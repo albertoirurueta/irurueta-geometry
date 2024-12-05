@@ -22,7 +22,6 @@ import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
 import com.irurueta.numerical.robust.InliersData;
@@ -39,8 +38,7 @@ import java.util.List;
  * useful in some other situations.
  */
 @SuppressWarnings("DuplicatedCode")
-public class HomogeneousPoint3DRefiner extends
-        Point3DRefiner<HomogeneousPoint3D> {
+public class HomogeneousPoint3DRefiner extends Point3DRefiner<HomogeneousPoint3D> {
 
     /**
      * Constructor.
@@ -62,12 +60,10 @@ public class HomogeneousPoint3DRefiner extends
      *                                    Levenberg-Marquardt fitting.
      */
     public HomogeneousPoint3DRefiner(
-            final HomogeneousPoint3D initialEstimation,
-            final boolean keepCovariance, final BitSet inliers, final double[] residuals,
-            final int numInliers, final List<Plane> samples,
+            final HomogeneousPoint3D initialEstimation, final boolean keepCovariance, final BitSet inliers,
+            final double[] residuals, final int numInliers, final List<Plane> samples,
             final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples, refinementStandardDeviation);
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples, refinementStandardDeviation);
     }
 
     /**
@@ -83,11 +79,9 @@ public class HomogeneousPoint3DRefiner extends
      *                                    Levenberg-Marquardt fitting.
      */
     public HomogeneousPoint3DRefiner(
-            final HomogeneousPoint3D initialEstimation,
-            final boolean keepCovariance, final InliersData inliersData,
+            final HomogeneousPoint3D initialEstimation, final boolean keepCovariance, final InliersData inliersData,
             final List<Plane> samples, final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples,
-                refinementStandardDeviation);
+        super(initialEstimation, keepCovariance, inliersData, samples, refinementStandardDeviation);
     }
 
     /**
@@ -101,9 +95,8 @@ public class HomogeneousPoint3DRefiner extends
      *                           to converge to a result).
      */
     @Override
-    public HomogeneousPoint3D refine() throws NotReadyException,
-            LockedException, RefinerException {
-        final HomogeneousPoint3D result = new HomogeneousPoint3D();
+    public HomogeneousPoint3D refine() throws NotReadyException, LockedException, RefinerException {
+        final var result = new HomogeneousPoint3D();
         refine(result);
         return result;
     }
@@ -123,8 +116,7 @@ public class HomogeneousPoint3DRefiner extends
      *                           to converge to a result).
      */
     @Override
-    public boolean refine(final HomogeneousPoint3D result) throws NotReadyException,
-            LockedException, RefinerException {
+    public boolean refine(final HomogeneousPoint3D result) throws NotReadyException, LockedException, RefinerException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -132,114 +124,104 @@ public class HomogeneousPoint3DRefiner extends
             throw new NotReadyException();
         }
 
-        mLocked = true;
+        locked = true;
 
-        if (mListener != null) {
-            mListener.onRefineStart(this, mInitialEstimation);
+        if (listener != null) {
+            listener.onRefineStart(this, initialEstimation);
         }
 
-        final double initialTotalResidual = totalResidual(mInitialEstimation);
+        final var initialTotalResidual = totalResidual(initialEstimation);
 
         try {
-            final double[] initParams = mInitialEstimation.asArray();
+            final var initParams = initialEstimation.asArray();
 
             // output values to be fitted/optimized will contain residuals
-            final double[] y = new double[mNumInliers];
+            final var y = new double[numInliers];
             // input values will contain planes to compute residuals
-            final int nDims = Plane.PLANE_NUMBER_PARAMS;
-            final Matrix x = new Matrix(mNumInliers, nDims);
-            final int nSamples = mInliers.length();
-            int pos = 0;
-            Plane plane;
-            for (int i = 0; i < nSamples; i++) {
-                if (mInliers.get(i)) {
+            final var nDims = Plane.PLANE_NUMBER_PARAMS;
+            final var x = new Matrix(numInliers, nDims);
+            final var nSamples = inliers.length();
+            var pos = 0;
+            for (var i = 0; i < nSamples; i++) {
+                if (inliers.get(i)) {
                     // sample is inlier
-                    plane = mSamples.get(i);
+                    final var plane = samples.get(i);
                     plane.normalize();
                     x.setElementAt(pos, 0, plane.getA());
                     x.setElementAt(pos, 1, plane.getB());
                     x.setElementAt(pos, 2, plane.getC());
                     x.setElementAt(pos, 3, plane.getD());
 
-                    y[pos] = mResiduals[i];
+                    y[pos] = residuals[i];
                     pos++;
                 }
             }
 
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
-                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
+            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-                        private final Plane mPlane = new Plane();
+                private final Plane plane = new Plane();
 
-                        private final HomogeneousPoint3D mPoint = new HomogeneousPoint3D();
+                private final HomogeneousPoint3D point = new HomogeneousPoint3D();
 
-                        private final GradientEstimator mGradientEstimator =
-                                new GradientEstimator(
-                                        new MultiDimensionFunctionEvaluatorListener() {
-                                            @Override
-                                            public double evaluate(final double[] point) {
+                private final GradientEstimator gradientEstimator = new GradientEstimator(p -> {
+                    this.point.setCoordinates(p);
+                    return residual(this.point, plane);
+                });
 
-                                                mPoint.setCoordinates(point);
-                                                return residual(mPoint, mPlane);
-                                            }
-                                        });
+                @Override
+                public int getNumberOfDimensions() {
+                    return nDims;
+                }
 
-                        @Override
-                        public int getNumberOfDimensions() {
-                            return nDims;
-                        }
+                @Override
+                public double[] createInitialParametersArray() {
+                    return initParams;
+                }
 
-                        @Override
-                        public double[] createInitialParametersArray() {
-                            return initParams;
-                        }
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+                    // point contains a,b,c,d values for plane
+                    plane.setParameters(point);
 
-                        @Override
-                        public double evaluate(final int i, final double[] point, final double[] params,
-                                               final double[] derivatives) throws EvaluationException {
-                            // point contains a,b,c,d values for plane
-                            mPlane.setParameters(point);
+                    // params contains coordinates of point
+                    this.point.setCoordinates(params);
 
-                            // params contains coordinates of point
-                            mPoint.setCoordinates(params);
+                    final var y = residual(this.point, plane);
+                    gradientEstimator.gradient(params, derivatives);
 
-                            final double y = residual(mPoint, mPlane);
-                            mGradientEstimator.gradient(params, derivatives);
+                    return y;
+                }
+            };
 
-                            return y;
-                        }
-                    };
-
-            final LevenbergMarquardtMultiDimensionFitter fitter =
-                    new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-                            getRefinementStandardDeviation());
+            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+                    getRefinementStandardDeviation());
 
             fitter.fit();
 
             // obtain estimated params
-            final double[] params = fitter.getA();
+            final var params = fitter.getA();
 
             // update point
             result.setCoordinates(params);
 
-            if (mKeepCovariance) {
+            if (keepCovariance) {
                 // keep covariance
-                mCovariance = fitter.getCovar();
+                covariance = fitter.getCovar();
             }
 
-            final double finalTotalResidual = totalResidual(result);
-            final boolean errorDecreased = finalTotalResidual < initialTotalResidual;
+            final var finalTotalResidual = totalResidual(result);
+            final var errorDecreased = finalTotalResidual < initialTotalResidual;
 
-            if (mListener != null) {
-                mListener.onRefineEnd(this, mInitialEstimation, result,
-                        errorDecreased);
+            if (listener != null) {
+                listener.onRefineEnd(this, initialEstimation, result, errorDecreased);
             }
 
             return errorDecreased;
         } catch (final Exception e) {
             throw new RefinerException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 }

@@ -89,8 +89,7 @@ public abstract class Point2DRobustEstimator {
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * Indicates that result is refined by default using Levenberg-Marquardt
@@ -107,19 +106,19 @@ public abstract class Point2DRobustEstimator {
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected Point2DRobustEstimatorListener mListener;
+    protected Point2DRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -127,25 +126,25 @@ public abstract class Point2DRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * List of lines to be used to estimate a 2D point. Provided list must have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    protected List<Line2D> mLines;
+    protected List<Line2D> lines;
 
     /**
      * Data related to inliers found after estimation.
      */
-    protected InliersData mInliersData;
+    protected InliersData inliersData;
 
     /**
      * Indicates whether result must be refined using Levenberg-Marquardt
@@ -153,38 +152,37 @@ public abstract class Point2DRobustEstimator {
      * If true, inliers will be computed and kept in any implementation
      * regardless of the settings.
      */
-    protected boolean mRefineResult;
+    protected boolean refineResult;
 
     /**
      * Coordinates type to use for refinement. When using inhomogeneous
      * coordinates a 3x3 covariance matrix is estimated. When using homogeneous
      * coordinates a 4x4 covariance matrix is estimated.
      */
-    private CoordinatesType mRefinementCoordinatesType =
-            CoordinatesType.INHOMOGENEOUS_COORDINATES;
+    private CoordinatesType refinementCoordinatesType = CoordinatesType.INHOMOGENEOUS_COORDINATES;
 
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
      */
-    private boolean mKeepCovariance;
+    private boolean keepCovariance;
 
     /**
      * Estimated covariance of estimated 2D point.
      * This is only available when result has been refined and covariance is
      * kept.
      */
-    private Matrix mCovariance;
+    private Matrix covariance;
 
     /**
      * Constructor.
      */
     protected Point2DRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -194,12 +192,12 @@ public abstract class Point2DRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      */
     protected Point2DRobustEstimator(final Point2DRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -210,12 +208,12 @@ public abstract class Point2DRobustEstimator {
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
     protected Point2DRobustEstimator(final List<Line2D> lines) {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetLines(lines);
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -227,15 +225,14 @@ public abstract class Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    protected Point2DRobustEstimator(final Point2DRobustEstimatorListener listener,
-                                  final List<Line2D> lines) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+    protected Point2DRobustEstimator(final Point2DRobustEstimatorListener listener, final List<Line2D> lines) {
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetLines(lines);
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
 
@@ -246,7 +243,7 @@ public abstract class Point2DRobustEstimator {
      * @return listener to be notified of events.
      */
     public Point2DRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -256,12 +253,11 @@ public abstract class Point2DRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(final Point2DRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final Point2DRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -271,7 +267,7 @@ public abstract class Point2DRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -280,7 +276,7 @@ public abstract class Point2DRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -291,7 +287,7 @@ public abstract class Point2DRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -309,11 +305,10 @@ public abstract class Point2DRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -325,7 +320,7 @@ public abstract class Point2DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -347,7 +342,7 @@ public abstract class Point2DRobustEstimator {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -358,7 +353,7 @@ public abstract class Point2DRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -378,7 +373,7 @@ public abstract class Point2DRobustEstimator {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -387,7 +382,7 @@ public abstract class Point2DRobustEstimator {
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-        return mInliersData;
+        return inliersData;
     }
 
     /**
@@ -400,7 +395,7 @@ public abstract class Point2DRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-        return mRefineResult;
+        return refineResult;
     }
 
     /**
@@ -415,7 +410,7 @@ public abstract class Point2DRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefineResult = refineResult;
+        this.refineResult = refineResult;
     }
 
     /**
@@ -426,7 +421,7 @@ public abstract class Point2DRobustEstimator {
      * @return coordinates type to use for refinement.
      */
     public CoordinatesType getRefinementCoordinatesType() {
-        return mRefinementCoordinatesType;
+        return refinementCoordinatesType;
     }
 
     /**
@@ -437,12 +432,11 @@ public abstract class Point2DRobustEstimator {
      * @param refinementCoordinatesType coordinates type to use for refinement.
      * @throws LockedException if estimator is locked.
      */
-    public void setRefinementCoordinatesType(
-            final CoordinatesType refinementCoordinatesType) throws LockedException {
+    public void setRefinementCoordinatesType(final CoordinatesType refinementCoordinatesType) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefinementCoordinatesType = refinementCoordinatesType;
+        this.refinementCoordinatesType = refinementCoordinatesType;
     }
 
     /**
@@ -453,7 +447,7 @@ public abstract class Point2DRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-        return mKeepCovariance;
+        return keepCovariance;
     }
 
     /**
@@ -464,12 +458,11 @@ public abstract class Point2DRobustEstimator {
      *                       result, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setCovarianceKept(final boolean keepCovariance)
-            throws LockedException {
+    public void setCovarianceKept(final boolean keepCovariance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mKeepCovariance = keepCovariance;
+        this.keepCovariance = keepCovariance;
     }
 
     /**
@@ -479,7 +472,7 @@ public abstract class Point2DRobustEstimator {
      * @return list of lines to be used to estimate a 2D point.
      */
     public List<Line2D> getLines() {
-        return mLines;
+        return lines;
     }
 
     /**
@@ -506,7 +499,7 @@ public abstract class Point2DRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mLines != null && mLines.size() >= MINIMUM_SIZE;
+        return lines != null && lines.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -544,7 +537,7 @@ public abstract class Point2DRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-        return mCovariance;
+        return covariance;
     }
 
     /**
@@ -556,19 +549,13 @@ public abstract class Point2DRobustEstimator {
      * @return an instance of a 2D point robust estimator.
      */
     public static Point2DRobustEstimator create(final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint2DRobustEstimator();
-            case MSAC:
-                return new MSACPoint2DRobustEstimator();
-            case PROSAC:
-                return new PROSACPoint2DRobustEstimator();
-            case PROMEDS:
-                return new PROMedSPoint2DRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACPoint2DRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPoint2DRobustEstimator();
+            case MSAC -> new MSACPoint2DRobustEstimator();
+            case PROSAC -> new PROSACPoint2DRobustEstimator();
+            case PROMEDS -> new PROMedSPoint2DRobustEstimator();
+            default -> new RANSACPoint2DRobustEstimator();
+        };
     }
 
     /**
@@ -582,21 +569,14 @@ public abstract class Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public static Point2DRobustEstimator create(final List<Line2D> lines,
-                                                final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint2DRobustEstimator(lines);
-            case MSAC:
-                return new MSACPoint2DRobustEstimator(lines);
-            case PROSAC:
-                return new PROSACPoint2DRobustEstimator(lines);
-            case PROMEDS:
-                return new PROMedSPoint2DRobustEstimator(lines);
-            case RANSAC:
-            default:
-                return new RANSACPoint2DRobustEstimator(lines);
-        }
+    public static Point2DRobustEstimator create(final List<Line2D> lines, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPoint2DRobustEstimator(lines);
+            case MSAC -> new MSACPoint2DRobustEstimator(lines);
+            case PROSAC -> new PROSACPoint2DRobustEstimator(lines);
+            case PROMEDS -> new PROMedSPoint2DRobustEstimator(lines);
+            default -> new RANSACPoint2DRobustEstimator(lines);
+        };
     }
 
     /**
@@ -610,21 +590,14 @@ public abstract class Point2DRobustEstimator {
      * @return an instance of a 2D point robust estimator.
      */
     public static Point2DRobustEstimator create(
-            final Point2DRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint2DRobustEstimator(listener);
-            case MSAC:
-                return new MSACPoint2DRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACPoint2DRobustEstimator(listener);
-            case PROMEDS:
-                return new PROMedSPoint2DRobustEstimator(listener);
-            case RANSAC:
-            default:
-                return new RANSACPoint2DRobustEstimator(listener);
-        }
+            final Point2DRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPoint2DRobustEstimator(listener);
+            case MSAC -> new MSACPoint2DRobustEstimator(listener);
+            case PROSAC -> new PROSACPoint2DRobustEstimator(listener);
+            case PROMEDS -> new PROMedSPoint2DRobustEstimator(listener);
+            default -> new RANSACPoint2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -643,19 +616,13 @@ public abstract class Point2DRobustEstimator {
     public static Point2DRobustEstimator create(
             final Point2DRobustEstimatorListener listener, final List<Line2D> lines,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint2DRobustEstimator(listener, lines);
-            case MSAC:
-                return new MSACPoint2DRobustEstimator(listener, lines);
-            case PROSAC:
-                return new PROSACPoint2DRobustEstimator(listener, lines);
-            case PROMEDS:
-                return new PROMedSPoint2DRobustEstimator(listener, lines);
-            case RANSAC:
-            default:
-                return new RANSACPoint2DRobustEstimator(listener, lines);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPoint2DRobustEstimator(listener, lines);
+            case MSAC -> new MSACPoint2DRobustEstimator(listener, lines);
+            case PROSAC -> new PROSACPoint2DRobustEstimator(listener, lines);
+            case PROMEDS -> new PROMedSPoint2DRobustEstimator(listener, lines);
+            default -> new RANSACPoint2DRobustEstimator(listener, lines);
+        };
     }
 
     /**
@@ -669,21 +636,14 @@ public abstract class Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
-    public static Point2DRobustEstimator create(final double[] qualityScores,
-                                                final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint2DRobustEstimator();
-            case MSAC:
-                return new MSACPoint2DRobustEstimator();
-            case PROSAC:
-                return new PROSACPoint2DRobustEstimator(qualityScores);
-            case PROMEDS:
-                return new PROMedSPoint2DRobustEstimator(qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPoint2DRobustEstimator();
-        }
+    public static Point2DRobustEstimator create(final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPoint2DRobustEstimator();
+            case MSAC -> new MSACPoint2DRobustEstimator();
+            case PROSAC -> new PROSACPoint2DRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSPoint2DRobustEstimator(qualityScores);
+            default -> new RANSACPoint2DRobustEstimator();
+        };
     }
 
     /**
@@ -700,21 +660,14 @@ public abstract class Point2DRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static Point2DRobustEstimator create(
-            final List<Line2D> lines, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint2DRobustEstimator(lines);
-            case MSAC:
-                return new MSACPoint2DRobustEstimator(lines);
-            case PROSAC:
-                return new PROSACPoint2DRobustEstimator(lines, qualityScores);
-            case PROMEDS:
-                return new PROMedSPoint2DRobustEstimator(lines, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPoint2DRobustEstimator(lines);
-        }
+            final List<Line2D> lines, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPoint2DRobustEstimator(lines);
+            case MSAC -> new MSACPoint2DRobustEstimator(lines);
+            case PROSAC -> new PROSACPoint2DRobustEstimator(lines, qualityScores);
+            case PROMEDS -> new PROMedSPoint2DRobustEstimator(lines, qualityScores);
+            default -> new RANSACPoint2DRobustEstimator(lines);
+        };
     }
 
     /**
@@ -733,19 +686,13 @@ public abstract class Point2DRobustEstimator {
     public static Point2DRobustEstimator create(
             final Point2DRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint2DRobustEstimator(listener);
-            case MSAC:
-                return new MSACPoint2DRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACPoint2DRobustEstimator(listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSPoint2DRobustEstimator(listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPoint2DRobustEstimator(listener);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPoint2DRobustEstimator(listener);
+            case MSAC -> new MSACPoint2DRobustEstimator(listener);
+            case PROSAC -> new PROSACPoint2DRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSPoint2DRobustEstimator(listener, qualityScores);
+            default -> new RANSACPoint2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -764,23 +711,15 @@ public abstract class Point2DRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static Point2DRobustEstimator create(
-            final Point2DRobustEstimatorListener listener, final List<Line2D> lines,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPoint2DRobustEstimator(listener, lines);
-            case MSAC:
-                return new MSACPoint2DRobustEstimator(listener, lines);
-            case PROSAC:
-                return new PROSACPoint2DRobustEstimator(listener, lines,
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSPoint2DRobustEstimator(listener, lines,
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPoint2DRobustEstimator(listener, lines);
-        }
+            final Point2DRobustEstimatorListener listener, final List<Line2D> lines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPoint2DRobustEstimator(listener, lines);
+            case MSAC -> new MSACPoint2DRobustEstimator(listener, lines);
+            case PROSAC -> new PROSACPoint2DRobustEstimator(listener, lines, qualityScores);
+            case PROMEDS -> new PROMedSPoint2DRobustEstimator(listener, lines, qualityScores);
+            default -> new RANSACPoint2DRobustEstimator(listener, lines);
+        };
     }
 
     /**
@@ -814,8 +753,7 @@ public abstract class Point2DRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @return an instance of a 2D point robust estimator.
      */
-    public static Point2DRobustEstimator create(
-            final Point2DRobustEstimatorListener listener) {
+    public static Point2DRobustEstimator create(final Point2DRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -859,8 +797,7 @@ public abstract class Point2DRobustEstimator {
      *                                  the same size as the list of provided quality scores, or if their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public static Point2DRobustEstimator create(final List<Line2D> lines,
-                                                final double[] qualityScores) {
+    public static Point2DRobustEstimator create(final List<Line2D> lines, final double[] qualityScores) {
         return create(lines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -894,8 +831,7 @@ public abstract class Point2DRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static Point2DRobustEstimator create(
-            final Point2DRobustEstimatorListener listener, final List<Line2D> lines,
-            final double[] qualityScores) {
+            final Point2DRobustEstimatorListener listener, final List<Line2D> lines, final double[] qualityScores) {
         return create(listener, lines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -911,8 +847,7 @@ public abstract class Point2DRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract Point2D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract Point2D estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -947,12 +882,12 @@ public abstract class Point2DRobustEstimator {
      * solution if not requested or if refinement failed.
      */
     protected Point2D attemptRefine(final Point2D point) {
-        if (mRefineResult) {
+        if (refineResult) {
             try {
                 final Point2DRefiner<? extends Point2D> refiner;
                 final Point2D result;
                 final boolean improved;
-                switch (mRefinementCoordinatesType) {
+                switch (refinementCoordinatesType) {
                     case HOMOGENEOUS_COORDINATES:
                         final HomogeneousPoint2D homP;
                         if (point.getType() == CoordinatesType.HOMOGENEOUS_COORDINATES) {
@@ -960,11 +895,10 @@ public abstract class Point2DRobustEstimator {
                         } else {
                             homP = new HomogeneousPoint2D(point);
                         }
-                        final HomogeneousPoint2DRefiner homRefiner = new HomogeneousPoint2DRefiner(
-                                homP, mKeepCovariance, getInliersData(), mLines,
-                                getRefinementStandardDeviation());
+                        final var homRefiner = new HomogeneousPoint2DRefiner(homP, keepCovariance, getInliersData(),
+                                lines, getRefinementStandardDeviation());
                         refiner = homRefiner;
-                        final HomogeneousPoint2D homResult = new HomogeneousPoint2D();
+                        final var homResult = new HomogeneousPoint2D();
                         improved = homRefiner.refine(homResult);
                         result = homResult;
                         break;
@@ -976,19 +910,18 @@ public abstract class Point2DRobustEstimator {
                         } else {
                             inhomP = new InhomogeneousPoint2D(point);
                         }
-                        final InhomogeneousPoint2DRefiner inhomRefiner = new InhomogeneousPoint2DRefiner(inhomP,
-                                mKeepCovariance, getInliersData(), mLines,
-                                getRefinementStandardDeviation());
+                        final var inhomRefiner = new InhomogeneousPoint2DRefiner(inhomP, keepCovariance,
+                                getInliersData(), lines, getRefinementStandardDeviation());
                         refiner = inhomRefiner;
-                        final InhomogeneousPoint2D inhomResult = new InhomogeneousPoint2D();
+                        final var inhomResult = new InhomogeneousPoint2D();
                         improved = inhomRefiner.refine(inhomResult);
                         result = inhomResult;
                         break;
                 }
 
-                if (mKeepCovariance) {
+                if (keepCovariance) {
                     // keep covariance
-                    mCovariance = refiner.getCovariance();
+                    covariance = refiner.getCovariance();
                 }
 
                 return improved ? result : point;
@@ -1027,6 +960,6 @@ public abstract class Point2DRobustEstimator {
         if (lines.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
-        mLines = lines;
+        this.lines = lines;
     }
 }

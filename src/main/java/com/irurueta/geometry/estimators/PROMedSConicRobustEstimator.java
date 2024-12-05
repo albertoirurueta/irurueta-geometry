@@ -71,20 +71,20 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Quality scores corresponding to each pair of matched points.
      * The larger the score value the better the quality of the matching.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Constructor.
      */
     public PROMedSConicRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -96,7 +96,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      */
     public PROMedSConicRobustEstimator(final List<Point2D> points) {
         super(points);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -107,7 +107,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      */
     public PROMedSConicRobustEstimator(final ConicRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
 
@@ -120,10 +120,9 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSConicRobustEstimator(final ConicRobustEstimatorListener listener,
-                                       final List<Point2D> points) {
+    public PROMedSConicRobustEstimator(final ConicRobustEstimatorListener listener, final List<Point2D> points) {
         super(listener, points);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -135,7 +134,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      */
     public PROMedSConicRobustEstimator(final double[] qualityScores) {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -148,15 +147,14 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      *                                  the same size as the list of provided quality scores, or it their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSConicRobustEstimator(final List<Point2D> points,
-                                       final double[] qualityScores) {
+    public PROMedSConicRobustEstimator(final List<Point2D> points, final double[] qualityScores) {
         super(points);
 
         if (qualityScores.length != points.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -169,10 +167,9 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 5 points).
      */
-    public PROMedSConicRobustEstimator(final ConicRobustEstimatorListener listener,
-                                       final double[] qualityScores) {
+    public PROMedSConicRobustEstimator(final ConicRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -189,15 +186,14 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSConicRobustEstimator(
-            final ConicRobustEstimatorListener listener,
-            final List<Point2D> points, final double[] qualityScores) {
+            final ConicRobustEstimatorListener listener, final List<Point2D> points, final double[] qualityScores) {
         super(listener, points);
 
         if (qualityScores.length != points.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -222,7 +218,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -256,7 +252,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -267,7 +263,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -297,8 +293,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mPoints.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == points.size();
     }
 
     /**
@@ -315,8 +310,7 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Conic estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Conic estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -324,102 +318,95 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
             throw new NotReadyException();
         }
 
-        final PROMedSRobustEstimator<Conic> innerEstimator =
-                new PROMedSRobustEstimator<>(new PROMedSRobustEstimatorListener<Conic>() {
+        final var innerEstimator = new PROMedSRobustEstimator<>(new PROMedSRobustEstimatorListener<Conic>() {
 
-                    @Override
-                    public double getThreshold() {
-                        return mStopThreshold;
-                    }
+            @Override
+            public double getThreshold() {
+                return stopThreshold;
+            }
 
-                    @Override
-                    public int getTotalSamples() {
-                        return mPoints.size();
-                    }
+            @Override
+            public int getTotalSamples() {
+                return points.size();
+            }
 
-                    @Override
-                    public int getSubsetSize() {
-                        return ConicRobustEstimator.MINIMUM_SIZE;
-                    }
+            @Override
+            public int getSubsetSize() {
+                return ConicRobustEstimator.MINIMUM_SIZE;
+            }
 
-                    @Override
-                    public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                            final List<Conic> solutions) {
-                        final Point2D point1 = mPoints.get(samplesIndices[0]);
-                        final Point2D point2 = mPoints.get(samplesIndices[1]);
-                        final Point2D point3 = mPoints.get(samplesIndices[2]);
-                        final Point2D point4 = mPoints.get(samplesIndices[3]);
-                        final Point2D point5 = mPoints.get(samplesIndices[4]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Conic> solutions) {
+                final var point1 = points.get(samplesIndices[0]);
+                final var point2 = points.get(samplesIndices[1]);
+                final var point3 = points.get(samplesIndices[2]);
+                final var point4 = points.get(samplesIndices[3]);
+                final var point5 = points.get(samplesIndices[4]);
 
-                        try {
-                            final Conic conic = new Conic(point1, point2, point3, point4,
-                                    point5);
-                            solutions.add(conic);
-                        } catch (final CoincidentPointsException e) {
-                            // if points are coincident, no solution is added
-                        }
-                    }
+                try {
+                    final var conic = new Conic(point1, point2, point3, point4, point5);
+                    solutions.add(conic);
+                } catch (final CoincidentPointsException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                    @Override
-                    public double computeResidual(final Conic currentEstimation, final int i) {
-                        return residual(currentEstimation, mPoints.get(i));
-                    }
+            @Override
+            public double computeResidual(final Conic currentEstimation, final int i) {
+                return residual(currentEstimation, points.get(i));
+            }
 
-                    @Override
-                    public boolean isReady() {
-                        return PROMedSConicRobustEstimator.this.isReady();
-                    }
+            @Override
+            public boolean isReady() {
+                return PROMedSConicRobustEstimator.this.isReady();
+            }
 
-                    @Override
-                    public void onEstimateStart(final RobustEstimator<Conic> estimator) {
-                        if (mListener != null) {
-                            mListener.onEstimateStart(PROMedSConicRobustEstimator.this);
-                        }
-                    }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Conic> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(PROMedSConicRobustEstimator.this);
+                }
+            }
 
-                    @Override
-                    public void onEstimateEnd(final RobustEstimator<Conic> estimator) {
-                        if (mListener != null) {
-                            mListener.onEstimateEnd(PROMedSConicRobustEstimator.this);
-                        }
-                    }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Conic> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(PROMedSConicRobustEstimator.this);
+                }
+            }
 
-                    @Override
-                    public void onEstimateNextIteration(
-                            final RobustEstimator<Conic> estimator, final int iteration) {
-                        if (mListener != null) {
-                            mListener.onEstimateNextIteration(
-                                    PROMedSConicRobustEstimator.this, iteration);
-                        }
-                    }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Conic> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(PROMedSConicRobustEstimator.this, iteration);
+                }
+            }
 
-                    @Override
-                    public void onEstimateProgressChange(
-                            final RobustEstimator<Conic> estimator, final float progress) {
-                        if (mListener != null) {
-                            mListener.onEstimateProgressChange(
-                                    PROMedSConicRobustEstimator.this, progress);
-                        }
-                    }
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Conic> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(PROMedSConicRobustEstimator.this, progress);
+                }
+            }
 
-                    @Override
-                    public double[] getQualityScores() {
-                        return mQualityScores;
-                    }
-                });
+            @Override
+            public double[] getQualityScores() {
+                return qualityScores;
+            }
+        });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
             return innerEstimator.estimate();
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -447,6 +434,6 @@ public class PROMedSConicRobustEstimator extends ConicRobustEstimator {
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

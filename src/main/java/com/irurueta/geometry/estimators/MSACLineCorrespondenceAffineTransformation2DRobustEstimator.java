@@ -64,14 +64,14 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * vector angle difference) a possible solution has on a matched pair of
      * lines.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Constructor.
      */
     public MSACLineCorrespondenceAffineTransformation2DRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -91,7 +91,7 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
     public MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
             final List<Line2D> inputLines, final List<Line2D> outputLines) {
         super(inputLines, outputLines);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -103,7 +103,7 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
     public MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
             final AffineTransformation2DRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -126,7 +126,7 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
             final AffineTransformation2DRobustEstimatorListener listener,
             final List<Line2D> inputLines, final List<Line2D> outputLines) {
         super(listener, inputLines, outputLines);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -146,7 +146,7 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
      * @return threshold to determine whether matched lines are inliers or not.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -177,7 +177,7 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -194,8 +194,7 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public AffineTransformation2D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public AffineTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -203,129 +202,118 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
             throw new NotReadyException();
         }
 
-        final MSACRobustEstimator<AffineTransformation2D> innerEstimator =
-                new MSACRobustEstimator<>(
-                        new MSACRobustEstimatorListener<AffineTransformation2D>() {
+        final var innerEstimator = new MSACRobustEstimator<>(new MSACRobustEstimatorListener<AffineTransformation2D>() {
 
-                            // line to be reused when computing residuals
-                            private final Line2D mTestLine = new Line2D();
+            // line to be reused when computing residuals
+            private final Line2D testLine = new Line2D();
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+            @Override
+            public double getThreshold() {
+                return threshold;
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputLines.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return inputLines.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return AffineTransformation2DRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return AffineTransformation2DRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<AffineTransformation2D> solutions) {
-                                final Line2D inputLine1 = mInputLines.get(samplesIndices[0]);
-                                final Line2D inputLine2 = mInputLines.get(samplesIndices[1]);
-                                final Line2D inputLine3 = mInputLines.get(samplesIndices[2]);
+            @Override
+            public void estimatePreliminarSolutions(
+                    final int[] samplesIndices, final List<AffineTransformation2D> solutions) {
+                final var inputLine1 = inputLines.get(samplesIndices[0]);
+                final var inputLine2 = inputLines.get(samplesIndices[1]);
+                final var inputLine3 = inputLines.get(samplesIndices[2]);
 
-                                final Line2D outputLine1 = mOutputLines.get(samplesIndices[0]);
-                                final Line2D outputLine2 = mOutputLines.get(samplesIndices[1]);
-                                final Line2D outputLine3 = mOutputLines.get(samplesIndices[2]);
+                final var outputLine1 = outputLines.get(samplesIndices[0]);
+                final var outputLine2 = outputLines.get(samplesIndices[1]);
+                final var outputLine3 = outputLines.get(samplesIndices[2]);
 
-                                try {
-                                    final AffineTransformation2D transformation =
-                                            new AffineTransformation2D(inputLine1, inputLine2,
-                                                    inputLine3, outputLine1, outputLine2, outputLine3);
-                                    solutions.add(transformation);
-                                } catch (final CoincidentLinesException e) {
-                                    // if lines are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var transformation = new AffineTransformation2D(inputLine1, inputLine2, inputLine3,
+                            outputLine1, outputLine2, outputLine3);
+                    solutions.add(transformation);
+                } catch (final CoincidentLinesException e) {
+                    // if lines are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final AffineTransformation2D currentEstimation, final int i) {
-                                final Line2D inputLine = mInputLines.get(i);
-                                final Line2D outputLine = mOutputLines.get(i);
+            @Override
+            public double computeResidual(final AffineTransformation2D currentEstimation, final int i) {
+                final var inputLine = inputLines.get(i);
+                final var outputLine = outputLines.get(i);
 
-                                // transform input line and store result in mTestLine
-                                try {
-                                    currentEstimation.transform(inputLine, mTestLine);
+                // transform input line and store result in mTestLine
+                try {
+                    currentEstimation.transform(inputLine, testLine);
 
-                                    return getResidual(outputLine, mTestLine);
-                                } catch (final AlgebraException e) {
-                                    // this happens when internal matrix of affine transformation
-                                    // cannot be reverse (i.e. transformation is not well-defined,
-                                    // numerical instabilities, etc.)
-                                    return Double.MAX_VALUE;
-                                }
-                            }
+                    return getResidual(outputLine, testLine);
+                } catch (final AlgebraException e) {
+                    // this happens when internal matrix of affine transformation
+                    // cannot be reverse (i.e. transformation is not well-defined,
+                    // numerical instabilities, etc.)
+                    return Double.MAX_VALUE;
+                }
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return MSACLineCorrespondenceAffineTransformation2DRobustEstimator.
-                                        this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return MSACLineCorrespondenceAffineTransformation2DRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<AffineTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            MSACLineCorrespondenceAffineTransformation2DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<AffineTransformation2D> estimator) {
+                if (mListener != null) {
+                    mListener.onEstimateStart(
+                            MSACLineCorrespondenceAffineTransformation2DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<AffineTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            MSACLineCorrespondenceAffineTransformation2DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<AffineTransformation2D> estimator) {
+                if (mListener != null) {
+                    mListener.onEstimateEnd(MSACLineCorrespondenceAffineTransformation2DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<AffineTransformation2D> estimator,
-                                    int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            MSACLineCorrespondenceAffineTransformation2DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(
+                    final RobustEstimator<AffineTransformation2D> estimator, int iteration) {
+                if (mListener != null) {
+                    mListener.onEstimateNextIteration(
+                            MSACLineCorrespondenceAffineTransformation2DRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<AffineTransformation2D> estimator,
-                                    float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            MSACLineCorrespondenceAffineTransformation2DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(
+                    final RobustEstimator<AffineTransformation2D> estimator, float progress) {
+                if (mListener != null) {
+                    mListener.onEstimateProgressChange(
+                            MSACLineCorrespondenceAffineTransformation2DRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final AffineTransformation2D transformation = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -352,6 +340,6 @@ public class MSACLineCorrespondenceAffineTransformation2DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        return mThreshold;
+        return threshold;
     }
 }

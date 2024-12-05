@@ -97,19 +97,19 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * Listener to be notified of events such as when estimation starts, ends or
      * its progress significantly changes.
      */
-    protected ProjectiveTransformation2DRobustEstimatorListener mListener;
+    protected ProjectiveTransformation2DRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -117,19 +117,19 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * Data related to inliers found after estimation.
      */
-    protected InliersData mInliersData;
+    protected InliersData inliersData;
 
     /**
      * Indicates whether result must be refined using Levenberg-Marquardt
@@ -137,30 +137,30 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * If true, inliers will be computed and kept in any implementation
      * regardless of the settings.
      */
-    protected boolean mRefineResult;
+    protected boolean refineResult;
 
     /**
      * Indicates whether covariance must be kept after refining result.
      * This setting is only taken into account if result is refined.
      */
-    protected boolean mKeepCovariance;
+    protected boolean keepCovariance;
 
     /**
      * Estimated covariance of estimated 2D projective transformation.
      * This is only available when result has been refined and covariance is
      * kept.
      */
-    protected Matrix mCovariance;
+    protected Matrix covariance;
 
     /**
      * Constructor.
      */
     protected ProjectiveTransformation2DRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -171,12 +171,12 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     protected ProjectiveTransformation2DRobustEstimator(
             final ProjectiveTransformation2DRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
-        mRefineResult = DEFAULT_REFINE_RESULT;
-        mKeepCovariance = DEFAULT_KEEP_COVARIANCE;
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
+        refineResult = DEFAULT_REFINE_RESULT;
+        keepCovariance = DEFAULT_KEEP_COVARIANCE;
     }
 
     /**
@@ -186,7 +186,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @return listener to be notified of events.
      */
     public ProjectiveTransformation2DRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -196,13 +196,11 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(
-            final ProjectiveTransformation2DRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final ProjectiveTransformation2DRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -212,7 +210,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -221,7 +219,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -232,7 +230,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -250,11 +248,10 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -266,7 +263,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -288,7 +285,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -299,7 +296,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -319,7 +316,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -328,7 +325,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @return data related to inliers found after estimation.
      */
     public InliersData getInliersData() {
-        return mInliersData;
+        return inliersData;
     }
 
     /**
@@ -341,7 +338,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * robust estimator without further refining.
      */
     public boolean isResultRefined() {
-        return mRefineResult;
+        return refineResult;
     }
 
     /**
@@ -356,7 +353,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefineResult = refineResult;
+        this.refineResult = refineResult;
     }
 
     /**
@@ -367,7 +364,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * otherwise.
      */
     public boolean isCovarianceKept() {
-        return mKeepCovariance;
+        return keepCovariance;
     }
 
     /**
@@ -378,12 +375,11 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                       result, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setCovarianceKept(final boolean keepCovariance)
-            throws LockedException {
+    public void setCovarianceKept(final boolean keepCovariance) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mKeepCovariance = keepCovariance;
+        this.keepCovariance = keepCovariance;
     }
 
     /**
@@ -394,7 +390,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @return estimated covariance or null.
      */
     public Matrix getCovariance() {
-        return mCovariance;
+        return covariance;
     }
 
     /**
@@ -410,8 +406,8 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract ProjectiveTransformation2D estimate()
-            throws LockedException, NotReadyException, RobustEstimatorException;
+    public abstract ProjectiveTransformation2D estimate() throws LockedException, NotReadyException,
+            RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -435,10 +431,8 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final RobustEstimatorMethod method) {
-        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, method);
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final RobustEstimatorMethod method) {
+        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.create(inputPoints, outputPoints, method);
     }
 
     /**
@@ -458,11 +452,10 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final RobustEstimatorMethod method) {
-        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, method);
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final RobustEstimatorMethod method) {
+        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                method);
     }
 
     /**
@@ -482,10 +475,10 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores, method);
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                qualityScores, method);
     }
 
     /**
@@ -507,12 +500,10 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, qualityScores,
-                        method);
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                qualityScores, method);
     }
 
     /**
@@ -529,8 +520,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
-        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints);
+        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.create(inputPoints, outputPoints);
     }
 
     /**
@@ -550,8 +540,8 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
             final ProjectiveTransformation2DRobustEstimatorListener listener,
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
-        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints);
+        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.create(listener, inputPoints,
+                outputPoints);
     }
 
     /**
@@ -569,10 +559,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
-        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputPoints, outputPoints, qualityScores);
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores) {
+        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.create(inputPoints, outputPoints,
+                qualityScores);
     }
 
     /**
@@ -593,10 +582,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public static ProjectiveTransformation2DRobustEstimator createFromPoints(
             final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
-        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputPoints, outputPoints, qualityScores);
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores) {
+        return PointCorrespondenceProjectiveTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,
+                qualityScores);
     }
 
     /**
@@ -614,10 +602,8 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final RobustEstimatorMethod method) {
-        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, outputLines, method);
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final RobustEstimatorMethod method) {
+        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.create(inputLines, outputLines, method);
     }
 
     /**
@@ -637,11 +623,10 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final RobustEstimatorMethod method) {
-        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, outputLines, method);
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final List<Line2D> inputLines,
+            final List<Line2D> outputLines, final RobustEstimatorMethod method) {
+        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.create(listener, inputLines, outputLines,
+                method);
     }
 
     /**
@@ -661,10 +646,10 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, outputLines, qualityScores, method);
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.create(inputLines, outputLines,
+                qualityScores, method);
     }
 
     /**
@@ -686,12 +671,10 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, outputLines, qualityScores,
-                        method);
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final List<Line2D> inputLines,
+            final List<Line2D> outputLines, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.create(listener, inputLines, outputLines,
+                qualityScores, method);
     }
 
     /**
@@ -708,8 +691,7 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
             final List<Line2D> inputLines, final List<Line2D> outputLines) {
-        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, outputLines);
+        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.create(inputLines, outputLines);
     }
 
     /**
@@ -727,10 +709,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Line2D> inputLines, final List<Line2D> outputLines) {
-        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, outputLines);
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final List<Line2D> inputLines,
+            final List<Line2D> outputLines) {
+        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.create(listener, inputLines, outputLines);
     }
 
     /**
@@ -748,10 +729,9 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores) {
-        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(inputLines, outputLines, qualityScores);
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores) {
+        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.create(inputLines, outputLines,
+                qualityScores);
     }
 
     /**
@@ -771,11 +751,10 @@ public abstract class ProjectiveTransformation2DRobustEstimator {
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static ProjectiveTransformation2DRobustEstimator createFromLines(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores) {
-        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                create(listener, inputLines, outputLines, qualityScores);
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final List<Line2D> inputLines,
+            final List<Line2D> outputLines, final double[] qualityScores) {
+        return LineCorrespondenceProjectiveTransformation2DRobustEstimator.create(listener, inputLines, outputLines,
+                qualityScores);
     }
 
     /**

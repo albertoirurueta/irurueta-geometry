@@ -15,22 +15,18 @@
  */
 package com.irurueta.geometry.estimators;
 
-import com.irurueta.algebra.Matrix;
 import com.irurueta.geometry.*;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
-        implements PinholeCameraRobustEstimatorListener {
+class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest implements PinholeCameraRobustEstimatorListener {
 
     private static final double ABSOLUTE_ERROR = 1e-6;
     private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
@@ -68,18 +64,16 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(1.0, MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
                 0.0);
-        assertEquals(0.0, MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.MIN_THRESHOLD,
-                0.0);
+        assertEquals(0.0, MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.MIN_THRESHOLD, 0.0);
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test constructor without arguments
-        MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+        var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getThreshold(), 0.0);
@@ -98,77 +92,9 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
-                estimator.isFastRefinementUsed());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
-                estimator.isSuggestSkewnessValueEnabled());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
-                estimator.getSuggestedSkewnessValue(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
-                estimator.isSuggestHorizontalFocalLengthEnabled());
-        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
-                estimator.isSuggestVerticalFocalLengthEnabled());
-        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(),
-                0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
-                estimator.isSuggestAspectRatioEnabled());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                estimator.getSuggestedAspectRatioValue(), 0.0);
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
-                estimator.isSuggestPrincipalPointEnabled());
-        assertNull(estimator.getSuggestedPrincipalPointValue());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
-                estimator.isSuggestRotationEnabled());
-        assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
-                estimator.isSuggestCenterEnabled());
-        assertNull(estimator.getSuggestedCenterValue());
-        assertNull(estimator.getCovariance());
-        assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
-                estimator.isPlanarConfigurationAllowed());
-        assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
-                estimator.isNullspaceDimension2Allowed());
-        assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.
-                        DEFAULT_PLANAR_THRESHOLD,
-                estimator.getPlanarThreshold(), 0.0);
-        assertEquals(0.0, estimator.getSkewness(), 0.0);
-        assertEquals(0.0, estimator.getHorizontalPrincipalPoint(), 0.0);
-        assertEquals(0.0, estimator.getVerticalPrincipalPoint(), 0.0);
-
-
-        // test constructor with listener
-        estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        this);
-
-        assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
-        assertFalse(estimator.isNormalizeSubsetPointCorrespondences());
-        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
-        assertNull(estimator.getPoints2D());
-        assertNull(estimator.getPoints3D());
-        assertFalse(estimator.isReady());
-        assertSame(this, estimator.getListener());
-        assertTrue(estimator.isListenerAvailable());
-        assertFalse(estimator.isLocked());
-        assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
-                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT, estimator.isFastRefinementUsed());
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
                 estimator.isSuggestSkewnessValueEnabled());
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
@@ -189,8 +115,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
                 estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
-                estimator.isSuggestCenterEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED, estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
         assertNull(estimator.getCovariance());
         assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
@@ -203,17 +128,71 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(0.0, estimator.getHorizontalPrincipalPoint(), 0.0);
         assertEquals(0.0, estimator.getVerticalPrincipalPoint(), 0.0);
 
+        // test constructor with listener
+        estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(this);
+
+        assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
+                estimator.getThreshold(), 0.0);
+        assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
+                estimator.getConfidence(), 0.0);
+        assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
+                estimator.getMaxIterations());
+        assertFalse(estimator.isNormalizeSubsetPointCorrespondences());
+        assertEquals(RobustEstimatorMethod.MSAC, estimator.getMethod());
+        assertNull(estimator.getPoints2D());
+        assertNull(estimator.getPoints3D());
+        assertFalse(estimator.isReady());
+        assertSame(this, estimator.getListener());
+        assertTrue(estimator.isListenerAvailable());
+        assertFalse(estimator.isLocked());
+        assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
+                estimator.getProgressDelta(), 0.0);
+        assertNull(estimator.getInliersData());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT, estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
+                estimator.isSuggestSkewnessValueEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
+                estimator.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestHorizontalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
+                estimator.isSuggestVerticalFocalLengthEnabled());
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
+                estimator.isSuggestAspectRatioEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
+                estimator.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
+                estimator.isSuggestPrincipalPointEnabled());
+        assertNull(estimator.getSuggestedPrincipalPointValue());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
+                estimator.isSuggestRotationEnabled());
+        assertNull(estimator.getSuggestedRotationValue());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED, estimator.isSuggestCenterEnabled());
+        assertNull(estimator.getSuggestedCenterValue());
+        assertNull(estimator.getCovariance());
+        assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
+                estimator.isPlanarConfigurationAllowed());
+        assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
+                estimator.isNullspaceDimension2Allowed());
+        assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD,
+                estimator.getPlanarThreshold(), 0.0);
+        assertEquals(0.0, estimator.getSkewness(), 0.0);
+        assertEquals(0.0, estimator.getHorizontalPrincipalPoint(), 0.0);
+        assertEquals(0.0, estimator.getVerticalPrincipalPoint(), 0.0);
 
         // test constructor with points
-        final List<Point3D> points3D = new ArrayList<>();
-        final List<Point2D> points2D = new ArrayList<>();
-        for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
+        final var points3D = new ArrayList<Point3D>();
+        final var points2D = new ArrayList<Point2D>();
+        for (var i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             points3D.add(Point3D.create());
             points2D.add(Point2D.create());
         }
 
-        estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                points3D, points2D);
+        estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(points3D, points2D);
 
         assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getThreshold(), 0.0);
@@ -232,12 +211,9 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
-                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT, estimator.isFastRefinementUsed());
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
                 estimator.isSuggestSkewnessValueEnabled());
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
@@ -258,8 +234,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
                 estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
-                estimator.isSuggestCenterEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED, estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
         assertNull(estimator.getCovariance());
         assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
@@ -273,30 +248,17 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(0.0, estimator.getVerticalPrincipalPoint(), 0.0);
 
         // Force IllegalArgumentException
-        final List<Point3D> points3DEmpty = new ArrayList<>();
-        final List<Point2D> points2DEmpty = new ArrayList<>();
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                    points3DEmpty, points2DEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                    points3D, points2DEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        final var points3DEmpty = new ArrayList<Point3D>();
+        final var points2DEmpty = new ArrayList<Point2D>();
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
+                points3DEmpty, points2DEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
+                points3D, points2DEmpty));
 
         // test constructor with listener and points
-        estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        this, points3D, points2D);
+        estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(this, points3D, points2D);
 
         assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getThreshold(), 0.0);
@@ -315,37 +277,30 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(PointCorrespondencePinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
                 estimator.getProgressDelta(), 0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
-                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT, estimator.isFastRefinementUsed());
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
                 estimator.isSuggestSkewnessValueEnabled());
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
                 estimator.getSuggestedSkewnessValue(), 0.0);
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
                 estimator.isSuggestHorizontalFocalLengthEnabled());
-        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(),
-                0.0);
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
                 estimator.isSuggestVerticalFocalLengthEnabled());
-        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(),
-                0.0);
+        assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
                 estimator.isSuggestAspectRatioEnabled());
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                estimator.getSuggestedAspectRatioValue(),
-                0.0);
+                estimator.getSuggestedAspectRatioValue(), 0.0);
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
                 estimator.isSuggestPrincipalPointEnabled());
         assertNull(estimator.getSuggestedPrincipalPointValue());
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
                 estimator.isSuggestRotationEnabled());
         assertNull(estimator.getSuggestedRotationValue());
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
-                estimator.isSuggestCenterEnabled());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED, estimator.isSuggestCenterEnabled());
         assertNull(estimator.getSuggestedCenterValue());
         assertNull(estimator.getCovariance());
         assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
@@ -359,28 +314,17 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(0.0, estimator.getVerticalPrincipalPoint(), 0.0);
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                    this, points3DEmpty, points2DEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                    this, points3D, points2DEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
+                this, points3DEmpty, points2DEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
+                this, points3D, points2DEmpty));
     }
 
     @Test
-    public void testGetSetThreshold() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetThreshold() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_THRESHOLD,
@@ -393,17 +337,12 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setThreshold(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setThreshold(0.0));
     }
 
     @Test
-    public void testGetSetConfidence() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetConfidence() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_CONFIDENCE,
@@ -416,23 +355,13 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetMaxIterations() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_MAX_ITERATIONS,
@@ -445,71 +374,54 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testIsSetResultRefined() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetResultRefined() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
 
         // set new value
-        estimator.setResultRefined(!PinholeCameraRobustEstimator.
-                DEFAULT_REFINE_RESULT);
+        estimator.setResultRefined(!PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
 
         // check correctness
-        assertEquals(estimator.isResultRefined(),
-                !PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
+        assertEquals(estimator.isResultRefined(), !PinholeCameraRobustEstimator.DEFAULT_REFINE_RESULT);
     }
 
     @Test
-    public void testIsSetCovarianceKept() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetCovarianceKept() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
 
         // set new value
-        estimator.setCovarianceKept(
-                !PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
+        estimator.setCovarianceKept(!PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE);
 
         // check correctness
-        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE,
-                estimator.isCovarianceKept());
+        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_KEEP_COVARIANCE, estimator.isCovarianceKept());
     }
 
     @Test
-    public void testIsSetFastRefinementUsed() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetFastRefinementUsed() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
-                estimator.isFastRefinementUsed());
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT, estimator.isFastRefinementUsed());
 
         // set new value
-        estimator.setFastRefinementUsed(
-                !PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
+        estimator.setFastRefinementUsed(!PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT);
 
         // check correctness
-        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT,
-                estimator.isFastRefinementUsed());
+        assertEquals(!PinholeCameraRobustEstimator.DEFAULT_USE_FAST_REFINEMENT, estimator.isFastRefinementUsed());
     }
 
     @Test
-    public void testGetSetPoints() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetPoints() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default values
         assertNull(estimator.getPoints2D());
@@ -517,9 +429,9 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertFalse(estimator.isReady());
 
         // set new value
-        final List<Point3D> points3D = new ArrayList<>();
-        final List<Point2D> points2D = new ArrayList<>();
-        for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
+        final var points3D = new ArrayList<Point3D>();
+        final var points2D = new ArrayList<Point2D>();
+        for (var i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             points3D.add(Point3D.create());
             points2D.add(Point2D.create());
         }
@@ -532,27 +444,17 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
-        final List<Point3D> points3DEmpty = new ArrayList<>();
-        final List<Point2D> points2DEmpty = new ArrayList<>();
-        try {
-            // not enough points
-            estimator.setPoints(points3DEmpty, points2DEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator.setPoints(points3D, points2DEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var points3DEmpty = new ArrayList<Point3D>();
+        final var points2DEmpty = new ArrayList<Point2D>();
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(points3DEmpty, points2DEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(points3D, points2DEmpty));
     }
 
     @Test
-    public void testGetSetListenerAndIsListenerAvailable()
-            throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetListenerAndIsListenerAvailable() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -567,17 +469,15 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSuggestSkewnessValueEnabled() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetSuggestSkewnessValueEnabled() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
                 estimator.isSuggestSkewnessValueEnabled());
 
         // set new value
-        estimator.setSuggestSkewnessValueEnabled(
-                !PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
+        estimator.setSuggestSkewnessValueEnabled(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
 
         // check correctness
         assertEquals(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED,
@@ -585,9 +485,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetSuggestedSkewnessValue() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetSuggestedSkewnessValue() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
@@ -601,10 +500,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSuggestedHorizontalFocalLengthEnabled()
-            throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetSuggestedHorizontalFocalLengthEnabled() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED,
@@ -620,14 +517,11 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetSuggestedHorizontalFocalLengthValue()
-            throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetSuggestedHorizontalFocalLengthValue() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(),
-                0.0);
+        assertEquals(0.0, estimator.getSuggestedHorizontalFocalLengthValue(), 0.0);
 
         // set new value
         estimator.setSuggestedHorizontalFocalLengthValue(100.0);
@@ -637,10 +531,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSuggestVerticalFocalLengthEnabled()
-            throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetSuggestVerticalFocalLengthEnabled() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED,
@@ -656,10 +548,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetSuggestedVerticalFocalLengthValue()
-            throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetSuggestedVerticalFocalLengthValue() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(0.0, estimator.getSuggestedVerticalFocalLengthValue(), 0.0);
@@ -671,17 +561,15 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSuggestAspectRatioEnabled() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetSuggestAspectRatioEnabled() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
                 estimator.isSuggestAspectRatioEnabled());
 
         // set new value
-        estimator.setSuggestAspectRatioEnabled(
-                !PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
+        estimator.setSuggestAspectRatioEnabled(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
 
         // check correctness
         assertEquals(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED,
@@ -689,9 +577,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetSuggestedAspectRatioValue() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetSuggestedAspectRatioValue() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
@@ -705,9 +592,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSuggestPrincipalPointEnabled() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetSuggestPrincipalPointEnabled() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED,
@@ -723,16 +609,14 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetSuggestedPrincipalPointValue()
-            throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetSuggestedPrincipalPointValue() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertNull(estimator.getSuggestedPrincipalPointValue());
 
         // set new value
-        final InhomogeneousPoint2D principalPoint = new InhomogeneousPoint2D();
+        final var principalPoint = new InhomogeneousPoint2D();
         estimator.setSuggestedPrincipalPointValue(principalPoint);
 
         // check correctness
@@ -740,17 +624,15 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSuggestRotationEnabled() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetSuggestRotationEnabled() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
                 estimator.isSuggestRotationEnabled());
 
         // set new value
-        estimator.setSuggestRotationEnabled(
-                !PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
+        estimator.setSuggestRotationEnabled(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED);
 
         // check correctness
         assertEquals(!PinholeCameraRobustEstimator.DEFAULT_SUGGEST_ROTATION_ENABLED,
@@ -758,15 +640,14 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetSuggestedRotationValue() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetSuggestedRotationValue() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertNull(estimator.getSuggestedRotationValue());
 
         // set new value
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
         estimator.setSuggestedRotationValue(q);
 
         // check correctness
@@ -774,9 +655,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetSuggestCenterEnabled() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetSuggestCenterEnabled() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.DEFAULT_SUGGEST_CENTER_ENABLED,
@@ -792,15 +672,14 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetSuggestedCenterValue() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetSuggestedCenterValue() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertNull(estimator.getSuggestedCenterValue());
 
         // set new value
-        final InhomogeneousPoint3D center = new InhomogeneousPoint3D();
+        final var center = new InhomogeneousPoint3D();
         estimator.setSuggestedCenterValue(center);
 
         // check correctness
@@ -808,13 +687,11 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetProgressDelta() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetProgressDelta() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
-        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(PinholeCameraRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
@@ -823,23 +700,13 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
         assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testIsNormalizeSubsetPointCorrespondences()
-            throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsNormalizeSubsetPointCorrespondences() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertFalse(estimator.isNormalizeSubsetPointCorrespondences());
@@ -852,9 +719,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetSkewness() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetSkewness() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(0.0, estimator.getSkewness(), 0.0);
@@ -867,9 +733,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetHorizontalPrincipalPoint() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetHorizontalPrincipalPoint() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(0.0, estimator.getHorizontalPrincipalPoint(), 0.0);
@@ -882,9 +747,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetVerticalPrincipalPoint() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetVerticalPrincipalPoint() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(0.0, estimator.getVerticalPrincipalPoint(), 0.0);
@@ -897,18 +761,17 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsReady() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsReady() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default values
         assertNull(estimator.getPoints2D());
         assertNull(estimator.getPoints3D());
 
         // set new value
-        final List<Point3D> points3D = new ArrayList<>();
-        final List<Point2D> points2D = new ArrayList<>();
-        for (int i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
+        final var points3D = new ArrayList<Point3D>();
+        final var points2D = new ArrayList<Point2D>();
+        for (var i = 0; i < PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES; i++) {
             points3D.add(Point3D.create());
             points2D.add(Point2D.create());
         }
@@ -922,9 +785,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetPlanarConfigurationAllowed() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetPlanarConfigurationAllowed() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default values
         assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED,
@@ -940,9 +802,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetNullspaceDimension2Allowed() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testIsSetNullspaceDimension2Allowed() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default values
         assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED,
@@ -958,9 +819,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetPlanarThreshold() throws LockedException {
-        final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
+    void testGetSetPlanarThreshold() throws LockedException {
+        final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator();
 
         // check default value
         assertEquals(UPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD,
@@ -974,76 +834,62 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testEstimateGeneralNoSuggestion()
-            throws LockedException, NotReadyException, CameraException,
+    void testEstimateGeneralNoSuggestion() throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
-        int numValidCameras = 0;
-        int numValidProjections = 0;
-        for (int t = 0; t < 5 * TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        var numValidCameras = 0;
+        var numValidProjections = 0;
+        for (var t = 0; t < 5 * TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
 
             // intrinsic parameters
-            final double focalLength = randomizer.nextDouble(
-                    MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-            final double horizontalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var focalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(focalLength,
-                            focalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
+            final var intrinsic = new PinholeCameraIntrinsicParameters(focalLength, focalLength,
+                    horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
             // create rotation parameters
-            final double roll = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double yaw = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final Quaternion rotation = new Quaternion(roll, pitch, yaw);
+            final var roll = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var rotation = new Quaternion(roll, pitch, yaw);
             rotation.normalize();
 
             // create camera center
-            final double[] cameraCenterArray = new double[3];
-            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                    cameraCenterArray);
+            final var cameraCenterArray = new double[3];
+            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
             // instantiate camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                    cameraCenter);
+            final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
             // normalize the camera to improve accuracy
             camera.normalize();
 
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> points3D = new ArrayList<>(nPoints);
-            Point3D point3D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = new InhomogeneousPoint3D(
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var points3D = new ArrayList<Point3D>(nPoints);
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = new InhomogeneousPoint3D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
                 points3D.add(point3D);
             }
 
-            final List<Point2D> points2D = camera.project(points3D);
+            final var points2D = camera.project(points3D);
 
             // create outliers
-            Point2D point2DWithError;
-            final List<Point2D> points2DWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, OUTLIER_STD_ERROR);
-            for (final Point2D point2D : points2D) {
+            final var points2DWithError = new ArrayList<Point2D>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, OUTLIER_STD_ERROR);
+            for (final var point2D : points2D) {
+                Point2D point2DWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorW = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorW = errorRandomizer.nextDouble();
                     point2DWithError = new HomogeneousPoint2D(
                             point2D.getHomX() + errorX,
                             point2D.getHomY() + errorY,
@@ -1056,9 +902,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 points2DWithError.add(point2DWithError);
             }
 
-            final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                    new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                            this, points3D, points2DWithError);
+            final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(this, points3D,
+                    points2DWithError);
 
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -1099,578 +944,80 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             camera2.decompose();
 
             // Comparing camera intrinsic parameters
-            final PinholeCameraIntrinsicParameters estimatedIntrinsic =
-                    camera2.getIntrinsicParameters();
+            final var estimatedIntrinsic = camera2.getIntrinsicParameters();
 
             if (Math.abs(focalLength - estimatedIntrinsic.getHorizontalFocalLength()) >
                     VERY_LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(focalLength,
-                    estimatedIntrinsic.getHorizontalFocalLength(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(focalLength - estimatedIntrinsic.getVerticalFocalLength()) >
-                    VERY_LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(focalLength,
-                    estimatedIntrinsic.getVerticalFocalLength(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(horizontalPrincipalPoint - estimatedIntrinsic.getHorizontalPrincipalPoint()) >
-                    ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(horizontalPrincipalPoint,
-                    estimatedIntrinsic.getHorizontalPrincipalPoint(),
-                    ABSOLUTE_ERROR);
-            if (Math.abs(verticalPrincipalPoint - estimatedIntrinsic.getVerticalPrincipalPoint()) >
-                    ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(verticalPrincipalPoint,
-                    estimatedIntrinsic.getVerticalPrincipalPoint(),
-                    ABSOLUTE_ERROR);
-            if (Math.abs(skewness - estimatedIntrinsic.getSkewness()) > ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(skewness, estimatedIntrinsic.getSkewness(),
-                    ABSOLUTE_ERROR);
-
-            // comparing estimated camera center
-            final Point3D estimatedCameraCenter = camera2.getCameraCenter();
-            if (!cameraCenter.equals(estimatedCameraCenter,
-                    VERY_LARGE_ABSOLUTE_ERROR)) {
-                continue;
-            }
-            assertTrue(cameraCenter.equals(estimatedCameraCenter,
-                    VERY_LARGE_ABSOLUTE_ERROR));
-
-            // comparing estimated rotation
-            final Quaternion estimatedRotation = camera2.getCameraRotation().
-                    toQuaternion();
-            estimatedRotation.normalize();
-
-            final Matrix rotMatrix = rotation.asInhomogeneousMatrix();
-            final Matrix estimatedRotMatrix = estimatedRotation.
-                    asInhomogeneousMatrix();
-
-            if (Math.abs(rotation.getA() - estimatedRotation.getA()) > LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(rotation.getA(), estimatedRotation.getA(),
-                    LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(rotation.getB() - estimatedRotation.getB()) > LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(rotation.getB(), estimatedRotation.getB(),
-                    LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(rotation.getC() - estimatedRotation.getC()) > LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(rotation.getC(), estimatedRotation.getC(),
-                    LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(rotation.getD() - estimatedRotation.getD()) > LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(rotation.getD(), estimatedRotation.getD(),
-                    LARGE_ABSOLUTE_ERROR);
-
-            if (!rotMatrix.equals(estimatedRotMatrix, LARGE_ABSOLUTE_ERROR)) {
-                continue;
-            }
-            assertTrue(rotMatrix.equals(estimatedRotMatrix,
-                    LARGE_ABSOLUTE_ERROR));
-
-            numValidCameras++;
-
-            // project original 3D points using estimated camera and check
-            // distance to 2D points without error
-            Point2D originalPoint2D, estimatedPoint2D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = points3D.get(i);
-                originalPoint2D = points2D.get(i);
-                estimatedPoint2D = camera2.project(point3D);
-
-                if (originalPoint2D.distanceTo(estimatedPoint2D) >
-                        VERY_LARGE_ABSOLUTE_ERROR) {
-                    continue;
-                }
-                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D),
-                        VERY_LARGE_ABSOLUTE_ERROR);
-                numValidProjections++;
-            }
-
-            if (numValidCameras > 0 && numValidProjections > 0) {
-                break;
-            }
-        }
-
-        assertTrue(numValidCameras > 0);
-        assertTrue(numValidProjections > 0);
-    }
-
-    @Test
-    public void testEstimateGeneralNoSuggestionWithRefinement()
-            throws LockedException, NotReadyException, CameraException,
-            NotAvailableException {
-        int numValidCameras = 0;
-        int numValidProjections = 0;
-        for (int t = 0; t < 5 * TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-
-            // intrinsic parameters
-            final double focalLength = randomizer.nextDouble(
-                    MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-            final double horizontalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(focalLength,
-                            focalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
-
-            // create rotation parameters
-            final double roll = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double yaw = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final Quaternion rotation = new Quaternion(roll, pitch, yaw);
-            rotation.normalize();
-
-            // create camera center
-            final double[] cameraCenterArray = new double[3];
-            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                    cameraCenterArray);
-
-            // instantiate camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                    cameraCenter);
-
-            // normalize the camera to improve accuracy
-            camera.normalize();
-
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> points3D = new ArrayList<>(nPoints);
-            Point3D point3D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = new InhomogeneousPoint3D(
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-                points3D.add(point3D);
-            }
-
-            final List<Point2D> points2D = camera.project(points3D);
-
-            // create outliers
-            Point2D point2DWithError;
-            final List<Point2D> points2DWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, OUTLIER_STD_ERROR);
-            for (final Point2D point2D : points2D) {
-                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorW = errorRandomizer.nextDouble();
-                    point2DWithError = new HomogeneousPoint2D(
-                            point2D.getHomX() + errorX,
-                            point2D.getHomY() + errorY,
-                            point2D.getHomW() + errorW);
-                } else {
-                    // inlier point (without error)
-                    point2DWithError = point2D;
-                }
-
-                points2DWithError.add(point2DWithError);
-            }
-
-            final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                    new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                            this, points3D, points2DWithError);
-
-            estimator.setSkewness(skewness);
-            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
-            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);
-
-            estimator.setThreshold(THRESHOLD);
-            estimator.setResultRefined(false);
-            estimator.setCovarianceKept(false);
-            estimator.setResultRefined(true);
-            estimator.setCovarianceKept(true);
-
-            assertEquals(0, estimateStart);
-            assertEquals(0, estimateEnd);
-            assertEquals(0, estimateNextIteration);
-            assertEquals(0, estimateProgressChange);
-            assertTrue(estimator.isReady());
-            assertFalse(estimator.isLocked());
-            assertTrue(estimator.isReady());
-            assertNull(estimator.getCovariance());
-
-            reset();
-
-            final PinholeCamera camera2;
-            try {
-                camera2 = estimator.estimate();
-            } catch (final RobustEstimatorException e) {
-                continue;
-            }
-
-            assertEquals(1, estimateStart);
-            assertEquals(1, estimateEnd);
-            assertTrue(estimateNextIteration > 0);
-            assertTrue(estimateProgressChange >= 0);
-            reset();
-
-            // check correctness of estimation
-
-            // decompose estimated camera and check its parameters
-            camera2.decompose();
-
-            // Comparing camera intrinsic parameters
-            final PinholeCameraIntrinsicParameters estimatedIntrinsic =
-                    camera2.getIntrinsicParameters();
-
-            if (Math.abs(focalLength - estimatedIntrinsic.getHorizontalFocalLength()) >
-                    VERY_LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(focalLength,
-                    estimatedIntrinsic.getHorizontalFocalLength(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(focalLength - estimatedIntrinsic.getVerticalFocalLength()) >
-                    VERY_LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(focalLength,
-                    estimatedIntrinsic.getVerticalFocalLength(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(horizontalPrincipalPoint - estimatedIntrinsic.getHorizontalPrincipalPoint()) >
-                    VERY_LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(horizontalPrincipalPoint,
-                    estimatedIntrinsic.getHorizontalPrincipalPoint(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(verticalPrincipalPoint - estimatedIntrinsic.getVerticalPrincipalPoint()) >
-                    VERY_LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(verticalPrincipalPoint,
-                    estimatedIntrinsic.getVerticalPrincipalPoint(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(skewness - estimatedIntrinsic.getSkewness()) >
-                    VERY_LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(skewness, estimatedIntrinsic.getSkewness(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
-
-            // comparing estimated camera center
-            final Point3D estimatedCameraCenter = camera2.getCameraCenter();
-            if (!cameraCenter.equals(estimatedCameraCenter,
-                    VERY_LARGE_ABSOLUTE_ERROR)) {
-                continue;
-            }
-            assertTrue(cameraCenter.equals(estimatedCameraCenter,
-                    VERY_LARGE_ABSOLUTE_ERROR));
-
-            // comparing estimated rotation
-            final Quaternion estimatedRotation = camera2.getCameraRotation().
-                    toQuaternion();
-            estimatedRotation.normalize();
-
-            final Matrix rotMatrix = rotation.asInhomogeneousMatrix();
-            final Matrix estimatedRotMatrix = estimatedRotation.
-                    asInhomogeneousMatrix();
-
-            if (Math.abs(rotation.getA() - estimatedRotation.getA()) > LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(rotation.getA(), estimatedRotation.getA(),
-                    LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(rotation.getB() - estimatedRotation.getB()) > LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(rotation.getB(), estimatedRotation.getB(),
-                    LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(rotation.getC() - estimatedRotation.getC()) > LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(rotation.getC(), estimatedRotation.getC(),
-                    LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(rotation.getD() - estimatedRotation.getD()) > LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(rotation.getD(), estimatedRotation.getD(),
-                    LARGE_ABSOLUTE_ERROR);
-
-            if (!rotMatrix.equals(estimatedRotMatrix, LARGE_ABSOLUTE_ERROR)) {
-                continue;
-            }
-            assertTrue(rotMatrix.equals(estimatedRotMatrix,
-                    LARGE_ABSOLUTE_ERROR));
-
-            numValidCameras++;
-
-            // project original 3D points using estimated camera and check
-            // distance to 2D points without error
-            Point2D originalPoint2D, estimatedPoint2D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = points3D.get(i);
-                originalPoint2D = points2D.get(i);
-                estimatedPoint2D = camera2.project(point3D);
-
-                if (originalPoint2D.distanceTo(estimatedPoint2D) >
-                        VERY_LARGE_ABSOLUTE_ERROR) {
-                    continue;
-                }
-                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D),
-                        VERY_LARGE_ABSOLUTE_ERROR);
-                numValidProjections++;
-            }
-
-            if (numValidCameras > 0 && numValidProjections > 0) {
-                break;
-            }
-        }
-
-        assertTrue(numValidCameras > 0);
-        assertTrue(numValidProjections > 0);
-    }
-
-    @Test
-    public void testEstimateGeneralNoSuggestionWithFastRefinement()
-            throws LockedException, NotReadyException, CameraException,
-            NotAvailableException {
-        int numValidCameras = 0;
-        int numValidProjections = 0;
-        for (int t = 0; t < 5 * TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-
-            // intrinsic parameters
-            final double focalLength = randomizer.nextDouble(
-                    MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-            final double horizontalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(focalLength,
-                            focalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
-
-            // create rotation parameters
-            final double roll = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double yaw = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final Quaternion rotation = new Quaternion(roll, pitch, yaw);
-            rotation.normalize();
-
-            // create camera center
-            final double[] cameraCenterArray = new double[3];
-            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                    cameraCenterArray);
-
-            // instantiate camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                    cameraCenter);
-
-            // normalize the camera to improve accuracy
-            camera.normalize();
-
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> points3D = new ArrayList<>(nPoints);
-            Point3D point3D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = new InhomogeneousPoint3D(
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-                points3D.add(point3D);
-            }
-
-            final List<Point2D> points2D = camera.project(points3D);
-
-            // create outliers
-            Point2D point2DWithError;
-            final List<Point2D> points2DWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, OUTLIER_STD_ERROR);
-            for (final Point2D point2D : points2D) {
-                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
-                    // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorW = errorRandomizer.nextDouble();
-                    point2DWithError = new HomogeneousPoint2D(
-                            point2D.getHomX() + errorX,
-                            point2D.getHomY() + errorY,
-                            point2D.getHomW() + errorW);
-                } else {
-                    // inlier point (without error)
-                    point2DWithError = point2D;
-                }
-
-                points2DWithError.add(point2DWithError);
-            }
-
-            final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                    new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                            this, points3D, points2DWithError);
-
-            estimator.setSkewness(skewness);
-            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
-            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);
-
-            estimator.setThreshold(THRESHOLD);
-            estimator.setResultRefined(true);
-            estimator.setFastRefinementUsed(true);
-            estimator.setCovarianceKept(true);
-
-            assertEquals(0, estimateStart);
-            assertEquals(0, estimateEnd);
-            assertEquals(0, estimateNextIteration);
-            assertEquals(0, estimateProgressChange);
-            assertTrue(estimator.isReady());
-            assertFalse(estimator.isLocked());
-            assertTrue(estimator.isReady());
-            assertNull(estimator.getCovariance());
-
-            reset();
-
-            final PinholeCamera camera2;
-            try {
-                camera2 = estimator.estimate();
-            } catch (final RobustEstimatorException e) {
-                continue;
-            }
-
-            assertEquals(1, estimateStart);
-            assertEquals(1, estimateEnd);
-            assertTrue(estimateNextIteration > 0);
-            assertTrue(estimateProgressChange >= 0);
-            reset();
-
-            // check correctness of estimation
-
-            // decompose estimated camera and check its parameters
-            camera2.decompose();
-
-            // Comparing camera intrinsic parameters
-            final PinholeCameraIntrinsicParameters estimatedIntrinsic =
-                    camera2.getIntrinsicParameters();
-
-            if (Math.abs(focalLength - estimatedIntrinsic.getHorizontalFocalLength()) >
-                    VERY_LARGE_ABSOLUTE_ERROR) {
-                continue;
-            }
-            assertEquals(focalLength,
-                    estimatedIntrinsic.getHorizontalFocalLength(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
+            assertEquals(focalLength, estimatedIntrinsic.getHorizontalFocalLength(), VERY_LARGE_ABSOLUTE_ERROR);
             if (Math.abs(focalLength - estimatedIntrinsic.getVerticalFocalLength()) > VERY_LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(focalLength,
-                    estimatedIntrinsic.getVerticalFocalLength(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(horizontalPrincipalPoint - estimatedIntrinsic.getHorizontalPrincipalPoint()) >
-                    VERY_LARGE_ABSOLUTE_ERROR) {
+            assertEquals(focalLength, estimatedIntrinsic.getVerticalFocalLength(), VERY_LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(horizontalPrincipalPoint - estimatedIntrinsic.getHorizontalPrincipalPoint())
+                    > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(horizontalPrincipalPoint,
-                    estimatedIntrinsic.getHorizontalPrincipalPoint(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(verticalPrincipalPoint - estimatedIntrinsic.getVerticalPrincipalPoint()) >
-                    VERY_LARGE_ABSOLUTE_ERROR) {
+            assertEquals(horizontalPrincipalPoint, estimatedIntrinsic.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
+            if (Math.abs(verticalPrincipalPoint - estimatedIntrinsic.getVerticalPrincipalPoint()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(verticalPrincipalPoint,
-                    estimatedIntrinsic.getVerticalPrincipalPoint(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(skewness - estimatedIntrinsic.getSkewness()) >
-                    VERY_LARGE_ABSOLUTE_ERROR) {
+            assertEquals(verticalPrincipalPoint, estimatedIntrinsic.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+            if (Math.abs(skewness - estimatedIntrinsic.getSkewness()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(skewness, estimatedIntrinsic.getSkewness(),
-                    VERY_LARGE_ABSOLUTE_ERROR);
+            assertEquals(skewness, estimatedIntrinsic.getSkewness(), ABSOLUTE_ERROR);
 
             // comparing estimated camera center
-            final Point3D estimatedCameraCenter = camera2.getCameraCenter();
-            if (!cameraCenter.equals(estimatedCameraCenter,
-                    VERY_LARGE_ABSOLUTE_ERROR)) {
+            final var estimatedCameraCenter = camera2.getCameraCenter();
+            if (!cameraCenter.equals(estimatedCameraCenter, VERY_LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(cameraCenter.equals(estimatedCameraCenter,
-                    VERY_LARGE_ABSOLUTE_ERROR));
+            assertTrue(cameraCenter.equals(estimatedCameraCenter, VERY_LARGE_ABSOLUTE_ERROR));
 
             // comparing estimated rotation
-            final Quaternion estimatedRotation = camera2.getCameraRotation().
-                    toQuaternion();
+            final var estimatedRotation = camera2.getCameraRotation().toQuaternion();
             estimatedRotation.normalize();
 
-            final Matrix rotMatrix = rotation.asInhomogeneousMatrix();
-            final Matrix estimatedRotMatrix = estimatedRotation.
-                    asInhomogeneousMatrix();
+            final var rotMatrix = rotation.asInhomogeneousMatrix();
+            final var estimatedRotMatrix = estimatedRotation.asInhomogeneousMatrix();
 
             if (Math.abs(rotation.getA() - estimatedRotation.getA()) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(rotation.getA(), estimatedRotation.getA(),
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(rotation.getA(), estimatedRotation.getA(), LARGE_ABSOLUTE_ERROR);
             if (Math.abs(rotation.getB() - estimatedRotation.getB()) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(rotation.getB(), estimatedRotation.getB(),
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(rotation.getB(), estimatedRotation.getB(), LARGE_ABSOLUTE_ERROR);
             if (Math.abs(rotation.getC() - estimatedRotation.getC()) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(rotation.getC(), estimatedRotation.getC(),
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(rotation.getC(), estimatedRotation.getC(), LARGE_ABSOLUTE_ERROR);
             if (Math.abs(rotation.getD() - estimatedRotation.getD()) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(rotation.getD(), estimatedRotation.getD(),
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(rotation.getD(), estimatedRotation.getD(), LARGE_ABSOLUTE_ERROR);
 
             if (!rotMatrix.equals(estimatedRotMatrix, LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(rotMatrix.equals(estimatedRotMatrix,
-                    LARGE_ABSOLUTE_ERROR));
+            assertTrue(rotMatrix.equals(estimatedRotMatrix, LARGE_ABSOLUTE_ERROR));
 
             numValidCameras++;
 
             // project original 3D points using estimated camera and check
             // distance to 2D points without error
-            Point2D originalPoint2D, estimatedPoint2D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = points3D.get(i);
-                originalPoint2D = points2D.get(i);
-                estimatedPoint2D = camera2.project(point3D);
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = points3D.get(i);
+                final var originalPoint2D = points2D.get(i);
+                final var estimatedPoint2D = camera2.project(point3D);
 
-                if (originalPoint2D.distanceTo(estimatedPoint2D) >
-                        VERY_LARGE_ABSOLUTE_ERROR) {
+                if (originalPoint2D.distanceTo(estimatedPoint2D) > VERY_LARGE_ABSOLUTE_ERROR) {
                     continue;
                 }
-                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D),
-                        VERY_LARGE_ABSOLUTE_ERROR);
+                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D), VERY_LARGE_ABSOLUTE_ERROR);
                 numValidProjections++;
             }
 
@@ -1684,75 +1031,62 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testEstimateGeneralSuggestedRotationEnabled()
-            throws LockedException, NotReadyException, CameraException,
+    void testEstimateGeneralNoSuggestionWithRefinement() throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        var numValidCameras = 0;
+        var numValidProjections = 0;
+        for (var t = 0; t < 5 * TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
 
             // intrinsic parameters
-            final double focalLength = randomizer.nextDouble(
-                    MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-            final double horizontalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var focalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(focalLength,
-                            focalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
+            final var intrinsic = new PinholeCameraIntrinsicParameters(focalLength, focalLength,
+                    horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
             // create rotation parameters
-            final double roll = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double yaw = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final Quaternion rotation = new Quaternion(roll, pitch, yaw);
+            final var roll = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var rotation = new Quaternion(roll, pitch, yaw);
             rotation.normalize();
 
             // create camera center
-            final double[] cameraCenterArray = new double[3];
-            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                    cameraCenterArray);
+            final var cameraCenterArray = new double[3];
+            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
             // instantiate camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                    cameraCenter);
+            final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
             // normalize the camera to improve accuracy
             camera.normalize();
 
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> points3D = new ArrayList<>(nPoints);
-            Point3D point3D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = new InhomogeneousPoint3D(
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var points3D = new ArrayList<Point3D>(nPoints);
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = new InhomogeneousPoint3D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
                 points3D.add(point3D);
             }
 
-            final List<Point2D> points2D = camera.project(points3D);
+            final var points2D = camera.project(points3D);
 
             // create outliers
-            Point2D point2DWithError;
-            final List<Point2D> points2DWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, OUTLIER_STD_ERROR);
-            for (final Point2D point2D : points2D) {
+            final var points2DWithError = new ArrayList<Point2D>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, OUTLIER_STD_ERROR);
+            for (final var point2D : points2D) {
+                Point2D point2DWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorW = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorW = errorRandomizer.nextDouble();
                     point2DWithError = new HomogeneousPoint2D(
                             point2D.getHomX() + errorX,
                             point2D.getHomY() + errorY,
@@ -1765,9 +1099,406 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 points2DWithError.add(point2DWithError);
             }
 
-            final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                    new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                            this, points3D, points2DWithError);
+            final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(this, points3D,
+                    points2DWithError);
+
+            estimator.setSkewness(skewness);
+            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
+            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);
+
+            estimator.setThreshold(THRESHOLD);
+            estimator.setResultRefined(false);
+            estimator.setCovarianceKept(false);
+            estimator.setResultRefined(true);
+            estimator.setCovarianceKept(true);
+
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
+            assertTrue(estimator.isReady());
+            assertFalse(estimator.isLocked());
+            assertTrue(estimator.isReady());
+            assertNull(estimator.getCovariance());
+
+            reset();
+
+            final PinholeCamera camera2;
+            try {
+                camera2 = estimator.estimate();
+            } catch (final RobustEstimatorException e) {
+                continue;
+            }
+
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
+            assertTrue(estimateNextIteration > 0);
+            assertTrue(estimateProgressChange >= 0);
+            reset();
+
+            // check correctness of estimation
+
+            // decompose estimated camera and check its parameters
+            camera2.decompose();
+
+            // Comparing camera intrinsic parameters
+            final var estimatedIntrinsic = camera2.getIntrinsicParameters();
+
+            if (Math.abs(focalLength - estimatedIntrinsic.getHorizontalFocalLength()) > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(focalLength, estimatedIntrinsic.getHorizontalFocalLength(), VERY_LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(focalLength - estimatedIntrinsic.getVerticalFocalLength()) > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(focalLength, estimatedIntrinsic.getVerticalFocalLength(), VERY_LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(horizontalPrincipalPoint - estimatedIntrinsic.getHorizontalPrincipalPoint())
+                    > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(horizontalPrincipalPoint, estimatedIntrinsic.getHorizontalPrincipalPoint(),
+                    VERY_LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(verticalPrincipalPoint - estimatedIntrinsic.getVerticalPrincipalPoint())
+                    > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(verticalPrincipalPoint, estimatedIntrinsic.getVerticalPrincipalPoint(),
+                    VERY_LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(skewness - estimatedIntrinsic.getSkewness()) > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(skewness, estimatedIntrinsic.getSkewness(), VERY_LARGE_ABSOLUTE_ERROR);
+
+            // comparing estimated camera center
+            final var estimatedCameraCenter = camera2.getCameraCenter();
+            if (!cameraCenter.equals(estimatedCameraCenter, VERY_LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(cameraCenter.equals(estimatedCameraCenter, VERY_LARGE_ABSOLUTE_ERROR));
+
+            // comparing estimated rotation
+            final var estimatedRotation = camera2.getCameraRotation().toQuaternion();
+            estimatedRotation.normalize();
+
+            final var rotMatrix = rotation.asInhomogeneousMatrix();
+            final var estimatedRotMatrix = estimatedRotation.asInhomogeneousMatrix();
+
+            if (Math.abs(rotation.getA() - estimatedRotation.getA()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(rotation.getA(), estimatedRotation.getA(), LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(rotation.getB() - estimatedRotation.getB()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(rotation.getB(), estimatedRotation.getB(), LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(rotation.getC() - estimatedRotation.getC()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(rotation.getC(), estimatedRotation.getC(), LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(rotation.getD() - estimatedRotation.getD()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(rotation.getD(), estimatedRotation.getD(), LARGE_ABSOLUTE_ERROR);
+
+            if (!rotMatrix.equals(estimatedRotMatrix, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(rotMatrix.equals(estimatedRotMatrix, LARGE_ABSOLUTE_ERROR));
+
+            numValidCameras++;
+
+            // project original 3D points using estimated camera and check
+            // distance to 2D points without error
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = points3D.get(i);
+                final var originalPoint2D = points2D.get(i);
+                final var estimatedPoint2D = camera2.project(point3D);
+
+                if (originalPoint2D.distanceTo(estimatedPoint2D) > VERY_LARGE_ABSOLUTE_ERROR) {
+                    continue;
+                }
+                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D), VERY_LARGE_ABSOLUTE_ERROR);
+                numValidProjections++;
+            }
+
+            if (numValidCameras > 0 && numValidProjections > 0) {
+                break;
+            }
+        }
+
+        assertTrue(numValidCameras > 0);
+        assertTrue(numValidProjections > 0);
+    }
+
+    @Test
+    void testEstimateGeneralNoSuggestionWithFastRefinement() throws LockedException, NotReadyException, CameraException,
+            NotAvailableException {
+        var numValidCameras = 0;
+        var numValidProjections = 0;
+        for (var t = 0; t < 5 * TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+
+            // intrinsic parameters
+            final var focalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+
+            final var intrinsic = new PinholeCameraIntrinsicParameters(focalLength, focalLength,
+                    horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
+
+            // create rotation parameters
+            final var roll = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var rotation = new Quaternion(roll, pitch, yaw);
+            rotation.normalize();
+
+            // create camera center
+            final var cameraCenterArray = new double[3];
+            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
+
+            // instantiate camera
+            final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
+
+            // normalize the camera to improve accuracy
+            camera.normalize();
+
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var points3D = new ArrayList<Point3D>(nPoints);
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = new InhomogeneousPoint3D(
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+                points3D.add(point3D);
+            }
+
+            final var points2D = camera.project(points3D);
+
+            // create outliers
+            final var points2DWithError = new ArrayList<Point2D>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, OUTLIER_STD_ERROR);
+            for (final var point2D : points2D) {
+                Point2D point2DWithError;
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
+                    // point is outlier
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorW = errorRandomizer.nextDouble();
+                    point2DWithError = new HomogeneousPoint2D(
+                            point2D.getHomX() + errorX,
+                            point2D.getHomY() + errorY,
+                            point2D.getHomW() + errorW);
+                } else {
+                    // inlier point (without error)
+                    point2DWithError = point2D;
+                }
+
+                points2DWithError.add(point2DWithError);
+            }
+
+            final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(this, points3D,
+                    points2DWithError);
+
+            estimator.setSkewness(skewness);
+            estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
+            estimator.setVerticalPrincipalPoint(verticalPrincipalPoint);
+
+            estimator.setThreshold(THRESHOLD);
+            estimator.setResultRefined(true);
+            estimator.setFastRefinementUsed(true);
+            estimator.setCovarianceKept(true);
+
+            assertEquals(0, estimateStart);
+            assertEquals(0, estimateEnd);
+            assertEquals(0, estimateNextIteration);
+            assertEquals(0, estimateProgressChange);
+            assertTrue(estimator.isReady());
+            assertFalse(estimator.isLocked());
+            assertTrue(estimator.isReady());
+            assertNull(estimator.getCovariance());
+
+            reset();
+
+            final PinholeCamera camera2;
+            try {
+                camera2 = estimator.estimate();
+            } catch (final RobustEstimatorException e) {
+                continue;
+            }
+
+            assertEquals(1, estimateStart);
+            assertEquals(1, estimateEnd);
+            assertTrue(estimateNextIteration > 0);
+            assertTrue(estimateProgressChange >= 0);
+            reset();
+
+            // check correctness of estimation
+
+            // decompose estimated camera and check its parameters
+            camera2.decompose();
+
+            // Comparing camera intrinsic parameters
+            final var estimatedIntrinsic = camera2.getIntrinsicParameters();
+
+            if (Math.abs(focalLength - estimatedIntrinsic.getHorizontalFocalLength()) > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(focalLength, estimatedIntrinsic.getHorizontalFocalLength(), VERY_LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(focalLength - estimatedIntrinsic.getVerticalFocalLength()) > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(focalLength, estimatedIntrinsic.getVerticalFocalLength(), VERY_LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(horizontalPrincipalPoint - estimatedIntrinsic.getHorizontalPrincipalPoint())
+                    > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(horizontalPrincipalPoint, estimatedIntrinsic.getHorizontalPrincipalPoint(),
+                    VERY_LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(verticalPrincipalPoint - estimatedIntrinsic.getVerticalPrincipalPoint())
+                    > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(verticalPrincipalPoint, estimatedIntrinsic.getVerticalPrincipalPoint(),
+                    VERY_LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(skewness - estimatedIntrinsic.getSkewness()) > VERY_LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(skewness, estimatedIntrinsic.getSkewness(), VERY_LARGE_ABSOLUTE_ERROR);
+
+            // comparing estimated camera center
+            final var estimatedCameraCenter = camera2.getCameraCenter();
+            if (!cameraCenter.equals(estimatedCameraCenter, VERY_LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(cameraCenter.equals(estimatedCameraCenter, VERY_LARGE_ABSOLUTE_ERROR));
+
+            // comparing estimated rotation
+            final var estimatedRotation = camera2.getCameraRotation().toQuaternion();
+            estimatedRotation.normalize();
+
+            final var rotMatrix = rotation.asInhomogeneousMatrix();
+            final var estimatedRotMatrix = estimatedRotation.asInhomogeneousMatrix();
+
+            if (Math.abs(rotation.getA() - estimatedRotation.getA()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(rotation.getA(), estimatedRotation.getA(), LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(rotation.getB() - estimatedRotation.getB()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(rotation.getB(), estimatedRotation.getB(), LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(rotation.getC() - estimatedRotation.getC()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(rotation.getC(), estimatedRotation.getC(), LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(rotation.getD() - estimatedRotation.getD()) > LARGE_ABSOLUTE_ERROR) {
+                continue;
+            }
+            assertEquals(rotation.getD(), estimatedRotation.getD(), LARGE_ABSOLUTE_ERROR);
+
+            if (!rotMatrix.equals(estimatedRotMatrix, LARGE_ABSOLUTE_ERROR)) {
+                continue;
+            }
+            assertTrue(rotMatrix.equals(estimatedRotMatrix, LARGE_ABSOLUTE_ERROR));
+
+            numValidCameras++;
+
+            // project original 3D points using estimated camera and check
+            // distance to 2D points without error
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = points3D.get(i);
+                final var originalPoint2D = points2D.get(i);
+                final var estimatedPoint2D = camera2.project(point3D);
+
+                if (originalPoint2D.distanceTo(estimatedPoint2D) > VERY_LARGE_ABSOLUTE_ERROR) {
+                    continue;
+                }
+                assertEquals(0.0, originalPoint2D.distanceTo(estimatedPoint2D), VERY_LARGE_ABSOLUTE_ERROR);
+                numValidProjections++;
+            }
+
+            if (numValidCameras > 0 && numValidProjections > 0) {
+                break;
+            }
+        }
+
+        assertTrue(numValidCameras > 0);
+        assertTrue(numValidProjections > 0);
+    }
+
+    @Test
+    void testEstimateGeneralSuggestedRotationEnabled() throws LockedException, NotReadyException, CameraException,
+            NotAvailableException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+
+            // intrinsic parameters
+            final var focalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+
+            final var intrinsic = new PinholeCameraIntrinsicParameters(focalLength, focalLength,
+                    horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
+
+            // create rotation parameters
+            final var roll = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var rotation = new Quaternion(roll, pitch, yaw);
+            rotation.normalize();
+
+            // create camera center
+            final var cameraCenterArray = new double[3];
+            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
+
+            // instantiate camera
+            final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
+
+            // normalize the camera to improve accuracy
+            camera.normalize();
+
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var points3D = new ArrayList<Point3D>(nPoints);
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = new InhomogeneousPoint3D(
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+                points3D.add(point3D);
+            }
+
+            final var points2D = camera.project(points3D);
+
+            // create outliers
+            final var points2DWithError = new ArrayList<Point2D>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, OUTLIER_STD_ERROR);
+            for (final var point2D : points2D) {
+                Point2D point2DWithError;
+                if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
+                    // point is outlier
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorW = errorRandomizer.nextDouble();
+                    point2DWithError = new HomogeneousPoint2D(
+                            point2D.getHomX() + errorX,
+                            point2D.getHomY() + errorY,
+                            point2D.getHomW() + errorW);
+                } else {
+                    // inlier point (without error)
+                    point2DWithError = point2D;
+                }
+
+                points2DWithError.add(point2DWithError);
+            }
+
+            final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(this, points3D,
+                    points2DWithError);
 
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -1787,7 +1518,6 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             assertTrue(estimator.isReady());
             assertNull(estimator.getCovariance());
 
-
             final PinholeCamera estimatedCamera;
             try {
                 estimatedCamera = estimator.estimate();
@@ -1806,8 +1536,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimatedCamera.decompose();
 
             // comparing rotation
-            final Quaternion estimatedRotation = estimatedCamera.getCameraRotation().
-                    toQuaternion();
+            final var estimatedRotation = estimatedCamera.getCameraRotation().toQuaternion();
             estimatedRotation.normalize();
 
             // estimate without suggestion
@@ -1822,25 +1551,17 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
 
             estimatedCameraNoSuggestion.decompose();
 
-            final Quaternion estimatedRotationNoSuggestion =
-                    estimatedCameraNoSuggestion.getCameraRotation().
-                            toQuaternion();
+            final var estimatedRotationNoSuggestion = estimatedCameraNoSuggestion.getCameraRotation().toQuaternion();
 
             // check that rotation has become closer to suggested value
-            final double diffEstimatedNoSuggestion =
-                    Math.pow(rotation.getA() -
-                            estimatedRotationNoSuggestion.getA(), 2.0) +
-                            Math.pow(rotation.getB() -
-                                    estimatedRotationNoSuggestion.getB(), 2.0) +
-                            Math.pow(rotation.getC() -
-                                    estimatedRotationNoSuggestion.getC(), 2.0) +
-                            Math.pow(rotation.getD() -
-                                    estimatedRotationNoSuggestion.getD(), 2.0);
-            final double diffEstimated =
-                    Math.pow(rotation.getA() - estimatedRotation.getA(), 2.0) +
-                            Math.pow(rotation.getB() - estimatedRotation.getB(), 2.0) +
-                            Math.pow(rotation.getC() - estimatedRotation.getC(), 2.0) +
-                            Math.pow(rotation.getD() - estimatedRotation.getD(), 2.0);
+            final var diffEstimatedNoSuggestion = Math.pow(rotation.getA() - estimatedRotationNoSuggestion.getA(), 2.0)
+                    + Math.pow(rotation.getB() - estimatedRotationNoSuggestion.getB(), 2.0)
+                    + Math.pow(rotation.getC() - estimatedRotationNoSuggestion.getC(), 2.0)
+                    + Math.pow(rotation.getD() - estimatedRotationNoSuggestion.getD(), 2.0);
+            final var diffEstimated = Math.pow(rotation.getA() - estimatedRotation.getA(), 2.0)
+                    + Math.pow(rotation.getB() - estimatedRotation.getB(), 2.0)
+                    + Math.pow(rotation.getC() - estimatedRotation.getC(), 2.0)
+                    + Math.pow(rotation.getD() - estimatedRotation.getD(), 2.0);
 
             if (diffEstimatedNoSuggestion >= diffEstimated) {
                 numValid++;
@@ -1855,76 +1576,62 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testEstimateGeneralSuggestedRotationWithRefinement()
-            throws LockedException, NotReadyException, CameraException,
-            NotAvailableException {
-        int numCovariances = 0;
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testEstimateGeneralSuggestedRotationWithRefinement() throws LockedException, NotReadyException,
+            CameraException, NotAvailableException {
+        var numCovariances = 0;
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
 
             // intrinsic parameters
-            final double focalLength = randomizer.nextDouble(
-                    MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-            final double horizontalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var focalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(focalLength,
-                            focalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
+            final var intrinsic = new PinholeCameraIntrinsicParameters(focalLength, focalLength,
+                    horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
             // create rotation parameters
-            final double roll = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double yaw = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final Quaternion rotation = new Quaternion(roll, pitch, yaw);
+            final var roll = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var rotation = new Quaternion(roll, pitch, yaw);
             rotation.normalize();
 
             // create camera center
-            final double[] cameraCenterArray = new double[3];
-            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                    cameraCenterArray);
+            final var cameraCenterArray = new double[3];
+            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
             // instantiate camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                    cameraCenter);
+            final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
             // normalize the camera to improve accuracy
             camera.normalize();
 
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> points3D = new ArrayList<>(nPoints);
-            Point3D point3D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = new InhomogeneousPoint3D(
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var points3D = new ArrayList<Point3D>(nPoints);
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = new InhomogeneousPoint3D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
                 points3D.add(point3D);
             }
 
-            final List<Point2D> points2D = camera.project(points3D);
+            final var points2D = camera.project(points3D);
 
             // create outliers
-            Point2D point2DWithError;
-            final List<Point2D> points2DWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, OUTLIER_STD_ERROR);
-            for (final Point2D point2D : points2D) {
+            final var points2DWithError = new ArrayList<Point2D>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, OUTLIER_STD_ERROR);
+            for (final var point2D : points2D) {
+                Point2D point2DWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorW = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorW = errorRandomizer.nextDouble();
                     point2DWithError = new HomogeneousPoint2D(
                             point2D.getHomX() + errorX,
                             point2D.getHomY() + errorY,
@@ -1937,9 +1644,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 points2DWithError.add(point2DWithError);
             }
 
-            final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                    new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                            this, points3D, points2DWithError);
+            final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(this, points3D,
+                    points2DWithError);
 
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -1960,7 +1666,6 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
             assertNull(estimator.getCovariance());
-
 
             final PinholeCamera estimatedCamera;
             try {
@@ -1987,8 +1692,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimatedCamera.decompose();
 
             // comparing rotation
-            final Quaternion estimatedRotation = estimatedCamera.getCameraRotation().
-                    toQuaternion();
+            final var estimatedRotation = estimatedCamera.getCameraRotation().toQuaternion();
             estimatedRotation.normalize();
 
             // estimate without suggestion
@@ -2003,25 +1707,17 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
 
             estimatedCameraNoSuggestion.decompose();
 
-            final Quaternion estimatedRotationNoSuggestion =
-                    estimatedCameraNoSuggestion.getCameraRotation().
-                            toQuaternion();
+            final var estimatedRotationNoSuggestion = estimatedCameraNoSuggestion.getCameraRotation().toQuaternion();
 
             // check that rotation has become closer to suggested value
-            final double diffEstimatedNoSuggestion =
-                    Math.pow(rotation.getA() -
-                            estimatedRotationNoSuggestion.getA(), 2.0) +
-                            Math.pow(rotation.getB() -
-                                    estimatedRotationNoSuggestion.getB(), 2.0) +
-                            Math.pow(rotation.getC() -
-                                    estimatedRotationNoSuggestion.getC(), 2.0) +
-                            Math.pow(rotation.getD() -
-                                    estimatedRotationNoSuggestion.getD(), 2.0);
-            final double diffEstimated =
-                    Math.pow(rotation.getA() - estimatedRotation.getA(), 2.0) +
-                            Math.pow(rotation.getB() - estimatedRotation.getB(), 2.0) +
-                            Math.pow(rotation.getC() - estimatedRotation.getC(), 2.0) +
-                            Math.pow(rotation.getD() - estimatedRotation.getD(), 2.0);
+            final var diffEstimatedNoSuggestion = Math.pow(rotation.getA() - estimatedRotationNoSuggestion.getA(), 2.0)
+                    + Math.pow(rotation.getB() - estimatedRotationNoSuggestion.getB(), 2.0)
+                    + Math.pow(rotation.getC() - estimatedRotationNoSuggestion.getC(), 2.0)
+                    + Math.pow(rotation.getD() - estimatedRotationNoSuggestion.getD(), 2.0);
+            final var diffEstimated = Math.pow(rotation.getA() - estimatedRotation.getA(), 2.0)
+                    + Math.pow(rotation.getB() - estimatedRotation.getB(), 2.0)
+                    + Math.pow(rotation.getC() - estimatedRotation.getC(), 2.0)
+                    + Math.pow(rotation.getD() - estimatedRotation.getD(), 2.0);
 
             if (diffEstimatedNoSuggestion >= diffEstimated) {
                 numValid++;
@@ -2037,76 +1733,62 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testEstimateGeneralSuggestedRotationWithFastRefinement()
-            throws LockedException, NotReadyException, CameraException,
-            NotAvailableException {
-        int numCovariances = 0;
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testEstimateGeneralSuggestedRotationWithFastRefinement() throws LockedException, NotReadyException,
+            CameraException, NotAvailableException {
+        var numCovariances = 0;
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
 
             // intrinsic parameters
-            final double focalLength = randomizer.nextDouble(
-                    MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-            final double horizontalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var focalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(focalLength,
-                            focalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
+            final var intrinsic = new PinholeCameraIntrinsicParameters(focalLength, focalLength,
+                    horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
             // create rotation parameters
-            final double roll = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double yaw = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final Quaternion rotation = new Quaternion(roll, pitch, yaw);
+            final var roll = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var rotation = new Quaternion(roll, pitch, yaw);
             rotation.normalize();
 
             // create camera center
-            final double[] cameraCenterArray = new double[3];
-            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                    cameraCenterArray);
+            final var cameraCenterArray = new double[3];
+            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
             // instantiate camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                    cameraCenter);
+            final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
             // normalize the camera to improve accuracy
             camera.normalize();
 
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> points3D = new ArrayList<>(nPoints);
-            Point3D point3D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = new InhomogeneousPoint3D(
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var points3D = new ArrayList<Point3D>(nPoints);
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = new InhomogeneousPoint3D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
                 points3D.add(point3D);
             }
 
-            final List<Point2D> points2D = camera.project(points3D);
+            final var points2D = camera.project(points3D);
 
             // create outliers
             Point2D point2DWithError;
-            final List<Point2D> points2DWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, OUTLIER_STD_ERROR);
-            for (final Point2D point2D : points2D) {
+            final var points2DWithError = new ArrayList<Point2D>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, OUTLIER_STD_ERROR);
+            for (final var point2D : points2D) {
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorW = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorW = errorRandomizer.nextDouble();
                     point2DWithError = new HomogeneousPoint2D(
                             point2D.getHomX() + errorX,
                             point2D.getHomY() + errorY,
@@ -2119,9 +1801,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 points2DWithError.add(point2DWithError);
             }
 
-            final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                    new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                            this, points3D, points2DWithError);
+            final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(this, points3D,
+                    points2DWithError);
 
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -2144,7 +1825,6 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             assertTrue(estimator.isReady());
             assertNull(estimator.getCovariance());
 
-
             final PinholeCamera estimatedCamera;
             try {
                 estimatedCamera = estimator.estimate();
@@ -2170,8 +1850,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimatedCamera.decompose();
 
             // comparing rotation
-            final Quaternion estimatedRotation = estimatedCamera.getCameraRotation().
-                    toQuaternion();
+            final var estimatedRotation = estimatedCamera.getCameraRotation().toQuaternion();
             estimatedRotation.normalize();
 
             // estimate without suggestion
@@ -2186,25 +1865,17 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
 
             estimatedCameraNoSuggestion.decompose();
 
-            final Quaternion estimatedRotationNoSuggestion =
-                    estimatedCameraNoSuggestion.getCameraRotation().
-                            toQuaternion();
+            final var estimatedRotationNoSuggestion = estimatedCameraNoSuggestion.getCameraRotation().toQuaternion();
 
             // check that rotation has become closer to suggested value
-            final double diffEstimatedNoSuggestion =
-                    Math.pow(rotation.getA() -
-                            estimatedRotationNoSuggestion.getA(), 2.0) +
-                            Math.pow(rotation.getB() -
-                                    estimatedRotationNoSuggestion.getB(), 2.0) +
-                            Math.pow(rotation.getC() -
-                                    estimatedRotationNoSuggestion.getC(), 2.0) +
-                            Math.pow(rotation.getD() -
-                                    estimatedRotationNoSuggestion.getD(), 2.0);
-            final double diffEstimated =
-                    Math.pow(rotation.getA() - estimatedRotation.getA(), 2.0) +
-                            Math.pow(rotation.getB() - estimatedRotation.getB(), 2.0) +
-                            Math.pow(rotation.getC() - estimatedRotation.getC(), 2.0) +
-                            Math.pow(rotation.getD() - estimatedRotation.getD(), 2.0);
+            final var diffEstimatedNoSuggestion = Math.pow(rotation.getA() - estimatedRotationNoSuggestion.getA(), 2.0)
+                    + Math.pow(rotation.getB() - estimatedRotationNoSuggestion.getB(), 2.0)
+                    + Math.pow(rotation.getC() - estimatedRotationNoSuggestion.getC(), 2.0)
+                    + Math.pow(rotation.getD() - estimatedRotationNoSuggestion.getD(), 2.0);
+            final var diffEstimated = Math.pow(rotation.getA() - estimatedRotation.getA(), 2.0)
+                    + Math.pow(rotation.getB() - estimatedRotation.getB(), 2.0)
+                    + Math.pow(rotation.getC() - estimatedRotation.getC(), 2.0)
+                    + Math.pow(rotation.getD() - estimatedRotation.getD(), 2.0);
 
             if (diffEstimatedNoSuggestion >= diffEstimated) {
                 numValid++;
@@ -2220,75 +1891,61 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testEstimateGeneralSuggestedCenterEnabled()
-            throws LockedException, NotReadyException, CameraException,
+    void testEstimateGeneralSuggestedCenterEnabled() throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
 
             // intrinsic parameters
-            final double focalLength = randomizer.nextDouble(
-                    MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-            final double horizontalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var focalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(focalLength,
-                            focalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
+            final var intrinsic = new PinholeCameraIntrinsicParameters(focalLength, focalLength,
+                    horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
             // create rotation parameters
-            final double roll = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double yaw = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final Quaternion rotation = new Quaternion(roll, pitch, yaw);
+            final var roll = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            final var rotation = new Quaternion(roll, pitch, yaw);
             rotation.normalize();
 
             // create camera center
-            final double[] cameraCenterArray = new double[3];
-            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                    cameraCenterArray);
+            final var cameraCenterArray = new double[3];
+            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
             // instantiate camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                    cameraCenter);
+            final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
             // normalize the camera to improve accuracy
             camera.normalize();
 
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> points3D = new ArrayList<>(nPoints);
-            Point3D point3D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = new InhomogeneousPoint3D(
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var points3D = new ArrayList<Point3D>(nPoints);
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = new InhomogeneousPoint3D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
                 points3D.add(point3D);
             }
 
-            final List<Point2D> points2D = camera.project(points3D);
+            final var points2D = camera.project(points3D);
 
             // create outliers
             Point2D point2DWithError;
-            final List<Point2D> points2DWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, OUTLIER_STD_ERROR);
-            for (final Point2D point2D : points2D) {
+            final var points2DWithError = new ArrayList<Point2D>();
+            final var errorRandomizer = new GaussianRandomizer( 0.0, OUTLIER_STD_ERROR);
+            for (final var point2D : points2D) {
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorW = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorW = errorRandomizer.nextDouble();
                     point2DWithError = new HomogeneousPoint2D(
                             point2D.getHomX() + errorX,
                             point2D.getHomY() + errorY,
@@ -2301,9 +1958,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 points2DWithError.add(point2DWithError);
             }
 
-            final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                    new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                            this, points3D, points2DWithError);
+            final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(this, points3D,
+                    points2DWithError);
 
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -2323,7 +1979,6 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             assertTrue(estimator.isReady());
             assertNull(estimator.getCovariance());
 
-
             final PinholeCamera estimatedCamera;
             try {
                 estimatedCamera = estimator.estimate();
@@ -2342,7 +1997,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimatedCamera.decompose();
 
             // comparing center
-            final Point3D estimatedCenter = estimatedCamera.getCameraCenter();
+            final var estimatedCenter = estimatedCamera.getCameraCenter();
 
             // estimate without suggestion
             estimator.setSuggestCenterEnabled(false);
@@ -2356,12 +2011,10 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
 
             estimatedCameraNoSuggestion.decompose();
 
-            final Point3D estimatedCenterNoSuggestion =
-                    estimatedCameraNoSuggestion.getCameraCenter();
+            final var estimatedCenterNoSuggestion = estimatedCameraNoSuggestion.getCameraCenter();
 
             // check that camera center has become closer to suggested value
-            if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >=
-                    cameraCenter.distanceTo(estimatedCenter)) {
+            if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >= cameraCenter.distanceTo(estimatedCenter)) {
                 numValid++;
             }
 
@@ -2374,76 +2027,62 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testEstimateGeneralSuggestedCenterWithRefinement()
-            throws LockedException, NotReadyException, CameraException,
+    void testEstimateGeneralSuggestedCenterWithRefinement() throws LockedException, NotReadyException, CameraException,
             NotAvailableException {
-        int numCovariances = 0;
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        var numCovariances = 0;
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
 
             // intrinsic parameters
-            final double focalLength = randomizer.nextDouble(
-                    MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-            final double horizontalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var focalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(focalLength,
-                            focalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
+            final var intrinsic = new PinholeCameraIntrinsicParameters(focalLength, focalLength,
+                    horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
             // create rotation parameters
-            final double roll = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double yaw = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final Quaternion rotation = new Quaternion(roll, pitch, yaw);
+            final var roll = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            final var pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            final var yaw = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            final var rotation = new Quaternion(roll, pitch, yaw);
             rotation.normalize();
 
             // create camera center
-            final double[] cameraCenterArray = new double[3];
-            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                    cameraCenterArray);
+            final var cameraCenterArray = new double[3];
+            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
             // instantiate camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                    cameraCenter);
+            final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
             // normalize the camera to improve accuracy
             camera.normalize();
 
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> points3D = new ArrayList<>(nPoints);
-            Point3D point3D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = new InhomogeneousPoint3D(
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var points3D = new ArrayList<Point3D>(nPoints);
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = new InhomogeneousPoint3D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
                 points3D.add(point3D);
             }
 
-            final List<Point2D> points2D = camera.project(points3D);
+            final var points2D = camera.project(points3D);
 
             // create outliers
-            Point2D point2DWithError;
-            final List<Point2D> points2DWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, OUTLIER_STD_ERROR);
-            for (final Point2D point2D : points2D) {
+            final var points2DWithError = new ArrayList<Point2D>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, OUTLIER_STD_ERROR);
+            for (final var point2D : points2D) {
+                Point2D point2DWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorW = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorW = errorRandomizer.nextDouble();
                     point2DWithError = new HomogeneousPoint2D(
                             point2D.getHomX() + errorX,
                             point2D.getHomY() + errorY,
@@ -2456,9 +2095,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 points2DWithError.add(point2DWithError);
             }
 
-            final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                    new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                            this, points3D, points2DWithError);
+            final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(this, points3D,
+                    points2DWithError);
 
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -2479,7 +2117,6 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             assertFalse(estimator.isLocked());
             assertTrue(estimator.isReady());
             assertNull(estimator.getCovariance());
-
 
             final PinholeCamera estimatedCamera;
             try {
@@ -2506,7 +2143,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimatedCamera.decompose();
 
             // comparing center
-            final Point3D estimatedCenter = estimatedCamera.getCameraCenter();
+            final var estimatedCenter = estimatedCamera.getCameraCenter();
 
             // estimate without suggestion
             estimator.setSuggestCenterEnabled(false);
@@ -2520,12 +2157,10 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
 
             estimatedCameraNoSuggestion.decompose();
 
-            final Point3D estimatedCenterNoSuggestion =
-                    estimatedCameraNoSuggestion.getCameraCenter();
+            final var estimatedCenterNoSuggestion = estimatedCameraNoSuggestion.getCameraCenter();
 
             // check that camera center has become closer to suggested value
-            if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >=
-                    cameraCenter.distanceTo(estimatedCenter)) {
+            if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >= cameraCenter.distanceTo(estimatedCenter)) {
                 numValid++;
             }
 
@@ -2539,76 +2174,62 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     }
 
     @Test
-    public void testEstimateGeneralSuggestedCenterWithFastRefinement()
-            throws LockedException, NotReadyException, CameraException,
-            NotAvailableException {
-        int numCovariances = 0;
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testEstimateGeneralSuggestedCenterWithFastRefinement() throws LockedException, NotReadyException,
+            CameraException, NotAvailableException {
+        var numCovariances = 0;
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
 
             // intrinsic parameters
-            final double focalLength = randomizer.nextDouble(
-                    MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-            final double horizontalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(
-                    MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var focalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(focalLength,
-                            focalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
+            final var intrinsic = new PinholeCameraIntrinsicParameters(focalLength, focalLength,
+                    horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
             // create rotation parameters
-            final double roll = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double yaw = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final Quaternion rotation = new Quaternion(roll, pitch, yaw);
+            final var roll = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var rotation = new Quaternion(roll, pitch, yaw);
             rotation.normalize();
 
             // create camera center
-            final double[] cameraCenterArray = new double[3];
-            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final InhomogeneousPoint3D cameraCenter = new InhomogeneousPoint3D(
-                    cameraCenterArray);
+            final var cameraCenterArray = new double[3];
+            randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
             // instantiate camera
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                    cameraCenter);
+            final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
             // normalize the camera to improve accuracy
             camera.normalize();
 
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> points3D = new ArrayList<>(nPoints);
-            Point3D point3D;
-            for (int i = 0; i < nPoints; i++) {
-                point3D = new InhomogeneousPoint3D(
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var points3D = new ArrayList<Point3D>(nPoints);
+            for (var i = 0; i < nPoints; i++) {
+                final var point3D = new InhomogeneousPoint3D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
                 points3D.add(point3D);
             }
 
-            final List<Point2D> points2D = camera.project(points3D);
+            final var points2D = camera.project(points3D);
 
             // create outliers
-            Point2D point2DWithError;
-            final List<Point2D> points2DWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, OUTLIER_STD_ERROR);
-            for (final Point2D point2D : points2D) {
+            final var points2DWithError = new ArrayList<Point2D>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, OUTLIER_STD_ERROR);
+            for (final var point2D : points2D) {
+                Point2D point2DWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorW = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorW = errorRandomizer.nextDouble();
                     point2DWithError = new HomogeneousPoint2D(
                             point2D.getHomX() + errorX,
                             point2D.getHomY() + errorY,
@@ -2621,9 +2242,8 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
                 points2DWithError.add(point2DWithError);
             }
 
-            final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator =
-                    new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
-                            this, points3D, points2DWithError);
+            final var estimator = new MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(this, points3D,
+                    points2DWithError);
 
             estimator.setSkewness(skewness);
             estimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);
@@ -2646,7 +2266,6 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             assertTrue(estimator.isReady());
             assertNull(estimator.getCovariance());
 
-
             final PinholeCamera estimatedCamera;
             try {
                 estimatedCamera = estimator.estimate();
@@ -2672,7 +2291,7 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
             estimatedCamera.decompose();
 
             // comparing center
-            final Point3D estimatedCenter = estimatedCamera.getCameraCenter();
+            final var estimatedCenter = estimatedCamera.getCameraCenter();
 
             // estimate without suggestion
             estimator.setSuggestCenterEnabled(false);
@@ -2686,12 +2305,10 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
 
             estimatedCameraNoSuggestion.decompose();
 
-            final Point3D estimatedCenterNoSuggestion =
-                    estimatedCameraNoSuggestion.getCameraCenter();
+            final var estimatedCenterNoSuggestion = estimatedCameraNoSuggestion.getCameraCenter();
 
             // check that camera center has become closer to suggested value
-            if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >=
-                    cameraCenter.distanceTo(estimatedCenter)) {
+            if (cameraCenter.distanceTo(estimatedCenterNoSuggestion) >= cameraCenter.distanceTo(estimatedCenter)) {
                 numValid++;
             }
 
@@ -2707,189 +2324,63 @@ public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimatorTest
     @Override
     public void onEstimateStart(final PinholeCameraRobustEstimator estimator) {
         estimateStart++;
-        checkLocked(
-                (MSACUPnPPointCorrespondencePinholeCameraRobustEstimator) estimator);
+        checkLocked((MSACUPnPPointCorrespondencePinholeCameraRobustEstimator) estimator);
     }
 
     @Override
     public void onEstimateEnd(final PinholeCameraRobustEstimator estimator) {
         estimateEnd++;
-        checkLocked(
-                (MSACUPnPPointCorrespondencePinholeCameraRobustEstimator) estimator);
+        checkLocked((MSACUPnPPointCorrespondencePinholeCameraRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateNextIteration(final PinholeCameraRobustEstimator estimator,
-                                        final int iteration) {
+    public void onEstimateNextIteration(final PinholeCameraRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
-        checkLocked(
-                (MSACUPnPPointCorrespondencePinholeCameraRobustEstimator) estimator);
+        checkLocked((MSACUPnPPointCorrespondencePinholeCameraRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateProgressChange(final PinholeCameraRobustEstimator estimator,
-                                         final float progress) {
+    public void onEstimateProgressChange(final PinholeCameraRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
-        checkLocked(
-                (MSACUPnPPointCorrespondencePinholeCameraRobustEstimator) estimator);
+        checkLocked((MSACUPnPPointCorrespondencePinholeCameraRobustEstimator) estimator);
     }
 
     private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
+        estimateStart = estimateEnd = estimateNextIteration = estimateProgressChange = 0;
     }
 
-    private void checkLocked(
-            final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator) {
-        final List<Point3D> points3D = new ArrayList<>();
-        final List<Point2D> points2D = new ArrayList<>();
-        try {
-            estimator.setPoints(points3D, points2D);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(0.01f);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setThreshold(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setConfidence(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setMaxIterations(10);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setNormalizeSubsetPointCorrespondences(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            estimator.setSuggestSkewnessValueEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestedSkewnessValue(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestHorizontalFocalLengthEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestedHorizontalFocalLengthValue(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestVerticalFocalLengthEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestedVerticalFocalLengthValue(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestAspectRatioEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestedAspectRatioValue(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestPrincipalPointEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestedPrincipalPointValue(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestRotationEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestedRotationValue(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestCenterEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSuggestedCenterValue(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setFastRefinementUsed(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setPlanarConfigurationAllowed(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setNullspaceDimension2Allowed(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setPlanarThreshold(1e9);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setSkewness(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setHorizontalPrincipalPoint(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setVerticalPrincipalPoint(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
+    private static void checkLocked(final MSACUPnPPointCorrespondencePinholeCameraRobustEstimator estimator) {
+        final var points3D = new ArrayList<Point3D>();
+        final var points2D = new ArrayList<Point2D>();
+        assertThrows(LockedException.class, () -> estimator.setPoints(points3D, points2D));
+        assertThrows(LockedException.class, () -> estimator.setListener(null));
+        assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.01f));
+        assertThrows(LockedException.class, () -> estimator.setThreshold(0.5));
+        assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+        assertThrows(LockedException.class, () -> estimator.setMaxIterations(10));
+        assertThrows(LockedException.class, () -> estimator.setNormalizeSubsetPointCorrespondences(true));
+        assertThrows(LockedException.class, estimator::estimate);
+        assertThrows(LockedException.class, () -> estimator.setSuggestSkewnessValueEnabled(true));
+        assertThrows(LockedException.class, () -> estimator.setSuggestedSkewnessValue(0.0));
+        assertThrows(LockedException.class, () -> estimator.setSuggestHorizontalFocalLengthEnabled(true));
+        assertThrows(LockedException.class, () -> estimator.setSuggestedHorizontalFocalLengthValue(0.0));
+        assertThrows(LockedException.class, () -> estimator.setSuggestVerticalFocalLengthEnabled(true));
+        assertThrows(LockedException.class, () -> estimator.setSuggestedVerticalFocalLengthValue(0.0));
+        assertThrows(LockedException.class, () -> estimator.setSuggestAspectRatioEnabled(true));
+        assertThrows(LockedException.class, () -> estimator.setSuggestedAspectRatioValue(0.0));
+        assertThrows(LockedException.class, () -> estimator.setSuggestPrincipalPointEnabled(true));
+        assertThrows(LockedException.class, () -> estimator.setSuggestedPrincipalPointValue(null));
+        assertThrows(LockedException.class, () -> estimator.setSuggestRotationEnabled(true));
+        assertThrows(LockedException.class, () -> estimator.setSuggestedRotationValue(null));
+        assertThrows(LockedException.class, () -> estimator.setSuggestCenterEnabled(true));
+        assertThrows(LockedException.class, () -> estimator.setSuggestedCenterValue(null));
+        assertThrows(LockedException.class, () -> estimator.setFastRefinementUsed(true));
+        assertThrows(LockedException.class, () -> estimator.setPlanarConfigurationAllowed(true));
+        assertThrows(LockedException.class, () -> estimator.setNullspaceDimension2Allowed(true));
+        assertThrows(LockedException.class, () -> estimator.setPlanarThreshold(1e9));
+        assertThrows(LockedException.class, () -> estimator.setSkewness(0.0));
+        assertThrows(LockedException.class, () -> estimator.setHorizontalPrincipalPoint(0.0));
+        assertThrows(LockedException.class, () -> estimator.setVerticalPrincipalPoint(0.0));
         assertTrue(estimator.isLocked());
     }
 }

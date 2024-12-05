@@ -73,14 +73,14 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Constructor.
      */
     public LMedSPointCorrespondenceAffineTransformation2DRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -100,7 +100,7 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
     public LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         super(inputPoints, outputPoints);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -112,7 +112,7 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
     public LMedSPointCorrespondenceAffineTransformation2DRobustEstimator(
             final AffineTransformation2DRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -135,7 +135,7 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
             final AffineTransformation2DRobustEstimatorListener listener,
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         super(listener, inputPoints, outputPoints);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -158,7 +158,7 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -191,7 +191,7 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -209,8 +209,7 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public AffineTransformation2D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public AffineTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -218,120 +217,111 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
             throw new NotReadyException();
         }
 
-        final LMedSRobustEstimator<AffineTransformation2D> innerEstimator =
-                new LMedSRobustEstimator<>(
-                        new LMedSRobustEstimatorListener<AffineTransformation2D>() {
+        final var innerEstimator = new LMedSRobustEstimator<>(
+                new LMedSRobustEstimatorListener<AffineTransformation2D>() {
 
-                            // point to be reused when computing residuals
-                            private final Point2D mTestPoint = Point2D.create(
-                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+                    // point to be reused when computing residuals
+                    private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputPoints.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputPoints.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return AffineTransformation2DRobustEstimator.MINIMUM_SIZE;
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return AffineTransformation2DRobustEstimator.MINIMUM_SIZE;
+                    }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<AffineTransformation2D> solutions) {
-                                final Point2D inputPoint1 = mInputPoints.get(samplesIndices[0]);
-                                final Point2D inputPoint2 = mInputPoints.get(samplesIndices[1]);
-                                final Point2D inputPoint3 = mInputPoints.get(samplesIndices[2]);
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<AffineTransformation2D> solutions) {
+                        final var inputPoint1 = inputPoints.get(samplesIndices[0]);
+                        final var inputPoint2 = inputPoints.get(samplesIndices[1]);
+                        final var inputPoint3 = inputPoints.get(samplesIndices[2]);
 
-                                final Point2D outputPoint1 = mOutputPoints.get(samplesIndices[0]);
-                                final Point2D outputPoint2 = mOutputPoints.get(samplesIndices[1]);
-                                final Point2D outputPoint3 = mOutputPoints.get(samplesIndices[2]);
+                        final var outputPoint1 = outputPoints.get(samplesIndices[0]);
+                        final var outputPoint2 = outputPoints.get(samplesIndices[1]);
+                        final var outputPoint3 = outputPoints.get(samplesIndices[2]);
 
-                                try {
-                                    final AffineTransformation2D transformation =
-                                            new AffineTransformation2D(inputPoint1, inputPoint2,
-                                                    inputPoint3, outputPoint1, outputPoint2, outputPoint3);
-                                    solutions.add(transformation);
-                                } catch (final CoincidentPointsException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            final var transformation = new AffineTransformation2D(inputPoint1, inputPoint2, inputPoint3,
+                                    outputPoint1, outputPoint2, outputPoint3);
+                            solutions.add(transformation);
+                        } catch (final CoincidentPointsException e) {
+                            // if points are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(
-                                    final AffineTransformation2D currentEstimation, final int i) {
-                                final Point2D inputPoint = mInputPoints.get(i);
-                                final Point2D outputPoint = mOutputPoints.get(i);
+                    @Override
+                    public double computeResidual(final AffineTransformation2D currentEstimation, final int i) {
+                        final var inputPoint = inputPoints.get(i);
+                        final var outputPoint = outputPoints.get(i);
 
-                                // transform input point and store result in mTestPoint
-                                currentEstimation.transform(inputPoint, mTestPoint);
+                        // transform input point and store result in mTestPoint
+                        currentEstimation.transform(inputPoint, testPoint);
 
-                                return outputPoint.distanceTo(mTestPoint);
-                            }
+                        return outputPoint.distanceTo(testPoint);
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.
-                                        this.isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<AffineTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<AffineTransformation2D> estimator) {
+                        if (mListener != null) {
+                            mListener.onEstimateStart(
+                                    LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<AffineTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<AffineTransformation2D> estimator) {
+                        if (mListener != null) {
+                            mListener.onEstimateEnd(
+                                    LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<AffineTransformation2D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<AffineTransformation2D> estimator, final int iteration) {
+                        if (mListener != null) {
+                            mListener.onEstimateNextIteration(
+                                    LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.this,
+                                    iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<AffineTransformation2D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
-                        });
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<AffineTransformation2D> estimator, final float progress) {
+                        if (mListener != null) {
+                            mListener.onEstimateProgressChange(
+                                    LMedSPointCorrespondenceAffineTransformation2DRobustEstimator.this,
+                                    progress);
+                        }
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            innerEstimator.setStopThreshold(mStopThreshold);
-            final AffineTransformation2D transformation = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            innerEstimator.setStopThreshold(stopThreshold);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -358,11 +348,10 @@ public class LMedSPointCorrespondenceAffineTransformation2DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        final LMedSRobustEstimator.LMedSInliersData inliersData =
-                (LMedSRobustEstimator.LMedSInliersData) getInliersData();
+        final var inliersData = (LMedSRobustEstimator.LMedSInliersData) getInliersData();
 
         // avoid setting a threshold too strict
-        final double threshold = inliersData.getEstimatedThreshold();
-        return Math.max(threshold, mStopThreshold);
+        final var threshold = inliersData.getEstimatedThreshold();
+        return Math.max(threshold, stopThreshold);
     }
 }

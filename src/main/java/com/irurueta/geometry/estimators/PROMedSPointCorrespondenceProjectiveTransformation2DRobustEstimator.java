@@ -74,20 +74,20 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Quality scores corresponding to each pair of matched points.
      * The larger the score value the better the quality of the matching.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Constructor.
      */
     public PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -107,7 +107,7 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
     public PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         super(inputPoints, outputPoints);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -119,7 +119,7 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
     public PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
             final ProjectiveTransformation2DRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -142,7 +142,7 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
             final ProjectiveTransformation2DRobustEstimatorListener listener,
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         super(listener, inputPoints, outputPoints);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -153,10 +153,9 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-            final double[] qualityScores) {
+    public PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(final double[] qualityScores) {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -178,15 +177,14 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
      *                                  MINIMUM_SIZE.
      */
     public PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores) {
         super(inputPoints, outputPoints);
 
         if (qualityScores.length != inputPoints.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -201,10 +199,9 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -228,15 +225,14 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
             final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores) {
         super(listener, inputPoints, outputPoints);
 
         if (qualityScores.length != inputPoints.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -261,7 +257,7 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -295,7 +291,7 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -306,7 +302,7 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -338,8 +334,7 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mInputPoints.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == inputPoints.size();
     }
 
     /**
@@ -356,8 +351,7 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public ProjectiveTransformation2D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public ProjectiveTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -365,133 +359,122 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
             throw new NotReadyException();
         }
 
-        final PROMedSRobustEstimator<ProjectiveTransformation2D> innerEstimator =
-                new PROMedSRobustEstimator<>(
-                        new PROMedSRobustEstimatorListener<ProjectiveTransformation2D>() {
+        final var innerEstimator = new PROMedSRobustEstimator<>(
+                new PROMedSRobustEstimatorListener<ProjectiveTransformation2D>() {
 
-                            // point to be reused when computing residuals
-                            private final Point2D mTestPoint = Point2D.create(
-                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+                    // point to be reused when computing residuals
+                    private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                            @Override
-                            public double getThreshold() {
-                                return mStopThreshold;
-                            }
+                    @Override
+                    public double getThreshold() {
+                        return stopThreshold;
+                    }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputPoints.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputPoints.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE;
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE;
+                    }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<ProjectiveTransformation2D> solutions) {
-                                final Point2D inputPoint1 = mInputPoints.get(samplesIndices[0]);
-                                final Point2D inputPoint2 = mInputPoints.get(samplesIndices[1]);
-                                final Point2D inputPoint3 = mInputPoints.get(samplesIndices[2]);
-                                final Point2D inputPoint4 = mInputPoints.get(samplesIndices[3]);
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<ProjectiveTransformation2D> solutions) {
+                        final var inputPoint1 = inputPoints.get(samplesIndices[0]);
+                        final var inputPoint2 = inputPoints.get(samplesIndices[1]);
+                        final var inputPoint3 = inputPoints.get(samplesIndices[2]);
+                        final var inputPoint4 = inputPoints.get(samplesIndices[3]);
 
-                                final Point2D outputPoint1 = mOutputPoints.get(samplesIndices[0]);
-                                final Point2D outputPoint2 = mOutputPoints.get(samplesIndices[1]);
-                                final Point2D outputPoint3 = mOutputPoints.get(samplesIndices[2]);
-                                final Point2D outputPoint4 = mOutputPoints.get(samplesIndices[3]);
+                        final var outputPoint1 = outputPoints.get(samplesIndices[0]);
+                        final var outputPoint2 = outputPoints.get(samplesIndices[1]);
+                        final var outputPoint3 = outputPoints.get(samplesIndices[2]);
+                        final var outputPoint4 = outputPoints.get(samplesIndices[3]);
 
-                                try {
-                                    final ProjectiveTransformation2D transformation =
-                                            new ProjectiveTransformation2D(inputPoint1, inputPoint2,
-                                                    inputPoint3, inputPoint4, outputPoint1, outputPoint2,
-                                                    outputPoint3, outputPoint4);
-                                    solutions.add(transformation);
-                                } catch (final CoincidentPointsException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            final var transformation = new ProjectiveTransformation2D(inputPoint1, inputPoint2,
+                                    inputPoint3, inputPoint4, outputPoint1, outputPoint2, outputPoint3, outputPoint4);
+                            solutions.add(transformation);
+                        } catch (final CoincidentPointsException e) {
+                            // if points are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(
-                                    final ProjectiveTransformation2D currentEstimation, final int i) {
-                                final Point2D inputPoint = mInputPoints.get(i);
-                                final Point2D outputPoint = mOutputPoints.get(i);
+                    @Override
+                    public double computeResidual(final ProjectiveTransformation2D currentEstimation, final int i) {
+                        final var inputPoint = inputPoints.get(i);
+                        final var outputPoint = outputPoints.get(i);
 
-                                // transform input point and store result in mTestPoint
-                                currentEstimation.transform(inputPoint, mTestPoint);
+                        // transform input point and store result in mTestPoint
+                        currentEstimation.transform(inputPoint, testPoint);
 
-                                return outputPoint.distanceTo(mTestPoint);
-                            }
+                        return outputPoint.distanceTo(testPoint);
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.
-                                        this.isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<ProjectiveTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<ProjectiveTransformation2D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(
+                                    PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<ProjectiveTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<ProjectiveTransformation2D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(
+                                    PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<ProjectiveTransformation2D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<ProjectiveTransformation2D> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(
+                                    PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.this,
+                                    iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<ProjectiveTransformation2D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<ProjectiveTransformation2D> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(
+                                    PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator.this,
+                                    progress);
+                        }
+                    }
 
-                            @Override
-                            public double[] getQualityScores() {
-                                return mQualityScores;
-                            }
-                        });
+                    @Override
+                    public double[] getQualityScores() {
+                        return qualityScores;
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final ProjectiveTransformation2D transformation =
-                    innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -518,12 +501,11 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        final PROMedSRobustEstimator.PROMedSInliersData inliersData =
-                (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
+        final var inliersData = (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
 
         // avoid setting a threshold too strict
-        final double threshold = inliersData.getEstimatedThreshold();
-        return Math.max(threshold, mStopThreshold);
+        final var threshold = inliersData.getEstimatedThreshold();
+        return Math.max(threshold, stopThreshold);
     }
 
     /**
@@ -540,6 +522,6 @@ public class PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

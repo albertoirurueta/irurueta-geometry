@@ -62,34 +62,34 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
     /**
      * Value corresponding to real numbers basis.
      */
-    private double mA;
+    private double a;
 
     /**
      * Value corresponding to basis i.
      */
-    private double mB;
+    private double b;
 
     /**
      * Value corresponding to basis j.
      */
-    private double mC;
+    private double c;
 
     /**
      * Value corresponding to basis k.
      */
-    private double mD;
+    private double d;
 
     /**
      * Indicates whether quaternion is normalized or not.
      */
-    private boolean mNormalized;
+    private boolean normalized;
 
     /**
      * Default constructor.
      * Creates a quaternion containing no rotation.
      */
     public Quaternion() {
-        mA = 1.0;
+        a = 1.0;
     }
 
     /**
@@ -101,10 +101,10 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param d value corresponding to basis k.
      */
     public Quaternion(final double a, final double b, final double c, final double d) {
-        mA = a;
-        mB = b;
-        mC = c;
-        mD = d;
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
     }
 
     /**
@@ -175,7 +175,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @return value corresponding to real numbers basis.
      */
     public double getA() {
-        return mA;
+        return a;
     }
 
     /**
@@ -184,8 +184,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param a value corresponding to real numbers basis.
      */
     public void setA(final double a) {
-        mA = a;
-        mNormalized = false;
+        this.a = a;
+        normalized = false;
     }
 
     /**
@@ -194,7 +194,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @return value corresponding to basis i.
      */
     public double getB() {
-        return mB;
+        return b;
     }
 
     /**
@@ -203,8 +203,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param b value corresponding to basis i.
      */
     public void setB(final double b) {
-        mB = b;
-        mNormalized = false;
+        this.b = b;
+        normalized = false;
     }
 
     /**
@@ -213,7 +213,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @return value corresponding to basis j.
      */
     public double getC() {
-        return mC;
+        return c;
     }
 
     /**
@@ -222,8 +222,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param c value corresponding to basis j.
      */
     public void setC(final double c) {
-        mC = c;
-        mNormalized = false;
+        this.c = c;
+        normalized = false;
     }
 
     /**
@@ -232,7 +232,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @return value corresponding to basis k.
      */
     public double getD() {
-        return mD;
+        return d;
     }
 
     /**
@@ -241,8 +241,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param d value corresponding to basis k.
      */
     public void setD(final double d) {
-        mD = d;
-        mNormalized = false;
+        this.d = d;
+        normalized = false;
     }
 
     /**
@@ -251,7 +251,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @return values of this quaternion.
      */
     public double[] getValues() {
-        final double[] result = new double[N_PARAMS];
+        final var result = new double[N_PARAMS];
         values(result);
         return result;
     }
@@ -267,10 +267,10 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
             throw new IllegalArgumentException("result length must be 4");
         }
 
-        result[0] = mA;
-        result[1] = mB;
-        result[2] = mC;
-        result[3] = mD;
+        result[0] = a;
+        result[1] = b;
+        result[2] = c;
+        result[3] = d;
     }
 
     /**
@@ -285,11 +285,11 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
             throw new IllegalArgumentException("values length must be 4");
         }
 
-        mA = values[0];
-        mB = values[1];
-        mC = values[2];
-        mD = values[3];
-        mNormalized = false;
+        a = values[0];
+        b = values[1];
+        c = values[2];
+        d = values[3];
+        normalized = false;
     }
 
     /**
@@ -298,11 +298,11 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param quaternion quaternion to copy from.
      */
     public final void fromQuaternion(final Quaternion quaternion) {
-        mA = quaternion.mA;
-        mB = quaternion.mB;
-        mC = quaternion.mC;
-        mD = quaternion.mD;
-        mNormalized = quaternion.mNormalized;
+        a = quaternion.a;
+        b = quaternion.b;
+        c = quaternion.c;
+        d = quaternion.d;
+        normalized = quaternion.normalized;
     }
 
     /**
@@ -314,7 +314,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      */
     @Override
     public Quaternion clone() throws CloneNotSupportedException {
-        final Quaternion result = (Quaternion) super.clone();
+        final var result = (Quaternion) super.clone();
         copyTo(result);
         return result;
     }
@@ -325,11 +325,11 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param output destination instance where data is copied to.
      */
     public void copyTo(final Quaternion output) {
-        output.mA = mA;
-        output.mB = mB;
-        output.mC = mC;
-        output.mD = mD;
-        output.mNormalized = mNormalized;
+        output.a = a;
+        output.b = b;
+        output.c = c;
+        output.d = d;
+        output.normalized = normalized;
     }
 
     /**
@@ -341,8 +341,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param theta rotation angle expressed in radians.
      */
     public final void setFromAxisAndRotation(
-            final double axisX, final double axisY, final double axisZ,
-            final double theta) {
+            final double axisX, final double axisY, final double axisZ, final double theta) {
         setFromAxisAndRotation(axisX, axisY, axisZ, theta, null, null);
     }
 
@@ -362,36 +361,34 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">au2q.m at https://github.com/joansola/slamtb</a>
      */
     public void setFromAxisAndRotation(
-            final double axisX, final double axisY, final double axisZ,
-            final double theta, final Matrix jacobianOfTheta,
-            final Matrix jacobianOfAxis) {
+            final double axisX, final double axisY, final double axisZ, final double theta,
+            final Matrix jacobianOfTheta, final Matrix jacobianOfAxis) {
 
         // validations
-        if (jacobianOfTheta != null && (jacobianOfTheta.getRows() != N_PARAMS ||
-                jacobianOfTheta.getColumns() != 1)) {
+        if (jacobianOfTheta != null && (jacobianOfTheta.getRows() != N_PARAMS || jacobianOfTheta.getColumns() != 1)) {
             throw new IllegalArgumentException("jacobian of theta must be 4x1");
         }
 
-        if (jacobianOfAxis != null && (jacobianOfAxis.getRows() != N_PARAMS ||
-                jacobianOfAxis.getColumns() != N_ANGLES)) {
+        if (jacobianOfAxis != null && (jacobianOfAxis.getRows() != N_PARAMS
+                || jacobianOfAxis.getColumns() != N_ANGLES)) {
             throw new IllegalArgumentException("jacobian of axis must be 4x3");
         }
 
 
-        final double halfTheta = theta / 2.0;
-        final double c = Math.cos(halfTheta);
-        final double s = Math.sin(halfTheta);
+        final var halfTheta = theta / 2.0;
+        final var cosine = Math.cos(halfTheta);
+        final var sine = Math.sin(halfTheta);
 
-        mA = c;
+        a = cosine;
 
-        mB = axisX * s;
-        mC = axisY * s;
-        mD = axisZ * s;
-        mNormalized = false;
+        b = axisX * sine;
+        this.c = axisY * sine;
+        d = axisZ * sine;
+        normalized = false;
 
         if (jacobianOfTheta != null) {
-            final double halfC = c / 2.0;
-            final double halfS = s / 2.0;
+            final var halfC = cosine / 2.0;
+            final var halfS = sine / 2.0;
 
             jacobianOfTheta.getBuffer()[0] = -halfS;
             jacobianOfTheta.getBuffer()[1] = axisX * halfC;
@@ -401,9 +398,9 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
 
         if (jacobianOfAxis != null) {
             jacobianOfAxis.initialize(0.0);
-            jacobianOfAxis.setElementAt(1, 0, s);
-            jacobianOfAxis.setElementAt(2, 1, s);
-            jacobianOfAxis.setElementAt(3, 2, s);
+            jacobianOfAxis.setElementAt(1, 0, sine);
+            jacobianOfAxis.setElementAt(2, 1, sine);
+            jacobianOfAxis.setElementAt(3, 2, sine);
         }
     }
 
@@ -433,14 +430,12 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      *                                  does not have proper size.
      */
     public void setFromAxisAndRotation(
-            final double[] axis, final double theta,
-            final Matrix jacobianOfTheta, final Matrix jacobianOfAxis) {
+            final double[] axis, final double theta, final Matrix jacobianOfTheta, final Matrix jacobianOfAxis) {
         if (axis.length != AxisRotation3D.AXIS_PARAMS) {
             throw new IllegalArgumentException("axis length must be 3");
         }
 
-        setFromAxisAndRotation(axis[0], axis[1], axis[2], theta,
-                jacobianOfTheta, jacobianOfAxis);
+        setFromAxisAndRotation(axis[0], axis[1], axis[2], theta, jacobianOfTheta, jacobianOfAxis);
     }
 
     /**
@@ -464,14 +459,12 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      *                                  does not have proper size.
      */
     public void setFromAxisAndRotation(
-            final AxisRotation3D axisRotation,
-            final Matrix jacobianOfTheta, final Matrix jacobianOfAxis) {
+            final AxisRotation3D axisRotation, final Matrix jacobianOfTheta, final Matrix jacobianOfAxis) {
 
-        final double theta = axisRotation.getRotationAngle();
+        final var theta = axisRotation.getRotationAngle();
 
-        setFromAxisAndRotation(axisRotation.getAxisX(), axisRotation.getAxisY(),
-                axisRotation.getAxisZ(), theta, jacobianOfTheta,
-                jacobianOfAxis);
+        setFromAxisAndRotation(axisRotation.getAxisX(), axisRotation.getAxisY(), axisRotation.getAxisZ(), theta,
+                jacobianOfTheta, jacobianOfAxis);
     }
 
     /**
@@ -492,7 +485,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @return obtained result.
      */
     public Quaternion multiplyAndReturnNew(final Quaternion q) {
-        final Quaternion result = new Quaternion(0.0, 0.0, 0.0, 0.0);
+        final var result = new Quaternion(0.0, 0.0, 0.0, 0.0);
         multiply(q, result);
         return result;
     }
@@ -535,32 +528,32 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">qProd.m at https://github.com/joansola/slamtb</a>
      */
     public static void product(
-            final Quaternion q1, final Quaternion q2, final Quaternion result,
-            final Matrix jacobianQ1, final Matrix jacobianQ2) {
+            final Quaternion q1, final Quaternion q2, final Quaternion result, final Matrix jacobianQ1,
+            final Matrix jacobianQ2) {
 
-        if (jacobianQ1 != null && (jacobianQ1.getRows() != Quaternion.N_PARAMS ||
-                jacobianQ1.getColumns() != Quaternion.N_PARAMS)) {
+        if (jacobianQ1 != null && (jacobianQ1.getRows() != Quaternion.N_PARAMS
+                || jacobianQ1.getColumns() != Quaternion.N_PARAMS)) {
             throw new IllegalArgumentException("jacobian of q1 must be 4x4");
         }
-        if (jacobianQ2 != null && (jacobianQ2.getRows() != Quaternion.N_PARAMS ||
-                jacobianQ2.getColumns() != Quaternion.N_PARAMS)) {
+        if (jacobianQ2 != null && (jacobianQ2.getRows() != Quaternion.N_PARAMS
+                || jacobianQ2.getColumns() != Quaternion.N_PARAMS)) {
             throw new IllegalArgumentException("jacobian of q2 must be 4x4");
         }
 
-        final double q1A = q1.mA;
-        final double q1B = q1.mB;
-        final double q1C = q1.mC;
-        final double q1D = q1.mD;
-        final double q2A = q2.mA;
-        final double q2B = q2.mB;
-        final double q2C = q2.mC;
-        final double q2D = q2.mD;
+        final var q1A = q1.a;
+        final var q1B = q1.b;
+        final var q1C = q1.c;
+        final var q1D = q1.d;
+        final var q2A = q2.a;
+        final var q2B = q2.b;
+        final var q2C = q2.c;
+        final var q2D = q2.d;
 
-        result.mA = q1A * q2A - q1B * q2B - q1C * q2C - q1D * q2D;
-        result.mB = q1A * q2B + q1B * q2A + q1C * q2D - q1D * q2C;
-        result.mC = q1A * q2C - q1B * q2D + q1C * q2A + q1D * q2B;
-        result.mD = q1A * q2D + q1B * q2C - q1C * q2B + q1D * q2A;
-        result.mNormalized = false;
+        result.a = q1A * q2A - q1B * q2B - q1C * q2C - q1D * q2D;
+        result.b = q1A * q2B + q1B * q2A + q1C * q2D - q1D * q2C;
+        result.c = q1A * q2C - q1B * q2D + q1C * q2A + q1D * q2B;
+        result.d = q1A * q2D + q1B * q2C - q1C * q2B + q1D * q2A;
+        result.normalized = false;
 
         if (jacobianQ1 != null) {
             jacobianQ1.setElementAt(0, 0, q2A);
@@ -619,37 +612,35 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">e2q.m at https://github.com/joansola/slamtb</a>
      */
     public void setFromEulerAngles(
-            final double roll, final double pitch, final double yaw,
-            final Matrix jacobian) {
+            final double roll, final double pitch, final double yaw, final Matrix jacobian) {
 
-        if (jacobian != null && (jacobian.getRows() != N_PARAMS ||
-                jacobian.getColumns() != N_ANGLES)) {
+        if (jacobian != null && (jacobian.getRows() != N_PARAMS || jacobian.getColumns() != N_ANGLES)) {
             throw new IllegalArgumentException("jacobian must be 4x3");
         }
 
         // roll rotation on X axis
-        final Quaternion qx = new Quaternion(new double[]{1.0, 0.0, 0.0}, roll);
+        final var qx = new Quaternion(new double[]{1.0, 0.0, 0.0}, roll);
         // pitch rotation on Y axis
-        final Quaternion qy = new Quaternion(new double[]{0.0, 1.0, 0.0}, pitch);
+        final var qy = new Quaternion(new double[]{0.0, 1.0, 0.0}, pitch);
         // yaw rotation on Z axis (qProd(qProd(qz, qy), qx)
-        final Quaternion qz = new Quaternion(new double[]{0.0, 0.0, 1.0}, yaw);
+        final var qz = new Quaternion(new double[]{0.0, 0.0, 1.0}, yaw);
 
         product(qz, qy, this);
         product(this, qx, this);
         normalize();
 
         if (jacobian != null) {
-            final double halfRoll = roll / 2.0;
-            final double halfPitch = pitch / 2.0;
-            final double halfYaw = yaw / 2.0;
+            final var halfRoll = roll / 2.0;
+            final var halfPitch = pitch / 2.0;
+            final var halfYaw = yaw / 2.0;
 
-            final double sr = Math.sin(halfRoll);
-            final double sp = Math.sin(halfPitch);
-            final double sy = Math.sin(halfYaw);
+            final var sr = Math.sin(halfRoll);
+            final var sp = Math.sin(halfPitch);
+            final var sy = Math.sin(halfYaw);
 
-            final double cr = Math.cos(halfRoll);
-            final double cp = Math.cos(halfPitch);
-            final double cy = Math.cos(halfYaw);
+            final var cr = Math.cos(halfRoll);
+            final var cp = Math.cos(halfPitch);
+            final var cy = Math.cos(halfYaw);
 
             jacobian.setElementAt(0, 0, 0.5 * (-cy * cp * sr + sy * sp * cr));
             jacobian.setElementAt(1, 0, 0.5 * (cy * cp * cr + sy * sp * sr));
@@ -676,8 +667,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param yaw   yaw angle expressed in radians. Rotation around z-axis.
      * @see <a href="https://github.com/joansola/slamtb">e2q.m at https://github.com/joansola/slamtb</a>
      */
-    public final void setFromEulerAngles(
-            final double roll, final double pitch, final double yaw) {
+    public final void setFromEulerAngles(final double roll, final double pitch, final double yaw) {
         setFromEulerAngles(roll, pitch, yaw, null);
     }
 
@@ -723,26 +713,25 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
      */
     public static void eulerToMatrixRotation(
-            final double roll, final double pitch, final double yaw,
-            final MatrixRotation3D result, final Matrix jacobian) {
+            final double roll, final double pitch, final double yaw, final MatrixRotation3D result,
+            final Matrix jacobian) {
 
-        if (jacobian != null && (jacobian.getRows() != 3 * N_ANGLES ||
-                jacobian.getColumns() != N_ANGLES)) {
+        if (jacobian != null && (jacobian.getRows() != 3 * N_ANGLES || jacobian.getColumns() != N_ANGLES)) {
             throw new IllegalArgumentException("jacobian must be 9x3");
         }
 
         result.setRollPitchYaw(roll, pitch, yaw);
 
         if (jacobian != null) {
-            final double sr = Math.sin(roll);
-            final double cr = Math.cos(roll);
-            final double sp = Math.sin(pitch);
-            final double cp = Math.cos(pitch);
-            final double sy = Math.sin(yaw);
-            final double cy = Math.cos(yaw);
+            final var sr = Math.sin(roll);
+            final var cr = Math.cos(roll);
+            final var sp = Math.sin(pitch);
+            final var cp = Math.cos(pitch);
+            final var sy = Math.sin(yaw);
+            final var cy = Math.cos(yaw);
 
-            final double tmp1 = sr * sy + cr * sp * cy;
-            final double tmp2 = -cr * cy - sr * sp * sy;
+            final var tmp1 = sr * sy + cr * sp * cy;
+            final var tmp2 = -cr * cy - sr * sp * sy;
             jacobian.setElementAt(0, 0, 0.0);
             jacobian.setElementAt(1, 0, 0.0);
             jacobian.setElementAt(2, 0, 0.0);
@@ -786,8 +775,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
      */
     public static void eulerToMatrixRotation(
-            final double roll, final double pitch, final double yaw,
-            final MatrixRotation3D result) {
+            final double roll, final double pitch, final double yaw, final MatrixRotation3D result) {
         eulerToMatrixRotation(roll, pitch, yaw, result, null);
     }
 
@@ -803,14 +791,12 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
      */
     public static void eulerToMatrixRotation(
-            final double[] angles,
-            final MatrixRotation3D result, final Matrix jacobian) {
+            final double[] angles, final MatrixRotation3D result, final Matrix jacobian) {
         if (angles.length != N_ANGLES) {
             throw new IllegalArgumentException("angles must have length 3");
         }
 
-        eulerToMatrixRotation(angles[0], angles[1], angles[2], result,
-                jacobian);
+        eulerToMatrixRotation(angles[0], angles[1], angles[2], result, jacobian);
     }
 
     /**
@@ -822,8 +808,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @throws IllegalArgumentException if provided angles length is not 3.
      * @see <a href="https://github.com/joansola/slamtb">e2R.m at https://github.com/joansola/slamtb</a>
      */
-    public static void eulerToMatrixRotation(
-            final double[] angles, final MatrixRotation3D result) {
+    public static void eulerToMatrixRotation(final double[] angles, final MatrixRotation3D result) {
         eulerToMatrixRotation(angles, result, null);
     }
 
@@ -841,26 +826,23 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">q2au.m at https://github.com/joansola/slamtb</a>
      */
     public double toAxisAndRotationAngle(
-            final double[] axis, final Matrix jacobianAngle,
-            final Matrix jacobianAxis) {
+            final double[] axis, final Matrix jacobianAngle, final Matrix jacobianAxis) {
         if (axis.length != AxisRotation3D.AXIS_PARAMS) {
             throw new IllegalArgumentException("axis length must be 3");
         }
-        if (jacobianAngle != null && (jacobianAngle.getRows() != 1 ||
-                jacobianAngle.getColumns() != N_PARAMS)) {
+        if (jacobianAngle != null && (jacobianAngle.getRows() != 1 || jacobianAngle.getColumns() != N_PARAMS)) {
             throw new IllegalArgumentException("jacobian of angle must be 1x4");
         }
-        if (jacobianAxis != null &&
-                (jacobianAxis.getRows() != AxisRotation3D.AXIS_PARAMS ||
-                        jacobianAxis.getColumns() != N_PARAMS)) {
+        if (jacobianAxis != null && (jacobianAxis.getRows() != AxisRotation3D.AXIS_PARAMS
+                || jacobianAxis.getColumns() != N_PARAMS)) {
             throw new IllegalArgumentException("jacobian of axis must be 3x4");
         }
 
         // non-normalized rotation axis
-        final double[] v = new double[]{mB, mC, mD};
+        final var v = new double[]{b, c, d};
 
         // norm of rotation axis
-        final double n = com.irurueta.algebra.Utils.normF(v);
+        final var n = com.irurueta.algebra.Utils.normF(v);
 
         // normalized rotation axis
         if (n > 0.0) {
@@ -871,15 +853,15 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
         }
 
         // scalar part
-        final double s = mA;
-        final double a = 2.0 * Math.atan2(n, s);
+        final var s = a;
+        final var aValue = 2.0 * Math.atan2(n, s);
 
         if (jacobianAngle != null) {
             if (n > AXIS_NORM_THRESHOLD) {
-                final double denom = n * n + s * s;
-                final double aN = 2.0 * s / denom;
-                final double aS = -2.0 * n / denom;
-                final double[] aV = ArrayUtils.multiplyByScalarAndReturnNew(axis, aN);
+                final var denom = n * n + s * s;
+                final var aN = 2.0 * s / denom;
+                final var aS = -2.0 * n / denom;
+                final var aV = ArrayUtils.multiplyByScalarAndReturnNew(axis, aN);
 
                 jacobianAngle.setElementAtIndex(0, aS);
                 jacobianAngle.setElementAtIndex(1, aV[0]);
@@ -896,8 +878,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
             try {
                 if (n > AXIS_NORM_THRESHOLD) {
                     // uV = (eye(3)*n - v * axis') / n^2
-                    final Matrix uV = Matrix.identity(AxisRotation3D.AXIS_PARAMS,
-                            AxisRotation3D.AXIS_PARAMS);
+                    final var uV = Matrix.identity(AxisRotation3D.AXIS_PARAMS, AxisRotation3D.AXIS_PARAMS);
                     uV.multiplyByScalar(n);
                     uV.subtract(Matrix.newFromArray(v, true).multiplyAndReturnNew(
                             Matrix.newFromArray(axis, false)));
@@ -906,8 +887,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
                     jacobianAxis.setSubmatrix(0, 1, 2, 3, uV);
                 } else {
                     // 2*eye(3)
-                    final Matrix m = Matrix.identity(AxisRotation3D.AXIS_PARAMS,
-                            AxisRotation3D.AXIS_PARAMS);
+                    final var m = Matrix.identity(AxisRotation3D.AXIS_PARAMS, AxisRotation3D.AXIS_PARAMS);
                     m.multiplyByScalar(2.0);
                     // uQ = [zeros(3,1) 2*eye(3)]
                     jacobianAxis.setSubmatrix(0, 1, 2, 3, m);
@@ -917,7 +897,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
             }
         }
 
-        return a;
+        return aValue;
     }
 
     /**
@@ -939,8 +919,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      */
     @Override
     public void toAxisRotation(final AxisRotation3D result) {
-        final double[] axis = new double[AxisRotation3D.AXIS_PARAMS];
-        final double theta = toAxisAndRotationAngle(axis, null, null);
+        final var axis = new double[AxisRotation3D.AXIS_PARAMS];
+        final var theta = toAxisAndRotationAngle(axis, null, null);
         result.setAxisAndRotation(axis, theta);
     }
 
@@ -951,7 +931,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      */
     @Override
     public AxisRotation3D toAxisRotation() {
-        final AxisRotation3D result = new AxisRotation3D();
+        final var result = new AxisRotation3D();
         toAxisRotation(result);
         return result;
     }
@@ -971,27 +951,24 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
         if (result.length != AxisRotation3D.AXIS_PARAMS) {
             throw new IllegalArgumentException("result length must be 3");
         }
-        if (jacobian != null &&
-                (jacobian.getRows() != AxisRotation3D.AXIS_PARAMS ||
-                        jacobian.getColumns() != N_PARAMS)) {
+        if (jacobian != null && (jacobian.getRows() != AxisRotation3D.AXIS_PARAMS
+                || jacobian.getColumns() != N_PARAMS)) {
             throw new IllegalArgumentException("jacobian must be 3x4");
         }
 
         if (jacobian == null) {
-            final double theta = toAxisAndRotationAngle(result, null, null);
+            final var theta = toAxisAndRotationAngle(result, null, null);
             ArrayUtils.multiplyByScalar(result, theta, result);
         } else {
             try {
-                final Matrix jacobianAngle = new Matrix(1, N_PARAMS);
-                final Matrix jacobianAxis = new Matrix(AxisRotation3D.AXIS_PARAMS,
-                        N_PARAMS);
-                final double[] axis = new double[AxisRotation3D.AXIS_PARAMS];
-                final double theta = toAxisAndRotationAngle(axis, jacobianAngle,
-                        jacobianAxis);
+                final var jacobianAngle = new Matrix(1, N_PARAMS);
+                final var jacobianAxis = new Matrix(AxisRotation3D.AXIS_PARAMS, N_PARAMS);
+                final var axis = new double[AxisRotation3D.AXIS_PARAMS];
+                final var theta = toAxisAndRotationAngle(axis, jacobianAngle, jacobianAxis);
                 ArrayUtils.multiplyByScalar(axis, theta, result);
 
-                final Matrix vA = Matrix.newFromArray(axis, true);
-                final Matrix vU = Matrix.diagonal(new double[]{theta, theta, theta});
+                final var vA = Matrix.newFromArray(axis, true);
+                final var vU = Matrix.diagonal(new double[]{theta, theta, theta});
 
                 if (theta > AXIS_NORM_THRESHOLD) {
                     // vA * jacobianAngle + vU * jacobianAxis //3x1 * 1x4 + 3x3 * 3x4
@@ -1006,7 +983,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
                     jacobian.copyFrom(vA);
                 } else {
                     // 2*eye(3)
-                    Matrix m = Matrix.identity(AxisRotation3D.AXIS_PARAMS,
+                    final var m = Matrix.identity(AxisRotation3D.AXIS_PARAMS,
                             AxisRotation3D.AXIS_PARAMS);
                     m.multiplyByScalar(2.0);
                     // uQ = [zeros(3,1) 2*eye(3)]
@@ -1044,16 +1021,15 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
         if (angles.length != N_ANGLES) {
             throw new IllegalArgumentException("angles length must be 3");
         }
-        if (jacobian != null && (jacobian.getRows() != N_ANGLES ||
-                jacobian.getColumns() != N_PARAMS)) {
+        if (jacobian != null && (jacobian.getRows() != N_ANGLES || jacobian.getColumns() != N_PARAMS)) {
             throw new IllegalArgumentException("jacobian must be 3x4");
         }
 
-        final double y1 = 2.0 * mC * mD + 2.0 * mA * mB;
-        final double x1 = mA * mA - mB * mB - mC * mC + mD * mD;
-        final double z2 = -2.0 * mB * mD + 2.0 * mA * mC;
-        final double y3 = 2.0 * mB * mC + 2.0 * mA * mD;
-        final double x3 = mA * mA + mB * mB - mC * mC - mD * mD;
+        final var y1 = 2.0 * c * d + 2.0 * a * b;
+        final var x1 = a * a - b * b - c * c + d * d;
+        final var z2 = -2.0 * b * d + 2.0 * a * c;
+        final var y3 = 2.0 * b * c + 2.0 * a * d;
+        final var x3 = a * a + b * b - c * c - d * d;
 
         // roll
         angles[0] = Math.atan2(y1, x1);
@@ -1065,32 +1041,30 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
         angles[2] = Math.atan2(y3, x3);
 
         if (jacobian != null) {
+            final var dx1dq = new double[]{2 * a, -2 * b, -2 * c, 2 * d};
+            final var dy1dq = new double[]{2 * b, 2 * a, 2 * d, 2 * c};
+            final var dz2dq = new double[]{2 * c, -2 * d, 2 * a, -2 * b};
+            final var dx3dq = new double[]{2 * a, 2 * b, -2 * c, -2 * d};
+            final var dy3dq = new double[]{2 * d, 2 * c, 2 * b, 2 * a};
 
-            final double[] dx1dq = new double[]{2 * mA, -2 * mB, -2 * mC, 2 * mD};
-            final double[] dy1dq = new double[]{2 * mB, 2 * mA, 2 * mD, 2 * mC};
-            final double[] dz2dq = new double[]{2 * mC, -2 * mD, 2 * mA, -2 * mB};
-            final double[] dx3dq = new double[]{2 * mA, 2 * mB, -2 * mC, -2 * mD};
-            final double[] dy3dq = new double[]{2 * mD, 2 * mC, 2 * mB, 2 * mA};
-
-            final double de1dx1 = -y1 / (x1 * x1 + y1 * y1);
-            final double de1dy1 = x1 / (x1 * x1 + y1 * y1);
-            final double de2dz2 = 1 / Math.sqrt(1 - z2 * z2);
-            final double de3dx3 = -y3 / (x3 * x3 + y3 * y3);
-            final double de3dy3 = x3 / (x3 * x3 + y3 * y3);
+            final var de1dx1 = -y1 / (x1 * x1 + y1 * y1);
+            final var de1dy1 = x1 / (x1 * x1 + y1 * y1);
+            final var de2dz2 = 1 / Math.sqrt(1 - z2 * z2);
+            final var de3dx3 = -y3 / (x3 * x3 + y3 * y3);
+            final var de3dy3 = x3 / (x3 * x3 + y3 * y3);
 
             // de1dq = de1dx1 * dx1dq + de1dy * dy1dq
             ArrayUtils.multiplyByScalar(dx1dq, de1dx1, dx1dq);
             ArrayUtils.multiplyByScalar(dy1dq, de1dy1, dy1dq);
-            final double[] de1dq = ArrayUtils.sumAndReturnNew(dx1dq, dy1dq);
+            final var de1dq = ArrayUtils.sumAndReturnNew(dx1dq, dy1dq);
 
             // de2dq = de2dz2 * dz2dq
-            final double[] de2dq = ArrayUtils.multiplyByScalarAndReturnNew(dz2dq,
-                    de2dz2);
+            final var de2dq = ArrayUtils.multiplyByScalarAndReturnNew(dz2dq, de2dz2);
 
             // de3dq = de3dx3 * dx3dq + de3dy3 * dy3dq
             ArrayUtils.multiplyByScalar(dx3dq, de3dx3, dx3dq);
             ArrayUtils.multiplyByScalar(dy3dq, de3dy3, dy3dq);
-            final double[] de3dq = ArrayUtils.sumAndReturnNew(dx3dq, dy3dq);
+            final var de3dq = ArrayUtils.sumAndReturnNew(dx3dq, dy3dq);
 
             jacobian.setSubmatrix(0, 0, 0, N_PARAMS - 1, de1dq);
             jacobian.setSubmatrix(1, 0, 1, N_PARAMS - 1, de2dq);
@@ -1117,7 +1091,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @return euler angles (roll, pitch, yaw)
      */
     public double[] toEulerAngles() {
-        final double[] result = new double[N_ANGLES];
+        final var result = new double[N_ANGLES];
         toEulerAngles(result, null);
         return result;
     }
@@ -1136,25 +1110,25 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
             throw new IllegalArgumentException("matrix must be 4x4");
         }
 
-        result.setElementAt(0, 0, mA);
-        result.setElementAt(1, 0, mB);
-        result.setElementAt(2, 0, mC);
-        result.setElementAt(3, 0, mD);
+        result.setElementAt(0, 0, a);
+        result.setElementAt(1, 0, b);
+        result.setElementAt(2, 0, c);
+        result.setElementAt(3, 0, d);
 
-        result.setElementAt(0, 1, -mB);
-        result.setElementAt(1, 1, mA);
-        result.setElementAt(2, 1, mD);
-        result.setElementAt(3, 1, -mC);
+        result.setElementAt(0, 1, -b);
+        result.setElementAt(1, 1, a);
+        result.setElementAt(2, 1, d);
+        result.setElementAt(3, 1, -c);
 
-        result.setElementAt(0, 2, -mC);
-        result.setElementAt(1, 2, -mD);
-        result.setElementAt(2, 2, mA);
-        result.setElementAt(3, 2, mB);
+        result.setElementAt(0, 2, -c);
+        result.setElementAt(1, 2, -d);
+        result.setElementAt(2, 2, a);
+        result.setElementAt(3, 2, b);
 
-        result.setElementAt(0, 3, -mD);
-        result.setElementAt(1, 3, mC);
-        result.setElementAt(2, 3, -mB);
-        result.setElementAt(3, 3, mA);
+        result.setElementAt(0, 3, -d);
+        result.setElementAt(1, 3, c);
+        result.setElementAt(2, 3, -b);
+        result.setElementAt(3, 3, a);
     }
 
     /**
@@ -1186,16 +1160,15 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">q2qc.m at https://github.com/joansola/slamtb</a>
      */
     public void conjugate(final Quaternion result, final Matrix jacobian) {
-        if (jacobian != null && (jacobian.getRows() != N_PARAMS ||
-                jacobian.getColumns() != N_PARAMS)) {
+        if (jacobian != null && (jacobian.getRows() != N_PARAMS || jacobian.getColumns() != N_PARAMS)) {
             throw new IllegalArgumentException("jacobian must be 4x4");
         }
 
-        result.mA = mA;
-        result.mB = -mB;
-        result.mC = -mC;
-        result.mD = -mD;
-        result.mNormalized = mNormalized;
+        result.a = a;
+        result.b = -b;
+        result.c = -c;
+        result.d = -d;
+        result.normalized = normalized;
 
         if (jacobian != null) {
             jacobian.initialize(0.0);
@@ -1224,7 +1197,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">q2qc.m at https://github.com/joansola/slamtb</a>
      */
     public Quaternion conjugateAndReturnNew() {
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
         conjugate(q);
         return q;
     }
@@ -1245,25 +1218,25 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
             throw new IllegalArgumentException("matrix must be 4x4");
         }
 
-        result.setElementAt(0, 0, mA);
-        result.setElementAt(1, 0, mB);
-        result.setElementAt(2, 0, mC);
-        result.setElementAt(3, 0, mD);
+        result.setElementAt(0, 0, a);
+        result.setElementAt(1, 0, b);
+        result.setElementAt(2, 0, c);
+        result.setElementAt(3, 0, d);
 
-        result.setElementAt(0, 1, -mB);
-        result.setElementAt(1, 1, mA);
-        result.setElementAt(2, 1, -mD);
-        result.setElementAt(3, 1, mC);
+        result.setElementAt(0, 1, -b);
+        result.setElementAt(1, 1, a);
+        result.setElementAt(2, 1, -d);
+        result.setElementAt(3, 1, c);
 
-        result.setElementAt(0, 2, -mC);
-        result.setElementAt(1, 2, mD);
-        result.setElementAt(2, 2, mA);
-        result.setElementAt(3, 2, -mB);
+        result.setElementAt(0, 2, -c);
+        result.setElementAt(1, 2, d);
+        result.setElementAt(2, 2, a);
+        result.setElementAt(3, 2, -b);
 
-        result.setElementAt(0, 3, -mD);
-        result.setElementAt(1, 3, -mC);
-        result.setElementAt(2, 3, mB);
-        result.setElementAt(3, 3, mA);
+        result.setElementAt(0, 3, -d);
+        result.setElementAt(1, 3, -c);
+        result.setElementAt(2, 3, b);
+        result.setElementAt(3, 3, a);
     }
 
     /**
@@ -1297,25 +1270,24 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">q2R.m at https://github.com/joansola/slamtb</a>
      */
     public void toMatrixRotation(final Matrix result, final Matrix jacobian) {
-        if (result.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS ||
-                result.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS) {
+        if (result.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS
+                || result.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS) {
             throw new IllegalArgumentException("result matrix is not 3x3");
         }
-        if (jacobian != null && (jacobian.getRows() != 9 ||
-                jacobian.getColumns() != 4)) {
+        if (jacobian != null && (jacobian.getRows() != 9 || jacobian.getColumns() != 4)) {
             throw new IllegalArgumentException("jacobian matrix is not 9x4");
         }
 
-        final double aa = mA * mA;
-        final double ab = 2.0 * mA * mB;
-        final double ac = 2.0 * mA * mC;
-        final double ad = 2.0 * mA * mD;
-        final double bb = mB * mB;
-        final double bc = 2.0 * mB * mC;
-        final double bd = 2.0 * mB * mD;
-        final double cc = mC * mC;
-        final double cd = 2.0 * mC * mD;
-        final double dd = mD * mD;
+        final var aa = a * a;
+        final var ab = 2.0 * a * b;
+        final var ac = 2.0 * a * c;
+        final var ad = 2.0 * a * d;
+        final var bb = b * b;
+        final var bc = 2.0 * b * c;
+        final var bd = 2.0 * b * d;
+        final var cc = c * c;
+        final var cd = 2.0 * c * d;
+        final var dd = d * d;
 
         result.setElementAt(0, 0, aa + bb - cc - dd);
         result.setElementAt(1, 0, bc + ad);
@@ -1330,10 +1302,10 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
         result.setElementAt(2, 2, aa - bb - cc + dd);
 
         if (jacobian != null) {
-            final double a2 = 2.0 * mA;
-            final double b2 = 2.0 * mB;
-            final double c2 = 2.0 * mC;
-            final double d2 = 2.0 * mD;
+            final var a2 = 2.0 * a;
+            final var b2 = 2.0 * b;
+            final var c2 = 2.0 * c;
+            final var d2 = 2.0 * d;
 
             jacobian.setElementAt(0, 0, a2);
             jacobian.setElementAt(1, 0, d2);
@@ -1407,7 +1379,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      */
     @Override
     public MatrixRotation3D toMatrixRotation() {
-        final MatrixRotation3D rotation = new MatrixRotation3D();
+        final var rotation = new MatrixRotation3D();
         toMatrixRotation(rotation);
         return rotation;
     }
@@ -1427,47 +1399,40 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      *                                  jacobian of quaternion is not 3x4.
      * @see <a href="https://github.com/joansola/slamtb">qRot.m at https://github.com/joansola/slamtb</a>
      */
-    public static void rotate(final Quaternion q, final Point3D inputPoint,
-                              final Point3D resultPoint, final Matrix jacobianPoint,
-                              final Matrix jacobianQuaternion) {
-        if (jacobianPoint != null && (jacobianPoint.getRows() != N_ANGLES ||
-                jacobianPoint.getColumns() != N_ANGLES)) {
+    public static void rotate(final Quaternion q, final Point3D inputPoint, final Point3D resultPoint,
+                              final Matrix jacobianPoint, final Matrix jacobianQuaternion) {
+        if (jacobianPoint != null && (jacobianPoint.getRows() != N_ANGLES || jacobianPoint.getColumns() != N_ANGLES)) {
             throw new IllegalArgumentException("jacobian of point must be 3x3");
         }
-        if (jacobianQuaternion != null &&
-                (jacobianQuaternion.getRows() != N_ANGLES ||
-                        jacobianQuaternion.getColumns() != N_PARAMS)) {
-            throw new IllegalArgumentException(
-                    "jacobian of quaternion must be 3x4");
+        if (jacobianQuaternion != null && (jacobianQuaternion.getRows() != N_ANGLES
+                || jacobianQuaternion.getColumns() != N_PARAMS)) {
+            throw new IllegalArgumentException("jacobian of quaternion must be 3x4");
         }
 
-        final Quaternion v0 = new Quaternion(0.0, inputPoint.getInhomX(),
-                inputPoint.getInhomY(), inputPoint.getInhomZ());
+        final var v0 = new Quaternion(0.0, inputPoint.getInhomX(), inputPoint.getInhomY(), inputPoint.getInhomZ());
 
-        final Quaternion tmp = q.multiplyAndReturnNew(v0).multiplyAndReturnNew(
-                q.conjugateAndReturnNew());
+        final var tmp = q.multiplyAndReturnNew(v0).multiplyAndReturnNew(q.conjugateAndReturnNew());
 
-        resultPoint.setInhomogeneousCoordinates(tmp.getB(), tmp.getC(),
-                tmp.getD());
+        resultPoint.setInhomogeneousCoordinates(tmp.getB(), tmp.getC(), tmp.getD());
 
         if (jacobianPoint != null) {
             q.toMatrixRotation(jacobianPoint);
         }
 
         if (jacobianQuaternion != null) {
-            final double a = q.mA;
-            final double b = q.mB;
-            final double c = q.mC;
-            final double d = q.mD;
+            final var a = q.a;
+            final var b = q.b;
+            final var c = q.c;
+            final var d = q.d;
 
-            final double x = inputPoint.getInhomX();
-            final double y = inputPoint.getInhomY();
-            final double z = inputPoint.getInhomZ();
+            final var x = inputPoint.getInhomX();
+            final var y = inputPoint.getInhomY();
+            final var z = inputPoint.getInhomZ();
 
-            final double axdycz = 2.0 * (a * x - d * y + c * z);
-            final double bxcydz = 2.0 * (b * x + c * y + d * z);
-            final double cxbyaz = 2.0 * (c * x - b * y - a * z);
-            final double dxaybz = 2.0 * (d * x + a * y - b * z);
+            final var axdycz = 2.0 * (a * x - d * y + c * z);
+            final var bxcydz = 2.0 * (b * x + c * y + d * z);
+            final var cxbyaz = 2.0 * (c * x - b * y - a * z);
+            final var dxaybz = 2.0 * (d * x + a * y - b * z);
 
             jacobianQuaternion.setElementAt(0, 0, axdycz);
             jacobianQuaternion.setElementAt(1, 0, dxaybz);
@@ -1501,11 +1466,10 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      *                                  jacobian of quaternion is no 3x4.
      * @see <a href="https://github.com/joansola/slamtb">qRot.m at https://github.com/joansola/slamtb</a>
      */
-    public void rotate(final Point3D inputPoint, final Point3D resultPoint,
-                       final Matrix jacobianPoint, final Matrix jacobianQuaternion) {
+    public void rotate(final Point3D inputPoint, final Point3D resultPoint, final Matrix jacobianPoint,
+                       final Matrix jacobianQuaternion) {
 
-        rotate(this, inputPoint, resultPoint, jacobianPoint,
-                jacobianQuaternion);
+        rotate(this, inputPoint, resultPoint, jacobianPoint, jacobianQuaternion);
     }
 
 
@@ -1537,7 +1501,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      */
     @Override
     public Point3D rotate(final Point3D point) {
-        final Point3D result = new HomogeneousPoint3D();
+        final var result = new HomogeneousPoint3D();
         rotate(point, result);
         return result;
     }
@@ -1550,14 +1514,13 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @throws IllegalArgumentException if provided matrix is not 3x3
      * @see <a href="https://github.com/joansola/slamtb">R2q.m at https://github.com/joansola/slamtb</a>
      */
-    public static void matrixRotationToQuaternion(
-            final Matrix r, final Quaternion result) {
-        if (r.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS ||
-                r.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS) {
+    public static void matrixRotationToQuaternion(final Matrix r, final Quaternion result) {
+        if (r.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS
+                || r.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS) {
             throw new IllegalArgumentException("rotation matrix must be 3x3");
         }
 
-        final double trace = com.irurueta.algebra.Utils.trace(r) + 1.0;
+        final var trace = com.irurueta.algebra.Utils.trace(r) + 1.0;
         double s;
         double a;
         double b;
@@ -1572,13 +1535,13 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
             c = (r.getElementAt(2, 0) - r.getElementAt(0, 2)) / s;
             d = (r.getElementAt(0, 1) - r.getElementAt(1, 0)) / s;
         } else {
-            if (r.getElementAt(0, 0) > r.getElementAt(1, 1) &&
-                    r.getElementAt(0, 0) > r.getElementAt(2, 2)) {
+            if (r.getElementAt(0, 0) > r.getElementAt(1, 1)
+                    && r.getElementAt(0, 0) > r.getElementAt(2, 2)) {
                 // column 1:
                 // tested with R2 = diag([1 -1 -1])
 
-                s = 2.0 * Math.sqrt(1.0 + r.getElementAt(0, 0) -
-                        r.getElementAt(1, 1) - r.getElementAt(2, 2));
+                s = 2.0 * Math.sqrt(1.0 + r.getElementAt(0, 0) - r.getElementAt(1, 1)
+                        - r.getElementAt(2, 2));
                 a = (r.getElementAt(1, 2) - r.getElementAt(2, 1)) / s;
                 b = 0.25 * s;
                 c = (r.getElementAt(0, 1) + r.getElementAt(1, 0)) / s;
@@ -1587,8 +1550,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
                 // column 2:
                 // tested with R3 = [0 1 0; 1 0 0; 0 0 -1]
 
-                s = 2.0 * Math.sqrt(1.0 + r.getElementAt(1, 1) -
-                        r.getElementAt(0, 0) - r.getElementAt(2, 2));
+                s = 2.0 * Math.sqrt(1.0 + r.getElementAt(1, 1) - r.getElementAt(0, 0)
+                        - r.getElementAt(2, 2));
                 a = (r.getElementAt(2, 0) - r.getElementAt(0, 2)) / s;
                 b = (r.getElementAt(0, 1) + r.getElementAt(1, 0)) / s;
                 c = 0.25 * s;
@@ -1597,8 +1560,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
                 // column 3:
                 // tested with R4 = [-1 0 0; 0 0 1; 0 1 0]
 
-                s = 2.0 * Math.sqrt(1.0 + r.getElementAt(2, 2) -
-                        r.getElementAt(0, 0) - r.getElementAt(1, 1));
+                s = 2.0 * Math.sqrt(1.0 + r.getElementAt(2, 2)
+                        - r.getElementAt(0, 0) - r.getElementAt(1, 1));
                 a = (r.getElementAt(0, 1) - r.getElementAt(1, 0)) / s;
                 b = (r.getElementAt(2, 0) + r.getElementAt(0, 2)) / s;
                 c = (r.getElementAt(1, 2) + r.getElementAt(2, 1)) / s;
@@ -1606,11 +1569,11 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
             }
         }
 
-        result.mA = a;
-        result.mB = -b;
-        result.mC = -c;
-        result.mD = -d;
-        result.mNormalized = false;
+        result.a = a;
+        result.b = -b;
+        result.c = -c;
+        result.d = -d;
+        result.normalized = false;
     }
 
     /**
@@ -1620,8 +1583,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param result   quaternion where result is stored.
      * @see <a href="https://github.com/joansola/slamtb">R2q.m at https://github.com/joansola/slamtb</a>
      */
-    public static void matrixRotationToQuaternion(final MatrixRotation3D rotation,
-                                                  final Quaternion result) {
+    public static void matrixRotationToQuaternion(final MatrixRotation3D rotation, final Quaternion result) {
         matrixRotationToQuaternion(rotation.internalMatrix, result);
     }
 
@@ -1662,27 +1624,22 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">v2au.m at https://github.com/joansola/slamtb</a>
      */
     public static double rotationVectorToRotationAxisAndAngle(
-            final double[] rotationVector, final double[] axis,
-            final Matrix jacobianAlpha,
+            final double[] rotationVector, final double[] axis, final Matrix jacobianAlpha,
             final Matrix jacobianRotationVector) {
         if (rotationVector.length != AxisRotation3D.AXIS_PARAMS) {
-            throw new IllegalArgumentException(
-                    "rotation vector length must be 3");
+            throw new IllegalArgumentException("rotation vector length must be 3");
         }
 
-        if (jacobianAlpha != null && (jacobianAlpha.getRows() != 1 ||
-                jacobianAlpha.getColumns() != N_ANGLES)) {
+        if (jacobianAlpha != null && (jacobianAlpha.getRows() != 1 || jacobianAlpha.getColumns() != N_ANGLES)) {
             throw new IllegalArgumentException("jacobian alpha must be 1x3");
         }
 
-        if (jacobianRotationVector != null &&
-                (jacobianRotationVector.getRows() != N_ANGLES ||
-                        jacobianRotationVector.getColumns() != N_ANGLES)) {
-            throw new IllegalArgumentException(
-                    "jacobian rotation vector must be 3x3");
+        if (jacobianRotationVector != null && (jacobianRotationVector.getRows() != N_ANGLES
+                || jacobianRotationVector.getColumns() != N_ANGLES)) {
+            throw new IllegalArgumentException("jacobian rotation vector must be 3x3");
         }
 
-        double alpha = com.irurueta.algebra.Utils.normF(rotationVector);
+        var alpha = com.irurueta.algebra.Utils.normF(rotationVector);
 
         if (alpha > AXIS_NORM_THRESHOLD) {
             ArrayUtils.multiplyByScalar(rotationVector, 1.0 / alpha, axis);
@@ -1693,26 +1650,17 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
             }
 
             if (jacobianRotationVector != null) {
-                jacobianRotationVector.setElementAt(0, 0,
-                        1.0 / alpha - axis[0] * axis[0] / alpha);
-                jacobianRotationVector.setElementAt(1, 0,
-                        -axis[0] / alpha * axis[1]);
-                jacobianRotationVector.setElementAt(2, 0,
-                        -axis[0] / alpha * axis[2]);
+                jacobianRotationVector.setElementAt(0, 0, 1.0 / alpha - axis[0] * axis[0] / alpha);
+                jacobianRotationVector.setElementAt(1, 0, -axis[0] / alpha * axis[1]);
+                jacobianRotationVector.setElementAt(2, 0, -axis[0] / alpha * axis[2]);
 
-                jacobianRotationVector.setElementAt(0, 1,
-                        -axis[0] / alpha * axis[1]);
-                jacobianRotationVector.setElementAt(1, 1,
-                        1.0 / alpha - axis[1] * axis[1] / alpha);
-                jacobianRotationVector.setElementAt(2, 1,
-                        -axis[1] / alpha * axis[2]);
+                jacobianRotationVector.setElementAt(0, 1, -axis[0] / alpha * axis[1]);
+                jacobianRotationVector.setElementAt(1, 1, 1.0 / alpha - axis[1] * axis[1] / alpha);
+                jacobianRotationVector.setElementAt(2, 1, -axis[1] / alpha * axis[2]);
 
-                jacobianRotationVector.setElementAt(0, 2,
-                        -axis[0] / alpha * axis[2]);
-                jacobianRotationVector.setElementAt(1, 2,
-                        -axis[1] / alpha * axis[2]);
-                jacobianRotationVector.setElementAt(2, 2,
-                        1.0 / alpha - axis[2] * axis[2] / alpha);
+                jacobianRotationVector.setElementAt(0, 2, -axis[0] / alpha * axis[2]);
+                jacobianRotationVector.setElementAt(1, 2, -axis[1] / alpha * axis[2]);
+                jacobianRotationVector.setElementAt(2, 2, 1.0 / alpha - axis[2] * axis[2] / alpha);
             }
 
         } else {
@@ -1743,10 +1691,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      *                                  not 3.
      * @see <a href="https://github.com/joansola/slamtb">v2au.m at https://github.com/joansola/slamtb</a>
      */
-    public static double rotationVectorToRotationAxisAndAngle(
-            final double[] rotationVector, final double[] axis) {
-        return rotationVectorToRotationAxisAndAngle(rotationVector, axis, null,
-                null);
+    public static double rotationVectorToRotationAxisAndAngle(final double[] rotationVector, final double[] axis) {
+        return rotationVectorToRotationAxisAndAngle(rotationVector, axis, null, null);
     }
 
     /**
@@ -1763,32 +1709,28 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @see <a href="https://github.com/joansola/slamtb">v2q.m at https://github.com/joansola/slamtb</a>
      */
     public static void rotationVectorToQuaternion(
-            final double[] rotationVector,
-            final Quaternion result, final Matrix jacobian) {
+            final double[] rotationVector, final Quaternion result, final Matrix jacobian) {
         if (rotationVector.length != AxisRotation3D.AXIS_PARAMS) {
-            throw new IllegalArgumentException(
-                    "rotation vector length must be 3");
+            throw new IllegalArgumentException("rotation vector length must be 3");
         }
-        if (jacobian != null && (jacobian.getRows() != N_PARAMS ||
-                jacobian.getColumns() != N_ANGLES)) {
+        if (jacobian != null && (jacobian.getRows() != N_PARAMS || jacobian.getColumns() != N_ANGLES)) {
             throw new IllegalArgumentException("jacobian must be 4x3");
         }
 
-        final double[] axis = new double[AxisRotation3D.AXIS_PARAMS];
+        final var axis = new double[AxisRotation3D.AXIS_PARAMS];
         if (jacobian == null) {
-            final double alpha = rotationVectorToRotationAxisAndAngle(rotationVector,
-                    axis);
+            final var alpha = rotationVectorToRotationAxisAndAngle(rotationVector, axis);
             result.setFromAxisAndRotation(axis, alpha);
         } else {
-            double alpha = com.irurueta.algebra.Utils.normF(rotationVector);
+            var alpha = com.irurueta.algebra.Utils.normF(rotationVector);
 
             if (alpha < LARGE_AXIS_NORM_THRESHOLD) {
                 // use small signal approximation
-                result.mA = 1 - alpha * alpha / 8.0;
-                result.mB = rotationVector[0] / 2.0;
-                result.mC = rotationVector[1] / 2.0;
-                result.mD = rotationVector[2] / 2.0;
-                result.mNormalized = false;
+                result.a = 1 - alpha * alpha / 8.0;
+                result.b = rotationVector[0] / 2.0;
+                result.c = rotationVector[1] / 2.0;
+                result.d = rotationVector[2] / 2.0;
+                result.normalized = false;
 
                 jacobian.setElementAt(0, 0, -0.25 * rotationVector[0]);
                 jacobian.setElementAt(0, 1, -0.25 * rotationVector[1]);
@@ -1808,19 +1750,17 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
             } else {
                 try {
                     // Av
-                    final Matrix jacobianAlpha = new Matrix(1, N_ANGLES);
+                    final var jacobianAlpha = new Matrix(1, N_ANGLES);
                     // Uv
-                    final Matrix jacobianRotationVector = new Matrix(N_ANGLES,
-                            N_ANGLES);
-                    alpha = rotationVectorToRotationAxisAndAngle(rotationVector,
-                            axis, jacobianAlpha, jacobianRotationVector);
+                    final var jacobianRotationVector = new Matrix(N_ANGLES, N_ANGLES);
+                    alpha = rotationVectorToRotationAxisAndAngle(rotationVector, axis, jacobianAlpha,
+                            jacobianRotationVector);
 
                     // Qa
-                    final Matrix jacobianOfTheta = new Matrix(N_PARAMS, 1);
+                    final var jacobianOfTheta = new Matrix(N_PARAMS, 1);
                     // Qu
-                    final Matrix jacobianOfAxis = new Matrix(N_PARAMS, N_ANGLES);
-                    result.setFromAxisAndRotation(axis, alpha, jacobianOfTheta,
-                            jacobianOfAxis);
+                    final var jacobianOfAxis = new Matrix(N_PARAMS, N_ANGLES);
+                    result.setFromAxisAndRotation(axis, alpha, jacobianOfTheta, jacobianOfAxis);
 
                     // Qv = Qa * Av + Qu * Uv
                     // Qa * Av
@@ -1848,8 +1788,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      *                                  length 3.
      * @see <a href="https://github.com/joansola/slamtb">v2q.m at https://github.com/joansola/slamtb</a>
      */
-    public static void rotationVectorToQuaternion(final double[] rotationVector,
-                                                  final Quaternion result) {
+    public static void rotationVectorToQuaternion(final double[] rotationVector, final Quaternion result) {
         rotationVectorToQuaternion(rotationVector, result, null);
     }
 
@@ -1880,12 +1819,10 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      *                                  have length 3.
      * @see <a href="https://github.com/joansola/slamtb">v2R.m at https://github.com/joansola/slamtb</a>
      */
-    public static void rotationVectorToMatrixRotation(final double[] rotationVector,
-                                                      final Matrix result) {
-        final double[] axis = new double[AxisRotation3D.AXIS_PARAMS];
-        final double alpha = rotationVectorToRotationAxisAndAngle(rotationVector,
-                axis);
-        final AxisRotation3D r = new AxisRotation3D(axis, alpha);
+    public static void rotationVectorToMatrixRotation(final double[] rotationVector, final Matrix result) {
+        final var axis = new double[AxisRotation3D.AXIS_PARAMS];
+        final var alpha = rotationVectorToRotationAxisAndAngle(rotationVector, axis);
+        final var r = new AxisRotation3D(axis, alpha);
         r.asInhomogeneousMatrix(result);
     }
 
@@ -1901,8 +1838,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      *                                  have length 3.
      * @see <a href="https://github.com/joansola/slamtb">v2R.m at https://github.com/joansola/slamtb</a>
      */
-    public static void rotationVectorToMatrixRotation(final double[] rotationVector,
-                                                      final MatrixRotation3D result) {
+    public static void rotationVectorToMatrixRotation(final double[] rotationVector, final MatrixRotation3D result) {
         rotationVectorToMatrixRotation(rotationVector, result.internalMatrix);
     }
 
@@ -1930,8 +1866,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      */
     @Override
     public void setAxisAndRotation(
-            final double axisX, final double axisY, final double axisZ,
-            final double theta) {
+            final double axisX, final double axisY, final double axisZ, final double theta) {
         setFromAxisAndRotation(axisX, axisY, axisZ, theta);
     }
 
@@ -1957,8 +1892,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
     @Override
     public double getRotationAngle() {
         // norm of rotation axis
-        final double n = Math.sqrt(mB * mB + mC * mC + mD * mD);
-        return 2.0 * Math.atan2(n, mA);
+        final var n = Math.sqrt(b * b + c * c + d * d);
+        return 2.0 * Math.atan2(n, a);
     }
 
     /**
@@ -2023,8 +1958,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
     public void asHomogeneousMatrix(final Matrix result) {
         result.initialize(0.0);
         result.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);
-        result.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
-                asInhomogeneousMatrix());
+        result.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                INHOM_COORDS - 1, asInhomogeneousMatrix());
     }
 
     /**
@@ -2071,13 +2006,13 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      */
     public static void inverse(final Quaternion q, final Quaternion result) {
         // the inverse is the conjugate divided by the quaternion square norm
-        final double sqrNorm = q.mA * q.mA + q.mB * q.mB + q.mC * q.mC + q.mD * q.mD;
+        final var sqrNorm = q.a * q.a + q.b * q.b + q.c * q.c + q.d * q.d;
         q.conjugate(result);
-        result.mA /= sqrNorm;
-        result.mB /= sqrNorm;
-        result.mC /= sqrNorm;
-        result.mD /= sqrNorm;
-        result.mNormalized = false;
+        result.a /= sqrNorm;
+        result.b /= sqrNorm;
+        result.c /= sqrNorm;
+        result.d /= sqrNorm;
+        result.normalized = false;
     }
 
     /**
@@ -2087,7 +2022,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @return a new quaternion containing the inverse.
      */
     public static Quaternion inverseAndReturnNew(final Quaternion q) {
-        final Quaternion result = new Quaternion();
+        final var result = new Quaternion();
         inverse(q, result);
         return result;
     }
@@ -2107,7 +2042,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @return a new quaternion containing the inverse of this quaternion.
      */
     public Quaternion inverseAndReturnNew() {
-        final Quaternion result = new Quaternion();
+        final var result = new Quaternion();
         inverse(result);
         return result;
     }
@@ -2128,7 +2063,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      */
     @Override
     public Rotation3D inverseRotationAndReturnNew() {
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
         inverseRotation(q);
         return q;
     }
@@ -2151,7 +2086,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      */
     @Override
     public void inverseRotation(final Rotation3D result) {
-        final Quaternion inverse = inverseAndReturnNew();
+        final var inverse = inverseAndReturnNew();
         result.fromRotation(inverse);
     }
 
@@ -2171,8 +2106,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param q2     2nd quaternion.
      * @param result combined quaternion where result is stored.
      */
-    public static void combine(
-            final Quaternion q1, final Quaternion q2, final Quaternion result) {
+    public static void combine(final Quaternion q1, final Quaternion q2, final Quaternion result) {
         product(q1, q2, result);
     }
 
@@ -2185,7 +2119,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * quaternions.
      */
     public Quaternion combineAndReturnNew(final Quaternion q) {
-        final Quaternion result = new Quaternion();
+        final var result = new Quaternion();
         combine(this, q, result);
         return result;
     }
@@ -2251,11 +2185,11 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      */
     @Override
     public void fromRotation(final Quaternion q) {
-        mA = q.mA;
-        mB = q.mB;
-        mC = q.mC;
-        mD = q.mD;
-        mNormalized = q.mNormalized;
+        a = q.a;
+        b = q.b;
+        c = q.c;
+        d = q.d;
+        normalized = q.normalized;
     }
 
     /**
@@ -2275,15 +2209,15 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @return true if quaternion is normalized, false otherwise.
      */
     public boolean isNormalized() {
-        return mNormalized;
+        return normalized;
     }
 
     /**
      * Normalizes this quaternion if not already normalized.
      */
     public void normalize() {
-        if (!mNormalized) {
-            final double norm = Math.sqrt(mA * mA + mB * mB + mC * mC + mD * mD);
+        if (!normalized) {
+            final var norm = Math.sqrt(a * a + b * b + c * c + d * d);
             internalNormalize(norm);
         }
     }
@@ -2297,41 +2231,44 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @throws IllegalArgumentException if provided jacobian is not 4x4.
      */
     public void normalize(final Matrix jacobian) {
-        if (jacobian != null && (jacobian.getRows() != N_PARAMS ||
-                jacobian.getColumns() != N_PARAMS)) {
+        if (jacobian != null && (jacobian.getRows() != N_PARAMS || jacobian.getColumns() != N_PARAMS)) {
             throw new IllegalArgumentException("jacobian must be 4x4");
         }
 
-        final double a = mA;
-        final double b = mB;
-        final double c = mC;
-        final double d = mD;
-        final double norm = Math.sqrt(a * a + b * b + c * c + d * d);
+        final var aValue = this.a;
+        final var bValue = this.b;
+        final var cValue = this.c;
+        final var dValue = this.d;
+        final var norm = Math.sqrt(aValue * aValue + bValue * bValue + cValue * cValue + dValue * dValue);
 
         internalNormalize(norm);
 
         if (jacobian != null) {
-            final double norm3 = norm * norm * norm;
+            final var norm3 = norm * norm * norm;
 
-            jacobian.setElementAt(0, 0, (b * b + c * c + d * d) / norm3);
-            jacobian.setElementAt(1, 0, -a / norm3 * b);
-            jacobian.setElementAt(2, 0, -a / norm3 * c);
-            jacobian.setElementAt(3, 0, -a / norm3 * d);
+            jacobian.setElementAt(0, 0, (bValue * bValue + cValue * cValue + dValue * dValue)
+                    / norm3);
+            jacobian.setElementAt(1, 0, -aValue / norm3 * bValue);
+            jacobian.setElementAt(2, 0, -aValue / norm3 * cValue);
+            jacobian.setElementAt(3, 0, -aValue / norm3 * dValue);
 
-            jacobian.setElementAt(0, 1, -a / norm3 * b);
-            jacobian.setElementAt(1, 1, (a * a + c * c + d * d) / norm3);
-            jacobian.setElementAt(2, 1, -b / norm3 * c);
-            jacobian.setElementAt(3, 1, -b / norm3 * d);
+            jacobian.setElementAt(0, 1, -aValue / norm3 * bValue);
+            jacobian.setElementAt(1, 1, (aValue * aValue + cValue * cValue + dValue * dValue)
+                    / norm3);
+            jacobian.setElementAt(2, 1, -bValue / norm3 * cValue);
+            jacobian.setElementAt(3, 1, -bValue / norm3 * dValue);
 
-            jacobian.setElementAt(0, 2, -a / norm3 * c);
-            jacobian.setElementAt(1, 2, -b / norm3 * c);
-            jacobian.setElementAt(2, 2, (a * a + b * b + d * d) / norm3);
-            jacobian.setElementAt(3, 2, -c / norm3 * d);
+            jacobian.setElementAt(0, 2, -aValue / norm3 * cValue);
+            jacobian.setElementAt(1, 2, -bValue / norm3 * cValue);
+            jacobian.setElementAt(2, 2, (aValue * aValue + bValue * bValue + dValue * dValue)
+                    / norm3);
+            jacobian.setElementAt(3, 2, -cValue / norm3 * dValue);
 
-            jacobian.setElementAt(0, 3, -a / norm3 * d);
-            jacobian.setElementAt(1, 3, -b / norm3 * d);
-            jacobian.setElementAt(2, 3, -c / norm3 * d);
-            jacobian.setElementAt(3, 3, (a * a + b * b + c * c) / norm3);
+            jacobian.setElementAt(0, 3, -aValue / norm3 * dValue);
+            jacobian.setElementAt(1, 3, -bValue / norm3 * dValue);
+            jacobian.setElementAt(2, 3, -cValue / norm3 * dValue);
+            jacobian.setElementAt(3, 3, (aValue * aValue + bValue * bValue + cValue * cValue)
+                    / norm3);
         }
     }
 
@@ -2349,7 +2286,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      *                                  and 1.0, both included.
      */
     public Quaternion slerpAndReturnNew(final Quaternion q, final double t) {
-        final Quaternion result = new Quaternion();
+        final var result = new Quaternion();
         slerp(q, t, result);
         return result;
     }
@@ -2386,9 +2323,8 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @throws IllegalArgumentException if provided interpolation ratio is not between 0.0
      *                                  and 1.0, both included.
      */
-    public static Quaternion slerpAndReturnNew(
-            final Quaternion q1, final Quaternion q2, final double t) {
-        final Quaternion result = new Quaternion();
+    public static Quaternion slerpAndReturnNew(final Quaternion q1, final Quaternion q2, final double t) {
+        final var result = new Quaternion();
         slerp(q1, q2, t, result);
         return result;
     }
@@ -2407,9 +2343,7 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @throws IllegalArgumentException if provided interpolation ratio is not between 0.0
      *                                  and 1.0, both included.
      */
-    public static void slerp(
-            final Quaternion q1, final Quaternion q2, final double t,
-            final Quaternion result) {
+    public static void slerp(final Quaternion q1, final Quaternion q2, final double t, final Quaternion result) {
         if (t < 0.0 || t > 1.0) {
             throw new IllegalArgumentException();
         }
@@ -2420,19 +2354,16 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
         q2.normalize();
 
         // calculate angle between input quaternions
-        double dot = q1.mA * q2.mA +
-                q1.mB * q2.mB +
-                q1.mC * q2.mC +
-                q1.mD * q2.mD;
+        var dot = q1.a * q2.a + q1.b * q2.b + q1.c * q2.c + q1.d * q2.d;
 
         // if q1 = q2 or q1 = -q2 (both quaternions are equal), then the angle
         // between input quaternions is theta0 = 0.
         // To avoid singularity caused by sinTheta0, we return q1
         if (Math.abs(dot) >= 1.0) {
-            result.mA = q1.mA;
-            result.mB = q1.mB;
-            result.mC = q1.mC;
-            result.mD = q1.mD;
+            result.a = q1.a;
+            result.b = q1.b;
+            result.c = q1.c;
+            result.d = q1.d;
             return;
         }
 
@@ -2441,25 +2372,25 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
         // components. Fix by reversing one quaternion.
         Quaternion q2b;
         if (dot < 0.0) {
-            q2b = new Quaternion(-q2.mA, -q2.mB, -q2.mC, -q2.mD);
+            q2b = new Quaternion(-q2.a, -q2.b, -q2.c, -q2.d);
             dot = -dot;
         } else {
             q2b = q2;
         }
 
-        final double theta0 = Math.acos(dot);
-        final double theta = theta0 * t;
-        final double sinTheta = Math.sin(theta);
-        final double sinTheta0 = Math.sin(theta0);
+        final var theta0 = Math.acos(dot);
+        final var theta = theta0 * t;
+        final var sinTheta = Math.sin(theta);
+        final var sinTheta0 = Math.sin(theta0);
 
-        final double s2 = sinTheta / sinTheta0;
+        final var s2 = sinTheta / sinTheta0;
         // line below is equal to sin(theta0 - theta) / sinTheta0
-        final double s1 = Math.cos(theta) - dot * s2;
+        final var s1 = Math.cos(theta) - dot * s2;
 
-        result.mA = s1 * q1.mA + s2 * q2b.mA;
-        result.mB = s1 * q1.mB + s2 * q2b.mB;
-        result.mC = s1 * q1.mC + s2 * q2b.mC;
-        result.mD = s1 * q1.mD + s2 * q2b.mD;
+        result.a = s1 * q1.a + s2 * q2b.a;
+        result.b = s1 * q1.b + s2 * q2b.b;
+        result.c = s1 * q1.c + s2 * q2b.c;
+        result.d = s1 * q1.d + s2 * q2b.d;
     }
 
     /**
@@ -2468,12 +2399,12 @@ public class Quaternion extends Rotation3D implements Serializable, Cloneable {
      * @param norm norm to normalize this quaternion with.
      */
     private void internalNormalize(final double norm) {
-        if (!mNormalized) {
-            mA /= norm;
-            mB /= norm;
-            mC /= norm;
-            mD /= norm;
-            mNormalized = true;
+        if (!normalized) {
+            a /= norm;
+            b /= norm;
+            c /= norm;
+            d /= norm;
+            normalized = true;
         }
     }
 }

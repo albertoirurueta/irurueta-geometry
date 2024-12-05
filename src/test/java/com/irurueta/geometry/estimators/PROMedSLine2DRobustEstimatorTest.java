@@ -22,16 +22,13 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PROMedSLine2DRobustEstimatorTest implements
-        Line2DRobustEstimatorListener {
+class PROMedSLine2DRobustEstimatorTest implements Line2DRobustEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -1.0;
     private static final double MAX_RANDOM_VALUE = 1.0;
@@ -58,7 +55,7 @@ public class PROMedSLine2DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(2, Line2DRobustEstimator.MINIMUM_SIZE);
         assertEquals(0.05f, Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
         assertEquals(0.0f, Line2DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
@@ -74,100 +71,83 @@ public class PROMedSLine2DRobustEstimatorTest implements
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test constructor without arguments
-        PROMedSLine2DRobustEstimator estimator = new PROMedSLine2DRobustEstimator();
+        var estimator = new PROMedSLine2DRobustEstimator();
 
         // check correctness
-        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // test constructor with points
-        final List<Point2D> points = new ArrayList<>();
-        for (int i = 0; i < Line2DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var points = new ArrayList<Point2D>();
+        for (var i = 0; i < Line2DRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point2D.create());
         }
 
         estimator = new PROMedSLine2DRobustEstimator(points);
 
         // check correctness
-        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        final List<Point2D> emptyPoints = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = new PROMedSLine2DRobustEstimator(emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var emptyPoints = new ArrayList<Point2D>();
+        assertThrows(IllegalArgumentException.class, () -> new PROMedSLine2DRobustEstimator(emptyPoints));
 
         // test constructor with listener
-        final Line2DRobustEstimatorListener listener =
-                new Line2DRobustEstimatorListener() {
+        final var listener = new Line2DRobustEstimatorListener() {
 
-                    @Override
-                    public void onEstimateStart(final Line2DRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateStart(final Line2DRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateEnd(final Line2DRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateEnd(final Line2DRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateNextIteration(
-                            final Line2DRobustEstimator estimator, final int iteration) {
-                    }
+            @Override
+            public void onEstimateNextIteration(final Line2DRobustEstimator estimator, final int iteration) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateProgressChange(
-                            final Line2DRobustEstimator estimator, final float progress) {
-                    }
-                };
+            @Override
+            public void onEstimateProgressChange(final Line2DRobustEstimator estimator, final float progress) {
+                // no action needed
+            }
+        };
 
         estimator = new PROMedSLine2DRobustEstimator(listener);
 
         // check correctness
-        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -176,172 +156,111 @@ public class PROMedSLine2DRobustEstimatorTest implements
         estimator = new PROMedSLine2DRobustEstimator(listener, points);
 
         // check correctness
-        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(points, estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROMedSLine2DRobustEstimator(listener, emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new PROMedSLine2DRobustEstimator(listener, emptyPoints));
 
         // test constructor with quality scores
-        final double[] qualityScores = new double[Line2DRobustEstimator.MINIMUM_SIZE];
+        final var qualityScores = new double[Line2DRobustEstimator.MINIMUM_SIZE];
         estimator = new PROMedSLine2DRobustEstimator(qualityScores);
 
         // check correctness
-        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        final double[] emptyScores = new double[0];
-        estimator = null;
-        try {
-            estimator = new PROMedSLine2DRobustEstimator(emptyScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var emptyScores = new double[0];
+        assertThrows(IllegalArgumentException.class, () -> new PROMedSLine2DRobustEstimator(emptyScores));
 
         // test constructor with points and scores
         estimator = new PROMedSLine2DRobustEstimator(points, qualityScores);
 
         // check correctness
-        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
-        assertSame(estimator.getQualityScores(), qualityScores);
+        assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROMedSLine2DRobustEstimator(emptyPoints,
-                    qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new PROMedSLine2DRobustEstimator(points, emptyScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class,
+                () -> new PROMedSLine2DRobustEstimator(emptyPoints, qualityScores));
+        assertThrows(IllegalArgumentException.class, () -> new PROMedSLine2DRobustEstimator(points, emptyScores));
 
         // test constructor with listener and quality scores
         estimator = new PROMedSLine2DRobustEstimator(listener, qualityScores);
 
         // check correctness
-        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROMedSLine2DRobustEstimator(listener, emptyScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new PROMedSLine2DRobustEstimator(listener, emptyScores));
 
         // test constructor with listener, points and quality scores
-        estimator = new PROMedSLine2DRobustEstimator(listener, points,
-                qualityScores);
+        estimator = new PROMedSLine2DRobustEstimator(listener, points, qualityScores);
 
         // check correctness
-        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.PROMEDS, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROMedSLine2DRobustEstimator(listener, emptyPoints,
-                    qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator = new PROMedSLine2DRobustEstimator(listener, points,
-                    emptyScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new PROMedSLine2DRobustEstimator(listener, emptyPoints,
+                qualityScores));
+        assertThrows(IllegalArgumentException.class, () -> new PROMedSLine2DRobustEstimator(listener, points,
+                emptyScores));
     }
 
     @Test
-    public void testGetSetThreshold() throws LockedException {
-        final PROMedSLine2DRobustEstimator estimator =
-                new PROMedSLine2DRobustEstimator();
+    void testGetSetThreshold() throws LockedException {
+        final var estimator = new PROMedSLine2DRobustEstimator();
 
         // check default value
-        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD,
-                estimator.getStopThreshold(), 0.0);
+        assertEquals(PROMedSLine2DRobustEstimator.DEFAULT_STOP_THRESHOLD, estimator.getStopThreshold(), 0.0);
 
         // set new value
         estimator.setStopThreshold(0.5);
@@ -349,17 +268,12 @@ public class PROMedSLine2DRobustEstimatorTest implements
         assertEquals(0.5, estimator.getStopThreshold(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setStopThreshold(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setStopThreshold(0.0));
     }
 
     @Test
-    public void testGetSetListener() throws LockedException {
-        final PROMedSLine2DRobustEstimator estimator =
-                new PROMedSLine2DRobustEstimator();
+    void testGetSetListener() throws LockedException {
+        final var estimator = new PROMedSLine2DRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -374,13 +288,11 @@ public class PROMedSLine2DRobustEstimatorTest implements
     }
 
     @Test
-    public void testGetSetProgressDelta() throws LockedException {
-        final PROMedSLine2DRobustEstimator estimator =
-                new PROMedSLine2DRobustEstimator();
+    void testGetSetProgressDelta() throws LockedException {
+        final var estimator = new PROMedSLine2DRobustEstimator();
 
         // check default value
-        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
@@ -389,26 +301,16 @@ public class PROMedSLine2DRobustEstimatorTest implements
         assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testGetSetConfidence() throws LockedException {
-        final PROMedSLine2DRobustEstimator estimator =
-                new PROMedSLine2DRobustEstimator();
+    void testGetSetConfidence() throws LockedException {
+        final var estimator = new PROMedSLine2DRobustEstimator();
 
         // check default value
-        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
+        assertEquals(Line2DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5f);
@@ -417,26 +319,16 @@ public class PROMedSLine2DRobustEstimatorTest implements
         assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException {
-        final PROMedSLine2DRobustEstimator estimator =
-                new PROMedSLine2DRobustEstimator();
+    void testGetSetMaxIterations() throws LockedException {
+        final var estimator = new PROMedSLine2DRobustEstimator();
 
         // check default value
-        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(Line2DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(1);
@@ -445,25 +337,20 @@ public class PROMedSLine2DRobustEstimatorTest implements
         assertEquals(1, estimator.getMaxIterations());
 
         // Fail IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testGetSetPoints() throws LockedException {
-        final PROMedSLine2DRobustEstimator estimator =
-                new PROMedSLine2DRobustEstimator();
+    void testGetSetPoints() throws LockedException {
+        final var estimator = new PROMedSLine2DRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
         assertFalse(estimator.isReady());
 
         // set new value
-        final List<Point2D> points = new ArrayList<>();
-        for (int i = 0; i < Line2DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var points = new ArrayList<Point2D>();
+        for (var i = 0; i < Line2DRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point2D.create());
         }
         estimator.setPoints(points);
@@ -473,7 +360,7 @@ public class PROMedSLine2DRobustEstimatorTest implements
         assertFalse(estimator.isReady());
 
         // if we set quality scores, then estimator becomes ready
-        final double[] qualityScores = new double[points.size()];
+        final var qualityScores = new double[points.size()];
         estimator.setQualityScores(qualityScores);
 
         assertTrue(estimator.isReady());
@@ -484,92 +371,73 @@ public class PROMedSLine2DRobustEstimatorTest implements
         assertFalse(estimator.isReady());
 
         // Force IllegalArgumentException
-        final List<Point2D> emptyPoints = new ArrayList<>();
-        try {
-            estimator.setPoints(emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var emptyPoints = new ArrayList<Point2D>();
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(emptyPoints));
     }
 
     @Test
-    public void testGetSetQualityScores() throws LockedException {
-        final PROMedSLine2DRobustEstimator estimator =
-                new PROMedSLine2DRobustEstimator();
+    void testGetSetQualityScores() throws LockedException {
+        final var estimator = new PROMedSLine2DRobustEstimator();
 
         assertNull(estimator.getQualityScores());
 
-        double[] qualityScores = new double[
-                Line2DRobustEstimator.MINIMUM_SIZE];
+        final var qualityScores = new double[Line2DRobustEstimator.MINIMUM_SIZE];
         estimator.setQualityScores(qualityScores);
 
         // check correctness
         assertSame(qualityScores, estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        qualityScores = new double[1];
-        try {
-            estimator.setQualityScores(qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var qualityScores2 = new double[1];
+        assertThrows(IllegalArgumentException.class, () -> estimator.setQualityScores(qualityScores2));
     }
 
     @Test
-    public void testEstimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    void testEstimate() throws LockedException, NotReadyException, RobustEstimatorException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        for (int t = 0; t < TIMES; t++) {
-            final double a = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double b = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double c = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final Line2D line = new Line2D(a, b, c);
+        for (var t = 0; t < TIMES; t++) {
+            final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var line = new Line2D(a, b, c);
 
             // compute random points passing through the line
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final double[] qualityScores = new double[nPoints];
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<Point2D> points = new ArrayList<>();
-            final List<Point2D> pointsWithError = new ArrayList<>();
-            Point2D point, pointWithError;
-            for (int i = 0; i < nPoints; i++) {
-                final double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR,
-                        MAX_SCORE_ERROR);
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var qualityScores = new double[nPoints];
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var points = new ArrayList<Point2D>();
+            final var pointsWithError = new ArrayList<Point2D>();
+            for (var i = 0; i < nPoints; i++) {
+                final var scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;
 
                 // get a random point belonging to the line (a*x + b*y + c*w = 0)
                 // y = -(a*x + c*w)/b or x = -(b*y - c*w)/a
                 final double homX;
                 final double homY;
-                final double homW = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+                final var homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 if (Math.abs(b) > ABSOLUTE_ERROR) {
-                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE);
+                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homW) / b;
                 } else {
-                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE);
+                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homW) / a;
                 }
-                point = new HomogeneousPoint2D(homX, homY, homW);
+                final var point = new HomogeneousPoint2D(homX, homY, homW);
 
+                Point2D pointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
                     pointWithError = new HomogeneousPoint2D(
                             point.getHomX() + errorX * point.getHomW(),
                             point.getHomY() + errorY * point.getHomW(),
                             point.getHomW());
 
-                    final double error = Math.sqrt(errorX * errorX + errorY * errorY);
+                    final var error = Math.sqrt(errorX * errorX + errorY * errorY);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
                 } else {
                     // inlier point
@@ -583,9 +451,7 @@ public class PROMedSLine2DRobustEstimatorTest implements
                 assertTrue(line.isLocus(point, ABSOLUTE_ERROR));
             }
 
-            final PROMedSLine2DRobustEstimator estimator =
-                    new PROMedSLine2DRobustEstimator(this, pointsWithError,
-                            qualityScores);
+            final var estimator = new PROMedSLine2DRobustEstimator(this, pointsWithError, qualityScores);
 
             estimator.setStopThreshold(STOP_THRESHOLD);
 
@@ -596,7 +462,7 @@ public class PROMedSLine2DRobustEstimatorTest implements
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final Line2D line2 = estimator.estimate();
+            final var line2 = estimator.estimate();
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -606,7 +472,7 @@ public class PROMedSLine2DRobustEstimatorTest implements
 
             // check correctness of estimation by checking that all points without
             // error have estimated line as locus
-            for (final Point2D p : points) {
+            for (final var p : points) {
                 assertTrue(line2.isLocus(p, ABSOLUTE_ERROR));
             }
 
@@ -630,62 +496,29 @@ public class PROMedSLine2DRobustEstimatorTest implements
     }
 
     @Override
-    public void onEstimateNextIteration(final Line2DRobustEstimator estimator,
-                                        final int iteration) {
+    public void onEstimateNextIteration(final Line2DRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
         checkLocked((PROMedSLine2DRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateProgressChange(final Line2DRobustEstimator estimator,
-                                         final float progress) {
+    public void onEstimateProgressChange(final Line2DRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
         checkLocked((PROMedSLine2DRobustEstimator) estimator);
     }
 
     private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
+        estimateStart = estimateEnd = estimateNextIteration = estimateProgressChange = 0;
     }
 
-    private void checkLocked(final PROMedSLine2DRobustEstimator estimator) {
-        try {
-            estimator.setStopThreshold(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(0.5f);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setConfidence(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setMaxIterations(5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setPoints(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
+    private static void checkLocked(final PROMedSLine2DRobustEstimator estimator) {
+        assertThrows(LockedException.class, () -> estimator.setStopThreshold(0.5));
+        assertThrows(LockedException.class, () -> estimator.setListener(null));
+        assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.5f));
+        assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+        assertThrows(LockedException.class, () -> estimator.setMaxIterations(5));
+        assertThrows(LockedException.class, () -> estimator.setPoints(null));
+        assertThrows(LockedException.class, estimator::estimate);
         assertTrue(estimator.isLocked());
     }
 }

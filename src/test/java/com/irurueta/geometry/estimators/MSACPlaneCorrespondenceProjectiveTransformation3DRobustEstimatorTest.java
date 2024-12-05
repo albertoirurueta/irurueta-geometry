@@ -22,15 +22,13 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest
+class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTest
         implements ProjectiveTransformation3DRobustEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -1000.0;
@@ -55,7 +53,7 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
     private int estimateProgressChange;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(1e-6, MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
                 0.0);
         assertEquals(0.0, MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MIN_THRESHOLD,
@@ -63,10 +61,9 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test constructor without arguments
-        MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
+        var estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         assertEquals(MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getThreshold(), 0.0);
@@ -81,25 +78,22 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
         // test constructor with planes
-        final List<Plane> inputPlanes = new ArrayList<>();
-        final List<Plane> outputPlanes = new ArrayList<>();
-        for (int i = 0; i < PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var inputPlanes = new ArrayList<Plane>();
+        final var outputPlanes = new ArrayList<Plane>();
+        for (var i = 0; i < PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPlanes.add(new Plane());
             outputPlanes.add(new Plane());
         }
 
-        estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-                inputPlanes, outputPlanes);
+        estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(inputPlanes, outputPlanes);
 
         assertEquals(MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getThreshold(), 0.0);
@@ -114,36 +108,24 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        final List<Plane> planesEmpty = new ArrayList<>();
-        estimator = null;
-        try {
-            // not enough planes
-            estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-                    planesEmpty, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-                    inputPlanes, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var planesEmpty = new ArrayList<Plane>();
+        // not enough planes
+        assertThrows(IllegalArgumentException.class,
+                () -> new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(planesEmpty, planesEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class,
+                () -> new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(inputPlanes, planesEmpty));
 
         // test constructor with listener
-        estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-                this);
+        estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(this);
 
         assertEquals(MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getThreshold(), 0.0);
@@ -166,10 +148,9 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
-
         // test constructor with listener and lines
-        estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-                this, inputPlanes, outputPlanes);
+        estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(this, inputPlanes,
+                outputPlanes);
 
         assertEquals(MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getThreshold(), 0.0);
@@ -184,37 +165,27 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-                    this, planesEmpty, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-                    this, inputPlanes, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // not enough points
+        assertThrows(IllegalArgumentException.class,
+                () -> new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(this, planesEmpty,
+                        planesEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class,
+                () -> new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(this, inputPlanes,
+                        planesEmpty));
     }
 
     @Test
-    public void testGetSetThreshold() throws LockedException {
-        final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
+    void testGetSetThreshold() throws LockedException {
+        final var estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
         assertEquals(MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
@@ -227,17 +198,12 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setThreshold(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setThreshold(0.0));
     }
 
     @Test
-    public void testGetSetConfidence() throws LockedException {
-        final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
+    void testGetSetConfidence() throws LockedException {
+        final var estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
         assertEquals(MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
@@ -250,23 +216,13 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException {
-        final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
+    void testGetSetMaxIterations() throws LockedException {
+        final var estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
         assertEquals(MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
@@ -279,17 +235,12 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testGetSetPlanesAndIsReady() throws LockedException {
-        final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
+    void testGetSetPlanesAndIsReady() throws LockedException {
+        final var estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default values
         assertNull(estimator.getInputPlanes());
@@ -297,9 +248,9 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         assertFalse(estimator.isReady());
 
         // set new value
-        final List<Plane> inputPlanes = new ArrayList<>();
-        final List<Plane> outputPlanes = new ArrayList<>();
-        for (int i = 0; i < PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var inputPlanes = new ArrayList<Plane>();
+        final var outputPlanes = new ArrayList<Plane>();
+        for (var i = 0; i < PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPlanes.add(new Plane());
             outputPlanes.add(new Plane());
         }
@@ -312,25 +263,16 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
-        final List<Plane> planesEmpty = new ArrayList<>();
-        try {
-            // not enough planes
-            estimator.setPlanes(planesEmpty, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator.setPlanes(planesEmpty, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var planesEmpty = new ArrayList<Plane>();
+        // not enough planes
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPlanes(planesEmpty, planesEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPlanes(planesEmpty, planesEmpty));
     }
 
     @Test
-    public void testGetSetListenerAndIsListenerAvailable() throws LockedException {
-        final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
+    void testGetSetListenerAndIsListenerAvailable() throws LockedException {
+        final var estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -345,13 +287,12 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
     }
 
     @Test
-    public void testGetSetProgressDelta() throws LockedException {
-        final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
+    void testGetSetProgressDelta() throws LockedException {
+        final var estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(ProjectiveTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
@@ -360,22 +301,13 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testIsSetResultRefined() throws LockedException {
-        final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
+    void testIsSetResultRefined() throws LockedException {
+        final var estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         assertTrue(estimator.isResultRefined());
 
@@ -387,9 +319,8 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
     }
 
     @Test
-    public void testIsSetCovarianceKept() throws LockedException {
-        final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
+    void testIsSetCovarianceKept() throws LockedException {
+        final var estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator();
 
         assertFalse(estimator.isCovarianceKept());
 
@@ -401,8 +332,8 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
     }
 
     @Test
-    public void testEstimateWithoutRefinement() throws LockedException, NotReadyException,
-            RobustEstimatorException, AlgebraException {
+    void testEstimateWithoutRefinement() throws LockedException, NotReadyException, RobustEstimatorException,
+            AlgebraException {
         // create an affine transformation
         Matrix a;
         do {
@@ -410,40 +341,37 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
             a = Matrix.createWithUniformRandomValues(
                     ProjectiveTransformation3D.INHOM_COORDS,
                     ProjectiveTransformation3D.INHOM_COORDS, -1.0, 1.0);
-            final double norm = Utils.normF(a);
+            final var norm = Utils.normF(a);
             // normalize T to increase accuracy
             a.multiplyByScalar(1.0 / norm);
         } while (Utils.rank(a) < ProjectiveTransformation3D.INHOM_COORDS);
 
-        final double[] translation = new double[
-                ProjectiveTransformation3D.INHOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var translation = new double[ProjectiveTransformation3D.INHOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(translation, -1.0, 1.0);
 
-        final ProjectiveTransformation3D transformation1 =
-                new ProjectiveTransformation3D(a, translation);
+        final var transformation1 = new ProjectiveTransformation3D(a, translation);
 
         // generate random planes
-        final int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
-        final List<Plane> inputPlanes = new ArrayList<>();
-        final List<Plane> outputPlanes = new ArrayList<>();
-        final List<Plane> outputPlanesWithError = new ArrayList<>();
-        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                new Random(), 0.0, STD_ERROR);
-        for (int i = 0; i < nPlanes; i++) {
-            final Plane inputPlane = new Plane(
+        final var nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
+        final var inputPlanes = new ArrayList<Plane>();
+        final var outputPlanes = new ArrayList<Plane>();
+        final var outputPlanesWithError = new ArrayList<Plane>();
+        final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+        for (var i = 0; i < nPlanes; i++) {
+            final var inputPlane = new Plane(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-            final Plane outputPlane = transformation1.transformAndReturnNew(inputPlane);
+            final var outputPlane = transformation1.transformAndReturnNew(inputPlane);
             final Plane outputPlaneWithError;
             if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                 // line is outlier
-                final double errorA = errorRandomizer.nextDouble();
-                final double errorB = errorRandomizer.nextDouble();
-                final double errorC = errorRandomizer.nextDouble();
-                final double errorD = errorRandomizer.nextDouble();
+                final var errorA = errorRandomizer.nextDouble();
+                final var errorB = errorRandomizer.nextDouble();
+                final var errorC = errorRandomizer.nextDouble();
+                final var errorD = errorRandomizer.nextDouble();
                 outputPlaneWithError = new Plane(
                         outputPlane.getA() + errorA,
                         outputPlane.getB() + errorB,
@@ -459,9 +387,8 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
             outputPlanesWithError.add(outputPlaneWithError);
         }
 
-        final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-                        this, inputPlanes, outputPlanesWithError);
+        final var estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(this,
+                inputPlanes, outputPlanesWithError);
 
         estimator.setThreshold(THRESHOLD);
         estimator.setResultRefined(false);
@@ -474,7 +401,7 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
 
-        final ProjectiveTransformation3D transformation2 = estimator.estimate();
+        final var transformation2 = estimator.estimate();
 
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
@@ -486,10 +413,9 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
         // using estimated transformation (transformation2) and checking
         // that output planes are equal to the original output planes without
         // error
-        Plane plane1, plane2;
-        for (int i = 0; i < nPlanes; i++) {
-            plane1 = outputPlanes.get(i);
-            plane2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
+        for (var i = 0; i < nPlanes; i++) {
+            final var plane1 = outputPlanes.get(i);
+            final var plane2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
             plane1.normalize();
             plane2.normalize();
             assertEquals(0.0,
@@ -500,51 +426,47 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
     }
 
     @Test
-    public void testEstimateWithRefinement() throws LockedException, NotReadyException,
-            RobustEstimatorException, AlgebraException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+    void testEstimateWithRefinement() throws LockedException, NotReadyException, RobustEstimatorException,
+            AlgebraException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
             // create an affine transformation
             Matrix a;
             do {
                 // ensure A matrix is invertible
-                a = Matrix.createWithUniformRandomValues(
-                        ProjectiveTransformation3D.INHOM_COORDS,
+                a = Matrix.createWithUniformRandomValues(ProjectiveTransformation3D.INHOM_COORDS,
                         ProjectiveTransformation3D.INHOM_COORDS, -1.0, 1.0);
-                final double norm = Utils.normF(a);
+                final var norm = Utils.normF(a);
                 // normalize T to increase accuracy
                 a.multiplyByScalar(1.0 / norm);
             } while (Utils.rank(a) < ProjectiveTransformation3D.INHOM_COORDS);
 
-            final double[] translation = new double[
-                    ProjectiveTransformation3D.INHOM_COORDS];
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final var translation = new double[ProjectiveTransformation3D.INHOM_COORDS];
+            final var randomizer = new UniformRandomizer();
             randomizer.fill(translation, -1.0, 1.0);
 
-            final ProjectiveTransformation3D transformation1 =
-                    new ProjectiveTransformation3D(a, translation);
+            final var transformation1 = new ProjectiveTransformation3D(a, translation);
 
             // generate random planes
-            final int nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
-            final List<Plane> inputPlanes = new ArrayList<>();
-            final List<Plane> outputPlanes = new ArrayList<>();
-            final List<Plane> outputPlanesWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            for (int i = 0; i < nPlanes; i++) {
-                final Plane inputPlane = new Plane(
+            final var nPlanes = randomizer.nextInt(MIN_LINES, MAX_LINES);
+            final var inputPlanes = new ArrayList<Plane>();
+            final var outputPlanes = new ArrayList<Plane>();
+            final var outputPlanesWithError = new ArrayList<Plane>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            for (var i = 0; i < nPlanes; i++) {
+                final var inputPlane = new Plane(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-                final Plane outputPlane = transformation1.transformAndReturnNew(inputPlane);
+                final var outputPlane = transformation1.transformAndReturnNew(inputPlane);
                 final Plane outputPlaneWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // line is outlier
-                    final double errorA = errorRandomizer.nextDouble();
-                    final double errorB = errorRandomizer.nextDouble();
-                    final double errorC = errorRandomizer.nextDouble();
-                    final double errorD = errorRandomizer.nextDouble();
+                    final var errorA = errorRandomizer.nextDouble();
+                    final var errorB = errorRandomizer.nextDouble();
+                    final var errorC = errorRandomizer.nextDouble();
+                    final var errorD = errorRandomizer.nextDouble();
                     outputPlaneWithError = new Plane(
                             outputPlane.getA() + errorA,
                             outputPlane.getB() + errorB,
@@ -560,9 +482,8 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
                 outputPlanesWithError.add(outputPlaneWithError);
             }
 
-            final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator =
-                    new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(
-                            this, inputPlanes, outputPlanesWithError);
+            final var estimator = new MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator(this,
+                    inputPlanes, outputPlanesWithError);
 
             estimator.setThreshold(THRESHOLD);
             estimator.setResultRefined(true);
@@ -575,7 +496,7 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final ProjectiveTransformation3D transformation2 = estimator.estimate();
+            final var transformation2 = estimator.estimate();
 
             assertNotNull(estimator.getInliersData());
             assertNotNull(estimator.getInliersData().getInliers());
@@ -583,11 +504,9 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
             assertTrue(estimator.getInliersData().getNumInliers() > 0);
             if (estimator.getCovariance() != null) {
                 assertEquals(estimator.getCovariance().getRows(),
-                        ProjectiveTransformation3D.HOM_COORDS *
-                                ProjectiveTransformation3D.HOM_COORDS);
+                        ProjectiveTransformation3D.HOM_COORDS * ProjectiveTransformation3D.HOM_COORDS);
                 assertEquals(estimator.getCovariance().getColumns(),
-                        ProjectiveTransformation3D.HOM_COORDS *
-                                ProjectiveTransformation3D.HOM_COORDS);
+                        ProjectiveTransformation3D.HOM_COORDS * ProjectiveTransformation3D.HOM_COORDS);
             }
 
             assertEquals(1, estimateStart);
@@ -600,15 +519,14 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
             // using estimated transformation (transformation2) and checking
             // that output planes are equal to the original output planes without
             // error
-            Plane plane1, plane2;
-            boolean failed = false;
-            for (int i = 0; i < nPlanes; i++) {
-                plane1 = outputPlanes.get(i);
-                plane2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
+            var failed = false;
+            for (var i = 0; i < nPlanes; i++) {
+                final var plane1 = outputPlanes.get(i);
+                final var plane2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
                 plane1.normalize();
                 plane2.normalize();
-                if (Math.abs(PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.
-                        getResidual(plane1, plane2)) > ABSOLUTE_ERROR) {
+                if (Math.abs(PlaneCorrespondenceProjectiveTransformation3DRobustEstimator.getResidual(plane1, plane2))
+                        > ABSOLUTE_ERROR) {
                     failed = true;
                     break;
                 }
@@ -637,75 +555,42 @@ public class MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimatorTes
     @Override
     public void onEstimateStart(final ProjectiveTransformation3DRobustEstimator estimator) {
         estimateStart++;
-        testLocked((MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator) estimator);
+        checkLocked((MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateEnd(
-            final ProjectiveTransformation3DRobustEstimator estimator) {
+    public void onEstimateEnd(final ProjectiveTransformation3DRobustEstimator estimator) {
         estimateEnd++;
-        testLocked((MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator) estimator);
+        checkLocked((MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator) estimator);
     }
 
     @Override
     public void onEstimateNextIteration(
             final ProjectiveTransformation3DRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
-        testLocked((MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator) estimator);
+        checkLocked((MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator) estimator);
     }
 
     @Override
     public void onEstimateProgressChange(
             final ProjectiveTransformation3DRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
-        testLocked((MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator) estimator);
+        checkLocked((MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator) estimator);
     }
 
     private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
+        estimateStart = estimateEnd = estimateNextIteration = estimateProgressChange = 0;
     }
 
-    private void testLocked(
-            final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator) {
-        final List<Plane> planes = new ArrayList<>();
-        try {
-            estimator.setPlanes(planes, planes);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(0.01f);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setThreshold(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setConfidence(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setMaxIterations(10);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
+    private static void checkLocked(final MSACPlaneCorrespondenceProjectiveTransformation3DRobustEstimator estimator) {
+        final var planes = new ArrayList<Plane>();
+        assertThrows(LockedException.class, () -> estimator.setPlanes(planes, planes));
+        assertThrows(LockedException.class, () -> estimator.setListener(null));
+        assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.01f));
+        assertThrows(LockedException.class, () -> estimator.setThreshold(0.5));
+        assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+        assertThrows(LockedException.class, () -> estimator.setMaxIterations(10));
+        assertThrows(LockedException.class, estimator::estimate);
         assertTrue(estimator.isLocked());
     }
 }

@@ -26,15 +26,13 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
+class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
         implements AffineTransformation3DRobustEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -1000.0;
@@ -59,7 +57,7 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(1.0, LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_STOP_THRESHOLD,
                 0.0);
         assertEquals(0.0, LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.MIN_STOP_THRESHOLD,
@@ -67,10 +65,9 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test constructor without arguments
-        LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
+        var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
 
         assertEquals(LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_STOP_THRESHOLD,
                 estimator.getStopThreshold(), 0.0);
@@ -85,25 +82,23 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // test constructor with points
-        final List<Point3D> inputPoints = new ArrayList<>();
-        final List<Point3D> outputPoints = new ArrayList<>();
-        for (int i = 0; i < PointCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var inputPoints = new ArrayList<Point3D>();
+        final var outputPoints = new ArrayList<Point3D>();
+        for (var i = 0; i < PointCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point3D.create());
             outputPoints.add(Point3D.create());
         }
 
-        estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
-                inputPoints, outputPoints);
+        estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(inputPoints, outputPoints);
 
         assertEquals(LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_STOP_THRESHOLD,
                 estimator.getStopThreshold(), 0.0);
@@ -118,37 +113,25 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        final List<Point3D> pointsEmpty = new ArrayList<>();
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
-                    pointsEmpty, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
-                    inputPoints, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var pointsEmpty = new ArrayList<Point3D>();
+        // not enough points
+        assertThrows(IllegalArgumentException.class,
+                () -> new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(pointsEmpty, pointsEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class,
+                () -> new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(inputPoints, pointsEmpty));
 
         // test constructor with listener
-        estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
-                this);
+        estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(this);
 
         assertEquals(RANSACPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getStopThreshold(), 0.0);
@@ -163,18 +146,17 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // test constructor with listener and points
-        estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
-                this, inputPoints, outputPoints);
+        estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(this, inputPoints,
+                outputPoints);
 
         assertEquals(RANSACPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getStopThreshold(), 0.0);
@@ -189,38 +171,28 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertNull(estimator.getQualityScores());
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
-                    this, pointsEmpty, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
-                    this, inputPoints, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // not enough points
+        assertThrows(IllegalArgumentException.class,
+                () -> new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(this, pointsEmpty,
+                        pointsEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class,
+                () -> new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(this, inputPoints,
+                        pointsEmpty));
     }
 
     @Test
-    public void testGetSetStopThreshold() throws LockedException {
-        final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetStopThreshold() throws LockedException {
+        final var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default value
         assertEquals(LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_STOP_THRESHOLD,
@@ -233,17 +205,12 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(0.5, estimator.getStopThreshold(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setStopThreshold(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setStopThreshold(0.0));
     }
 
     @Test
-    public void testGetSetConfidence() throws LockedException {
-        final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetConfidence() throws LockedException {
+        final var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default value
         assertEquals(LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
@@ -256,23 +223,13 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException {
-        final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetMaxIterations() throws LockedException {
+        final var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default value
         assertEquals(LMedSPointCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
@@ -285,17 +242,12 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testGetSetPointsAndIsReady() throws LockedException {
-        final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetPointsAndIsReady() throws LockedException {
+        final var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default values
         assertNull(estimator.getInputPoints());
@@ -303,9 +255,9 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertFalse(estimator.isReady());
 
         // set new value
-        final List<Point3D> inputPoints = new ArrayList<>();
-        final List<Point3D> outputPoints = new ArrayList<>();
-        for (int i = 0; i < PointCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var inputPoints = new ArrayList<Point3D>();
+        final var outputPoints = new ArrayList<Point3D>();
+        for (var i = 0; i < PointCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point3D.create());
             outputPoints.add(Point3D.create());
         }
@@ -318,25 +270,16 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
-        final List<Point3D> pointsEmpty = new ArrayList<>();
-        try {
-            // not enough points
-            estimator.setPoints(pointsEmpty, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator.setPoints(pointsEmpty, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var pointsEmpty = new ArrayList<Point3D>();
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(pointsEmpty, pointsEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(pointsEmpty, pointsEmpty));
     }
 
     @Test
-    public void testGetSetListenerAndIsListenerAvailable() throws LockedException {
-        final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetListenerAndIsListenerAvailable() throws LockedException {
+        final var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -351,13 +294,12 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetProgressDelta() throws LockedException {
-        final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetProgressDelta() throws LockedException {
+        final var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
@@ -366,27 +308,17 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testGetSetQualityScores() throws LockedException {
-        final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetQualityScores() throws LockedException {
+        final var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
 
         assertNull(estimator.getQualityScores());
 
-        final double[] qualityScores = new double[
-                PointCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE];
+        final var qualityScores = new double[PointCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE];
         estimator.setQualityScores(qualityScores);
 
         // check correctness
@@ -394,9 +326,8 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetResultRefined() throws LockedException {
-        final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
+    void testIsSetResultRefined() throws LockedException {
+        final var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
 
         assertTrue(estimator.isResultRefined());
 
@@ -408,9 +339,8 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetCovarianceKept() throws LockedException {
-        final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
+    void testIsSetCovarianceKept() throws LockedException {
+        final var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator();
 
         assertFalse(estimator.isCovarianceKept());
 
@@ -422,10 +352,9 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testEstimateWithoutRefinement() throws WrongSizeException,
-            DecomposerException, LockedException, NotReadyException,
-            RobustEstimatorException {
-        for (int t = 0; t < TIMES; t++) {
+    void testEstimateWithoutRefinement() throws WrongSizeException, DecomposerException, LockedException,
+            NotReadyException, RobustEstimatorException {
+        for (var t = 0; t < TIMES; t++) {
             // create an affine transformation
             Matrix a;
             do {
@@ -433,38 +362,35 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
                 a = Matrix.createWithUniformRandomValues(
                         AffineTransformation3D.INHOM_COORDS,
                         AffineTransformation3D.INHOM_COORDS, -1.0, 1.0);
-                final double norm = Utils.normF(a);
+                final var norm = Utils.normF(a);
                 // normalize T to increase accuracy
                 a.multiplyByScalar(1.0 / norm);
             } while (Utils.rank(a) < AffineTransformation3D.INHOM_COORDS);
 
-            final double[] translation = new double[
-                    AffineTransformation3D.INHOM_COORDS];
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final var translation = new double[AffineTransformation3D.INHOM_COORDS];
+            final var randomizer = new UniformRandomizer();
             randomizer.fill(translation, -1.0, 1.0);
 
-            final AffineTransformation3D transformation1 =
-                    new AffineTransformation3D(a, translation);
+            final var transformation1 = new AffineTransformation3D(a, translation);
 
             // generate random points
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> inputPoints = new ArrayList<>();
-            final List<Point3D> outputPoints = new ArrayList<>();
-            final List<Point3D> outputPointsWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            for (int i = 0; i < nPoints; i++) {
-                final Point3D inputPoint = new InhomogeneousPoint3D(
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var inputPoints = new ArrayList<Point3D>();
+            final var outputPoints = new ArrayList<Point3D>();
+            final var outputPointsWithError = new ArrayList<Point3D>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            for (var i = 0; i < nPoints; i++) {
+                final var inputPoint = new InhomogeneousPoint3D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-                final Point3D outputPoint = transformation1.transformAndReturnNew(inputPoint);
+                final var outputPoint = transformation1.transformAndReturnNew(inputPoint);
                 final Point3D outputPointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorZ = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorZ = errorRandomizer.nextDouble();
                     outputPointWithError = new InhomogeneousPoint3D(
                             outputPoint.getInhomX() + errorX,
                             outputPoint.getInhomY() + errorY,
@@ -479,9 +405,8 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
                 outputPointsWithError.add(outputPointWithError);
             }
 
-            final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                    new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
-                            this, inputPoints, outputPointsWithError);
+            final var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(this,
+                    inputPoints, outputPointsWithError);
 
             estimator.setStopThreshold(STOP_THRESHOLD);
             estimator.setResultRefined(false);
@@ -494,7 +419,7 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final AffineTransformation3D transformation2 = estimator.estimate();
+            final var transformation2 = estimator.estimate();
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -506,59 +431,53 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
             // using estimated transformation (transformation2) and checking
             // that output points are equal to the original output points without
             // error
-            Point3D p1, p2;
-            for (int i = 0; i < nPoints; i++) {
-                p1 = outputPoints.get(i);
-                p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
+            for (var i = 0; i < nPoints; i++) {
+                final var p1 = outputPoints.get(i);
+                final var p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
                 assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
             }
         }
     }
 
     @Test
-    public void testEstimateWithRefinement() throws WrongSizeException,
-            DecomposerException, LockedException, NotReadyException,
-            RobustEstimatorException {
-        for (int t = 0; t < TIMES; t++) {
+    void testEstimateWithRefinement() throws WrongSizeException, DecomposerException, LockedException,
+            NotReadyException, RobustEstimatorException {
+        for (var t = 0; t < TIMES; t++) {
             // create an affine transformation
             Matrix a;
             do {
                 // ensure A matrix is invertible
-                a = Matrix.createWithUniformRandomValues(
-                        AffineTransformation3D.INHOM_COORDS,
+                a = Matrix.createWithUniformRandomValues(AffineTransformation3D.INHOM_COORDS,
                         AffineTransformation3D.INHOM_COORDS, -1.0, 1.0);
-                final double norm = Utils.normF(a);
+                final var norm = Utils.normF(a);
                 // normalize T to increase accuracy
                 a.multiplyByScalar(1.0 / norm);
             } while (Utils.rank(a) < AffineTransformation3D.INHOM_COORDS);
 
-            final double[] translation = new double[
-                    AffineTransformation3D.INHOM_COORDS];
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final var translation = new double[AffineTransformation3D.INHOM_COORDS];
+            final var randomizer = new UniformRandomizer();
             randomizer.fill(translation, -1.0, 1.0);
 
-            final AffineTransformation3D transformation1 =
-                    new AffineTransformation3D(a, translation);
+            final var transformation1 = new AffineTransformation3D(a, translation);
 
             // generate random points
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> inputPoints = new ArrayList<>();
-            final List<Point3D> outputPoints = new ArrayList<>();
-            final List<Point3D> outputPointsWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            for (int i = 0; i < nPoints; i++) {
-                final Point3D inputPoint = new InhomogeneousPoint3D(
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var inputPoints = new ArrayList<Point3D>();
+            final var outputPoints = new ArrayList<Point3D>();
+            final var outputPointsWithError = new ArrayList<Point3D>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            for (var i = 0; i < nPoints; i++) {
+                final var inputPoint = new InhomogeneousPoint3D(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-                final Point3D outputPoint = transformation1.transformAndReturnNew(inputPoint);
+                final var outputPoint = transformation1.transformAndReturnNew(inputPoint);
                 final Point3D outputPointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorZ = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorZ = errorRandomizer.nextDouble();
                     outputPointWithError = new InhomogeneousPoint3D(
                             outputPoint.getInhomX() + errorX,
                             outputPoint.getInhomY() + errorY,
@@ -573,9 +492,8 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
                 outputPointsWithError.add(outputPointWithError);
             }
 
-            final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                    new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
-                            this, inputPoints, outputPointsWithError);
+            final var estimator = new LMedSPointCorrespondenceAffineTransformation3DRobustEstimator(this,
+                    inputPoints, outputPointsWithError);
 
             estimator.setStopThreshold(STOP_THRESHOLD);
             estimator.setResultRefined(true);
@@ -588,7 +506,7 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final AffineTransformation3D transformation2 = estimator.estimate();
+            final var transformation2 = estimator.estimate();
 
             assertNotNull(estimator.getInliersData());
             assertNotNull(estimator.getInliersData().getInliers());
@@ -596,14 +514,11 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
             assertTrue(estimator.getInliersData().getNumInliers() > 0);
             assertNotNull(estimator.getCovariance());
             assertEquals(estimator.getCovariance().getRows(),
-                    AffineTransformation3D.INHOM_COORDS *
-                            AffineTransformation3D.INHOM_COORDS +
-                            AffineTransformation3D.NUM_TRANSLATION_COORDS);
+                    AffineTransformation3D.INHOM_COORDS * AffineTransformation3D.INHOM_COORDS
+                            + AffineTransformation3D.NUM_TRANSLATION_COORDS);
             assertEquals(estimator.getCovariance().getColumns(),
-                    AffineTransformation3D.INHOM_COORDS *
-                            AffineTransformation3D.INHOM_COORDS +
-                            AffineTransformation3D.NUM_TRANSLATION_COORDS);
-
+                    AffineTransformation3D.INHOM_COORDS * AffineTransformation3D.INHOM_COORDS
+                            + AffineTransformation3D.NUM_TRANSLATION_COORDS);
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -615,10 +530,9 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
             // using estimated transformation (transformation2) and checking
             // that output points are equal to the original output points without
             // error
-            Point3D p1, p2;
-            for (int i = 0; i < nPoints; i++) {
-                p1 = outputPoints.get(i);
-                p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
+            for (var i = 0; i < nPoints; i++) {
+                final var p1 = outputPoints.get(i);
+                final var p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
                 assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
             }
         }
@@ -637,64 +551,30 @@ public class LMedSPointCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Override
-    public void onEstimateNextIteration(
-            final AffineTransformation3DRobustEstimator estimator, final int iteration) {
+    public void onEstimateNextIteration(final AffineTransformation3DRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
         checkLocked((LMedSPointCorrespondenceAffineTransformation3DRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateProgressChange(
-            final AffineTransformation3DRobustEstimator estimator, final float progress) {
+    public void onEstimateProgressChange(final AffineTransformation3DRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
         checkLocked((LMedSPointCorrespondenceAffineTransformation3DRobustEstimator) estimator);
     }
 
     private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
+        estimateStart = estimateEnd = estimateNextIteration = estimateProgressChange = 0;
     }
 
-    private void checkLocked(
-            final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator) {
-        final List<Point3D> points = new ArrayList<>();
-        try {
-            estimator.setPoints(points, points);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(0.01f);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setStopThreshold(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setConfidence(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setMaxIterations(10);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
+    private static void checkLocked(final LMedSPointCorrespondenceAffineTransformation3DRobustEstimator estimator) {
+        final var points = new ArrayList<Point3D>();
+        assertThrows(LockedException.class, () -> estimator.setPoints(points, points));
+        assertThrows(LockedException.class, () -> estimator.setListener(null));
+        assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.01f));
+        assertThrows(LockedException.class, () -> estimator.setStopThreshold(0.5));
+        assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+        assertThrows(LockedException.class, () -> estimator.setMaxIterations(10));
+        assertThrows(LockedException.class, estimator::estimate);
         assertTrue(estimator.isLocked());
     }
 }

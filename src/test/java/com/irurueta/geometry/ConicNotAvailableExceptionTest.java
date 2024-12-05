@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class ConicNotAvailableExceptionTest {
+class ConicNotAvailableExceptionTest {
 
     @Test
-    public void testConstructor() {
-        ConicNotAvailableException ex = new ConicNotAvailableException();
+    void testConstructor() {
+        var ex = new ConicNotAvailableException();
         assertNotNull(ex);
 
         ex = new ConicNotAvailableException("message");

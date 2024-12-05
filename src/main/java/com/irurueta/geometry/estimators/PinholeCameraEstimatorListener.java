@@ -42,6 +42,5 @@ public interface PinholeCameraEstimatorListener {
      * @param progress  Current percentage of progress expressed as a value
      *                  between 0.0f and 1.0f.
      */
-    void onEstimationProgressChange(final PinholeCameraEstimator estimator,
-                                    final float progress);
+    void onEstimationProgressChange(final PinholeCameraEstimator estimator, final float progress);
 }

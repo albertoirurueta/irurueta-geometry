@@ -23,21 +23,16 @@ import com.irurueta.geometry.Line2D;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.geometry.estimators.RANSACLineCorrespondenceAffineTransformation2DRobustEstimator;
-import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LineCorrespondenceAffineTransformation2DRefinerTest implements
-        RefinerListener<AffineTransformation2D> {
+class LineCorrespondenceAffineTransformation2DRefinerTest implements RefinerListener<AffineTransformation2D> {
 
     private static final double MIN_RANDOM_VALUE = -1000.0;
     private static final double MAX_RANDOM_VALUE = 1000.0;
@@ -54,29 +49,26 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
 
     private static final int TIMES = 1000;
 
-    private int mRefineStart;
-    private int mRefineEnd;
+    private int refineStart;
+    private int refineEnd;
 
     @Test
-    public void testConstructor() throws AlgebraException, LockedException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
-                createRobustEstimator();
-        final AffineTransformation2D transformation = estimator.estimate();
-        final InliersData inliersData = estimator.getInliersData();
-        final BitSet inliers = inliersData.getInliers();
-        final double[] residuals = inliersData.getResiduals();
-        final int numInliers = inliersData.getNumInliers();
-        final double refinementStandardDeviation = estimator.getThreshold();
-        final List<Line2D> samples1 = estimator.getInputLines();
-        final List<Line2D> samples2 = estimator.getOutputLines();
+    void testConstructor() throws AlgebraException, LockedException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
+        final var transformation = estimator.estimate();
+        final var inliersData = estimator.getInliersData();
+        final var inliers = inliersData.getInliers();
+        final var residuals = inliersData.getResiduals();
+        final var numInliers = inliersData.getNumInliers();
+        final var refinementStandardDeviation = estimator.getThreshold();
+        final var samples1 = estimator.getInputLines();
+        final var samples2 = estimator.getOutputLines();
 
         assertNotNull(transformation);
         assertNotNull(inliersData);
 
         // test empty constructor
-        LineCorrespondenceAffineTransformation2DRefiner refiner =
-                new LineCorrespondenceAffineTransformation2DRefiner();
+        var refiner = new LineCorrespondenceAffineTransformation2DRefiner();
 
         // check default values
         assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
@@ -93,9 +85,8 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
         assertNull(refiner.getListener());
 
         // test non-empty constructor
-        refiner = new LineCorrespondenceAffineTransformation2DRefiner(
-                transformation, true, inliers, residuals, numInliers, samples1,
-                samples2, refinementStandardDeviation);
+        refiner = new LineCorrespondenceAffineTransformation2DRefiner(transformation, true, inliers,
+                residuals, numInliers, samples1, samples2, refinementStandardDeviation);
 
         // check default values
         assertEquals(refinementStandardDeviation, refiner.getRefinementStandardDeviation(), 0.0);
@@ -112,10 +103,8 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
         assertNull(refiner.getCovariance());
         assertNull(refiner.getListener());
 
-
-        refiner = new LineCorrespondenceAffineTransformation2DRefiner(
-                transformation, true, inliersData, samples1, samples2,
-                refinementStandardDeviation);
+        refiner = new LineCorrespondenceAffineTransformation2DRefiner(transformation, true, inliersData,
+                samples1, samples2, refinementStandardDeviation);
 
         // check default values
         assertEquals(refinementStandardDeviation, refiner.getRefinementStandardDeviation(), 0.0);
@@ -134,9 +123,8 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetListener() {
-        final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                new LineCorrespondenceAffineTransformation2DRefiner();
+    void testGetSetListener() {
+        final var refiner = new LineCorrespondenceAffineTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getListener());
@@ -149,17 +137,15 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetRefinementStandardDeviation() throws LockedException {
-        final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                new LineCorrespondenceAffineTransformation2DRefiner();
+    void testGetSetRefinementStandardDeviation() throws LockedException {
+        final var refiner = new LineCorrespondenceAffineTransformation2DRefiner();
 
         // check default value
         assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double refinementStandardDeviation = randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var refinementStandardDeviation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setRefinementStandardDeviation(refinementStandardDeviation);
 
         // check correctness
@@ -167,15 +153,14 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetSamples1() throws LockedException {
-        final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                new LineCorrespondenceAffineTransformation2DRefiner();
+    void testGetSetSamples1() throws LockedException {
+        final var refiner = new LineCorrespondenceAffineTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getSamples1());
 
         // set new value
-        final List<Line2D> samples1 = new ArrayList<>();
+        final var samples1 = new ArrayList<Line2D>();
         refiner.setSamples1(samples1);
 
         // check correctness
@@ -183,15 +168,14 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetSamples2() throws LockedException {
-        final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                new LineCorrespondenceAffineTransformation2DRefiner();
+    void testGetSetSamples2() throws LockedException {
+        final var refiner = new LineCorrespondenceAffineTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getSamples2());
 
         // set new value
-        final List<Line2D> samples2 = new ArrayList<>();
+        final var samples2 = new ArrayList<Line2D>();
         refiner.setSamples2(samples2);
 
         // check correctness
@@ -199,17 +183,14 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetInliers() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetInliers() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final BitSet inliers = inliersData.getInliers();
+        final var inliersData = estimator.getInliersData();
+        final var inliers = inliersData.getInliers();
 
-        final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                new LineCorrespondenceAffineTransformation2DRefiner();
+        final var refiner = new LineCorrespondenceAffineTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getInliers());
@@ -222,17 +203,14 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetResiduals() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetResiduals() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final double[] residuals = inliersData.getResiduals();
+        final var inliersData = estimator.getInliersData();
+        final var residuals = inliersData.getResiduals();
 
-        final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                new LineCorrespondenceAffineTransformation2DRefiner();
+        final var refiner = new LineCorrespondenceAffineTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getResiduals());
@@ -245,17 +223,14 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetNumInliers() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetNumInliers() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final int numInliers = inliersData.getNumInliers();
+        final var inliersData = estimator.getInliersData();
+        final var numInliers = inliersData.getNumInliers();
 
-        final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                new LineCorrespondenceAffineTransformation2DRefiner();
+        final var refiner = new LineCorrespondenceAffineTransformation2DRefiner();
 
         // check default value
         assertEquals(0, refiner.getNumInliers());
@@ -267,24 +242,17 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
         assertEquals(numInliers, refiner.getNumInliers());
 
         // Force IllegalArgumentException
-        try {
-            refiner.setNumInliers(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> refiner.setNumInliers(0));
     }
 
     @Test
-    public void testSetInliersData() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
-                createRobustEstimator();
+    void testSetInliersData() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
+        final var inliersData = estimator.getInliersData();
 
-        final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                new LineCorrespondenceAffineTransformation2DRefiner();
+        final var refiner = new LineCorrespondenceAffineTransformation2DRefiner();
 
         // check default values
         assertNull(refiner.getInliers());
@@ -301,15 +269,14 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetInitialEstimation() throws LockedException {
-        final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                new LineCorrespondenceAffineTransformation2DRefiner();
+    void testGetSetInitialEstimation() throws LockedException {
+        final var refiner = new LineCorrespondenceAffineTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getInitialEstimation());
 
         // set new value
-        final AffineTransformation2D transformation = new AffineTransformation2D();
+        final var transformation = new AffineTransformation2D();
         refiner.setInitialEstimation(transformation);
 
         // check correctness
@@ -317,9 +284,8 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testIsSetCovarianceKept() throws LockedException {
-        final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                new LineCorrespondenceAffineTransformation2DRefiner();
+    void testIsSetCovarianceKept() throws LockedException {
+        final var refiner = new LineCorrespondenceAffineTransformation2DRefiner();
 
         // check default value
         assertFalse(refiner.isCovarianceKept());
@@ -332,42 +298,38 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testRefine() throws AlgebraException, LockedException,
-            NotReadyException, RobustEstimatorException, RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
-                    createRobustEstimator();
+    void testRefine() throws AlgebraException, LockedException, NotReadyException, RobustEstimatorException,
+            RefinerException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = createRobustEstimator();
 
-            final AffineTransformation2D transformation = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refineStandardDeviation = estimator.getThreshold();
-            final List<Line2D> samples1 = estimator.getInputLines();
-            final List<Line2D> samples2 = estimator.getOutputLines();
+            final var transformation = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refineStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getInputLines();
+            final var samples2 = estimator.getOutputLines();
 
-            final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                    new LineCorrespondenceAffineTransformation2DRefiner(
-                            transformation, true, inliersData, samples1, samples2,
-                            refineStandardDeviation);
+            final var refiner = new LineCorrespondenceAffineTransformation2DRefiner(transformation, true,
+                    inliersData, samples1, samples2, refineStandardDeviation);
             refiner.setListener(this);
 
-            final AffineTransformation2D result1 = new AffineTransformation2D();
+            final var result1 = new AffineTransformation2D();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final AffineTransformation2D result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
-            assertTrue(result1.asMatrix().equals(result2.asMatrix(),
-                    ABSOLUTE_ERROR));
+            assertTrue(result1.asMatrix().equals(result2.asMatrix(), ABSOLUTE_ERROR));
 
             numValid++;
             break;
@@ -380,35 +342,29 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     private RANSACLineCorrespondenceAffineTransformation2DRobustEstimator createRobustEstimator()
             throws AlgebraException, LockedException {
 
-        final AffineTransformation2D transformation = createTransformation();
-
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var transformation = createTransformation();
+        final var randomizer = new UniformRandomizer();
 
         // generate random lines
-        final int nLines = randomizer.nextInt(MIN_LINES, MAX_LINES);
+        final var nLines = randomizer.nextInt(MIN_LINES, MAX_LINES);
 
-        final List<Line2D> inputLines = new ArrayList<>();
-        final List<Line2D> outputLinesWithError = new ArrayList<>();
-        Line2D inputLine;
-        Line2D outputLine;
-        Line2D outputLineWithError;
-        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                new Random(), 0.0, STD_ERROR);
-        for (int i = 0; i < nLines; i++) {
+        final var inputLines = new ArrayList<Line2D>();
+        final var outputLinesWithError = new ArrayList<Line2D>();
+        final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+        for (var i = 0; i < nLines; i++) {
             // generate input point
-            inputLine = new Line2D(
+            final var inputLine = new Line2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-            outputLine = transformation.transformAndReturnNew(inputLine);
-
+            final var outputLine = transformation.transformAndReturnNew(inputLine);
+            Line2D outputLineWithError;
             if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                 // line is outlier
-                final double errorA = errorRandomizer.nextDouble();
-                final double errorB = errorRandomizer.nextDouble();
-                final double errorC = errorRandomizer.nextDouble();
-                outputLineWithError = new Line2D(outputLine.getA() + errorA,
-                        outputLine.getB() + errorB,
+                final var errorA = errorRandomizer.nextDouble();
+                final var errorB = errorRandomizer.nextDouble();
+                final var errorC = errorRandomizer.nextDouble();
+                outputLineWithError = new Line2D(outputLine.getA() + errorA, outputLine.getB() + errorB,
                         outputLine.getC() + errorC);
             } else {
                 // inlier line (without error)
@@ -419,9 +375,8 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
             outputLinesWithError.add(outputLineWithError);
         }
 
-        final RANSACLineCorrespondenceAffineTransformation2DRobustEstimator estimator =
-                new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        inputLines, outputLinesWithError);
+        final var estimator = new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(inputLines,
+                outputLinesWithError);
 
         estimator.setThreshold(THRESHOLD);
         estimator.setComputeAndKeepInliersEnabled(true);
@@ -432,22 +387,20 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
         return estimator;
     }
 
-    private AffineTransformation2D createTransformation()
-            throws AlgebraException {
+    private AffineTransformation2D createTransformation() throws AlgebraException {
 
         Matrix a;
         do {
             // ensure A matrix is invertible
-            a = Matrix.createWithUniformRandomValues(
-                    AffineTransformation2D.INHOM_COORDS,
+            a = Matrix.createWithUniformRandomValues(AffineTransformation2D.INHOM_COORDS,
                     AffineTransformation2D.INHOM_COORDS, -1.0, 1.0);
-            final double norm = Utils.normF(a);
+            final var norm = Utils.normF(a);
             // normalize T to increase accuracy
             a.multiplyByScalar(1.0 / norm);
         } while (Utils.rank(a) < AffineTransformation2D.INHOM_COORDS);
 
-        final double[] translation = new double[AffineTransformation2D.INHOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var translation = new double[AffineTransformation2D.INHOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(translation, -1.0, 1.0);
 
         return new AffineTransformation2D(a, translation);
@@ -456,7 +409,7 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
     @Override
     public void onRefineStart(final Refiner<AffineTransformation2D> refiner,
                               final AffineTransformation2D initialEstimation) {
-        mRefineStart++;
+        refineStart++;
         checkLocked((LineCorrespondenceAffineTransformation2DRefiner) refiner);
     }
 
@@ -465,75 +418,26 @@ public class LineCorrespondenceAffineTransformation2DRefinerTest implements
                             final AffineTransformation2D initialEstimation,
                             final AffineTransformation2D result,
                             final boolean errorDecreased) {
-        mRefineEnd++;
+        refineEnd++;
         checkLocked((LineCorrespondenceAffineTransformation2DRefiner) refiner);
     }
 
     private void reset() {
-        mRefineStart = mRefineEnd = 0;
+        refineStart = refineEnd = 0;
     }
 
-    private void checkLocked(
-            final LineCorrespondenceAffineTransformation2DRefiner refiner) {
+    private static void checkLocked(final LineCorrespondenceAffineTransformation2DRefiner refiner) {
         assertTrue(refiner.isLocked());
-        try {
-            refiner.setInitialEstimation(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setCovarianceKept(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.refine(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            refiner.refine();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            refiner.setInliers(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setResiduals(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setNumInliers(0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setInliersData(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSamples1(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSamples2(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setRefinementStandardDeviation(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
+        assertThrows(LockedException.class, () -> refiner.setInitialEstimation(null));
+        assertThrows(LockedException.class, () -> refiner.setCovarianceKept(true));
+        assertThrows(LockedException.class, () -> refiner.refine(null));
+        assertThrows(LockedException.class, refiner::refine);
+        assertThrows(LockedException.class, () -> refiner.setInliers(null));
+        assertThrows(LockedException.class, () -> refiner.setResiduals(null));
+        assertThrows(LockedException.class, () -> refiner.setNumInliers(0));
+        assertThrows(LockedException.class, () -> refiner.setInliersData(null));
+        assertThrows(LockedException.class, () -> refiner.setSamples1(null));
+        assertThrows(LockedException.class, () -> refiner.setSamples2(null));
+        assertThrows(LockedException.class, () -> refiner.setRefinementStandardDeviation(0.0));
     }
 }

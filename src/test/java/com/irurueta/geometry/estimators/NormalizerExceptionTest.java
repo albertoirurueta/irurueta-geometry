@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry.estimators;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class NormalizerExceptionTest {
+class NormalizerExceptionTest {
 
     @Test
-    public void testConstructor() {
-        NormalizerException ex = new NormalizerException();
+    void testConstructor() {
+        var ex = new NormalizerException();
         assertNotNull(ex);
 
         ex = new NormalizerException("message");

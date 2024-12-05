@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class NotEnoughVerticesExceptionTest {
+class NotEnoughVerticesExceptionTest {
 
     @Test
-    public void testConstructor() {
-        NotEnoughVerticesException ex = new NotEnoughVerticesException();
+    void testConstructor() {
+        var ex = new NotEnoughVerticesException();
         assertNotNull(ex);
 
         ex = new NotEnoughVerticesException("message");

@@ -72,64 +72,64 @@ public abstract class BaseQuadric implements Serializable {
     /**
      * A element of the matrix defining a quadric.
      */
-    private double mA;
+    private double a;
 
     /**
      * B element of the matrix defining a quadric.
      */
-    private double mB;
+    private double b;
 
     /**
      * C element of the matrix defining a quadric.
      */
-    private double mC;
+    private double c;
 
     /**
      * D element of the matrix defining a quadric.
      */
-    private double mD;
+    private double d;
 
     /**
      * E element of the matrix defining a quadric.
      */
-    private double mE;
+    private double e;
 
     /**
      * F element of the matrix defining a quadric.
      */
-    private double mF;
+    private double f;
 
     /**
      * G element of the matrix defining a quadric.
      */
-    private double mG;
+    private double g;
 
     /**
      * H element of the matrix defining a quadric.
      */
-    private double mH;
+    private double h;
 
     /**
      * I element of the matrix defining a quadric.
      */
-    private double mI;
+    private double i;
 
     /**
      * J element of the matrix defining a quadric.
      */
-    private double mJ;
+    private double j;
 
     /**
      * Determines whether this instance is already normalized.
      */
-    private boolean mNormalized;
+    private boolean normalized;
 
     /**
      * Constructor of this class.
      */
     protected BaseQuadric() {
-        mA = mB = mC = mD = mE = mF = mG = mH = mI = mJ = 0.0;
-        mNormalized = false;
+        a = b = c = d = e = f = g = h = i = j = 0.0;
+        normalized = false;
     }
 
     /**
@@ -171,7 +171,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter B of a matrix describing a base quadric.
      */
     public double getA() {
-        return mA;
+        return a;
     }
 
     /**
@@ -180,7 +180,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter B of a matrix describing a base quadric.
      */
     public double getB() {
-        return mB;
+        return b;
     }
 
     /**
@@ -189,7 +189,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter C of a matrix describing a base quadric.
      */
     public double getC() {
-        return mC;
+        return c;
     }
 
     /**
@@ -198,7 +198,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter D of a matrix describing a base quadric.
      */
     public double getD() {
-        return mD;
+        return d;
     }
 
     /**
@@ -207,7 +207,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter E of a matrix describing a base quadric.
      */
     public double getE() {
-        return mE;
+        return e;
     }
 
     /**
@@ -216,7 +216,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter F of a matrix describing a base quadric.
      */
     public double getF() {
-        return mF;
+        return f;
     }
 
     /**
@@ -225,7 +225,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter G of a matrix describing a base quadric.
      */
     public double getG() {
-        return mG;
+        return g;
     }
 
     /**
@@ -234,7 +234,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter H of a matrix describing a base quadric.
      */
     public double getH() {
-        return mH;
+        return h;
     }
 
     /**
@@ -243,7 +243,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter I of a matrix describing a base quadric.
      */
     public double getI() {
-        return mI;
+        return i;
     }
 
     /**
@@ -252,7 +252,7 @@ public abstract class BaseQuadric implements Serializable {
      * @return Parameter J of a matrix describing a base quadric.
      */
     public double getJ() {
-        return mJ;
+        return j;
     }
 
     /**
@@ -270,20 +270,19 @@ public abstract class BaseQuadric implements Serializable {
      * @param i Parameter I of the base quadric.
      * @param j Parameter J of the base quadric.
      */
-    public final void setParameters(final double a, final double b, final double c, final double d,
-                                    final double e, final double f, final double g, final double h,
-                                    final double i, final double j) {
-        mA = a;
-        mB = b;
-        mC = c;
-        mD = d;
-        mE = e;
-        mF = f;
-        mG = g;
-        mH = h;
-        mI = i;
-        mJ = j;
-        mNormalized = false;
+    public final void setParameters(final double a, final double b, final double c, final double d, final double e,
+                                    final double f, final double g, final double h, final double i, final double j) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.d = d;
+        this.e = e;
+        this.f = f;
+        this.g = g;
+        this.h = h;
+        this.i = i;
+        this.j = j;
+        normalized = false;
     }
 
     /**
@@ -302,24 +301,23 @@ public abstract class BaseQuadric implements Serializable {
      */
     public final void setParameters(final Matrix m, final double symmetricThreshold)
             throws NonSymmetricMatrixException {
-        if (m.getRows() != BASEQUADRIC_MATRIX_ROW_SIZE ||
-                m.getColumns() != BASEQUADRIC_MATRIX_COLUMN_SIZE) {
+        if (m.getRows() != BASEQUADRIC_MATRIX_ROW_SIZE || m.getColumns() != BASEQUADRIC_MATRIX_COLUMN_SIZE) {
             throw new IllegalArgumentException();
         } else {
             if (!Utils.isSymmetric(m, symmetricThreshold)) {
                 throw new NonSymmetricMatrixException();
             } else {
-                mA = m.getElementAt(0, 0);
-                mB = m.getElementAt(1, 1);
-                mC = m.getElementAt(2, 2);
-                mD = m.getElementAt(0, 1);
-                mE = m.getElementAt(2, 1);
-                mF = m.getElementAt(2, 0);
-                mG = m.getElementAt(3, 0);
-                mH = m.getElementAt(3, 1);
-                mI = m.getElementAt(3, 2);
-                mJ = m.getElementAt(3, 3);
-                mNormalized = false;
+                a = m.getElementAt(0, 0);
+                b = m.getElementAt(1, 1);
+                c = m.getElementAt(2, 2);
+                d = m.getElementAt(0, 1);
+                e = m.getElementAt(2, 1);
+                f = m.getElementAt(2, 0);
+                g = m.getElementAt(3, 0);
+                h = m.getElementAt(3, 1);
+                i = m.getElementAt(3, 2);
+                j = m.getElementAt(3, 3);
+                normalized = false;
             }
         }
     }
@@ -344,8 +342,8 @@ public abstract class BaseQuadric implements Serializable {
      * @param a Parameter A of the given base quadric.
      */
     public void setA(final double a) {
-        mA = a;
-        mNormalized = false;
+        this.a = a;
+        normalized = false;
     }
 
     /**
@@ -354,8 +352,8 @@ public abstract class BaseQuadric implements Serializable {
      * @param b Parameter B of the given base quadric.
      */
     public void setB(final double b) {
-        mB = b;
-        mNormalized = false;
+        this.b = b;
+        normalized = false;
     }
 
     /**
@@ -364,8 +362,8 @@ public abstract class BaseQuadric implements Serializable {
      * @param c Parameter C of the given base quadric.
      */
     public void setC(final double c) {
-        mC = c;
-        mNormalized = false;
+        this.c = c;
+        normalized = false;
     }
 
     /**
@@ -374,8 +372,8 @@ public abstract class BaseQuadric implements Serializable {
      * @param d Parameter D of the given base quadric.
      */
     public void setD(final double d) {
-        mD = d;
-        mNormalized = false;
+        this.d = d;
+        normalized = false;
     }
 
     /**
@@ -384,8 +382,8 @@ public abstract class BaseQuadric implements Serializable {
      * @param e Parameter E of the given base quadric.
      */
     public void setE(final double e) {
-        mE = e;
-        mNormalized = false;
+        this.e = e;
+        normalized = false;
     }
 
     /**
@@ -394,8 +392,8 @@ public abstract class BaseQuadric implements Serializable {
      * @param f Parameter F of the given base quadric.
      */
     public void setF(final double f) {
-        mF = f;
-        mNormalized = false;
+        this.f = f;
+        normalized = false;
     }
 
     /**
@@ -404,8 +402,8 @@ public abstract class BaseQuadric implements Serializable {
      * @param g Parameter G of the given base quadric.
      */
     public void setG(final double g) {
-        mG = g;
-        mNormalized = false;
+        this.g = g;
+        normalized = false;
     }
 
     /**
@@ -414,8 +412,8 @@ public abstract class BaseQuadric implements Serializable {
      * @param h Parameter H of the given base quadric.
      */
     public void setH(final double h) {
-        mH = h;
-        mNormalized = false;
+        this.h = h;
+        normalized = false;
     }
 
     /**
@@ -424,8 +422,8 @@ public abstract class BaseQuadric implements Serializable {
      * @param i Parameter "I" of the given base quadric.
      */
     public void setI(final double i) {
-        mI = i;
-        mNormalized = false;
+        this.i = i;
+        normalized = false;
     }
 
     /**
@@ -434,8 +432,8 @@ public abstract class BaseQuadric implements Serializable {
      * @param j Parameter J of the given base quadric.
      */
     public void setJ(final double j) {
-        mJ = j;
-        mNormalized = false;
+        this.j = j;
+        normalized = false;
     }
 
     /**
@@ -462,50 +460,48 @@ public abstract class BaseQuadric implements Serializable {
      * @throws IllegalArgumentException Raised if provided matrix is not 4x4.
      */
     public void asMatrix(final Matrix m) {
-
-        if (m.getRows() != BASEQUADRIC_MATRIX_ROW_SIZE ||
-                m.getColumns() != BASEQUADRIC_MATRIX_ROW_SIZE) {
+        if (m.getRows() != BASEQUADRIC_MATRIX_ROW_SIZE || m.getColumns() != BASEQUADRIC_MATRIX_ROW_SIZE) {
             throw new IllegalArgumentException();
         }
 
-        m.setElementAt(0, 0, mA);
-        m.setElementAt(1, 1, mB);
-        m.setElementAt(2, 2, mC);
-        m.setElementAt(3, 3, mJ);
-        m.setElementAt(1, 0, mD);
-        m.setElementAt(0, 1, mD);
-        m.setElementAt(2, 1, mE);
-        m.setElementAt(1, 2, mE);
-        m.setElementAt(2, 0, mF);
-        m.setElementAt(0, 2, mF);
-        m.setElementAt(3, 0, mG);
-        m.setElementAt(0, 3, mG);
-        m.setElementAt(3, 1, mH);
-        m.setElementAt(1, 3, mH);
-        m.setElementAt(3, 2, mI);
-        m.setElementAt(2, 3, mI);
+        m.setElementAt(0, 0, a);
+        m.setElementAt(1, 1, b);
+        m.setElementAt(2, 2, c);
+        m.setElementAt(3, 3, j);
+        m.setElementAt(1, 0, d);
+        m.setElementAt(0, 1, d);
+        m.setElementAt(2, 1, e);
+        m.setElementAt(1, 2, e);
+        m.setElementAt(2, 0, f);
+        m.setElementAt(0, 2, f);
+        m.setElementAt(3, 0, g);
+        m.setElementAt(0, 3, g);
+        m.setElementAt(3, 1, h);
+        m.setElementAt(1, 3, h);
+        m.setElementAt(3, 2, i);
+        m.setElementAt(2, 3, i);
     }
 
     /**
      * Normalizes the Quadric params using its norm.
      */
     public void normalize() {
-        if (!mNormalized) {
-            final Matrix m = asMatrix();
-            final double norm = Utils.normF(m);
+        if (!normalized) {
+            final var m = asMatrix();
+            final var norm = Utils.normF(m);
 
             if (norm > PRECISION) {
-                mA /= norm;
-                mB /= norm;
-                mC /= norm;
-                mD /= norm;
-                mE /= norm;
-                mF /= norm;
-                mG /= norm;
-                mH /= norm;
-                mI /= norm;
-                mJ /= norm;
-                mNormalized = true;
+                a /= norm;
+                b /= norm;
+                c /= norm;
+                d /= norm;
+                e /= norm;
+                f /= norm;
+                g /= norm;
+                h /= norm;
+                i /= norm;
+                j /= norm;
+                normalized = true;
             }
         }
     }
@@ -517,6 +513,6 @@ public abstract class BaseQuadric implements Serializable {
      * @return True if normalized, false otherwise.
      */
     public boolean isNormalized() {
-        return mNormalized;
+        return normalized;
     }
 }

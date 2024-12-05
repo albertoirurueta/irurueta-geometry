@@ -45,36 +45,36 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
     /**
      * Defines the X coordinate of an homogeneous 2D point.
      */
-    private double mX;
+    private double x;
 
     /**
      * Defines the Y coordinate of an homogeneous 2D point.
      */
-    private double mY;
+    private double y;
 
     /**
      * Defines the Z coordinate of an homogeneous 2D point.
      */
-    private double mZ;
+    private double z;
 
     /**
      * Defines the W coordinate of an homogeneous 2D point.
      */
-    private double mW;
+    private double w;
 
     /**
      * Determines whether this point is already normalized.
      */
-    private boolean mNormalized;
+    private boolean normalized;
 
     /**
      * Empty constructor.
      */
     public HomogeneousPoint3D() {
         super();
-        mX = mY = mZ = 0.0;
-        mW = 1.0;
-        mNormalized = false;
+        x = y = z = 0.0;
+        w = 1.0;
+        normalized = false;
     }
 
     /**
@@ -101,11 +101,11 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param w W coordinate of the given 3D point.
      */
     public HomogeneousPoint3D(final double x, final double y, final double z, final double w) {
-        mX = x;
-        mY = y;
-        mZ = z;
-        mW = w;
-        mNormalized = false;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
+        normalized = false;
     }
 
     /**
@@ -124,7 +124,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return X coordinate.
      */
     public double getX() {
-        return mX;
+        return x;
     }
 
     /**
@@ -133,8 +133,8 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param x X coordinate.
      */
     public void setX(final double x) {
-        mX = x;
-        mNormalized = false;
+        this.x = x;
+        normalized = false;
     }
 
     /**
@@ -143,7 +143,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return Y coordinate.
      */
     public double getY() {
-        return mY;
+        return y;
     }
 
     /**
@@ -152,8 +152,8 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param y Y coordinate.
      */
     public void setY(final double y) {
-        mY = y;
-        mNormalized = false;
+        this.y = y;
+        normalized = false;
     }
 
     /**
@@ -162,7 +162,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return Z coordinate.
      */
     public double getZ() {
-        return mZ;
+        return z;
     }
 
     /**
@@ -171,8 +171,8 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param z Z coordinate.
      */
     public void setZ(final double z) {
-        mZ = z;
-        mNormalized = false;
+        this.z = z;
+        normalized = false;
     }
 
     /**
@@ -181,7 +181,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return W coordinate.
      */
     public double getW() {
-        return mW;
+        return w;
     }
 
     /**
@@ -190,8 +190,8 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param w W coordinate.
      */
     public void setW(final double w) {
-        mW = w;
-        mNormalized = false;
+        this.w = w;
+        normalized = false;
     }
 
     /**
@@ -204,11 +204,11 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param w W coordinate.
      */
     public void setCoordinates(final double x, final double y, final double z, final double w) {
-        mX = x;
-        mY = y;
-        mZ = z;
-        mW = w;
-        mNormalized = false;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.w = w;
+        normalized = false;
     }
 
     /**
@@ -224,11 +224,11 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
         if (v.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         } else {
-            mX = v[0];
-            mY = v[1];
-            mZ = v[2];
-            mW = v[3];
-            mNormalized = false;
+            x = v[0];
+            y = v[1];
+            z = v[2];
+            w = v[3];
+            normalized = false;
         }
     }
 
@@ -242,22 +242,22 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
     public final void setCoordinates(final Point3D point) {
         switch (point.getType()) {
             case INHOMOGENEOUS_COORDINATES:
-                final InhomogeneousPoint3D inhomPoint = (InhomogeneousPoint3D) point;
-                mX = inhomPoint.getX();
-                mY = inhomPoint.getY();
-                mZ = inhomPoint.getZ();
-                mW = 1.0;
-                mNormalized = false;
+                final var inhomPoint = (InhomogeneousPoint3D) point;
+                x = inhomPoint.getX();
+                y = inhomPoint.getY();
+                z = inhomPoint.getZ();
+                w = 1.0;
+                normalized = false;
                 break;
 
             case HOMOGENEOUS_COORDINATES:
             default:
-                final HomogeneousPoint3D homPoint = (HomogeneousPoint3D) point;
-                mX = homPoint.getX();
-                mY = homPoint.getY();
-                mZ = homPoint.getZ();
-                mW = homPoint.getW();
-                mNormalized = false;
+                final var homPoint = (HomogeneousPoint3D) point;
+                x = homPoint.getX();
+                y = homPoint.getY();
+                z = homPoint.getZ();
+                w = homPoint.getW();
+                normalized = false;
                 break;
         }
     }
@@ -312,8 +312,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param homW w homogeneous coordinate.
      */
     @Override
-    public void setHomogeneousCoordinates(final double homX, final double homY, final double homZ,
-                                          final double homW) {
+    public void setHomogeneousCoordinates(final double homX, final double homY, final double homZ, final double homW) {
         setCoordinates(homX, homY, homZ, homW);
     }
 
@@ -324,7 +323,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double getInhomX() {
-        return (mX / mW);
+        return (x / w);
     }
 
     /**
@@ -334,8 +333,8 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public void setInhomX(final double inhomX) {
-        mX = inhomX * mW;
-        mNormalized = false;
+        x = inhomX * w;
+        normalized = false;
     }
 
     /**
@@ -345,7 +344,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double getInhomY() {
-        return (mY / mW);
+        return (y / w);
     }
 
     /**
@@ -355,8 +354,8 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public void setInhomY(final double inhomY) {
-        mY = inhomY * mW;
-        mNormalized = false;
+        y = inhomY * w;
+        normalized = false;
     }
 
     /**
@@ -366,7 +365,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double getInhomZ() {
-        return (mZ / mW);
+        return (z / w);
     }
 
     /**
@@ -375,8 +374,8 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param inhomZ Z inhomogeneous coordinate.
      */
     public void setInhomZ(final double inhomZ) {
-        mZ = inhomZ * mW;
-        mNormalized = false;
+        z = inhomZ * w;
+        normalized = false;
     }
 
     /**
@@ -388,13 +387,12 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @param inhomZ z inhomogeneous coordinate.
      */
     @Override
-    public void setInhomogeneousCoordinates(final double inhomX, final double inhomY,
-                                            final double inhomZ) {
-        mX = inhomX;
-        mY = inhomY;
-        mZ = inhomZ;
-        mW = 1.0;
-        mNormalized = false;
+    public void setInhomogeneousCoordinates(final double inhomX, final double inhomY, final double inhomZ) {
+        x = inhomX;
+        y = inhomY;
+        z = inhomZ;
+        w = 1.0;
+        normalized = false;
     }
 
     /**
@@ -405,14 +403,13 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof Point3D)) {
+        if (!(obj instanceof Point3D point)) {
             return false;
         }
         if (obj == this) {
             return true;
         }
 
-        final Point3D point = (Point3D) obj;
         return equals(point);
     }
 
@@ -423,7 +420,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(mX, mY, mZ, mW);
+        return Objects.hash(x, y, z, w);
     }
 
     /**
@@ -441,12 +438,10 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public boolean equals(final Point3D point, final double threshold) {
-        switch (point.getType()) {
-            case INHOMOGENEOUS_COORDINATES:
-                return equals((InhomogeneousPoint3D) point, threshold);
-            case HOMOGENEOUS_COORDINATES:
-            default:
-                return equals((HomogeneousPoint3D) point, threshold);
+        if (point.getType() == CoordinatesType.INHOMOGENEOUS_COORDINATES) {
+            return equals((InhomogeneousPoint3D) point, threshold);
+        } else {
+            return equals((HomogeneousPoint3D) point, threshold);
         }
     }
 
@@ -464,7 +459,6 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean equals(final HomogeneousPoint3D point, final double threshold) {
-
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -473,22 +467,17 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
         point.normalize();
 
         // compute sign for the case when points have different sign
-        final double signThis = (mW > 0.0) ? 1.0 : -1.0;
-        final double signPoint = (point.mW > 0.0) ? 1.0 : -1.0;
+        final var signThis = (w > 0.0) ? 1.0 : -1.0;
+        final var signPoint = (point.w > 0.0) ? 1.0 : -1.0;
 
-        final double normThis = Math.sqrt(mX * mX + mY * mY + mZ * mZ + mW * mW) *
-                signThis;
-        final double normPoint = Math.sqrt(point.mX * point.mX + point.mY * point.mY +
-                point.mZ * point.mZ + point.mW * point.mW) * signPoint;
+        final var normThis = Math.sqrt(x * x + y * y + z * z + w * w) * signThis;
+        final var normPoint = Math.sqrt(point.x * point.x + point.y * point.y + point.z * point.z
+                + point.w * point.w) * signPoint;
 
-        final boolean validX = Math.abs(mX / normThis - point.mX / normPoint)
-                <= threshold;
-        final boolean validY = Math.abs(mY / normThis - point.mY / normPoint)
-                <= threshold;
-        final boolean validZ = Math.abs(mZ / normThis - point.mZ / normPoint)
-                <= threshold;
-        final boolean validW = Math.abs(mW / normThis - point.mW / normPoint)
-                <= threshold;
+        final var validX = Math.abs(x / normThis - point.x / normPoint) <= threshold;
+        final var validY = Math.abs(y / normThis - point.y / normPoint) <= threshold;
+        final var validZ = Math.abs(z / normThis - point.z / normPoint) <= threshold;
+        final var validW = Math.abs(w / normThis - point.w / normPoint) <= threshold;
 
         return (validX && validY && validZ && validW);
     }
@@ -519,14 +508,13 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean equals(final InhomogeneousPoint3D point, final double threshold) {
-
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
-        final boolean dX = Math.abs(point.getX() - (mX / mW)) <= threshold;
-        final boolean dY = Math.abs(point.getY() - (mY / mW)) <= threshold;
-        final boolean dZ = Math.abs(point.getZ() - (mZ / mW)) <= threshold;
+        final var dX = Math.abs(point.getX() - (x / w)) <= threshold;
+        final var dY = Math.abs(point.getY() - (y / w)) <= threshold;
+        final var dZ = Math.abs(point.getZ() - (z / w)) <= threshold;
         return (dX && dY && dZ);
     }
 
@@ -568,7 +556,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        return (Math.abs(mW) <= threshold);
+        return (Math.abs(w) <= threshold);
     }
 
     /**
@@ -588,14 +576,14 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public void normalize() {
-        if (!mNormalized) {
-            double norm = Math.sqrt(mX * mX + mY * mY + mZ * mZ + mW * mW);
+        if (!normalized) {
+            var norm = Math.sqrt(x * x + y * y + z * z + w * w);
             if (norm > PRECISION) {
-                mX /= norm;
-                mY /= norm;
-                mZ /= norm;
-                mW /= norm;
-                mNormalized = true;
+                x /= norm;
+                y /= norm;
+                z /= norm;
+                w /= norm;
+                normalized = true;
             }
         }
     }
@@ -607,7 +595,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public boolean isNormalized() {
-        return mNormalized;
+        return normalized;
     }
 
     /**
@@ -617,7 +605,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      * @return Converts and returns this point as an inhomogeneous 3D point.
      */
     public InhomogeneousPoint3D toInhomogeneous() {
-        return new InhomogeneousPoint3D(mX / mW, mY / mW, mZ / mW);
+        return new InhomogeneousPoint3D(x / w, y / w, z / w);
     }
 
     /**
@@ -627,7 +615,7 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
      */
     @Override
     public double[] asArray() {
-        final double[] out = new double[POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];
+        final var out = new double[POINT3D_HOMOGENEOUS_COORDINATES_LENGTH];
         asArray(out);
         return out;
     }
@@ -643,9 +631,9 @@ public class HomogeneousPoint3D extends Point3D implements Serializable {
         if (array.length != POINT3D_HOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         }
-        array[0] = mX;
-        array[1] = mY;
-        array[2] = mZ;
-        array[3] = mW;
+        array[0] = x;
+        array[1] = y;
+        array[2] = z;
+        array[3] = w;
     }
 }

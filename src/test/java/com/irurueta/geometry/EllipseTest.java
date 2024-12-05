@@ -17,14 +17,13 @@ package com.irurueta.geometry;
 
 import com.irurueta.algebra.ArrayUtils;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class EllipseTest {
+class EllipseTest {
 
     private static final double LARGE_ABSOLUTE_ERROR = 1e-3;
     private static final double ABSOLUTE_ERROR = 1e-6;
@@ -37,69 +36,61 @@ public class EllipseTest {
     private static final int TIMES = 500;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(1e-9, Ellipse.DEFAULT_THRESHOLD, 0.0);
         assertEquals(0.0, Ellipse.MIN_THRESHOLD, 0.0);
     }
 
     @Test
-    public void testConstructor() throws ColinearPointsException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+    void testConstructor() throws ColinearPointsException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
             // test empty constructor
-            Ellipse ellipse = new Ellipse();
+            var ellipse = new Ellipse();
 
             // check default values
-            assertEquals(ellipse.getCenter(), new InhomogeneousPoint2D());
+            assertEquals(new InhomogeneousPoint2D(), ellipse.getCenter());
             assertEquals(1.0, ellipse.getSemiMajorAxis(), 0.0);
             assertEquals(1.0, ellipse.getSemiMinorAxis(), 0.0);
             assertEquals(0.0, ellipse.getRotationAngle(), 0.0);
 
             // test constructor with center, axes and rotation
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final Point2D center = new InhomogeneousPoint2D(
+            final var randomizer = new UniformRandomizer();
+            final var center = new InhomogeneousPoint2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-            final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                    MAX_RANDOM_VALUE);
-            final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                    semiMajorAxis);
-            final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
-                    randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                            MAX_RANDOM_DEGREES));
-            ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                    rotationAngle);
+            final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+            final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, semiMajorAxis);
+            final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                    randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+            ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
             // check correctness
-            assertEquals(ellipse.getCenter(), center);
+            assertEquals(center, ellipse.getCenter());
             assertEquals(semiMajorAxis, ellipse.getSemiMajorAxis(), 0.0);
             assertEquals(semiMinorAxis, ellipse.getSemiMinorAxis(), 0.0);
             assertEquals(rotationAngle, ellipse.getRotationAngle(), 0.0);
 
-            ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                    new Rotation2D(rotationAngle));
+            ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, new Rotation2D(rotationAngle));
 
             // check correctness
-            assertEquals(ellipse.getCenter(), center);
+            assertEquals(center, ellipse.getCenter());
             assertEquals(semiMajorAxis, ellipse.getSemiMajorAxis(), 0.0);
             assertEquals(semiMinorAxis, ellipse.getSemiMinorAxis(), 0.0);
             assertEquals(rotationAngle, ellipse.getRotationAngle(), 0.0);
 
             // test with 2 points, center and rotation angle
-            double radius = Math.abs(randomizer.nextDouble(
-                    MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
+            var radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
 
             Point2D point1;
             Point2D point2;
             boolean areEqual;
             do {
-                double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                var angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point1 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
-                angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point2 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
@@ -130,45 +121,37 @@ public class EllipseTest {
             assertFalse(ellipse.isLocus(center, ABSOLUTE_ERROR));
 
             // test with 5 points (without threshold)
-            radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                    MAX_RANDOM_VALUE));
+            radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
 
             Point2D point3;
             Point2D point4;
             Point2D point5;
             do {
-                double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                var angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point1 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
-                angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point2 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
-                angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point3 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
-                angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point4 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
-                angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point5 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
 
                 // ensure that all three points are different
-                areEqual = point1.equals(point2, ABSOLUTE_ERROR) ||
-                        point2.equals(point3, ABSOLUTE_ERROR) ||
-                        point3.equals(point1, ABSOLUTE_ERROR) ||
-                        point4.equals(point1, ABSOLUTE_ERROR) ||
-                        point5.equals(point1, ABSOLUTE_ERROR);
+                areEqual = point1.equals(point2, ABSOLUTE_ERROR) || point2.equals(point3, ABSOLUTE_ERROR)
+                        || point3.equals(point1, ABSOLUTE_ERROR) || point4.equals(point1, ABSOLUTE_ERROR)
+                        || point5.equals(point1, ABSOLUTE_ERROR);
             } while (areEqual);
 
             try {
@@ -181,20 +164,15 @@ public class EllipseTest {
             if (!ellipse.getCenter().equals(center, LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(ellipse.getCenter().equals(center,
-                    LARGE_ABSOLUTE_ERROR));
-            if (Math.abs(ellipse.getSemiMajorAxis() - radius) >
-                    LARGE_ABSOLUTE_ERROR) {
+            assertTrue(ellipse.getCenter().equals(center, LARGE_ABSOLUTE_ERROR));
+            if (Math.abs(ellipse.getSemiMajorAxis() - radius) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getSemiMajorAxis(), radius,
-                    LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getSemiMinorAxis() - radius) >
-                    LARGE_ABSOLUTE_ERROR) {
+            assertEquals(ellipse.getSemiMajorAxis(), radius, LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(ellipse.getSemiMinorAxis() - radius) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getSemiMinorAxis(), radius,
-                    LARGE_ABSOLUTE_ERROR);
+            assertEquals(ellipse.getSemiMinorAxis(), radius, LARGE_ABSOLUTE_ERROR);
 
             if (!ellipse.isLocus(point1, LARGE_ABSOLUTE_ERROR)) {
                 continue;
@@ -218,16 +196,12 @@ public class EllipseTest {
             assertTrue(ellipse.isLocus(point5, LARGE_ABSOLUTE_ERROR));
             assertFalse(ellipse.isLocus(center));
 
-            ellipse = new Ellipse(point1, point2, point3, point4, point5,
-                    ABSOLUTE_ERROR);
+            ellipse = new Ellipse(point1, point2, point3, point4, point5, ABSOLUTE_ERROR);
 
             // check parameters
-            assertTrue(ellipse.getCenter().equals(center,
-                    LARGE_ABSOLUTE_ERROR));
-            assertEquals(ellipse.getSemiMajorAxis(), radius,
-                    LARGE_ABSOLUTE_ERROR);
-            assertEquals(ellipse.getSemiMinorAxis(), radius,
-                    LARGE_ABSOLUTE_ERROR);
+            assertTrue(ellipse.getCenter().equals(center, LARGE_ABSOLUTE_ERROR));
+            assertEquals(ellipse.getSemiMajorAxis(), radius, LARGE_ABSOLUTE_ERROR);
+            assertEquals(ellipse.getSemiMinorAxis(), radius, LARGE_ABSOLUTE_ERROR);
 
             if (!ellipse.isLocus(point1, LARGE_ABSOLUTE_ERROR)) {
                 continue;
@@ -252,34 +226,27 @@ public class EllipseTest {
             assertFalse(ellipse.isLocus(center));
 
             // constructor with parameters
-            double a = ellipse.getA();
-            double b = ellipse.getB();
-            double c = ellipse.getC();
-            double d = ellipse.getD();
-            double e = ellipse.getE();
-            double f = ellipse.getF();
+            var a = ellipse.getA();
+            var b = ellipse.getB();
+            var c = ellipse.getC();
+            var d = ellipse.getD();
+            var e = ellipse.getE();
+            var f = ellipse.getF();
 
-            Ellipse ellipse2 = new Ellipse(a, b, c, d, e, f);
+            var ellipse2 = new Ellipse(a, b, c, d, e, f);
 
             // check correctness
-            assertTrue(ellipse.getCenter().equals(ellipse2.getCenter(),
-                    ABSOLUTE_ERROR));
-            if (Math.abs(ellipse.getSemiMajorAxis() -
-                    ellipse2.getSemiMajorAxis()) > ABSOLUTE_ERROR) {
+            assertTrue(ellipse.getCenter().equals(ellipse2.getCenter(), ABSOLUTE_ERROR));
+            if (Math.abs(ellipse.getSemiMajorAxis() - ellipse2.getSemiMajorAxis()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getSemiMajorAxis(),
-                    ellipse2.getSemiMajorAxis(), ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getSemiMinorAxis() -
-                    ellipse2.getSemiMinorAxis()) > ABSOLUTE_ERROR) {
+            assertEquals(ellipse.getSemiMajorAxis(), ellipse2.getSemiMajorAxis(), ABSOLUTE_ERROR);
+            if (Math.abs(ellipse.getSemiMinorAxis() - ellipse2.getSemiMinorAxis()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getSemiMinorAxis(),
-                    ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
+            assertEquals(ellipse.getSemiMinorAxis(), ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
 
-
-            ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                    rotationAngle);
+            ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
             a = ellipse.getA();
             b = ellipse.getB();
@@ -291,67 +258,45 @@ public class EllipseTest {
             ellipse2 = new Ellipse(a, b, c, d, e, f, ABSOLUTE_ERROR);
 
             // check correctness
-            assertTrue(ellipse.getCenter().equals(ellipse2.getCenter(),
-                    ABSOLUTE_ERROR));
-            if (Math.abs(ellipse.getSemiMajorAxis() -
-                    ellipse2.getSemiMajorAxis()) > ABSOLUTE_ERROR) {
+            assertTrue(ellipse.getCenter().equals(ellipse2.getCenter(), ABSOLUTE_ERROR));
+            if (Math.abs(ellipse.getSemiMajorAxis() - ellipse2.getSemiMajorAxis()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getSemiMajorAxis(),
-                    ellipse2.getSemiMajorAxis(), ABSOLUTE_ERROR);
-            assertEquals(ellipse.getSemiMinorAxis(),
-                    ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
+            assertEquals(ellipse.getSemiMajorAxis(), ellipse2.getSemiMajorAxis(), ABSOLUTE_ERROR);
+            assertEquals(ellipse.getSemiMinorAxis(), ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
 
-            if (Math.abs(ellipse.getRotationAngle() -
-                    ellipse2.getRotationAngle()) > ABSOLUTE_ERROR) {
+            if (Math.abs(ellipse.getRotationAngle() - ellipse2.getRotationAngle()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getRotationAngle(),
-                    ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
+            assertEquals(ellipse.getRotationAngle(), ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
 
-            Conic conic = ellipse.toConic();
+            final var conic = ellipse.toConic();
 
             ellipse2 = new Ellipse(conic);
 
             // check correctness
-            if (ellipse.getCenter().distanceTo(ellipse2.getCenter()) >
-                    ABSOLUTE_ERROR) {
+            if (ellipse.getCenter().distanceTo(ellipse2.getCenter()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(0.0, ellipse.getCenter().distanceTo(ellipse2.getCenter()),
-                    ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getSemiMajorAxis() - ellipse2.getSemiMajorAxis()) >
-                    ABSOLUTE_ERROR) {
+            assertEquals(0.0, ellipse.getCenter().distanceTo(ellipse2.getCenter()), ABSOLUTE_ERROR);
+            if (Math.abs(ellipse.getSemiMajorAxis() - ellipse2.getSemiMajorAxis()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getSemiMajorAxis(),
-                    ellipse2.getSemiMajorAxis(), ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getSemiMinorAxis() - ellipse2.getSemiMinorAxis()) >
-                    ABSOLUTE_ERROR) {
+            assertEquals(ellipse.getSemiMajorAxis(), ellipse2.getSemiMajorAxis(), ABSOLUTE_ERROR);
+            if (Math.abs(ellipse.getSemiMinorAxis() - ellipse2.getSemiMinorAxis()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getSemiMinorAxis(),
-                    ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getRotationAngle() - ellipse2.getRotationAngle()) >
-                    ABSOLUTE_ERROR) {
+            assertEquals(ellipse.getSemiMinorAxis(), ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
+            if (Math.abs(ellipse.getRotationAngle() - ellipse2.getRotationAngle()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getRotationAngle(),
-                    ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
+            assertEquals(ellipse.getRotationAngle(), ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
 
             // Force IllegalArgumentException
-            ellipse2 = null;
-            conic = new Conic();
-            try {
-                ellipse2 = new Ellipse(conic);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (final IllegalArgumentException ignore) {
-            }
+            final var conic2 = new Conic();
+            assertThrows(IllegalArgumentException.class, () -> new Ellipse(conic2));
 
-            assertNull(ellipse2);
-
-
-            final Circle circle = new Circle(center, radius);
+            final var circle = new Circle(center, radius);
             ellipse = new Ellipse(circle);
 
             // check correctness
@@ -368,11 +313,11 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetSetCenter() {
-        final Ellipse ellipse = new Ellipse();
+    void testGetSetCenter() {
+        final var ellipse = new Ellipse();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
@@ -384,16 +329,15 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetSetSemiMajorAxis() {
-        final Ellipse ellipse = new Ellipse();
+    void testGetSetSemiMajorAxis() {
+        final var ellipse = new Ellipse();
 
         // initial value
         assertEquals(1.0, ellipse.getSemiMajorAxis(), 0.0);
 
         // new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
 
         ellipse.setSemiMajorAxis(semiMajorAxis);
 
@@ -402,16 +346,15 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetSetSemiMinorAxis() {
-        final Ellipse ellipse = new Ellipse();
+    void testGetSetSemiMinorAxis() {
+        final var ellipse = new Ellipse();
 
         // initial value
         assertEquals(1.0, ellipse.getSemiMinorAxis(), 0.0);
 
         // new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
 
         ellipse.setSemiMinorAxis(semiMinorAxis);
 
@@ -420,15 +363,15 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetSetRotationAngle() {
-        final Ellipse ellipse = new Ellipse();
+    void testGetSetRotationAngle() {
+        final var ellipse = new Ellipse();
 
         // initial value
         assertEquals(0.0, ellipse.getRotationAngle(), 0.0);
 
         // new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+        final var randomizer = new UniformRandomizer();
+        final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
                 randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
         ellipse.setRotationAngle(rotationAngle);
@@ -438,18 +381,18 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetSetRotation() {
-        final Ellipse ellipse = new Ellipse();
+    void testGetSetRotation() {
+        final var ellipse = new Ellipse();
 
         // initial value
         assertEquals(0.0, ellipse.getRotation().getTheta(), 0.0);
 
         // new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+        final var randomizer = new UniformRandomizer();
+        final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
                 randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Rotation2D rotation = new Rotation2D(rotationAngle);
+        final var rotation = new Rotation2D(rotationAngle);
         ellipse.setRotation(rotation);
 
         // check correctness
@@ -458,14 +401,14 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetSetA() {
-        final Ellipse ellipse = new Ellipse();
+    void testGetSetA() {
+        final var ellipse = new Ellipse();
 
         assertEquals(1.0, ellipse.getA(), ABSOLUTE_ERROR);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double a = randomizer.nextDouble(ABSOLUTE_ERROR, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(ABSOLUTE_ERROR, MAX_RANDOM_VALUE);
 
         ellipse.setA(a);
 
@@ -474,15 +417,14 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetSetB() {
-        final Ellipse ellipse = new Ellipse();
+    void testGetSetB() {
+        final var ellipse = new Ellipse();
 
         assertEquals(0.0, ellipse.getB(), ABSOLUTE_ERROR);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double b = randomizer.nextDouble(0.0,
-                Math.sqrt(4.0 * ellipse.getA() * ellipse.getC()));
+        final var randomizer = new UniformRandomizer();
+        final var b = randomizer.nextDouble(0.0, Math.sqrt(4.0 * ellipse.getA() * ellipse.getC()));
 
         ellipse.setB(b);
 
@@ -491,15 +433,14 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetSetC() {
-        final Ellipse ellipse = new Ellipse();
+    void testGetSetC() {
+        final var ellipse = new Ellipse();
 
         assertEquals(1.0, ellipse.getC(), ABSOLUTE_ERROR);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double c = randomizer.nextDouble(ellipse.getB() * ellipse.getB() /
-                (4.0 * ellipse.getA()), MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var c = randomizer.nextDouble(ellipse.getB() * ellipse.getB() / (4.0 * ellipse.getA()), MAX_RANDOM_VALUE);
 
         ellipse.setC(c);
 
@@ -508,14 +449,14 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetSetD() {
-        final Ellipse ellipse = new Ellipse();
+    void testGetSetD() {
+        final var ellipse = new Ellipse();
 
         assertEquals(0.0, ellipse.getD(), ABSOLUTE_ERROR);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         ellipse.setD(d);
 
@@ -524,14 +465,14 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetSetE() {
-        final Ellipse ellipse = new Ellipse();
+    void testGetSetE() {
+        final var ellipse = new Ellipse();
 
         assertEquals(0.0, ellipse.getE(), ABSOLUTE_ERROR);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         ellipse.setE(e);
 
@@ -540,17 +481,16 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetSetF() {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final Ellipse ellipse = new Ellipse();
+    void testGetSetF() {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var ellipse = new Ellipse();
 
-            assertEquals(ellipse.getF(), -1.0, ABSOLUTE_ERROR);
+            assertEquals(-1.0, ellipse.getF(), ABSOLUTE_ERROR);
 
             // set new value
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double f = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+            final var randomizer = new UniformRandomizer();
+            final var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             ellipse.setF(f);
 
@@ -562,23 +502,19 @@ public class EllipseTest {
     }
 
     @Test
-    public void testSetCenterAxesAndRotationAngle() {
-        final Ellipse ellipse = new Ellipse();
+    void testSetCenterAxesAndRotationAngle() {
+        final var ellipse = new Ellipse();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                semiMajorAxis);
-        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES));
+        final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, semiMajorAxis);
+        final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        ellipse.setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis,
-                rotationAngle);
+        ellipse.setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
         // check correctness
         assertEquals(center, ellipse.getCenter());
@@ -588,61 +524,53 @@ public class EllipseTest {
     }
 
     @Test
-    public void testSetCenterAxesAndRotation() {
-        final Ellipse ellipse = new Ellipse();
+    void testSetCenterAxesAndRotation() {
+        final var ellipse = new Ellipse();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                semiMajorAxis);
-        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES));
-        final Rotation2D rotation = new Rotation2D(rotationAngle);
+        final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, semiMajorAxis);
+        final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var rotation = new Rotation2D(rotationAngle);
 
-        ellipse.setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis,
-                rotation);
+        ellipse.setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, rotation);
 
         // check correctness
-        assertEquals(ellipse.getCenter(), center);
+        assertEquals(center, ellipse.getCenter());
         assertEquals(semiMajorAxis, ellipse.getSemiMajorAxis(), 0.0);
         assertEquals(semiMinorAxis, ellipse.getSemiMinorAxis(), 0.0);
         assertEquals(rotationAngle, ellipse.getRotationAngle(), 0.0);
     }
 
     @Test
-    public void testSetParametersFromPointsCenterAndRotation()
-            throws ColinearPointsException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final Ellipse ellipse = new Ellipse();
+    void testSetParametersFromPointsCenterAndRotation() throws ColinearPointsException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var ellipse = new Ellipse();
 
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double radius = Math.abs(randomizer.nextDouble(
-                    MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
+            final var randomizer = new UniformRandomizer();
+            final var radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
 
-            final Point2D center = new InhomogeneousPoint2D(
+            final var center = new InhomogeneousPoint2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-            final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+            final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
                     randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
             Point2D point1;
             Point2D point2;
             boolean areEqual;
             do {
-                double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                var angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point1 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
-                angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point2 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
@@ -651,8 +579,7 @@ public class EllipseTest {
                 areEqual = point1.equals(point2, ABSOLUTE_ERROR);
             } while (areEqual);
 
-            ellipse.setParametersFromPointsCenterAndRotation(point1, point2, center,
-                    rotationAngle);
+            ellipse.setParametersFromPointsCenterAndRotation(point1, point2, center, rotationAngle);
 
             // check parameters
             assertEquals(center, ellipse.getCenter());
@@ -680,15 +607,14 @@ public class EllipseTest {
     }
 
     @Test
-    public void testSetParametersFromPoints() throws ColinearPointsException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final Ellipse ellipse = new Ellipse();
+    void testSetParametersFromPoints() throws ColinearPointsException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var ellipse = new Ellipse();
 
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final double radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                    MAX_RANDOM_VALUE));
-            final Point2D center = new InhomogeneousPoint2D(
+            final var randomizer = new UniformRandomizer();
+            final var radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
+            final var center = new InhomogeneousPoint2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
@@ -699,43 +625,35 @@ public class EllipseTest {
             Point2D point5;
             boolean areEqual;
             do {
-                double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                var angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point1 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
-                angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point2 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
-                angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point3 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
-                angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point4 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
-                angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+                angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
                 point5 = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
 
                 // ensure that all three points are different
-                areEqual = point1.equals(point2, ABSOLUTE_ERROR) ||
-                        point2.equals(point3, ABSOLUTE_ERROR) ||
-                        point3.equals(point1, ABSOLUTE_ERROR) ||
-                        point4.equals(point1, ABSOLUTE_ERROR) ||
-                        point5.equals(point1, ABSOLUTE_ERROR);
+                areEqual = point1.equals(point2, ABSOLUTE_ERROR) || point2.equals(point3, ABSOLUTE_ERROR)
+                        || point3.equals(point1, ABSOLUTE_ERROR) || point4.equals(point1, ABSOLUTE_ERROR)
+                        || point5.equals(point1, ABSOLUTE_ERROR);
             } while (areEqual);
 
             try {
-                ellipse.setParametersFromPoints(point1, point2, point3, point4,
-                        point5);
+                ellipse.setParametersFromPoints(point1, point2, point3, point4, point5);
             } catch (final ColinearPointsException e) {
                 continue;
             }
@@ -744,16 +662,12 @@ public class EllipseTest {
             if (!ellipse.getCenter().equals(center, LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
-            assertTrue(ellipse.getCenter().equals(center,
-                    LARGE_ABSOLUTE_ERROR));
-            if (Math.abs(ellipse.getSemiMajorAxis() - radius) >
-                    LARGE_ABSOLUTE_ERROR) {
+            assertTrue(ellipse.getCenter().equals(center, LARGE_ABSOLUTE_ERROR));
+            if (Math.abs(ellipse.getSemiMajorAxis() - radius) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getSemiMajorAxis(), radius,
-                    LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getSemiMinorAxis() - radius) >
-                    LARGE_ABSOLUTE_ERROR) {
+            assertEquals(ellipse.getSemiMajorAxis(), radius, LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(ellipse.getSemiMinorAxis() - radius) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
             assertEquals(radius, ellipse.getSemiMinorAxis(), LARGE_ABSOLUTE_ERROR);
@@ -781,22 +695,18 @@ public class EllipseTest {
             assertFalse(ellipse.isLocus(center));
 
             // use threshold
-            ellipse.setParametersFromPoints(point1, point2, point3, point4,
-                    point5, ABSOLUTE_ERROR);
+            ellipse.setParametersFromPoints(point1, point2, point3, point4, point5, ABSOLUTE_ERROR);
 
             // check parameters
             if (!ellipse.getCenter().equals(center, LARGE_ABSOLUTE_ERROR)) {
                 continue;
             }
             assertTrue(ellipse.getCenter().equals(center, LARGE_ABSOLUTE_ERROR));
-            if (Math.abs(ellipse.getSemiMajorAxis() - radius) >
-                    LARGE_ABSOLUTE_ERROR) {
+            if (Math.abs(ellipse.getSemiMajorAxis() - radius) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getSemiMajorAxis(), radius,
-                    LARGE_ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getSemiMinorAxis() - radius) >
-                    LARGE_ABSOLUTE_ERROR) {
+            assertEquals(ellipse.getSemiMajorAxis(), radius, LARGE_ABSOLUTE_ERROR);
+            if (Math.abs(ellipse.getSemiMinorAxis() - radius) > LARGE_ABSOLUTE_ERROR) {
                 continue;
             }
             assertEquals(radius, ellipse.getSemiMinorAxis(), LARGE_ABSOLUTE_ERROR);
@@ -831,43 +741,37 @@ public class EllipseTest {
     }
 
     @Test
-    public void testSetParameters() {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final Point2D center = new InhomogeneousPoint2D(
+    void testSetParameters() {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            final var center = new InhomogeneousPoint2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-            final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                    MAX_RANDOM_VALUE);
-            final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                    MAX_RANDOM_VALUE);
-            final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
-                    randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                            MAX_RANDOM_DEGREES));
+            final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+            final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+            final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                    randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-            final Ellipse ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                    rotationAngle);
+            final var ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
-            final double a = ellipse.getA();
-            final double b = ellipse.getB();
-            final double c = ellipse.getC();
-            final double d = ellipse.getD();
-            final double e = ellipse.getE();
-            final double f = ellipse.getF();
+            final var a = ellipse.getA();
+            final var b = ellipse.getB();
+            final var c = ellipse.getC();
+            final var d = ellipse.getD();
+            final var e = ellipse.getE();
+            final var f = ellipse.getF();
 
-            final Ellipse ellipse2 = new Ellipse();
+            final var ellipse2 = new Ellipse();
             ellipse2.setParameters(a, b, c, d, e, f);
 
             // check correctness
             assertTrue(ellipse.getCenter().equals(ellipse2.getCenter(), ABSOLUTE_ERROR));
-            if (Math.abs(ellipse.getSemiMajorAxis() -
-                    ellipse2.getSemiMajorAxis()) > ABSOLUTE_ERROR) {
+            if (Math.abs(ellipse.getSemiMajorAxis() - ellipse2.getSemiMajorAxis()) > ABSOLUTE_ERROR) {
                 continue;
             }
             assertEquals(ellipse.getSemiMajorAxis(), ellipse2.getSemiMajorAxis(), ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getSemiMinorAxis() -
-                    ellipse2.getSemiMinorAxis()) > ABSOLUTE_ERROR) {
+            if (Math.abs(ellipse.getSemiMinorAxis() - ellipse2.getSemiMinorAxis()) > ABSOLUTE_ERROR) {
                 continue;
             }
             assertEquals(ellipse.getSemiMinorAxis(), ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
@@ -877,17 +781,14 @@ public class EllipseTest {
 
             // check correctness
             assertTrue(ellipse.getCenter().equals(ellipse2.getCenter(), ABSOLUTE_ERROR));
-            if (Math.abs(ellipse.getSemiMajorAxis() -
-                    ellipse2.getSemiMajorAxis()) > ABSOLUTE_ERROR) {
+            if (Math.abs(ellipse.getSemiMajorAxis() - ellipse2.getSemiMajorAxis()) > ABSOLUTE_ERROR) {
                 continue;
             }
             assertEquals(ellipse.getSemiMajorAxis(), ellipse2.getSemiMajorAxis(), ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getSemiMinorAxis() -
-                    ellipse2.getSemiMinorAxis()) > ABSOLUTE_ERROR) {
+            if (Math.abs(ellipse.getSemiMinorAxis() - ellipse2.getSemiMinorAxis()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(ellipse.getSemiMinorAxis(),
-                    ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
+            assertEquals(ellipse.getSemiMinorAxis(), ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
 
             numValid++;
             break;
@@ -897,147 +798,125 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetFocus() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+    void testGetFocus() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                semiMajorAxis);
-        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES));
+        final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, semiMajorAxis);
+        final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Ellipse ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                rotationAngle);
+        final var ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
-        assertEquals(ellipse.getFocus(), Math.sqrt(
-                        Math.pow(semiMajorAxis, 2.0) - Math.pow(semiMinorAxis, 2.0)),
+        assertEquals(ellipse.getFocus(), Math.sqrt(Math.pow(semiMajorAxis, 2.0) - Math.pow(semiMinorAxis, 2.0)),
                 ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testGetSetSemiMajorAxisCoordinates() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+    void testGetSetSemiMajorAxisCoordinates() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                semiMajorAxis);
-        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES));
+        final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, semiMajorAxis);
+        final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Ellipse ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                rotationAngle);
+        final var ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
-        final double[] coords1 = new double[2];
+        final var coords1 = new double[2];
         ellipse.getSemiMajorAxisCoordinates(coords1);
 
-        final double[] coords2 = ellipse.getSemiMajorAxisCoordinates();
+        final var coords2 = ellipse.getSemiMajorAxisCoordinates();
 
         assertArrayEquals(coords1, coords2, ABSOLUTE_ERROR);
 
-        assertEquals(coords1[0], semiMajorAxis * Math.cos(rotationAngle),
-                ABSOLUTE_ERROR);
-        assertEquals(coords1[1], semiMajorAxis * Math.sin(rotationAngle),
-                ABSOLUTE_ERROR);
+        assertEquals(coords1[0], semiMajorAxis * Math.cos(rotationAngle), ABSOLUTE_ERROR);
+        assertEquals(coords1[1], semiMajorAxis * Math.sin(rotationAngle), ABSOLUTE_ERROR);
 
         // semi major and semi minor coordinates are orthogonal
-        assertEquals(0.0, ArrayUtils.dotProduct(coords1,
-                ellipse.getSemiMinorAxisCoordinates()), ABSOLUTE_ERROR);
+        assertEquals(0.0, ArrayUtils.dotProduct(coords1, ellipse.getSemiMinorAxisCoordinates()),
+                ABSOLUTE_ERROR);
 
-        final Ellipse ellipse2 = new Ellipse();
+        final var ellipse2 = new Ellipse();
         ellipse2.setSemiMajorAxisCoordinates(coords1);
 
         assertArrayEquals(coords1, ellipse2.getSemiMajorAxisCoordinates(), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testGetSetSemiMinorAxisCoordinates() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+    void testGetSetSemiMinorAxisCoordinates() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                semiMajorAxis);
-        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES));
+        final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, semiMajorAxis);
+        final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Ellipse ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                rotationAngle);
+        final var ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
-        final double[] coords1 = new double[2];
+        final var coords1 = new double[2];
         ellipse.getSemiMinorAxisCoordinates(coords1);
 
-        final double[] coords2 = ellipse.getSemiMinorAxisCoordinates();
+        final var coords2 = ellipse.getSemiMinorAxisCoordinates();
 
         assertArrayEquals(coords1, coords2, ABSOLUTE_ERROR);
 
-        assertEquals(coords1[0], -semiMinorAxis * Math.sin(rotationAngle),
-                ABSOLUTE_ERROR);
-        assertEquals(coords1[1], semiMinorAxis * Math.cos(rotationAngle),
-                ABSOLUTE_ERROR);
+        assertEquals(coords1[0], -semiMinorAxis * Math.sin(rotationAngle), ABSOLUTE_ERROR);
+        assertEquals(coords1[1], semiMinorAxis * Math.cos(rotationAngle), ABSOLUTE_ERROR);
 
         // semi major and semi minor coordinates are orthogonal
         assertEquals(0.0, ArrayUtils.dotProduct(ellipse.getSemiMajorAxisCoordinates(), coords1),
                 ABSOLUTE_ERROR);
 
-        final Ellipse ellipse2 = new Ellipse();
+        final var ellipse2 = new Ellipse();
         ellipse2.setSemiMinorAxisCoordinates(coords1);
 
-        assertArrayEquals(ellipse2.getSemiMinorAxisCoordinates(), coords1,
-                ABSOLUTE_ERROR);
+        assertArrayEquals(ellipse2.getSemiMinorAxisCoordinates(), coords1, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testGetSetFocusPoints() {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final Point2D center = new InhomogeneousPoint2D(
+    void testGetSetFocusPoints() {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            final var center = new InhomogeneousPoint2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-            final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                    MAX_RANDOM_VALUE);
-            final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                    semiMajorAxis);
-            final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
-                    randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                            MAX_RANDOM_DEGREES));
+            final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+            final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, semiMajorAxis);
+            final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                    randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-            final Ellipse ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                    rotationAngle);
+            final var ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
-            final double focus = ellipse.getFocus();
+            final var focus = ellipse.getFocus();
 
-            final Point2D p1a = Point2D.create();
+            final var p1a = Point2D.create();
             ellipse.getFocusPoint1(p1a);
 
-            final Point2D p1b = ellipse.getFocusPoint1();
+            final var p1b = ellipse.getFocusPoint1();
 
             assertEquals(p1a.distanceTo(center), focus, ABSOLUTE_ERROR);
             assertEquals(p1b.distanceTo(center), focus, ABSOLUTE_ERROR);
 
-            final Point2D p2a = Point2D.create();
+            final var p2a = Point2D.create();
             ellipse.getFocusPoint2(p2a);
 
-            final Point2D p2b = ellipse.getFocusPoint2();
+            final var p2b = ellipse.getFocusPoint2();
 
             assertEquals(p2a.distanceTo(center), focus, ABSOLUTE_ERROR);
             assertEquals(p2b.distanceTo(center), focus, ABSOLUTE_ERROR);
 
-            final Line2D line = new Line2D(p1a, p2a);
+            final var line = new Line2D(p1a, p2a);
             assertTrue(line.isLocus(center, ABSOLUTE_ERROR));
 
-            final Ellipse ellipse2 = new Ellipse(center, semiMajorAxis, semiMinorAxis,
+            final var ellipse2 = new Ellipse(center, semiMajorAxis, semiMinorAxis,
                     0.0);
 
             ellipse2.setFocusPoints(p1a, p2a, true);
@@ -1052,7 +931,7 @@ public class EllipseTest {
             }
             assertTrue(ellipse2.getFocusPoint2().equals(p2a, LARGE_ABSOLUTE_ERROR));
 
-            final Ellipse ellipse3 = new Ellipse(center, semiMajorAxis, semiMinorAxis, 0.0);
+            final var ellipse3 = new Ellipse(center, semiMajorAxis, semiMinorAxis, 0.0);
 
             ellipse3.setFocusPoints(p1a, p2a, false);
 
@@ -1073,47 +952,40 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetEccentricity() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+    void testGetEccentricity() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                semiMajorAxis);
-        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES));
+        final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, semiMajorAxis);
+        final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Ellipse ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                rotationAngle);
+        final var ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
-        final double focus = ellipse.getFocus();
+        final var focus = ellipse.getFocus();
 
         assertEquals(ellipse.getEccentricity(), focus / semiMajorAxis, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testGetArea() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+    void testGetArea() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+        final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
                 randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Ellipse ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                rotationAngle);
+        final var ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
         assertEquals(ellipse.getArea(), Math.PI * semiMajorAxis * semiMinorAxis, ABSOLUTE_ERROR);
 
-        final double radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
-        final Circle c = new Circle(center, radius);
+        final var radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var c = new Circle(center, radius);
 
         ellipse.setFromConic(c.toConic());
 
@@ -1121,26 +993,25 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetPerimeter() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+    void testGetPerimeter() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
-        final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
-        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+        final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
                 randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Ellipse ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                rotationAngle);
+        final var ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
         assertEquals(ellipse.getPerimeter(),
-                Math.PI * (3.0 * (semiMajorAxis + semiMinorAxis) -
-                        Math.sqrt((3.0 * semiMajorAxis + semiMinorAxis) * (semiMajorAxis + 3.0 * semiMinorAxis))),
+                Math.PI * (3.0 * (semiMajorAxis + semiMinorAxis)
+                        - Math.sqrt((3.0 * semiMajorAxis + semiMinorAxis) * (semiMajorAxis + 3.0 * semiMinorAxis))),
                 ABSOLUTE_ERROR);
 
-        final double radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
-        final Circle c = new Circle(center, radius);
+        final var radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var c = new Circle(center, radius);
 
         ellipse.setFromConic(c.toConic());
 
@@ -1148,18 +1019,17 @@ public class EllipseTest {
     }
 
     @Test
-    public void testGetCurvature() {
+    void testGetCurvature() {
         // build an ellipse like a circle
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
-        final Ellipse ellipse = new Ellipse(center, radius, radius, 0.0);
+        final var radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var ellipse = new Ellipse(center, radius, radius, 0.0);
 
-        final double angle = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                MAX_RANDOM_DEGREES) * Math.PI / 180.0;
-        final Point2D point1 = new HomogeneousPoint2D(
+        final var angle = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var point1 = new HomogeneousPoint2D(
                 center.getInhomX() + radius * Math.cos(angle),
                 center.getInhomY() + radius * Math.sin(angle), 1.0);
 
@@ -1170,21 +1040,18 @@ public class EllipseTest {
     }
 
     @Test
-    public void testToConic() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new HomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
-        final double radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE));
-        final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+    void testToConic() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new HomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
+        final var radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
         center.normalize();
 
-        final Ellipse ellipse = new Ellipse(center, radius, radius, 0.0);
-        final Circle circle = new Circle(center, radius);
-        final Conic conic = ellipse.toConic();
-        final Conic conic2 = circle.toConic();
+        final var ellipse = new Ellipse(center, radius, radius, 0.0);
+        final var circle = new Circle(center, radius);
+        final var conic = ellipse.toConic();
+        final var conic2 = circle.toConic();
 
         conic.normalize();
         conic2.normalize();
@@ -1195,7 +1062,7 @@ public class EllipseTest {
         assertFalse(conic.isLocus(center));
         assertFalse(conic.isLocus(center, ABSOLUTE_ERROR));
 
-        final Point2D locus = new HomogeneousPoint2D(
+        final var locus = new HomogeneousPoint2D(
                 center.getInhomX() + radius * Math.cos(theta),
                 center.getInhomY() + radius * Math.sin(theta), 1.0);
         locus.normalize();
@@ -1209,56 +1076,46 @@ public class EllipseTest {
     }
 
     @Test
-    public void testSetFromConic() {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final Point2D center = new InhomogeneousPoint2D(
+    void testSetFromConic() {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            final var center = new InhomogeneousPoint2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-            final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
-            final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
-            final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+            final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+            final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+            final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
                     randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-            final Ellipse ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                    rotationAngle);
+            final var ellipse = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
             // test from conic
-            Conic conic = ellipse.toConic();
-            final Ellipse ellipse2 = new Ellipse();
+            var conic = ellipse.toConic();
+            final var ellipse2 = new Ellipse();
             ellipse2.setFromConic(conic);
 
             // check correctness
-            if (ellipse.getCenter().distanceTo(ellipse2.getCenter()) >
-                    ABSOLUTE_ERROR) {
+            if (ellipse.getCenter().distanceTo(ellipse2.getCenter()) > ABSOLUTE_ERROR) {
                 continue;
             }
-            assertEquals(0.0, ellipse.getCenter().distanceTo(ellipse2.getCenter()),
-                    ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getSemiMajorAxis() - ellipse2.getSemiMajorAxis()) >
-                    ABSOLUTE_ERROR) {
+            assertEquals(0.0, ellipse.getCenter().distanceTo(ellipse2.getCenter()), ABSOLUTE_ERROR);
+            if (Math.abs(ellipse.getSemiMajorAxis() - ellipse2.getSemiMajorAxis()) > ABSOLUTE_ERROR) {
                 continue;
             }
             assertEquals(ellipse.getSemiMajorAxis(), ellipse2.getSemiMajorAxis(), ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getSemiMinorAxis() - ellipse2.getSemiMinorAxis()) >
-                    ABSOLUTE_ERROR) {
+            if (Math.abs(ellipse.getSemiMinorAxis() - ellipse2.getSemiMinorAxis()) > ABSOLUTE_ERROR) {
                 continue;
             }
             assertEquals(ellipse.getSemiMinorAxis(), ellipse2.getSemiMinorAxis(), ABSOLUTE_ERROR);
-            if (Math.abs(ellipse.getRotationAngle() - ellipse2.getRotationAngle()) >
-                    ABSOLUTE_ERROR) {
+            if (Math.abs(ellipse.getRotationAngle() - ellipse2.getRotationAngle()) > ABSOLUTE_ERROR) {
                 continue;
             }
             assertEquals(ellipse.getRotationAngle(), ellipse2.getRotationAngle(), ABSOLUTE_ERROR);
 
             // Force IllegalArgumentException
-            conic = new Conic();
-            try {
-                ellipse2.setFromConic(conic);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (final IllegalArgumentException ignore) {
-            }
+            final var wrong = new Conic();
+            assertThrows(IllegalArgumentException.class, () -> ellipse2.setFromConic(wrong));
 
             numValid++;
             break;
@@ -1268,17 +1125,16 @@ public class EllipseTest {
     }
 
     @Test
-    public void testSetFromCircle() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+    void testSetFromCircle() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
+        final var radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
 
-        final Circle circle = new Circle(center, radius);
+        final var circle = new Circle(center, radius);
 
-        final Ellipse ellipse = new Ellipse();
+        final var ellipse = new Ellipse();
         ellipse.setFromCircle(circle);
 
         // check correctness
@@ -1289,24 +1145,21 @@ public class EllipseTest {
     }
 
     @Test
-    public void testIsInside() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE));
-        final double value = randomizer.nextDouble(0.2, 0.8);
-        final double value2 = 1.0 + value;
-        final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+    void testIsInside() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
+        final var value = randomizer.nextDouble(0.2, 0.8);
+        final var value2 = 1.0 + value;
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Ellipse ellipse = new Ellipse(center, radius, radius, 0.0);
+        final var ellipse = new Ellipse(center, radius, radius, 0.0);
 
-        final Point2D inside = new InhomogeneousPoint2D(
+        final var inside = new InhomogeneousPoint2D(
                 center.getInhomX() + value * radius * Math.cos(theta),
                 center.getInhomY() + value * radius * Math.sin(theta));
-        final Point2D outside = new InhomogeneousPoint2D(
+        final var outside = new InhomogeneousPoint2D(
                 center.getInhomX() + value2 * radius * Math.cos(theta),
                 center.getInhomY() + value2 * radius * Math.sin(theta));
 
@@ -1324,31 +1177,28 @@ public class EllipseTest {
     }
 
     @Test
-    public void testIsLocus() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE));
-        final double value = randomizer.nextDouble(0.2, 0.8);
-        final double value2 = 1.0 + value;
-        final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+    void testIsLocus() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var value = randomizer.nextDouble(0.2, 0.8);
+        final var value2 = 1.0 + value;
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
 
-        final Ellipse ellipse = new Ellipse(center, radius, radius, 0.0);
+        final var ellipse = new Ellipse(center, radius, radius, 0.0);
 
         // center is not locus
         assertFalse(ellipse.isLocus(center));
         assertFalse(ellipse.isLocus(center, ABSOLUTE_ERROR));
 
-        final Point2D inside = new InhomogeneousPoint2D(
+        final var inside = new InhomogeneousPoint2D(
                 center.getInhomX() + value * radius * Math.cos(theta),
                 center.getInhomY() + value * radius * Math.sin(theta));
-        final Point2D outside = new InhomogeneousPoint2D(
+        final var outside = new InhomogeneousPoint2D(
                 center.getInhomX() + value2 * radius * Math.cos(theta),
                 center.getInhomY() + value2 * radius * Math.sin(theta));
-        final Point2D zero = new InhomogeneousPoint2D(
+        final var zero = new InhomogeneousPoint2D(
                 center.getInhomX() + radius * Math.cos(theta),
                 center.getInhomY() + radius * Math.sin(theta));
 
@@ -1359,7 +1209,6 @@ public class EllipseTest {
         assertFalse(ellipse.isLocus(outside));
         assertFalse(ellipse.isLocus(outside, ABSOLUTE_ERROR));
 
-
         // for point at locus of circle, distance is zero
 
         // zero is locus
@@ -1367,23 +1216,16 @@ public class EllipseTest {
         assertTrue(ellipse.isLocus(zero, radius));
 
         // Force IllegalArgumentException
-        try {
-            ellipse.isLocus(zero, -radius);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> ellipse.isLocus(zero, -radius));
     }
 
     @Test
-    public void testGetTangentLineAt() throws NotLocusException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new HomogeneousPoint2D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
-        final double radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE));
-        final double theta = randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                MAX_RANDOM_DEGREES) * Math.PI / 180.0;
+    void testGetTangentLineAt() throws NotLocusException {
+        final var randomizer = new UniformRandomizer();
+        final var center = new HomogeneousPoint2D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
+        final var radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
         // angle corresponding to line slope
         final double theta2;
         if (theta > Math.PI / 2.0) {
@@ -1394,9 +1236,9 @@ public class EllipseTest {
             theta2 = theta;
         }
 
-        final Ellipse ellipse = new Ellipse(center, radius, radius, 0.0);
+        final var ellipse = new Ellipse(center, radius, radius, 0.0);
 
-        final Point2D point = new HomogeneousPoint2D(
+        final var point = new HomogeneousPoint2D(
                 center.getInhomX() + radius * Math.cos(theta),
                 center.getInhomY() + radius * Math.sin(theta), 1.0);
         point.normalize();
@@ -1404,8 +1246,8 @@ public class EllipseTest {
         assertTrue(ellipse.isLocus(point, ABSOLUTE_ERROR));
 
         // find tangent line at locus point
-        final Line2D line = ellipse.getTangentLineAt(point, ABSOLUTE_ERROR);
-        final Line2D line2 = new Line2D();
+        final var line = ellipse.getTangentLineAt(point, ABSOLUTE_ERROR);
+        final var line2 = new Line2D();
         ellipse.tangentLineAt(point, line2, ABSOLUTE_ERROR);
 
         assertEquals(line, line2);
@@ -1414,60 +1256,47 @@ public class EllipseTest {
         assertTrue(line.isLocus(point));
 
         // check that line angle is equal to theta
-        final double lineAngle = line.getAngle();
-        double theta3 = theta2 - Math.PI / 2.0;
+        final var lineAngle = line.getAngle();
+        var theta3 = theta2 - Math.PI / 2.0;
         if (theta3 < -Math.PI / 2.0) {
             theta3 += Math.PI;
         } else if (theta3 > Math.PI / 2.0) {
             theta3 -= Math.PI;
         }
-        assertEquals(lineAngle * 180.0 / Math.PI,
-                theta3 * 180.0 / Math.PI, ABSOLUTE_ERROR);
+        assertEquals(lineAngle * 180.0 / Math.PI, theta3 * 180.0 / Math.PI, ABSOLUTE_ERROR);
 
         // Force NotLocusException (because of accuracy)
-        try {
-            assertNotNull(ellipse.getTangentLineAt(point));
-        } catch (final NotLocusException ignore) {
-        }
+        assertThrows(NotLocusException.class, () -> ellipse.getTangentLineAt(point));
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point2D center = new InhomogeneousPoint2D(
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint2D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                semiMajorAxis);
-        final double rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_RANDOM_DEGREES,
-                        MAX_RANDOM_DEGREES));
-        final Ellipse ellipse1 = new Ellipse(center, semiMajorAxis, semiMinorAxis,
-                rotationAngle);
+        final var semiMajorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var semiMinorAxis = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, semiMajorAxis);
+        final var rotationAngle = com.irurueta.geometry.Utils.convertToRadians(
+                randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var ellipse1 = new Ellipse(center, semiMajorAxis, semiMinorAxis, rotationAngle);
 
         // check
         assertSame(center, ellipse1.getCenter());
-        assertEquals(Math.max(semiMajorAxis, semiMinorAxis),
-                ellipse1.getSemiMajorAxis(), 0.0);
-        assertEquals(Math.min(semiMajorAxis, semiMinorAxis),
-                ellipse1.getSemiMinorAxis(), 0.0);
+        assertEquals(Math.max(semiMajorAxis, semiMinorAxis), ellipse1.getSemiMajorAxis(), 0.0);
+        assertEquals(Math.min(semiMajorAxis, semiMinorAxis), ellipse1.getSemiMinorAxis(), 0.0);
         assertEquals(rotationAngle, ellipse1.getRotationAngle(), 0.0);
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(ellipse1);
-        final Ellipse ellipse2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(ellipse1);
+        final var ellipse2 = SerializationHelper.<Ellipse>deserialize(bytes);
 
         // check
         assertNotSame(ellipse1, ellipse2);
         assertEquals(ellipse1.getCenter(), ellipse2.getCenter());
         assertNotSame(ellipse1.getCenter(), ellipse2.getCenter());
-        assertEquals(ellipse1.getSemiMajorAxis(),
-                ellipse2.getSemiMajorAxis(), 0.0);
-        assertEquals(ellipse1.getSemiMinorAxis(),
-                ellipse2.getSemiMinorAxis(), 0.0);
-        assertEquals(ellipse1.getRotationAngle(),
-                ellipse2.getRotationAngle(), 0.0);
+        assertEquals(ellipse1.getSemiMajorAxis(), ellipse2.getSemiMajorAxis(), 0.0);
+        assertEquals(ellipse1.getSemiMinorAxis(), ellipse2.getSemiMinorAxis(), 0.0);
+        assertEquals(ellipse1.getRotationAngle(), ellipse2.getRotationAngle(), 0.0);
     }
 }

@@ -32,8 +32,7 @@ import java.util.List;
  * matched 2D points using PROSAC algorithm.
  */
 @SuppressWarnings("DuplicatedCode")
-public class PROSACMetricTransformation2DRobustEstimator extends
-        MetricTransformation2DRobustEstimator {
+public class PROSACMetricTransformation2DRobustEstimator extends MetricTransformation2DRobustEstimator {
 
     /**
      * Constant defining default threshold to determine whether points are
@@ -65,32 +64,32 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a matched pair of points.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Quality scores corresponding to each pair of matched points.
      * The larger the score value the better the quality of the matching.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Indicates whether inliers must be computed and kept.
      */
-    private boolean mComputeAndKeepInliers;
+    private boolean computeAndKeepInliers;
 
     /**
      * Indicates whether residuals must be computed and kept.
      */
-    private boolean mComputeAndKeepResiduals;
+    private boolean computeAndKeepResiduals;
 
     /**
      * Constructor.
      */
     public PROSACMetricTransformation2DRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -110,9 +109,9 @@ public class PROSACMetricTransformation2DRobustEstimator extends
     public PROSACMetricTransformation2DRobustEstimator(
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         super(inputPoints, outputPoints);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -121,12 +120,11 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public PROSACMetricTransformation2DRobustEstimator(
-            final MetricTransformation2DRobustEstimatorListener listener) {
+    public PROSACMetricTransformation2DRobustEstimator(final MetricTransformation2DRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -149,9 +147,9 @@ public class PROSACMetricTransformation2DRobustEstimator extends
             final MetricTransformation2DRobustEstimatorListener listener,
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         super(listener, inputPoints, outputPoints);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -162,13 +160,12 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public PROSACMetricTransformation2DRobustEstimator(
-            final double[] qualityScores) {
+    public PROSACMetricTransformation2DRobustEstimator(final double[] qualityScores) {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -189,18 +186,17 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      *                                  MINIMUM_SIZE.
      */
     public PROSACMetricTransformation2DRobustEstimator(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores) {
         super(inputPoints, outputPoints);
 
         if (qualityScores.length != inputPoints.size()) {
             throw new IllegalArgumentException();
         }
 
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -214,13 +210,12 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACMetricTransformation2DRobustEstimator(
-            final MetricTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final MetricTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -243,18 +238,17 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      */
     public PROSACMetricTransformation2DRobustEstimator(
             final MetricTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores) {
         super(listener, inputPoints, outputPoints);
 
         if (qualityScores.length != inputPoints.size()) {
             throw new IllegalArgumentException();
         }
 
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -262,12 +256,11 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      *
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      */
-    public PROSACMetricTransformation2DRobustEstimator(
-            final boolean weakMinimumSizeAllowed) {
+    public PROSACMetricTransformation2DRobustEstimator(final boolean weakMinimumSizeAllowed) {
         super(weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -286,12 +279,11 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROSACMetricTransformation2DRobustEstimator(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -302,12 +294,11 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      */
     public PROSACMetricTransformation2DRobustEstimator(
-            final MetricTransformation2DRobustEstimatorListener listener,
-            final boolean weakMinimumSizeAllowed) {
+            final MetricTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
         super(listener, weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -329,12 +320,11 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      */
     public PROSACMetricTransformation2DRobustEstimator(
             final MetricTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
         super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -349,10 +339,10 @@ public class PROSACMetricTransformation2DRobustEstimator extends
     public PROSACMetricTransformation2DRobustEstimator(
             final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
         super(weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -374,18 +364,18 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      *                                  MINIMUM_SIZE.
      */
     public PROSACMetricTransformation2DRobustEstimator(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
 
         if (qualityScores.length != inputPoints.size()) {
             throw new IllegalArgumentException();
         }
 
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -400,13 +390,13 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROSACMetricTransformation2DRobustEstimator(
-            final MetricTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+            final MetricTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed) {
         super(listener, weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -438,10 +428,10 @@ public class PROSACMetricTransformation2DRobustEstimator extends
             throw new IllegalArgumentException();
         }
 
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
         internalSetQualityScores(qualityScores);
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -454,7 +444,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -477,7 +467,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -488,7 +478,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -520,8 +510,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mInputPoints.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == inputPoints.size();
     }
 
     /**
@@ -531,7 +520,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-        return mComputeAndKeepInliers;
+        return computeAndKeepInliers;
     }
 
     /**
@@ -541,12 +530,11 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      *                              false if inliers only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
-            throws LockedException {
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepInliers = computeAndKeepInliers;
+        this.computeAndKeepInliers = computeAndKeepInliers;
     }
 
     /**
@@ -556,7 +544,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-        return mComputeAndKeepResiduals;
+        return computeAndKeepResiduals;
     }
 
     /**
@@ -566,12 +554,11 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      *                                kept, false if residuals only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepResidualsEnabled(
-            final boolean computeAndKeepResiduals) throws LockedException {
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepResiduals = computeAndKeepResiduals;
+        this.computeAndKeepResiduals = computeAndKeepResiduals;
     }
 
     /**
@@ -588,8 +575,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public MetricTransformation2D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public MetricTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -597,141 +583,122 @@ public class PROSACMetricTransformation2DRobustEstimator extends
             throw new NotReadyException();
         }
 
-        final PROSACRobustEstimator<MetricTransformation2D> innerEstimator =
-                new PROSACRobustEstimator<>(
-                        new PROSACRobustEstimatorListener<MetricTransformation2D>() {
+        final var innerEstimator = new PROSACRobustEstimator<>(
+                new PROSACRobustEstimatorListener<MetricTransformation2D>() {
 
-                            // point to be reused when computing residuals
-                            private final Point2D mTestPoint = Point2D.create(
-                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+                    // point to be reused when computing residuals
+                    private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                            private final MetricTransformation2DEstimator mNonRobustEstimator =
-                                    new MetricTransformation2DEstimator(
-                                            isWeakMinimumSizeAllowed());
+                    private final MetricTransformation2DEstimator nonRobustEstimator =
+                            new MetricTransformation2DEstimator(isWeakMinimumSizeAllowed());
 
-                            private final List<Point2D> mSubsetInputPoints =
-                                    new ArrayList<>();
-                            private final List<Point2D> mSubsetOutputPoints =
-                                    new ArrayList<>();
+                    private final List<Point2D> subsetInputPoints = new ArrayList<>();
+                    private final List<Point2D> subsetOutputPoints = new ArrayList<>();
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+                    @Override
+                    public double getThreshold() {
+                        return threshold;
+                    }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputPoints.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputPoints.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return mNonRobustEstimator.getMinimumPoints();
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return nonRobustEstimator.getMinimumPoints();
+                    }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<MetricTransformation2D> solutions) {
-                                mSubsetInputPoints.clear();
-                                mSubsetOutputPoints.clear();
-                                for (final int samplesIndex : samplesIndices) {
-                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));
-                                    mSubsetOutputPoints.add(mOutputPoints.get(
-                                            samplesIndex));
-                                }
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<MetricTransformation2D> solutions) {
+                        subsetInputPoints.clear();
+                        subsetOutputPoints.clear();
+                        for (final var samplesIndex : samplesIndices) {
+                            subsetInputPoints.add(inputPoints.get(samplesIndex));
+                            subsetOutputPoints.add(outputPoints.get(samplesIndex));
+                        }
 
-                                try {
-                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,
-                                            mSubsetOutputPoints);
-                                    solutions.add(mNonRobustEstimator.estimate());
-                                } catch (final Exception e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            nonRobustEstimator.setPoints(subsetInputPoints, subsetOutputPoints);
+                            solutions.add(nonRobustEstimator.estimate());
+                        } catch (final Exception e) {
+                            // if points are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(
-                                    final MetricTransformation2D currentEstimation, final int i) {
-                                final Point2D inputPoint = mInputPoints.get(i);
-                                final Point2D outputPoint = mOutputPoints.get(i);
+                    @Override
+                    public double computeResidual(final MetricTransformation2D currentEstimation, final int i) {
+                        final var inputPoint = inputPoints.get(i);
+                        final var outputPoint = outputPoints.get(i);
 
-                                // transform input point and store result in mTestPoint
-                                currentEstimation.transform(inputPoint, mTestPoint);
+                        // transform input point and store result in mTestPoint
+                        currentEstimation.transform(inputPoint, testPoint);
 
-                                return outputPoint.distanceTo(mTestPoint);
-                            }
+                        return outputPoint.distanceTo(testPoint);
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return PROSACMetricTransformation2DRobustEstimator.this.
-                                        isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return PROSACMetricTransformation2DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<MetricTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            PROSACMetricTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<MetricTransformation2D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(PROSACMetricTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<MetricTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            PROSACMetricTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<MetricTransformation2D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(PROSACMetricTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<MetricTransformation2D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            PROSACMetricTransformation2DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<MetricTransformation2D> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(
+                                    PROSACMetricTransformation2DRobustEstimator.this, iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<MetricTransformation2D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            PROSACMetricTransformation2DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<MetricTransformation2D> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(
+                                    PROSACMetricTransformation2DRobustEstimator.this, progress);
+                        }
+                    }
 
-                            @Override
-                            public double[] getQualityScores() {
-                                return mQualityScores;
-                            }
-                        });
+                    @Override
+                    public double[] getQualityScores() {
+                        return qualityScores;
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setComputeAndKeepInliersEnabled(
-                    mComputeAndKeepInliers || mRefineResult);
-            innerEstimator.setComputeAndKeepResidualsEnabled(
-                    mComputeAndKeepResiduals || mRefineResult);
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final MetricTransformation2D transformation = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setComputeAndKeepInliersEnabled(computeAndKeepInliers || refineResult);
+            innerEstimator.setComputeAndKeepResidualsEnabled(computeAndKeepResiduals || refineResult);
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -758,7 +725,7 @@ public class PROSACMetricTransformation2DRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -775,6 +742,6 @@ public class PROSACMetricTransformation2DRobustEstimator extends
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

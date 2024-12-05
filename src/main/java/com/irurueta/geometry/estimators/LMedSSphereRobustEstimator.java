@@ -113,8 +113,7 @@ public class LMedSSphereRobustEstimator extends SphereRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public LMedSSphereRobustEstimator(final SphereRobustEstimatorListener listener,
-                                      final List<Point3D> points) {
+    public LMedSSphereRobustEstimator(final SphereRobustEstimatorListener listener, final List<Point3D> points) {
         super(listener, points);
         mStopThreshold = DEFAULT_STOP_THRESHOLD;
     }
@@ -190,8 +189,7 @@ public class LMedSSphereRobustEstimator extends SphereRobustEstimator {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public Sphere estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Sphere estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -199,84 +197,77 @@ public class LMedSSphereRobustEstimator extends SphereRobustEstimator {
             throw new NotReadyException();
         }
 
-        final LMedSRobustEstimator<Sphere> innerEstimator =
-                new LMedSRobustEstimator<>(
-                        new LMedSRobustEstimatorListener<Sphere>() {
+        final var innerEstimator = new LMedSRobustEstimator<>(new LMedSRobustEstimatorListener<Sphere>() {
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPoints.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return points.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return SphereRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return SphereRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<Sphere> solutions) {
-                                final Point3D point1 = mPoints.get(samplesIndices[0]);
-                                final Point3D point2 = mPoints.get(samplesIndices[1]);
-                                final Point3D point3 = mPoints.get(samplesIndices[2]);
-                                final Point3D point4 = mPoints.get(samplesIndices[3]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Sphere> solutions) {
+                final var point1 = points.get(samplesIndices[0]);
+                final var point2 = points.get(samplesIndices[1]);
+                final var point3 = points.get(samplesIndices[2]);
+                final var point4 = points.get(samplesIndices[3]);
 
-                                try {
-                                    final Sphere sphere = new Sphere(point1, point2, point3, point4);
-                                    solutions.add(sphere);
-                                } catch (final CoplanarPointsException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var sphere = new Sphere(point1, point2, point3, point4);
+                    solutions.add(sphere);
+                } catch (final CoplanarPointsException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final Sphere currentEstimation, final int i) {
-                                return residual(currentEstimation, mPoints.get(i));
-                            }
+            @Override
+            public double computeResidual(final Sphere currentEstimation, final int i) {
+                return residual(currentEstimation, points.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return LMedSSphereRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return LMedSSphereRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<Sphere> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(LMedSSphereRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Sphere> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(LMedSSphereRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<Sphere> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(LMedSSphereRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Sphere> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(LMedSSphereRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Sphere> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            LMedSSphereRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Sphere> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(LMedSSphereRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Sphere> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            LMedSSphereRobustEstimator.this, progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Sphere> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(LMedSSphereRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
             innerEstimator.setStopThreshold(mStopThreshold);
             return innerEstimator.estimate();
         } catch (final com.irurueta.numerical.LockedException e) {
@@ -284,7 +275,7 @@ public class LMedSSphereRobustEstimator extends SphereRobustEstimator {
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 

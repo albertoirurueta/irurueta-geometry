@@ -52,14 +52,14 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a sampled line.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Constructor.
      */
     public MSACPoint3DRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -71,7 +71,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     public MSACPoint3DRobustEstimator(final List<Plane> planes) {
         super(planes);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -82,7 +82,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     public MSACPoint3DRobustEstimator(final Point3DRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
 
@@ -95,10 +95,9 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes doesn't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public MSACPoint3DRobustEstimator(final Point3DRobustEstimatorListener listener,
-                                      final List<Plane> planes) {
+    public MSACPoint3DRobustEstimator(final Point3DRobustEstimatorListener listener, final List<Plane> planes) {
         super(listener, planes);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -111,7 +110,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -133,7 +132,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
 
@@ -151,8 +150,7 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public Point3D estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Point3D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -160,99 +158,92 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
             throw new NotReadyException();
         }
 
-        final MSACRobustEstimator<Point3D> innerEstimator =
-                new MSACRobustEstimator<>(
-                        new MSACRobustEstimatorListener<Point3D>() {
+        final var innerEstimator = new MSACRobustEstimator<>(new MSACRobustEstimatorListener<Point3D>() {
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+            @Override
+            public double getThreshold() {
+                return threshold;
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPlanes.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return planes.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return Point3DRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return Point3DRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @SuppressWarnings("DuplicatedCode")
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<Point3D> solutions) {
-                                final Plane plane1 = mPlanes.get(samplesIndices[0]);
-                                final Plane plane2 = mPlanes.get(samplesIndices[1]);
-                                final Plane plane3 = mPlanes.get(samplesIndices[2]);
+            @SuppressWarnings("DuplicatedCode")
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Point3D> solutions) {
+                final var plane1 = planes.get(samplesIndices[0]);
+                final var plane2 = planes.get(samplesIndices[1]);
+                final var plane3 = planes.get(samplesIndices[2]);
 
-                                try {
-                                    final Point3D point = plane1.getIntersection(plane2, plane3);
-                                    solutions.add(point);
-                                } catch (final NoIntersectionException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var point = plane1.getIntersection(plane2, plane3);
+                    solutions.add(point);
+                } catch (final NoIntersectionException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final Point3D currentEstimation, int i) {
-                                return residual(currentEstimation, mPlanes.get(i));
-                            }
+            @Override
+            public double computeResidual(final Point3D currentEstimation, int i) {
+                return residual(currentEstimation, planes.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return MSACPoint3DRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return MSACPoint3DRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<Point3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(MSACPoint3DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Point3D> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(MSACPoint3DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<Point3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(MSACPoint3DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Point3D> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(MSACPoint3DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Point3D> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            MSACPoint3DRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Point3D> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(MSACPoint3DRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Point3D> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            MSACPoint3DRobustEstimator.this, progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Point3D> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(MSACPoint3DRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final Point3D result = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var result = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(result);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -279,6 +270,6 @@ public class MSACPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        return mThreshold;
+        return threshold;
     }
 }

@@ -72,20 +72,20 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sample.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Constructor.
      */
     public PROMedSPoint2DRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -97,7 +97,7 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     public PROMedSPoint2DRobustEstimator(final List<Line2D> lines) {
         super(lines);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -106,10 +106,9 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public PROMedSPoint2DRobustEstimator(
-            final Point2DRobustEstimatorListener listener) {
+    public PROMedSPoint2DRobustEstimator(final Point2DRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
 
@@ -122,11 +121,9 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPoint2DRobustEstimator(
-            final Point2DRobustEstimatorListener listener,
-            final List<Line2D> lines) {
+    public PROMedSPoint2DRobustEstimator(final Point2DRobustEstimatorListener listener, final List<Line2D> lines) {
         super(listener, lines);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -138,7 +135,7 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     public PROMedSPoint2DRobustEstimator(final double[] qualityScores) {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -151,15 +148,14 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      *                                  the same size as the list of provided quality scores, or it their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPoint2DRobustEstimator(final List<Line2D> lines,
-                                         final double[] qualityScores) {
+    public PROMedSPoint2DRobustEstimator(final List<Line2D> lines, final double[] qualityScores) {
         super(lines);
 
         if (qualityScores.length != lines.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -173,10 +169,9 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      *                                  smaller than MINIMUM_SIZE (i.e. 2 lines).
      */
     public PROMedSPoint2DRobustEstimator(
-            final Point2DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final Point2DRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -193,15 +188,14 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSPoint2DRobustEstimator(
-            final Point2DRobustEstimatorListener listener,
-            final List<Line2D> lines, final double[] qualityScores) {
+            final Point2DRobustEstimatorListener listener, final List<Line2D> lines, final double[] qualityScores) {
         super(listener, lines);
 
         if (qualityScores.length != lines.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -225,7 +219,7 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -258,7 +252,7 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -269,7 +263,7 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -299,8 +293,7 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mLines.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == lines.size();
     }
 
     /**
@@ -316,8 +309,7 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Point2D estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Point2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -325,103 +317,95 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
             throw new NotReadyException();
         }
 
-        final PROMedSRobustEstimator<Point2D> innerEstimator =
-                new PROMedSRobustEstimator<>(
-                        new PROMedSRobustEstimatorListener<Point2D>() {
+        final var innerEstimator = new PROMedSRobustEstimator<>(new PROMedSRobustEstimatorListener<Point2D>() {
 
-                            @Override
-                            public double getThreshold() {
-                                return mStopThreshold;
-                            }
+            @Override
+            public double getThreshold() {
+                return stopThreshold;
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mLines.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return lines.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return Point2DRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return Point2DRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<Point2D> solutions) {
-                                final Line2D line1 = mLines.get(samplesIndices[0]);
-                                final Line2D line2 = mLines.get(samplesIndices[1]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Point2D> solutions) {
+                final var line1 = lines.get(samplesIndices[0]);
+                final var line2 = lines.get(samplesIndices[1]);
 
-                                try {
-                                    final Point2D point = line1.getIntersection(line2);
-                                    solutions.add(point);
-                                } catch (final NoIntersectionException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var point = line1.getIntersection(line2);
+                    solutions.add(point);
+                } catch (final NoIntersectionException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final Point2D currentEstimation, final int i) {
-                                return residual(currentEstimation, mLines.get(i));
-                            }
+            @Override
+            public double computeResidual(final Point2D currentEstimation, final int i) {
+                return residual(currentEstimation, lines.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return PROMedSPoint2DRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return PROMedSPoint2DRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<Point2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            PROMedSPoint2DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Point2D> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(PROMedSPoint2DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<Point2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(PROMedSPoint2DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Point2D> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(PROMedSPoint2DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Point2D> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            PROMedSPoint2DRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Point2D> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(PROMedSPoint2DRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Point2D> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            PROMedSPoint2DRobustEstimator.this, progress);
-                                }
-                            }
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Point2D> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(PROMedSPoint2DRobustEstimator.this, progress);
+                }
+            }
 
-                            @Override
-                            public double[] getQualityScores() {
-                                return mQualityScores;
-                            }
-                        });
+            @Override
+            public double[] getQualityScores() {
+                return qualityScores;
+            }
+        });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final Point2D result = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var result = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(result);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -448,8 +432,7 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        final PROMedSRobustEstimator.PROMedSInliersData inliersData =
-                (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
+        final var inliersData = (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
         return inliersData.getEstimatedThreshold();
     }
 
@@ -467,6 +450,6 @@ public class PROMedSPoint2DRobustEstimator extends Point2DRobustEstimator {
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

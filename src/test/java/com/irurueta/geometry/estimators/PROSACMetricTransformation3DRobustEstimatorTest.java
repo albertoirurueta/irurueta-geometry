@@ -25,16 +25,13 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PROSACMetricTransformation3DRobustEstimatorTest implements
-        MetricTransformation3DRobustEstimatorListener {
+class PROSACMetricTransformation3DRobustEstimatorTest implements MetricTransformation3DRobustEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
@@ -70,7 +67,7 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(4, MetricTransformation3DRobustEstimator.MINIMUM_SIZE);
         assertEquals(3, MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE);
         assertEquals(0.05f, MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
@@ -91,17 +88,15 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test constructor without arguments
-        PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+        var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -110,36 +105,32 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // test constructor with points
-        List<Point3D> inputPoints = new ArrayList<>();
-        List<Point3D> outputPoints = new ArrayList<>();
-        for (int i = 0; i < MetricTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var inputPoints = new ArrayList<Point3D>();
+        final var outputPoints = new ArrayList<Point3D>();
+        for (var i = 0; i < MetricTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point3D.create());
             outputPoints.add(Point3D.create());
         }
 
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                inputPoints, outputPoints);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(inputPoints, outputPoints);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
@@ -148,47 +139,34 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        final List<Point3D> pointsEmpty = new ArrayList<>();
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    pointsEmpty, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    inputPoints, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var pointsEmpty = new ArrayList<Point3D>();
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                pointsEmpty, pointsEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                inputPoints, pointsEmpty));
 
         // test constructor with listener
         estimator = new PROSACMetricTransformation3DRobustEstimator(this);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -197,29 +175,25 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // test constructor with listener and points
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                this, inputPoints, outputPoints);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(this, inputPoints, outputPoints);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
@@ -228,51 +202,36 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, pointsEmpty, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, inputPoints, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                this, pointsEmpty, pointsEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                this, inputPoints, pointsEmpty));
 
         // test constructor with quality scores
-        double[] qualityScores = new double[
-                EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE];
-        final double[] shortQualityScores = new double[1];
+        final var qualityScores = new double[EuclideanTransformation3DRobustEstimator.MINIMUM_SIZE];
+        final var shortQualityScores = new double[1];
 
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                qualityScores);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(qualityScores);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -281,39 +240,29 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    shortQualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                shortQualityScores));
 
         // test constructor with points and quality scores
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                inputPoints, outputPoints, qualityScores);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(inputPoints, outputPoints, qualityScores);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
@@ -322,54 +271,36 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    pointsEmpty, pointsEmpty, qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    inputPoints, pointsEmpty, qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // not enough scores
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    inputPoints, outputPoints, shortQualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                pointsEmpty, pointsEmpty, qualityScores));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                inputPoints, pointsEmpty, qualityScores));
+        // not enough scores
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                inputPoints, outputPoints, shortQualityScores));
 
         // test constructor with listener and quality scores
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                this, qualityScores);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(this, qualityScores);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -378,39 +309,30 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, shortQualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                this, shortQualityScores));
 
         // test constructor with listener, points and quality scores
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                this, inputPoints, outputPoints, qualityScores);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(this, inputPoints, outputPoints,
+                qualityScores);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
@@ -419,54 +341,36 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, pointsEmpty, pointsEmpty, qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, inputPoints, pointsEmpty, qualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // not enough scores
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, inputPoints, outputPoints, shortQualityScores);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
-
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                this, pointsEmpty, pointsEmpty, qualityScores));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                this, inputPoints, pointsEmpty, qualityScores));
+        // not enough scores
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                this, inputPoints, outputPoints, shortQualityScores));
 
         // test constructor without arguments and weak min points
         estimator = new PROSACMetricTransformation3DRobustEstimator(true);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -475,84 +379,68 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // test constructor with points
-        inputPoints = new ArrayList<>();
-        outputPoints = new ArrayList<>();
-        for (int i = 0; i < MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE; i++) {
-            inputPoints.add(Point3D.create());
-            outputPoints.add(Point3D.create());
+        final var inputPoints2 = new ArrayList<Point3D>();
+        final var outputPoints2 = new ArrayList<Point3D>();
+        for (var i = 0; i < MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE; i++) {
+            inputPoints2.add(Point3D.create());
+            outputPoints2.add(Point3D.create());
         }
 
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                inputPoints, outputPoints, true);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(inputPoints2, outputPoints2,
+                true);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
-        assertSame(inputPoints, estimator.getInputPoints());
-        assertSame(outputPoints, estimator.getOutputPoints());
+        assertSame(inputPoints2, estimator.getInputPoints());
+        assertSame(outputPoints2, estimator.getOutputPoints());
         assertNull(estimator.getQualityScores());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    pointsEmpty, pointsEmpty, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    inputPoints, pointsEmpty, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                pointsEmpty, pointsEmpty, true));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                inputPoints, pointsEmpty, true));
 
         // test constructor with listener
         estimator = new PROSACMetricTransformation3DRobustEstimator(this, true);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
@@ -561,29 +449,26 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // test constructor with listener and points
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                this, inputPoints, outputPoints, true);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(this, inputPoints, outputPoints,
+                true);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertSame(inputPoints, estimator.getInputPoints());
         assertSame(outputPoints, estimator.getOutputPoints());
@@ -592,243 +477,176 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, pointsEmpty, pointsEmpty, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, inputPoints, pointsEmpty, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(this,
+                pointsEmpty, pointsEmpty, true));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(this,
+                inputPoints, pointsEmpty, true));
 
         // test constructor with quality scores
-        qualityScores = new double[
-                EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE];
+        final var qualityScores2 = new double[EuclideanTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE];
 
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                qualityScores, true);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(qualityScores2, true);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
-        assertSame(qualityScores, estimator.getQualityScores());
+        assertSame(qualityScores2, estimator.getQualityScores());
         assertFalse(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    shortQualityScores, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                shortQualityScores, true));
 
         // test constructor with points and quality scores
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                inputPoints, outputPoints, qualityScores, true);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(inputPoints2, outputPoints2, qualityScores2,
+                true);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
-        assertSame(inputPoints, estimator.getInputPoints());
-        assertSame(outputPoints, estimator.getOutputPoints());
-        assertSame(qualityScores, estimator.getQualityScores());
+        assertSame(inputPoints2, estimator.getInputPoints());
+        assertSame(outputPoints2, estimator.getOutputPoints());
+        assertSame(qualityScores2, estimator.getQualityScores());
         assertTrue(estimator.isReady());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    pointsEmpty, pointsEmpty, qualityScores, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    inputPoints, pointsEmpty, qualityScores, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // not enough scores
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    inputPoints, outputPoints, shortQualityScores, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                pointsEmpty, pointsEmpty, qualityScores, true));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                inputPoints, pointsEmpty, qualityScores, true));
+        // not enough scores
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                inputPoints, outputPoints, shortQualityScores, true));
 
         // test constructor with listener and quality scores
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                this, qualityScores, true);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(this, qualityScores2,
+                true);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
         assertNull(estimator.getInputPoints());
         assertNull(estimator.getOutputPoints());
-        assertSame(qualityScores, estimator.getQualityScores());
+        assertSame(qualityScores2, estimator.getQualityScores());
         assertFalse(estimator.isReady());
-        assertSame(estimator.getListener(), this);
+        assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, shortQualityScores, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(this,
+                shortQualityScores, true));
 
         // test constructor with listener, points and quality scores
-        estimator = new PROSACMetricTransformation3DRobustEstimator(
-                this, inputPoints, outputPoints, qualityScores, true);
+        estimator = new PROSACMetricTransformation3DRobustEstimator(this, inputPoints2, outputPoints2,
+                qualityScores2, true);
 
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertEquals(RobustEstimatorMethod.PROSAC, estimator.getMethod());
-        assertSame(inputPoints, estimator.getInputPoints());
-        assertSame(outputPoints, estimator.getOutputPoints());
-        assertSame(qualityScores, estimator.getQualityScores());
+        assertSame(inputPoints2, estimator.getInputPoints());
+        assertSame(outputPoints2, estimator.getOutputPoints());
+        assertSame(qualityScores2, estimator.getQualityScores());
         assertTrue(estimator.isReady());
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
         assertNull(estimator.getInliersData());
-        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(MetricTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, pointsEmpty, pointsEmpty, qualityScores, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, inputPoints, pointsEmpty, qualityScores, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // not enough scores
-            estimator = new PROSACMetricTransformation3DRobustEstimator(
-                    this, inputPoints, outputPoints, shortQualityScores, true);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                this, pointsEmpty, pointsEmpty, qualityScores, true));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                this, inputPoints, pointsEmpty, qualityScores, true));
+        // not enough scores
+        assertThrows(IllegalArgumentException.class, () -> new PROSACMetricTransformation3DRobustEstimator(
+                this, inputPoints, outputPoints, shortQualityScores, true));
     }
 
     @Test
-    public void testGetSetStopThreshold() throws LockedException {
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+    void testGetSetStopThreshold() throws LockedException {
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(),
+                0.0);
 
         // set new value
         estimator.setThreshold(0.5);
@@ -837,21 +655,16 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setThreshold(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setThreshold(0.0));
     }
 
     @Test
-    public void testGetSetConfidence() throws LockedException {
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+    void testGetSetConfidence() throws LockedException {
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(),
+                0.0);
 
         // set new value
         estimator.setConfidence(0.5);
@@ -860,27 +673,16 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException {
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+    void testGetSetMaxIterations() throws LockedException {
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(PROSACMetricTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(10);
@@ -889,17 +691,12 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testGetSetPointsAndIsReady() throws LockedException {
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+    void testGetSetPointsAndIsReady() throws LockedException {
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
         // check default values
         assertNull(estimator.getInputPoints());
@@ -907,9 +704,9 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertFalse(estimator.isReady());
 
         // set new value
-        final List<Point3D> inputPoints = new ArrayList<>();
-        final List<Point3D> outputPoints = new ArrayList<>();
-        for (int i = 0; i < MetricTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var inputPoints = new ArrayList<Point3D>();
+        final var outputPoints = new ArrayList<Point3D>();
+        for (var i = 0; i < MetricTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPoints.add(Point3D.create());
             outputPoints.add(Point3D.create());
         }
@@ -922,33 +719,22 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertFalse(estimator.isReady());
 
         // if we set quality scores, then estimator becomes ready
-        final double[] qualityScores = new double[
-                MetricTransformation3DRobustEstimator.MINIMUM_SIZE];
+        final var qualityScores = new double[MetricTransformation3DRobustEstimator.MINIMUM_SIZE];
         estimator.setQualityScores(qualityScores);
 
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
-        final List<Point3D> pointsEmpty = new ArrayList<>();
-        try {
-            // not enough points
-            estimator.setPoints(pointsEmpty, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator.setPoints(pointsEmpty, pointsEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var pointsEmpty = new ArrayList<Point3D>();
+        // not enough points
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(pointsEmpty, pointsEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(pointsEmpty, pointsEmpty));
     }
 
     @Test
-    public void testGetSetListenerAndIsListenerAvailable()
-            throws LockedException {
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+    void testGetSetListenerAndIsListenerAvailable() throws LockedException {
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -963,32 +749,28 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testIsSetWeakMinimumPointsAllowed() throws LockedException {
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+    void testIsSetWeakMinimumPointsAllowed() throws LockedException {
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
         // check default value
         assertFalse(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.MINIMUM_SIZE, estimator.getMinimumPoints());
 
         // set new value
         estimator.setWeakMinimumSizeAllowed(true);
 
         // check correctness
         assertTrue(estimator.isWeakMinimumSizeAllowed());
-        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE,
-                estimator.getMinimumPoints());
+        assertEquals(MetricTransformation3DRobustEstimator.WEAK_MINIMUM_SIZE, estimator.getMinimumPoints());
     }
 
     @Test
-    public void testGetSetProgressDelta() throws LockedException {
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+    void testGetSetProgressDelta() throws LockedException {
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(MetricTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
@@ -997,22 +779,13 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testIsSetResultRefined() throws LockedException {
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+    void testIsSetResultRefined() throws LockedException {
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
         assertTrue(estimator.isResultRefined());
 
@@ -1024,9 +797,8 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testIsSetCovarianceKept() throws LockedException {
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+    void testIsSetCovarianceKept() throws LockedException {
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
         assertFalse(estimator.isCovarianceKept());
 
@@ -1038,9 +810,8 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testIsSetComputeAndKeepInliersEnabled() throws LockedException {
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+    void testIsSetComputeAndKeepInliersEnabled() throws LockedException {
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
 
@@ -1052,10 +823,8 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testIsSetComputeAndKeepResidualsEnabled()
-            throws LockedException {
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator();
+    void testIsSetComputeAndKeepResidualsEnabled() throws LockedException {
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator();
 
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
@@ -1067,63 +836,52 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateWithoutRefinement() throws LockedException,
-            NotReadyException, RobustEstimatorException {
-        for (int t = 0; t < TIMES; t++) {
+    void testEstimateWithoutRefinement() throws LockedException, NotReadyException, RobustEstimatorException {
+        for (var t = 0; t < TIMES; t++) {
             // create an euclidean transformation
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final var randomizer = new UniformRandomizer();
 
-            final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-            final Quaternion q = new Quaternion(roll, pitch, yaw);
+            final var q = new Quaternion(roll, pitch, yaw);
             q.normalize();
 
-            final double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
+            final var scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
 
-            final double[] translation = new double[3];
+            final var translation = new double[3];
             randomizer.fill(translation, MIN_TRANSLATION, MAX_TRANSLATION);
 
-            final MetricTransformation3D transformation1 =
-                    new MetricTransformation3D(q, translation, scale);
+            final var transformation1 = new MetricTransformation3D(q, translation, scale);
 
 
             // generate random points
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> inputPoints = new ArrayList<>();
-            final List<Point3D> outputPoints = new ArrayList<>();
-            final List<Point3D> outputPointsWithError = new ArrayList<>();
-            final double[] qualityScores = new double[nPoints];
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var inputPoints = new ArrayList<Point3D>();
+            final var outputPoints = new ArrayList<Point3D>();
+            final var outputPointsWithError = new ArrayList<Point3D>();
+            final var qualityScores = new double[nPoints];
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
             for (int i = 0; i < nPoints; i++) {
-                final Point3D inputPoint = new InhomogeneousPoint3D(
-                        randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                MAX_RANDOM_VALUE),
-                        randomizer.nextDouble(MIN_RANDOM_VALUE,
-                                MAX_RANDOM_VALUE));
-                final Point3D outputPoint = transformation1.transformAndReturnNew(
-                        inputPoint);
-                final Point3D outputPointWithError;
-                final double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR,
-                        MAX_SCORE_ERROR);
+                final var inputPoint = new InhomogeneousPoint3D(
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                        randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+                final var outputPoint = transformation1.transformAndReturnNew(inputPoint);
+                final var scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;
+                final Point3D outputPointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorZ = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorZ = errorRandomizer.nextDouble();
                     outputPointWithError = new InhomogeneousPoint3D(
                             outputPoint.getInhomX() + errorX,
                             outputPoint.getInhomY() + errorY,
                             outputPoint.getInhomZ() + errorZ);
-                    final double error = Math.sqrt(errorX * errorX + errorY * errorY);
+                    final var error = Math.sqrt(errorX * errorX + errorY * errorY);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
                 } else {
                     // inlier point (without error)
@@ -1135,9 +893,8 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
                 outputPointsWithError.add(outputPointWithError);
             }
 
-            final PROSACMetricTransformation3DRobustEstimator estimator =
-                    new PROSACMetricTransformation3DRobustEstimator(this,
-                            inputPoints, outputPointsWithError, qualityScores);
+            final var estimator = new PROSACMetricTransformation3DRobustEstimator(this, inputPoints,
+                    outputPointsWithError, qualityScores);
 
             estimator.setThreshold(THRESHOLD);
             estimator.setResultRefined(false);
@@ -1150,7 +907,7 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final MetricTransformation3D transformation2 = estimator.estimate();
+            final var transformation2 = estimator.estimate();
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -1162,18 +919,17 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
             // using estimated transformation (transformation2) and checking
             // that output points are equal to the original output points without
             // error
-            Point3D p1, p2;
-            for (int i = 0; i < nPoints; i++) {
-                p1 = outputPoints.get(i);
-                p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
+            for (var i = 0; i < nPoints; i++) {
+                final var p1 = outputPoints.get(i);
+                final var p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
                 assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
             }
 
             // check parameters of estimated transformation
-            final Quaternion q2 = transformation2.getRotation().toQuaternion();
+            final var q2 = transformation2.getRotation().toQuaternion();
             q2.normalize();
-            final double[] translation2 = transformation2.getTranslation();
-            final double scale2 = transformation2.getScale();
+            final var translation2 = transformation2.getTranslation();
+            final var scale2 = transformation2.getScale();
 
             assertEquals(q.getA(), q2.getA(), ABSOLUTE_ERROR);
             assertEquals(q.getB(), q2.getB(), ABSOLUTE_ERROR);
@@ -1185,83 +941,66 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateCoplanarWithoutRefinement() throws LockedException,
-            NotReadyException, RobustEstimatorException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+    void testEstimateCoplanarWithoutRefinement() throws LockedException, NotReadyException, RobustEstimatorException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
             // create an euclidean transformation
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final var randomizer = new UniformRandomizer();
 
-            final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-            final Quaternion q = new Quaternion(roll, pitch, yaw);
+            final var q = new Quaternion(roll, pitch, yaw);
             q.normalize();
 
-            final double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
+            final var scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
 
-            final double[] translation = new double[3];
+            final var translation = new double[3];
             randomizer.fill(translation, MIN_TRANSLATION, MAX_TRANSLATION);
 
-            final MetricTransformation3D transformation1 =
-                    new MetricTransformation3D(q, translation, scale);
+            final var transformation1 = new MetricTransformation3D(q, translation, scale);
 
             // generate random plane
-            final double a = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double b = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double c = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double d = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+            final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> inputPoints = new ArrayList<>();
-            final List<Point3D> outputPoints = new ArrayList<>();
-            final List<Point3D> outputPointsWithError = new ArrayList<>();
-            final double[] qualityScores = new double[nPoints];
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            HomogeneousPoint3D inputPoint;
-            for (int i = 0; i < nPoints; i++) {
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var inputPoints = new ArrayList<Point3D>();
+            final var outputPoints = new ArrayList<Point3D>();
+            final var outputPointsWithError = new ArrayList<Point3D>();
+            final var qualityScores = new double[nPoints];
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            for (var i = 0; i < nPoints; i++) {
                 final double homX;
                 final double homY;
-                final double homW = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double homZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+                final var homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var homZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 if (Math.abs(b) > ABSOLUTE_ERROR) {
-                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE);
+                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homZ + d * homW) / b;
                 } else {
-                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE);
+                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homZ + d * homW) / a;
                 }
-                inputPoint = new HomogeneousPoint3D(homX, homY, homZ, homW);
+                final var inputPoint = new HomogeneousPoint3D(homX, homY, homZ, homW);
 
-                final Point3D outputPoint = transformation1.transformAndReturnNew(
-                        inputPoint);
-                final Point3D outputPointWithError;
-                final double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR,
-                        MAX_SCORE_ERROR);
+                final var outputPoint = transformation1.transformAndReturnNew(inputPoint);
+                final var scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;
+                final Point3D outputPointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorZ = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorZ = errorRandomizer.nextDouble();
                     outputPointWithError = new InhomogeneousPoint3D(
                             outputPoint.getInhomX() + errorX,
                             outputPoint.getInhomY() + errorY,
                             outputPoint.getInhomZ() + errorZ);
-                    final double error = Math.sqrt(errorX * errorX + errorY * errorY);
+                    final var error = Math.sqrt(errorX * errorX + errorY * errorY);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
                 } else {
                     // inlier point (without error)
@@ -1273,10 +1012,8 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
                 outputPointsWithError.add(outputPointWithError);
             }
 
-            final PROSACMetricTransformation3DRobustEstimator estimator =
-                    new PROSACMetricTransformation3DRobustEstimator(this,
-                            inputPoints, outputPointsWithError, qualityScores,
-                            true);
+            final var estimator = new PROSACMetricTransformation3DRobustEstimator(this, inputPoints,
+                    outputPointsWithError, qualityScores, true);
 
             estimator.setThreshold(THRESHOLD);
             estimator.setResultRefined(false);
@@ -1289,7 +1026,7 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final MetricTransformation3D transformation2 = estimator.estimate();
+            final var transformation2 = estimator.estimate();
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -1301,11 +1038,10 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
             // using estimated transformation (transformation2) and checking
             // that output points are equal to the original output points without
             // error
-            Point3D p1, p2;
-            boolean isValid = true;
-            for (int i = 0; i < nPoints; i++) {
-                p1 = outputPoints.get(i);
-                p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
+            var isValid = true;
+            for (var i = 0; i < nPoints; i++) {
+                final var p1 = outputPoints.get(i);
+                final var p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
                 if (p1.distanceTo(p2) > ABSOLUTE_ERROR) {
                     isValid = false;
                     break;
@@ -1318,10 +1054,10 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
             }
 
             // check parameters of estimated transformation
-            final Quaternion q2 = transformation2.getRotation().toQuaternion();
+            final var q2 = transformation2.getRotation().toQuaternion();
             q2.normalize();
-            final double[] translation2 = transformation2.getTranslation();
-            final double scale2 = transformation2.getScale();
+            final var translation2 = transformation2.getTranslation();
+            final var scale2 = transformation2.getScale();
 
             assertEquals(q.getA(), q2.getA(), ABSOLUTE_ERROR);
             assertEquals(q.getB(), q2.getB(), ABSOLUTE_ERROR);
@@ -1338,62 +1074,50 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateWithRefinement() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    void testEstimateWithRefinement() throws LockedException, NotReadyException, RobustEstimatorException {
         // create an euclidean transformation
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-        final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-        final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
         q.normalize();
 
-        final double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
+        final var scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
 
-        final double[] translation = new double[3];
+        final var translation = new double[3];
         randomizer.fill(translation, MIN_TRANSLATION, MAX_TRANSLATION);
 
-        final MetricTransformation3D transformation1 =
-                new MetricTransformation3D(q, translation, scale);
-
+        final var transformation1 = new MetricTransformation3D(q, translation, scale);
 
         // generate random points
-        final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-        final List<Point3D> inputPoints = new ArrayList<>();
-        final List<Point3D> outputPoints = new ArrayList<>();
-        final List<Point3D> outputPointsWithError = new ArrayList<>();
-        final double[] qualityScores = new double[nPoints];
-        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                new Random(), 0.0, STD_ERROR);
-        for (int i = 0; i < nPoints; i++) {
-            final Point3D inputPoint = new InhomogeneousPoint3D(
-                    randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE),
-                    randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE),
-                    randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE));
-            final Point3D outputPoint = transformation1.transformAndReturnNew(
-                    inputPoint);
-            final Point3D outputPointWithError;
-            final double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR,
-                    MAX_SCORE_ERROR);
+        final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var inputPoints = new ArrayList<Point3D>();
+        final var outputPoints = new ArrayList<Point3D>();
+        final var outputPointsWithError = new ArrayList<Point3D>();
+        final var qualityScores = new double[nPoints];
+        final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+        for (var i = 0; i < nPoints; i++) {
+            final var inputPoint = new InhomogeneousPoint3D(
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+            final var outputPoint = transformation1.transformAndReturnNew(inputPoint);
+            final var scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, MAX_SCORE_ERROR);
             qualityScores[i] = 1.0 + scoreError;
+            final Point3D outputPointWithError;
             if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                 // point is outlier
-                final double errorX = errorRandomizer.nextDouble();
-                final double errorY = errorRandomizer.nextDouble();
-                final double errorZ = errorRandomizer.nextDouble();
+                final var errorX = errorRandomizer.nextDouble();
+                final var errorY = errorRandomizer.nextDouble();
+                final var errorZ = errorRandomizer.nextDouble();
                 outputPointWithError = new InhomogeneousPoint3D(
                         outputPoint.getInhomX() + errorX,
                         outputPoint.getInhomY() + errorY,
                         outputPoint.getInhomZ() + errorZ);
-                final double error = Math.sqrt(errorX * errorX + errorY * errorY);
+                final var error = Math.sqrt(errorX * errorX + errorY * errorY);
                 qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
             } else {
                 // inlier point (without error)
@@ -1405,9 +1129,8 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
             outputPointsWithError.add(outputPointWithError);
         }
 
-        final PROSACMetricTransformation3DRobustEstimator estimator =
-                new PROSACMetricTransformation3DRobustEstimator(this,
-                        inputPoints, outputPointsWithError, qualityScores);
+        final var estimator = new PROSACMetricTransformation3DRobustEstimator(this, inputPoints,
+                outputPointsWithError, qualityScores);
 
         estimator.setThreshold(THRESHOLD);
         estimator.setResultRefined(true);
@@ -1420,19 +1143,17 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
 
-        final MetricTransformation3D transformation2 = estimator.estimate();
+        final var transformation2 = estimator.estimate();
 
         assertNotNull(estimator.getInliersData());
         assertNotNull(estimator.getInliersData().getInliers());
         assertNotNull(estimator.getInliersData().getResiduals());
         assertTrue(estimator.getInliersData().getNumInliers() > 0);
         if (estimator.getCovariance() != null) {
-            assertEquals(estimator.getCovariance().getRows(),
-                    1 + Quaternion.N_PARAMS +
-                            MetricTransformation3D.NUM_TRANSLATION_COORDS);
-            assertEquals(estimator.getCovariance().getColumns(),
-                    1 + Quaternion.N_PARAMS +
-                            MetricTransformation3D.NUM_TRANSLATION_COORDS);
+            assertEquals(1 + Quaternion.N_PARAMS + MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                    estimator.getCovariance().getRows());
+            assertEquals(1 + Quaternion.N_PARAMS + MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                    estimator.getCovariance().getColumns());
         }
 
         assertEquals(1, estimateStart);
@@ -1445,18 +1166,17 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
         // using estimated transformation (transformation2) and checking
         // that output points are equal to the original output points without
         // error
-        Point3D p1, p2;
-        for (int i = 0; i < nPoints; i++) {
-            p1 = outputPoints.get(i);
-            p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
+        for (var i = 0; i < nPoints; i++) {
+            final var p1 = outputPoints.get(i);
+            final var p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
             assertEquals(0.0, p1.distanceTo(p2), ABSOLUTE_ERROR);
         }
 
         // check parameters of estimated transformation
-        final Quaternion q2 = transformation2.getRotation().toQuaternion();
+        final var q2 = transformation2.getRotation().toQuaternion();
         q2.normalize();
-        final double[] translation2 = transformation2.getTranslation();
-        final double scale2 = transformation2.getScale();
+        final var translation2 = transformation2.getTranslation();
+        final var scale2 = transformation2.getScale();
 
         assertEquals(q.getA(), q2.getA(), ABSOLUTE_ERROR);
         assertEquals(q.getB(), q2.getB(), ABSOLUTE_ERROR);
@@ -1467,83 +1187,66 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimateCoplanarWithRefinement() throws LockedException,
-            NotReadyException, RobustEstimatorException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+    void testEstimateCoplanarWithRefinement() throws LockedException, NotReadyException, RobustEstimatorException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
             // create an euclidean transformation
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final var randomizer = new UniformRandomizer();
 
-            final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
-            final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                    MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-            final Quaternion q = new Quaternion(roll, pitch, yaw);
+            final var q = new Quaternion(roll, pitch, yaw);
             q.normalize();
 
-            final double scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
+            final var scale = randomizer.nextDouble(MIN_SCALE, MAX_SCALE);
 
-            final double[] translation = new double[3];
+            final var translation = new double[3];
             randomizer.fill(translation, MIN_TRANSLATION, MAX_TRANSLATION);
 
-            final MetricTransformation3D transformation1 =
-                    new MetricTransformation3D(q, translation, scale);
+            final var transformation1 = new MetricTransformation3D(q, translation, scale);
 
             // generate random plane
-            final double a = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double b = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double c = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
-            final double d = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+            final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final List<Point3D> inputPoints = new ArrayList<>();
-            final List<Point3D> outputPoints = new ArrayList<>();
-            final List<Point3D> outputPointsWithError = new ArrayList<>();
-            final double[] qualityScores = new double[nPoints];
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            HomogeneousPoint3D inputPoint;
-            for (int i = 0; i < nPoints; i++) {
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var inputPoints = new ArrayList<Point3D>();
+            final var outputPoints = new ArrayList<Point3D>();
+            final var outputPointsWithError = new ArrayList<Point3D>();
+            final var qualityScores = new double[nPoints];
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            for (var i = 0; i < nPoints; i++) {
                 final double homX;
                 final double homY;
-                final double homW = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
-                final double homZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                        MAX_RANDOM_VALUE);
+                final var homW = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var homZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                 if (Math.abs(b) > ABSOLUTE_ERROR) {
-                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE);
+                    homX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                     homY = -(a * homX + c * homZ + d * homW) / b;
                 } else {
-                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE);
+                    homY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
                     homX = -(b * homY + c * homZ + d * homW) / a;
                 }
-                inputPoint = new HomogeneousPoint3D(homX, homY, homZ, homW);
+                final var inputPoint = new HomogeneousPoint3D(homX, homY, homZ, homW);
 
-                final Point3D outputPoint = transformation1.transformAndReturnNew(
-                        inputPoint);
-                final Point3D outputPointWithError;
-                final double scoreError = randomizer.nextDouble(MIN_SCORE_ERROR,
-                        MAX_SCORE_ERROR);
+                final var outputPoint = transformation1.transformAndReturnNew(inputPoint);
+                final var scoreError = randomizer.nextDouble(MIN_SCORE_ERROR, MAX_SCORE_ERROR);
                 qualityScores[i] = 1.0 + scoreError;
+                final Point3D outputPointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
-                    final double errorZ = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
+                    final var errorZ = errorRandomizer.nextDouble();
                     outputPointWithError = new InhomogeneousPoint3D(
                             outputPoint.getInhomX() + errorX,
                             outputPoint.getInhomY() + errorY,
                             outputPoint.getInhomZ() + errorZ);
-                    final double error = Math.sqrt(errorX * errorX + errorY * errorY);
+                    final var error = Math.sqrt(errorX * errorX + errorY * errorY);
                     qualityScores[i] = 1.0 / (1.0 + error) + scoreError;
                 } else {
                     // inlier point (without error)
@@ -1555,10 +1258,8 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
                 outputPointsWithError.add(outputPointWithError);
             }
 
-            final PROSACMetricTransformation3DRobustEstimator estimator =
-                    new PROSACMetricTransformation3DRobustEstimator(this,
-                            inputPoints, outputPointsWithError, qualityScores,
-                            true);
+            final var estimator = new PROSACMetricTransformation3DRobustEstimator(this, inputPoints,
+                    outputPointsWithError, qualityScores, true);
 
             estimator.setThreshold(THRESHOLD);
             estimator.setResultRefined(true);
@@ -1571,19 +1272,17 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final MetricTransformation3D transformation2 = estimator.estimate();
+            final var transformation2 = estimator.estimate();
 
             assertNotNull(estimator.getInliersData());
             assertNotNull(estimator.getInliersData().getInliers());
             assertNotNull(estimator.getInliersData().getResiduals());
             assertTrue(estimator.getInliersData().getNumInliers() > 0);
             if (estimator.getCovariance() != null) {
-                assertEquals(estimator.getCovariance().getRows(),
-                        1 + Quaternion.N_PARAMS +
-                                MetricTransformation3D.NUM_TRANSLATION_COORDS);
-                assertEquals(estimator.getCovariance().getColumns(),
-                        1 + Quaternion.N_PARAMS +
-                                MetricTransformation3D.NUM_TRANSLATION_COORDS);
+                assertEquals(1 + Quaternion.N_PARAMS + MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                        estimator.getCovariance().getRows());
+                assertEquals(1 + Quaternion.N_PARAMS + MetricTransformation3D.NUM_TRANSLATION_COORDS,
+                        estimator.getCovariance().getColumns());
             }
 
             assertEquals(1, estimateStart);
@@ -1596,11 +1295,10 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
             // using estimated transformation (transformation2) and checking
             // that output points are equal to the original output points without
             // error
-            Point3D p1, p2;
-            boolean isValid = true;
-            for (int i = 0; i < nPoints; i++) {
-                p1 = outputPoints.get(i);
-                p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
+            var isValid = true;
+            for (var i = 0; i < nPoints; i++) {
+                final var p1 = outputPoints.get(i);
+                final var p2 = transformation2.transformAndReturnNew(inputPoints.get(i));
                 if (p1.distanceTo(p2) > ABSOLUTE_ERROR) {
                     isValid = false;
                     break;
@@ -1613,10 +1311,10 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
             }
 
             // check parameters of estimated transformation
-            final Quaternion q2 = transformation2.getRotation().toQuaternion();
+            final var q2 = transformation2.getRotation().toQuaternion();
             q2.normalize();
-            final double[] translation2 = transformation2.getTranslation();
-            final double scale2 = transformation2.getScale();
+            final var translation2 = transformation2.getTranslation();
+            final var scale2 = transformation2.getScale();
 
             assertEquals(q.getA(), q2.getA(), ABSOLUTE_ERROR);
             assertEquals(q.getB(), q2.getB(), ABSOLUTE_ERROR);
@@ -1645,76 +1343,33 @@ public class PROSACMetricTransformation3DRobustEstimatorTest implements
     }
 
     @Override
-    public void onEstimateNextIteration(
-            final MetricTransformation3DRobustEstimator estimator, final int iteration) {
+    public void onEstimateNextIteration(final MetricTransformation3DRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
         checkLocked((PROSACMetricTransformation3DRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateProgressChange(
-            final MetricTransformation3DRobustEstimator estimator, final float progress) {
+    public void onEstimateProgressChange(final MetricTransformation3DRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
         checkLocked((PROSACMetricTransformation3DRobustEstimator) estimator);
     }
 
     private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
+        estimateStart = estimateEnd = estimateNextIteration = estimateProgressChange = 0;
     }
 
-    private void checkLocked(
-            final PROSACMetricTransformation3DRobustEstimator estimator) {
-        final List<Point3D> points = new ArrayList<>();
-        try {
-            estimator.setPoints(points, points);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(0.01f);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setThreshold(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            final double[] qualityScores = new double[
-                    EuclideanTransformation2DRobustEstimator.MINIMUM_SIZE];
-            estimator.setQualityScores(qualityScores);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setConfidence(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setMaxIterations(10);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            estimator.setWeakMinimumSizeAllowed(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
+    private static void checkLocked(final PROSACMetricTransformation3DRobustEstimator estimator) {
+        final var points = new ArrayList<Point3D>();
+        assertThrows(LockedException.class, () -> estimator.setPoints(points, points));
+        assertThrows(LockedException.class, () -> estimator.setListener(null));
+        assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.01f));
+        assertThrows(LockedException.class, () -> estimator.setThreshold(0.5));
+        final var qualityScores = new double[EuclideanTransformation2DRobustEstimator.MINIMUM_SIZE];
+        assertThrows(LockedException.class, () -> estimator.setQualityScores(qualityScores));
+        assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+        assertThrows(LockedException.class, () -> estimator.setMaxIterations(10));
+        assertThrows(LockedException.class, estimator::estimate);
+        assertThrows(LockedException.class, () -> estimator.setWeakMinimumSizeAllowed(true));
         assertTrue(estimator.isLocked());
     }
 }

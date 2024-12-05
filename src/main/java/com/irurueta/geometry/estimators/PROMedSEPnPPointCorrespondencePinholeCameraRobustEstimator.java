@@ -76,20 +76,20 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Quality scores corresponding to each pair of matched points.
      * The larger the score value the better the quality of the matching.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Constructor.
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -108,7 +108,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             final List<Point3D> points3D, final List<Point2D> points2D) {
         super(points3D, points2D);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -120,7 +120,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             final PinholeCameraRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -140,10 +140,10 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (6 correspondences).
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D) {
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D) {
         super(listener, points3D, points2D);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -154,10 +154,9 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final double[] qualityScores) {
+    public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(final double[] qualityScores) {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -177,15 +176,14 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      *                                  6 correspondences.
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores) {
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores) {
         super(points3D, points2D);
 
         if (qualityScores.length != points3D.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -200,10 +198,9 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final PinholeCameraRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -226,16 +223,15 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      *                                  MIN_NUMBER_OF_POINT_CORRESPONDENCES.
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores) {
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores) {
         super(listener, points3D, points2D);
 
         if (qualityScores.length != points3D.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -247,7 +243,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             final PinholeCameraIntrinsicParameters intrinsic) {
         super(intrinsic);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -269,7 +265,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
             final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
             final List<Point2D> points2D) {
         super(intrinsic, points3D, points2D);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -280,10 +276,9 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * @param intrinsic intrinsic parameters of camera to be estimated.
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic) {
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic) {
         super(listener, intrinsic);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -308,7 +303,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
             final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
             final List<Point2D> points2D) {
         super(listener, intrinsic, points3D, points2D);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -323,7 +318,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
             final PinholeCameraIntrinsicParameters intrinsic, final double[] qualityScores) {
         super(intrinsic);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -352,7 +347,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -368,11 +363,10 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
             final double[] qualityScores) {
         super(listener, intrinsic);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -396,17 +390,15 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      *                                  MIN_NUMBER_OF_POINT_CORRESPONDENCES.
      */
     public PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores) {
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores) {
         super(listener, intrinsic, points3D, points2D);
 
         if (qualityScores.length != points3D.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -431,7 +423,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -465,7 +457,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -476,7 +468,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -508,8 +500,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mPoints3D.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == points3D.size();
     }
 
     /**
@@ -526,8 +517,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public PinholeCamera estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public PinholeCamera estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -535,191 +525,153 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
             throw new NotReadyException();
         }
 
-        // pinhole camera estimator using EPnP (Efficient Perspective-n-Point)
-        // algorithm
-        final EPnPPointCorrespondencePinholeCameraEstimator nonRobustEstimator =
-                new EPnPPointCorrespondencePinholeCameraEstimator(mIntrinsic);
+        // pinhole camera estimator using EPnP (Efficient Perspective-n-Point) algorithm
+        final var nonRobustEstimator = new EPnPPointCorrespondencePinholeCameraEstimator(intrinsic);
 
-        nonRobustEstimator.setPlanarConfigurationAllowed(
-                mPlanarConfigurationAllowed);
-        nonRobustEstimator.setNullspaceDimension2Allowed(
-                mNullspaceDimension2Allowed);
-        nonRobustEstimator.setNullspaceDimension3Allowed(
-                mNullspaceDimension3Allowed);
-        nonRobustEstimator.setPlanarThreshold(mPlanarThreshold);
+        nonRobustEstimator.setPlanarConfigurationAllowed(planarConfigurationAllowed);
+        nonRobustEstimator.setNullspaceDimension2Allowed(nullspaceDimension2Allowed);
+        nonRobustEstimator.setNullspaceDimension3Allowed(nullspaceDimension3Allowed);
+        nonRobustEstimator.setPlanarThreshold(planarThreshold);
 
         // suggestions
-        nonRobustEstimator.setSuggestSkewnessValueEnabled(
-                isSuggestSkewnessValueEnabled());
-        nonRobustEstimator.setSuggestedSkewnessValue(
-                getSuggestedSkewnessValue());
-        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(
-                isSuggestHorizontalFocalLengthEnabled());
-        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(
-                getSuggestedHorizontalFocalLengthValue());
-        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(
-                isSuggestVerticalFocalLengthEnabled());
-        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(
-                getSuggestedVerticalFocalLengthValue());
-        nonRobustEstimator.setSuggestAspectRatioEnabled(
-                isSuggestAspectRatioEnabled());
-        nonRobustEstimator.setSuggestedAspectRatioValue(
-                getSuggestedAspectRatioValue());
-        nonRobustEstimator.setSuggestPrincipalPointEnabled(
-                isSuggestPrincipalPointEnabled());
-        nonRobustEstimator.setSuggestedPrincipalPointValue(
-                getSuggestedPrincipalPointValue());
-        nonRobustEstimator.setSuggestRotationEnabled(
-                isSuggestRotationEnabled());
-        nonRobustEstimator.setSuggestedRotationValue(
-                getSuggestedRotationValue());
-        nonRobustEstimator.setSuggestCenterEnabled(
-                isSuggestCenterEnabled());
-        nonRobustEstimator.setSuggestedCenterValue(
-                getSuggestedCenterValue());
+        nonRobustEstimator.setSuggestSkewnessValueEnabled(isSuggestSkewnessValueEnabled());
+        nonRobustEstimator.setSuggestedSkewnessValue(getSuggestedSkewnessValue());
+        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(isSuggestHorizontalFocalLengthEnabled());
+        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(getSuggestedHorizontalFocalLengthValue());
+        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(isSuggestVerticalFocalLengthEnabled());
+        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(getSuggestedVerticalFocalLengthValue());
+        nonRobustEstimator.setSuggestAspectRatioEnabled(isSuggestAspectRatioEnabled());
+        nonRobustEstimator.setSuggestedAspectRatioValue(getSuggestedAspectRatioValue());
+        nonRobustEstimator.setSuggestPrincipalPointEnabled(isSuggestPrincipalPointEnabled());
+        nonRobustEstimator.setSuggestedPrincipalPointValue(getSuggestedPrincipalPointValue());
+        nonRobustEstimator.setSuggestRotationEnabled(isSuggestRotationEnabled());
+        nonRobustEstimator.setSuggestedRotationValue(getSuggestedRotationValue());
+        nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());
+        nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());
 
-        final PROMedSRobustEstimator<PinholeCamera> innerEstimator =
-                new PROMedSRobustEstimator<>(
-                        new PROMedSRobustEstimatorListener<PinholeCamera>() {
+        final var innerEstimator = new PROMedSRobustEstimator<>(new PROMedSRobustEstimatorListener<PinholeCamera>() {
 
-                            // point to be reused when computing residuals
-                            private final Point2D mTestPoint = Point2D.create(
-                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+            // point to be reused when computing residuals
+            private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                            // 3D points for a subset of samples
-                            private final List<Point3D> mSubset3D = new ArrayList<>();
+            // 3D points for a subset of samples
+            private final List<Point3D> subset3D = new ArrayList<>();
 
-                            // 2D points for a subset of samples
-                            private final List<Point2D> mSubset2D = new ArrayList<>();
+            // 2D points for a subset of samples
+            private final List<Point2D> subset2D = new ArrayList<>();
 
-                            @Override
-                            public double getThreshold() {
-                                return mStopThreshold;
-                            }
+            @Override
+            public double getThreshold() {
+                return stopThreshold;
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPoints3D.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return points3D.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return PointCorrespondencePinholeCameraRobustEstimator.
-                                        MIN_NUMBER_OF_POINT_CORRESPONDENCES;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return PointCorrespondencePinholeCameraRobustEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<PinholeCamera> solutions) {
-                                mSubset3D.clear();
-                                mSubset3D.add(mPoints3D.get(samplesIndices[0]));
-                                mSubset3D.add(mPoints3D.get(samplesIndices[1]));
-                                mSubset3D.add(mPoints3D.get(samplesIndices[2]));
-                                mSubset3D.add(mPoints3D.get(samplesIndices[3]));
-                                mSubset3D.add(mPoints3D.get(samplesIndices[4]));
-                                mSubset3D.add(mPoints3D.get(samplesIndices[5]));
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<PinholeCamera> solutions) {
+                subset3D.clear();
+                subset3D.add(points3D.get(samplesIndices[0]));
+                subset3D.add(points3D.get(samplesIndices[1]));
+                subset3D.add(points3D.get(samplesIndices[2]));
+                subset3D.add(points3D.get(samplesIndices[3]));
+                subset3D.add(points3D.get(samplesIndices[4]));
+                subset3D.add(points3D.get(samplesIndices[5]));
 
-                                mSubset2D.clear();
-                                mSubset2D.add(mPoints2D.get(samplesIndices[0]));
-                                mSubset2D.add(mPoints2D.get(samplesIndices[1]));
-                                mSubset2D.add(mPoints2D.get(samplesIndices[2]));
-                                mSubset2D.add(mPoints2D.get(samplesIndices[3]));
-                                mSubset2D.add(mPoints2D.get(samplesIndices[4]));
-                                mSubset2D.add(mPoints2D.get(samplesIndices[5]));
+                subset2D.clear();
+                subset2D.add(points2D.get(samplesIndices[0]));
+                subset2D.add(points2D.get(samplesIndices[1]));
+                subset2D.add(points2D.get(samplesIndices[2]));
+                subset2D.add(points2D.get(samplesIndices[3]));
+                subset2D.add(points2D.get(samplesIndices[4]));
+                subset2D.add(points2D.get(samplesIndices[5]));
 
-                                try {
-                                    nonRobustEstimator.setLists(mSubset3D, mSubset2D);
+                try {
+                    nonRobustEstimator.setLists(subset3D, subset2D);
 
-                                    final PinholeCamera cam = nonRobustEstimator.estimate();
-                                    solutions.add(cam);
-                                } catch (final Exception e) {
-                                    // if points configuration is degenerate, no solution is
-                                    // added
-                                }
-                            }
+                    final var cam = nonRobustEstimator.estimate();
+                    solutions.add(cam);
+                } catch (final Exception e) {
+                    // if points configuration is degenerate, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final PinholeCamera currentEstimation,
-                                                          final int i) {
-                                // pick i-th points
-                                final Point3D point3D = mPoints3D.get(i);
-                                final Point2D point2D = mPoints2D.get(i);
+            @Override
+            public double computeResidual(final PinholeCamera currentEstimation, final int i) {
+                // pick i-th points
+                final var point3D = points3D.get(i);
+                final var point2D = points2D.get(i);
 
-                                // project point3D into test point
-                                currentEstimation.project(point3D, mTestPoint);
+                // project point3D into test point
+                currentEstimation.project(point3D, testPoint);
 
-                                // compare test point and 2D point
-                                return mTestPoint.distanceTo(point2D);
-                            }
+                // compare test point and 2D point
+                return testPoint.distanceTo(point2D);
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                                        this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<PinholeCamera> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<PinholeCamera> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<PinholeCamera> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<PinholeCamera> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<PinholeCamera> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<PinholeCamera> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(
+                            PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<PinholeCamera> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.this,
-                                            progress);
-                                }
-                            }
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<PinholeCamera> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(
+                            PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator.this, progress);
+                }
+            }
 
-                            @Override
-                            public double[] getQualityScores() {
-                                return mQualityScores;
-                            }
-                        });
+            @Override
+            public double[] getQualityScores() {
+                return qualityScores;
+            }
+        });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final PinholeCamera result = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
-            return attemptRefine(result,
-                    nonRobustEstimator.getMaxSuggestionWeight());
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var result = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
+            return attemptRefine(result, nonRobustEstimator.getMaxSuggestionWeight());
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -746,8 +698,7 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        final PROMedSRobustEstimator.PROMedSInliersData inliersData =
-                (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
+        final var inliersData = (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
         return inliersData.getEstimatedThreshold();
     }
 
@@ -765,6 +716,6 @@ public class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator extends
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

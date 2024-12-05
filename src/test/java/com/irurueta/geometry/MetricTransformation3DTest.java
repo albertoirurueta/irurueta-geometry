@@ -18,17 +18,15 @@ package com.irurueta.geometry;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class MetricTransformation3DTest {
+class MetricTransformation3DTest {
 
     private static final int PINHOLE_CAMERA_ROWS = 3;
     private static final int PINHOLE_CAMERA_COLS = 4;
@@ -73,17 +71,16 @@ public class MetricTransformation3DTest {
     private static final int TIMES = 50;
 
     @Test
-    public void testConstructor() throws RotationException, CoincidentPointsException {
+    void testConstructor() throws RotationException, CoincidentPointsException {
         // Test empty constructor
-        MetricTransformation3D transformation = new MetricTransformation3D();
+        var transformation = new MetricTransformation3D();
 
         // check correctness
         assertEquals(0.0, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
         assertEquals(1.0, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
-        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
@@ -93,53 +90,38 @@ public class MetricTransformation3DTest {
         assertEquals(MetricTransformation2D.DEFAULT_SCALE, transformation.getScale(), 0.0);
 
         // Test constructor with rotation
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
         transformation = new MetricTransformation3D(rotation);
 
         // check correctness
-        double sign = Math.signum(
-                transformation.getRotation().getRotationAngle() * theta);
-        assertEquals(theta * sign, transformation.getRotation().getRotationAngle(),
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis[0] * sign, transformation.getRotation().getRotationAxis()[0],
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis[1] * sign, transformation.getRotation().getRotationAxis()[1],
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis[2] * sign, transformation.getRotation().getRotationAxis()[2],
-                ABSOLUTE_ERROR);
-        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        var sign = Math.signum(transformation.getRotation().getRotationAngle() * theta);
+        assertEquals(theta * sign, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(rotAxis[0] * sign, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(rotAxis[1] * sign, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(rotAxis[2] * sign, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslationX(), ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslationZ(), ABSOLUTE_ERROR);
-        assertEquals(MetricTransformation2D.DEFAULT_SCALE,
-                transformation.getScale(), 0.0);
+        assertEquals(MetricTransformation2D.DEFAULT_SCALE, transformation.getScale(), 0.0);
 
         // Force NullPointerException
-        transformation = null;
-        try {
-            transformation = new MetricTransformation3D((Rotation3D) null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        assertNull(transformation);
+        assertThrows(NullPointerException.class, () -> new MetricTransformation3D((Rotation3D) null));
 
         // Test constructor with translation
-        double[] translation =
-                new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         transformation = new MetricTransformation3D(translation);
@@ -149,8 +131,7 @@ public class MetricTransformation3DTest {
         assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
         assertEquals(1.0, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
-        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
         assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
         assertEquals(translation[2], transformation.getTranslation()[2], 0.0);
@@ -160,25 +141,14 @@ public class MetricTransformation3DTest {
         assertEquals(MetricTransformation2D.DEFAULT_SCALE, transformation.getScale(), 0.0);
 
         // Force NullPointerException
-        transformation = null;
-        try {
-            transformation = new MetricTransformation3D((double[]) null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> new MetricTransformation3D((double[]) null));
 
         // Force IllegalArgumentException
-        final double[] badTranslation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS + 1];
-        try {
-            transformation = new MetricTransformation3D(badTranslation);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(transformation);
+        final var badTranslation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS + 1];
+        assertThrows(IllegalArgumentException.class, () -> new MetricTransformation3D(badTranslation));
 
         // Test constructor with scale
-        double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         transformation = new MetricTransformation3D(scale);
 
         // check correctness
@@ -186,8 +156,7 @@ public class MetricTransformation3DTest {
         assertEquals(0.0, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
         assertEquals(1.0, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
-        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
@@ -201,16 +170,11 @@ public class MetricTransformation3DTest {
 
         // check correctness
         sign = Math.signum(transformation.getRotation().getRotationAngle() * theta);
-        assertEquals(theta * sign, transformation.getRotation().getRotationAngle(),
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis[0] * sign, transformation.getRotation().getRotationAxis()[0],
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis[1] * sign, transformation.getRotation().getRotationAxis()[1],
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis[2] * sign, transformation.getRotation().getRotationAxis()[2],
-                ABSOLUTE_ERROR);
-        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(theta * sign, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(rotAxis[0] * sign, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(rotAxis[1] * sign, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(rotAxis[2] * sign, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(translation[0], transformation.getTranslation()[0], 0.0);
         assertEquals(translation[1], transformation.getTranslation()[1], 0.0);
         assertEquals(translation[2], transformation.getTranslation()[2], 0.0);
@@ -220,80 +184,63 @@ public class MetricTransformation3DTest {
         assertEquals(scale, transformation.getScale(), 0.0);
 
         // Force NullPointerException
-        transformation = null;
-        try {
-            transformation = new MetricTransformation3D(null, translation, scale);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        try {
-            transformation = new MetricTransformation3D(rotation, null, scale);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        assertNull(transformation);
+        final var finalTranslation = translation;
+        final var finalScale = scale;
+        assertThrows(NullPointerException.class,
+                () -> new MetricTransformation3D(null, finalTranslation, finalScale));
+        assertThrows(NullPointerException.class,
+                () -> new MetricTransformation3D(rotation, null, finalScale));
 
         // Force IllegalArgumentException
-        try {
-            transformation = new MetricTransformation3D(rotation, badTranslation, scale);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(transformation);
+        assertThrows(IllegalArgumentException.class,
+                () -> new MetricTransformation3D(rotation, badTranslation, finalScale));
 
         // test constructor with corresponding points
-        final double roll = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                        MAX_ANGLE_DEGREES2));
-        final double pitch = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                        MAX_ANGLE_DEGREES2));
-        final double yaw = com.irurueta.geometry.Utils.convertToRadians(
-                randomizer.nextDouble(MIN_ANGLE_DEGREES2,
-                        MAX_ANGLE_DEGREES2));
+        final var roll = com.irurueta.geometry.Utils.convertToRadians(
+                randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
+        final var pitch = com.irurueta.geometry.Utils.convertToRadians(
+                randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
+        final var yaw = com.irurueta.geometry.Utils.convertToRadians(
+                randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
         q.normalize();
 
-        translation =
-                new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_TRANSLATION2, MAX_TRANSLATION2);
         scale = randomizer.nextDouble(MIN_SCALE2, MAX_SCALE2);
 
-        final InhomogeneousPoint3D inputPoint1 = new InhomogeneousPoint3D(
+        final var inputPoint1 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final InhomogeneousPoint3D inputPoint2 = new InhomogeneousPoint3D(
+        final var inputPoint2 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final InhomogeneousPoint3D inputPoint3 = new InhomogeneousPoint3D(
+        final var inputPoint3 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final InhomogeneousPoint3D inputPoint4 = new InhomogeneousPoint3D(
+        final var inputPoint4 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        transformation = new MetricTransformation3D(q, translation,
-                scale);
+        transformation = new MetricTransformation3D(q, translation, scale);
 
-        final Point3D outputPoint1 = transformation.transformAndReturnNew(inputPoint1);
-        final Point3D outputPoint2 = transformation.transformAndReturnNew(inputPoint2);
-        final Point3D outputPoint3 = transformation.transformAndReturnNew(inputPoint3);
-        final Point3D outputPoint4 = transformation.transformAndReturnNew(inputPoint4);
+        final var outputPoint1 = transformation.transformAndReturnNew(inputPoint1);
+        final var outputPoint2 = transformation.transformAndReturnNew(inputPoint2);
+        final var outputPoint3 = transformation.transformAndReturnNew(inputPoint3);
+        final var outputPoint4 = transformation.transformAndReturnNew(inputPoint4);
 
-        final MetricTransformation3D transformation2 =
-                new MetricTransformation3D(inputPoint1, inputPoint2,
-                        inputPoint3, inputPoint4, outputPoint1,
-                        outputPoint2, outputPoint3, outputPoint4);
+        final var transformation2 = new MetricTransformation3D(inputPoint1, inputPoint2, inputPoint3, inputPoint4,
+                outputPoint1, outputPoint2, outputPoint3, outputPoint4);
 
-        final Quaternion q2 = transformation2.getRotation().toQuaternion();
+        final var q2 = transformation2.getRotation().toQuaternion();
         q2.normalize();
 
-        final double[] translation2 = transformation2.getTranslation();
+        final var translation2 = transformation2.getTranslation();
 
         assertEquals(q.getA(), q2.getA(), ABSOLUTE_ERROR);
         assertEquals(q.getB(), q2.getB(), ABSOLUTE_ERROR);
@@ -304,20 +251,19 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testGetSetRotation() throws RotationException {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testGetSetRotation() throws RotationException {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize rotation axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
         // test default values
         assertEquals(0.0, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
@@ -329,91 +275,73 @@ public class MetricTransformation3DTest {
         transformation.setRotation(rotation);
 
         // check correctness
-        final double sign = Math.signum(
-                transformation.getRotation().getRotationAngle() * theta);
-        assertEquals(theta * sign, transformation.getRotation().getRotationAngle(),
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis[0] * sign, transformation.getRotation().getRotationAxis()[0],
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis[1] * sign, transformation.getRotation().getRotationAxis()[1],
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis[2] * sign, transformation.getRotation().getRotationAxis()[2],
-                ABSOLUTE_ERROR);
+        final var sign = Math.signum(transformation.getRotation().getRotationAngle() * theta);
+        assertEquals(theta * sign, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(rotAxis[0] * sign, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(rotAxis[1] * sign, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(rotAxis[2] * sign, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
 
         // Force NullPointerException
-        try {
-            transformation.setRotation(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> transformation.setRotation(null));
     }
 
     @Test
-    public void testAddRotation() throws RotationException {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testAddRotation() throws RotationException {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double theta2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var randomizer = new UniformRandomizer();
+        final var theta1 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var theta2 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final double[] rotAxis1 = new double[Rotation3D.INHOM_COORDS];
+        final var rotAxis1 = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double norm = Utils.normF(rotAxis1);
+        var norm = Utils.normF(rotAxis1);
         ArrayUtils.multiplyByScalar(rotAxis1, 1.0 / norm, rotAxis1);
 
-        final double[] rotAxis2 = new double[Rotation3D.INHOM_COORDS];
+        final var rotAxis2 = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         norm = Utils.normF(rotAxis2);
         ArrayUtils.multiplyByScalar(rotAxis2, 1.0 / norm, rotAxis2);
 
-        final Rotation3D rotation1 = Rotation3D.create(rotAxis1, theta1);
-        final Rotation3D rotation2 = Rotation3D.create(rotAxis2, theta2);
+        final var rotation1 = Rotation3D.create(rotAxis1, theta1);
+        final var rotation2 = Rotation3D.create(rotAxis2, theta2);
 
-        final Rotation3D combinedRotation = rotation1.combineAndReturnNew(rotation2);
+        final var combinedRotation = rotation1.combineAndReturnNew(rotation2);
 
         // set rotation1
         transformation.setRotation(rotation1);
 
         // check correctness
-        final double sign = Math.signum(
-                transformation.getRotation().getRotationAngle() * theta1);
-        assertEquals(theta1 * sign, transformation.getRotation().getRotationAngle(),
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis1[0] * sign, transformation.getRotation().getRotationAxis()[0],
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis1[1] * sign, transformation.getRotation().getRotationAxis()[1],
-                ABSOLUTE_ERROR);
-        assertEquals(rotAxis1[2] * sign, transformation.getRotation().getRotationAxis()[2],
-                ABSOLUTE_ERROR);
+        final var sign = Math.signum(transformation.getRotation().getRotationAngle() * theta1);
+        assertEquals(theta1 * sign, transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
+        assertEquals(rotAxis1[0] * sign, transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
+        assertEquals(rotAxis1[1] * sign, transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
+        assertEquals(rotAxis1[2] * sign, transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
 
         // add second rotation
         transformation.addRotation(rotation2);
 
         // check correctness
-        assertEquals(combinedRotation.getRotationAngle(),
-                transformation.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(combinedRotation.getRotationAxis()[0],
-                transformation.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
-        assertEquals(combinedRotation.getRotationAxis()[1],
-                transformation.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
-        assertEquals(combinedRotation.getRotationAxis()[2],
-                transformation.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(combinedRotation.getRotationAngle(), transformation.getRotation().getRotationAngle(),
+                ABSOLUTE_ERROR);
+        assertEquals(combinedRotation.getRotationAxis()[0], transformation.getRotation().getRotationAxis()[0],
+                ABSOLUTE_ERROR);
+        assertEquals(combinedRotation.getRotationAxis()[1], transformation.getRotation().getRotationAxis()[1],
+                ABSOLUTE_ERROR);
+        assertEquals(combinedRotation.getRotationAxis()[2], transformation.getRotation().getRotationAxis()[2],
+                ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testGetSetTranslation() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testGetSetTranslation() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var randomizer = new UniformRandomizer();
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
@@ -425,8 +353,7 @@ public class MetricTransformation3DTest {
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(translation[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
         assertEquals(translation[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
         assertEquals(translation[2], transformation.getTranslation()[2], ABSOLUTE_ERROR);
@@ -435,31 +362,22 @@ public class MetricTransformation3DTest {
         assertEquals(translation[2], transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        final double[] badTranslation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS + 1];
-
-        try {
-            transformation.setTranslation(badTranslation);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var badTranslation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS + 1];
+        assertThrows(IllegalArgumentException.class, () -> transformation.setTranslation(badTranslation));
     }
 
     @Test
-    public void testAddTranslation() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testAddTranslation() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] translation1 = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var randomizer = new UniformRandomizer();
+        final var translation1 = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double[] translation2 = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation2 = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
@@ -467,13 +385,11 @@ public class MetricTransformation3DTest {
         assertEquals(0.0, transformation.getTranslationY(), ABSOLUTE_ERROR);
 
         // set new value
-        final double[] translationCopy = Arrays.copyOf(translation1,
-                MetricTransformation3D.NUM_TRANSLATION_COORDS);
+        final var translationCopy = Arrays.copyOf(translation1, MetricTransformation3D.NUM_TRANSLATION_COORDS);
         transformation.setTranslation(translationCopy);
 
         // check correctness
-        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(translation1[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
         assertEquals(translation1[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
         assertEquals(translation1[2], transformation.getTranslation()[2], ABSOLUTE_ERROR);
@@ -485,38 +401,25 @@ public class MetricTransformation3DTest {
         transformation.addTranslation(translation2);
 
         // check correctness
-        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
-        assertEquals(translation1[0] + translation2[0],
-                transformation.getTranslation()[0], ABSOLUTE_ERROR);
-        assertEquals(translation1[1] + translation2[1],
-                transformation.getTranslation()[1], ABSOLUTE_ERROR);
-        assertEquals(translation1[2] + translation2[2],
-                transformation.getTranslation()[2], ABSOLUTE_ERROR);
-        assertEquals(translation1[0] + translation2[0],
-                transformation.getTranslationX(), ABSOLUTE_ERROR);
-        assertEquals(translation1[1] + translation2[1],
-                transformation.getTranslationY(), ABSOLUTE_ERROR);
-        assertEquals(translation1[2] + translation2[2],
-                transformation.getTranslationZ(), ABSOLUTE_ERROR);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
+        assertEquals(translation1[0] + translation2[0], transformation.getTranslation()[0], ABSOLUTE_ERROR);
+        assertEquals(translation1[1] + translation2[1], transformation.getTranslation()[1], ABSOLUTE_ERROR);
+        assertEquals(translation1[2] + translation2[2], transformation.getTranslation()[2], ABSOLUTE_ERROR);
+        assertEquals(translation1[0] + translation2[0], transformation.getTranslationX(), ABSOLUTE_ERROR);
+        assertEquals(translation1[1] + translation2[1], transformation.getTranslationY(), ABSOLUTE_ERROR);
+        assertEquals(translation1[2] + translation2[2], transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        final double[] badTranslation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS + 1];
-        try {
-            transformation.addTranslation(badTranslation);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var badTranslation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS + 1];
+        assertThrows(IllegalArgumentException.class, () -> transformation.addTranslation(badTranslation));
     }
 
     @Test
-    public void testGetSetTranslationX() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testGetSetTranslationX() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var translationX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
         assertEquals(0.0, transformation.getTranslationX(), 0.0);
@@ -529,12 +432,11 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testGetSetTranslationY() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testGetSetTranslationY() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var translationY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
         assertEquals(0.0, transformation.getTranslationY(), 0.0);
@@ -548,12 +450,11 @@ public class MetricTransformation3DTest {
 
 
     @Test
-    public void testGetSetTranslationZ() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testGetSetTranslationZ() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var translationZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
         assertEquals(0.0, transformation.getTranslationZ(), 0.0);
@@ -566,20 +467,16 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testSetTranslationCoordinates() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testSetTranslationCoordinates() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationZ = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var translationX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
-        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(MetricTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
@@ -591,8 +488,7 @@ public class MetricTransformation3DTest {
         transformation.setTranslation(translationX, translationY, translationZ);
 
         // check correctness
-        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
         assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
         assertEquals(translationZ, transformation.getTranslation()[2], ABSOLUTE_ERROR);
@@ -602,19 +498,17 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testGetSetTranslationPoint() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testGetSetTranslationPoint() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final InhomogeneousPoint3D translation = new InhomogeneousPoint3D(
-                translationX, translationY, translationZ);
+        final var randomizer = new UniformRandomizer();
+        final var translationX = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationY = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationZ = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translation = new InhomogeneousPoint3D(translationX, translationY, translationZ);
 
         // check default value
-        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(0.0, transformation.getTranslation()[0], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[1], ABSOLUTE_ERROR);
         assertEquals(0.0, transformation.getTranslation()[2], ABSOLUTE_ERROR);
@@ -626,8 +520,7 @@ public class MetricTransformation3DTest {
         transformation.setTranslation(translation);
 
         // check correctness
-        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS,
-                transformation.getTranslation().length);
+        assertEquals(AffineTransformation3D.NUM_TRANSLATION_COORDS, transformation.getTranslation().length);
         assertEquals(translationX, transformation.getTranslation()[0], ABSOLUTE_ERROR);
         assertEquals(translationY, transformation.getTranslation()[1], ABSOLUTE_ERROR);
         assertEquals(translationZ, transformation.getTranslation()[2], ABSOLUTE_ERROR);
@@ -635,8 +528,8 @@ public class MetricTransformation3DTest {
         assertEquals(translationY, transformation.getTranslationY(), ABSOLUTE_ERROR);
         assertEquals(translationZ, transformation.getTranslationZ(), ABSOLUTE_ERROR);
 
-        final Point3D translation2 = transformation.getTranslationPoint();
-        final Point3D translation3 = Point3D.create();
+        final var translation2 = transformation.getTranslationPoint();
+        final var translation3 = Point3D.create();
         transformation.getTranslationPoint(translation3);
 
         // check correctness
@@ -645,12 +538,12 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testAddTranslationX() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testAddTranslationX() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
         assertEquals(0.0, transformation.getTranslationX(), 0.0);
@@ -669,14 +562,12 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testAddTranslationY() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testAddTranslationY() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
         assertEquals(0.0, transformation.getTranslationY(), 0.0);
@@ -695,12 +586,12 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testAddTranslationZ() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testAddTranslationZ() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
         assertEquals(0.0, transformation.getTranslationZ(), 0.0);
@@ -719,16 +610,16 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testAddTranslationCoordinates() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testAddTranslationCoordinates() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
         assertEquals(0.0, transformation.getTranslationX(), 0.0);
@@ -748,16 +639,16 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testAddTranslationPoint() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testAddTranslationPoint() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var translationX1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationX2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationY1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationY2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationZ1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var translationZ2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
         assertEquals(0.0, transformation.getTranslationX(), 0.0);
@@ -768,7 +659,7 @@ public class MetricTransformation3DTest {
         transformation.setTranslation(translationX1, translationY1, translationZ1);
 
         // add translation
-        final Point3D translation2 = new InhomogeneousPoint3D(translationX2, translationY2, translationZ2);
+        final var translation2 = new InhomogeneousPoint3D(translationX2, translationY2, translationZ2);
         transformation.addTranslation(translation2);
 
         // check correctness
@@ -778,11 +669,11 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testGetSetScale() {
-        final MetricTransformation3D transformation = new MetricTransformation3D();
+    void testGetSetScale() {
+        final var transformation = new MetricTransformation3D();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // check default value
         assertEquals(MetricTransformation3D.DEFAULT_SCALE, transformation.getScale(), 0.0);
@@ -795,83 +686,67 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testAsMatrix() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+    void testAsMatrix() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final Matrix m = Matrix.identity(4, 4);
+        final var m = Matrix.identity(4, 4);
         m.setSubmatrix(0, 0, 2, 2,
-                rotation.asInhomogeneousMatrix().multiplyByScalarAndReturnNew(
-                        scale));
+                rotation.asInhomogeneousMatrix().multiplyByScalarAndReturnNew(scale));
         m.setSubmatrix(0, 3, 2, 3, translation);
 
-        final Matrix transMatrix1 = transformation.asMatrix();
-        final Matrix transMatrix2 = new Matrix(MetricTransformation3D.HOM_COORDS,
-                MetricTransformation3D.HOM_COORDS);
+        final var transMatrix1 = transformation.asMatrix();
+        final var transMatrix2 = new Matrix(MetricTransformation3D.HOM_COORDS, MetricTransformation3D.HOM_COORDS);
         transformation.asMatrix(transMatrix2);
 
         assertTrue(transMatrix1.equals(m, ABSOLUTE_ERROR));
         assertTrue(transMatrix2.equals(m, ABSOLUTE_ERROR));
 
-        final Matrix t = new Matrix(MetricTransformation3D.HOM_COORDS + 1,
-                MetricTransformation3D.HOM_COORDS);
-        try {
-            transformation.asMatrix(t);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var t = new Matrix(MetricTransformation3D.HOM_COORDS + 1, MetricTransformation3D.HOM_COORDS);
+        assertThrows(IllegalArgumentException.class, () -> transformation.asMatrix(t));
     }
 
     @Test
-    public void testTransformPoint() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] coords = new double[
-                Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+    void testTransformPoint() {
+        final var randomizer = new UniformRandomizer();
+        final var coords = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
         randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Point3D point = Point3D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+        final var point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Point3D expectedPoint = Point3D.create();
+        final var expectedPoint = Point3D.create();
         transformPoint(point, expectedPoint, rotation, translation, scale);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final Point3D outPoint1 = transformation.transformAndReturnNew(point);
-        final Point3D outPoint2 = Point3D.create();
+        final var outPoint1 = transformation.transformAndReturnNew(point);
+        final var outPoint2 = Point3D.create();
         transformation.transform(point, outPoint2);
 
         // check correctness
@@ -886,58 +761,52 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformPoints() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+    void testTransformPoints() {
+        final var randomizer = new UniformRandomizer();
+        final var size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final ArrayList<Point3D> inputPoints = new ArrayList<>(size);
-        final ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            final double[] coords = new double[
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var inputPoints = new ArrayList<Point3D>(size);
+        final var expectedPoints = new ArrayList<Point3D>(size);
+        for (var i = 0; i < size; i++) {
+            final var coords = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
             randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Point3D point = Point3D.create(
-                    CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+            final var point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
             inputPoints.add(point);
 
-            final Point3D expectedPoint = Point3D.create();
+            final var expectedPoint = Point3D.create();
             transformPoint(point, expectedPoint, rotation, translation, scale);
 
             expectedPoints.add(expectedPoint);
         }
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final List<Point3D> outPoints1 = transformation.transformPointsAndReturnNew(inputPoints);
-        final List<Point3D> outPoints2 = new ArrayList<>();
+        final var outPoints1 = transformation.transformPointsAndReturnNew(inputPoints);
+        final var outPoints2 = new ArrayList<Point3D>();
         transformation.transformPoints(inputPoints, outPoints2);
 
         // check correctness
         assertEquals(outPoints1.size(), inputPoints.size());
         assertEquals(outPoints2.size(), inputPoints.size());
-        for (int i = 0; i < size; i++) {
-            final Point3D expectedPoint = expectedPoints.get(i);
+        for (var i = 0; i < size; i++) {
+            final var expectedPoint = expectedPoints.get(i);
 
-            final Point3D outPoint1 = outPoints1.get(i);
-            final Point3D outPoint2 = outPoints2.get(i);
+            final var outPoint1 = outPoints1.get(i);
+            final var outPoint2 = outPoints2.get(i);
 
             assertTrue(outPoint1.equals(expectedPoint, ABSOLUTE_ERROR));
             assertTrue(outPoint2.equals(expectedPoint, ABSOLUTE_ERROR));
@@ -945,107 +814,96 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformAndOverwritePoints() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+    void testTransformAndOverwritePoints() {
+        final var randomizer = new UniformRandomizer();
+        final var size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final ArrayList<Point3D> inputPoints = new ArrayList<>(size);
-        final ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            final double[] coords = new double[
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var inputPoints = new ArrayList<Point3D>(size);
+        final var expectedPoints = new ArrayList<Point3D>(size);
+        for (var i = 0; i < size; i++) {
+            final var coords = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
             randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Point3D point = Point3D.create(
-                    CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+            final var point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
             inputPoints.add(point);
 
-            final Point3D expectedPoint = Point3D.create();
+            final var expectedPoint = Point3D.create();
             transformPoint(point, expectedPoint, rotation, translation, scale);
 
             expectedPoints.add(expectedPoint);
         }
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
         transformation.transformAndOverwritePoints(inputPoints);
 
         // check correctness
         assertEquals(inputPoints.size(), size);
-        for (int i = 0; i < size; i++) {
-            final Point3D expectedPoint = expectedPoints.get(i);
+        for (var i = 0; i < size; i++) {
+            final var expectedPoint = expectedPoints.get(i);
 
-            final Point3D point = inputPoints.get(i);
+            final var point = inputPoints.get(i);
 
             assertTrue(point.equals(expectedPoint, ABSOLUTE_ERROR));
         }
     }
 
     @Test
-    public void testTransformQuadric() throws NonSymmetricMatrixException,
-            AlgebraException {
+    void testTransformQuadric() throws NonSymmetricMatrixException, AlgebraException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // create input conic
         // Constructor with params
-        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quadric quadric = new Quadric(a, b, c, d, e, f, g, h, i, j);
+        final var quadric = new Quadric(a, b, c, d, e, f, g, h, i, j);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
         // compute expected value
-        final Quadric expectedQuadric = new Quadric();
+        final var expectedQuadric = new Quadric();
         transformQuadric(quadric, expectedQuadric, transformation);
         expectedQuadric.normalize();
 
         // make transformation
-        final Quadric outQuadric1 = transformation.transformAndReturnNew(quadric);
-        final Quadric outQuadric2 = new Quadric();
+        final var outQuadric1 = transformation.transformAndReturnNew(quadric);
+        final var outQuadric2 = new Quadric();
         transformation.transform(quadric, outQuadric2);
 
         // check correctness
@@ -1092,8 +950,7 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformQuadricAndPoints() throws AlgebraException,
-            GeometryException {
+    void testTransformQuadricAndPoints() throws AlgebraException, GeometryException {
 
         // create Quadric from 9 points
         Quadric quadric = null;
@@ -1107,8 +964,7 @@ public class MetricTransformation3DTest {
         Point3D point8;
         Point3D point9;
         do {
-            final Matrix m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
                     m.getElementAt(0, 1), m.getElementAt(0, 2), 1.0);
@@ -1130,9 +986,9 @@ public class MetricTransformation3DTest {
                     m.getElementAt(8, 1), m.getElementAt(8, 2), 1.0);
 
             try {
-                quadric = new Quadric(point1, point2, point3, point4, point5, point6,
-                        point7, point8, point9);
+                quadric = new Quadric(point1, point2, point3, point4, point5, point6, point7, point8, point9);
             } catch (final GeometryException ignore) {
+                // if points are not valid, ignore and continue
             }
 
         } while (quadric == null);
@@ -1149,43 +1005,39 @@ public class MetricTransformation3DTest {
         assertTrue(quadric.isLocus(point9, ABSOLUTE_ERROR));
 
         // create transformation
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
         // compute expected value
-        final Quadric expectedQuadric = new Quadric();
+        final var expectedQuadric = new Quadric();
         transformQuadric(quadric, expectedQuadric, transformation);
         expectedQuadric.normalize();
 
         // transform quadric and points
-        final Quadric outQuadric = transformation.transformAndReturnNew(quadric);
-        final Point3D outPoint1 = transformation.transformAndReturnNew(point1);
-        final Point3D outPoint2 = transformation.transformAndReturnNew(point2);
-        final Point3D outPoint3 = transformation.transformAndReturnNew(point3);
-        final Point3D outPoint4 = transformation.transformAndReturnNew(point4);
-        final Point3D outPoint5 = transformation.transformAndReturnNew(point5);
-        final Point3D outPoint6 = transformation.transformAndReturnNew(point6);
-        final Point3D outPoint7 = transformation.transformAndReturnNew(point7);
-        final Point3D outPoint8 = transformation.transformAndReturnNew(point8);
-        final Point3D outPoint9 = transformation.transformAndReturnNew(point9);
+        final var outQuadric = transformation.transformAndReturnNew(quadric);
+        final var outPoint1 = transformation.transformAndReturnNew(point1);
+        final var outPoint2 = transformation.transformAndReturnNew(point2);
+        final var outPoint3 = transformation.transformAndReturnNew(point3);
+        final var outPoint4 = transformation.transformAndReturnNew(point4);
+        final var outPoint5 = transformation.transformAndReturnNew(point5);
+        final var outPoint6 = transformation.transformAndReturnNew(point6);
+        final var outPoint7 = transformation.transformAndReturnNew(point7);
+        final var outPoint8 = transformation.transformAndReturnNew(point8);
+        final var outPoint9 = transformation.transformAndReturnNew(point9);
 
         // check that transformed points still belong to transformed quadric
         assertTrue(outQuadric.isLocus(outPoint1, ABSOLUTE_ERROR));
@@ -1214,53 +1066,48 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void tesTransformDualQuadric() throws NonSymmetricMatrixException,
-            AlgebraException {
+    void tesTransformDualQuadric() throws NonSymmetricMatrixException, AlgebraException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // create input conic
         // Constructor with params
-        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final DualQuadric dualQuadric = new DualQuadric(a, b, c, d, e, f, g, h, i, j);
+        final var dualQuadric = new DualQuadric(a, b, c, d, e, f, g, h, i, j);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
         // compute expected value
-        final DualQuadric expectedDualQuadric = new DualQuadric();
+        final var expectedDualQuadric = new DualQuadric();
         transformDualQuadric(dualQuadric, expectedDualQuadric, transformation);
         expectedDualQuadric.normalize();
 
         // make transformation
-        final DualQuadric outDualQuadric1 = transformation.transformAndReturnNew(dualQuadric);
-        final DualQuadric outDualQuadric2 = new DualQuadric();
+        final var outDualQuadric1 = transformation.transformAndReturnNew(dualQuadric);
+        final var outDualQuadric2 = new DualQuadric();
         transformation.transform(dualQuadric, outDualQuadric2);
 
         // check correctness
@@ -1307,8 +1154,7 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformDualQuadricAndPlanes() throws AlgebraException,
-            GeometryException {
+    void testTransformDualQuadricAndPlanes() throws AlgebraException, GeometryException {
 
         // create dual quadric from 9 planes
         DualQuadric dualQuadric = null;
@@ -1322,8 +1168,7 @@ public class MetricTransformation3DTest {
         Plane plane8;
         Plane plane9;
         do {
-            final Matrix m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            final var m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             plane1 = new Plane(m.getElementAt(0, 0), m.getElementAt(0, 1),
                     m.getElementAt(0, 2), m.getElementAt(0, 3));
@@ -1355,9 +1200,9 @@ public class MetricTransformation3DTest {
             plane9.normalize();
 
             try {
-                dualQuadric = new DualQuadric(plane1, plane2, plane3, plane4, plane5,
-                        plane6, plane7, plane8, plane9);
+                dualQuadric = new DualQuadric(plane1, plane2, plane3, plane4, plane5, plane6, plane7, plane8, plane9);
             } catch (final GeometryException ignore) {
+                // if planes are not valid, ignore and continue
             }
 
         } while (dualQuadric == null);
@@ -1374,43 +1219,39 @@ public class MetricTransformation3DTest {
         assertTrue(dualQuadric.isLocus(plane9, ABSOLUTE_ERROR));
 
         // create transformation
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
         // compute expected value
-        final DualQuadric expectedDualQuadric = new DualQuadric();
+        final var expectedDualQuadric = new DualQuadric();
         transformDualQuadric(dualQuadric, expectedDualQuadric, transformation);
         expectedDualQuadric.normalize();
 
         // transform dual quadric and planes
-        final DualQuadric outDualQuadric = transformation.transformAndReturnNew(dualQuadric);
-        final Plane outPlane1 = transformation.transformAndReturnNew(plane1);
-        final Plane outPlane2 = transformation.transformAndReturnNew(plane2);
-        final Plane outPlane3 = transformation.transformAndReturnNew(plane3);
-        final Plane outPlane4 = transformation.transformAndReturnNew(plane4);
-        final Plane outPlane5 = transformation.transformAndReturnNew(plane5);
-        final Plane outPlane6 = transformation.transformAndReturnNew(plane6);
-        final Plane outPlane7 = transformation.transformAndReturnNew(plane7);
-        final Plane outPlane8 = transformation.transformAndReturnNew(plane8);
-        final Plane outPlane9 = transformation.transformAndReturnNew(plane9);
+        final var outDualQuadric = transformation.transformAndReturnNew(dualQuadric);
+        final var outPlane1 = transformation.transformAndReturnNew(plane1);
+        final var outPlane2 = transformation.transformAndReturnNew(plane2);
+        final var outPlane3 = transformation.transformAndReturnNew(plane3);
+        final var outPlane4 = transformation.transformAndReturnNew(plane4);
+        final var outPlane5 = transformation.transformAndReturnNew(plane5);
+        final var outPlane6 = transformation.transformAndReturnNew(plane6);
+        final var outPlane7 = transformation.transformAndReturnNew(plane7);
+        final var outPlane8 = transformation.transformAndReturnNew(plane8);
+        final var outPlane9 = transformation.transformAndReturnNew(plane9);
 
         // check that transformed planes still belong to transformed dual quadric
         assertTrue(outDualQuadric.isLocus(outPlane1, ABSOLUTE_ERROR));
@@ -1439,38 +1280,35 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformPlane() throws AlgebraException {
+    void testTransformPlane() throws AlgebraException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] params = new double[Plane.PLANE_NUMBER_PARAMS];
+        final var randomizer = new UniformRandomizer();
+        final var params = new double[Plane.PLANE_NUMBER_PARAMS];
         randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Plane plane = new Plane(params);
+        final var plane = new Plane(params);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final Plane expectedPlane = new Plane();
+        final var expectedPlane = new Plane();
         transformPlane(plane, expectedPlane, transformation);
         expectedPlane.normalize();
 
-        final Plane outPlane1 = transformation.transformAndReturnNew(plane);
-        final Plane outPlane2 = new Plane();
+        final var outPlane1 = transformation.transformAndReturnNew(plane);
+        final var outPlane2 = new Plane();
         transformation.transform(plane, outPlane2);
 
         outPlane1.normalize();
@@ -1499,32 +1337,29 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformPlaneAndPoints() throws AlgebraException,
-            GeometryException {
+    void testTransformPlaneAndPoints() throws AlgebraException, GeometryException {
 
         // create plane from 3 points
-        Matrix m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+        var m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(m);
         decomposer.decompose();
 
         // ensure we create a matrix with 3 non-linear dependent rows
         while (decomposer.getRank() < 3) {
-            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(3, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             decomposer.setInputMatrix(m);
             decomposer.decompose();
         }
 
-        final Point3D point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
+        final var point1 = new HomogeneousPoint3D(m.getElementAt(0, 0),
                 m.getElementAt(0, 1),
                 m.getElementAt(0, 2),
                 m.getElementAt(0, 3));
-        final Point3D point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
+        final var point2 = new HomogeneousPoint3D(m.getElementAt(1, 0),
                 m.getElementAt(1, 1),
                 m.getElementAt(1, 2),
                 m.getElementAt(1, 3));
-        final Point3D point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
+        final var point3 = new HomogeneousPoint3D(m.getElementAt(2, 0),
                 m.getElementAt(2, 1),
                 m.getElementAt(2, 2),
                 m.getElementAt(2, 3));
@@ -1533,7 +1368,7 @@ public class MetricTransformation3DTest {
         point2.normalize();
         point3.normalize();
 
-        final Plane plane = new Plane(point1, point2, point3);
+        final var plane = new Plane(point1, point2, point3);
 
         // check that points belong to the plane
         assertTrue(plane.isLocus(point1, ABSOLUTE_ERROR));
@@ -1541,36 +1376,32 @@ public class MetricTransformation3DTest {
         assertTrue(plane.isLocus(point3, ABSOLUTE_ERROR));
 
         // create transformation
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final Plane expectedPlane = new Plane();
+        final var expectedPlane = new Plane();
         transformPlane(plane, expectedPlane, transformation);
         expectedPlane.normalize();
 
         // transform plane and points
-        final Plane outPlane = transformation.transformAndReturnNew(plane);
-        final Point3D outPoint1 = transformation.transformAndReturnNew(point1);
-        final Point3D outPoint2 = transformation.transformAndReturnNew(point1);
-        final Point3D outPoint3 = transformation.transformAndReturnNew(point1);
+        final var outPlane = transformation.transformAndReturnNew(plane);
+        final var outPoint1 = transformation.transformAndReturnNew(point1);
+        final var outPoint2 = transformation.transformAndReturnNew(point1);
+        final var outPoint3 = transformation.transformAndReturnNew(point1);
 
         // check that transformed points still belong to transformed plane
         assertTrue(outPlane.isLocus(outPoint1));
@@ -1587,55 +1418,52 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformPlanes() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+    void testTransformPlanes() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final ArrayList<Plane> inputPlanes = new ArrayList<>(size);
-        final ArrayList<Plane> expectedPlanes = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            final double[] params = new double[Plane.PLANE_NUMBER_PARAMS];
+        final var inputPlanes = new ArrayList<Plane>(size);
+        final var expectedPlanes = new ArrayList<Plane>(size);
+        for (var i = 0; i < size; i++) {
+            final var params = new double[Plane.PLANE_NUMBER_PARAMS];
             randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Plane plane = new Plane(params);
+            final var plane = new Plane(params);
             inputPlanes.add(plane);
 
-            final Plane expectedPlane = new Plane();
+            final var expectedPlane = new Plane();
             transformPlane(plane, expectedPlane, transformation);
 
             expectedPlanes.add(expectedPlane);
         }
 
-        final List<Plane> outPlanes1 = transformation.transformPlanesAndReturnNew(inputPlanes);
-        final List<Plane> outPlanes2 = new ArrayList<>();
+        final var outPlanes1 = transformation.transformPlanesAndReturnNew(inputPlanes);
+        final var outPlanes2 = new ArrayList<Plane>();
         transformation.transformPlanes(inputPlanes, outPlanes2);
 
         // check correctness
         assertEquals(outPlanes1.size(), inputPlanes.size());
         assertEquals(outPlanes2.size(), inputPlanes.size());
-        for (int i = 0; i < size; i++) {
-            final Plane expectedPlane = expectedPlanes.get(i);
+        for (var i = 0; i < size; i++) {
+            final var expectedPlane = expectedPlanes.get(i);
 
-            final Plane outPlane1 = outPlanes1.get(i);
-            final Plane outPlane2 = outPlanes2.get(i);
+            final var outPlane1 = outPlanes1.get(i);
+            final var outPlane2 = outPlanes2.get(i);
 
             expectedPlane.normalize();
             outPlane1.normalize();
@@ -1655,40 +1483,36 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformAndOverwritePlanes() throws AlgebraException {
+    void testTransformAndOverwritePlanes() throws AlgebraException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var randomizer = new UniformRandomizer();
+        final var size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final ArrayList<Plane> inputPlanes = new ArrayList<>(size);
-        final ArrayList<Plane> expectedPlanes = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            final double[] params = new double[Plane.PLANE_NUMBER_PARAMS];
+        final var inputPlanes = new ArrayList<Plane>(size);
+        final var expectedPlanes = new ArrayList<Plane>(size);
+        for (var i = 0; i < size; i++) {
+            final var params = new double[Plane.PLANE_NUMBER_PARAMS];
             randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Plane plane = new Plane(params);
+            final var plane = new Plane(params);
             inputPlanes.add(plane);
 
-            final Plane expectedPlane = new Plane();
+            final var expectedPlane = new Plane();
             transformPlane(plane, expectedPlane, transformation);
 
             expectedPlanes.add(expectedPlane);
@@ -1698,10 +1522,10 @@ public class MetricTransformation3DTest {
 
         // check correctness
         assertEquals(inputPlanes.size(), size);
-        for (int i = 0; i < size; i++) {
-            final Plane expectedPlane = expectedPlanes.get(i);
+        for (var i = 0; i < size; i++) {
+            final var expectedPlane = expectedPlanes.get(i);
 
-            final Plane plane = inputPlanes.get(i);
+            final var plane = inputPlanes.get(i);
 
             expectedPlane.normalize();
             plane.normalize();
@@ -1715,47 +1539,39 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformLine() throws CoincidentPointsException,
-            CoincidentPlanesException, AlgebraException {
+    void testTransformLine() throws CoincidentPointsException, CoincidentPlanesException, AlgebraException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] coords = new double[
-                Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var randomizer = new UniformRandomizer();
+        final var coords = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
         randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Point3D point1 = Point3D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+        final var point1 = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
 
         randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Point3D point2 = Point3D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+        final var point2 = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
 
-        final Line3D line = new Line3D(point1, point2);
+        final var line = new Line3D(point1, point2);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final Line3D expectedLine = new Line3D(point1, point2);
+        final var expectedLine = new Line3D(point1, point2);
         transformLine(line, expectedLine, transformation);
         expectedLine.normalize();
 
-        final Line3D outLine1 = transformation.transformAndReturnNew(line);
-        final Line3D outLine2 = new Line3D(point1, point2);
+        final var outLine1 = transformation.transformAndReturnNew(line);
+        final var outLine2 = new Line3D(point1, point2);
         transformation.transform(line, outLine2);
 
         outLine1.normalize();
@@ -1799,66 +1615,58 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformLines() throws CoincidentPlanesException,
-            CoincidentPointsException, AlgebraException {
+    void testTransformLines() throws CoincidentPlanesException, CoincidentPointsException, AlgebraException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var randomizer = new UniformRandomizer();
+        final var size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final ArrayList<Line3D> inputLines = new ArrayList<>(size);
-        final ArrayList<Line3D> expectedLines = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            final double[] coords = new double[
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var inputLines = new ArrayList<Line3D>(size);
+        final var expectedLines = new ArrayList<Line3D>(size);
+        for (var i = 0; i < size; i++) {
+            final var coords = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
             randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            final Point3D point1 = Point3D.create(
-                    CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+            final var point1 = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
 
             randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            final Point3D point2 = Point3D.create(
-                    CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+            final var point2 = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
 
-            final Line3D line = new Line3D(point1, point2);
+            final var line = new Line3D(point1, point2);
             inputLines.add(line);
 
-            final Line3D expectedLine = new Line3D(point1, point2);
+            final var expectedLine = new Line3D(point1, point2);
             transformLine(line, expectedLine, transformation);
 
             expectedLines.add(expectedLine);
         }
 
 
-        final List<Line3D> outLines1 = transformation.transformLines(inputLines);
-        final List<Line3D> outLines2 = new ArrayList<>();
+        final var outLines1 = transformation.transformLines(inputLines);
+        final var outLines2 = new ArrayList<Line3D>();
         transformation.transformLines(inputLines, outLines2);
 
         // check correctness
         assertEquals(outLines1.size(), inputLines.size());
         assertEquals(outLines2.size(), inputLines.size());
-        for (int i = 0; i < size; i++) {
-            final Line3D expectedLine = expectedLines.get(i);
+        for (var i = 0; i < size; i++) {
+            final var expectedLine = expectedLines.get(i);
 
-            final Line3D outLine1 = outLines1.get(i);
-            final Line3D outLine2 = outLines2.get(i);
+            final var outLine1 = outLines1.get(i);
+            final var outLine2 = outLines2.get(i);
 
             expectedLine.normalize();
             outLine1.normalize();
@@ -1888,47 +1696,41 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformAndOverwriteLines() throws CoincidentPointsException,
-            CoincidentPlanesException, AlgebraException {
+    void testTransformAndOverwriteLines() throws CoincidentPointsException, CoincidentPlanesException,
+            AlgebraException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var randomizer = new UniformRandomizer();
+        final var size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final ArrayList<Line3D> inputLines = new ArrayList<>(size);
-        final ArrayList<Line3D> expectedLines = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            final double[] coords = new double[
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var inputLines = new ArrayList<Line3D>(size);
+        final var expectedLines = new ArrayList<Line3D>(size);
+        for (var i = 0; i < size; i++) {
+            final var coords = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
             randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            final Point3D point1 = Point3D.create(
-                    CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+            final var point1 = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
 
             randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            final Point3D point2 = Point3D.create(
-                    CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+            final var point2 = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
 
-            final Line3D line = new Line3D(point1, point2);
+            final var line = new Line3D(point1, point2);
             inputLines.add(line);
 
-            final Line3D expectedLine = new Line3D(point1, point2);
+            final var expectedLine = new Line3D(point1, point2);
             transformLine(line, expectedLine, transformation);
 
             expectedLines.add(expectedLine);
@@ -1938,10 +1740,10 @@ public class MetricTransformation3DTest {
 
         // check correctness
         assertEquals(inputLines.size(), size);
-        for (int i = 0; i < size; i++) {
-            final Line3D expectedLine = expectedLines.get(i);
+        for (var i = 0; i < size; i++) {
+            final var expectedLine = expectedLines.get(i);
 
-            final Line3D line = inputLines.get(i);
+            final var line = inputLines.get(i);
 
             expectedLine.normalize();
             line.normalize();
@@ -1960,64 +1762,56 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformPolygon() throws NotEnoughVerticesException {
+    void testTransformPolygon() throws NotEnoughVerticesException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var randomizer = new UniformRandomizer();
+        final var size = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         //normalize axis
-        double norm = Utils.normF(rotAxis);
+        var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final ArrayList<Point3D> inputPoints = new ArrayList<>(size);
-        final ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            final double[] coords = new double[
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var inputPoints = new ArrayList<Point3D>(size);
+        final var expectedPoints = new ArrayList<Point3D>(size);
+        for (var i = 0; i < size; i++) {
+            final var coords = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
             randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Point3D point = Point3D.create(
-                    CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+            final var point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
             inputPoints.add(point);
 
-            final Point3D expectedPoint = Point3D.create();
+            final var expectedPoint = Point3D.create();
             transformPoint(point, expectedPoint, rotation, translation, scale);
 
             expectedPoints.add(expectedPoint);
         }
 
-        final Polygon3D inputPolygon = new Polygon3D(inputPoints);
-        final Polygon3D expectedPolygon = new Polygon3D(expectedPoints);
+        final var inputPolygon = new Polygon3D(inputPoints);
+        final var expectedPolygon = new Polygon3D(expectedPoints);
 
-        final Polygon3D outPolygon1 = transformation.transformAndReturnNew(inputPolygon);
-        final Polygon3D outPolygon2 = new Polygon3D(inputPoints);
+        final var outPolygon1 = transformation.transformAndReturnNew(inputPolygon);
+        final var outPolygon2 = new Polygon3D(inputPoints);
         transformation.transform(inputPolygon, outPolygon2);
 
         // check correctness
-        assertEquals(outPolygon1.getVertices().size(),
-                inputPolygon.getVertices().size());
-        assertEquals(outPolygon2.getVertices().size(),
-                inputPolygon.getVertices().size());
-        for (int i = 0; i < size; i++) {
-            final Point3D expectedPoint = expectedPolygon.getVertices().get(i);
+        assertEquals(outPolygon1.getVertices().size(), inputPolygon.getVertices().size());
+        assertEquals(outPolygon2.getVertices().size(), inputPolygon.getVertices().size());
+        for (var i = 0; i < size; i++) {
+            final var expectedPoint = expectedPolygon.getVertices().get(i);
 
-            final Point3D outPoint1 = outPolygon1.getVertices().get(i);
-            final Point3D outPoint2 = outPolygon2.getVertices().get(i);
+            final var outPoint1 = outPolygon1.getVertices().get(i);
+            final var outPoint2 = outPolygon2.getVertices().get(i);
 
             assertTrue(outPoint1.equals(expectedPoint, ABSOLUTE_ERROR));
             assertTrue(outPoint2.equals(expectedPoint, ABSOLUTE_ERROR));
@@ -2026,76 +1820,68 @@ public class MetricTransformation3DTest {
         transformation.transform(inputPolygon);
 
         // check correctness
-        assertEquals(expectedPolygon.getVertices().size(),
-                inputPolygon.getVertices().size());
-        for (int i = 0; i < size; i++) {
-            final Point3D expectedPoint = expectedPolygon.getVertices().get(i);
+        assertEquals(expectedPolygon.getVertices().size(), inputPolygon.getVertices().size());
+        for (var i = 0; i < size; i++) {
+            final var expectedPoint = expectedPolygon.getVertices().get(i);
 
-            final Point3D outPoint = outPolygon1.getVertices().get(i);
+            final var outPoint = outPolygon1.getVertices().get(i);
 
             assertTrue(outPoint.equals(expectedPoint, ABSOLUTE_ERROR));
         }
     }
 
     @Test
-    public void testTransformTriangle() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int size = Triangle2D.NUM_VERTICES;
+    void testTransformTriangle() {
+        final var randomizer = new UniformRandomizer();
+        final var size = Triangle2D.NUM_VERTICES;
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final ArrayList<Point3D> inputPoints = new ArrayList<>(size);
-        final ArrayList<Point3D> expectedPoints = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            final double[] coords = new double[
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var inputPoints = new ArrayList<Point3D>(size);
+        final var expectedPoints = new ArrayList<Point3D>(size);
+        for (var i = 0; i < size; i++) {
+            final var coords = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
             randomizer.fill(coords, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final Point3D point = Point3D.create(
-                    CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
+            final var point = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, coords);
             inputPoints.add(point);
 
-            final Point3D expectedPoint = Point3D.create();
+            final var expectedPoint = Point3D.create();
             transformPoint(point, expectedPoint, rotation, translation, scale);
 
             expectedPoints.add(expectedPoint);
         }
 
-        final Triangle3D inputTriangle = new Triangle3D(inputPoints.get(0),
-                inputPoints.get(1), inputPoints.get(2));
-        final Triangle3D expectedTriangle = new Triangle3D(expectedPoints.get(0),
-                expectedPoints.get(1), expectedPoints.get(2));
+        final var inputTriangle = new Triangle3D(inputPoints.get(0), inputPoints.get(1), inputPoints.get(2));
+        final var expectedTriangle = new Triangle3D(expectedPoints.get(0), expectedPoints.get(1),
+                expectedPoints.get(2));
 
-        final Triangle3D outTriangle1 = transformation.transformAndReturnNew(inputTriangle);
-        final Triangle3D outTriangle2 = new Triangle3D(
+        final var outTriangle1 = transformation.transformAndReturnNew(inputTriangle);
+        final var outTriangle2 = new Triangle3D(
                 new InhomogeneousPoint3D(inputPoints.get(0)),
                 new InhomogeneousPoint3D(inputPoints.get(1)),
                 new InhomogeneousPoint3D(inputPoints.get(2)));
         transformation.transform(inputTriangle, outTriangle2);
 
         // check correctness
-        for (int i = 0; i < size; i++) {
-            final Point3D expectedPoint = expectedTriangle.getVertices().get(i);
+        for (var i = 0; i < size; i++) {
+            final var expectedPoint = expectedTriangle.getVertices().get(i);
 
-            final Point3D outPoint1 = outTriangle1.getVertices().get(i);
-            final Point3D outPoint2 = outTriangle2.getVertices().get(i);
+            final var outPoint1 = outTriangle1.getVertices().get(i);
+            final var outPoint2 = outTriangle2.getVertices().get(i);
 
             assertTrue(outPoint1.equals(expectedPoint, ABSOLUTE_ERROR));
             assertTrue(outPoint2.equals(expectedPoint, ABSOLUTE_ERROR));
@@ -2104,67 +1890,61 @@ public class MetricTransformation3DTest {
         transformation.transform(inputTriangle);
 
         // check correctness
-        for (int i = 0; i < size; i++) {
-            final Point3D expectedPoint = expectedTriangle.getVertices().get(i);
+        for (var i = 0; i < size; i++) {
+            final var expectedPoint = expectedTriangle.getVertices().get(i);
 
-            final Point3D outPoint = inputTriangle.getVertices().get(i);
+            final var outPoint = inputTriangle.getVertices().get(i);
 
             assertTrue(outPoint.equals(expectedPoint, ABSOLUTE_ERROR));
         }
     }
 
     @Test
-    public void testTransformCamera() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testTransformCamera() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
 
         // generate random metric 3D point
-        final InhomogeneousPoint3D metricPoint = new InhomogeneousPoint3D(
+        final var metricPoint = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         // generate random camera
-        final Matrix cameraMatrix = Matrix.createWithUniformRandomValues(
-                PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final PinholeCamera camera = new PinholeCamera(cameraMatrix);
+        final var cameraMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS, PINHOLE_CAMERA_COLS,
+                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var camera = new PinholeCamera(cameraMatrix);
 
         // project metric point
-        final Point2D p1 = camera.project(metricPoint);
+        final var p1 = camera.project(metricPoint);
 
         // generate arbitrary transformation
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
         // transform metric point and camera
-        final Point3D affinePoint = transformation.transformAndReturnNew(metricPoint);
-        final PinholeCamera affineCamera1 = transformation.transformAndReturnNew(
-                camera);
-        final PinholeCamera affineCamera2 = new PinholeCamera();
+        final var affinePoint = transformation.transformAndReturnNew(metricPoint);
+        final var affineCamera1 = transformation.transformAndReturnNew(camera);
+        final var affineCamera2 = new PinholeCamera();
         transformation.transform(camera, affineCamera2);
 
         transformation.transform(camera);
 
         // project affine point with affine camera
-        final Point2D p2 = affineCamera1.project(affinePoint);
-        final Point2D p3 = affineCamera2.project(affinePoint);
-        final Point2D p4 = camera.project(affinePoint);
+        final var p2 = affineCamera1.project(affinePoint);
+        final var p3 = affineCamera2.project(affinePoint);
+        final var p4 = camera.project(affinePoint);
 
         // check that all projected points p1, p2, p3, p4 are still the same
         assertTrue(p1.equals(p2, ABSOLUTE_ERROR));
@@ -2173,123 +1953,111 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testTransformCameraAndPoints() throws AlgebraException,
-            GeometryException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testTransformCameraAndPoints() throws AlgebraException, GeometryException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
 
             // create intrinsic parameters
-            final double horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                    MAX_FOCAL_LENGTH);
-            final double verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                    MAX_FOCAL_LENGTH);
-            final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-            final double horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
-                    MAX_PRINCIPAL_POINT);
-            final double verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT,
-                    MAX_PRINCIPAL_POINT);
+            final var horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+            final var skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+            final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+            final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
 
-            final PinholeCameraIntrinsicParameters intrinsic =
-                    new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                            verticalFocalLength, horizontalPrincipalPoint,
-                            verticalPrincipalPoint, skewness);
+            final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                    horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
 
             // create rotation parameters
-            final double alphaEuler = com.irurueta.geometry.Utils.convertToRadians(
+            final var alphaEuler = com.irurueta.geometry.Utils.convertToRadians(
                     randomizer.nextDouble(MIN_ANGLE_DEGREES3, MAX_ANGLE_DEGREES3));
-            final double betaEuler = com.irurueta.geometry.Utils.convertToRadians(
+            final var betaEuler = com.irurueta.geometry.Utils.convertToRadians(
                     randomizer.nextDouble(MIN_ANGLE_DEGREES3, MAX_ANGLE_DEGREES3));
-            final double gammaEuler = com.irurueta.geometry.Utils.convertToRadians(
+            final var gammaEuler = com.irurueta.geometry.Utils.convertToRadians(
                     randomizer.nextDouble(MIN_ANGLE_DEGREES3, MAX_ANGLE_DEGREES3));
 
-            final MatrixRotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                    gammaEuler);
+            final var rotation = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
 
             // create camera center
-            final Point3D cameraCenter = new InhomogeneousPoint3D(
+            final var cameraCenter = new InhomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
 
-            final PinholeCamera camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
+            final var camera = new PinholeCamera(intrinsic, rotation, cameraCenter);
 
             // normalize camera to improve accuracy
             camera.normalize();
 
             // create 6 random point correspondences
-            final Point3D point3D1 = new InhomogeneousPoint3D(
+            final var point3D1 = new InhomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
-            final Point3D point3D2 = new InhomogeneousPoint3D(
+            final var point3D2 = new InhomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
-            final Point3D point3D3 = new InhomogeneousPoint3D(
+            final var point3D3 = new InhomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
-            final Point3D point3D4 = new InhomogeneousPoint3D(
+            final var point3D4 = new InhomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
-            final Point3D point3D5 = new InhomogeneousPoint3D(
+            final var point3D5 = new InhomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
-            final Point3D point3D6 = new InhomogeneousPoint3D(
+            final var point3D6 = new InhomogeneousPoint3D(
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_POINT_VALUE, MAX_RANDOM_POINT_VALUE));
 
-            final Point2D point2D1 = camera.project(point3D1);
-            final Point2D point2D2 = camera.project(point3D2);
-            final Point2D point2D3 = camera.project(point3D3);
-            final Point2D point2D4 = camera.project(point3D4);
-            final Point2D point2D5 = camera.project(point3D5);
-            final Point2D point2D6 = camera.project(point3D6);
+            final var point2D1 = camera.project(point3D1);
+            final var point2D2 = camera.project(point3D2);
+            final var point2D3 = camera.project(point3D3);
+            final var point2D4 = camera.project(point3D4);
+            final var point2D5 = camera.project(point3D5);
+            final var point2D6 = camera.project(point3D6);
 
             // create transformation
-            final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                    MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-            final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+            final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+            final var rotAxis = new double[Rotation3D.INHOM_COORDS];
             randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
             // normalize axis
-            final double norm = Utils.normF(rotAxis);
+            final var norm = Utils.normF(rotAxis);
             ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-            final Rotation3D rotation2 = Rotation3D.create(rotAxis, theta);
+            final var rotation2 = Rotation3D.create(rotAxis, theta);
 
-            final double[] translation = new double[
-                    MetricTransformation3D.NUM_TRANSLATION_COORDS];
+            final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
             randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-            final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                    MAX_RANDOM_VALUE);
+            final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-            final MetricTransformation3D transformation =
-                    new MetricTransformation3D(rotation2, translation, scale);
+            final var transformation = new MetricTransformation3D(rotation2, translation, scale);
 
             // transform camera and points
-            final PinholeCamera outCamera = transformation.transformAndReturnNew(camera);
-            final Point3D outPoint3D1 = transformation.transformAndReturnNew(point3D1);
-            final Point3D outPoint3D2 = transformation.transformAndReturnNew(point3D2);
-            final Point3D outPoint3D3 = transformation.transformAndReturnNew(point3D3);
-            final Point3D outPoint3D4 = transformation.transformAndReturnNew(point3D4);
-            final Point3D outPoint3D5 = transformation.transformAndReturnNew(point3D5);
-            final Point3D outPoint3D6 = transformation.transformAndReturnNew(point3D6);
+            final var outCamera = transformation.transformAndReturnNew(camera);
+            final var outPoint3D1 = transformation.transformAndReturnNew(point3D1);
+            final var outPoint3D2 = transformation.transformAndReturnNew(point3D2);
+            final var outPoint3D3 = transformation.transformAndReturnNew(point3D3);
+            final var outPoint3D4 = transformation.transformAndReturnNew(point3D4);
+            final var outPoint3D5 = transformation.transformAndReturnNew(point3D5);
+            final var outPoint3D6 = transformation.transformAndReturnNew(point3D6);
 
-            final Point2D outPoint2D1 = outCamera.project(outPoint3D1);
-            final Point2D outPoint2D2 = outCamera.project(outPoint3D2);
-            final Point2D outPoint2D3 = outCamera.project(outPoint3D3);
-            final Point2D outPoint2D4 = outCamera.project(outPoint3D4);
-            final Point2D outPoint2D5 = outCamera.project(outPoint3D5);
-            final Point2D outPoint2D6 = outCamera.project(outPoint3D6);
+            final var outPoint2D1 = outCamera.project(outPoint3D1);
+            final var outPoint2D2 = outCamera.project(outPoint3D2);
+            final var outPoint2D3 = outCamera.project(outPoint3D3);
+            final var outPoint2D4 = outCamera.project(outPoint3D4);
+            final var outPoint2D5 = outCamera.project(outPoint3D5);
+            final var outPoint2D6 = outCamera.project(outPoint3D6);
 
             outCamera.decompose();
 
-            final Point3D outCameraCenter = transformation.transformAndReturnNew(cameraCenter);
-            final Point3D outCameraCenter2 = outCamera.getCameraCenter();
+            final var outCameraCenter = transformation.transformAndReturnNew(cameraCenter);
+            final var outCameraCenter2 = outCamera.getCameraCenter();
 
             // check that projection of transformed points on transformed camera does
             // not change projected points
@@ -2314,58 +2082,48 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testInverse() throws WrongSizeException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+    void testInverse() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                MetricTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[MetricTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final Transformation3D invTransformation1 =
-                transformation.inverseAndReturnNew();
-        final MetricTransformation3D invTransformation2 =
-                new MetricTransformation3D();
+        final var invTransformation1 = transformation.inverseAndReturnNew();
+        final var invTransformation2 = new MetricTransformation3D();
         transformation.inverse(invTransformation2);
 
         // check that inverse transformation matrix is the inverse matrix of
         // current transformation
         assertTrue(invTransformation1.asMatrix().multiplyAndReturnNew(
-                transformation.asMatrix()).equals(Matrix.identity(
-                MetricTransformation3D.HOM_COORDS,
+                transformation.asMatrix()).equals(Matrix.identity(MetricTransformation3D.HOM_COORDS,
                 MetricTransformation3D.HOM_COORDS), ABSOLUTE_ERROR));
 
         assertTrue(invTransformation2.asMatrix().multiplyAndReturnNew(
-                transformation.asMatrix()).equals(Matrix.identity(
-                MetricTransformation3D.HOM_COORDS,
+                transformation.asMatrix()).equals(Matrix.identity(MetricTransformation3D.HOM_COORDS,
                 MetricTransformation3D.HOM_COORDS), ABSOLUTE_ERROR));
 
         // test transforming a random point by transformation and then by its
         // inverse to ensure it remains the same
-        final double[] params = new double[
-                Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+        final var params = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
         randomizer.fill(params, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Point3D inputPoint = Point3D.create(
-                CoordinatesType.INHOMOGENEOUS_COORDINATES, params);
+        final var inputPoint = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, params);
 
-        final Point3D transfPoint = transformation.transformAndReturnNew(inputPoint);
+        final var transfPoint = transformation.transformAndReturnNew(inputPoint);
 
-        final Point3D invTransfPoint1 = invTransformation1.transformAndReturnNew(transfPoint);
-        final Point3D invTransfPoint2 = invTransformation2.transformAndReturnNew(transfPoint);
+        final var invTransfPoint1 = invTransformation1.transformAndReturnNew(transfPoint);
+        final var invTransfPoint2 = invTransformation2.transformAndReturnNew(transfPoint);
 
         // check correctness
         assertTrue(inputPoint.equals(invTransfPoint1, ABSOLUTE_ERROR));
@@ -2373,132 +2131,114 @@ public class MetricTransformation3DTest {
 
         // try inverting original transformation
         transformation.inverse();
-        final Point3D outPoint = transformation.transformAndReturnNew(transfPoint);
+        final var outPoint = transformation.transformAndReturnNew(transfPoint);
 
         assertTrue(inputPoint.equals(outPoint, ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testToMetric() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+    void testToMetric() {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final Matrix expectedMatrix = transformation.asMatrix();
+        final var expectedMatrix = transformation.asMatrix();
 
-        final Matrix metricMatrix = transformation.toMetric().asMatrix();
+        final var metricMatrix = transformation.toMetric().asMatrix();
 
         // check correctness
         assertTrue(expectedMatrix.equals(metricMatrix, ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testToAffine() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+    void testToAffine() {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation = new double[
-                EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(rotation, translation, scale);
+        final var transformation = new MetricTransformation3D(rotation, translation, scale);
 
-        final Matrix expectedMatrix = transformation.asMatrix();
+        final var expectedMatrix = transformation.asMatrix();
 
-        final Matrix metricMatrix = transformation.toAffine().asMatrix();
+        final var metricMatrix = transformation.toAffine().asMatrix();
 
         // check correctness
         assertTrue(expectedMatrix.equals(metricMatrix, ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testCombine() throws WrongSizeException, RotationException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double theta2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testCombine() throws WrongSizeException, RotationException {
+        final var randomizer = new UniformRandomizer();
+        final var theta1 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var theta2 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final double[] rotAxis1 = new double[Rotation3D.INHOM_COORDS];
+        final var rotAxis1 = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        double norm = Utils.normF(rotAxis1);
+        var norm = Utils.normF(rotAxis1);
         ArrayUtils.multiplyByScalar(rotAxis1, 1.0 / norm, rotAxis1);
 
-        final double[] rotAxis2 = new double[Rotation3D.INHOM_COORDS];
+        final var rotAxis2 = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
         norm = Utils.normF(rotAxis2);
         ArrayUtils.multiplyByScalar(rotAxis2, 1.0 / norm, rotAxis2);
 
-        final Rotation3D rotation1 = Rotation3D.create(rotAxis1, theta1);
-        final Rotation3D rotation2 = Rotation3D.create(rotAxis2, theta2);
+        final var rotation1 = Rotation3D.create(rotAxis1, theta1);
+        final var rotation2 = Rotation3D.create(rotAxis2, theta2);
 
-        final double[] translation1 = new double[
-                EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation1 = new double[EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double[] translation2 = new double[
-                EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation2 = new double[EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation2, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double scale1 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double scale2 = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var scale1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var scale2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        MetricTransformation3D transformation1 =
-                new MetricTransformation3D(rotation1, translation1, scale1);
-        final MetricTransformation3D transformation2 =
-                new MetricTransformation3D(rotation2, translation2, scale2);
+        var transformation1 = new MetricTransformation3D(rotation1, translation1, scale1);
+        final var transformation2 = new MetricTransformation3D(rotation2, translation2, scale2);
 
-        Matrix expectedMatrix = transformation1.asMatrix().multiplyAndReturnNew(
-                transformation2.asMatrix());
+        var expectedMatrix = transformation1.asMatrix().multiplyAndReturnNew(transformation2.asMatrix());
 
-        Rotation3D expectedRotation = rotation1.combineAndReturnNew(rotation2);
-        Matrix rotM1 = rotation1.asInhomogeneousMatrix();
-        Matrix t2 = Matrix.newFromArray(translation2, true);
+        var expectedRotation = rotation1.combineAndReturnNew(rotation2);
+        var rotM1 = rotation1.asInhomogeneousMatrix();
+        var t2 = Matrix.newFromArray(translation2, true);
         rotM1.multiply(t2);
         rotM1.multiplyByScalar(scale1);
-        double[] expectedTranslation = rotM1.toArray();
+        var expectedTranslation = rotM1.toArray();
         ArrayUtils.sum(expectedTranslation, translation1, expectedTranslation);
-        double expectedScale = scale1 * scale2;
+        var expectedScale = scale1 * scale2;
 
         // combine and return result as a new transformation
-        MetricTransformation3D transformation3 =
-                transformation1.combineAndReturnNew(transformation2);
+        var transformation3 = transformation1.combineAndReturnNew(transformation2);
         // combine into transformation1
         transformation1.combine(transformation2);
 
         // both matrices m1 and m3 need to be equal
-        Matrix m3 = transformation3.asMatrix();
-        Matrix m1 = transformation1.asMatrix();
+        var m3 = transformation3.asMatrix();
+        var m1 = transformation1.asMatrix();
 
         // check correctness
         assertTrue(m1.equals(m3, ABSOLUTE_ERROR));
@@ -2509,23 +2249,23 @@ public class MetricTransformation3DTest {
         assertTrue(m3.equals(expectedMatrix, ABSOLUTE_ERROR));
 
         // check also correctness of rotation and translation
-        assertEquals(expectedRotation.getRotationAngle(),
-                transformation1.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[0],
-                transformation1.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[1],
-                transformation1.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[2],
-                transformation1.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAngle(), transformation1.getRotation().getRotationAngle(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[0], transformation1.getRotation().getRotationAxis()[0],
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[1], transformation1.getRotation().getRotationAxis()[1],
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[2], transformation1.getRotation().getRotationAxis()[2],
+                ABSOLUTE_ERROR);
 
-        assertEquals(expectedRotation.getRotationAngle(),
-                transformation3.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[0],
-                transformation3.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[1],
-                transformation3.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[2],
-                transformation3.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAngle(), transformation3.getRotation().getRotationAngle(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[0], transformation3.getRotation().getRotationAxis()[0],
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[1], transformation3.getRotation().getRotationAxis()[1],
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[2], transformation3.getRotation().getRotationAxis()[2],
+                ABSOLUTE_ERROR);
 
         assertArrayEquals(expectedTranslation, transformation1.getTranslation(), ABSOLUTE_ERROR);
         assertArrayEquals(expectedTranslation, transformation3.getTranslation(), ABSOLUTE_ERROR);
@@ -2535,11 +2275,9 @@ public class MetricTransformation3DTest {
 
         // now try combining with Euclidean transformations
         transformation1 = new MetricTransformation3D(rotation1, translation1, scale1);
-        final EuclideanTransformation3D euclideanTransformation =
-                new EuclideanTransformation3D(rotation2, translation2);
+        final var euclideanTransformation = new EuclideanTransformation3D(rotation2, translation2);
 
-        expectedMatrix = transformation1.asMatrix().multiplyAndReturnNew(
-                euclideanTransformation.asMatrix());
+        expectedMatrix = transformation1.asMatrix().multiplyAndReturnNew(euclideanTransformation.asMatrix());
         expectedRotation = rotation1.combineAndReturnNew(rotation2);
         rotM1 = rotation1.asInhomogeneousMatrix();
         t2 = Matrix.newFromArray(translation2, true);
@@ -2552,8 +2290,7 @@ public class MetricTransformation3DTest {
         expectedScale = scale1;
 
         // combine and return result as a new transformation
-        transformation3 =
-                transformation1.combineAndReturnNew(euclideanTransformation);
+        transformation3 = transformation1.combineAndReturnNew(euclideanTransformation);
         // combine into transformation1
         transformation1.combine(euclideanTransformation);
 
@@ -2570,23 +2307,23 @@ public class MetricTransformation3DTest {
         assertTrue(m3.equals(expectedMatrix, ABSOLUTE_ERROR));
 
         // check also correctness of rotation and translation
-        assertEquals(expectedRotation.getRotationAngle(),
-                transformation1.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[0],
-                transformation1.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[1],
-                transformation1.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[2],
-                transformation1.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAngle(), transformation1.getRotation().getRotationAngle(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[0], transformation1.getRotation().getRotationAxis()[0],
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[1], transformation1.getRotation().getRotationAxis()[1],
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[2], transformation1.getRotation().getRotationAxis()[2],
+                ABSOLUTE_ERROR);
 
-        assertEquals(expectedRotation.getRotationAngle(),
-                transformation3.getRotation().getRotationAngle(), ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[0],
-                transformation3.getRotation().getRotationAxis()[0], ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[1],
-                transformation3.getRotation().getRotationAxis()[1], ABSOLUTE_ERROR);
-        assertEquals(expectedRotation.getRotationAxis()[2],
-                transformation3.getRotation().getRotationAxis()[2], ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAngle(), transformation3.getRotation().getRotationAngle(),
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[0], transformation3.getRotation().getRotationAxis()[0],
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[1], transformation3.getRotation().getRotationAxis()[1],
+                ABSOLUTE_ERROR);
+        assertEquals(expectedRotation.getRotationAxis()[2], transformation3.getRotation().getRotationAxis()[2],
+                ABSOLUTE_ERROR);
 
         assertArrayEquals(expectedTranslation, transformation1.getTranslation(), ABSOLUTE_ERROR);
         assertArrayEquals(expectedTranslation, transformation3.getTranslation(), ABSOLUTE_ERROR);
@@ -2596,59 +2333,55 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testSetTransformationFromPoints()
-            throws CoincidentPointsException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll = com.irurueta.geometry.Utils.convertToRadians(
+    void testSetTransformationFromPoints() throws CoincidentPointsException {
+        final var randomizer = new UniformRandomizer();
+        final var roll = com.irurueta.geometry.Utils.convertToRadians(
                 randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
-        final double pitch = com.irurueta.geometry.Utils.convertToRadians(
+        final var pitch = com.irurueta.geometry.Utils.convertToRadians(
                 randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
-        final double yaw = com.irurueta.geometry.Utils.convertToRadians(
+        final var yaw = com.irurueta.geometry.Utils.convertToRadians(
                 randomizer.nextDouble(MIN_ANGLE_DEGREES2, MAX_ANGLE_DEGREES2));
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
         q.normalize();
 
-        final double[] translation =
-                new double[EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_TRANSLATION2, MAX_TRANSLATION2);
-        final double scale = randomizer.nextDouble(MIN_SCALE2, MAX_SCALE2);
+        final var scale = randomizer.nextDouble(MIN_SCALE2, MAX_SCALE2);
 
-        final MetricTransformation3D transformation =
-                new MetricTransformation3D(q, translation, scale);
+        final var transformation = new MetricTransformation3D(q, translation, scale);
 
         // test constructor with corresponding points
-        final InhomogeneousPoint3D inputPoint1 = new InhomogeneousPoint3D(
+        final var inputPoint1 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final InhomogeneousPoint3D inputPoint2 = new InhomogeneousPoint3D(
+        final var inputPoint2 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final InhomogeneousPoint3D inputPoint3 = new InhomogeneousPoint3D(
+        final var inputPoint3 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final InhomogeneousPoint3D inputPoint4 = new InhomogeneousPoint3D(
+        final var inputPoint4 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Point3D outputPoint1 = transformation.transformAndReturnNew(inputPoint1);
-        final Point3D outputPoint2 = transformation.transformAndReturnNew(inputPoint2);
-        final Point3D outputPoint3 = transformation.transformAndReturnNew(inputPoint3);
-        final Point3D outputPoint4 = transformation.transformAndReturnNew(inputPoint4);
+        final var outputPoint1 = transformation.transformAndReturnNew(inputPoint1);
+        final var outputPoint2 = transformation.transformAndReturnNew(inputPoint2);
+        final var outputPoint3 = transformation.transformAndReturnNew(inputPoint3);
+        final var outputPoint4 = transformation.transformAndReturnNew(inputPoint4);
 
-        final MetricTransformation3D transformation2 = new MetricTransformation3D();
-        transformation2.setTransformationFromPoints(inputPoint1,
-                inputPoint2, inputPoint3, inputPoint4, outputPoint1,
+        final var transformation2 = new MetricTransformation3D();
+        transformation2.setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, inputPoint4, outputPoint1,
                 outputPoint2, outputPoint3, outputPoint4);
 
-        final Quaternion q2 = transformation2.getRotation().toQuaternion();
+        final var q2 = transformation2.getRotation().toQuaternion();
         q2.normalize();
 
-        final double[] translation2 = transformation2.getTranslation();
+        final var translation2 = transformation2.getTranslation();
 
         assertEquals(q.getA(), q2.getA(), ABSOLUTE_ERROR);
         assertEquals(q.getB(), q2.getB(), ABSOLUTE_ERROR);
@@ -2659,26 +2392,23 @@ public class MetricTransformation3DTest {
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double[] rotAxis = new double[Rotation3D.INHOM_COORDS];
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var rotAxis = new double[Rotation3D.INHOM_COORDS];
         randomizer.fill(rotAxis, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         // normalize axis
-        final double norm = Utils.normF(rotAxis);
+        final var norm = Utils.normF(rotAxis);
         ArrayUtils.multiplyByScalar(rotAxis, 1.0 / norm, rotAxis);
 
-        final Rotation3D rotation = Rotation3D.create(rotAxis, theta);
+        final var rotation = Rotation3D.create(rotAxis, theta);
 
-        final double[] translation =
-                new double[EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
+        final var translation = new double[EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
         randomizer.fill(translation, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final double scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var scale = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final MetricTransformation3D transformation1 = new MetricTransformation3D(
-                rotation, translation, scale);
+        final var transformation1 = new MetricTransformation3D(rotation, translation, scale);
 
         // check
         assertSame(rotation, transformation1.getRotation());
@@ -2686,9 +2416,8 @@ public class MetricTransformation3DTest {
         assertEquals(scale, transformation1.getScale(), 0.0);
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(transformation1);
-        final MetricTransformation3D transformation2 =
-                SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(transformation1);
+        final var transformation2 = SerializationHelper.<MetricTransformation3D>deserialize(bytes);
 
         // check
         assertEquals(transformation1.getRotation(), transformation2.getRotation());
@@ -2699,8 +2428,8 @@ public class MetricTransformation3DTest {
     }
 
     private static void transformPoint(
-            final Point3D inputPoint, final Point3D outputPoint,
-            final Rotation3D rotation, final double[] translation, final double scale) {
+            final Point3D inputPoint, final Point3D outputPoint, final Rotation3D rotation, final double[] translation,
+            final double scale) {
         inputPoint.normalize();
         rotation.rotate(inputPoint, outputPoint);
         outputPoint.setInhomogeneousCoordinates(
@@ -2710,39 +2439,36 @@ public class MetricTransformation3DTest {
     }
 
     private static void transformPlane(
-            final Plane inputPlane, final Plane outputPlane,
-            final MetricTransformation3D transformation) throws WrongSizeException,
-            RankDeficientMatrixException, DecomposerException {
+            final Plane inputPlane, final Plane outputPlane, final MetricTransformation3D transformation)
+            throws WrongSizeException, RankDeficientMatrixException, DecomposerException {
         inputPlane.normalize();
-        final Matrix t = transformation.asMatrix();
-        double norm = Utils.normF(t);
+        final var t = transformation.asMatrix();
+        var norm = Utils.normF(t);
         t.multiplyByScalar(1.0 / norm);
 
-        final Matrix invT = Utils.inverse(t);
+        final var invT = Utils.inverse(t);
         norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
-        final Matrix transInvT = invT.transposeAndReturnNew();
-        final Matrix p = Matrix.newFromArray(inputPlane.asArray(), true);
+        final var transInvT = invT.transposeAndReturnNew();
+        final var p = Matrix.newFromArray(inputPlane.asArray(), true);
 
         outputPlane.setParameters(transInvT.multiplyAndReturnNew(p).toArray());
     }
 
     private static void transformQuadric(
-            final Quadric inputQuadric,
-            final Quadric outputQuadric,
-            final MetricTransformation3D transformation)
+            final Quadric inputQuadric, final Quadric outputQuadric, final MetricTransformation3D transformation)
             throws AlgebraException, NonSymmetricMatrixException {
 
-        final Matrix t = transformation.asMatrix();
-        final Matrix invT = Utils.inverse(t);
-        double norm = Utils.normF(invT);
+        final var t = transformation.asMatrix();
+        final var invT = Utils.inverse(t);
+        var norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
-        final Matrix transInvT = invT.transposeAndReturnNew();
+        final var transInvT = invT.transposeAndReturnNew();
 
         inputQuadric.normalize();
-        final Matrix q = inputQuadric.asMatrix();
+        final var q = inputQuadric.asMatrix();
 
-        final Matrix transQ = transInvT.multiplyAndReturnNew(q.multiplyAndReturnNew(invT));
+        final var transQ = transInvT.multiplyAndReturnNew(q.multiplyAndReturnNew(invT));
         // normalize to increase accuracy to ensure that matrix remains symmetric
         norm = Utils.normF(transQ);
         transQ.multiplyByScalar(1.0 / norm);
@@ -2751,22 +2477,19 @@ public class MetricTransformation3DTest {
     }
 
     private static void transformDualQuadric(
-            final DualQuadric inputDualQuadric,
-            final DualQuadric outputDualQuadric,
-            final MetricTransformation3D transformation) throws WrongSizeException,
-            NonSymmetricMatrixException {
+            final DualQuadric inputDualQuadric, final DualQuadric outputDualQuadric,
+            final MetricTransformation3D transformation) throws WrongSizeException, NonSymmetricMatrixException {
 
-        final Matrix t = transformation.asMatrix();
-        double norm = Utils.normF(t);
+        final var t = transformation.asMatrix();
+        var norm = Utils.normF(t);
         t.multiplyByScalar(1.0 / norm);
 
-        final Matrix transT = t.transposeAndReturnNew();
+        final var transT = t.transposeAndReturnNew();
 
         inputDualQuadric.normalize();
-        final Matrix dualQ = inputDualQuadric.asMatrix();
+        final var dualQ = inputDualQuadric.asMatrix();
 
-        final Matrix transDualQ = t.multiplyAndReturnNew(
-                dualQ.multiplyAndReturnNew(transT));
+        final var transDualQ = t.multiplyAndReturnNew(dualQ.multiplyAndReturnNew(transT));
         // normalize to increase accuracy to ensure that matrix remains symmetric
         norm = Utils.normF(transDualQ);
         transDualQ.multiplyByScalar(1.0 / norm);
@@ -2775,17 +2498,15 @@ public class MetricTransformation3DTest {
     }
 
     private static void transformLine(
-            final Line3D inputLine, final Line3D outputLine,
-            final MetricTransformation3D transformation) throws WrongSizeException,
-            RankDeficientMatrixException, DecomposerException,
-            CoincidentPlanesException {
+            final Line3D inputLine, final Line3D outputLine, final MetricTransformation3D transformation)
+            throws WrongSizeException, RankDeficientMatrixException, DecomposerException, CoincidentPlanesException {
 
         inputLine.normalize();
-        final Plane inputPlane1 = inputLine.getPlane1();
-        final Plane inputPlane2 = inputLine.getPlane2();
+        final var inputPlane1 = inputLine.getPlane1();
+        final var inputPlane2 = inputLine.getPlane2();
 
-        final Plane outputPlane1 = new Plane();
-        final Plane outputPlane2 = new Plane();
+        final var outputPlane1 = new Plane();
+        final var outputPlane2 = new Plane();
 
         transformPlane(inputPlane1, outputPlane1, transformation);
         transformPlane(inputPlane2, outputPlane2, transformation);

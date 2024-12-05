@@ -19,21 +19,16 @@ import com.irurueta.geometry.*;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.geometry.estimators.RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator;
-import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
-        implements RefinerListener<PinholeCamera> {
+class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest implements RefinerListener<PinholeCamera> {
 
     private static final double MIN_RANDOM_VALUE = 50.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
@@ -65,28 +60,26 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
 
     private static final double ABSOLUTE_ERROR = 1e-6;
 
-    private int mRefineStart;
-    private int mRefineEnd;
+    private int refineStart;
+    private int refineEnd;
 
-    private double mSkewness;
-    private double mHorizontalFocalLength;
-    private double mVerticalFocalLength;
-    private double mAspectRatio;
-    private InhomogeneousPoint2D mPrincipalPoint;
-    private Quaternion mRotation;
-    private InhomogeneousPoint3D mCameraCenter;
+    private double skewness;
+    private double horizontalFocalLength;
+    private double verticalFocalLength;
+    private double aspectRatio;
+    private InhomogeneousPoint2D principalPoint;
+    private Quaternion rotation;
+    private InhomogeneousPoint3D cameraCenter;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertFalse(Refiner.DEFAULT_KEEP_COVARIANCE);
         assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED);
-        assertEquals(0.0, PinholeCameraRefiner.DEFAULT_SUGGESTED_SKEWNESS_VALUE,
-                0.0);
+        assertEquals(0.0, PinholeCameraRefiner.DEFAULT_SUGGESTED_SKEWNESS_VALUE, 0.0);
         assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED);
         assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED);
         assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED);
-        assertEquals(1.0, PinholeCameraRefiner.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE,
-                0.0);
+        assertEquals(1.0, PinholeCameraRefiner.DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE, 0.0);
         assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED);
         assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_ROTATION_ENABLED);
         assertFalse(PinholeCameraRefiner.DEFAULT_SUGGEST_CENTER_ENABLED);
@@ -99,25 +92,22 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testConstructor() throws LockedException, NotReadyException,
-            RobustEstimatorException {
-        final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                createRobustEstimator();
-        final PinholeCamera camera = estimator.estimate();
-        final InliersData inliersData = estimator.getInliersData();
-        final BitSet inliers = inliersData.getInliers();
-        final double[] residuals = inliersData.getResiduals();
-        final int numInliers = inliersData.getNumInliers();
-        final double refinementStandardDeviation = estimator.getThreshold();
-        final List<Plane> samples1 = estimator.getPlanes();
-        final List<Line2D> samples2 = estimator.getLines();
+    void testConstructor() throws LockedException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
+        final var camera = estimator.estimate();
+        final var inliersData = estimator.getInliersData();
+        final var inliers = inliersData.getInliers();
+        final var residuals = inliersData.getResiduals();
+        final var numInliers = inliersData.getNumInliers();
+        final var refinementStandardDeviation = estimator.getThreshold();
+        final var samples1 = estimator.getPlanes();
+        final var samples2 = estimator.getLines();
 
         assertNotNull(camera);
         assertNotNull(inliersData);
 
         // test empty constructor
-        DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+        var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // check default value
         assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
@@ -157,9 +147,8 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
                 refiner.getSuggestionWeightStep(), 0.0);
 
         // test non-empty constructor
-        refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
-                camera, true, inliers, residuals, numInliers, samples1,
-                samples2, refinementStandardDeviation);
+        refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(camera, true, inliers,
+                residuals, numInliers, samples1, samples2, refinementStandardDeviation);
 
         // check default values
         assertEquals(refinementStandardDeviation, refiner.getRefinementStandardDeviation(), 0.0);
@@ -200,17 +189,16 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetMinSuggestionWeight() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetMinSuggestionWeight() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // default value
         assertEquals(DecomposedLinePlaneCorrespondencePinholeCameraRefiner.DEFAULT_MIN_SUGGESTION_WEIGHT,
                 refiner.getMinSuggestionWeight(), 0.0);
 
         // new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double weight = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var weight = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setMinSuggestionWeight(weight);
 
         // check correctness
@@ -218,17 +206,16 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetMaxSuggestionWeight() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetMaxSuggestionWeight() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // default value
         assertEquals(DecomposedLinePlaneCorrespondencePinholeCameraRefiner.DEFAULT_MAX_SUGGESTION_WEIGHT,
                 refiner.getMaxSuggestionWeight(), 0.0);
 
         // new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double weight = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var weight = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setMaxSuggestionWeight(weight);
 
         // check correctness
@@ -236,9 +223,8 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testSetMinMaxSuggestionWeight() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testSetMinMaxSuggestionWeight() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // default values
         assertEquals(DecomposedLinePlaneCorrespondencePinholeCameraRefiner.DEFAULT_MIN_SUGGESTION_WEIGHT,
@@ -247,10 +233,9 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
                 refiner.getMaxSuggestionWeight(), 0.0);
 
         // set new values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double minWeight = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
-        final double maxWeight = randomizer.nextDouble(minWeight, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var minWeight = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var maxWeight = randomizer.nextDouble(minWeight, MAX_RANDOM_VALUE);
         refiner.setMinMaxSuggestionWeight(minWeight, maxWeight);
 
         // check correctness
@@ -259,42 +244,35 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetSuggestionWeightStep() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetSuggestionWeightStep() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // default value
         assertEquals(DecomposedLinePlaneCorrespondencePinholeCameraRefiner.DEFAULT_SUGGESTION_WEIGHT_STEP,
                 refiner.getSuggestionWeightStep(), 0.0);
 
         // set new values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double step = randomizer.nextDouble(1e-6, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var step = randomizer.nextDouble(1e-6, MAX_RANDOM_VALUE);
         refiner.setSuggestionWeightStep(step);
 
         // check correctness
         assertEquals(step, refiner.getSuggestionWeightStep(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            refiner.setSuggestionWeightStep(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> refiner.setSuggestionWeightStep(0.0));
     }
 
     @Test
-    public void testGetSetRefinementStandardDeviation() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetRefinementStandardDeviation() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double refinementStandardDeviation = randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var refinementStandardDeviation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         refiner.setRefinementStandardDeviation(refinementStandardDeviation);
 
@@ -303,9 +281,8 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testIsSetSuggestSkewnessValueEnabled() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testIsSetSuggestSkewnessValueEnabled() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertFalse(refiner.isSuggestSkewnessValueEnabled());
@@ -318,28 +295,25 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetSuggestedSkewnessValue() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetSuggestedSkewnessValue() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertEquals(0.0, refiner.getSuggestedSkewnessValue(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var randomizer = new UniformRandomizer();
+        final var s = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
 
-        refiner.setSuggestedSkewnessValue(skewness);
+        refiner.setSuggestedSkewnessValue(s);
 
         // check correctness
-        assertEquals(skewness, refiner.getSuggestedSkewnessValue(), 0.0);
+        assertEquals(s, refiner.getSuggestedSkewnessValue(), 0.0);
     }
 
     @Test
-    public void testIsSetSuggestHorizontalFocalLengthEnabled()
-            throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testIsSetSuggestHorizontalFocalLengthEnabled() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertFalse(refiner.isSuggestHorizontalFocalLengthEnabled());
@@ -352,18 +326,15 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetSuggestedHorizontalFocalLengthValue()
-            throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetSuggestedHorizontalFocalLengthValue() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertEquals(0.0, refiner.getSuggestedHorizontalFocalLengthValue(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double focalLength = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var focalLength = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setSuggestedHorizontalFocalLengthValue(focalLength);
 
         // check correctness
@@ -371,10 +342,8 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testIsSetSuggestVerticalFocalLengthEnabled()
-            throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testIsSetSuggestVerticalFocalLengthEnabled() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertFalse(refiner.isSuggestVerticalFocalLengthEnabled());
@@ -387,18 +356,15 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetSuggestedVerticalFocalLengthValue()
-            throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetSuggestedVerticalFocalLengthValue() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertEquals(0.0, refiner.getSuggestedVerticalFocalLengthValue(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double focalLength = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var focalLength = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setSuggestedVerticalFocalLengthValue(focalLength);
 
         // check correctness
@@ -406,9 +372,8 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testIsSetSuggestAspectRatioEnabled() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testIsSetSuggestAspectRatioEnabled() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertFalse(refiner.isSuggestAspectRatioEnabled());
@@ -421,26 +386,24 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetSuggestedAspectRatioValue() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetSuggestedAspectRatioValue() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertEquals(1.0, refiner.getSuggestedAspectRatioValue(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double aspectRatio = randomizer.nextDouble();
-        refiner.setSuggestedAspectRatioValue(aspectRatio);
+        final var randomizer = new UniformRandomizer();
+        final var aRatio = randomizer.nextDouble();
+        refiner.setSuggestedAspectRatioValue(aRatio);
 
         // check correctness
-        assertEquals(aspectRatio, refiner.getSuggestedAspectRatioValue(), 0.0);
+        assertEquals(aRatio, refiner.getSuggestedAspectRatioValue(), 0.0);
     }
 
     @Test
-    public void testIsSetSuggestPrincipalPointEnabled() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testIsSetSuggestPrincipalPointEnabled() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertFalse(refiner.isSuggestPrincipalPointEnabled());
@@ -453,16 +416,14 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetSuggestedPrincipalPointValue()
-            throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetSuggestedPrincipalPointValue() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertNull(refiner.getSuggestedPrincipalPointValue());
 
         // set new value
-        final InhomogeneousPoint2D point = new InhomogeneousPoint2D();
+        final var point = new InhomogeneousPoint2D();
         refiner.setSuggestedPrincipalPointValue(point);
 
         // check correctness
@@ -470,9 +431,8 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testIsSetSuggestRotationEnabled() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testIsSetSuggestRotationEnabled() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertFalse(refiner.isSuggestRotationEnabled());
@@ -485,15 +445,14 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetSuggestedRotationValue() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetSuggestedRotationValue() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertNull(refiner.getSuggestedRotationValue());
 
         // set new value
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
         refiner.setSuggestedRotationValue(q);
 
         // check correctness
@@ -501,9 +460,8 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testIsSetSuggestCenterEnabled() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testIsSetSuggestCenterEnabled() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertFalse(refiner.isSuggestCenterEnabled());
@@ -516,15 +474,14 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetSuggestedCenterValue() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetSuggestedCenterValue() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertNull(refiner.getSuggestedCenterValue());
 
         // set new value
-        final InhomogeneousPoint3D value = new InhomogeneousPoint3D();
+        final var value = new InhomogeneousPoint3D();
         refiner.setSuggestedCenterValue(value);
 
         // check correctness
@@ -532,15 +489,14 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetSamples1() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetSamples1() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertNull(refiner.getSamples1());
 
         // new value
-        final List<Plane> samples1 = new ArrayList<>();
+        final var samples1 = new ArrayList<Plane>();
         refiner.setSamples1(samples1);
 
         // check correctness
@@ -548,15 +504,14 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetSamples2() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetSamples2() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // initial value
         assertNull(refiner.getSamples2());
 
         // new value
-        final List<Line2D> samples2 = new ArrayList<>();
+        final var samples2 = new ArrayList<Line2D>();
         refiner.setSamples2(samples2);
 
         // check correctness
@@ -564,17 +519,14 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetInliers() throws LockedException, NotReadyException,
-            RobustEstimatorException {
-        final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetInliers() throws LockedException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final BitSet inliers = inliersData.getInliers();
+        final var inliersData = estimator.getInliersData();
+        final var inliers = inliersData.getInliers();
 
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // check default value
         assertNull(refiner.getInliers());
@@ -587,17 +539,14 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetResiduals() throws LockedException, NotReadyException,
-            RobustEstimatorException {
-        final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetResiduals() throws LockedException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final double[] residuals = inliersData.getResiduals();
+        final var inliersData = estimator.getInliersData();
+        final var residuals = inliersData.getResiduals();
 
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // check default value
         assertNull(refiner.getResiduals());
@@ -610,17 +559,14 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetNumInliers() throws LockedException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetNumInliers() throws LockedException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final int numInliers = inliersData.getNumInliers();
+        final var inliersData = estimator.getInliersData();
+        final var numInliers = inliersData.getNumInliers();
 
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // check default value
         assertEquals(0, refiner.getNumInliers());
@@ -632,24 +578,17 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
         assertEquals(numInliers, refiner.getNumInliers());
 
         // Force IllegalArgumentException
-        try {
-            refiner.setNumInliers(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> refiner.setNumInliers(0));
     }
 
     @Test
-    public void testSetInliersData() throws LockedException, NotReadyException,
-            RobustEstimatorException {
-        final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                createRobustEstimator();
+    void testSetInliersData() throws LockedException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
+        final var inliersData = estimator.getInliersData();
 
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // check default values
         assertNull(refiner.getInliers());
@@ -666,9 +605,8 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetListener() {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetListener() {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // check default value
         assertNull(refiner.getListener());
@@ -681,15 +619,14 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testGetSetInitialEstimation() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testGetSetInitialEstimation() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // check default value
         assertNull(refiner.getInitialEstimation());
 
         // set new value
-        final PinholeCamera camera = new PinholeCamera();
+        final var camera = new PinholeCamera();
         refiner.setInitialEstimation(camera);
 
         // check correctness
@@ -697,9 +634,8 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testIsSetCovarianceKept() throws LockedException {
-        final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
+    void testIsSetCovarianceKept() throws LockedException {
+        final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner();
 
         // check default value
         assertFalse(refiner.isCovarianceKept());
@@ -712,42 +648,38 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testRefineNoSuggestions() throws LockedException,
-            NotReadyException, RobustEstimatorException, RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                    createRobustEstimator();
+    void testRefineNoSuggestions() throws LockedException, NotReadyException, RobustEstimatorException,
+            RefinerException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = createRobustEstimator();
 
-            final PinholeCamera camera = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refinementStandardDeviation = estimator.getThreshold();
-            final List<Plane> samples1 = estimator.getPlanes();
-            final List<Line2D> samples2 = estimator.getLines();
+            final var camera = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refinementStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getPlanes();
+            final var samples2 = estimator.getLines();
 
-            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
-                            camera, true, inliersData, samples1, samples2,
-                            refinementStandardDeviation);
+            final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(camera, true,
+                    inliersData, samples1, samples2, refinementStandardDeviation);
             refiner.setListener(this);
 
-            final PinholeCamera result1 = new PinholeCamera();
+            final var result1 = new PinholeCamera();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             assertFalse(refiner.refine(result1));
-            final PinholeCamera result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
             result1.normalize();
             result2.normalize();
 
-            assertEquals(result1.getInternalMatrix(),
-                    result2.getInternalMatrix());
+            assertEquals(result1.getInternalMatrix(), result2.getInternalMatrix());
 
             if (refiner.getCovariance() == null) {
                 continue;
@@ -762,47 +694,43 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testRefineSuggestedSkewness() throws LockedException,
-            NotReadyException, RobustEstimatorException, RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < 10 * TIMES; t++) {
-            final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                    createRobustEstimator();
+    void testRefineSuggestedSkewness() throws LockedException, NotReadyException, RobustEstimatorException,
+            RefinerException {
+        var numValid = 0;
+        for (var t = 0; t < 10 * TIMES; t++) {
+            final var estimator = createRobustEstimator();
 
-            final PinholeCamera camera = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refinementStandardDeviation = estimator.getThreshold();
-            final List<Plane> samples1 = estimator.getPlanes();
-            final List<Line2D> samples2 = estimator.getLines();
+            final var camera = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refinementStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getPlanes();
+            final var samples2 = estimator.getLines();
 
-            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
-                            camera, true, inliersData, samples1, samples2,
-                            refinementStandardDeviation);
+            final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(camera, true,
+                    inliersData, samples1, samples2, refinementStandardDeviation);
             refiner.setListener(this);
             refiner.setSuggestSkewnessValueEnabled(true);
-            refiner.setSuggestedSkewnessValue(mSkewness);
+            refiner.setSuggestedSkewnessValue(skewness);
 
-            final PinholeCamera result1 = new PinholeCamera();
+            final var result1 = new PinholeCamera();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final PinholeCamera result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
             result1.normalize();
             result2.normalize();
 
-            assertTrue(result1.getInternalMatrix().equals(
-                    result2.getInternalMatrix(), ABSOLUTE_ERROR));
+            assertTrue(result1.getInternalMatrix().equals(result2.getInternalMatrix(), ABSOLUTE_ERROR));
 
             numValid++;
             break;
@@ -812,49 +740,43 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testRefineSuggestedHorizontalFocalLength()
-            throws LockedException, NotReadyException, RobustEstimatorException,
+    void testRefineSuggestedHorizontalFocalLength() throws LockedException, NotReadyException, RobustEstimatorException,
             RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < 10 * TIMES; t++) {
-            final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                    createRobustEstimator();
+        var numValid = 0;
+        for (var t = 0; t < 10 * TIMES; t++) {
+            final var estimator = createRobustEstimator();
 
-            final PinholeCamera camera = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refinementStandardDeviation = estimator.getThreshold();
-            final List<Plane> samples1 = estimator.getPlanes();
-            final List<Line2D> samples2 = estimator.getLines();
+            final var camera = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refinementStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getPlanes();
+            final var samples2 = estimator.getLines();
 
-            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
-                            camera, true, inliersData, samples1, samples2,
-                            refinementStandardDeviation);
+            final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(camera, true,
+                    inliersData, samples1, samples2, refinementStandardDeviation);
             refiner.setListener(this);
             refiner.setSuggestHorizontalFocalLengthEnabled(true);
-            refiner.setSuggestedHorizontalFocalLengthValue(
-                    mHorizontalFocalLength);
+            refiner.setSuggestedHorizontalFocalLengthValue(horizontalFocalLength);
 
-            final PinholeCamera result1 = new PinholeCamera();
+            final var result1 = new PinholeCamera();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final PinholeCamera result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
             result1.normalize();
             result2.normalize();
 
-            assertEquals(result1.getInternalMatrix(),
-                    result2.getInternalMatrix());
+            assertEquals(result1.getInternalMatrix(), result2.getInternalMatrix());
 
             numValid++;
             break;
@@ -864,49 +786,43 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testRefineSuggestedVerticalFocalLength()
-            throws LockedException, NotReadyException, RobustEstimatorException,
+    void testRefineSuggestedVerticalFocalLength() throws LockedException, NotReadyException, RobustEstimatorException,
             RefinerException {
-        int numValid = 0;
+        var numValid = 0;
         for (int t = 0; t < 5 * TIMES; t++) {
-            final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                    createRobustEstimator();
+            final var estimator = createRobustEstimator();
 
-            final PinholeCamera camera = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refinementStandardDeviation = estimator.getThreshold();
-            final List<Plane> samples1 = estimator.getPlanes();
-            final List<Line2D> samples2 = estimator.getLines();
+            final var camera = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refinementStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getPlanes();
+            final var samples2 = estimator.getLines();
 
-            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
-                            camera, true, inliersData, samples1, samples2,
-                            refinementStandardDeviation);
+            final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(camera, true,
+                    inliersData, samples1, samples2, refinementStandardDeviation);
             refiner.setListener(this);
             refiner.setSuggestVerticalFocalLengthEnabled(true);
-            refiner.setSuggestedVerticalFocalLengthValue(
-                    mVerticalFocalLength);
+            refiner.setSuggestedVerticalFocalLengthValue(verticalFocalLength);
 
-            final PinholeCamera result1 = new PinholeCamera();
+            final var result1 = new PinholeCamera();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final PinholeCamera result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
             result1.normalize();
             result2.normalize();
 
-            assertEquals(result1.getInternalMatrix(),
-                    result2.getInternalMatrix());
+            assertEquals(result1.getInternalMatrix(), result2.getInternalMatrix());
 
             if (refiner.getCovariance() == null) {
                 continue;
@@ -921,48 +837,43 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testRefineSuggestedAspectRatio()
-            throws LockedException, NotReadyException, RobustEstimatorException,
+    void testRefineSuggestedAspectRatio() throws LockedException, NotReadyException, RobustEstimatorException,
             RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < 5 * TIMES; t++) {
-            final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                    createRobustEstimator();
+        var numValid = 0;
+        for (var t = 0; t < 5 * TIMES; t++) {
+            final var estimator = createRobustEstimator();
 
-            final PinholeCamera camera = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refinementStandardDeviation = estimator.getThreshold();
-            final List<Plane> samples1 = estimator.getPlanes();
-            final List<Line2D> samples2 = estimator.getLines();
+            final var camera = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refinementStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getPlanes();
+            final var samples2 = estimator.getLines();
 
-            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
-                            camera, true, inliersData, samples1, samples2,
-                            refinementStandardDeviation);
+            final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(camera, true,
+                    inliersData, samples1, samples2, refinementStandardDeviation);
             refiner.setListener(this);
             refiner.setSuggestAspectRatioEnabled(true);
-            refiner.setSuggestedAspectRatioValue(mAspectRatio);
+            refiner.setSuggestedAspectRatioValue(aspectRatio);
 
-            final PinholeCamera result1 = new PinholeCamera();
+            final var result1 = new PinholeCamera();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final PinholeCamera result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
             result1.normalize();
             result2.normalize();
 
-            assertEquals(result1.getInternalMatrix(),
-                    result2.getInternalMatrix());
+            assertEquals(result1.getInternalMatrix(), result2.getInternalMatrix());
 
             if (refiner.getCovariance() == null) {
                 continue;
@@ -977,48 +888,43 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testRefineSuggestedPrincipalPoint()
-            throws LockedException, NotReadyException, RobustEstimatorException,
+    void testRefineSuggestedPrincipalPoint() throws LockedException, NotReadyException, RobustEstimatorException,
             RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < 2 * TIMES; t++) {
-            final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                    createRobustEstimator();
+        var numValid = 0;
+        for (var t = 0; t < 2 * TIMES; t++) {
+            final var estimator = createRobustEstimator();
 
-            final PinholeCamera camera = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refinementStandardDeviation = estimator.getThreshold();
-            final List<Plane> samples1 = estimator.getPlanes();
-            final List<Line2D> samples2 = estimator.getLines();
+            final var camera = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refinementStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getPlanes();
+            final var samples2 = estimator.getLines();
 
-            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
-                            camera, true, inliersData, samples1, samples2,
-                            refinementStandardDeviation);
+            final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(camera, true,
+                    inliersData, samples1, samples2, refinementStandardDeviation);
             refiner.setListener(this);
             refiner.setSuggestPrincipalPointEnabled(true);
-            refiner.setSuggestedPrincipalPointValue(mPrincipalPoint);
+            refiner.setSuggestedPrincipalPointValue(principalPoint);
 
-            final PinholeCamera result1 = new PinholeCamera();
+            final var result1 = new PinholeCamera();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final PinholeCamera result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
             result1.normalize();
             result2.normalize();
 
-            assertEquals(result1.getInternalMatrix(),
-                    result2.getInternalMatrix());
+            assertEquals(result1.getInternalMatrix(), result2.getInternalMatrix());
 
             numValid++;
             break;
@@ -1028,42 +934,38 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testRefineSuggestedRotation()
-            throws LockedException, NotReadyException, RobustEstimatorException,
+    void testRefineSuggestedRotation() throws LockedException, NotReadyException, RobustEstimatorException,
             RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                    createRobustEstimator();
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = createRobustEstimator();
 
-            final PinholeCamera camera = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refinementStandardDeviation = estimator.getThreshold();
-            final List<Plane> samples1 = estimator.getPlanes();
-            final List<Line2D> samples2 = estimator.getLines();
+            final var camera = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refinementStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getPlanes();
+            final var samples2 = estimator.getLines();
 
-            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
-                            camera, true, inliersData, samples1, samples2,
-                            refinementStandardDeviation);
+            final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(camera, true,
+                    inliersData, samples1, samples2, refinementStandardDeviation);
             refiner.setListener(this);
             refiner.setSuggestRotationEnabled(true);
-            refiner.setSuggestedRotationValue(mRotation);
+            refiner.setSuggestedRotationValue(rotation);
 
-            final PinholeCamera result1 = new PinholeCamera();
+            final var result1 = new PinholeCamera();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final PinholeCamera result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
             result1.normalize();
             result2.normalize();
@@ -1071,8 +973,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
             if (!result1.getInternalMatrix().equals(result2.getInternalMatrix())) {
                 continue;
             }
-            assertEquals(result1.getInternalMatrix(),
-                    result2.getInternalMatrix());
+            assertEquals(result1.getInternalMatrix(), result2.getInternalMatrix());
 
             numValid++;
             break;
@@ -1082,48 +983,43 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testRefineSuggestedCenter()
-            throws LockedException, NotReadyException, RobustEstimatorException,
+    void testRefineSuggestedCenter() throws LockedException, NotReadyException, RobustEstimatorException,
             RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                    createRobustEstimator();
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = createRobustEstimator();
 
-            final PinholeCamera camera = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refinementStandardDeviation = estimator.getThreshold();
-            final List<Plane> samples1 = estimator.getPlanes();
-            final List<Line2D> samples2 = estimator.getLines();
+            final var camera = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refinementStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getPlanes();
+            final var samples2 = estimator.getLines();
 
-            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
-                            camera, true, inliersData, samples1, samples2,
-                            refinementStandardDeviation);
+            final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(camera, true,
+                    inliersData, samples1, samples2, refinementStandardDeviation);
             refiner.setListener(this);
             refiner.setSuggestCenterEnabled(true);
-            refiner.setSuggestedCenterValue(mCameraCenter);
+            refiner.setSuggestedCenterValue(cameraCenter);
 
-            final PinholeCamera result1 = new PinholeCamera();
+            final var result1 = new PinholeCamera();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final PinholeCamera result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
             result1.normalize();
             result2.normalize();
 
-            assertEquals(result1.getInternalMatrix(),
-                    result2.getInternalMatrix());
+            assertEquals(result1.getInternalMatrix(), result2.getInternalMatrix());
 
             if (refiner.getCovariance() == null) {
                 continue;
@@ -1138,52 +1034,47 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Test
-    public void testRefineSuggestedSkewnessZeroPrincipalPointAndEqualFocalLength()
-            throws LockedException, NotReadyException, RobustEstimatorException,
-            RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < 10 * TIMES; t++) {
-            final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                    createRobustEstimator2();
+    void testRefineSuggestedSkewnessZeroPrincipalPointAndEqualFocalLength() throws LockedException, NotReadyException,
+            RobustEstimatorException, RefinerException {
+        var numValid = 0;
+        for (var t = 0; t < 10 * TIMES; t++) {
+            final var estimator = createRobustEstimator2();
 
-            final PinholeCamera camera = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refinementStandardDeviation = estimator.getThreshold();
-            final List<Plane> samples1 = estimator.getPlanes();
-            final List<Line2D> samples2 = estimator.getLines();
+            final var camera = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refinementStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getPlanes();
+            final var samples2 = estimator.getLines();
 
-            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
-                            camera, true, inliersData, samples1, samples2,
-                            refinementStandardDeviation);
+            final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(camera, true,
+                    inliersData, samples1, samples2, refinementStandardDeviation);
             refiner.setListener(this);
             refiner.setSuggestSkewnessValueEnabled(true);
-            refiner.setSuggestedSkewnessValue(mSkewness);
+            refiner.setSuggestedSkewnessValue(skewness);
             refiner.setSuggestPrincipalPointEnabled(true);
-            refiner.setSuggestedPrincipalPointValue(mPrincipalPoint);
+            refiner.setSuggestedPrincipalPointValue(principalPoint);
             refiner.setSuggestAspectRatioEnabled(true);
-            refiner.setSuggestedAspectRatioValue(mAspectRatio);
+            refiner.setSuggestedAspectRatioValue(aspectRatio);
 
-            final PinholeCamera result1 = new PinholeCamera();
+            final var result1 = new PinholeCamera();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final PinholeCamera result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
             result1.normalize();
             result2.normalize();
 
-            assertEquals(result1.getInternalMatrix(),
-                    result2.getInternalMatrix());
+            assertEquals(result1.getInternalMatrix(), result2.getInternalMatrix());
 
             numValid++;
             break;
@@ -1195,80 +1086,62 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     private RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator createRobustEstimator()
             throws LockedException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        mHorizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        mVerticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        mSkewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
-        final double horizontalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        final double verticalPrincipalPoint = randomizer.nextDouble(
-                MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
-        mPrincipalPoint = new InhomogeneousPoint2D(horizontalPrincipalPoint,
-                verticalPrincipalPoint);
+        final var randomizer = new UniformRandomizer();
+        horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        verticalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        skewness = randomizer.nextDouble(MIN_SKEWNESS, MAX_SKEWNESS);
+        final var horizontalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        final var verticalPrincipalPoint = randomizer.nextDouble(MIN_PRINCIPAL_POINT, MAX_PRINCIPAL_POINT);
+        principalPoint = new InhomogeneousPoint2D(horizontalPrincipalPoint, verticalPrincipalPoint);
 
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(mHorizontalFocalLength,
-                        mVerticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, mSkewness);
-        mAspectRatio = intrinsic.getAspectRatio();
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
+        aspectRatio = intrinsic.getAspectRatio();
 
         // create rotation parameters
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var alphaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var betaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var gammaEuler = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
-        mRotation = rotation.toQuaternion();
+        final var rot = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        rotation = rot.toQuaternion();
 
         // create camera center
-        final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
+        final var cameraCenterArray = new double[INHOM_3D_COORDS];
         randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        mCameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
+        cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // instantiate camera
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                mCameraCenter);
+        final var camera = new PinholeCamera(intrinsic, rot, cameraCenter);
 
         // normalize the camera to improve accuracy
         camera.normalize();
 
-        final int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-        final List<Line2D> lines = new ArrayList<>(nSamples);
-        Line2D line;
-        for (int i = 0; i < nSamples; i++) {
-            line = new Line2D(
-                    randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE),
-                    randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE),
-                    randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE));
+        final var nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
+        final var lines = new ArrayList<Line2D>(nSamples);
+        for (var i = 0; i < nSamples; i++) {
+            final var line = new Line2D(
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             lines.add(line);
         }
 
-        final List<Plane> planes = camera.backProjectLines(lines);
+        final var planes = camera.backProjectLines(lines);
 
         // create outliers
-        Plane planeWithError;
-        final List<Plane> planesWithError = new ArrayList<>();
-        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                new Random(), 0.0, STD_ERROR);
-        for (final Plane plane : planes) {
+        final var planesWithError = new ArrayList<Plane>();
+        final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+        for (final var plane : planes) {
+            Plane planeWithError;
             if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                 // plane is outlier
-                final double errorA = errorRandomizer.nextDouble();
-                final double errorB = errorRandomizer.nextDouble();
-                final double errorC = errorRandomizer.nextDouble();
-                final double errorD = errorRandomizer.nextDouble();
-                planeWithError = new Plane(plane.getA() + errorA,
-                        plane.getB() + errorB, plane.getC() + errorC,
-                        plane.getD() + errorD);
+                final var errorA = errorRandomizer.nextDouble();
+                final var errorB = errorRandomizer.nextDouble();
+                final var errorC = errorRandomizer.nextDouble();
+                final var errorD = errorRandomizer.nextDouble();
+                planeWithError = new Plane(plane.getA() + errorA, plane.getB() + errorB,
+                        plane.getC() + errorC, plane.getD() + errorD);
             } else {
                 // inlier plane (without error)
                 planeWithError = plane;
@@ -1277,9 +1150,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
             planesWithError.add(planeWithError);
         }
 
-        final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planesWithError, lines);
+        final var estimator = new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(planesWithError, lines);
 
         estimator.setThreshold(THRESHOLD);
         estimator.setComputeAndKeepInliersEnabled(true);
@@ -1293,77 +1164,62 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     private RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator createRobustEstimator2()
             throws LockedException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        mHorizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH,
-                MAX_FOCAL_LENGTH);
-        mVerticalFocalLength = mHorizontalFocalLength;
-        mSkewness = 0.0;
-        final double horizontalPrincipalPoint = 0.0;
-        final double verticalPrincipalPoint = 0.0;
-        mPrincipalPoint = new InhomogeneousPoint2D(horizontalPrincipalPoint,
-                verticalPrincipalPoint);
+        final var randomizer = new UniformRandomizer();
+        horizontalFocalLength = randomizer.nextDouble(MIN_FOCAL_LENGTH, MAX_FOCAL_LENGTH);
+        verticalFocalLength = horizontalFocalLength;
+        skewness = 0.0;
+        final var horizontalPrincipalPoint = 0.0;
+        final var verticalPrincipalPoint = 0.0;
+        principalPoint = new InhomogeneousPoint2D(horizontalPrincipalPoint, verticalPrincipalPoint);
 
-        final PinholeCameraIntrinsicParameters intrinsic =
-                new PinholeCameraIntrinsicParameters(mHorizontalFocalLength,
-                        mVerticalFocalLength, horizontalPrincipalPoint,
-                        verticalPrincipalPoint, mSkewness);
-        mAspectRatio = intrinsic.getAspectRatio();
+        final var intrinsic = new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength,
+                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
+        aspectRatio = intrinsic.getAspectRatio();
 
         // create rotation parameters
-        final double alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var alphaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var betaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var gammaEuler = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES) * Math.PI / 180.0;
 
-        final Rotation3D rotation = new MatrixRotation3D(alphaEuler, betaEuler,
-                gammaEuler);
-        mRotation = rotation.toQuaternion();
+        final var rot = new MatrixRotation3D(alphaEuler, betaEuler, gammaEuler);
+        rotation = rot.toQuaternion();
 
         // create camera center
-        final double[] cameraCenterArray = new double[INHOM_3D_COORDS];
+        final var cameraCenterArray = new double[INHOM_3D_COORDS];
         randomizer.fill(cameraCenterArray, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        mCameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
+        cameraCenter = new InhomogeneousPoint3D(cameraCenterArray);
 
         // instantiate camera
-        final PinholeCamera camera = new PinholeCamera(intrinsic, rotation,
-                mCameraCenter);
+        final var camera = new PinholeCamera(intrinsic, rot, cameraCenter);
 
         // normalize the camera to improve accuracy
         camera.normalize();
 
-        final int nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
-        final List<Line2D> lines = new ArrayList<>(nSamples);
-        Line2D line;
-        for (int i = 0; i < nSamples; i++) {
-            line = new Line2D(
-                    randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE),
-                    randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE),
-                    randomizer.nextDouble(MIN_RANDOM_VALUE,
-                            MAX_RANDOM_VALUE));
+        final var nSamples = randomizer.nextInt(MIN_SAMPLES, MAX_SAMPLES);
+        final var lines = new ArrayList<Line2D>(nSamples);
+        for (var i = 0; i < nSamples; i++) {
+            final var line = new Line2D(
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                    randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
             lines.add(line);
         }
 
-        final List<Plane> planes = camera.backProjectLines(lines);
+        final var planes = camera.backProjectLines(lines);
 
         // create outliers
-        Plane planeWithError;
-        final List<Plane> planesWithError = new ArrayList<>();
-        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                new Random(), 0.0, STD_ERROR);
-        for (final Plane plane : planes) {
+        final var planesWithError = new ArrayList<Plane>();
+        final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+        for (final var plane : planes) {
+            Plane planeWithError;
             if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                 // plane is outlier
-                final double errorA = errorRandomizer.nextDouble();
-                final double errorB = errorRandomizer.nextDouble();
-                final double errorC = errorRandomizer.nextDouble();
-                final double errorD = errorRandomizer.nextDouble();
-                planeWithError = new Plane(plane.getA() + errorA,
-                        plane.getB() + errorB, plane.getC() + errorC,
-                        plane.getD() + errorD);
+                final var errorA = errorRandomizer.nextDouble();
+                final var errorB = errorRandomizer.nextDouble();
+                final var errorC = errorRandomizer.nextDouble();
+                final var errorD = errorRandomizer.nextDouble();
+                planeWithError = new Plane(plane.getA() + errorA, plane.getB() + errorB,
+                        plane.getC() + errorC, plane.getD() + errorD);
             } else {
                 // inlier plane (without error)
                 planeWithError = plane;
@@ -1372,9 +1228,7 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
             planesWithError.add(planeWithError);
         }
 
-        final RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator estimator =
-                new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planesWithError, lines);
+        final var estimator = new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(planesWithError, lines);
 
         estimator.setThreshold(THRESHOLD);
         estimator.setComputeAndKeepInliersEnabled(true);
@@ -1386,177 +1240,52 @@ public class DecomposedLinePlaneCorrespondencePinholeCameraRefinerTest
     }
 
     @Override
-    public void onRefineStart(final Refiner<PinholeCamera> refiner,
-                              final PinholeCamera initialEstimation) {
-        mRefineStart++;
-        checkLocked(
-                (DecomposedLinePlaneCorrespondencePinholeCameraRefiner) refiner);
+    public void onRefineStart(final Refiner<PinholeCamera> refiner, final PinholeCamera initialEstimation) {
+        refineStart++;
+        checkLocked((DecomposedLinePlaneCorrespondencePinholeCameraRefiner) refiner);
     }
 
     @Override
-    public void onRefineEnd(final Refiner<PinholeCamera> refiner,
-                            final PinholeCamera initialEstimation, final PinholeCamera result,
-                            final boolean errorDecreased) {
-        mRefineEnd++;
-        checkLocked(
-                (DecomposedLinePlaneCorrespondencePinholeCameraRefiner) refiner);
+    public void onRefineEnd(final Refiner<PinholeCamera> refiner, final PinholeCamera initialEstimation,
+                            final PinholeCamera result, final boolean errorDecreased) {
+        refineEnd++;
+        checkLocked((DecomposedLinePlaneCorrespondencePinholeCameraRefiner) refiner);
     }
 
     private void reset() {
-        mRefineStart = mRefineEnd = 0;
+        refineStart = refineEnd = 0;
     }
 
-    private void checkLocked(
-            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner) {
+    private static void checkLocked(final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner) {
         assertTrue(refiner.isLocked());
-        try {
-            refiner.setInitialEstimation(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setCovarianceKept(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.refine(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            refiner.refine();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            refiner.setInliers(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setResiduals(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setNumInliers(0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setInliersData(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSamples1(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSamples2(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setRefinementStandardDeviation(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setMinSuggestionWeight(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setMaxSuggestionWeight(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setMinMaxSuggestionWeight(0.0, 0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestionWeightStep(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestSkewnessValueEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestedSkewnessValue(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestHorizontalFocalLengthEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestedHorizontalFocalLengthValue(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestVerticalFocalLengthEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestedVerticalFocalLengthValue(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestAspectRatioEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestedAspectRatioValue(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestPrincipalPointEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestedPrincipalPointValue(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestRotationEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestedRotationValue(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestCenterEnabled(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSuggestedCenterValue(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
+        assertThrows(LockedException.class, () -> refiner.setInitialEstimation(null));
+        assertThrows(LockedException.class, () -> refiner.setCovarianceKept(true));
+        assertThrows(LockedException.class, () -> refiner.refine(null));
+        assertThrows(LockedException.class, refiner::refine);
+        assertThrows(LockedException.class, () -> refiner.setInliers(null));
+        assertThrows(LockedException.class, () -> refiner.setResiduals(null));
+        assertThrows(LockedException.class, () -> refiner.setNumInliers(0));
+        assertThrows(LockedException.class, () -> refiner.setInliersData(null));
+        assertThrows(LockedException.class, () -> refiner.setSamples1(null));
+        assertThrows(LockedException.class, () -> refiner.setSamples2(null));
+        assertThrows(LockedException.class, () -> refiner.setRefinementStandardDeviation(0.0));
+        assertThrows(LockedException.class, () -> refiner.setMinSuggestionWeight(0.0));
+        assertThrows(LockedException.class, () -> refiner.setMaxSuggestionWeight(0.0));
+        assertThrows(LockedException.class, () -> refiner.setMinMaxSuggestionWeight(0.0, 0.0));
+        assertThrows(LockedException.class, () -> refiner.setSuggestionWeightStep(0.0));
+        assertThrows(LockedException.class, () -> refiner.setSuggestSkewnessValueEnabled(true));
+        assertThrows(LockedException.class, () -> refiner.setSuggestedSkewnessValue(0.0));
+        assertThrows(LockedException.class, () -> refiner.setSuggestHorizontalFocalLengthEnabled(true));
+        assertThrows(LockedException.class, () -> refiner.setSuggestedHorizontalFocalLengthValue(0.0));
+        assertThrows(LockedException.class, () -> refiner.setSuggestVerticalFocalLengthEnabled(true));
+        assertThrows(LockedException.class, () -> refiner.setSuggestedVerticalFocalLengthValue(0.0));
+        assertThrows(LockedException.class, () -> refiner.setSuggestAspectRatioEnabled(true));
+        assertThrows(LockedException.class, () -> refiner.setSuggestedAspectRatioValue(0.0));
+        assertThrows(LockedException.class, () -> refiner.setSuggestPrincipalPointEnabled(true));
+        assertThrows(LockedException.class, () -> refiner.setSuggestedPrincipalPointValue(null));
+        assertThrows(LockedException.class, () -> refiner.setSuggestRotationEnabled(true));
+        assertThrows(LockedException.class, () -> refiner.setSuggestedRotationValue(null));
+        assertThrows(LockedException.class, () -> refiner.setSuggestCenterEnabled(true));
+        assertThrows(LockedException.class, () -> refiner.setSuggestedCenterValue(null));
     }
 }

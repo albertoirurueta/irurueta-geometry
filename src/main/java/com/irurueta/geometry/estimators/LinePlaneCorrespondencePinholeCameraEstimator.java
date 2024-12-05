@@ -29,24 +29,23 @@ import java.util.List;
  * This file contains abstract implementation for pinhole camera estimators
  * based on line/plane correspondences.
  */
-public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
-        PinholeCameraEstimator {
-
-    /**
-     * List of corresponding 3D planes.
-     */
-    protected List<Plane> mPlanes;
-
-    /**
-     * List of corresponding 2D lines.
-     */
-    protected List<Line2D> mLines2D;
+public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends PinholeCameraEstimator {
 
     /**
      * Minimum number of required line/plane correspondences to estimate a
      * camera.
      */
     public static final int MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES = 4;
+
+    /**
+     * List of corresponding 3D planes.
+     */
+    protected List<Plane> planes;
+
+    /**
+     * List of corresponding 2D lines.
+     */
+    protected List<Line2D> lines2D;
 
     /**
      * Constructor.
@@ -61,8 +60,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or estimation progress changes.
      */
-    protected LinePlaneCorrespondencePinholeCameraEstimator(
-            final PinholeCameraEstimatorListener listener) {
+    protected LinePlaneCorrespondencePinholeCameraEstimator(final PinholeCameraEstimatorListener listener) {
         super(listener);
     }
 
@@ -75,8 +73,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * @throws WrongListSizesException  if provided lists of points don't have
      *                                  the same size and enough correspondences.
      */
-    protected LinePlaneCorrespondencePinholeCameraEstimator(
-            final List<Plane> planes, final List<Line2D> lines2D) throws WrongListSizesException {
+    protected LinePlaneCorrespondencePinholeCameraEstimator(final List<Plane> planes, final List<Line2D> lines2D)
+            throws WrongListSizesException {
         super();
         internalSetLists(planes, lines2D);
     }
@@ -93,8 +91,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough correspondences.
      */
     protected LinePlaneCorrespondencePinholeCameraEstimator(
-            final List<Plane> planes, final List<Line2D> lines2D,
-            final PinholeCameraEstimatorListener listener)
+            final List<Plane> planes, final List<Line2D> lines2D, final PinholeCameraEstimatorListener listener)
             throws WrongListSizesException {
         super(listener);
         internalSetLists(planes, lines2D);
@@ -110,8 +107,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * @throws WrongListSizesException  if provided lists of points don't have
      *                                  the same size and enough correspondences.
      */
-    private void internalSetLists(final List<Plane> planes, final List<Line2D> lines2D)
-            throws WrongListSizesException {
+    private void internalSetLists(final List<Plane> planes, final List<Line2D> lines2D) throws WrongListSizesException {
 
         if (planes == null || lines2D == null) {
             throw new IllegalArgumentException();
@@ -121,8 +117,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
             throw new WrongListSizesException();
         }
 
-        mPlanes = planes;
-        mLines2D = lines2D;
+        this.planes = planes;
+        this.lines2D = lines2D;
     }
 
     /**
@@ -135,8 +131,8 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * @throws WrongListSizesException  if provided lists of points don't have
      *                                  the same size and enough correspondences.
      */
-    public void setLists(final List<Plane> planes, final List<Line2D> lines2D)
-            throws LockedException, WrongListSizesException {
+    public void setLists(final List<Plane> planes, final List<Line2D> lines2D) throws LockedException,
+            WrongListSizesException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -153,12 +149,12 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * @throws NotAvailableException if list of planes is not yet available.
      */
     public List<Plane> getPlanes() throws NotAvailableException {
-        if (mPlanes == null) {
+        if (planes == null) {
             throw new NotAvailableException();
         }
 
         // to avoid undesired modifications
-        return Collections.unmodifiableList(mPlanes);
+        return Collections.unmodifiableList(planes);
     }
 
     /**
@@ -170,12 +166,12 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * @throws NotAvailableException if list of 2D lines is not yet available.
      */
     public List<Line2D> getLines2D() throws NotAvailableException {
-        if (mLines2D == null) {
+        if (lines2D == null) {
             throw new NotAvailableException();
         }
 
         // to avoid undesired modifications
-        return Collections.unmodifiableList(mLines2D);
+        return Collections.unmodifiableList(lines2D);
     }
 
     /**
@@ -188,13 +184,11 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * @return true if corresponding 2D lines and planes are valid, false
      * otherwise.
      */
-    public static boolean areValidLists(final List<Plane> planes,
-                                        final List<Line2D> lines2D) {
+    public static boolean areValidLists(final List<Plane> planes, final List<Line2D> lines2D) {
         if (planes == null || lines2D == null) {
             return false;
         }
-        return planes.size() == lines2D.size() &&
-                lines2D.size() >= MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;
+        return planes.size() == lines2D.size() && lines2D.size() >= MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;
     }
 
     /**
@@ -204,7 +198,7 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
      * @return true if available, false otherwise.
      */
     public boolean areListsAvailable() {
-        return mPlanes != null && mLines2D != null;
+        return planes != null && lines2D != null;
     }
 
     /**
@@ -219,46 +213,35 @@ public abstract class LinePlaneCorrespondencePinholeCameraEstimator extends
     @Override
     protected PinholeCamera attemptRefine(PinholeCamera pinholeCamera) {
         if (hasSuggestions()) {
-            final int numPoints = mPlanes.size();
-            final BitSet inliers = new BitSet(numPoints);
+            final var numPoints = planes.size();
+            final var inliers = new BitSet(numPoints);
             inliers.set(0, numPoints, true);
-            final double[] residuals = new double[numPoints];
+            final var residuals = new double[numPoints];
 
-            final DecomposedLinePlaneCorrespondencePinholeCameraRefiner refiner =
-                    new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
-                            pinholeCamera, false, inliers, residuals, numPoints,
-                            mPlanes, mLines2D, 0.0);
+            final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(pinholeCamera,
+                    false, inliers, residuals, numPoints, planes, lines2D, 0.0);
             try {
-                refiner.setMinSuggestionWeight(mMinSuggestionWeight);
-                refiner.setMaxSuggestionWeight(mMaxSuggestionWeight);
-                refiner.setSuggestionWeightStep(mSuggestionWeightStep);
+                refiner.setMinSuggestionWeight(minSuggestionWeight);
+                refiner.setMaxSuggestionWeight(maxSuggestionWeight);
+                refiner.setSuggestionWeightStep(suggestionWeightStep);
 
-                refiner.setSuggestSkewnessValueEnabled(
-                        mSuggestSkewnessValueEnabled);
-                refiner.setSuggestedSkewnessValue(mSuggestedSkewnessValue);
-                refiner.setSuggestHorizontalFocalLengthEnabled(
-                        mSuggestHorizontalFocalLengthEnabled);
-                refiner.setSuggestedHorizontalFocalLengthValue(
-                        mSuggestedHorizontalFocalLengthValue);
-                refiner.setSuggestVerticalFocalLengthEnabled(
-                        mSuggestVerticalFocalLengthEnabled);
-                refiner.setSuggestedVerticalFocalLengthValue(
-                        mSuggestedVerticalFocalLengthValue);
-                refiner.setSuggestAspectRatioEnabled(
-                        mSuggestAspectRatioEnabled);
-                refiner.setSuggestedAspectRatioValue(
-                        mSuggestedAspectRatioValue);
-                refiner.setSuggestPrincipalPointEnabled(
-                        mSuggestPrincipalPointEnabled);
-                refiner.setSuggestedPrincipalPointValue(
-                        mSuggestedPrincipalPointValue);
-                refiner.setSuggestRotationEnabled(mSuggestRotationEnabled);
-                refiner.setSuggestedRotationValue(mSuggestedRotationValue);
-                refiner.setSuggestCenterEnabled(mSuggestCenterEnabled);
-                refiner.setSuggestedCenterValue(mSuggestedCenterValue);
+                refiner.setSuggestSkewnessValueEnabled(suggestSkewnessValueEnabled);
+                refiner.setSuggestedSkewnessValue(suggestedSkewnessValue);
+                refiner.setSuggestHorizontalFocalLengthEnabled(suggestHorizontalFocalLengthEnabled);
+                refiner.setSuggestedHorizontalFocalLengthValue(suggestedHorizontalFocalLengthValue);
+                refiner.setSuggestVerticalFocalLengthEnabled(suggestVerticalFocalLengthEnabled);
+                refiner.setSuggestedVerticalFocalLengthValue(suggestedVerticalFocalLengthValue);
+                refiner.setSuggestAspectRatioEnabled(suggestAspectRatioEnabled);
+                refiner.setSuggestedAspectRatioValue(suggestedAspectRatioValue);
+                refiner.setSuggestPrincipalPointEnabled(suggestPrincipalPointEnabled);
+                refiner.setSuggestedPrincipalPointValue(suggestedPrincipalPointValue);
+                refiner.setSuggestRotationEnabled(suggestRotationEnabled);
+                refiner.setSuggestedRotationValue(suggestedRotationValue);
+                refiner.setSuggestCenterEnabled(suggestCenterEnabled);
+                refiner.setSuggestedCenterValue(suggestedCenterValue);
 
-                final PinholeCamera result = new PinholeCamera();
-                final boolean improved = refiner.refine(result);
+                final var result = new PinholeCamera();
+                final var improved = refiner.refine(result);
 
                 return improved ? result : pinholeCamera;
 

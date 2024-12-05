@@ -20,16 +20,14 @@ import com.irurueta.algebra.Matrix;
 import com.irurueta.algebra.Utils;
 import com.irurueta.algebra.WrongSizeException;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Triangle3DTest {
+class Triangle3DTest {
 
     private static final double MIN_RANDOM_VALUE = -100.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
@@ -41,7 +39,7 @@ public class Triangle3DTest {
     private static final int INHOM_COORDS = 3;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(1e-9, Triangle3D.DEFAULT_THRESHOLD, 0.0);
         assertEquals(0.0, Triangle3D.MIN_THRESHOLD, 0.0);
         assertEquals(3, Triangle3D.INHOM_COORDS);
@@ -49,74 +47,59 @@ public class Triangle3DTest {
     }
 
     @Test
-    public void testConstructor() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testConstructor() {
+        final var randomizer = new UniformRandomizer();
 
-        final Point3D point1 = new InhomogeneousPoint3D(
+        final var point1 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2 = new InhomogeneousPoint3D(
+        final var point2 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3 = new InhomogeneousPoint3D(
+        final var point3 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        Triangle3D triangle = new Triangle3D(point1, point2, point3);
+        var triangle = new Triangle3D(point1, point2, point3);
 
         assertEquals(point1, triangle.getVertex1());
         assertEquals(point2, triangle.getVertex2());
         assertEquals(point3, triangle.getVertex3());
 
         // Force NullPointerException
-        triangle = null;
-        try {
-            triangle = new Triangle3D(null, point2, point3);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        try {
-            triangle = new Triangle3D(point1, null, point3);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        try {
-            triangle = new Triangle3D(point1, point2, null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        //noinspection ConstantConditions
-        assertNull(triangle);
+        assertThrows(NullPointerException.class, () -> new Triangle3D(null, point2, point3));
+        assertThrows(NullPointerException.class, () -> new Triangle3D(point1, null, point3));
+        assertThrows(NullPointerException.class, () -> new Triangle3D(point1, point2, null));
     }
 
     @Test
-    public void testGetSetVertex1() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testGetSetVertex1() {
+        final var randomizer = new UniformRandomizer();
 
-        final Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point2 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point3 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Triangle3D triangle = new Triangle3D(point1, point2, point3);
+        final var triangle = new Triangle3D(point1, point2, point3);
 
         assertEquals(point1, triangle.getVertex1());
         assertEquals(point2, triangle.getVertex2());
         assertEquals(point3, triangle.getVertex3());
 
         // new vertex1
-        final Point3D vertex1 = new InhomogeneousPoint3D(
+        final var vertex1 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
@@ -128,38 +111,34 @@ public class Triangle3DTest {
         assertEquals(point3, triangle.getVertex3());
 
         // Force NullPointerException
-        try {
-            triangle.setVertex1(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> triangle.setVertex1(null));
     }
 
     @Test
-    public void testGetSetVertex2() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testGetSetVertex2() {
+        final var randomizer = new UniformRandomizer();
 
-        final Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point2 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point3 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Triangle3D triangle = new Triangle3D(point1, point2, point3);
+        final var triangle = new Triangle3D(point1, point2, point3);
 
         assertEquals(point1, triangle.getVertex1());
         assertEquals(point2, triangle.getVertex2());
         assertEquals(point3, triangle.getVertex3());
 
         // new vertex1
-        final Point3D vertex2 = new InhomogeneousPoint3D(
+        final var vertex2 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
@@ -171,38 +150,34 @@ public class Triangle3DTest {
         assertEquals(point3, triangle.getVertex3());
 
         // Force NullPointerException
-        try {
-            triangle.setVertex2(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> triangle.setVertex2(null));
     }
 
     @Test
-    public void testGetSetVertex3() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testGetSetVertex3() {
+        final var randomizer = new UniformRandomizer();
 
-        final Point3D point1 = new InhomogeneousPoint3D(
+        final var point1 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2 = new InhomogeneousPoint3D(
+        final var point2 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3 = new InhomogeneousPoint3D(
+        final var point3 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Triangle3D triangle = new Triangle3D(point1, point2, point3);
+        final var triangle = new Triangle3D(point1, point2, point3);
 
         assertEquals(point1, triangle.getVertex1());
         assertEquals(point2, triangle.getVertex2());
         assertEquals(point3, triangle.getVertex3());
 
         // new vertex1
-        final Point3D vertex3 = new InhomogeneousPoint3D(
+        final var vertex3 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
@@ -214,45 +189,41 @@ public class Triangle3DTest {
         assertEquals(vertex3, triangle.getVertex3());
 
         // Force NullPointerException
-        try {
-            triangle.setVertex3(null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> triangle.setVertex3(null));
     }
 
     @Test
-    public void testGetSetVertices() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testGetSetVertices() {
+        final var randomizer = new UniformRandomizer();
 
-        final Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point2 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point3 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Triangle3D triangle = new Triangle3D(point1, point2, point3);
+        final var triangle = new Triangle3D(point1, point2, point3);
 
         assertEquals(point1, triangle.getVertex1());
         assertEquals(point2, triangle.getVertex2());
         assertEquals(point3, triangle.getVertex3());
 
-        final Point3D point1b = new InhomogeneousPoint3D(
+        final var point1b = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2b = new InhomogeneousPoint3D(
+        final var point2b = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3b = new InhomogeneousPoint3D(
+        final var point3b = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
@@ -266,8 +237,8 @@ public class Triangle3DTest {
         assertEquals(point3b, triangle.getVertex3());
 
         // get vertices as a list
-        final List<Point3D> vertices = triangle.getVertices();
-        final List<Point3D> vertices2 = new ArrayList<>();
+        final var vertices = triangle.getVertices();
+        final var vertices2 = new ArrayList<Point3D>();
         triangle.vertices(vertices2);
 
         assertEquals(Triangle2D.NUM_VERTICES, vertices.size());
@@ -282,48 +253,36 @@ public class Triangle3DTest {
         assertTrue(vertices2.get(2).equals(point3b, ABSOLUTE_ERROR));
 
         // Force NullPointerException
-        try {
-            triangle.setVertices(null, point2, point3);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        try {
-            triangle.setVertices(point1, null, point3);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
-        try {
-            triangle.setVertices(point1, point2, null);
-            fail("NullPointerException expected but not thrown");
-        } catch (final NullPointerException ignore) {
-        }
+        assertThrows(NullPointerException.class, () -> triangle.setVertices(null, point2, point3));
+        assertThrows(NullPointerException.class, () -> triangle.setVertices(point1, null, point3));
+        assertThrows(NullPointerException.class, () -> triangle.setVertices(point1, point2, null));
     }
 
     @Test
-    public void testAreaAndColinearPoints() throws WrongSizeException {
+    void testAreaAndColinearPoints() throws WrongSizeException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double base = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double height = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double zValue = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var base = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var height = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var zValue = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // Test known and simple values
-        Point3D point1 = new InhomogeneousPoint3D(0.0, 0.0, zValue);
-        Point3D point2 = new InhomogeneousPoint3D(base, 0.0, zValue);
-        Point3D point3 = new InhomogeneousPoint3D(base / 2.0, height, zValue);
+        var point1 = new InhomogeneousPoint3D(0.0, 0.0, zValue);
+        var point2 = new InhomogeneousPoint3D(base, 0.0, zValue);
+        var point3 = new InhomogeneousPoint3D(base / 2.0, height, zValue);
 
-        double expectedArea = base * height / 2.0;
+        var expectedArea = base * height / 2.0;
 
-        Triangle3D triangle = new Triangle3D(point1, point2, point3);
+        final var triangle1 = new Triangle3D(point1, point2, point3);
 
-        assertEquals(expectedArea, Math.abs(Triangle3D.area(triangle)), ABSOLUTE_ERROR);
+        assertEquals(expectedArea, Math.abs(Triangle3D.area(triangle1)), ABSOLUTE_ERROR);
         assertEquals(expectedArea, Math.abs(Triangle3D.area(point1, point2, point3)), ABSOLUTE_ERROR);
-        assertEquals(expectedArea, Math.abs(triangle.getArea()), ABSOLUTE_ERROR);
+        assertEquals(expectedArea, Math.abs(triangle1.getArea()), ABSOLUTE_ERROR);
 
         if (expectedArea > Triangle2D.DEFAULT_THRESHOLD) {
-            assertFalse(triangle.areVerticesColinear());
+            assertFalse(triangle1.areVerticesColinear());
         } else {
-            assertTrue(triangle.areVerticesColinear());
+            assertTrue(triangle1.areVerticesColinear());
         }
 
         // Test with random values
@@ -340,7 +299,7 @@ public class Triangle3DTest {
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        Matrix m = new Matrix(2, 2);
+        var m = new Matrix(2, 2);
         // 1st column
         m.setElementAt(0, 0, point2.getInhomX() - point1.getInhomX());
         m.setElementAt(1, 0, point2.getInhomY() - point1.getInhomY());
@@ -349,63 +308,58 @@ public class Triangle3DTest {
         m.setElementAt(1, 1, point3.getInhomY() - point1.getInhomY());
 
         // expected area
-        final double[] v1 = ArrayUtils.subtractAndReturnNew(point2.asArray(), point1.asArray());
-        final double[] v2 = ArrayUtils.subtractAndReturnNew(point3.asArray(), point1.asArray());
+        final var v1 = ArrayUtils.subtractAndReturnNew(point2.asArray(), point1.asArray());
+        final var v2 = ArrayUtils.subtractAndReturnNew(point3.asArray(), point1.asArray());
 
-        final double[] cross = Utils.crossProduct(v1, v2);
+        final var cross = Utils.crossProduct(v1, v2);
         expectedArea = 0.5 * Utils.normF(cross);
 
-        triangle = new Triangle3D(point1, point2, point3);
+        final var triangle2 = new Triangle3D(point1, point2, point3);
 
-        assertEquals(expectedArea, Triangle3D.area(triangle), ABSOLUTE_ERROR);
+        assertEquals(expectedArea, Triangle3D.area(triangle2), ABSOLUTE_ERROR);
         assertEquals(expectedArea, Triangle3D.area(point1, point2, point3), ABSOLUTE_ERROR);
-        assertEquals(expectedArea, triangle.getArea(), ABSOLUTE_ERROR);
+        assertEquals(expectedArea, triangle2.getArea(), ABSOLUTE_ERROR);
 
         if (expectedArea > Triangle2D.DEFAULT_THRESHOLD) {
-            assertFalse(triangle.areVerticesColinear());
+            assertFalse(triangle2.areVerticesColinear());
         } else {
-            assertTrue(triangle.areVerticesColinear());
+            assertTrue(triangle2.areVerticesColinear());
         }
 
         // if threshold is large enough, points will always be considered to be
         // co-linear
-        assertTrue(triangle.areVerticesColinear(expectedArea + ABSOLUTE_ERROR));
+        assertTrue(triangle2.areVerticesColinear(expectedArea + ABSOLUTE_ERROR));
 
         // If two points are coincident, then area must be zero or close to zero
-        triangle = new Triangle3D(point1, point1, point2);
-        assertEquals(0.0, Triangle3D.area(triangle), ABSOLUTE_ERROR);
+        final var triangle3 = new Triangle3D(point1, point1, point2);
+        assertEquals(0.0, Triangle3D.area(triangle3), ABSOLUTE_ERROR);
         assertEquals(0.0, Triangle3D.area(point1, point1, point2), ABSOLUTE_ERROR);
-        assertEquals(0.0, triangle.getArea(), ABSOLUTE_ERROR);
+        assertEquals(0.0, triangle3.getArea(), ABSOLUTE_ERROR);
 
         // because area is zero, then points are co-linear
-        assertTrue(triangle.areVerticesColinear());
-        assertTrue(triangle.areVerticesColinear(ABSOLUTE_ERROR));
+        assertTrue(triangle3.areVerticesColinear());
+        assertTrue(triangle3.areVerticesColinear(ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        try {
-            triangle.areVerticesColinear(-ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> triangle3.areVerticesColinear(-ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testIsInsideShortestDistanceAndIsLocus()
-            throws CoincidentPointsException {
+    void testIsInsideShortestDistanceAndIsLocus() throws CoincidentPointsException {
         // Test for known values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double base = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double height = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double zValue = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double dist = randomizer.nextDouble(Triangle2D.DEFAULT_THRESHOLD, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var base = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var height = Math.abs(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var zValue = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var dist = randomizer.nextDouble(Triangle2D.DEFAULT_THRESHOLD, MAX_RANDOM_VALUE);
 
         // Test known and simple values
-        Point3D point1 = new InhomogeneousPoint3D(0.0, 0.0, zValue);
-        Point3D point2 = new InhomogeneousPoint3D(base, 0.0, zValue);
-        Point3D point3 = new InhomogeneousPoint3D(base / 2.0, height, zValue);
+        final var point1 = new InhomogeneousPoint3D(0.0, 0.0, zValue);
+        final var point2 = new InhomogeneousPoint3D(base, 0.0, zValue);
+        final var point3 = new InhomogeneousPoint3D(base / 2.0, height, zValue);
 
-        final Triangle3D triangle = new Triangle3D(point1, point2, point3);
-        Point3D center = triangle.getCenter();
+        final var triangle = new Triangle3D(point1, point2, point3);
+        var center = triangle.getCenter();
 
         // vertices and center lie inside the triangle
         assertTrue(triangle.isInside(point1));
@@ -417,13 +371,13 @@ public class Triangle3DTest {
         assertEquals(0.0, triangle.getShortestDistance(point1), 0.0);
         assertEquals(0.0, triangle.getShortestDistance(point2), 0.0);
         assertEquals(0.0, triangle.getShortestDistance(point3), 0.0);
-        Line3D line1 = new Line3D(point1, point2);
-        Line3D line2 = new Line3D(point1, point3);
-        Line3D line3 = new Line3D(point2, point3);
-        double dist1 = line1.getDistance(center);
-        double dist2 = line2.getDistance(center);
-        double dist3 = line3.getDistance(center);
-        double centerDist = Math.min(dist1, Math.min(dist2, dist3));
+        var line1 = new Line3D(point1, point2);
+        var line2 = new Line3D(point1, point3);
+        var line3 = new Line3D(point2, point3);
+        var dist1 = line1.getDistance(center);
+        var dist2 = line2.getDistance(center);
+        var dist3 = line3.getDistance(center);
+        var centerDist = Math.min(dist1, Math.min(dist2, dist3));
         assertEquals(triangle.getShortestDistance(center), centerDist, ABSOLUTE_ERROR);
 
         // test is locus (vertices will be locus, but not center)
@@ -450,8 +404,7 @@ public class Triangle3DTest {
         assertEquals(0.0, Triangle3D.shortestDistance(point1, point2, point3, point1), 0.0);
         assertEquals(0.0, Triangle3D.shortestDistance(point1, point2, point3, point2), 0.0);
         assertEquals(0.0, Triangle3D.shortestDistance(point1, point2, point3, point3), 0.0);
-        assertEquals(centerDist, Triangle3D.shortestDistance(point1, point2, point3, center),
-                ABSOLUTE_ERROR);
+        assertEquals(centerDist, Triangle3D.shortestDistance(point1, point2, point3, center), ABSOLUTE_ERROR);
 
         // the same is true for a small threshold
         assertTrue(triangle.isInside(point1, 0.0));
@@ -473,30 +426,14 @@ public class Triangle3DTest {
         assertTrue(Triangle3D.isInside(point1, point2, point3, point3, 0.0));
 
         // Force IllegalArgumentException
-        try {
-            triangle.isInside(point1, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Triangle3D.isInside(triangle, point1, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Triangle3D.isInside(point1, point2, point3, point1, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            triangle.isLocus(point3, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> triangle.isInside(point1, -ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> Triangle3D.isInside(triangle, point1, -ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class,
+                () -> Triangle3D.isInside(point1, point2, point3, point1, -ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> triangle.isLocus(point3, -ABSOLUTE_ERROR));
 
         // Check point outside
-        final Point3D outside = new InhomogeneousPoint3D(-dist, 0.0, zValue);
+        final var outside = new InhomogeneousPoint3D(-dist, 0.0, zValue);
 
         assertFalse(triangle.isInside(outside));
 
@@ -510,19 +447,16 @@ public class Triangle3DTest {
         // the same is true for a small threshold, but point is considered to
         // be inside when setting large threshold
         assertFalse(triangle.isInside(outside, 0.0));
-        assertTrue(triangle.isInside(outside,
-                3.0 * MAX_RANDOM_VALUE * MAX_RANDOM_VALUE));
+        assertTrue(triangle.isInside(outside, 3.0 * MAX_RANDOM_VALUE * MAX_RANDOM_VALUE));
 
         assertEquals(triangle.getShortestDistance(outside), dist, ABSOLUTE_ERROR);
 
         assertFalse(Triangle3D.isInside(triangle, outside, 0.0));
-        assertTrue(Triangle3D.isInside(triangle, outside,
-                3.0 * MAX_RANDOM_VALUE * MAX_RANDOM_VALUE));
+        assertTrue(Triangle3D.isInside(triangle, outside, 3.0 * MAX_RANDOM_VALUE * MAX_RANDOM_VALUE));
 
         // check locus with a small and large threshold
         assertFalse(triangle.isLocus(outside, 0.0));
-        assertTrue(triangle.isLocus(outside,
-                3.0 * MAX_RANDOM_VALUE * MAX_RANDOM_VALUE));
+        assertTrue(triangle.isLocus(outside, 3.0 * MAX_RANDOM_VALUE * MAX_RANDOM_VALUE));
 
         assertEquals(Triangle3D.shortestDistance(triangle, outside), dist, ABSOLUTE_ERROR);
 
@@ -534,114 +468,110 @@ public class Triangle3DTest {
 
         // Testing for a random triangle we can see that vertices and center
         // lie inside the triangle
-        point1 = new InhomogeneousPoint3D(
+        final var point4 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        point2 = new InhomogeneousPoint3D(
+        final var point5 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        point3 = new InhomogeneousPoint3D(
+        final var point6 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        triangle.setVertices(point1, point2, point3);
+        triangle.setVertices(point4, point5, point6);
         center = triangle.getCenter();
 
         // vertices and center lie inside the triangle
-        assertTrue(triangle.isInside(point1));
-        assertTrue(triangle.isInside(point2));
-        assertTrue(triangle.isInside(point3));
+        assertTrue(triangle.isInside(point4));
+        assertTrue(triangle.isInside(point5));
+        assertTrue(triangle.isInside(point6));
         assertTrue(triangle.isInside(center));
 
         // vertices are locus, but not center
-        assertTrue(triangle.isLocus(point1, ABSOLUTE_ERROR));
-        assertTrue(triangle.isLocus(point2, ABSOLUTE_ERROR));
-        assertTrue(triangle.isLocus(point3, ABSOLUTE_ERROR));
+        assertTrue(triangle.isLocus(point4, ABSOLUTE_ERROR));
+        assertTrue(triangle.isLocus(point5, ABSOLUTE_ERROR));
+        assertTrue(triangle.isLocus(point6, ABSOLUTE_ERROR));
         assertFalse(triangle.isLocus(center, ABSOLUTE_ERROR));
 
-        assertEquals(0.0, triangle.getShortestDistance(point1), ABSOLUTE_ERROR);
-        assertEquals(0.0, triangle.getShortestDistance(point2), ABSOLUTE_ERROR);
-        assertEquals(0.0, triangle.getShortestDistance(point3), ABSOLUTE_ERROR);
-        line1 = new Line3D(point1, point2);
-        line2 = new Line3D(point1, point3);
-        line3 = new Line3D(point2, point3);
+        assertEquals(0.0, triangle.getShortestDistance(point4), ABSOLUTE_ERROR);
+        assertEquals(0.0, triangle.getShortestDistance(point5), ABSOLUTE_ERROR);
+        assertEquals(0.0, triangle.getShortestDistance(point6), ABSOLUTE_ERROR);
+        line1 = new Line3D(point4, point5);
+        line2 = new Line3D(point4, point6);
+        line3 = new Line3D(point5, point6);
         dist1 = line1.getDistance(center);
         dist2 = line2.getDistance(center);
         dist3 = line3.getDistance(center);
         centerDist = Math.min(dist1, Math.min(dist2, dist3));
         assertEquals(centerDist, triangle.getShortestDistance(center), ABSOLUTE_ERROR);
 
-        assertTrue(Triangle3D.isInside(triangle, point1));
-        assertTrue(Triangle3D.isInside(triangle, point2));
-        assertTrue(Triangle3D.isInside(triangle, point3));
+        assertTrue(Triangle3D.isInside(triangle, point4));
+        assertTrue(Triangle3D.isInside(triangle, point5));
+        assertTrue(Triangle3D.isInside(triangle, point6));
         assertTrue(Triangle3D.isInside(triangle, center));
 
-        assertEquals(0.0, Triangle3D.shortestDistance(triangle, point1), ABSOLUTE_ERROR);
-        assertEquals(0.0, Triangle3D.shortestDistance(triangle, point2), ABSOLUTE_ERROR);
-        assertEquals(0.0, Triangle3D.shortestDistance(triangle, point3), ABSOLUTE_ERROR);
+        assertEquals(0.0, Triangle3D.shortestDistance(triangle, point4), ABSOLUTE_ERROR);
+        assertEquals(0.0, Triangle3D.shortestDistance(triangle, point5), ABSOLUTE_ERROR);
+        assertEquals(0.0, Triangle3D.shortestDistance(triangle, point6), ABSOLUTE_ERROR);
         assertEquals(centerDist, Triangle3D.shortestDistance(triangle, center), ABSOLUTE_ERROR);
 
-        assertTrue(Triangle3D.isInside(point1, point2, point3, point1));
-        assertTrue(Triangle3D.isInside(point1, point2, point3, point2));
-        assertTrue(Triangle3D.isInside(point1, point2, point3, point3));
-        assertTrue(Triangle3D.isInside(point1, point2, point3, center));
+        assertTrue(Triangle3D.isInside(point4, point5, point6, point4));
+        assertTrue(Triangle3D.isInside(point4, point5, point6, point5));
+        assertTrue(Triangle3D.isInside(point4, point5, point6, point6));
+        assertTrue(Triangle3D.isInside(point4, point5, point6, center));
 
-        assertEquals(0.0, Triangle3D.shortestDistance(point1, point2, point3, point1),
-                ABSOLUTE_ERROR);
-        assertEquals(0.0, Triangle3D.shortestDistance(point1, point2, point3, point2),
-                ABSOLUTE_ERROR);
-        assertEquals(0.0, Triangle3D.shortestDistance(point1, point2, point3, point3),
-                ABSOLUTE_ERROR);
-        assertEquals(centerDist, Triangle3D.shortestDistance(point1, point2, point3, center),
-                ABSOLUTE_ERROR);
+        assertEquals(0.0, Triangle3D.shortestDistance(point4, point5, point6, point4), ABSOLUTE_ERROR);
+        assertEquals(0.0, Triangle3D.shortestDistance(point4, point5, point6, point5), ABSOLUTE_ERROR);
+        assertEquals(0.0, Triangle3D.shortestDistance(point4, point5, point6, point6), ABSOLUTE_ERROR);
+        assertEquals(centerDist, Triangle3D.shortestDistance(point4, point5, point6, center), ABSOLUTE_ERROR);
 
         // the same is true for a small threshold
-        assertTrue(triangle.isInside(point1, ABSOLUTE_ERROR));
-        assertTrue(triangle.isInside(point2, ABSOLUTE_ERROR));
-        assertTrue(triangle.isInside(point3, ABSOLUTE_ERROR));
+        assertTrue(triangle.isInside(point4, ABSOLUTE_ERROR));
+        assertTrue(triangle.isInside(point5, ABSOLUTE_ERROR));
+        assertTrue(triangle.isInside(point6, ABSOLUTE_ERROR));
         assertTrue(triangle.isInside(center, ABSOLUTE_ERROR));
 
-        assertTrue(Triangle3D.isInside(triangle, point1, ABSOLUTE_ERROR));
-        assertTrue(Triangle3D.isInside(triangle, point2, ABSOLUTE_ERROR));
-        assertTrue(Triangle3D.isInside(triangle, point3, ABSOLUTE_ERROR));
+        assertTrue(Triangle3D.isInside(triangle, point4, ABSOLUTE_ERROR));
+        assertTrue(Triangle3D.isInside(triangle, point5, ABSOLUTE_ERROR));
+        assertTrue(Triangle3D.isInside(triangle, point6, ABSOLUTE_ERROR));
         assertTrue(Triangle3D.isInside(triangle, center, ABSOLUTE_ERROR));
 
-        assertTrue(Triangle3D.isInside(point1, point2, point3, point1, ABSOLUTE_ERROR));
-        assertTrue(Triangle3D.isInside(point1, point2, point3, point2, ABSOLUTE_ERROR));
-        assertTrue(Triangle3D.isInside(point1, point2, point3, point3, ABSOLUTE_ERROR));
-        assertTrue(Triangle3D.isInside(point1, point2, point3, center, ABSOLUTE_ERROR));
+        assertTrue(Triangle3D.isInside(point4, point5, point6, point4, ABSOLUTE_ERROR));
+        assertTrue(Triangle3D.isInside(point4, point5, point6, point5, ABSOLUTE_ERROR));
+        assertTrue(Triangle3D.isInside(point4, point5, point6, point6, ABSOLUTE_ERROR));
+        assertTrue(Triangle3D.isInside(point4, point5, point6, center, ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testCenter() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testCenter() {
+        final var randomizer = new UniformRandomizer();
 
-        final Point3D point1 = new InhomogeneousPoint3D(
+        final var point1 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2 = new InhomogeneousPoint3D(
+        final var point2 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3 = new InhomogeneousPoint3D(
+        final var point3 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Triangle3D triangle = new Triangle3D(point1, point2, point3);
+        final var triangle = new Triangle3D(point1, point2, point3);
 
-        final Point3D expectedCenter = new InhomogeneousPoint3D(
+        final var expectedCenter = new InhomogeneousPoint3D(
                 (point1.getInhomX() + point2.getInhomX() + point3.getInhomX()) / 3.0,
                 (point1.getInhomY() + point2.getInhomY() + point3.getInhomY()) / 3.0,
                 (point1.getInhomZ() + point2.getInhomZ() + point3.getInhomZ()) / 3.0);
 
         assertTrue(triangle.getCenter().equals(expectedCenter, ABSOLUTE_ERROR));
 
-        final Point3D center = Point3D.create();
+        final var center = Point3D.create();
         triangle.center(center);
         assertTrue(center.equals(expectedCenter, ABSOLUTE_ERROR));
 
@@ -656,26 +586,25 @@ public class Triangle3DTest {
     }
 
     @Test
-    public void testPerimeter() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testPerimeter() {
+        final var randomizer = new UniformRandomizer();
 
-        final Point3D point1 = new InhomogeneousPoint3D(
+        final var point1 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2 = new InhomogeneousPoint3D(
+        final var point2 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3 = new InhomogeneousPoint3D(
+        final var point3 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Triangle3D triangle = new Triangle3D(point1, point2, point3);
+        final var triangle = new Triangle3D(point1, point2, point3);
 
-        final double perimeter = point1.distanceTo(point2) +
-                point1.distanceTo(point3) + point3.distanceTo(point2);
+        final var perimeter = point1.distanceTo(point2) + point1.distanceTo(point3) + point3.distanceTo(point2);
 
         assertEquals(perimeter, triangle.getPerimeter(), ABSOLUTE_ERROR);
         assertEquals(perimeter, Triangle3D.perimeter(triangle), ABSOLUTE_ERROR);
@@ -683,27 +612,27 @@ public class Triangle3DTest {
     }
 
     @Test
-    public void testClosestPoint() throws CoincidentPointsException {
+    void testClosestPoint() throws CoincidentPointsException {
         // Test for known values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double base = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
-        final double height = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
-        final double zValue = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var base = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
+        final var height = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
+        final var zValue = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // Test known and simple values
-        final Point3D point1 = new InhomogeneousPoint3D(0.0, 0.0, zValue);
-        final Point3D point2 = new InhomogeneousPoint3D(base, 0.0, zValue);
-        final Point3D point3 = new InhomogeneousPoint3D(base / 2.0, height, zValue);
+        final var point1 = new InhomogeneousPoint3D(0.0, 0.0, zValue);
+        final var point2 = new InhomogeneousPoint3D(base, 0.0, zValue);
+        final var point3 = new InhomogeneousPoint3D(base / 2.0, height, zValue);
 
-        final Triangle3D triangle = new Triangle3D(point1, point2, point3);
+        final var triangle = new Triangle3D(point1, point2, point3);
 
         // try for point1
-        final Point3D testPoint = Point3D.create();
+        final var testPoint = Point3D.create();
         testPoint.setInhomogeneousCoordinates(-base, 0.0, zValue);
         assertTrue(triangle.getClosestPoint(testPoint).equals(point1, ABSOLUTE_ERROR));
         assertTrue(triangle.getClosestPoint(testPoint, ABSOLUTE_ERROR).equals(point1, ABSOLUTE_ERROR));
 
-        final Point3D closestPoint = Point3D.create();
+        final var closestPoint = Point3D.create();
         triangle.closestPoint(testPoint, closestPoint);
         assertTrue(closestPoint.equals(point1, ABSOLUTE_ERROR));
         triangle.closestPoint(testPoint, closestPoint, ABSOLUTE_ERROR);
@@ -731,7 +660,7 @@ public class Triangle3DTest {
 
         // try for a point close to line1
         testPoint.setInhomogeneousCoordinates(base / 2.0, -height, zValue);
-        final Point3D basePoint = new InhomogeneousPoint3D(base / 2.0, 0.0, zValue);
+        final var basePoint = new InhomogeneousPoint3D(base / 2.0, 0.0, zValue);
         assertTrue(triangle.getClosestPoint(testPoint).equals(basePoint, ABSOLUTE_ERROR));
         assertTrue(triangle.getClosestPoint(testPoint, ABSOLUTE_ERROR).equals(basePoint, ABSOLUTE_ERROR));
 
@@ -767,31 +696,31 @@ public class Triangle3DTest {
         assertTrue(closestPoint.equals(point3, ABSOLUTE_ERROR));
 
         // and now try for center
-        final Point3D center = triangle.getCenter();
+        final var center = triangle.getCenter();
         center.normalize();
 
-        final Line3D line1 = new Line3D(point1, point2);
-        final Line3D line2 = new Line3D(point1, point3);
-        final Line3D line3 = new Line3D(point2, point3);
+        final var line1 = new Line3D(point1, point2);
+        final var line2 = new Line3D(point1, point3);
+        final var line3 = new Line3D(point2, point3);
 
         line1.normalize();
         line2.normalize();
         line3.normalize();
 
-        final Point3D pointLine1 = line1.getClosestPoint(center);
-        final Point3D pointLine2 = line2.getClosestPoint(center);
-        final Point3D pointLine3 = line3.getClosestPoint(center);
+        final var pointLine1 = line1.getClosestPoint(center);
+        final var pointLine2 = line2.getClosestPoint(center);
+        final var pointLine3 = line3.getClosestPoint(center);
 
         pointLine1.normalize();
         pointLine2.normalize();
         pointLine3.normalize();
 
         // pick the closest point among the three above to center
-        final double dist1 = pointLine1.distanceTo(center);
-        final double dist2 = pointLine2.distanceTo(center);
-        final double dist3 = pointLine3.distanceTo(center);
+        final var dist1 = pointLine1.distanceTo(center);
+        final var dist2 = pointLine2.distanceTo(center);
+        final var dist3 = pointLine3.distanceTo(center);
 
-        final Point3D linePoint = Point3D.create();
+        final var linePoint = Point3D.create();
 
         if (dist1 < dist2 && dist1 < dist3) {
             // pick pointLine1
@@ -814,34 +743,33 @@ public class Triangle3DTest {
     }
 
     @Test
-    public void testOrientationAndToPlane() throws ColinearPointsException,
-            CoincidentPointsException {
+    void testOrientationAndToPlane() throws ColinearPointsException, CoincidentPointsException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final Point3D point1 = new InhomogeneousPoint3D(
+        final var point1 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2 = new InhomogeneousPoint3D(
+        final var point2 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3 = new InhomogeneousPoint3D(
+        final var point3 = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        Triangle3D triangle = new Triangle3D(point1, point2, point3);
+        final var triangle1 = new Triangle3D(point1, point2, point3);
 
         // check that points are locus of triangle
-        assertTrue(triangle.isLocus(point1, ABSOLUTE_ERROR));
-        assertTrue(triangle.isLocus(point2, ABSOLUTE_ERROR));
-        assertTrue(triangle.isLocus(point3, ABSOLUTE_ERROR));
+        assertTrue(triangle1.isLocus(point1, ABSOLUTE_ERROR));
+        assertTrue(triangle1.isLocus(point2, ABSOLUTE_ERROR));
+        assertTrue(triangle1.isLocus(point3, ABSOLUTE_ERROR));
 
-        final Plane plane1 = triangle.toPlane();
-        final Plane plane2 = new Plane();
-        triangle.toPlane(plane2);
+        final var plane1 = triangle1.toPlane();
+        final var plane2 = new Plane();
+        triangle1.toPlane(plane2);
 
         // check that vertices of triangle are locus of plane1 and plane2
         assertTrue(plane1.isLocus(point1, ABSOLUTE_ERROR));
@@ -852,28 +780,28 @@ public class Triangle3DTest {
         assertTrue(plane2.isLocus(point2, ABSOLUTE_ERROR));
         assertTrue(plane2.isLocus(point3, ABSOLUTE_ERROR));
 
-        final double[] expectedOrientation = plane1.getDirectorVector();
+        final var expectedOrientation = plane1.getDirectorVector();
         // normalize expected orientation
-        final double norm = Utils.normF(expectedOrientation);
+        final var norm = Utils.normF(expectedOrientation);
         ArrayUtils.multiplyByScalar(expectedOrientation, 1.0 / norm, expectedOrientation);
 
-        final double[] orientation1 = triangle.getOrientation();
-        final double[] orientation2 = triangle.getOrientation(ABSOLUTE_ERROR);
-        final double[] orientation3 = Triangle3D.orientation(triangle);
-        final double[] orientation4 = Triangle3D.orientation(triangle, ABSOLUTE_ERROR);
-        final double[] orientation5 = Triangle3D.orientation(point1, point2, point3);
-        final double[] orientation6 = Triangle3D.orientation(point1, point2, point3, ABSOLUTE_ERROR);
-        final double[] orientation7 = new double[INHOM_COORDS];
-        triangle.orientation(orientation7);
-        final double[] orientation8 = new double[INHOM_COORDS];
-        triangle.orientation(orientation8, ABSOLUTE_ERROR);
-        final double[] orientation9 = new double[INHOM_COORDS];
-        Triangle3D.orientation(triangle, orientation9);
-        final double[] orientation10 = new double[INHOM_COORDS];
-        Triangle3D.orientation(triangle, orientation10, ABSOLUTE_ERROR);
-        final double[] orientation11 = new double[INHOM_COORDS];
+        final var orientation1 = triangle1.getOrientation();
+        final var orientation2 = triangle1.getOrientation(ABSOLUTE_ERROR);
+        final var orientation3 = Triangle3D.orientation(triangle1);
+        final var orientation4 = Triangle3D.orientation(triangle1, ABSOLUTE_ERROR);
+        final var orientation5 = Triangle3D.orientation(point1, point2, point3);
+        final var orientation6 = Triangle3D.orientation(point1, point2, point3, ABSOLUTE_ERROR);
+        final var orientation7 = new double[INHOM_COORDS];
+        triangle1.orientation(orientation7);
+        final var orientation8 = new double[INHOM_COORDS];
+        triangle1.orientation(orientation8, ABSOLUTE_ERROR);
+        final var orientation9 = new double[INHOM_COORDS];
+        Triangle3D.orientation(triangle1, orientation9);
+        final var orientation10 = new double[INHOM_COORDS];
+        Triangle3D.orientation(triangle1, orientation10, ABSOLUTE_ERROR);
+        final var orientation11 = new double[INHOM_COORDS];
         Triangle3D.orientation(point1, point2, point3, orientation11);
-        final double[] orientation12 = new double[INHOM_COORDS];
+        final var orientation12 = new double[INHOM_COORDS];
         Triangle3D.orientation(point1, point2, point3, orientation12, ABSOLUTE_ERROR);
 
         if (Math.signum(expectedOrientation[0]) != Math.signum(orientation1[0])) {
@@ -896,203 +824,113 @@ public class Triangle3DTest {
         assertArrayEquals(expectedOrientation, orientation12, ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        try {
-            triangle.getOrientation(-ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Triangle3D.orientation(triangle, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Triangle3D.orientation(point1, point2, point3, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            triangle.orientation(orientation8, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Triangle3D.orientation(triangle, orientation10, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Triangle3D.orientation(point1, point2, point3, orientation12, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> triangle1.getOrientation(-ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> Triangle3D.orientation(triangle1, -ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> Triangle3D.orientation(point1, point2, point3,
+                -ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> triangle1.orientation(orientation8, -ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> Triangle3D.orientation(triangle1, orientation10,
+                -ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> Triangle3D.orientation(point1, point2, point3, orientation12,
+                -ABSOLUTE_ERROR));
 
-        final double[] wrong = new double[INHOM_COORDS + 1];
-        try {
-            triangle.orientation(wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            triangle.orientation(wrong, ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Triangle3D.orientation(triangle, wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Triangle3D.orientation(triangle, wrong, ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Triangle3D.orientation(point1, point2, point3, wrong);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Triangle3D.orientation(point1, point2, point3, wrong, ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var wrong = new double[INHOM_COORDS + 1];
+        assertThrows(IllegalArgumentException.class, () -> triangle1.orientation(wrong));
+        assertThrows(IllegalArgumentException.class, () -> triangle1.orientation(wrong, ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> Triangle3D.orientation(triangle1, wrong));
+        assertThrows(IllegalArgumentException.class, () -> Triangle3D.orientation(triangle1, wrong, ABSOLUTE_ERROR));
+        assertThrows(IllegalArgumentException.class, () -> Triangle3D.orientation(point1, point2, point3, wrong));
+        assertThrows(IllegalArgumentException.class, () -> Triangle3D.orientation(point1, point2, point3, wrong,
+                ABSOLUTE_ERROR));
 
         // Force CoincidentPointsException
-        triangle = new Triangle3D(point1, point1, point2);
-
-        try {
-            triangle.getOrientation();
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        try {
-            triangle.getOrientation(ABSOLUTE_ERROR);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        try {
-            Triangle3D.orientation(triangle);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        try {
-            Triangle3D.orientation(triangle, ABSOLUTE_ERROR);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        try {
-            Triangle3D.orientation(point1, point1, point2);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        try {
-            Triangle3D.orientation(point1, point1, point2, ABSOLUTE_ERROR);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        try {
-            triangle.orientation(orientation7);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        try {
-            triangle.orientation(orientation8, ABSOLUTE_ERROR);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        try {
-            Triangle3D.orientation(triangle, orientation9);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        try {
-            Triangle3D.orientation(triangle, orientation10, ABSOLUTE_ERROR);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        try {
-            Triangle3D.orientation(point1, point1, point2, orientation11);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
-        try {
-            Triangle3D.orientation(point1, point1, point2, orientation12, ABSOLUTE_ERROR);
-            fail("CoincidentPointsException expected but not thrown");
-        } catch (final CoincidentPointsException ignore) {
-        }
+        final var triangle2 = new Triangle3D(point1, point1, point2);
+        assertThrows(CoincidentPointsException.class, triangle2::getOrientation);
+        assertThrows(CoincidentPointsException.class, () -> triangle2.getOrientation(ABSOLUTE_ERROR));
+        assertThrows(CoincidentPointsException.class, () -> Triangle3D.orientation(triangle2));
+        assertThrows(CoincidentPointsException.class, () -> Triangle3D.orientation(triangle2, ABSOLUTE_ERROR));
+        assertThrows(CoincidentPointsException.class, () -> Triangle3D.orientation(point1, point1, point2));
+        assertThrows(CoincidentPointsException.class, () -> Triangle3D.orientation(point1, point1, point2,
+                ABSOLUTE_ERROR));
+        assertThrows(CoincidentPointsException.class, () -> triangle2.orientation(orientation7));
+        assertThrows(CoincidentPointsException.class, () -> triangle2.orientation(orientation8, ABSOLUTE_ERROR));
+        assertThrows(CoincidentPointsException.class, () -> Triangle3D.orientation(triangle2, orientation9));
+        assertThrows(CoincidentPointsException.class, () -> Triangle3D.orientation(triangle2, orientation10,
+                ABSOLUTE_ERROR));
+        assertThrows(CoincidentPointsException.class, () -> Triangle3D.orientation(point1, point1, point2,
+                orientation11));
+        assertThrows(CoincidentPointsException.class, () -> Triangle3D.orientation(point1, point1, point2,
+                orientation12, ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testGetAngleBetweenTriangles() throws CoincidentPointsException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testGetAngleBetweenTriangles() throws CoincidentPointsException {
+        final var randomizer = new UniformRandomizer();
 
-        final Point3D point1a = new InhomogeneousPoint3D(
+        final var point1a = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2a = new InhomogeneousPoint3D(
+        final var point2a = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3a = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-
-        final Point3D point1b = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2b = new InhomogeneousPoint3D(
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
-                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3b = new InhomogeneousPoint3D(
+        final var point3a = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Triangle3D triangleA = new Triangle3D(point1a, point2a, point3a);
-        final Triangle3D triangleB = new Triangle3D(point1b, point2b, point3b);
+        final var point1b = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var point2b = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var point3b = new InhomogeneousPoint3D(
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final double[] orientationA = triangleA.getOrientation();
-        final double[] orientationB = triangleB.getOrientation();
+        final var triangleA = new Triangle3D(point1a, point2a, point3a);
+        final var triangleB = new Triangle3D(point1b, point2b, point3b);
 
-        final double normA = Utils.normF(orientationA);
-        final double normB = Utils.normF(orientationB);
+        final var orientationA = triangleA.getOrientation();
+        final var orientationB = triangleB.getOrientation();
+
+        final var normA = Utils.normF(orientationA);
+        final var normB = Utils.normF(orientationB);
 
         // compute dot product between orientation vectors
-        final double dotProduct = orientationA[0] * orientationB[0] +
+        final var dotProduct = orientationA[0] * orientationB[0] +
                 orientationA[1] * orientationB[1] +
                 orientationA[2] * orientationB[2];
-        final double cosAngle = dotProduct / (normA * normB);
+        final var cosAngle = dotProduct / (normA * normB);
 
-        final double expectedAngle = Math.acos(cosAngle);
+        final var expectedAngle = Math.acos(cosAngle);
 
-        assertEquals(Triangle3D.getAngleBetweenTriangles(triangleA, triangleB), expectedAngle,
-                ABSOLUTE_ERROR);
+        assertEquals(Triangle3D.getAngleBetweenTriangles(triangleA, triangleB), expectedAngle, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
 
-        final Point3D point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point1 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point2 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point2 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final Point3D point3 = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var point3 = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final Triangle3D triangle1 = new Triangle3D(point1, point2, point3);
+        final var triangle1 = new Triangle3D(point1, point2, point3);
 
         // check
         assertEquals(point1, triangle1.getVertex1());
@@ -1100,8 +938,8 @@ public class Triangle3DTest {
         assertEquals(point3, triangle1.getVertex3());
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(triangle1);
-        final Triangle3D triangle2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(triangle1);
+        final var triangle2 = SerializationHelper.<Triangle3D>deserialize(bytes);
 
         // check
         assertEquals(triangle1.getVertex1(), triangle2.getVertex1());

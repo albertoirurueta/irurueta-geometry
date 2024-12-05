@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class NoIntersectionExceptionTest {
+class NoIntersectionExceptionTest {
 
     @Test
-    public void testConstructor() {
-        NoIntersectionException ex = new NoIntersectionException();
+    void testConstructor() {
+        var ex = new NoIntersectionException();
         assertNotNull(ex);
 
         ex = new NoIntersectionException("message");

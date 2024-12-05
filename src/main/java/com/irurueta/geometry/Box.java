@@ -28,12 +28,12 @@ public abstract class Box<P extends Point<P>> implements Serializable {
     /**
      * Low coordinate values.
      */
-    protected P mLo;
+    protected P lo;
 
     /**
      * High coordinate values.
      */
-    protected P mHi;
+    protected P hi;
 
     /**
      * Empty constructor.
@@ -57,7 +57,7 @@ public abstract class Box<P extends Point<P>> implements Serializable {
      * @return low coordinate values.
      */
     public P getLo() {
-        return mLo;
+        return lo;
     }
 
     /**
@@ -66,7 +66,7 @@ public abstract class Box<P extends Point<P>> implements Serializable {
      * @param lo low coordinate values.
      */
     public void setLo(final P lo) {
-        mLo = lo;
+        this.lo = lo;
     }
 
     /**
@@ -75,7 +75,7 @@ public abstract class Box<P extends Point<P>> implements Serializable {
      * @return high coordinate values.
      */
     public P getHi() {
-        return mHi;
+        return hi;
     }
 
     /**
@@ -84,7 +84,7 @@ public abstract class Box<P extends Point<P>> implements Serializable {
      * @param hi high coordinate values.
      */
     public void setHi(final P hi) {
-        mHi = hi;
+        this.hi = hi;
     }
 
     /**
@@ -105,16 +105,13 @@ public abstract class Box<P extends Point<P>> implements Serializable {
      * @return distance of provided point.
      */
     public double getSqrDistance(final P point) {
-        final int dim = point.getDimensions();
+        final var dim = point.getDimensions();
 
-        double dd = 0.0;
-        double pointValue;
-        double loValue;
-        double hiValue;
-        for (int i = 0; i < dim; i++) {
-            pointValue = point.getInhomogeneousCoordinate(i);
-            loValue = mLo.getInhomogeneousCoordinate(i);
-            hiValue = mHi.getInhomogeneousCoordinate(i);
+        var dd = 0.0;
+        for (var i = 0; i < dim; i++) {
+            final var pointValue = point.getInhomogeneousCoordinate(i);
+            final var loValue = lo.getInhomogeneousCoordinate(i);
+            final var hiValue = hi.getInhomogeneousCoordinate(i);
 
             if (pointValue < loValue) {
                 dd += sqr(pointValue - loValue);
@@ -154,7 +151,7 @@ public abstract class Box<P extends Point<P>> implements Serializable {
      * @param hi high coordinate values.
      */
     private void internalSetBounds(final P lo, final P hi) {
-        mLo = lo;
-        mHi = hi;
+        this.lo = lo;
+        this.hi = hi;
     }
 }

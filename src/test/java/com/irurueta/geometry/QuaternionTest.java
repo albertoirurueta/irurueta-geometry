@@ -15,19 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import com.irurueta.algebra.AlgebraException;
-import com.irurueta.algebra.ArrayUtils;
-import com.irurueta.algebra.Matrix;
-import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class QuaternionTest {
+class QuaternionTest {
     private static final int ROTATION_COLS = 3;
     private static final int INHOM_COORDS = 3;
 
@@ -42,7 +38,7 @@ public class QuaternionTest {
     private static final double JACOBIAN_ERROR = 1e-6;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(4, Quaternion.N_PARAMS);
         assertEquals(3, Quaternion.N_ANGLES);
         assertEquals(1e-7, Quaternion.AXIS_NORM_THRESHOLD, 0.0);
@@ -51,9 +47,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testConstructors() throws AlgebraException, RotationException {
+    void testConstructors() throws AlgebraException, RotationException {
         // empty constructor
-        Quaternion q = new Quaternion();
+        var q = new Quaternion();
 
         // check correctness
         assertEquals(1.0, q.getA(), 0.0);
@@ -64,11 +60,11 @@ public class QuaternionTest {
                 q.toMatrixRotation().getInternalMatrix());
 
         // constructor with values
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         q = new Quaternion(a, b, c, d);
 
@@ -79,7 +75,7 @@ public class QuaternionTest {
         assertEquals(d, q.getD(), 0.0);
 
         // constructor from another quaternion
-        Quaternion q2 = new Quaternion(q);
+        var q2 = new Quaternion(q);
 
         // check correctness
         assertEquals(a, q2.getA(), 0.0);
@@ -88,8 +84,8 @@ public class QuaternionTest {
         assertEquals(d, q2.getD(), 0.0);
 
         // constructor from values
-        double[] values = new double[]{a, b, c, d};
-        q = new Quaternion(values);
+        final var values1 = new double[]{a, b, c, d};
+        q = new Quaternion(values1);
 
         // check correctness
         assertEquals(a, q.getA(), 0.0);
@@ -98,18 +94,11 @@ public class QuaternionTest {
         assertEquals(d, q.getD(), 0.0);
 
         // Force IllegalArgumentException
-        q = null;
-        values = new double[]{1, a, b, c, d};
-        try {
-            q = new Quaternion(values);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(q);
+        final var values2 = new double[]{1, a, b, c, d};
+        assertThrows(IllegalArgumentException.class, () ->  new Quaternion(values2));
 
         // constructor from axis and rotation angle
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -117,36 +106,28 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final AxisRotation3D axisRotation = new AxisRotation3D(axis, theta);
+        final var axisRotation = new AxisRotation3D(axis, theta);
 
         q = new Quaternion(axis, theta);
 
         // check correctness
-        final double[] axis2 = q.getRotationAxis();
-        final double theta2 = q.getRotationAngle();
+        final var axis2 = q.getRotationAxis();
+        final var theta2 = q.getRotationAngle();
         assertArrayEquals(axis, axis2, ABSOLUTE_ERROR);
         assertEquals(theta, theta2, ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        q = null;
-        try {
-            q = new Quaternion(new double[]{}, theta);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(q);
+        assertThrows(IllegalArgumentException.class, () -> new Quaternion(new double[]{}, theta));
 
         // constructor from an axis rotation
         q = new Quaternion(axisRotation);
@@ -156,22 +137,19 @@ public class QuaternionTest {
         assertEquals(q, axisRotation);
 
         // constructor from roll, pitch and yaw angles
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
         q = new Quaternion(roll, pitch, yaw);
-        MatrixRotation3D matrixRotation = new MatrixRotation3D();
+        var matrixRotation = new MatrixRotation3D();
         matrixRotation.setRollPitchYaw(roll, pitch, yaw);
 
         q2 = matrixRotation.toQuaternion();
 
         assertEquals(q, q2);
 
-        final double[] angles = new double[Quaternion.N_ANGLES];
+        final var angles = new double[Quaternion.N_ANGLES];
         q.toEulerAngles(angles);
 
         // check correctness
@@ -191,11 +169,11 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testGetSetA() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testGetSetA() {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
 
         // check initial value
         assertEquals(1.0, q.getA(), 0.0);
@@ -208,11 +186,11 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testGetSetB() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testGetSetB() {
+        final var randomizer = new UniformRandomizer();
+        final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
 
         // check initial value
         assertEquals(0.0, q.getB(), 0.0);
@@ -225,11 +203,11 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testGetSetC() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testGetSetC() {
+        final var randomizer = new UniformRandomizer();
+        final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
 
         // check initial value
         assertEquals(0.0, q.getC(), 0.0);
@@ -242,11 +220,11 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testGetSetD() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testGetSetD() {
+        final var randomizer = new UniformRandomizer();
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
 
         // check initial value
         assertEquals(0.0, q.getD(), 0.0);
@@ -259,42 +237,38 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testGetSetValues() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] values = new double[Quaternion.N_PARAMS];
+    void testGetSetValues() {
+        final var randomizer = new UniformRandomizer();
+        final var values = new double[Quaternion.N_PARAMS];
         randomizer.fill(values, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
 
         // set values
         q.setValues(values);
 
         // check correctness
-        final double[] values2 = new double[Quaternion.N_PARAMS];
-        final double[] values3 = q.getValues();
+        final var values2 = new double[Quaternion.N_PARAMS];
+        final var values3 = q.getValues();
         q.values(values2);
 
         assertArrayEquals(values, values2, 0.0);
         assertArrayEquals(values, values3, 0.0);
 
         // Force IllegalArgumentException
-        final double[] invalid = new double[Quaternion.N_PARAMS + 1];
-        try {
-            q.setValues(invalid);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var invalid = new double[Quaternion.N_PARAMS + 1];
+        assertThrows(IllegalArgumentException.class, () -> q.setValues(invalid));
     }
 
     @Test
-    public void testFromQuaternion() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] values = new double[Quaternion.N_PARAMS];
+    void testFromQuaternion() {
+        final var randomizer = new UniformRandomizer();
+        final var values = new double[Quaternion.N_PARAMS];
         randomizer.fill(values, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quaternion q = new Quaternion(values);
+        final var q = new Quaternion(values);
 
-        final Quaternion q2 = new Quaternion();
+        final var q2 = new Quaternion();
         q2.fromQuaternion(q);
 
         // check correctness
@@ -305,14 +279,14 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testClone() throws CloneNotSupportedException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] values = new double[Quaternion.N_PARAMS];
+    void testClone() throws CloneNotSupportedException {
+        final var randomizer = new UniformRandomizer();
+        final var values = new double[Quaternion.N_PARAMS];
         randomizer.fill(values, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quaternion q = new Quaternion(values);
+        final var q = new Quaternion(values);
 
-        final Quaternion q2 = q.clone();
+        final var q2 = q.clone();
 
         // check correctness
         assertArrayEquals(values, q.getValues(), 0.0);
@@ -322,14 +296,14 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testCopyTo() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double[] values = new double[Quaternion.N_PARAMS];
+    void testCopyTo() {
+        final var randomizer = new UniformRandomizer();
+        final var values = new double[Quaternion.N_PARAMS];
         randomizer.fill(values, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quaternion q = new Quaternion(values);
+        final var q = new Quaternion(values);
 
-        final Quaternion q2 = new Quaternion();
+        final var q2 = new Quaternion();
         q.copyTo(q2);
 
         // check correctness
@@ -340,11 +314,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testGetSetFromAxisAndRotation() throws AlgebraException,
-            RotationException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testGetSetFromAxisAndRotation() throws AlgebraException, RotationException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -352,254 +324,223 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final AxisRotation3D axisRotation = new AxisRotation3D(axis, theta);
+        final var axisRotation = new AxisRotation3D(axis, theta);
 
-        Quaternion q = new Quaternion();
+        final var q1 = new Quaternion();
         // set values
-        q.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta);
+        q1.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta);
 
         // check correctness
-        assertArrayEquals(axis, q.getRotationAxis(), ABSOLUTE_ERROR);
-        assertEquals(theta, q.getRotationAngle(), ABSOLUTE_ERROR);
+        assertArrayEquals(axis, q1.getRotationAxis(), ABSOLUTE_ERROR);
+        assertEquals(theta, q1.getRotationAngle(), ABSOLUTE_ERROR);
 
         // set values with jacobians
-        Matrix jacobianOfTheta = new Matrix(Quaternion.N_PARAMS, 1);
-        Matrix jacobianOfAxis = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
+        final var jacobianOfTheta1 = new Matrix(Quaternion.N_PARAMS, 1);
+        final var jacobianOfAxis1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
 
-        q.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta,
-                jacobianOfTheta, jacobianOfAxis);
+        q1.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta, jacobianOfTheta1, jacobianOfAxis1);
 
         // check correctness
-        final double halfTheta = theta / 2.0;
-        final double c = Math.cos(halfTheta);
-        final double s = Math.sin(halfTheta);
-        final double halfC = c / 2.0;
-        final double halfS = s / 2.0;
+        final var halfTheta = theta / 2.0;
+        final var c = Math.cos(halfTheta);
+        final var s = Math.sin(halfTheta);
+        final var halfC = c / 2.0;
+        final var halfS = s / 2.0;
 
-        assertEquals(-halfS, jacobianOfTheta.getElementAtIndex(0), ABSOLUTE_ERROR);
-        assertEquals(axis[0] * halfC, jacobianOfTheta.getElementAtIndex(1), ABSOLUTE_ERROR);
-        assertEquals(axis[1] * halfC, jacobianOfTheta.getElementAtIndex(2), ABSOLUTE_ERROR);
-        assertEquals(axis[2] * halfC, jacobianOfTheta.getElementAtIndex(3), ABSOLUTE_ERROR);
+        assertEquals(-halfS, jacobianOfTheta1.getElementAtIndex(0), ABSOLUTE_ERROR);
+        assertEquals(axis[0] * halfC, jacobianOfTheta1.getElementAtIndex(1), ABSOLUTE_ERROR);
+        assertEquals(axis[1] * halfC, jacobianOfTheta1.getElementAtIndex(2), ABSOLUTE_ERROR);
+        assertEquals(axis[2] * halfC, jacobianOfTheta1.getElementAtIndex(3), ABSOLUTE_ERROR);
 
-        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 0), 0.0);
-        assertEquals(s, jacobianOfAxis.getElementAt(1, 0), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 0), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis1.getElementAt(0, 0), 0.0);
+        assertEquals(s, jacobianOfAxis1.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis1.getElementAt(2, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis1.getElementAt(3, 0), 0.0);
 
-        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 1), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 1), 0.0);
-        assertEquals(s, jacobianOfAxis.getElementAt(2, 1), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis1.getElementAt(0, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis1.getElementAt(1, 1), 0.0);
+        assertEquals(s, jacobianOfAxis1.getElementAt(2, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis1.getElementAt(3, 0), 0.0);
 
-        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 2), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 2), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 2), 0.0);
-        assertEquals(s, jacobianOfAxis.getElementAt(3, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis1.getElementAt(0, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis1.getElementAt(1, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis1.getElementAt(2, 2), 0.0);
+        assertEquals(s, jacobianOfAxis1.getElementAt(3, 2), 0.0);
 
         // Force IllegalArgumentException
-        final Matrix invalid = new Matrix(1, 1);
-        try {
-            q.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta, invalid, jacobianOfAxis);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            q.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta, jacobianOfTheta, invalid);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var invalid = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class,
+                () -> q1.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta, invalid, jacobianOfAxis1));
+        assertThrows(IllegalArgumentException.class,
+                () -> q1.setFromAxisAndRotation(axis[0], axis[1], axis[2], theta, jacobianOfTheta1, invalid));
 
         // set values
-        q = new Quaternion();
-        q.setFromAxisAndRotation(axis, theta);
+        final var q2 = new Quaternion();
+        q2.setFromAxisAndRotation(axis, theta);
 
         // check correctness
-        assertArrayEquals(axis, q.getRotationAxis(), ABSOLUTE_ERROR);
-        assertEquals(theta, q.getRotationAngle(), ABSOLUTE_ERROR);
+        assertArrayEquals(axis, q2.getRotationAxis(), ABSOLUTE_ERROR);
+        assertEquals(theta, q2.getRotationAngle(), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        try {
-            q.setFromAxisAndRotation(new double[1], theta);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> q2.setFromAxisAndRotation(new double[1], theta));
 
         // set values with jacobians
-        jacobianOfTheta = new Matrix(Quaternion.N_PARAMS, 1);
-        jacobianOfAxis = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
+        final var jacobianOfTheta2 = new Matrix(Quaternion.N_PARAMS, 1);
+        final var jacobianOfAxis2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
 
-        q.setFromAxisAndRotation(axis, theta, jacobianOfTheta, jacobianOfAxis);
+        q2.setFromAxisAndRotation(axis, theta, jacobianOfTheta2, jacobianOfAxis2);
 
         // check correctness
-        assertEquals(-halfS, jacobianOfTheta.getElementAtIndex(0), ABSOLUTE_ERROR);
-        assertEquals(axis[0] * halfC, jacobianOfTheta.getElementAtIndex(1), ABSOLUTE_ERROR);
-        assertEquals(axis[1] * halfC, jacobianOfTheta.getElementAtIndex(2), ABSOLUTE_ERROR);
-        assertEquals(axis[2] * halfC, jacobianOfTheta.getElementAtIndex(3), ABSOLUTE_ERROR);
+        assertEquals(-halfS, jacobianOfTheta2.getElementAtIndex(0), ABSOLUTE_ERROR);
+        assertEquals(axis[0] * halfC, jacobianOfTheta2.getElementAtIndex(1), ABSOLUTE_ERROR);
+        assertEquals(axis[1] * halfC, jacobianOfTheta2.getElementAtIndex(2), ABSOLUTE_ERROR);
+        assertEquals(axis[2] * halfC, jacobianOfTheta2.getElementAtIndex(3), ABSOLUTE_ERROR);
 
-        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 0), 0.0);
-        assertEquals(s, jacobianOfAxis.getElementAt(1, 0), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 0), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis2.getElementAt(0, 0), 0.0);
+        assertEquals(s, jacobianOfAxis2.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis2.getElementAt(2, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis2.getElementAt(3, 0), 0.0);
 
-        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 1), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 1), 0.0);
-        assertEquals(s, jacobianOfAxis.getElementAt(2, 1), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis2.getElementAt(0, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis2.getElementAt(1, 1), 0.0);
+        assertEquals(s, jacobianOfAxis2.getElementAt(2, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis2.getElementAt(3, 0), 0.0);
 
-        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 2), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 2), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 2), 0.0);
-        assertEquals(s, jacobianOfAxis.getElementAt(3, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis2.getElementAt(0, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis2.getElementAt(1, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis2.getElementAt(2, 2), 0.0);
+        assertEquals(s, jacobianOfAxis2.getElementAt(3, 2), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            q.setFromAxisAndRotation(new double[1], theta, jacobianOfTheta, jacobianOfAxis);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            q.setFromAxisAndRotation(axis, theta, invalid, jacobianOfAxis);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            q.setFromAxisAndRotation(axis, theta, jacobianOfTheta, invalid);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                () -> q2.setFromAxisAndRotation(new double[1], theta, jacobianOfTheta2, jacobianOfAxis2));
+        assertThrows(IllegalArgumentException.class,
+                () -> q2.setFromAxisAndRotation(axis, theta, invalid, jacobianOfAxis2));
+        assertThrows(IllegalArgumentException.class,
+                () -> q2.setFromAxisAndRotation(axis, theta, jacobianOfTheta2, invalid));
 
         // set values
-        q = new Quaternion();
-        q.setFromAxisAndRotation(axisRotation);
+        final var q3 = new Quaternion();
+        q3.setFromAxisAndRotation(axisRotation);
 
         // check correctness
-        assertArrayEquals(axis, q.getRotationAxis(), ABSOLUTE_ERROR);
-        assertEquals(theta, q.getRotationAngle(), ABSOLUTE_ERROR);
+        assertArrayEquals(axis, q3.getRotationAxis(), ABSOLUTE_ERROR);
+        assertEquals(theta, q3.getRotationAngle(), ABSOLUTE_ERROR);
 
         // set values with jacobians
-        jacobianOfTheta = new Matrix(Quaternion.N_PARAMS, 1);
-        jacobianOfAxis = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
+        final var jacobianOfTheta3 = new Matrix(Quaternion.N_PARAMS, 1);
+        final var jacobianOfAxis3 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
 
-        q = new Quaternion();
-        q.setFromAxisAndRotation(axisRotation, jacobianOfTheta, jacobianOfAxis);
+        final var q4 = new Quaternion();
+        q4.setFromAxisAndRotation(axisRotation, jacobianOfTheta3, jacobianOfAxis3);
 
         // check correctness
-        assertArrayEquals(axis, q.getRotationAxis(), ABSOLUTE_ERROR);
-        assertEquals(theta, q.getRotationAngle(), ABSOLUTE_ERROR);
+        assertArrayEquals(axis, q4.getRotationAxis(), ABSOLUTE_ERROR);
+        assertEquals(theta, q4.getRotationAngle(), ABSOLUTE_ERROR);
 
-        assertEquals(-halfS, jacobianOfTheta.getElementAtIndex(0), ABSOLUTE_ERROR);
-        assertEquals(axis[0] * halfC, jacobianOfTheta.getElementAtIndex(1), ABSOLUTE_ERROR);
-        assertEquals(axis[1] * halfC, jacobianOfTheta.getElementAtIndex(2), ABSOLUTE_ERROR);
-        assertEquals(axis[2] * halfC, jacobianOfTheta.getElementAtIndex(3), ABSOLUTE_ERROR);
+        assertEquals(-halfS, jacobianOfTheta3.getElementAtIndex(0), ABSOLUTE_ERROR);
+        assertEquals(axis[0] * halfC, jacobianOfTheta3.getElementAtIndex(1), ABSOLUTE_ERROR);
+        assertEquals(axis[1] * halfC, jacobianOfTheta3.getElementAtIndex(2), ABSOLUTE_ERROR);
+        assertEquals(axis[2] * halfC, jacobianOfTheta3.getElementAtIndex(3), ABSOLUTE_ERROR);
 
-        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 0), 0.0);
-        assertEquals(s, jacobianOfAxis.getElementAt(1, 0), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 0), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis3.getElementAt(0, 0), 0.0);
+        assertEquals(s, jacobianOfAxis3.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis3.getElementAt(2, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis3.getElementAt(3, 0), 0.0);
 
-        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 1), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 1), 0.0);
-        assertEquals(s, jacobianOfAxis.getElementAt(2, 1), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(3, 0), 0.0);
+        assertEquals(0.0, jacobianOfAxis3.getElementAt(0, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis3.getElementAt(1, 1), 0.0);
+        assertEquals(s, jacobianOfAxis3.getElementAt(2, 1), 0.0);
+        assertEquals(0.0, jacobianOfAxis3.getElementAt(3, 0), 0.0);
 
-        assertEquals(0.0, jacobianOfAxis.getElementAt(0, 2), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(1, 2), 0.0);
-        assertEquals(0.0, jacobianOfAxis.getElementAt(2, 2), 0.0);
-        assertEquals(s, jacobianOfAxis.getElementAt(3, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis3.getElementAt(0, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis3.getElementAt(1, 2), 0.0);
+        assertEquals(0.0, jacobianOfAxis3.getElementAt(2, 2), 0.0);
+        assertEquals(s, jacobianOfAxis3.getElementAt(3, 2), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            q.setFromAxisAndRotation(axisRotation, invalid, jacobianOfAxis);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            q.setFromAxisAndRotation(axisRotation, jacobianOfTheta, invalid);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                () -> q4.setFromAxisAndRotation(axisRotation, invalid, jacobianOfAxis3));
+        assertThrows(IllegalArgumentException.class,
+                () -> q4.setFromAxisAndRotation(axisRotation, jacobianOfTheta3, invalid));
     }
 
     @Test
-    public void testMultiplyAndProduct() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double a1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double a2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testMultiplyAndProduct() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var a1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var a2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d1 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d2 = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quaternion q1 = new Quaternion(a1, b1, c1, d1);
-        final Quaternion q2 = new Quaternion(a2, b2, c2, d2);
+        final var q1 = new Quaternion(a1, b1, c1, d1);
+        final var q2 = new Quaternion(a2, b2, c2, d2);
 
-        final double a = a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2;
-        final double b = a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2;
-        final double c = a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2;
-        final double d = a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2;
+        final var a = a1 * a2 - b1 * b2 - c1 * c2 - d1 * d2;
+        final var b = a1 * b2 + b1 * a2 + c1 * d2 - d1 * c2;
+        final var c = a1 * c2 - b1 * d2 + c1 * a2 + d1 * b2;
+        final var d = a1 * d2 + b1 * c2 - c1 * b2 + d1 * a2;
 
-        Quaternion q = new Quaternion(q1);
-        q.multiply(q2);
-
-        // check correctness
-        assertEquals(q.getA(), a, ABSOLUTE_ERROR);
-        assertEquals(q.getB(), b, ABSOLUTE_ERROR);
-        assertEquals(q.getC(), c, ABSOLUTE_ERROR);
-        assertEquals(q.getD(), d, ABSOLUTE_ERROR);
-
-        q = q1.multiplyAndReturnNew(q2);
+        final var q3 = new Quaternion(q1);
+        q3.multiply(q2);
 
         // check correctness
-        assertEquals(q.getA(), a, ABSOLUTE_ERROR);
-        assertEquals(q.getB(), b, ABSOLUTE_ERROR);
-        assertEquals(q.getC(), c, ABSOLUTE_ERROR);
-        assertEquals(q.getD(), d, ABSOLUTE_ERROR);
+        assertEquals(q3.getA(), a, ABSOLUTE_ERROR);
+        assertEquals(q3.getB(), b, ABSOLUTE_ERROR);
+        assertEquals(q3.getC(), c, ABSOLUTE_ERROR);
+        assertEquals(q3.getD(), d, ABSOLUTE_ERROR);
 
-        q = new Quaternion();
-        q1.multiply(q2, q);
-
-        // check correctness
-        assertEquals(q.getA(), a, ABSOLUTE_ERROR);
-        assertEquals(q.getB(), b, ABSOLUTE_ERROR);
-        assertEquals(q.getC(), c, ABSOLUTE_ERROR);
-        assertEquals(q.getD(), d, ABSOLUTE_ERROR);
-
-        q = new Quaternion();
-        Quaternion.product(q1, q2, q);
+        final var q4 = q1.multiplyAndReturnNew(q2);
 
         // check correctness
-        assertEquals(q.getA(), a, ABSOLUTE_ERROR);
-        assertEquals(q.getB(), b, ABSOLUTE_ERROR);
-        assertEquals(q.getC(), c, ABSOLUTE_ERROR);
-        assertEquals(q.getD(), d, ABSOLUTE_ERROR);
+        assertEquals(q4.getA(), a, ABSOLUTE_ERROR);
+        assertEquals(q4.getB(), b, ABSOLUTE_ERROR);
+        assertEquals(q4.getC(), c, ABSOLUTE_ERROR);
+        assertEquals(q4.getD(), d, ABSOLUTE_ERROR);
 
-        q = new Quaternion();
-        Matrix jacobianQ1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
-        Matrix jacobianQ2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
-        Quaternion.product(q1, q2, q, jacobianQ1, jacobianQ2);
+        final var q5 = new Quaternion();
+        q1.multiply(q2, q5);
 
         // check correctness
-        assertEquals(q.getA(), a, ABSOLUTE_ERROR);
-        assertEquals(q.getB(), b, ABSOLUTE_ERROR);
-        assertEquals(q.getC(), c, ABSOLUTE_ERROR);
-        assertEquals(q.getD(), d, ABSOLUTE_ERROR);
+        assertEquals(q5.getA(), a, ABSOLUTE_ERROR);
+        assertEquals(q5.getB(), b, ABSOLUTE_ERROR);
+        assertEquals(q5.getC(), c, ABSOLUTE_ERROR);
+        assertEquals(q5.getD(), d, ABSOLUTE_ERROR);
+
+        final var q6 = new Quaternion();
+        Quaternion.product(q1, q2, q6);
+
+        // check correctness
+        assertEquals(q6.getA(), a, ABSOLUTE_ERROR);
+        assertEquals(q6.getB(), b, ABSOLUTE_ERROR);
+        assertEquals(q6.getC(), c, ABSOLUTE_ERROR);
+        assertEquals(q6.getD(), d, ABSOLUTE_ERROR);
+
+        final var q7 = new Quaternion();
+        final var jacobianQ1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        final var jacobianQ2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        Quaternion.product(q1, q2, q7, jacobianQ1, jacobianQ2);
+
+        // check correctness
+        assertEquals(q7.getA(), a, ABSOLUTE_ERROR);
+        assertEquals(q7.getB(), b, ABSOLUTE_ERROR);
+        assertEquals(q7.getC(), c, ABSOLUTE_ERROR);
+        assertEquals(q7.getD(), d, ABSOLUTE_ERROR);
 
         assertEquals(a2, jacobianQ1.getElementAt(0, 0), ABSOLUTE_ERROR);
         assertEquals(b2, jacobianQ1.getElementAt(1, 0), ABSOLUTE_ERROR);
@@ -642,368 +583,318 @@ public class QuaternionTest {
         assertEquals(a1, jacobianQ2.getElementAt(3, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        final Matrix invalid = new Matrix(1, 1);
-        try {
-            Quaternion.product(q1, q2, q, invalid, jacobianQ2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Quaternion.product(q1, q2, q, jacobianQ1, invalid);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var invalid = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> Quaternion.product(q1, q2, q7, invalid, jacobianQ2));
+        assertThrows(IllegalArgumentException.class, () -> Quaternion.product(q1, q2, q7, jacobianQ1, invalid));
 
         // check correctness of jacobians
-        q = new Quaternion();
-        jacobianQ1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
-        jacobianQ2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
-        Quaternion.product(q1, q2, q, jacobianQ1, jacobianQ2);
+        final var q8 = new Quaternion();
+        final var jacobianQ3 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        final var jacobianQ4 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        Quaternion.product(q1, q2, q8, jacobianQ3, jacobianQ4);
 
         // check q1 variation
-        double[] diff = new double[4];
+        var diff = new double[4];
         randomizer.fill(diff, -JACOBIAN_ERROR, JACOBIAN_ERROR);
-        final Quaternion q1b = new Quaternion(q1.getA() + diff[0],
-                q1.getB() + diff[1], q1.getC() + diff[2], q1.getD() + diff[3]);
-        Quaternion qb = new Quaternion();
+        final var q1b = new Quaternion(q1.getA() + diff[0], q1.getB() + diff[1], q1.getC() + diff[2],
+                q1.getD() + diff[3]);
+        var qb = new Quaternion();
         Quaternion.product(q1b, q2, qb);
 
-        double[] diffResult = new double[]{
-                qb.getA() - q.getA(),
-                qb.getB() - q.getB(),
-                qb.getC() - q.getC(),
-                qb.getD() - q.getD()
+        var diffResult = new double[]{
+                qb.getA() - q8.getA(),
+                qb.getB() - q8.getB(),
+                qb.getC() - q8.getC(),
+                qb.getD() - q8.getD()
         };
-        double[] diffResult2 = jacobianQ1.multiplyAndReturnNew(
-                Matrix.newFromArray(diff)).toArray();
+        var diffResult2 = jacobianQ1.multiplyAndReturnNew(Matrix.newFromArray(diff)).toArray();
         assertArrayEquals(diffResult, diffResult2, ABSOLUTE_ERROR);
 
         // check q2 variation
         diff = new double[4];
         randomizer.fill(diff, -JACOBIAN_ERROR, JACOBIAN_ERROR);
-        final Quaternion q2b = new Quaternion(q2.getA() + diff[0],
-                q2.getB() + diff[1], q2.getC() + diff[2], q2.getD() + diff[3]);
+        final var q2b = new Quaternion(q2.getA() + diff[0], q2.getB() + diff[1], q2.getC() + diff[2],
+                q2.getD() + diff[3]);
         qb = new Quaternion();
         Quaternion.product(q1, q2b, qb);
 
         diffResult = new double[]{
-                qb.getA() - q.getA(),
-                qb.getB() - q.getB(),
-                qb.getC() - q.getC(),
-                qb.getD() - q.getD()
+                qb.getA() - q8.getA(),
+                qb.getB() - q8.getB(),
+                qb.getC() - q8.getC(),
+                qb.getD() - q8.getD()
         };
-        diffResult2 = jacobianQ2.multiplyAndReturnNew(
-                Matrix.newFromArray(diff)).toArray();
+        diffResult2 = jacobianQ2.multiplyAndReturnNew(Matrix.newFromArray(diff)).toArray();
         assertArrayEquals(diffResult, diffResult2, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testSetFromEulerAngles() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testSetFromEulerAngles() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        Matrix jacobian = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
+        final var jacobian1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
 
-        Quaternion q = new Quaternion();
-        q.setFromEulerAngles(roll, pitch, yaw, jacobian);
+        final var q1 = new Quaternion();
+        q1.setFromEulerAngles(roll, pitch, yaw, jacobian1);
 
         // check correctness
-        double[] angles = q.toEulerAngles();
+        var angles = q1.toEulerAngles();
         assertEquals(roll, angles[0], ABSOLUTE_ERROR);
         assertEquals(pitch, angles[1], ABSOLUTE_ERROR);
         assertEquals(yaw, angles[2], ABSOLUTE_ERROR);
 
-        final double halfRoll = roll / 2.0;
-        final double halfPitch = pitch / 2.0;
-        final double halfYaw = yaw / 2.0;
+        final var halfRoll = roll / 2.0;
+        final var halfPitch = pitch / 2.0;
+        final var halfYaw = yaw / 2.0;
 
-        final double sr = Math.sin(halfRoll);
-        final double sp = Math.sin(halfPitch);
-        final double sy = Math.sin(halfYaw);
+        final var sr = Math.sin(halfRoll);
+        final var sp = Math.sin(halfPitch);
+        final var sy = Math.sin(halfYaw);
 
-        final double cr = Math.cos(halfRoll);
-        final double cp = Math.cos(halfPitch);
-        final double cy = Math.cos(halfYaw);
+        final var cr = Math.cos(halfRoll);
+        final var cp = Math.cos(halfPitch);
+        final var cy = Math.cos(halfYaw);
 
-        final double tmp1 = -cy * cp * sr + sy * sp * cr;
-        final double tmp2 = 0.5 * (cy * cp * cr + sy * sp * sr);
-        final double tmp3 = -cy * sp * sr + sy * cp * cr;
-        final double tmp4 = -sy * cp * sr - cy * sp * cr;
-        final double tmp5 = -cy * sp * cr + sy * cp * sr;
-        final double tmp6 = -cy * sp * sr - sy * cp * cr;
-        final double tmp7 = 0.5 * (cy * cp * cr - sy * sp * sr);
-        final double tmp8 = -cy * cp * sr - sy * sp * cr;
-        final double tmp9 = -sy * cp * cr + cy * sp * sr;
-        final double tmp10 = -sy * sp * cr + cy * cp * sr;
-        assertEquals(0.5 * tmp1, jacobian.getElementAt(0, 0), ABSOLUTE_ERROR);
-        assertEquals(tmp2, jacobian.getElementAt(1, 0), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp3, jacobian.getElementAt(2, 0), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp4, jacobian.getElementAt(3, 0), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp5, jacobian.getElementAt(0, 1), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp6, jacobian.getElementAt(1, 1), ABSOLUTE_ERROR);
-        assertEquals(tmp7, jacobian.getElementAt(2, 1), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp8, jacobian.getElementAt(3, 1), ABSOLUTE_ERROR);
+        final var tmp1 = -cy * cp * sr + sy * sp * cr;
+        final var tmp2 = 0.5 * (cy * cp * cr + sy * sp * sr);
+        final var tmp3 = -cy * sp * sr + sy * cp * cr;
+        final var tmp4 = -sy * cp * sr - cy * sp * cr;
+        final var tmp5 = -cy * sp * cr + sy * cp * sr;
+        final var tmp6 = -cy * sp * sr - sy * cp * cr;
+        final var tmp7 = 0.5 * (cy * cp * cr - sy * sp * sr);
+        final var tmp8 = -cy * cp * sr - sy * sp * cr;
+        final var tmp9 = -sy * cp * cr + cy * sp * sr;
+        final var tmp10 = -sy * sp * cr + cy * cp * sr;
+        assertEquals(0.5 * tmp1, jacobian1.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp2, jacobian1.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp3, jacobian1.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp4, jacobian1.getElementAt(3, 0), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp5, jacobian1.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp6, jacobian1.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(tmp7, jacobian1.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp8, jacobian1.getElementAt(3, 1), ABSOLUTE_ERROR);
 
-        assertEquals(0.5 * tmp9, jacobian.getElementAt(0, 2), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp4, jacobian.getElementAt(1, 2), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp10, jacobian.getElementAt(2, 2), ABSOLUTE_ERROR);
-        assertEquals(tmp2, jacobian.getElementAt(3, 2), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp9, jacobian1.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp4, jacobian1.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp10, jacobian1.getElementAt(2, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp2, jacobian1.getElementAt(3, 2), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        final Matrix invalid = new Matrix(1, 1);
-        try {
-            q.setFromEulerAngles(roll, pitch, yaw, invalid);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var invalid = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> q1.setFromEulerAngles(roll, pitch, yaw, invalid));
 
         // set values
-        q = new Quaternion();
-        q.setFromEulerAngles(roll, pitch, yaw);
+        final var q2 = new Quaternion();
+        q2.setFromEulerAngles(roll, pitch, yaw);
 
         // check correctness
-        angles = q.toEulerAngles();
+        angles = q2.toEulerAngles();
         assertEquals(roll, angles[0], ABSOLUTE_ERROR);
         assertEquals(pitch, angles[1], ABSOLUTE_ERROR);
         assertEquals(yaw, angles[2], ABSOLUTE_ERROR);
 
         // set values and jacobian
-        jacobian = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
-        q = new Quaternion();
-        q.setFromEulerAngles(new double[]{roll, pitch, yaw}, jacobian);
+        final var jacobian2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
+        final var q3 = new Quaternion();
+        q3.setFromEulerAngles(new double[]{roll, pitch, yaw}, jacobian2);
 
         // check correctness
-        angles = q.toEulerAngles();
+        angles = q3.toEulerAngles();
         assertEquals(roll, angles[0], ABSOLUTE_ERROR);
         assertEquals(pitch, angles[1], ABSOLUTE_ERROR);
         assertEquals(yaw, angles[2], ABSOLUTE_ERROR);
 
-        assertEquals(0.5 * tmp1, jacobian.getElementAt(0, 0), ABSOLUTE_ERROR);
-        assertEquals(tmp2, jacobian.getElementAt(1, 0), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp3, jacobian.getElementAt(2, 0), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp4, jacobian.getElementAt(3, 0), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp1, jacobian2.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp2, jacobian2.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp3, jacobian2.getElementAt(2, 0), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp4, jacobian2.getElementAt(3, 0), ABSOLUTE_ERROR);
 
-        assertEquals(0.5 * tmp5, jacobian.getElementAt(0, 1), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp6, jacobian.getElementAt(1, 1), ABSOLUTE_ERROR);
-        assertEquals(tmp7, jacobian.getElementAt(2, 1), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp8, jacobian.getElementAt(3, 1), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp5, jacobian2.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp6, jacobian2.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(tmp7, jacobian2.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp8, jacobian2.getElementAt(3, 1), ABSOLUTE_ERROR);
 
-        assertEquals(0.5 * tmp9, jacobian.getElementAt(0, 2), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp4, jacobian.getElementAt(1, 2), ABSOLUTE_ERROR);
-        assertEquals(0.5 * tmp10, jacobian.getElementAt(2, 2), ABSOLUTE_ERROR);
-        assertEquals(tmp2, jacobian.getElementAt(3, 2), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp9, jacobian2.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp4, jacobian2.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(0.5 * tmp10, jacobian2.getElementAt(2, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp2, jacobian2.getElementAt(3, 2), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        try {
-            q.setFromEulerAngles(new double[1], jacobian);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) {
-        }
-        try {
-            q.setFromEulerAngles(new double[]{roll, pitch, yaw}, invalid);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> q3.setFromEulerAngles(new double[1], jacobian2));
+        assertThrows(IllegalArgumentException.class,
+                () -> q3.setFromEulerAngles(new double[]{roll, pitch, yaw}, invalid));
 
         // set values
-        q = new Quaternion();
-        q.setFromEulerAngles(new double[]{roll, pitch, yaw});
+        final var q4 = new Quaternion();
+        q4.setFromEulerAngles(new double[]{roll, pitch, yaw});
 
         // check correctness
-        angles = q.toEulerAngles();
+        angles = q4.toEulerAngles();
         assertEquals(roll, angles[0], ABSOLUTE_ERROR);
         assertEquals(pitch, angles[1], ABSOLUTE_ERROR);
         assertEquals(yaw, angles[2], ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testEulerToMatrixRotation() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testEulerToMatrixRotation() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final MatrixRotation3D rot = new MatrixRotation3D();
+        final var rot = new MatrixRotation3D();
         rot.setRollPitchYaw(roll, pitch, yaw);
 
-        MatrixRotation3D rot2 = new MatrixRotation3D();
-        Matrix jacobian = new Matrix(9, 3);
-        Quaternion.eulerToMatrixRotation(roll, pitch, yaw, rot2, jacobian);
+        final var rot2 = new MatrixRotation3D();
+        final var jacobian1 = new Matrix(9, 3);
+        Quaternion.eulerToMatrixRotation(roll, pitch, yaw, rot2, jacobian1);
 
         // check correctness
         assertEquals(rot, rot2);
 
-        final double sr = Math.sin(roll);
-        final double cr = Math.cos(roll);
-        final double sp = Math.sin(pitch);
-        final double cp = Math.cos(pitch);
-        final double sy = Math.sin(yaw);
-        final double cy = Math.cos(yaw);
+        final var sr = Math.sin(roll);
+        final var cr = Math.cos(roll);
+        final var sp = Math.sin(pitch);
+        final var cp = Math.cos(pitch);
+        final var sy = Math.sin(yaw);
+        final var cy = Math.cos(yaw);
 
-        final double tmp1 = -cr * sy + sr * sp * cy;
-        final double tmp2 = cr * cy + sr * sp * sy;
-        final double tmp3 = sr * sy + cr * sp * cy;
-        final double tmp4 = -sr * cy + cr * sp * sy;
-        final double tmp5 = cr * sy - sr * sp * cy;
-        final double tmp6 = -cr * cy - sr * sp * sy;
-        final double tmp7 = sr * cy - cr * sp * sy;
+        final var tmp1 = -cr * sy + sr * sp * cy;
+        final var tmp2 = cr * cy + sr * sp * sy;
+        final var tmp3 = sr * sy + cr * sp * cy;
+        final var tmp4 = -sr * cy + cr * sp * sy;
+        final var tmp5 = cr * sy - sr * sp * cy;
+        final var tmp6 = -cr * cy - sr * sp * sy;
+        final var tmp7 = sr * cy - cr * sp * sy;
 
-        assertEquals(cp * cy, rot2.internalMatrix.getElementAt(0, 0),
-                ABSOLUTE_ERROR);
-        assertEquals(cp * sy, rot2.internalMatrix.getElementAt(1, 0),
-                ABSOLUTE_ERROR);
+        assertEquals(cp * cy, rot2.internalMatrix.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(cp * sy, rot2.internalMatrix.getElementAt(1, 0), ABSOLUTE_ERROR);
         assertEquals(-sp, rot2.internalMatrix.getElementAt(2, 0), ABSOLUTE_ERROR);
 
         assertEquals(tmp1, rot2.internalMatrix.getElementAt(0, 1), ABSOLUTE_ERROR);
         assertEquals(tmp2, rot2.internalMatrix.getElementAt(1, 1), ABSOLUTE_ERROR);
-        assertEquals(sr * cp, rot2.internalMatrix.getElementAt(2, 1),
-                ABSOLUTE_ERROR);
+        assertEquals(sr * cp, rot2.internalMatrix.getElementAt(2, 1), ABSOLUTE_ERROR);
 
         assertEquals(tmp3, rot2.internalMatrix.getElementAt(0, 2), ABSOLUTE_ERROR);
         assertEquals(tmp4, rot2.internalMatrix.getElementAt(1, 2), ABSOLUTE_ERROR);
-        assertEquals(cr * cp, rot2.internalMatrix.getElementAt(2, 2),
-                ABSOLUTE_ERROR);
+        assertEquals(cr * cp, rot2.internalMatrix.getElementAt(2, 2), ABSOLUTE_ERROR);
 
-        assertEquals(0.0, jacobian.getElementAt(0, 0), 0.0);
-        assertEquals(0.0, jacobian.getElementAt(1, 0), 0.0);
-        assertEquals(0.0, jacobian.getElementAt(2, 0), 0.0);
-        assertEquals(tmp3, jacobian.getElementAt(3, 0), ABSOLUTE_ERROR);
-        assertEquals(tmp4, jacobian.getElementAt(4, 0), ABSOLUTE_ERROR);
-        assertEquals(cr * cp, jacobian.getElementAt(5, 0), ABSOLUTE_ERROR);
-        assertEquals(tmp5, jacobian.getElementAt(6, 0), ABSOLUTE_ERROR);
-        assertEquals(tmp6, jacobian.getElementAt(7, 0), ABSOLUTE_ERROR);
-        assertEquals(-sr * cp, jacobian.getElementAt(8, 0), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian1.getElementAt(0, 0), 0.0);
+        assertEquals(0.0, jacobian1.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobian1.getElementAt(2, 0), 0.0);
+        assertEquals(tmp3, jacobian1.getElementAt(3, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp4, jacobian1.getElementAt(4, 0), ABSOLUTE_ERROR);
+        assertEquals(cr * cp, jacobian1.getElementAt(5, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp5, jacobian1.getElementAt(6, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp6, jacobian1.getElementAt(7, 0), ABSOLUTE_ERROR);
+        assertEquals(-sr * cp, jacobian1.getElementAt(8, 0), ABSOLUTE_ERROR);
 
-        assertEquals(-sp * cy, jacobian.getElementAt(0, 1), ABSOLUTE_ERROR);
-        assertEquals(-sp * sy, jacobian.getElementAt(1, 1), ABSOLUTE_ERROR);
-        assertEquals(-cp, jacobian.getElementAt(2, 1), ABSOLUTE_ERROR);
-        assertEquals(sr * cp * cy, jacobian.getElementAt(3, 1), ABSOLUTE_ERROR);
-        assertEquals(sr * cp * sy, jacobian.getElementAt(4, 1), ABSOLUTE_ERROR);
-        assertEquals(-sr * sp, jacobian.getElementAt(5, 1), ABSOLUTE_ERROR);
-        assertEquals(cr * cp * cy, jacobian.getElementAt(6, 1), ABSOLUTE_ERROR);
-        assertEquals(cr * cp * sy, jacobian.getElementAt(7, 1), ABSOLUTE_ERROR);
-        assertEquals(-cr * sp, jacobian.getElementAt(8, 1), ABSOLUTE_ERROR);
+        assertEquals(-sp * cy, jacobian1.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(-sp * sy, jacobian1.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(-cp, jacobian1.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(sr * cp * cy, jacobian1.getElementAt(3, 1), ABSOLUTE_ERROR);
+        assertEquals(sr * cp * sy, jacobian1.getElementAt(4, 1), ABSOLUTE_ERROR);
+        assertEquals(-sr * sp, jacobian1.getElementAt(5, 1), ABSOLUTE_ERROR);
+        assertEquals(cr * cp * cy, jacobian1.getElementAt(6, 1), ABSOLUTE_ERROR);
+        assertEquals(cr * cp * sy, jacobian1.getElementAt(7, 1), ABSOLUTE_ERROR);
+        assertEquals(-cr * sp, jacobian1.getElementAt(8, 1), ABSOLUTE_ERROR);
 
-        assertEquals(-cp * sy, jacobian.getElementAt(0, 2), ABSOLUTE_ERROR);
-        assertEquals(cp * cy, jacobian.getElementAt(1, 2), ABSOLUTE_ERROR);
-        assertEquals(0.0, jacobian.getElementAt(2, 2), 0.0);
-        assertEquals(tmp6, jacobian.getElementAt(3, 2), ABSOLUTE_ERROR);
-        assertEquals(tmp1, jacobian.getElementAt(4, 2), ABSOLUTE_ERROR);
-        assertEquals(0.0, jacobian.getElementAt(5, 2), 0.0);
-        assertEquals(tmp7, jacobian.getElementAt(6, 2), ABSOLUTE_ERROR);
-        assertEquals(tmp3, jacobian.getElementAt(7, 2), ABSOLUTE_ERROR);
-        assertEquals(0.0, jacobian.getElementAt(8, 2), 0.0);
-
-        // Force IllegalArgumentException
-        final Matrix invalid = new Matrix(1, 1);
-        try {
-            Quaternion.eulerToMatrixRotation(roll, pitch, yaw, rot2, invalid);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        // set new values
-        rot2 = new MatrixRotation3D();
-        Quaternion.eulerToMatrixRotation(roll, pitch, yaw, rot2);
-
-        // check correctness
-        assertEquals(rot, rot2);
-
-        // set new values
-        rot2 = new MatrixRotation3D();
-        jacobian = new Matrix(9, 3);
-        Quaternion.eulerToMatrixRotation(new double[]{roll, pitch, yaw}, rot2, jacobian);
-
-        // check correctness
-        assertEquals(rot, rot2);
-
-        assertEquals(cp * cy, rot2.internalMatrix.getElementAt(0, 0),
-                ABSOLUTE_ERROR);
-        assertEquals(cp * sy, rot2.internalMatrix.getElementAt(1, 0),
-                ABSOLUTE_ERROR);
-        assertEquals(-sp, rot2.internalMatrix.getElementAt(2, 0), ABSOLUTE_ERROR);
-
-        assertEquals(tmp1, rot2.internalMatrix.getElementAt(0, 1), ABSOLUTE_ERROR);
-        assertEquals(tmp2, rot2.internalMatrix.getElementAt(1, 1), ABSOLUTE_ERROR);
-        assertEquals(sr * cp, rot2.internalMatrix.getElementAt(2, 1),
-                ABSOLUTE_ERROR);
-
-        assertEquals(tmp3, rot2.internalMatrix.getElementAt(0, 2), ABSOLUTE_ERROR);
-        assertEquals(tmp4, rot2.internalMatrix.getElementAt(1, 2), ABSOLUTE_ERROR);
-        assertEquals(cr * cp, rot2.internalMatrix.getElementAt(2, 2),
-                ABSOLUTE_ERROR);
-
-        assertEquals(0.0, jacobian.getElementAt(0, 0), 0.0);
-        assertEquals(0.0, jacobian.getElementAt(1, 0), 0.0);
-        assertEquals(0.0, jacobian.getElementAt(2, 0), 0.0);
-        assertEquals(tmp3, jacobian.getElementAt(3, 0), ABSOLUTE_ERROR);
-        assertEquals(tmp4, jacobian.getElementAt(4, 0), ABSOLUTE_ERROR);
-        assertEquals(cr * cp, jacobian.getElementAt(5, 0),  ABSOLUTE_ERROR);
-        assertEquals(tmp5, jacobian.getElementAt(6, 0), ABSOLUTE_ERROR);
-        assertEquals(tmp6, jacobian.getElementAt(7, 0), ABSOLUTE_ERROR);
-        assertEquals(-sr * cp, jacobian.getElementAt(8, 0), ABSOLUTE_ERROR);
-
-        assertEquals(-sp * cy, jacobian.getElementAt(0, 1), ABSOLUTE_ERROR);
-        assertEquals(-sp * sy, jacobian.getElementAt(1, 1), ABSOLUTE_ERROR);
-        assertEquals(-cp, jacobian.getElementAt(2, 1), ABSOLUTE_ERROR);
-        assertEquals(sr * cp * cy, jacobian.getElementAt(3, 1), ABSOLUTE_ERROR);
-        assertEquals(sr * cp * sy, jacobian.getElementAt(4, 1), ABSOLUTE_ERROR);
-        assertEquals(-sr * sp, jacobian.getElementAt(5, 1), ABSOLUTE_ERROR);
-        assertEquals(cr * cp * cy, jacobian.getElementAt(6, 1), ABSOLUTE_ERROR);
-        assertEquals(cr * cp * sy, jacobian.getElementAt(7, 1), ABSOLUTE_ERROR);
-        assertEquals(-cr * sp, jacobian.getElementAt(8, 1), ABSOLUTE_ERROR);
-
-        assertEquals(-cp * sy, jacobian.getElementAt(0, 2), ABSOLUTE_ERROR);
-        assertEquals(cp * cy, jacobian.getElementAt(1, 2), ABSOLUTE_ERROR);
-        assertEquals(0.0, jacobian.getElementAt(2, 2), 0.0);
-        assertEquals(tmp6, jacobian.getElementAt(3, 2), ABSOLUTE_ERROR);
-        assertEquals(tmp1, jacobian.getElementAt(4, 2), ABSOLUTE_ERROR);
-        assertEquals(0.0, jacobian.getElementAt(5, 2), 0.0);
-        assertEquals(tmp7, jacobian.getElementAt(6, 2), ABSOLUTE_ERROR);
-        assertEquals(tmp3, jacobian.getElementAt(7, 2), ABSOLUTE_ERROR);
-        assertEquals(0.0, jacobian.getElementAt(8, 2), 0.0);
+        assertEquals(-cp * sy, jacobian1.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(cp * cy, jacobian1.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian1.getElementAt(2, 2), 0.0);
+        assertEquals(tmp6, jacobian1.getElementAt(3, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp1, jacobian1.getElementAt(4, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian1.getElementAt(5, 2), 0.0);
+        assertEquals(tmp7, jacobian1.getElementAt(6, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp3, jacobian1.getElementAt(7, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian1.getElementAt(8, 2), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            Quaternion.eulerToMatrixRotation(new double[1], rot2, jacobian);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Quaternion.eulerToMatrixRotation(new double[]{roll, pitch, yaw}, rot2, invalid);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var invalid = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class,
+                () -> Quaternion.eulerToMatrixRotation(roll, pitch, yaw, rot2, invalid));
 
         // set new values
-        rot2 = new MatrixRotation3D();
-        Quaternion.eulerToMatrixRotation(new double[]{roll, pitch, yaw}, rot2);
+        final var rot3 = new MatrixRotation3D();
+        Quaternion.eulerToMatrixRotation(roll, pitch, yaw, rot3);
 
         // check correctness
-        assertEquals(rot, rot2);
+        assertEquals(rot, rot3);
+
+        // set new values
+        final var rot4 = new MatrixRotation3D();
+        final var jacobian2 = new Matrix(9, 3);
+        Quaternion.eulerToMatrixRotation(new double[]{roll, pitch, yaw}, rot4, jacobian2);
+
+        // check correctness
+        assertEquals(rot, rot4);
+
+        assertEquals(cp * cy, rot4.internalMatrix.getElementAt(0, 0), ABSOLUTE_ERROR);
+        assertEquals(cp * sy, rot4.internalMatrix.getElementAt(1, 0), ABSOLUTE_ERROR);
+        assertEquals(-sp, rot4.internalMatrix.getElementAt(2, 0), ABSOLUTE_ERROR);
+
+        assertEquals(tmp1, rot4.internalMatrix.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(tmp2, rot4.internalMatrix.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(sr * cp, rot4.internalMatrix.getElementAt(2, 1), ABSOLUTE_ERROR);
+
+        assertEquals(tmp3, rot4.internalMatrix.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp4, rot4.internalMatrix.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(cr * cp, rot4.internalMatrix.getElementAt(2, 2), ABSOLUTE_ERROR);
+
+        assertEquals(0.0, jacobian2.getElementAt(0, 0), 0.0);
+        assertEquals(0.0, jacobian2.getElementAt(1, 0), 0.0);
+        assertEquals(0.0, jacobian2.getElementAt(2, 0), 0.0);
+        assertEquals(tmp3, jacobian2.getElementAt(3, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp4, jacobian2.getElementAt(4, 0), ABSOLUTE_ERROR);
+        assertEquals(cr * cp, jacobian2.getElementAt(5, 0),  ABSOLUTE_ERROR);
+        assertEquals(tmp5, jacobian2.getElementAt(6, 0), ABSOLUTE_ERROR);
+        assertEquals(tmp6, jacobian2.getElementAt(7, 0), ABSOLUTE_ERROR);
+        assertEquals(-sr * cp, jacobian2.getElementAt(8, 0), ABSOLUTE_ERROR);
+
+        assertEquals(-sp * cy, jacobian2.getElementAt(0, 1), ABSOLUTE_ERROR);
+        assertEquals(-sp * sy, jacobian2.getElementAt(1, 1), ABSOLUTE_ERROR);
+        assertEquals(-cp, jacobian2.getElementAt(2, 1), ABSOLUTE_ERROR);
+        assertEquals(sr * cp * cy, jacobian2.getElementAt(3, 1), ABSOLUTE_ERROR);
+        assertEquals(sr * cp * sy, jacobian2.getElementAt(4, 1), ABSOLUTE_ERROR);
+        assertEquals(-sr * sp, jacobian2.getElementAt(5, 1), ABSOLUTE_ERROR);
+        assertEquals(cr * cp * cy, jacobian2.getElementAt(6, 1), ABSOLUTE_ERROR);
+        assertEquals(cr * cp * sy, jacobian2.getElementAt(7, 1), ABSOLUTE_ERROR);
+        assertEquals(-cr * sp, jacobian2.getElementAt(8, 1), ABSOLUTE_ERROR);
+
+        assertEquals(-cp * sy, jacobian2.getElementAt(0, 2), ABSOLUTE_ERROR);
+        assertEquals(cp * cy, jacobian2.getElementAt(1, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian2.getElementAt(2, 2), 0.0);
+        assertEquals(tmp6, jacobian2.getElementAt(3, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp1, jacobian2.getElementAt(4, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian2.getElementAt(5, 2), 0.0);
+        assertEquals(tmp7, jacobian2.getElementAt(6, 2), ABSOLUTE_ERROR);
+        assertEquals(tmp3, jacobian2.getElementAt(7, 2), ABSOLUTE_ERROR);
+        assertEquals(0.0, jacobian2.getElementAt(8, 2), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            Quaternion.eulerToMatrixRotation(new double[1], rot2);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                () -> Quaternion.eulerToMatrixRotation(new double[1], rot2, jacobian2));
+        assertThrows(IllegalArgumentException.class,
+                () -> Quaternion.eulerToMatrixRotation(new double[]{roll, pitch, yaw}, rot2, invalid));
+
+        // set new values
+        final var rot5 = new MatrixRotation3D();
+        Quaternion.eulerToMatrixRotation(new double[]{roll, pitch, yaw}, rot5);
+
+        // check correctness
+        assertEquals(rot, rot5);
+
+        // Force IllegalArgumentException
+        assertThrows(IllegalArgumentException.class, () -> Quaternion.eulerToMatrixRotation(new double[1], rot2));
     }
 
     @Test
-    public void testToAxisAndRotationAngle() throws AlgebraException,
-            RotationException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testToAxisAndRotationAngle() throws AlgebraException, RotationException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -1011,53 +902,48 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final Quaternion q = new Quaternion(axis, theta);
+        final var q = new Quaternion(axis, theta);
 
-        final double[] axis2 = new double[Quaternion.N_ANGLES];
-        final Matrix jacobianAngle = new Matrix(1, Quaternion.N_PARAMS);
-        final Matrix jacobianAxis = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
-        double theta2 = q.toAxisAndRotationAngle(axis2, jacobianAngle, jacobianAxis);
+        final var axis2 = new double[Quaternion.N_ANGLES];
+        final var jacobianAngle = new Matrix(1, Quaternion.N_PARAMS);
+        final var jacobianAxis = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
+        var theta2 = q.toAxisAndRotationAngle(axis2, jacobianAngle, jacobianAxis);
 
         // check correctness
         assertArrayEquals(axis, axis2, ABSOLUTE_ERROR);
         assertEquals(theta, theta2, ABSOLUTE_ERROR);
 
-        final double n = Math.sqrt(q.getB() * q.getB() + q.getC() * q.getC() +
-                q.getD() * q.getD());
-        final double s = q.getA();
-        final double denom = n * n + s * s;
-        final double aN = 2.0 * s / denom;
-        final double aS = -2.0 * n / denom;
+        final var n = Math.sqrt(q.getB() * q.getB() + q.getC() * q.getC() + q.getD() * q.getD());
+        final var s = q.getA();
+        final var denom = n * n + s * s;
+        final var aN = 2.0 * s / denom;
+        final var aS = -2.0 * n / denom;
 
         assertEquals(jacobianAngle.getElementAtIndex(0), aS, ABSOLUTE_ERROR);
         assertEquals(jacobianAngle.getElementAtIndex(1), axis[0] * aN, ABSOLUTE_ERROR);
         assertEquals(jacobianAngle.getElementAtIndex(2), axis[1] * aN, ABSOLUTE_ERROR);
         assertEquals(jacobianAngle.getElementAtIndex(3), axis[2] * aN, ABSOLUTE_ERROR);
 
-        final Matrix uV = Matrix.identity(3, 3);
+        final var uV = Matrix.identity(3, 3);
         uV.multiplyByScalar(n);
-        uV.subtract(Matrix.newFromArray(
-                new double[]{q.getB(), q.getC(), q.getD()}, true).
-                multiplyAndReturnNew(Matrix.newFromArray(axis2, false)));
+        uV.subtract(Matrix.newFromArray(new double[]{q.getB(), q.getC(), q.getD()}, true)
+                .multiplyAndReturnNew(Matrix.newFromArray(axis2, false)));
         uV.multiplyByScalar(1.0 / (n * n));
 
-        assertEquals(jacobianAxis.getSubmatrix(0, 1,
-                2, 3), uV);
-        assertArrayEquals(jacobianAxis.getSubmatrix(0, 0,
-                2, 0).toArray(),
-                new double[]{0.0, 0.0, 0.0}, 0.0);
+        assertEquals(jacobianAxis.getSubmatrix(0, 1, 2, 3), uV);
+        assertArrayEquals(new double[]{0.0, 0.0, 0.0},
+                jacobianAxis.getSubmatrix(0, 0, 2, 0).toArray(),
+                0.0);
 
         theta2 = q.toAxisAndRotationAngle(axis2);
 
@@ -1065,7 +951,7 @@ public class QuaternionTest {
         assertArrayEquals(axis, axis2, ABSOLUTE_ERROR);
         assertEquals(theta, theta2, ABSOLUTE_ERROR);
 
-        AxisRotation3D axisRotation = new AxisRotation3D();
+        var axisRotation = new AxisRotation3D();
         q.toAxisRotation(axisRotation);
 
         // check correctness
@@ -1080,10 +966,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testToRotationVector() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testToRotationVector() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -1091,80 +976,68 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final Quaternion q = new Quaternion(axis, theta);
+        final var q = new Quaternion(axis, theta);
 
-        double[] rotationVector = new double[axis.length];
-        final Matrix jacobian = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
+        final var rotationVector1 = new double[axis.length];
+        final var jacobian = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
 
-        q.toRotationVector(rotationVector, jacobian);
+        q.toRotationVector(rotationVector1, jacobian);
 
         // check correctness
-        final double[] axis2 = new double[axis.length];
-        final Matrix jacobianAngle = new Matrix(1, Quaternion.N_PARAMS);
-        final Matrix jacobianAxis = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
-        final double theta2 = q.toAxisAndRotationAngle(axis2, jacobianAngle, jacobianAxis);
-        final Matrix vA = Matrix.newFromArray(axis2, true);
-        final Matrix vQ = vA.multiplyAndReturnNew(jacobianAngle).addAndReturnNew(
+        final var axis2 = new double[axis.length];
+        final var jacobianAngle = new Matrix(1, Quaternion.N_PARAMS);
+        final var jacobianAxis = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
+        final var theta2 = q.toAxisAndRotationAngle(axis2, jacobianAngle, jacobianAxis);
+        final var vA = Matrix.newFromArray(axis2, true);
+        final var vQ = vA.multiplyAndReturnNew(jacobianAngle).addAndReturnNew(
                 jacobianAxis.multiplyByScalarAndReturnNew(theta2));
 
         // rotation vector is proportional to rotation axis but having a norm equal
         // to the rotation angle
-        assertEquals(ArrayUtils.dotProduct(rotationVector, axis), Math.abs(theta), ABSOLUTE_ERROR);
+        assertEquals(ArrayUtils.dotProduct(rotationVector1, axis), Math.abs(theta), ABSOLUTE_ERROR);
 
         assertTrue(jacobian.equals(vQ, ABSOLUTE_ERROR));
 
         // throw IllegalArgumentException
-        try {
-            q.toRotationVector(new double[1], jacobian);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            q.toRotationVector(rotationVector, new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> q.toRotationVector(new double[1], jacobian));
+        final var m = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> q.toRotationVector(rotationVector1, m));
 
-        rotationVector = new double[axis.length];
-        q.toRotationVector(rotationVector);
+        final var rotationVector2 = new double[axis.length];
+        q.toRotationVector(rotationVector2);
 
         // rotation vector is proportional to rotation axis but having a norm equal
         // to the rotation angle
-        assertEquals(ArrayUtils.dotProduct(rotationVector, axis), Math.abs(theta), ABSOLUTE_ERROR);
+        assertEquals(ArrayUtils.dotProduct(rotationVector2, axis), Math.abs(theta), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testToEulerAngles() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testToEulerAngles() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final MatrixRotation3D rot = new MatrixRotation3D();
+        final var rot = new MatrixRotation3D();
         rot.setRollPitchYaw(roll, pitch, yaw);
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
 
         //noinspection AssertBetweenInconvertibleTypes
         assertEquals(rot, q);
 
-        double[] angles = new double[Quaternion.N_ANGLES];
-        final Matrix jacobian = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
+        var angles = new double[Quaternion.N_ANGLES];
+        final var jacobian = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);
 
         q.toEulerAngles(angles, jacobian);
 
@@ -1173,42 +1046,41 @@ public class QuaternionTest {
         assertEquals(pitch, angles[1], ABSOLUTE_ERROR);
         assertEquals(yaw, angles[2], ABSOLUTE_ERROR);
 
-        final double a = q.getA();
-        final double b = q.getB();
-        final double c = q.getC();
-        final double d = q.getD();
+        final var a = q.getA();
+        final var b = q.getB();
+        final var c = q.getC();
+        final var d = q.getD();
 
-        final double y1 = 2.0 * c * d + 2.0 * a * b;
-        final double x1 = a * a - b * b - c * c + d * d;
-        final double z2 = -2.0 * b * d + 2.0 * a * c;
-        final double y3 = 2.0 * b * c + 2.0 * a * d;
-        final double x3 = a * a + b * b - c * c - d * d;
+        final var y1 = 2.0 * c * d + 2.0 * a * b;
+        final var x1 = a * a - b * b - c * c + d * d;
+        final var z2 = -2.0 * b * d + 2.0 * a * c;
+        final var y3 = 2.0 * b * c + 2.0 * a * d;
+        final var x3 = a * a + b * b - c * c - d * d;
 
-        final double[] dx1dq = new double[]{2 * a, -2 * b, -2 * c, 2 * d};
-        final double[] dy1dq = new double[]{2 * b, 2 * a, 2 * d, 2 * c};
-        final double[] dz2dq = new double[]{2 * c, -2 * d, 2 * a, -2 * b};
-        final double[] dx3dq = new double[]{2 * a, 2 * b, -2 * c, -2 * d};
-        final double[] dy3dq = new double[]{2 * d, 2 * c, 2 * b, 2 * a};
+        final var dx1dq = new double[]{2 * a, -2 * b, -2 * c, 2 * d};
+        final var dy1dq = new double[]{2 * b, 2 * a, 2 * d, 2 * c};
+        final var dz2dq = new double[]{2 * c, -2 * d, 2 * a, -2 * b};
+        final var dx3dq = new double[]{2 * a, 2 * b, -2 * c, -2 * d};
+        final var dy3dq = new double[]{2 * d, 2 * c, 2 * b, 2 * a};
 
-        final double de1dx1 = -y1 / (x1 * x1 + y1 * y1);
-        final double de1dy1 = x1 / (x1 * x1 + y1 * y1);
-        final double de2dz2 = 1 / Math.sqrt(1 - z2 * z2);
-        final double de3dx3 = -y3 / (x3 * x3 + y3 * y3);
-        final double de3dy3 = x3 / (x3 * x3 + y3 * y3);
+        final var de1dx1 = -y1 / (x1 * x1 + y1 * y1);
+        final var de1dy1 = x1 / (x1 * x1 + y1 * y1);
+        final var de2dz2 = 1 / Math.sqrt(1 - z2 * z2);
+        final var de3dx3 = -y3 / (x3 * x3 + y3 * y3);
+        final var de3dy3 = x3 / (x3 * x3 + y3 * y3);
 
         // de1dq = de1dx1 * dx1dq + de1dy * dy1dq
         ArrayUtils.multiplyByScalar(dx1dq, de1dx1, dx1dq);
         ArrayUtils.multiplyByScalar(dy1dq, de1dy1, dy1dq);
-        final double[] de1dq = ArrayUtils.sumAndReturnNew(dx1dq, dy1dq);
+        final var de1dq = ArrayUtils.sumAndReturnNew(dx1dq, dy1dq);
 
         // de2dq = de2dz2 * dz2dq
-        final double[] de2dq = ArrayUtils.multiplyByScalarAndReturnNew(dz2dq,
-                de2dz2);
+        final var de2dq = ArrayUtils.multiplyByScalarAndReturnNew(dz2dq, de2dz2);
 
         // de3dq = de3dx3 * dx3dq + de3dy3 * dy3dq
         ArrayUtils.multiplyByScalar(dx3dq, de3dx3, dx3dq);
         ArrayUtils.multiplyByScalar(dy3dq, de3dy3, dy3dq);
-        final double[] de3dq = ArrayUtils.sumAndReturnNew(dx3dq, dy3dq);
+        final var de3dq = ArrayUtils.sumAndReturnNew(dx3dq, dy3dq);
 
         assertEquals(de1dq[0], jacobian.getElementAt(0, 0), ABSOLUTE_ERROR);
         assertEquals(de1dq[1], jacobian.getElementAt(0, 1), ABSOLUTE_ERROR);
@@ -1235,34 +1107,28 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testQuaternionMatrix() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testQuaternionMatrix() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var roll1 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch1 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw1 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final double roll2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var roll2 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch2 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw2 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final Quaternion q1 = new Quaternion(roll1, pitch1, yaw1);
-        final Quaternion q2 = new Quaternion(roll2, pitch2, yaw2);
+        final var q1 = new Quaternion(roll1, pitch1, yaw1);
+        final var q2 = new Quaternion(roll2, pitch2, yaw2);
 
-        final Quaternion q = q1.multiplyAndReturnNew(q2);
+        final var q = q1.multiplyAndReturnNew(q2);
 
         // check that quaternion product can be expressed as the matrix
         // product m1 with quaternion q2 expressed as a column vector
-        Matrix m1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        var m1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
         q1.quaternionMatrix(m1);
 
-        final Matrix m2 = Matrix.newFromArray(q2.getValues(), true);
-        Matrix m = m1.multiplyAndReturnNew(m2);
+        final var m2 = Matrix.newFromArray(q2.getValues(), true);
+        var m = m1.multiplyAndReturnNew(m2);
 
         assertArrayEquals(q.getValues(), m.getBuffer(), ABSOLUTE_ERROR);
 
@@ -1272,14 +1138,14 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testConjugate() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testConjugate() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quaternion q = new Quaternion(a, b, c, d);
+        final var q = new Quaternion(a, b, c, d);
 
         // check correctness
         assertEquals(a, q.getA(), 0.0);
@@ -1288,15 +1154,15 @@ public class QuaternionTest {
         assertEquals(d, q.getD(), 0.0);
 
         // conjugate
-        Quaternion qc = new Quaternion();
-        final Matrix jacobian = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
-        q.conjugate(qc, jacobian);
+        final var qc1 = new Quaternion();
+        final var jacobian = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        q.conjugate(qc1, jacobian);
 
         // check correctness
-        assertEquals(qc.getA(), q.getA(), 0.0);
-        assertEquals(-qc.getB(), q.getB(), 0.0);
-        assertEquals(-qc.getC(), q.getC(), 0.0);
-        assertEquals(-qc.getD(), q.getD(), 0.0);
+        assertEquals(qc1.getA(), q.getA(), 0.0);
+        assertEquals(-qc1.getB(), q.getB(), 0.0);
+        assertEquals(-qc1.getC(), q.getC(), 0.0);
+        assertEquals(-qc1.getD(), q.getD(), 0.0);
 
         assertEquals(1.0, jacobian.getElementAt(0, 0), 0.0);
         assertEquals(0.0, jacobian.getElementAt(1, 0), 0.0);
@@ -1318,59 +1184,49 @@ public class QuaternionTest {
         assertEquals(0.0, jacobian.getElementAt(2, 3), 0.0);
         assertEquals(-1.0, jacobian.getElementAt(3, 3), 0.0);
 
-        qc = new Quaternion();
-        q.conjugate(qc);
+        final var qc2 = new Quaternion();
+        q.conjugate(qc2);
 
-        final Quaternion qcB = q.conjugateAndReturnNew();
+        final var qcB = q.conjugateAndReturnNew();
 
         // check correctness
-        assertEquals(q.getA(), qc.getA(), 0.0);
-        assertEquals(-q.getB(), qc.getB(), 0.0);
-        assertEquals(-q.getC(), qc.getC(), 0.0);
-        assertEquals(-q.getD(), qc.getD(), 0.0);
+        assertEquals(q.getA(), qc2.getA(), 0.0);
+        assertEquals(-q.getB(), qc2.getB(), 0.0);
+        assertEquals(-q.getC(), qc2.getC(), 0.0);
+        assertEquals(-q.getD(), qc2.getD(), 0.0);
 
-        assertEquals(qc, qcB);
+        assertEquals(qc2, qcB);
 
         // conjugate of conjugate is the same as the original quaternion
-        qc.conjugate(qc);
-        assertEquals(qc, q);
-
-        try {
-            q.conjugate(qc, new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        qc2.conjugate(qc2);
+        assertEquals(qc2, q);
+        final var m = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> q.conjugate(qc2, m));
     }
 
     @Test
-    public void testQuaternionMatrixN() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testQuaternionMatrixN() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var roll1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var pitch1 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw1 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final double roll2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var roll2 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch2 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw2 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final Quaternion q1 = new Quaternion(roll1, pitch1, yaw1);
-        final Quaternion q2 = new Quaternion(roll2, pitch2, yaw2);
+        final var q1 = new Quaternion(roll1, pitch1, yaw1);
+        final var q2 = new Quaternion(roll2, pitch2, yaw2);
 
-        final Quaternion q = q1.multiplyAndReturnNew(q2);
+        final var q = q1.multiplyAndReturnNew(q2);
 
         // check that quaternion product can be expressed as the matrix
         // product m1 with quaternion q2 expressed as a column vector
-        Matrix m2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        var m2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
         q2.quaternionMatrixN(m2);
 
-        final Matrix m1 = Matrix.newFromArray(q1.getValues(), true);
-        Matrix m = m2.multiplyAndReturnNew(m1);
+        final var m1 = Matrix.newFromArray(q1.getValues(), true);
+        var m = m2.multiplyAndReturnNew(m1);
 
         assertArrayEquals(q.getValues(), m.getBuffer(), ABSOLUTE_ERROR);
 
@@ -1380,31 +1236,28 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testToMatrixRotation() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testToMatrixRotation() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final MatrixRotation3D matrixRot = new MatrixRotation3D();
+        final var matrixRot = new MatrixRotation3D();
         matrixRot.setRollPitchYaw(roll, pitch, yaw);
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
 
-        Matrix m = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
+        final var m1 = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
                 MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
-        final Matrix jacobian = new Matrix(9, 4);
-        q.toMatrixRotation(m, jacobian);
+        final var jacobian = new Matrix(9, 4);
+        q.toMatrixRotation(m1, jacobian);
 
-        assertTrue(m.equals(matrixRot.internalMatrix, ABSOLUTE_ERROR));
+        assertTrue(m1.equals(matrixRot.internalMatrix, ABSOLUTE_ERROR));
 
-        final double a = q.getA();
-        final double b = q.getB();
-        final double c = q.getC();
-        final double d = q.getD();
+        final var a = q.getA();
+        final var b = q.getB();
+        final var c = q.getC();
+        final var d = q.getD();
 
         assertEquals(2 * a, jacobian.getElementAt(0, 0), ABSOLUTE_ERROR);
         assertEquals(2 * d, jacobian.getElementAt(1, 0), ABSOLUTE_ERROR);
@@ -1447,69 +1300,56 @@ public class QuaternionTest {
         assertEquals(2 * d, jacobian.getElementAt(8, 3), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        try {
-            q.toMatrixRotation(m, new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            q.toMatrixRotation(new Matrix(1, 1), jacobian);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var m = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> q.toMatrixRotation(m1, m));
+        assertThrows(IllegalArgumentException.class, () -> q.toMatrixRotation(m, jacobian));
 
-        m = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
+        final var m2 = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
                 MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
-        q.toMatrixRotation(m);
+        q.toMatrixRotation(m2);
 
-        assertTrue(m.equals(matrixRot.internalMatrix, ABSOLUTE_ERROR));
+        assertTrue(m2.equals(matrixRot.internalMatrix, ABSOLUTE_ERROR));
 
         // Force IllegalArgumentException
-        try {
-            q.toMatrixRotation(new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var m3 = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> q.toMatrixRotation(m3));
 
-        final MatrixRotation3D matrixRot2 = new MatrixRotation3D();
+        final var matrixRot2 = new MatrixRotation3D();
         q.toMatrixRotation(matrixRot2);
 
         assertEquals(matrixRot, matrixRot2);
 
-        final MatrixRotation3D matrixRot3 = q.toMatrixRotation();
+        final var matrixRot3 = q.toMatrixRotation();
 
         assertEquals(matrixRot, matrixRot3);
     }
 
     @Test
-    public void testRotate() throws ColinearPointsException, AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testRotate() throws ColinearPointsException, AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final MatrixRotation3D matrixRot = new MatrixRotation3D();
+        final var matrixRot = new MatrixRotation3D();
         matrixRot.setRollPitchYaw(roll, pitch, yaw);
 
-        final Quaternion q = new Quaternion(roll, pitch, yaw);
+        final var q = new Quaternion(roll, pitch, yaw);
 
         // create 3 random points
-        final HomogeneousPoint3D point1 = new HomogeneousPoint3D();
+        final var point1 = new HomogeneousPoint3D();
         point1.setInhomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final HomogeneousPoint3D point2 = new HomogeneousPoint3D();
+        final var point2 = new HomogeneousPoint3D();
         point2.setInhomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
-        final HomogeneousPoint3D point3 = new HomogeneousPoint3D();
+        final var point3 = new HomogeneousPoint3D();
         point3.setInhomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
@@ -1529,62 +1369,62 @@ public class QuaternionTest {
         }
 
         // create plane passing through all three points
-        final Plane plane = new Plane(point1, point2, point3);
+        final var plane = new Plane(point1, point2, point3);
         assertTrue(plane.isLocus(point1, ABSOLUTE_ERROR));
         assertTrue(plane.isLocus(point2, ABSOLUTE_ERROR));
         assertTrue(plane.isLocus(point3, ABSOLUTE_ERROR));
 
         // now rotate points
-        final Matrix jacobianPoint1A = new Matrix(3, 3);
-        final Matrix jacobianQuaternion1A = new Matrix(3, 4);
-        final Point3D rotPoint1A = Point3D.create();
+        final var jacobianPoint1A = new Matrix(3, 3);
+        final var jacobianQuaternion1A = new Matrix(3, 4);
+        final var rotPoint1A = Point3D.create();
         Quaternion.rotate(q, point1, rotPoint1A, jacobianPoint1A, jacobianQuaternion1A);
 
-        final Point3D rotPoint1B = Point3D.create();
-        final Matrix jacobianPoint1B = new Matrix(3, 3);
-        final Matrix jacobianQuaternion1B = new Matrix(3, 4);
+        final var rotPoint1B = Point3D.create();
+        final var jacobianPoint1B = new Matrix(3, 3);
+        final var jacobianQuaternion1B = new Matrix(3, 4);
         q.rotate(point1, rotPoint1B, jacobianPoint1B, jacobianQuaternion1B);
 
-        final Point3D rotPoint1C = Point3D.create();
+        final var rotPoint1C = Point3D.create();
         q.rotate(point1, rotPoint1C);
 
-        final Point3D rotPoint1D = q.rotate(point1);
+        final var rotPoint1D = q.rotate(point1);
 
-        final Point3D rotPoint1E = matrixRot.rotate(point1);
+        final var rotPoint1E = matrixRot.rotate(point1);
 
-        final Matrix jacobianPoint2A = new Matrix(3, 3);
-        final Matrix jacobianQuaternion2A = new Matrix(3, 4);
-        final Point3D rotPoint2A = Point3D.create();
+        final var jacobianPoint2A = new Matrix(3, 3);
+        final var jacobianQuaternion2A = new Matrix(3, 4);
+        final var rotPoint2A = Point3D.create();
         Quaternion.rotate(q, point2, rotPoint2A, jacobianPoint2A, jacobianQuaternion2A);
 
-        final Point3D rotPoint2B = Point3D.create();
-        final Matrix jacobianPoint2B = new Matrix(3, 3);
-        final Matrix jacobianQuaternion2B = new Matrix(3, 4);
+        final var rotPoint2B = Point3D.create();
+        final var jacobianPoint2B = new Matrix(3, 3);
+        final var jacobianQuaternion2B = new Matrix(3, 4);
         q.rotate(point2, rotPoint2B, jacobianPoint2B, jacobianQuaternion2B);
 
-        final Point3D rotPoint2C = Point3D.create();
+        final var rotPoint2C = Point3D.create();
         q.rotate(point2, rotPoint2C);
 
-        final Point3D rotPoint2D = q.rotate(point2);
+        final var rotPoint2D = q.rotate(point2);
 
-        final Point3D rotPoint2E = matrixRot.rotate(point2);
+        final var rotPoint2E = matrixRot.rotate(point2);
 
-        final Matrix jacobianPoint3A = new Matrix(3, 3);
-        final Matrix jacobianQuaternion3A = new Matrix(3, 4);
-        final Point3D rotPoint3A = Point3D.create();
+        final var jacobianPoint3A = new Matrix(3, 3);
+        final var jacobianQuaternion3A = new Matrix(3, 4);
+        final var rotPoint3A = Point3D.create();
         Quaternion.rotate(q, point3, rotPoint3A, jacobianPoint3A, jacobianQuaternion3A);
 
-        final Point3D rotPoint3B = Point3D.create();
-        final Matrix jacobianPoint3B = new Matrix(3, 3);
-        final Matrix jacobianQuaternion3B = new Matrix(3, 4);
+        final var rotPoint3B = Point3D.create();
+        final var jacobianPoint3B = new Matrix(3, 3);
+        final var jacobianQuaternion3B = new Matrix(3, 4);
         q.rotate(point3, rotPoint3B, jacobianPoint3B, jacobianQuaternion3B);
 
-        final Point3D rotPoint3C = Point3D.create();
+        final var rotPoint3C = Point3D.create();
         q.rotate(point3, rotPoint3C);
 
-        final Point3D rotPoint3D = q.rotate(point3);
+        final var rotPoint3D = q.rotate(point3);
 
-        final Point3D rotPoint3E = matrixRot.rotate(point3);
+        final var rotPoint3E = matrixRot.rotate(point3);
 
         // check that rotated points A, B, C, D, E are equal
         assertTrue(rotPoint1A.equals(rotPoint1B, ABSOLUTE_ERROR));
@@ -1606,19 +1446,19 @@ public class QuaternionTest {
         assertTrue(rotPoint3D.equals(rotPoint3A, ABSOLUTE_ERROR));
 
         // check that points have been correctly rotated
-        final Matrix point1Mat = Matrix.newFromArray(point1.asArray(), true);
-        final Matrix point2Mat = Matrix.newFromArray(point2.asArray(), true);
-        final Matrix point3Mat = Matrix.newFromArray(point3.asArray(), true);
-        final Matrix R = q.asHomogeneousMatrix();
-        final Matrix rotPoint1Mat = R.multiplyAndReturnNew(point1Mat);
-        final Matrix rotPoint2Mat = R.multiplyAndReturnNew(point2Mat);
-        final Matrix rotPoint3Mat = R.multiplyAndReturnNew(point3Mat);
+        final var point1Mat = Matrix.newFromArray(point1.asArray(), true);
+        final var point2Mat = Matrix.newFromArray(point2.asArray(), true);
+        final var point3Mat = Matrix.newFromArray(point3.asArray(), true);
+        final var r = q.asHomogeneousMatrix();
+        final var rotPoint1Mat = r.multiplyAndReturnNew(point1Mat);
+        final var rotPoint2Mat = r.multiplyAndReturnNew(point2Mat);
+        final var rotPoint3Mat = r.multiplyAndReturnNew(point3Mat);
 
         // check correctness
-        double scaleX = rotPoint1A.getHomX() / rotPoint1Mat.getElementAtIndex(0);
-        double scaleY = rotPoint1A.getHomY() / rotPoint1Mat.getElementAtIndex(1);
-        double scaleZ = rotPoint1A.getHomZ() / rotPoint1Mat.getElementAtIndex(2);
-        double scaleW = rotPoint1A.getHomW() / rotPoint1Mat.getElementAtIndex(3);
+        var scaleX = rotPoint1A.getHomX() / rotPoint1Mat.getElementAtIndex(0);
+        var scaleY = rotPoint1A.getHomY() / rotPoint1Mat.getElementAtIndex(1);
+        var scaleZ = rotPoint1A.getHomZ() / rotPoint1Mat.getElementAtIndex(2);
+        var scaleW = rotPoint1A.getHomW() / rotPoint1Mat.getElementAtIndex(3);
         assertEquals(scaleX, scaleY, ABSOLUTE_ERROR);
         assertEquals(scaleY, scaleZ, ABSOLUTE_ERROR);
         assertEquals(scaleZ, scaleW, ABSOLUTE_ERROR);
@@ -1644,25 +1484,24 @@ public class QuaternionTest {
 
         // ensure that points where correctly rotated using inhomogeneous
         // coordinates
-        final Matrix inhomPoint = new Matrix(INHOM_COORDS, 1);
+        final var inhomPoint = new Matrix(INHOM_COORDS, 1);
         inhomPoint.setElementAtIndex(0, point1.getInhomX());
         inhomPoint.setElementAtIndex(1, point1.getInhomY());
         inhomPoint.setElementAtIndex(2, point1.getInhomZ());
-        final Matrix inhomR = q.asInhomogeneousMatrix();
-        final Matrix inhomRotPoint = inhomR.multiplyAndReturnNew(inhomPoint);
-        final Point3D rotP = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES,
-                inhomRotPoint.toArray());
+        final var inhomR = q.asInhomogeneousMatrix();
+        final var inhomRotPoint = inhomR.multiplyAndReturnNew(inhomPoint);
+        final var rotP = Point3D.create(CoordinatesType.INHOMOGENEOUS_COORDINATES, inhomRotPoint.toArray());
         assertTrue(rotP.equals(rotPoint1A, ABSOLUTE_ERROR));
 
-        final Plane rotPlaneA = q.rotate(plane);
-        final Plane rotPlaneB = new Plane();
+        final var rotPlaneA = q.rotate(plane);
+        final var rotPlaneB = new Plane();
         q.rotate(plane, rotPlaneB);
 
         // check both rotated lines are equal
-        double scaleA = rotPlaneA.getA() / rotPlaneB.getA();
-        double scaleB = rotPlaneA.getB() / rotPlaneB.getB();
-        double scaleC = rotPlaneA.getC() / rotPlaneB.getC();
-        double scaleD = rotPlaneA.getD() / rotPlaneB.getD();
+        var scaleA = rotPlaneA.getA() / rotPlaneB.getA();
+        var scaleB = rotPlaneA.getB() / rotPlaneB.getB();
+        var scaleC = rotPlaneA.getC() / rotPlaneB.getC();
+        var scaleD = rotPlaneA.getD() / rotPlaneB.getD();
 
         assertEquals(scaleA, scaleB, ABSOLUTE_ERROR);
         assertEquals(scaleB, scaleC, ABSOLUTE_ERROR);
@@ -1679,8 +1518,8 @@ public class QuaternionTest {
         assertTrue(rotPlaneA.isLocus(rotPoint3B, ABSOLUTE_ERROR));
 
         // and by ensuring that rotated plane follow appropriate equation
-        final Matrix planeMat = Matrix.newFromArray(plane.asArray(), true);
-        final Matrix rotPlaneMat = R.multiplyAndReturnNew(planeMat);
+        final var planeMat = Matrix.newFromArray(plane.asArray(), true);
+        final var rotPlaneMat = r.multiplyAndReturnNew(planeMat);
 
         scaleA = rotPlaneA.getA() / rotPlaneMat.getElementAtIndex(0);
         scaleB = rotPlaneA.getB() / rotPlaneMat.getElementAtIndex(1);
@@ -1694,73 +1533,61 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testMatrixRotationToQuaternionAndSetFromMatrixRotation()
-            throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testMatrixRotationToQuaternionAndSetFromMatrixRotation() throws WrongSizeException {
+        final var randomizer = new UniformRandomizer();
+        final var roll = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final MatrixRotation3D matrixRot = new MatrixRotation3D();
+        final var matrixRot = new MatrixRotation3D();
         matrixRot.setRollPitchYaw(roll, pitch, yaw);
 
-        Quaternion q = new Quaternion();
+        final var q1 = new Quaternion();
 
         // test
-        Quaternion.matrixRotationToQuaternion(matrixRot.internalMatrix, q);
+        Quaternion.matrixRotationToQuaternion(matrixRot.internalMatrix, q1);
 
         // check correctness
         //noinspection AssertBetweenInconvertibleTypes
-        assertEquals(matrixRot, q);
+        assertEquals(matrixRot, q1);
 
         // Force IllegalArgumentException
-        try {
-            Quaternion.matrixRotationToQuaternion(new Matrix(1, 1), q);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var m = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class,
+                () -> Quaternion.matrixRotationToQuaternion(m, q1));
 
         // test
-        q = new Quaternion();
-        Quaternion.matrixRotationToQuaternion(matrixRot, q);
+        final var q2 = new Quaternion();
+        Quaternion.matrixRotationToQuaternion(matrixRot, q2);
 
         // check correctness
         //noinspection AssertBetweenInconvertibleTypes
-        assertEquals(matrixRot, q);
+        assertEquals(matrixRot, q2);
 
         // test
-        q = new Quaternion();
-        q.setFromMatrixRotation(matrixRot.internalMatrix);
+        final var q3 = new Quaternion();
+        q3.setFromMatrixRotation(matrixRot.internalMatrix);
 
         // check correctness
         //noinspection AssertBetweenInconvertibleTypes
-        assertEquals(matrixRot, q);
+        assertEquals(matrixRot, q3);
 
         // Force IllegalArgumentException
-        try {
-            q.setFromMatrixRotation(new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> q3.setFromMatrixRotation(m));
 
         // test
-        q = new Quaternion();
-        q.setFromMatrixRotation(matrixRot);
+        final var q4 = new Quaternion();
+        q4.setFromMatrixRotation(matrixRot);
 
         // check correctness
         //noinspection AssertBetweenInconvertibleTypes
-        assertEquals(matrixRot, q);
+        assertEquals(matrixRot, q4);
     }
 
     @Test
-    public void testRotationVectorToRotationAxisAndAngle()
-            throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testRotationVectorToRotationAxisAndAngle() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -1768,27 +1595,24 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(
-                0, 0, 2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis,
-                theta);
+        final var rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, theta);
 
-        final Matrix jacobianAlpha = new Matrix(1, 3);
-        final Matrix jacobianRotationVector = new Matrix(3, 3);
+        final var jacobianAlpha = new Matrix(1, 3);
+        final var jacobianRotationVector = new Matrix(3, 3);
 
-        final double[] axis2 = new double[axis.length];
-        final double theta2 = Quaternion.rotationVectorToRotationAxisAndAngle(
-                rotationVector, axis2, jacobianAlpha, jacobianRotationVector);
+        final var axis2 = new double[axis.length];
+        final var theta2 = Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector, axis2, jacobianAlpha,
+                jacobianRotationVector);
 
         assertArrayEquals(axis, axis2, ABSOLUTE_ERROR);
         assertEquals(theta, theta2, ABSOLUTE_ERROR);
@@ -1817,44 +1641,30 @@ public class QuaternionTest {
                 jacobianRotationVector.getElementAt(2, 2), ABSOLUTE_ERROR);
 
         // Force IllegalArgumentException
-        try {
-            Quaternion.rotationVectorToRotationAxisAndAngle(new double[1],
-                    axis2, jacobianAlpha, jacobianRotationVector);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector,
-                    new double[1], jacobianAlpha, jacobianRotationVector);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector,
-                    axis2, new Matrix(1, 1), jacobianRotationVector);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector,
-                    axis2, jacobianAlpha, new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                () -> Quaternion.rotationVectorToRotationAxisAndAngle(new double[1], axis2, jacobianAlpha,
+                        jacobianRotationVector));
+        assertThrows(IllegalArgumentException.class,
+                () -> Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector, new double[1], jacobianAlpha,
+                        jacobianRotationVector));
+        final var m = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class,
+                () -> Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector, axis2, m,
+                        jacobianRotationVector));
+        assertThrows(IllegalArgumentException.class,
+                () -> Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector, axis2, jacobianAlpha, m));
 
-        final double[] axis3 = new double[axis.length];
-        final double theta3 = Quaternion.rotationVectorToRotationAxisAndAngle(
-                rotationVector, axis3);
+        final var axis3 = new double[axis.length];
+        final var theta3 = Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector, axis3);
 
         assertArrayEquals(axis, axis3, ABSOLUTE_ERROR);
         assertEquals(theta, theta3, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testRotationVectorToQuaternion() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testRotationVectorToQuaternion() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -1862,122 +1672,104 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, theta);
+        final var rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, theta);
 
-        Quaternion q = new Quaternion();
-        Matrix jacobian = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
+        final var q1 = new Quaternion();
+        final var jacobian1 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
 
-        Quaternion.rotationVectorToQuaternion(rotationVector, q, jacobian);
+        Quaternion.rotationVectorToQuaternion(rotationVector, q1, jacobian1);
 
         // check correctness
-        double[] rotationVector2 = new double[Quaternion.N_ANGLES];
-        q.toRotationVector(rotationVector2);
+        var rotationVector2 = new double[Quaternion.N_ANGLES];
+        q1.toRotationVector(rotationVector2);
         assertArrayEquals(rotationVector, rotationVector2, ABSOLUTE_ERROR);
 
         if (theta < Quaternion.LARGE_AXIS_NORM_THRESHOLD) {
-            assertEquals(-0.25 * rotationVector[0], jacobian.getElementAt(0, 0),
-                    ABSOLUTE_ERROR);
-            assertEquals(-0.25 * rotationVector[1], jacobian.getElementAt(1, 0),
-                    ABSOLUTE_ERROR);
-            assertEquals(-0.25 * rotationVector[2], jacobian.getElementAt(2, 0),
-                    ABSOLUTE_ERROR);
+            assertEquals(-0.25 * rotationVector[0], jacobian1.getElementAt(0, 0), ABSOLUTE_ERROR);
+            assertEquals(-0.25 * rotationVector[1], jacobian1.getElementAt(1, 0), ABSOLUTE_ERROR);
+            assertEquals(-0.25 * rotationVector[2], jacobian1.getElementAt(2, 0), ABSOLUTE_ERROR);
 
-            assertEquals(0.5, jacobian.getElementAt(0, 1), 0.0);
-            assertEquals(0.0, jacobian.getElementAt(1, 1), 0.0);
-            assertEquals(0.0, jacobian.getElementAt(2, 1), 0.0);
+            assertEquals(0.5, jacobian1.getElementAt(0, 1), 0.0);
+            assertEquals(0.0, jacobian1.getElementAt(1, 1), 0.0);
+            assertEquals(0.0, jacobian1.getElementAt(2, 1), 0.0);
 
-            assertEquals(0.0, jacobian.getElementAt(0, 2), 0.0);
-            assertEquals(0.5, jacobian.getElementAt(1, 2), 0.0);
-            assertEquals(0.0, jacobian.getElementAt(2, 2), 0.0);
+            assertEquals(0.0, jacobian1.getElementAt(0, 2), 0.0);
+            assertEquals(0.5, jacobian1.getElementAt(1, 2), 0.0);
+            assertEquals(0.0, jacobian1.getElementAt(2, 2), 0.0);
 
-            assertEquals(0.0, jacobian.getElementAt(0, 3), 0.0);
-            assertEquals(0.0, jacobian.getElementAt(1, 3), 0.0);
-            assertEquals(0.5, jacobian.getElementAt(2, 3), 0.0);
+            assertEquals(0.0, jacobian1.getElementAt(0, 3), 0.0);
+            assertEquals(0.0, jacobian1.getElementAt(1, 3), 0.0);
+            assertEquals(0.5, jacobian1.getElementAt(2, 3), 0.0);
         } else {
-            final Matrix jacobianAlpha = new Matrix(1, Quaternion.N_ANGLES);
-            final Matrix jacobianRotationVector = new Matrix(Quaternion.N_ANGLES,
-                    Quaternion.N_ANGLES);
-            Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector,
-                    axis, jacobianAlpha, jacobianRotationVector);
+            final var jacobianAlpha = new Matrix(1, Quaternion.N_ANGLES);
+            final var jacobianRotationVector = new Matrix(Quaternion.N_ANGLES, Quaternion.N_ANGLES);
+            Quaternion.rotationVectorToRotationAxisAndAngle(rotationVector, axis, jacobianAlpha,
+                    jacobianRotationVector);
 
-            final Matrix jacobianOfTheta = new Matrix(Quaternion.N_PARAMS, 1);
-            final Matrix jacobianOfAxis = new Matrix(Quaternion.N_PARAMS,
-                    Quaternion.N_ANGLES);
-            final Quaternion tmp = new Quaternion();
-            tmp.setFromAxisAndRotation(axis, theta, jacobianOfTheta,
-                    jacobianOfAxis);
+            final var jacobianOfTheta = new Matrix(Quaternion.N_PARAMS, 1);
+            final var jacobianOfAxis = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
+            final var tmp = new Quaternion();
+            tmp.setFromAxisAndRotation(axis, theta, jacobianOfTheta, jacobianOfAxis);
 
-            final Matrix jacobian2 = jacobianOfTheta.multiplyAndReturnNew(
-                    jacobianAlpha).addAndReturnNew(
-                    jacobianOfAxis.multiplyAndReturnNew(
-                            jacobianRotationVector));
+            final var jacobian2 = jacobianOfTheta.multiplyAndReturnNew(
+                    jacobianAlpha).addAndReturnNew(jacobianOfAxis.multiplyAndReturnNew(jacobianRotationVector));
 
-            assertTrue(jacobian.equals(jacobian2, ABSOLUTE_ERROR));
+            assertTrue(jacobian1.equals(jacobian2, ABSOLUTE_ERROR));
         }
 
         // Force IllegalArgumentException
-        try {
-            Quaternion.rotationVectorToQuaternion(new double[1], q, jacobian);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Quaternion.rotationVectorToQuaternion(rotationVector, q,
-                    new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                () -> Quaternion.rotationVectorToQuaternion(new double[1], q1, jacobian1));
+        final var m = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> Quaternion.rotationVectorToQuaternion(rotationVector, q1,
+                m));
 
-        q = new Quaternion();
-        Quaternion.rotationVectorToQuaternion(rotationVector, q);
+        final var q2 = new Quaternion();
+        Quaternion.rotationVectorToQuaternion(rotationVector, q2);
 
         // check correctness
         rotationVector2 = new double[Quaternion.N_ANGLES];
-        q.toRotationVector(rotationVector2);
+        q2.toRotationVector(rotationVector2);
         assertArrayEquals(rotationVector, rotationVector2, ABSOLUTE_ERROR);
 
         // check correctness of jacobian
-        q = new Quaternion();
-        jacobian = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
+        final var q3 = new Quaternion();
+        final var jacobian2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);
 
-        Quaternion.rotationVectorToQuaternion(rotationVector, q, jacobian);
+        Quaternion.rotationVectorToQuaternion(rotationVector, q3, jacobian2);
 
         // check rotation vector variation
-        final double[] diff = new double[3];
+        final var diff = new double[3];
         randomizer.fill(diff, -JACOBIAN_ERROR, JACOBIAN_ERROR);
         rotationVector2 = ArrayUtils.sumAndReturnNew(rotationVector, diff);
 
-        final Quaternion q2 = new Quaternion();
-        Quaternion.rotationVectorToQuaternion(rotationVector2, q2);
+        final var q4 = new Quaternion();
+        Quaternion.rotationVectorToQuaternion(rotationVector2, q4);
 
-        final double[] diffResult = new double[]{
-                q2.getA() - q.getA(),
-                q2.getB() - q.getB(),
-                q2.getC() - q.getC(),
-                q2.getD() - q.getD()
+        final var diffResult = new double[]{
+                q4.getA() - q3.getA(),
+                q4.getB() - q3.getB(),
+                q4.getC() - q3.getC(),
+                q4.getD() - q3.getD()
         };
-        final double[] diffResult2 = jacobian.multiplyAndReturnNew(
-                Matrix.newFromArray(diff)).toArray();
+        final var diffResult2 = jacobian2.multiplyAndReturnNew(Matrix.newFromArray(diff)).toArray();
         assertArrayEquals(diffResult, diffResult2, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testSetFromRotationVector() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testSetFromRotationVector() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -1985,37 +1777,33 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, theta);
+        final var rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, theta);
 
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
 
         // set value
         q.setFromRotationVector(rotationVector);
 
         // check correctness
-        final double[] rotationVector2 = new double[Quaternion.N_ANGLES];
+        final var rotationVector2 = new double[Quaternion.N_ANGLES];
         q.toRotationVector(rotationVector2);
         assertArrayEquals(rotationVector, rotationVector2, ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testRotationVectorToMatrixRotation() throws AlgebraException,
-            RotationException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testRotationVectorToMatrixRotation() throws AlgebraException, RotationException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -2023,52 +1811,48 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(
-                0, 0, 2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final double[] rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, theta);
+        final var rotationVector = ArrayUtils.multiplyByScalarAndReturnNew(axis, theta);
 
-        final Matrix m = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
+        final var m = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
                 MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
 
         Quaternion.rotationVectorToMatrixRotation(rotationVector, m);
 
-        final MatrixRotation3D matrixRot = new MatrixRotation3D();
+        final var matrixRot = new MatrixRotation3D();
         Quaternion.rotationVectorToMatrixRotation(rotationVector, matrixRot);
 
         // check correctness
         assertEquals(m, matrixRot.internalMatrix);
 
-        final double[] axis2 = matrixRot.getRotationAxis();
-        final double theta2 = matrixRot.getRotationAngle();
+        final var axis2 = matrixRot.getRotationAxis();
+        final var theta2 = matrixRot.getRotationAngle();
 
-        for (int i = 0; i < axis.length; i++) {
+        for (var i = 0; i < axis.length; i++) {
             assertEquals(Math.abs(axis[i]), Math.abs(axis2[i]), ABSOLUTE_ERROR);
         }
         assertEquals(Math.abs(theta), Math.abs(theta2), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testGetType() {
-        final Quaternion q = new Quaternion();
+    void testGetType() {
+        final var q = new Quaternion();
         assertEquals(Rotation3DType.QUATERNION, q.getType());
     }
 
     @Test
-    public void testSetAxisAndRotationRotationAxisAndGetRotationAngle()
-            throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testSetAxisAndRotationRotationAxisAndGetRotationAngle() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -2076,23 +1860,21 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
         q.setAxisAndRotation(axis[0], axis[1], axis[2], theta);
 
         // check correctness
-        final double[] axis2 = new double[Quaternion.N_ANGLES];
+        final var axis2 = new double[Quaternion.N_ANGLES];
         q.rotationAxis(axis2);
 
         assertArrayEquals(axis, axis2, ABSOLUTE_ERROR);
@@ -2100,10 +1882,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testAsInhomogeneousMatrix() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testAsInhomogeneousMatrix() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -2111,29 +1892,25 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final Quaternion q = new Quaternion(axis, theta);
-        final MatrixRotation3D rot = new MatrixRotation3D(axis, theta);
+        final var q = new Quaternion(axis, theta);
+        final var rot = new MatrixRotation3D(axis, theta);
 
-        Matrix m1 = q.asInhomogeneousMatrix();
-        Matrix m2 = rot.asInhomogeneousMatrix();
+        var m1 = q.asInhomogeneousMatrix();
+        var m2 = rot.asInhomogeneousMatrix();
         assertTrue(m1.equals(m2, ABSOLUTE_ERROR));
 
-        m1 = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
-                MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
-        m2 = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,
-                MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
+        m1 = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS, MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
+        m2 = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS, MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
 
         q.asInhomogeneousMatrix(m1);
         rot.asInhomogeneousMatrix(m2);
@@ -2142,10 +1919,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testAsHomogeneousMatrix() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testAsHomogeneousMatrix() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -2153,29 +1929,25 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final Quaternion q = new Quaternion(axis, theta);
-        final MatrixRotation3D rot = new MatrixRotation3D(axis, theta);
+        final var q = new Quaternion(axis, theta);
+        final var rot = new MatrixRotation3D(axis, theta);
 
-        Matrix m1 = q.asHomogeneousMatrix();
-        Matrix m2 = rot.asHomogeneousMatrix();
+        var m1 = q.asHomogeneousMatrix();
+        var m2 = rot.asHomogeneousMatrix();
         assertTrue(m1.equals(m2, ABSOLUTE_ERROR));
 
-        m1 = new Matrix(MatrixRotation3D.ROTATION3D_HOM_MATRIX_ROWS,
-                MatrixRotation3D.ROTATION3D_HOM_MATRIX_COLS);
-        m2 = new Matrix(MatrixRotation3D.ROTATION3D_HOM_MATRIX_ROWS,
-                MatrixRotation3D.ROTATION3D_HOM_MATRIX_COLS);
+        m1 = new Matrix(MatrixRotation3D.ROTATION3D_HOM_MATRIX_ROWS, MatrixRotation3D.ROTATION3D_HOM_MATRIX_COLS);
+        m2 = new Matrix(MatrixRotation3D.ROTATION3D_HOM_MATRIX_ROWS, MatrixRotation3D.ROTATION3D_HOM_MATRIX_COLS);
 
         q.asHomogeneousMatrix(m1);
         rot.asHomogeneousMatrix(m2);
@@ -2184,11 +1956,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testFromInhomogeneousMatrix() throws AlgebraException,
-            InvalidRotationMatrixException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testFromInhomogeneousMatrix() throws AlgebraException, InvalidRotationMatrixException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -2196,22 +1966,21 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0,
                 2, 0);
 
-        final Quaternion q1 = new Quaternion(axis, theta);
-        final Matrix m1 = q1.asInhomogeneousMatrix();
+        final var q1 = new Quaternion(axis, theta);
+        final var m1 = q1.asInhomogeneousMatrix();
 
-        final Quaternion q2 = new Quaternion();
+        final var q2 = new Quaternion();
         q2.fromInhomogeneousMatrix(m1);
 
         // check correctness
@@ -2220,11 +1989,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testFromHomogeneousMatrix() throws AlgebraException,
-            InvalidRotationMatrixException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testFromHomogeneousMatrix() throws AlgebraException, InvalidRotationMatrixException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -2232,22 +1999,20 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final Quaternion q1 = new Quaternion(axis, theta);
-        final Matrix m1 = q1.asHomogeneousMatrix();
+        final var q1 = new Quaternion(axis, theta);
+        final var m1 = q1.asHomogeneousMatrix();
 
-        final Quaternion q2 = new Quaternion();
+        final var q2 = new Quaternion();
         q2.fromHomogeneousMatrix(m1);
 
         // check correctness
@@ -2256,10 +2021,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testInverse() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testInverse() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -2267,28 +2031,26 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final Quaternion q = new Quaternion(axis, theta);
-        final Quaternion invQ1 = new Quaternion();
+        final var q = new Quaternion(axis, theta);
+        final var invQ1 = new Quaternion();
         Quaternion.inverse(q, invQ1);
 
-        final Quaternion invQ2 = Quaternion.inverseAndReturnNew(q);
+        final var invQ2 = Quaternion.inverseAndReturnNew(q);
 
-        final Quaternion invQ3 = new Quaternion();
+        final var invQ3 = new Quaternion();
         q.inverse(invQ3);
 
-        final Quaternion invQ4 = q.inverseAndReturnNew();
+        final var invQ4 = q.inverseAndReturnNew();
 
         // check correctness
         assertEquals(invQ1, invQ2);
@@ -2296,24 +2058,24 @@ public class QuaternionTest {
         assertEquals(invQ3, invQ4);
         assertEquals(invQ4, invQ1);
 
-        final Quaternion prodQ = q.multiplyAndReturnNew(invQ1);
+        final var prodQ = q.multiplyAndReturnNew(invQ1);
 
         assertEquals(1.0, prodQ.getA(), ABSOLUTE_ERROR);
         assertEquals(0.0, prodQ.getB(), ABSOLUTE_ERROR);
         assertEquals(0.0, prodQ.getC(), ABSOLUTE_ERROR);
         assertEquals(0.0, prodQ.getD(), ABSOLUTE_ERROR);
 
-        final HomogeneousPoint3D point = new HomogeneousPoint3D();
+        final var point = new HomogeneousPoint3D();
         point.setInhomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         // rotate point
-        final Point3D rotPoint = q.rotate(point);
+        final var rotPoint = q.rotate(point);
 
         // rotate with inverse quaternion
-        final Point3D point2 = invQ1.rotate(rotPoint);
+        final var point2 = invQ1.rotate(rotPoint);
 
         // check that both points are equal
         assertTrue(point.equals(point2, ABSOLUTE_ERROR));
@@ -2322,17 +2084,16 @@ public class QuaternionTest {
         q.inverse();
 
         // rotate again rotated point
-        final Point3D point3 = q.rotate(rotPoint);
+        final var point3 = q.rotate(rotPoint);
 
         // check that both points are equal
         assertTrue(point.equals(point3, ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testInverseRotation() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testInverseRotation() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -2340,24 +2101,22 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final Quaternion q = new Quaternion(axis, theta);
+        final var q = new Quaternion(axis, theta);
 
-        final Rotation3D invQ1 = q.inverseRotationAndReturnNew();
-        final Quaternion invQ2 = new Quaternion();
+        final var invQ1 = q.inverseRotationAndReturnNew();
+        final var invQ2 = new Quaternion();
         q.inverseRotation(invQ2);
-        final MatrixRotation3D invRot = new MatrixRotation3D();
+        final var invRot = new MatrixRotation3D();
         q.inverseRotation(invRot);
 
         // check correctness
@@ -2366,24 +2125,24 @@ public class QuaternionTest {
         assertEquals(invQ2, invRot);
         assertEquals(invRot, invQ1);
 
-        final Quaternion prodQ = q.multiplyAndReturnNew(invQ2);
+        final var prodQ = q.multiplyAndReturnNew(invQ2);
 
         assertEquals(1.0, prodQ.getA(), ABSOLUTE_ERROR);
         assertEquals(0.0, prodQ.getB(), ABSOLUTE_ERROR);
         assertEquals(0.0, prodQ.getC(), ABSOLUTE_ERROR);
         assertEquals(0.0, prodQ.getD(), ABSOLUTE_ERROR);
 
-        final HomogeneousPoint3D point = new HomogeneousPoint3D();
+        final var point = new HomogeneousPoint3D();
         point.setInhomogeneousCoordinates(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
 
         // rotate point
-        final Point3D rotPoint = q.rotate(point);
+        final var rotPoint = q.rotate(point);
 
         // rotate with inverse quaternion
-        final Point3D point2 = invQ2.rotate(rotPoint);
+        final var point2 = invQ2.rotate(rotPoint);
 
         // check that both points are equal
         assertTrue(point.equals(point2, ABSOLUTE_ERROR));
@@ -2392,46 +2151,38 @@ public class QuaternionTest {
         q.inverseRotation();
 
         // rotate again rotated point
-        final Point3D point3 = q.rotate(rotPoint);
+        final var point3 = q.rotate(rotPoint);
 
         // check that both points are equal
         assertTrue(point.equals(point3, ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testCombine() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testCombine() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var roll1 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch1 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw1 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final double roll2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch2 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var roll2 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch2 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
+        final var yaw2 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final Quaternion q1 = new Quaternion(roll1, pitch1, yaw1);
-        final Quaternion q2 = new Quaternion(roll2, pitch2, yaw2);
+        final var q1 = new Quaternion(roll1, pitch1, yaw1);
+        final var q2 = new Quaternion(roll2, pitch2, yaw2);
 
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
         Quaternion.combine(q1, q2, q);
 
-        assertTrue(q.asInhomogeneousMatrix().equals(q1.asInhomogeneousMatrix().
-                        multiplyAndReturnNew(q2.asInhomogeneousMatrix()),
-                ABSOLUTE_ERROR));
+        assertTrue(q.asInhomogeneousMatrix().equals(q1.asInhomogeneousMatrix()
+                        .multiplyAndReturnNew(q2.asInhomogeneousMatrix()), ABSOLUTE_ERROR));
 
-        final Quaternion q3 = q.combineAndReturnNew(q2);
-        assertTrue(q3.asInhomogeneousMatrix().equals(q.asInhomogeneousMatrix().
-                        multiplyAndReturnNew(q2.asInhomogeneousMatrix()),
-                ABSOLUTE_ERROR));
+        final var q3 = q.combineAndReturnNew(q2);
+        assertTrue(q3.asInhomogeneousMatrix().equals(q.asInhomogeneousMatrix()
+                        .multiplyAndReturnNew(q2.asInhomogeneousMatrix()), ABSOLUTE_ERROR));
 
-        final MatrixRotation3D rot2 = q2.toMatrixRotation();
-        final Rotation3D rot3 = q.combineAndReturnNew(rot2);
+        final var rot2 = q2.toMatrixRotation();
+        final var rot3 = q.combineAndReturnNew(rot2);
 
         assertEquals(q3, rot3);
 
@@ -2443,10 +2194,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testFromRotation() throws AlgebraException, RotationException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testFromRotation() throws AlgebraException, RotationException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -2454,24 +2204,22 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final MatrixRotation3D matrixRot = new MatrixRotation3D(axis, theta);
-        final AxisRotation3D axisRot = new AxisRotation3D(axis, theta);
-        final Quaternion qRot = new Quaternion(axis, theta);
+        final var matrixRot = new MatrixRotation3D(axis, theta);
+        final var axisRot = new AxisRotation3D(axis, theta);
+        final var qRot = new Quaternion(axis, theta);
 
         // from matrix rotation
-        Quaternion q = new Quaternion();
+        var q = new Quaternion();
         q.fromRotation(matrixRot);
 
         // check correctness
@@ -2501,10 +2249,9 @@ public class QuaternionTest {
     }
 
     @Test
-    public void testToQuaternion() throws AlgebraException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testToQuaternion() throws AlgebraException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -2512,30 +2259,27 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(0, 0,
-                2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        final Quaternion q1 = new Quaternion(axis, theta);
-        final Quaternion q2 = new Quaternion();
+        final var q1 = new Quaternion(axis, theta);
+        final var q2 = new Quaternion();
         q1.toQuaternion(q2);
 
         assertEquals(q1, q2);
     }
 
     @Test
-    public void testNormalize() throws AlgebraException, RotationException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testNormalize() throws AlgebraException, RotationException {
+        final var randomizer = new UniformRandomizer();
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
 
         // Find any 3 orthogonal vectors, 1st will be axis of rotation, and
         // the remaining two will lie on the rotation plane and will be used
@@ -2543,20 +2287,18 @@ public class QuaternionTest {
 
         // To find 3 orthogonal vectors, we use V matrix of a singular
         // decomposition of any Nx3 matrix
-        final Matrix aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(aM);
+        final var aM = Matrix.createWithUniformRandomValues(1, ROTATION_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var decomposer = new SingularValueDecomposer(aM);
 
         decomposer.decompose();
 
-        final Matrix vMatrix = decomposer.getV();
+        final var vMatrix = decomposer.getV();
 
         // axis of rotation
-        final double[] axis = vMatrix.getSubmatrixAsArray(
-                0, 0, 2, 0);
+        final var axis = vMatrix.getSubmatrixAsArray(0, 0, 2, 0);
 
-        Quaternion q1 = new Quaternion(axis, theta);
-        final Quaternion q2 = new Quaternion(axis, theta);
+        final var q1 = new Quaternion(axis, theta);
+        final var q2 = new Quaternion(axis, theta);
         assertFalse(q1.isNormalized());
         assertFalse(q2.isNormalized());
 
@@ -2568,41 +2310,39 @@ public class QuaternionTest {
         assertTrue(q1.equals(q2, ABSOLUTE_ERROR));
 
         assertEquals(1.0,
-                Math.sqrt(q1.getA() * q1.getA() + q1.getB() * q1.getB()
-                        + q1.getC() * q1.getC() + q1.getD() * q1.getD()),
-                ABSOLUTE_ERROR);
+                Math.sqrt(q1.getA() * q1.getA() + q1.getB() * q1.getB() + q1.getC() * q1.getC()
+                        + q1.getD() * q1.getD()), ABSOLUTE_ERROR);
 
         assertTrue(q1.isNormalized());
         assertFalse(q2.isNormalized());
 
 
         // normalize with jacobian
-        q1 = new Quaternion(axis, theta);
-        assertFalse(q1.isNormalized());
-        final double a = q1.getA();
-        final double b = q1.getB();
-        final double c = q1.getC();
-        final double d = q1.getD();
-        final double norm = Math.sqrt(a * a + b * b + c * c + d * d);
+        final var q3 = new Quaternion(axis, theta);
+        assertFalse(q3.isNormalized());
+        final var a = q3.getA();
+        final var b = q3.getB();
+        final var c = q3.getC();
+        final var d = q3.getD();
+        final var norm = Math.sqrt(a * a + b * b + c * c + d * d);
 
-        final Matrix jacobian = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
-        q1.normalize(jacobian);
+        final var jacobian = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        q3.normalize(jacobian);
 
         // check correctness
-        assertTrue(q1.equals(q2, ABSOLUTE_ERROR));
+        assertTrue(q3.equals(q2, ABSOLUTE_ERROR));
 
         assertEquals(1.0,
-                Math.sqrt(q1.getA() * q1.getA() + q1.getB() * q1.getB() +
-                        q1.getC() * q1.getC() + q1.getD() * q1.getD()),
-                ABSOLUTE_ERROR);
+                Math.sqrt(q3.getA() * q3.getA() + q3.getB() * q3.getB() + q3.getC() * q3.getC()
+                        + q3.getD() * q3.getD()), ABSOLUTE_ERROR);
 
-        assertTrue(q1.isNormalized());
+        assertTrue(q3.isNormalized());
         assertFalse(q2.isNormalized());
 
         // check jacobian
-        final double norm3 = norm * norm * norm;
+        final var norm3 = norm * norm * norm;
 
-        final Matrix jacobian2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
+        final var jacobian2 = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);
 
         jacobian2.setElementAtIndex(0, (b * b + c * c + d * d) / norm3);
         jacobian2.setElementAtIndex(1, -a / norm3 * b);
@@ -2627,39 +2367,29 @@ public class QuaternionTest {
         assertEquals(jacobian, jacobian2);
 
         // Force IllegalArgumentException
-        try {
-            q1.normalize(new Matrix(1, 1));
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var m = new Matrix(1, 1);
+        assertThrows(IllegalArgumentException.class, () -> q3.normalize(m));
     }
 
     @Test
-    public void testSlerp() throws RotationException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll1 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw1 = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+    void testSlerp() throws RotationException {
+        final var randomizer = new UniformRandomizer();
+        final var roll1 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch1 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var yaw1 = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final double roll2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double pitch2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
-        final double yaw2 = randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES,
-                2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var roll2 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var pitch2 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
+        final var yaw2 = Math.toRadians(randomizer.nextDouble(2.0 * MIN_ANGLE_DEGREES, 2.0 * MAX_ANGLE_DEGREES));
 
-        final Quaternion q1 = new Quaternion(roll1, pitch1, yaw1);
-        final Quaternion q2 = new Quaternion(roll2, pitch2, yaw2);
+        final var q1 = new Quaternion(roll1, pitch1, yaw1);
+        final var q2 = new Quaternion(roll2, pitch2, yaw2);
 
-
-        final Quaternion q3a = q1.slerpAndReturnNew(q2, 0.0);
-        final Quaternion q3b = new Quaternion();
+        final var q3a = q1.slerpAndReturnNew(q2, 0.0);
+        final var q3b = new Quaternion();
         q1.slerp(q2, 0.0, q3b);
-        final Quaternion q3c = Quaternion.slerpAndReturnNew(q1, q2, 0.0);
-        final Quaternion q3d = new Quaternion();
+        final var q3c = Quaternion.slerpAndReturnNew(q1, q2, 0.0);
+        final var q3d = new Quaternion();
         Quaternion.slerp(q1, q2, 0.0, q3d);
 
         assertTrue(q3a.equals(q1, ABSOLUTE_ERROR));
@@ -2667,11 +2397,11 @@ public class QuaternionTest {
         assertTrue(q3c.equals(q1, ABSOLUTE_ERROR));
         assertTrue(q3d.equals(q1, ABSOLUTE_ERROR));
 
-        final Quaternion q4a = q1.slerpAndReturnNew(q2, 1.0);
-        final Quaternion q4b = new Quaternion();
+        final var q4a = q1.slerpAndReturnNew(q2, 1.0);
+        final var q4b = new Quaternion();
         q1.slerp(q2, 1.0, q4b);
-        final Quaternion q4c = Quaternion.slerpAndReturnNew(q1, q2, 1.0);
-        final Quaternion q4d = new Quaternion();
+        final var q4c = Quaternion.slerpAndReturnNew(q1, q2, 1.0);
+        final var q4d = new Quaternion();
         Quaternion.slerp(q1, q2, 1.0, q4d);
 
         assertTrue(q4a.equals(q2, ABSOLUTE_ERROR));
@@ -2679,11 +2409,11 @@ public class QuaternionTest {
         assertTrue(q4c.equals(q2, ABSOLUTE_ERROR));
         assertTrue(q4d.equals(q2, ABSOLUTE_ERROR));
 
-        final Quaternion q5a = q2.slerpAndReturnNew(q1, 0.0);
-        final Quaternion q5b = new Quaternion();
+        final var q5a = q2.slerpAndReturnNew(q1, 0.0);
+        final var q5b = new Quaternion();
         q2.slerp(q1, 0.0, q5b);
-        final Quaternion q5c = Quaternion.slerpAndReturnNew(q2, q1, 0.0);
-        final Quaternion q5d = new Quaternion();
+        final var q5c = Quaternion.slerpAndReturnNew(q2, q1, 0.0);
+        final var q5d = new Quaternion();
         Quaternion.slerp(q2, q1, 0.0, q5d);
 
         assertTrue(q5a.equals(q2, ABSOLUTE_ERROR));
@@ -2691,11 +2421,11 @@ public class QuaternionTest {
         assertTrue(q5c.equals(q2, ABSOLUTE_ERROR));
         assertTrue(q5d.equals(q2, ABSOLUTE_ERROR));
 
-        final Quaternion q6a = q2.slerpAndReturnNew(q1, 1.0);
-        final Quaternion q6b = new Quaternion();
+        final var q6a = q2.slerpAndReturnNew(q1, 1.0);
+        final var q6b = new Quaternion();
         q2.slerp(q1, 1.0, q6b);
-        final Quaternion q6c = Quaternion.slerpAndReturnNew(q2, q1, 1.0);
-        final Quaternion q6d = new Quaternion();
+        final var q6c = Quaternion.slerpAndReturnNew(q2, q1, 1.0);
+        final var q6d = new Quaternion();
         Quaternion.slerp(q2, q1, 1.0, q6d);
 
         assertTrue(q6a.equals(q1, ABSOLUTE_ERROR));
@@ -2703,39 +2433,31 @@ public class QuaternionTest {
         assertTrue(q6c.equals(q1, ABSOLUTE_ERROR));
         assertTrue(q6d.equals(q1, ABSOLUTE_ERROR));
 
-        Quaternion result = new Quaternion();
+        final var result1 = new Quaternion();
 
         // use equal quaternions
-        Quaternion.slerp(q1, q1, 0.0, result);
-        assertTrue(result.equals(q1));
+        Quaternion.slerp(q1, q1, 0.0, result1);
+        assertTrue(result1.equals(q1));
 
-        Quaternion.slerp(q1, q1, 1.0, result);
-        assertTrue(result.equals(q1));
+        Quaternion.slerp(q1, q1, 1.0, result1);
+        assertTrue(result1.equals(q1));
 
         // force IllegalArgumentException
-        result = new Quaternion();
-        try {
-            Quaternion.slerp(q1, q2, -1.0, result);
-            fail("IllegalArgumentException expected");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            Quaternion.slerp(q1, q2, 2.0, result);
-            fail("IllegalArgumentException expected");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertTrue(result.equals(new Quaternion()));
+        final var result2 = new Quaternion();
+        assertThrows(IllegalArgumentException.class, () -> Quaternion.slerp(q1, q2, -1.0, result2));
+        assertThrows(IllegalArgumentException.class, () -> Quaternion.slerp(q1, q2, 2.0, result2));
+        assertTrue(result2.equals(new Quaternion()));
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
+        final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        final Quaternion q1 = new Quaternion(a, b, c, d);
+        final var q1 = new Quaternion(a, b, c, d);
 
         // check
         assertEquals(q1.getA(), a, 0.0);
@@ -2745,8 +2467,8 @@ public class QuaternionTest {
         assertFalse(q1.isNormalized());
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(q1);
-        final Quaternion q2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(q1);
+        final var q2 = SerializationHelper.<Quaternion>deserialize(bytes);
 
         // check
         assertEquals(q1, q2);

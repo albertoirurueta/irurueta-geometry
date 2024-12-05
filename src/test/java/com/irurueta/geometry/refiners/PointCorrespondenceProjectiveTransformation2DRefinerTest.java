@@ -24,21 +24,16 @@ import com.irurueta.geometry.ProjectiveTransformation2D;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.geometry.estimators.RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator;
-import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
-        RefinerListener<ProjectiveTransformation2D> {
+class PointCorrespondenceProjectiveTransformation2DRefinerTest implements RefinerListener<ProjectiveTransformation2D> {
 
     private static final double MIN_RANDOM_VALUE = -1000.0;
     private static final double MAX_RANDOM_VALUE = 1000.0;
@@ -55,29 +50,26 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
 
     private static final int TIMES = 1000;
 
-    private int mRefineStart;
-    private int mRefineEnd;
+    private int refineStart;
+    private int refineEnd;
 
     @Test
-    public void testConstructor() throws AlgebraException, LockedException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
-                createRobustEstimator();
-        final ProjectiveTransformation2D transformation = estimator.estimate();
-        final InliersData inliersData = estimator.getInliersData();
-        final BitSet inliers = inliersData.getInliers();
-        final double[] residuals = inliersData.getResiduals();
-        final int numInliers = inliersData.getNumInliers();
-        final double refinementStandardDeviation = estimator.getThreshold();
-        final List<Point2D> samples1 = estimator.getInputPoints();
-        final List<Point2D> samples2 = estimator.getOutputPoints();
+    void testConstructor() throws AlgebraException, LockedException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
+        final var transformation = estimator.estimate();
+        final var inliersData = estimator.getInliersData();
+        final var inliers = inliersData.getInliers();
+        final var residuals = inliersData.getResiduals();
+        final var numInliers = inliersData.getNumInliers();
+        final var refinementStandardDeviation = estimator.getThreshold();
+        final var samples1 = estimator.getInputPoints();
+        final var samples2 = estimator.getOutputPoints();
 
         assertNotNull(transformation);
         assertNotNull(inliersData);
 
         // test empty constructor
-        PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                new PointCorrespondenceProjectiveTransformation2DRefiner();
+        var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner();
 
         // check default values
         assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
@@ -94,9 +86,8 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
         assertNull(refiner.getListener());
 
         // test non-empty constructor
-        refiner = new PointCorrespondenceProjectiveTransformation2DRefiner(
-                transformation, true, inliers, residuals, numInliers, samples1,
-                samples2, refinementStandardDeviation);
+        refiner = new PointCorrespondenceProjectiveTransformation2DRefiner(transformation, true, inliers,
+                residuals, numInliers, samples1, samples2, refinementStandardDeviation);
 
         // check default values
         assertEquals(refinementStandardDeviation, refiner.getRefinementStandardDeviation(), 0.0);
@@ -113,9 +104,8 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
         assertNull(refiner.getCovariance());
         assertNull(refiner.getListener());
 
-        refiner = new PointCorrespondenceProjectiveTransformation2DRefiner(
-                transformation, true, inliersData, samples1, samples2,
-                refinementStandardDeviation);
+        refiner = new PointCorrespondenceProjectiveTransformation2DRefiner(transformation, true,
+                inliersData, samples1, samples2, refinementStandardDeviation);
 
         // check default values
         assertEquals(refinementStandardDeviation, refiner.getRefinementStandardDeviation(), 0.0);
@@ -134,9 +124,8 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetListener() {
-        final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                new PointCorrespondenceProjectiveTransformation2DRefiner();
+    void testGetSetListener() {
+        final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getListener());
@@ -149,17 +138,15 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetRefinementStandardDeviation() throws LockedException {
-        final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                new PointCorrespondenceProjectiveTransformation2DRefiner();
+    void testGetSetRefinementStandardDeviation() throws LockedException {
+        final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner();
 
         // check default value
         assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double refinementStandardDeviation = randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var refinementStandardDeviation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setRefinementStandardDeviation(refinementStandardDeviation);
 
         // check correctness
@@ -167,15 +154,14 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetSamples1() throws LockedException {
-        final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                new PointCorrespondenceProjectiveTransformation2DRefiner();
+    void testGetSetSamples1() throws LockedException {
+        final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getSamples1());
 
         // set new value
-        final List<Point2D> samples1 = new ArrayList<>();
+        final var samples1 = new ArrayList<Point2D>();
         refiner.setSamples1(samples1);
 
         // check correctness
@@ -183,15 +169,14 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetSamples2() throws LockedException {
-        final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                new PointCorrespondenceProjectiveTransformation2DRefiner();
+    void testGetSetSamples2() throws LockedException {
+        final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getSamples2());
 
         // set new value
-        final List<Point2D> samples2 = new ArrayList<>();
+        final var samples2 = new ArrayList<Point2D>();
         refiner.setSamples2(samples2);
 
         // check correctness
@@ -199,17 +184,14 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetInliers() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetInliers() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final BitSet inliers = inliersData.getInliers();
+        final var inliersData = estimator.getInliersData();
+        final var inliers = inliersData.getInliers();
 
-        final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                new PointCorrespondenceProjectiveTransformation2DRefiner();
+        final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getInliers());
@@ -222,17 +204,14 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetResiduals() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetResiduals() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final double[] residuals = inliersData.getResiduals();
+        final var inliersData = estimator.getInliersData();
+        final var residuals = inliersData.getResiduals();
 
-        final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                new PointCorrespondenceProjectiveTransformation2DRefiner();
+        final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getResiduals());
@@ -245,17 +224,14 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetNumInliers() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetNumInliers() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final int numInliers = inliersData.getNumInliers();
+        final var inliersData = estimator.getInliersData();
+        final var numInliers = inliersData.getNumInliers();
 
-        final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                new PointCorrespondenceProjectiveTransformation2DRefiner();
+        final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner();
 
         // check default value
         assertEquals(0, refiner.getNumInliers());
@@ -267,24 +243,17 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
         assertEquals(numInliers, refiner.getNumInliers());
 
         // Force IllegalArgumentException
-        try {
-            refiner.setNumInliers(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> refiner.setNumInliers(0));
     }
 
     @Test
-    public void testSetInliersData() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
-                createRobustEstimator();
+    void testSetInliersData() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
+        final var inliersData = estimator.getInliersData();
 
-        final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                new PointCorrespondenceProjectiveTransformation2DRefiner();
+        final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner();
 
         // check default values
         assertNull(refiner.getInliers());
@@ -301,16 +270,14 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testGetSetInitialEstimation() throws LockedException {
-        final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                new PointCorrespondenceProjectiveTransformation2DRefiner();
+    void testGetSetInitialEstimation() throws LockedException {
+        final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner();
 
         // check default value
         assertNull(refiner.getInitialEstimation());
 
         // set new value
-        final ProjectiveTransformation2D transformation =
-                new ProjectiveTransformation2D();
+        final var transformation = new ProjectiveTransformation2D();
         refiner.setInitialEstimation(transformation);
 
         // check correctness
@@ -318,9 +285,8 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testIsSetCovarianceKept() throws LockedException {
-        final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                new PointCorrespondenceProjectiveTransformation2DRefiner();
+    void testIsSetCovarianceKept() throws LockedException {
+        final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner();
 
         // check default value
         assertFalse(refiner.isCovarianceKept());
@@ -333,40 +299,36 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
     }
 
     @Test
-    public void testRefine() throws AlgebraException, LockedException,
-            NotReadyException, RobustEstimatorException, RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
-                    createRobustEstimator();
+    void testRefine() throws AlgebraException, LockedException, NotReadyException, RobustEstimatorException,
+            RefinerException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = createRobustEstimator();
 
-            final ProjectiveTransformation2D transformation = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refineStandardDeviation = estimator.getThreshold();
-            final List<Point2D> samples1 = estimator.getInputPoints();
-            final List<Point2D> samples2 = estimator.getOutputPoints();
+            final var transformation = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refineStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getInputPoints();
+            final var samples2 = estimator.getOutputPoints();
 
-            final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                    new PointCorrespondenceProjectiveTransformation2DRefiner(
-                            transformation, true, inliersData, samples1, samples2,
-                            refineStandardDeviation);
+            final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner(transformation,
+                    true, inliersData, samples1, samples2, refineStandardDeviation);
             refiner.setListener(this);
 
-            final ProjectiveTransformation2D result1 =
-                    new ProjectiveTransformation2D();
+            final var result1 = new ProjectiveTransformation2D();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final ProjectiveTransformation2D result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
             assertTrue(result1.asMatrix().equals(result2.asMatrix(), ABSOLUTE_ERROR));
 
@@ -377,34 +339,30 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
         assertTrue(numValid > 0);
     }
 
-    private RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator createRobustEstimator()
+    private static RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator createRobustEstimator()
             throws AlgebraException, LockedException {
 
-        final ProjectiveTransformation2D transformation = createTransformation();
+        final var transformation = createTransformation();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // generate random points
-        final int nPoints = randomizer.nextInt(MIN_LINES, MAX_LINES);
+        final var nPoints = randomizer.nextInt(MIN_LINES, MAX_LINES);
 
-        final List<Point2D> inputPoints = new ArrayList<>();
-        final List<Point2D> outputLinesWithError = new ArrayList<>();
-        Point2D inputPoint;
-        Point2D outputPoint;
-        Point2D outputPointWithError;
-        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                new Random(), 0.0, STD_ERROR);
-        for (int i = 0; i < nPoints; i++) {
+        final var inputPoints = new ArrayList<Point2D>();
+        final var outputLinesWithError = new ArrayList<Point2D>();
+        final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+        for (var i = 0; i < nPoints; i++) {
             // generate input point
-            inputPoint = new InhomogeneousPoint2D(
+            final var inputPoint = new InhomogeneousPoint2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-            outputPoint = transformation.transformAndReturnNew(inputPoint);
-
+            final var outputPoint = transformation.transformAndReturnNew(inputPoint);
+            Point2D outputPointWithError;
             if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                 // point is outlier
-                final double errorX = errorRandomizer.nextDouble();
-                final double errorY = errorRandomizer.nextDouble();
+                final var errorX = errorRandomizer.nextDouble();
+                final var errorY = errorRandomizer.nextDouble();
                 outputPointWithError = new InhomogeneousPoint2D(
                         outputPoint.getInhomX() + errorX,
                         outputPoint.getInhomY() + errorY);
@@ -417,9 +375,8 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
             outputLinesWithError.add(outputPointWithError);
         }
 
-        final RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator estimator =
-                new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputPoints, outputLinesWithError);
+        final var estimator = new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(inputPoints,
+                outputLinesWithError);
 
         estimator.setThreshold(THRESHOLD);
         estimator.setComputeAndKeepInliersEnabled(true);
@@ -430,16 +387,14 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
         return estimator;
     }
 
-    private ProjectiveTransformation2D createTransformation()
-            throws AlgebraException {
+    private static ProjectiveTransformation2D createTransformation() throws AlgebraException {
 
         Matrix t;
         do {
             // ensure T matrix is invertible
-            t = Matrix.createWithUniformRandomValues(
-                    ProjectiveTransformation2D.HOM_COORDS,
+            t = Matrix.createWithUniformRandomValues(ProjectiveTransformation2D.HOM_COORDS,
                     ProjectiveTransformation2D.HOM_COORDS, -1.0, 1.0);
-            final double norm = Utils.normF(t);
+            final var norm = Utils.normF(t);
             // normalize T to increase accuracy
             t.multiplyByScalar(1.0 / norm);
         } while (Utils.rank(t) < ProjectiveTransformation2D.HOM_COORDS);
@@ -450,7 +405,7 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
     @Override
     public void onRefineStart(final Refiner<ProjectiveTransformation2D> refiner,
                               final ProjectiveTransformation2D initialEstimation) {
-        mRefineStart++;
+        refineStart++;
         checkLocked((PointCorrespondenceProjectiveTransformation2DRefiner) refiner);
     }
 
@@ -459,75 +414,26 @@ public class PointCorrespondenceProjectiveTransformation2DRefinerTest implements
                             final ProjectiveTransformation2D initialEstimation,
                             final ProjectiveTransformation2D result,
                             final boolean errorDecreased) {
-        mRefineEnd++;
+        refineEnd++;
         checkLocked((PointCorrespondenceProjectiveTransformation2DRefiner) refiner);
     }
 
     private void reset() {
-        mRefineStart = mRefineEnd = 0;
+        refineStart = refineEnd = 0;
     }
 
-    private void checkLocked(
-            final PointCorrespondenceProjectiveTransformation2DRefiner refiner) {
+    private static void checkLocked(final PointCorrespondenceProjectiveTransformation2DRefiner refiner) {
         assertTrue(refiner.isLocked());
-        try {
-            refiner.setInitialEstimation(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setCovarianceKept(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.refine(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            refiner.refine();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            refiner.setInliers(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setResiduals(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setNumInliers(0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setInliersData(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSamples1(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSamples2(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setRefinementStandardDeviation(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
+        assertThrows(LockedException.class, () -> refiner.setInitialEstimation(null));
+        assertThrows(LockedException.class, () -> refiner.setCovarianceKept(true));
+        assertThrows(LockedException.class, () -> refiner.refine(null));
+        assertThrows(LockedException.class, refiner::refine);
+        assertThrows(LockedException.class, () -> refiner.setInliers(null));
+        assertThrows(LockedException.class, () -> refiner.setResiduals(null));
+        assertThrows(LockedException.class, () -> refiner.setNumInliers(0));
+        assertThrows(LockedException.class, () -> refiner.setInliersData(null));
+        assertThrows(LockedException.class, () -> refiner.setSamples1(null));
+        assertThrows(LockedException.class, () -> refiner.setSamples2(null));
+        assertThrows(LockedException.class, () -> refiner.setRefinementStandardDeviation(0.0));
     }
 }

@@ -84,8 +84,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  size or their size is smaller than required minimum size (4 matches).
      */
     protected DLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Plane> planes, final List<Line2D> lines) {
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes, final List<Line2D> lines) {
         super(listener, planes, lines);
     }
 
@@ -97,21 +96,14 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
-    public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
-            case MSAC:
-                return new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
-            case PROSAC:
-                return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
-            case PROMEDS:
-                return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
-        }
+    public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
+            case MSAC -> new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
+            case PROSAC -> new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
+            case PROMEDS -> new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
+            default -> new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
+        };
     }
 
     /**
@@ -130,26 +122,14 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            final List<Plane> planes, final List<Line2D> lines,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planes, lines);
-            case MSAC:
-                return new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planes, lines);
-            case PROSAC:
-                return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planes, lines);
-            case PROMEDS:
-                return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planes, lines);
-            case RANSAC:
-            default:
-                return new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planes, lines);
-        }
+            final List<Plane> planes, final List<Line2D> lines, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(planes, lines);
+            case MSAC -> new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(planes, lines);
+            case PROSAC -> new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(planes, lines);
+            case PROMEDS -> new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(planes, lines);
+            default -> new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(planes, lines);
+        };
     }
 
     /**
@@ -163,26 +143,14 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @return an instance of a pinhole camera robust estimator.
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case PROMEDS:
-                return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case RANSAC:
-            default:
-                return new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-        }
+            final PinholeCameraRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener);
+            case MSAC -> new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener);
+            case PROSAC -> new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener);
+            case PROMEDS -> new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener);
+            default -> new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener);
+        };
     }
 
     /**
@@ -203,26 +171,15 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes,
-            final List<Line2D> lines, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, planes, lines);
-            case MSAC:
-                return new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, planes, lines);
-            case PROSAC:
-                return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, planes, lines);
-            case PROMEDS:
-                return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, planes, lines);
-            case RANSAC:
-            default:
-                return new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, planes, lines);
-        }
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes, final List<Line2D> lines,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, planes, lines);
+            case MSAC -> new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, planes, lines);
+            case PROSAC -> new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, planes, lines);
+            case PROMEDS -> new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, planes, lines);
+            default -> new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, planes, lines);
+        };
     }
 
     /**
@@ -240,21 +197,13 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
-            case MSAC:
-                return new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
-            case PROSAC:
-                return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
+            case MSAC -> new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
+            case PROSAC -> new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(qualityScores);
+            default -> new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator();
+        };
     }
 
     /**
@@ -277,24 +226,15 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
             final List<Plane> planes, final List<Line2D> lines, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planes, lines);
-            case MSAC:
-                return new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planes, lines);
-            case PROSAC:
-                return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planes, lines, qualityScores);
-            case PROMEDS:
-                return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planes, lines, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        planes, lines);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(planes, lines);
+            case MSAC -> new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(planes, lines);
+            case PROSAC -> new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
+                    planes, lines, qualityScores);
+            case PROMEDS -> new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
+                    planes, lines, qualityScores);
+            default -> new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(planes, lines);
+        };
     }
 
     /**
@@ -313,26 +253,15 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  the required minimum size (4 samples).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-        }
+            final PinholeCameraRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener);
+            case MSAC -> new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener);
+            case PROSAC -> new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, qualityScores);
+            default -> new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener);
+        };
     }
 
     /**
@@ -355,27 +284,17 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  required minimum size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes,
-            final List<Line2D> lines, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, planes, lines);
-            case MSAC:
-                return new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, planes, lines);
-            case PROSAC:
-                return new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, planes, lines, qualityScores);
-            case PROMEDS:
-                return new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, planes, lines, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-                        listener, planes, lines);
-        }
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes, final List<Line2D> lines,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, planes, lines);
+            case MSAC -> new MSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, planes, lines);
+            case PROSAC -> new PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, planes, lines,
+                    qualityScores);
+            case PROMEDS -> new PROMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, planes, lines,
+                    qualityScores);
+            default -> new RANSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(listener, planes, lines);
+        };
     }
 
     /**
@@ -435,8 +354,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Plane> planes, final List<Line2D> lines) {
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes, final List<Line2D> lines) {
         return create(listener, planes, lines, DEFAULT_ROBUST_METHOD);
     }
 
@@ -451,8 +369,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than required minimum size (4 samples).
      */
-    public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            final double[] qualityScores) {
+    public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(final double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -490,8 +407,7 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  the required minimum size (4 samples).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final PinholeCameraRobustEstimatorListener listener, final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -513,9 +429,8 @@ public abstract class DLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  required minimum size (4 correspondences).
      */
     public static DLTLinePlaneCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes,
-            final List<Line2D> lines, final double[] qualityScores) {
-        return create(listener, planes, lines, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes, final List<Line2D> lines,
+            final double[] qualityScores) {
+        return create(listener, planes, lines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 }

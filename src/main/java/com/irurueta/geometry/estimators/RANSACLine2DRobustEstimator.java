@@ -52,14 +52,14 @@ public class RANSACLine2DRobustEstimator extends Line2DRobustEstimator {
      * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a sampled line.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Constructor.
      */
     public RANSACLine2DRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -71,7 +71,7 @@ public class RANSACLine2DRobustEstimator extends Line2DRobustEstimator {
      */
     public RANSACLine2DRobustEstimator(List<Point2D> points) {
         super(points);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -82,7 +82,7 @@ public class RANSACLine2DRobustEstimator extends Line2DRobustEstimator {
      */
     public RANSACLine2DRobustEstimator(final Line2DRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
 
@@ -98,7 +98,7 @@ public class RANSACLine2DRobustEstimator extends Line2DRobustEstimator {
     public RANSACLine2DRobustEstimator(final Line2DRobustEstimatorListener listener,
                                        final List<Point2D> points) {
         super(listener, points);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -111,7 +111,7 @@ public class RANSACLine2DRobustEstimator extends Line2DRobustEstimator {
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -133,7 +133,7 @@ public class RANSACLine2DRobustEstimator extends Line2DRobustEstimator {
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
 
@@ -150,8 +150,7 @@ public class RANSACLine2DRobustEstimator extends Line2DRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Line2D estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Line2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -159,94 +158,87 @@ public class RANSACLine2DRobustEstimator extends Line2DRobustEstimator {
             throw new NotReadyException();
         }
 
-        final RANSACRobustEstimator<Line2D> innerEstimator =
-                new RANSACRobustEstimator<>(
-                        new RANSACRobustEstimatorListener<Line2D>() {
+        final var innerEstimator = new RANSACRobustEstimator<>(new RANSACRobustEstimatorListener<Line2D>() {
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+            @Override
+            public double getThreshold() {
+                return threshold;
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPoints.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return points.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return Line2DRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return Line2DRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<Line2D> solutions) {
-                                final Point2D point1 = mPoints.get(samplesIndices[0]);
-                                final Point2D point2 = mPoints.get(samplesIndices[1]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Line2D> solutions) {
+                final var point1 = points.get(samplesIndices[0]);
+                final var point2 = points.get(samplesIndices[1]);
 
-                                try {
-                                    final Line2D line = new Line2D(point1, point2, false);
-                                    solutions.add(line);
-                                } catch (final CoincidentPointsException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var line = new Line2D(point1, point2, false);
+                    solutions.add(line);
+                } catch (final CoincidentPointsException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final Line2D currentEstimation, final int i) {
-                                return residual(currentEstimation, mPoints.get(i));
-                            }
+            @Override
+            public double computeResidual(final Line2D currentEstimation, final int i) {
+                return residual(currentEstimation, points.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return RANSACLine2DRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return RANSACLine2DRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<Line2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(RANSACLine2DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Line2D> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(RANSACLine2DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<Line2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(RANSACLine2DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Line2D> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(RANSACLine2DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Line2D> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            RANSACLine2DRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Line2D> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(RANSACLine2DRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Line2D> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            RANSACLine2DRobustEstimator.this, progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Line2D> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(RANSACLine2DRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
             return innerEstimator.estimate();
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 

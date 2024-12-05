@@ -23,21 +23,16 @@ import com.irurueta.geometry.Plane;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.geometry.estimators.RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator;
-import com.irurueta.numerical.robust.InliersData;
 import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
-        RefinerListener<AffineTransformation3D> {
+class PlaneCorrespondenceAffineTransformation3DRefinerTest implements RefinerListener<AffineTransformation3D> {
 
     private static final double MIN_RANDOM_VALUE = -1000.0;
     private static final double MAX_RANDOM_VALUE = 1000.0;
@@ -54,29 +49,26 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
 
     private static final int TIMES = 1000;
 
-    private int mRefineStart;
-    private int mRefineEnd;
+    private int refineStart;
+    private int refineEnd;
 
     @Test
-    public void testConstructor() throws AlgebraException, LockedException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                createRobustEstimator();
-        final AffineTransformation3D transformation = estimator.estimate();
-        final InliersData inliersData = estimator.getInliersData();
-        final BitSet inliers = inliersData.getInliers();
-        final double[] residuals = inliersData.getResiduals();
-        final int numInliers = inliersData.getNumInliers();
-        final double refinementStandardDeviation = estimator.getThreshold();
-        final List<Plane> samples1 = estimator.getInputPlanes();
-        final List<Plane> samples2 = estimator.getOutputPlanes();
+    void testConstructor() throws AlgebraException, LockedException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
+        final var transformation = estimator.estimate();
+        final var inliersData = estimator.getInliersData();
+        final var inliers = inliersData.getInliers();
+        final var residuals = inliersData.getResiduals();
+        final var numInliers = inliersData.getNumInliers();
+        final var refinementStandardDeviation = estimator.getThreshold();
+        final var samples1 = estimator.getInputPlanes();
+        final var samples2 = estimator.getOutputPlanes();
 
         assertNotNull(transformation);
         assertNotNull(inliersData);
 
         // test empty constructor
-        PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                new PlaneCorrespondenceAffineTransformation3DRefiner();
+        var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner();
 
         // check default values
         assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
@@ -93,13 +85,11 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
         assertNull(refiner.getListener());
 
         // test non-empty constructor
-        refiner = new PlaneCorrespondenceAffineTransformation3DRefiner(
-                transformation, true, inliers, residuals, numInliers, samples1,
-                samples2, refinementStandardDeviation);
+        refiner = new PlaneCorrespondenceAffineTransformation3DRefiner(transformation, true, inliers,
+                residuals, numInliers, samples1, samples2, refinementStandardDeviation);
 
         // check default values
-        assertEquals(refiner.getRefinementStandardDeviation(),
-                refinementStandardDeviation, 0.0);
+        assertEquals(refiner.getRefinementStandardDeviation(), refinementStandardDeviation, 0.0);
         assertSame(samples1, refiner.getSamples1());
         assertSame(samples2, refiner.getSamples2());
         assertTrue(refiner.isReady());
@@ -113,13 +103,11 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
         assertNull(refiner.getCovariance());
         assertNull(refiner.getListener());
 
-        refiner = new PlaneCorrespondenceAffineTransformation3DRefiner(
-                transformation, true, inliersData, samples1, samples2,
-                refinementStandardDeviation);
+        refiner = new PlaneCorrespondenceAffineTransformation3DRefiner(transformation, true, inliersData,
+                samples1, samples2, refinementStandardDeviation);
 
         // check default values
-        assertEquals(refiner.getRefinementStandardDeviation(),
-                refinementStandardDeviation, 0.0);
+        assertEquals(refiner.getRefinementStandardDeviation(), refinementStandardDeviation, 0.0);
         assertSame(samples1, refiner.getSamples1());
         assertSame(samples2, refiner.getSamples2());
         assertTrue(refiner.isReady());
@@ -135,9 +123,8 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetListener() {
-        final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                new PlaneCorrespondenceAffineTransformation3DRefiner();
+    void testGetSetListener() {
+        final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getListener());
@@ -150,17 +137,15 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetRefinementStandardDeviation() throws LockedException {
-        final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                new PlaneCorrespondenceAffineTransformation3DRefiner();
+    void testGetSetRefinementStandardDeviation() throws LockedException {
+        final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner();
 
         // check default value
         assertEquals(0.0, refiner.getRefinementStandardDeviation(), 0.0);
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double refinementStandardDeviation = randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var refinementStandardDeviation = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         refiner.setRefinementStandardDeviation(refinementStandardDeviation);
 
         // check correctness
@@ -168,15 +153,14 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetSamples1() throws LockedException {
-        final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                new PlaneCorrespondenceAffineTransformation3DRefiner();
+    void testGetSetSamples1() throws LockedException {
+        final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getSamples1());
 
         // set new value
-        final List<Plane> samples1 = new ArrayList<>();
+        final var samples1 = new ArrayList<Plane>();
         refiner.setSamples1(samples1);
 
         // check correctness
@@ -184,15 +168,14 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetSamples2() throws LockedException {
-        final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                new PlaneCorrespondenceAffineTransformation3DRefiner();
+    void testGetSetSamples2() throws LockedException {
+        final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getSamples2());
 
         // set new value
-        final List<Plane> samples2 = new ArrayList<>();
+        final var samples2 = new ArrayList<Plane>();
         refiner.setSamples2(samples2);
 
         // check correctness
@@ -200,17 +183,14 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetInliers() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetInliers() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final BitSet inliers = inliersData.getInliers();
+        final var inliersData = estimator.getInliersData();
+        final var inliers = inliersData.getInliers();
 
-        final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                new PlaneCorrespondenceAffineTransformation3DRefiner();
+        final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getInliers());
@@ -223,17 +203,14 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetResiduals() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetResiduals() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final double[] residuals = inliersData.getResiduals();
+        final var inliersData = estimator.getInliersData();
+        final var residuals = inliersData.getResiduals();
 
-        final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                new PlaneCorrespondenceAffineTransformation3DRefiner();
+        final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getResiduals());
@@ -246,17 +223,14 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetNumInliers() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                createRobustEstimator();
+    void testGetSetNumInliers() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
-        final int numInliers = inliersData.getNumInliers();
+        final var inliersData = estimator.getInliersData();
+        final var numInliers = inliersData.getNumInliers();
 
-        final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                new PlaneCorrespondenceAffineTransformation3DRefiner();
+        final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner();
 
         // check default value
         assertEquals(0, refiner.getNumInliers());
@@ -268,24 +242,17 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
         assertEquals(numInliers, refiner.getNumInliers());
 
         // Force IllegalArgumentException
-        try {
-            refiner.setNumInliers(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> refiner.setNumInliers(0));
     }
 
     @Test
-    public void testSetInliersData() throws LockedException, AlgebraException,
-            NotReadyException, RobustEstimatorException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                createRobustEstimator();
+    void testSetInliersData() throws LockedException, AlgebraException, NotReadyException, RobustEstimatorException {
+        final var estimator = createRobustEstimator();
 
         assertNotNull(estimator.estimate());
-        final InliersData inliersData = estimator.getInliersData();
+        final var inliersData = estimator.getInliersData();
 
-        final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                new PlaneCorrespondenceAffineTransformation3DRefiner();
+        final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner();
 
         // check default values
         assertNull(refiner.getInliers());
@@ -302,15 +269,14 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testGetSetInitialEstimation() throws LockedException {
-        final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                new PlaneCorrespondenceAffineTransformation3DRefiner();
+    void testGetSetInitialEstimation() throws LockedException {
+        final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner();
 
         // check default value
         assertNull(refiner.getInitialEstimation());
 
         // set new value
-        final AffineTransformation3D transformation = new AffineTransformation3D();
+        final var transformation = new AffineTransformation3D();
         refiner.setInitialEstimation(transformation);
 
         // check correctness
@@ -318,9 +284,8 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testIsSetCovarianceKept() throws LockedException {
-        final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                new PlaneCorrespondenceAffineTransformation3DRefiner();
+    void testIsSetCovarianceKept() throws LockedException {
+        final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner();
 
         // check default value
         assertFalse(refiner.isCovarianceKept());
@@ -333,39 +298,36 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
     }
 
     @Test
-    public void testRefine() throws AlgebraException, LockedException,
-            NotReadyException, RobustEstimatorException, RefinerException {
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                    createRobustEstimator();
+    void testRefine() throws AlgebraException, LockedException, NotReadyException, RobustEstimatorException,
+            RefinerException {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var estimator = createRobustEstimator();
 
-            final AffineTransformation3D transformation = estimator.estimate();
-            final InliersData inliersData = estimator.getInliersData();
-            final double refineStandardDeviation = estimator.getThreshold();
-            final List<Plane> samples1 = estimator.getInputPlanes();
-            final List<Plane> samples2 = estimator.getOutputPlanes();
+            final var transformation = estimator.estimate();
+            final var inliersData = estimator.getInliersData();
+            final var refineStandardDeviation = estimator.getThreshold();
+            final var samples1 = estimator.getInputPlanes();
+            final var samples2 = estimator.getOutputPlanes();
 
-            final PlaneCorrespondenceAffineTransformation3DRefiner refiner =
-                    new PlaneCorrespondenceAffineTransformation3DRefiner(
-                            transformation, true, inliersData, samples1, samples2,
-                            refineStandardDeviation);
+            final var refiner = new PlaneCorrespondenceAffineTransformation3DRefiner(transformation, true,
+                    inliersData, samples1, samples2, refineStandardDeviation);
             refiner.setListener(this);
 
-            final AffineTransformation3D result1 = new AffineTransformation3D();
+            final var result1 = new AffineTransformation3D();
 
             reset();
-            assertEquals(0, mRefineStart);
-            assertEquals(0, mRefineEnd);
+            assertEquals(0, refineStart);
+            assertEquals(0, refineEnd);
 
             if (!refiner.refine(result1)) {
                 continue;
             }
 
-            final AffineTransformation3D result2 = refiner.refine();
+            final var result2 = refiner.refine();
 
-            assertEquals(2, mRefineStart);
-            assertEquals(2, mRefineEnd);
+            assertEquals(2, refineStart);
+            assertEquals(2, refineEnd);
 
             assertTrue(result1.asMatrix().equals(result2.asMatrix(), ABSOLUTE_ERROR));
 
@@ -376,38 +338,34 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
         assertTrue(numValid > 0);
     }
 
-    private RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator createRobustEstimator()
+    private static RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator createRobustEstimator()
             throws AlgebraException, LockedException {
 
-        final AffineTransformation3D transformation = createTransformation();
+        final var transformation = createTransformation();
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // generate random planes
-        final int nPlanes = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+        final var nPlanes = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
 
-        final List<Plane> inputPlanes = new ArrayList<>();
-        final List<Plane> outputPlanesWithError = new ArrayList<>();
-        Plane inputPlane;
-        Plane outputPlane;
-        Plane outputPlaneWithError;
-        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                new Random(), 0.0, STD_ERROR);
-        for (int i = 0; i < nPlanes; i++) {
+        final var inputPlanes = new ArrayList<Plane>();
+        final var outputPlanesWithError = new ArrayList<Plane>();
+        final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+        for (var i = 0; i < nPlanes; i++) {
             // generate input point
-            inputPlane = new Plane(
+            final var inputPlane = new Plane(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-            outputPlane = transformation.transformAndReturnNew(inputPlane);
-
+            final var outputPlane = transformation.transformAndReturnNew(inputPlane);
+            Plane outputPlaneWithError;
             if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                 // plane is outlier
-                final double errorA = errorRandomizer.nextDouble();
-                final double errorB = errorRandomizer.nextDouble();
-                final double errorC = errorRandomizer.nextDouble();
-                final double errorD = errorRandomizer.nextDouble();
+                final var errorA = errorRandomizer.nextDouble();
+                final var errorB = errorRandomizer.nextDouble();
+                final var errorC = errorRandomizer.nextDouble();
+                final var errorD = errorRandomizer.nextDouble();
                 outputPlaneWithError = new Plane(
                         outputPlane.getA() + errorA,
                         outputPlane.getB() + errorB,
@@ -422,9 +380,8 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
             outputPlanesWithError.add(outputPlaneWithError);
         }
 
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        inputPlanes, outputPlanesWithError);
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(inputPlanes,
+                outputPlanesWithError);
 
         estimator.setThreshold(THRESHOLD);
         estimator.setComputeAndKeepInliersEnabled(true);
@@ -435,22 +392,19 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
         return estimator;
     }
 
-    private AffineTransformation3D createTransformation()
-            throws AlgebraException {
-
+    private static AffineTransformation3D createTransformation() throws AlgebraException {
         Matrix a;
         do {
             // ensure A matrix is invertible
-            a = Matrix.createWithUniformRandomValues(
-                    AffineTransformation3D.INHOM_COORDS,
+            a = Matrix.createWithUniformRandomValues(AffineTransformation3D.INHOM_COORDS,
                     AffineTransformation3D.INHOM_COORDS, -1.0, 1.0);
-            final double norm = Utils.normF(a);
+            final var norm = Utils.normF(a);
             // normalize A to increase accuracy
             a.multiplyByScalar(1.0 / norm);
         } while (Utils.rank(a) < AffineTransformation3D.INHOM_COORDS);
 
-        final double[] translation = new double[AffineTransformation3D.INHOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var translation = new double[AffineTransformation3D.INHOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(translation, -1.0, 1.0);
 
         return new AffineTransformation3D(a, translation);
@@ -459,7 +413,7 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
     @Override
     public void onRefineStart(final Refiner<AffineTransformation3D> refiner,
                               final AffineTransformation3D initialEstimation) {
-        mRefineStart++;
+        refineStart++;
         checkLocked((PlaneCorrespondenceAffineTransformation3DRefiner) refiner);
     }
 
@@ -468,75 +422,26 @@ public class PlaneCorrespondenceAffineTransformation3DRefinerTest implements
                             final AffineTransformation3D initialEstimation,
                             final AffineTransformation3D result,
                             final boolean errorDecreased) {
-        mRefineEnd++;
+        refineEnd++;
         checkLocked((PlaneCorrespondenceAffineTransformation3DRefiner) refiner);
     }
 
     private void reset() {
-        mRefineStart = mRefineEnd = 0;
+        refineStart = refineEnd = 0;
     }
 
-    private void checkLocked(
-            final PlaneCorrespondenceAffineTransformation3DRefiner refiner) {
+    private static void checkLocked(final PlaneCorrespondenceAffineTransformation3DRefiner refiner) {
         assertTrue(refiner.isLocked());
-        try {
-            refiner.setInitialEstimation(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setCovarianceKept(true);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.refine(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            refiner.refine();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
-        try {
-            refiner.setInliers(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setResiduals(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setNumInliers(0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setInliersData(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSamples1(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setSamples2(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            refiner.setRefinementStandardDeviation(0.0);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
+        assertThrows(LockedException.class, () -> refiner.setInitialEstimation(null));
+        assertThrows(LockedException.class, () -> refiner.setCovarianceKept(true));
+        assertThrows(LockedException.class, () -> refiner.refine(null));
+        assertThrows(LockedException.class, refiner::refine);
+        assertThrows(LockedException.class, () -> refiner.setInliers(null));
+        assertThrows(LockedException.class, () -> refiner.setResiduals(null));
+        assertThrows(LockedException.class, () -> refiner.setNumInliers(0));
+        assertThrows(LockedException.class, () -> refiner.setInliersData(null));
+        assertThrows(LockedException.class, () -> refiner.setSamples1(null));
+        assertThrows(LockedException.class, () -> refiner.setSamples2(null));
+        assertThrows(LockedException.class, () -> refiner.setRefinementStandardDeviation(0.0));
     }
 }

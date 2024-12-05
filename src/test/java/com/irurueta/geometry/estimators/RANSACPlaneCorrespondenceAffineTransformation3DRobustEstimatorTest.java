@@ -24,15 +24,13 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
+class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         implements AffineTransformation3DRobustEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -1000.0;
@@ -57,7 +55,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     private int estimateProgressChange;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(4, AffineTransformation3DRobustEstimator.MINIMUM_SIZE);
         assertEquals(0.05f, AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
         assertEquals(0.0f, AffineTransformation3DRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
@@ -80,10 +78,9 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test constructor without arguments
-        RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+        var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
         assertEquals(RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getThreshold(), 0.0);
@@ -98,26 +95,24 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // test constructor with points
-        final List<Plane> inputPlanes = new ArrayList<>();
-        final List<Plane> outputPlanes = new ArrayList<>();
-        for (int i = 0; i < PlaneCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var inputPlanes = new ArrayList<Plane>();
+        final var outputPlanes = new ArrayList<Plane>();
+        for (var i = 0; i < PlaneCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPlanes.add(new Plane());
             outputPlanes.add(new Plane());
         }
 
-        estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                inputPlanes, outputPlanes);
+        estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(inputPlanes, outputPlanes);
 
         assertEquals(RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getThreshold(), 0.0);
@@ -132,38 +127,26 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        final List<Plane> planesEmpty = new ArrayList<>();
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                    planesEmpty, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                    inputPlanes, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var planesEmpty = new ArrayList<Plane>();
+        // not enough points
+        assertThrows(IllegalArgumentException.class,
+                () -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(planesEmpty, planesEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class,
+                () -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(inputPlanes, planesEmpty));
 
         // test constructor with listener
-        estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                this);
+        estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(this);
 
         assertEquals(RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getThreshold(), 0.0);
@@ -178,19 +161,18 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // test constructor with listener and points
-        estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                this, inputPlanes, outputPlanes);
+        estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(this, inputPlanes,
+                outputPlanes);
 
         assertEquals(RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
                 estimator.getThreshold(), 0.0);
@@ -205,39 +187,29 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertSame(this, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
         assertNull(estimator.getInliersData());
-        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT,
-                estimator.isResultRefined());
+        assertEquals(AffineTransformation2DRobustEstimator.DEFAULT_REFINE_RESULT, estimator.isResultRefined());
         assertFalse(estimator.isCovarianceKept());
         assertNull(estimator.getCovariance());
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            // not enough points
-            estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                    this, planesEmpty, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                    this, inputPlanes, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        // not enough points
+        assertThrows(IllegalArgumentException.class,
+                () -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(this, planesEmpty,
+                        planesEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class,
+                () -> new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(this, inputPlanes,
+                        planesEmpty));
     }
 
     @Test
-    public void testGetSetThreshold() throws LockedException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetThreshold() throws LockedException {
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default value
         assertEquals(RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_THRESHOLD,
@@ -250,17 +222,12 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setThreshold(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setThreshold(0.0));
     }
 
     @Test
-    public void testGetSetConfidence() throws LockedException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetConfidence() throws LockedException {
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default value
         assertEquals(RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_CONFIDENCE,
@@ -273,23 +240,13 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetMaxIterations() throws LockedException {
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default value
         assertEquals(RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.DEFAULT_MAX_ITERATIONS,
@@ -302,17 +259,12 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(10, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testGetSetPlanesAndIsReady() throws LockedException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetPlanesAndIsReady() throws LockedException {
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default values
         assertNull(estimator.getInputPlanes());
@@ -320,9 +272,9 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertFalse(estimator.isReady());
 
         // set new value
-        final List<Plane> inputPlanes = new ArrayList<>();
-        final List<Plane> outputPlanes = new ArrayList<>();
-        for (int i = 0; i < PlaneCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
+        final var inputPlanes = new ArrayList<Plane>();
+        final var outputPlanes = new ArrayList<Plane>();
+        for (var i = 0; i < PlaneCorrespondenceAffineTransformation3DRobustEstimator.MINIMUM_SIZE; i++) {
             inputPlanes.add(new Plane());
             outputPlanes.add(new Plane());
         }
@@ -335,25 +287,16 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertTrue(estimator.isReady());
 
         // Force IllegalArgumentException
-        final List<Plane> planesEmpty = new ArrayList<>();
-        try {
-            // not enough lines
-            estimator.setPlanes(planesEmpty, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            // different sizes
-            estimator.setPlanes(planesEmpty, planesEmpty);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var planesEmpty = new ArrayList<Plane>();
+        // not enough lines
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPlanes(planesEmpty, planesEmpty));
+        // different sizes
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPlanes(planesEmpty, planesEmpty));
     }
 
     @Test
-    public void testGetSetListenerAndIsListenerAvailable() throws LockedException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetListenerAndIsListenerAvailable() throws LockedException {
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -368,13 +311,12 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testGetSetProgressDelta() throws LockedException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+    void testGetSetProgressDelta() throws LockedException {
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
         // check default value
-        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(AffineTransformation3DRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(),
+                0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
@@ -383,22 +325,13 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testIsSetResultRefined() throws LockedException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+    void testIsSetResultRefined() throws LockedException {
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
         assertTrue(estimator.isResultRefined());
 
@@ -410,9 +343,8 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetCovarianceKept() throws LockedException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+    void testIsSetCovarianceKept() throws LockedException {
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
         assertFalse(estimator.isCovarianceKept());
 
@@ -424,9 +356,8 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetComputeAndKeepInliersEnabled() throws LockedException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+    void testIsSetComputeAndKeepInliersEnabled() throws LockedException {
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
         assertFalse(estimator.isComputeAndKeepInliersEnabled());
 
@@ -438,10 +369,8 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testIsSetComputeAndKeepResidualsEnabled()
-            throws LockedException {
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
+    void testIsSetComputeAndKeepResidualsEnabled() throws LockedException {
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator();
 
         assertFalse(estimator.isComputeAndKeepResidualsEnabled());
 
@@ -453,49 +382,45 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Test
-    public void testEstimateWithoutRefinement() throws LockedException, NotReadyException,
-            RobustEstimatorException, AlgebraException {
+    void testEstimateWithoutRefinement() throws LockedException, NotReadyException, RobustEstimatorException,
+            AlgebraException {
         // create an affine transformation
         Matrix a;
         do {
             // ensure A matrix is invertible
-            a = Matrix.createWithUniformRandomValues(
-                    AffineTransformation3D.INHOM_COORDS,
+            a = Matrix.createWithUniformRandomValues(AffineTransformation3D.INHOM_COORDS,
                     AffineTransformation3D.INHOM_COORDS, -1.0, 1.0);
-            final double norm = Utils.normF(a);
+            final var norm = Utils.normF(a);
             // normalize T to increase accuracy
             a.multiplyByScalar(1.0 / norm);
         } while (Utils.rank(a) < AffineTransformation3D.INHOM_COORDS);
 
-        final double[] translation = new double[
-                AffineTransformation3D.INHOM_COORDS];
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var translation = new double[AffineTransformation3D.INHOM_COORDS];
+        final var randomizer = new UniformRandomizer();
         randomizer.fill(translation, -1.0, 1.0);
 
-        final AffineTransformation3D transformation1 =
-                new AffineTransformation3D(a, translation);
+        final var transformation1 = new AffineTransformation3D(a, translation);
 
         // generate random planes
-        final int nPlanes = randomizer.nextInt(MIN_PLANES, MAX_PLANES);
-        final List<Plane> inputPlanes = new ArrayList<>();
-        final List<Plane> outputPlanes = new ArrayList<>();
-        final List<Plane> outputPlanesWithError = new ArrayList<>();
-        final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                new Random(), 0.0, STD_ERROR);
-        for (int i = 0; i < nPlanes; i++) {
-            final Plane inputPlane = new Plane(
+        final var nPlanes = randomizer.nextInt(MIN_PLANES, MAX_PLANES);
+        final var inputPlanes = new ArrayList<Plane>();
+        final var outputPlanes = new ArrayList<Plane>();
+        final var outputPlanesWithError = new ArrayList<Plane>();
+        final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+        for (var i = 0; i < nPlanes; i++) {
+            final var inputPlane = new Plane(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-            final Plane outputPlane = transformation1.transformAndReturnNew(inputPlane);
+            final var outputPlane = transformation1.transformAndReturnNew(inputPlane);
             final Plane outputPlaneWithError;
             if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                 // plane is outlier
-                final double errorA = errorRandomizer.nextDouble();
-                final double errorB = errorRandomizer.nextDouble();
-                final double errorC = errorRandomizer.nextDouble();
-                final double errorD = errorRandomizer.nextDouble();
+                final var errorA = errorRandomizer.nextDouble();
+                final var errorB = errorRandomizer.nextDouble();
+                final var errorC = errorRandomizer.nextDouble();
+                final var errorD = errorRandomizer.nextDouble();
                 outputPlaneWithError = new Plane(
                         outputPlane.getA() + errorA,
                         outputPlane.getB() + errorB,
@@ -511,9 +436,8 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
             outputPlanesWithError.add(outputPlaneWithError);
         }
 
-        final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                        this, inputPlanes, outputPlanesWithError);
+        final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(this,
+                inputPlanes, outputPlanesWithError);
 
         estimator.setThreshold(THRESHOLD);
         estimator.setResultRefined(false);
@@ -526,7 +450,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         assertTrue(estimator.isReady());
         assertFalse(estimator.isLocked());
 
-        final AffineTransformation3D transformation2 = estimator.estimate();
+        final var transformation2 = estimator.estimate();
 
         assertEquals(1, estimateStart);
         assertEquals(1, estimateEnd);
@@ -538,65 +462,58 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
         // using estimated transformation (transformation2) and checking
         // that output planes are equal to the original output planes without
         // error
-        Plane p1;
-        Plane p2;
         for (int i = 0; i < nPlanes; i++) {
-            p1 = outputPlanes.get(i);
-            p2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
+            final var p1 = outputPlanes.get(i);
+            final var p2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
             p1.normalize();
             p2.normalize();
-            assertEquals(0.0,
-                    PlaneCorrespondenceAffineTransformation3DRobustEstimator.getResidual(p1, p2),
+            assertEquals(0.0, PlaneCorrespondenceAffineTransformation3DRobustEstimator.getResidual(p1, p2),
                     ABSOLUTE_ERROR);
             assertTrue(p1.equals(p2, ABSOLUTE_ERROR));
         }
     }
 
     @Test
-    public void testEstimateWithRefinement() throws LockedException, NotReadyException,
-            RobustEstimatorException, AlgebraException {
-        for (int t = 0; t < TIMES; t++) {
+    void testEstimateWithRefinement() throws LockedException, NotReadyException, RobustEstimatorException,
+            AlgebraException {
+        for (var t = 0; t < TIMES; t++) {
             // create an affine transformation
             Matrix a;
             do {
                 // ensure A matrix is invertible
-                a = Matrix.createWithUniformRandomValues(
-                        AffineTransformation3D.INHOM_COORDS,
+                a = Matrix.createWithUniformRandomValues(AffineTransformation3D.INHOM_COORDS,
                         AffineTransformation3D.INHOM_COORDS, -1.0, 1.0);
-                final double norm = Utils.normF(a);
+                final var norm = Utils.normF(a);
                 // normalize T to increase accuracy
                 a.multiplyByScalar(1.0 / norm);
             } while (Utils.rank(a) < AffineTransformation3D.INHOM_COORDS);
 
-            final double[] translation = new double[
-                    AffineTransformation3D.INHOM_COORDS];
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+            final var translation = new double[AffineTransformation3D.INHOM_COORDS];
+            final var randomizer = new UniformRandomizer();
             randomizer.fill(translation, -1.0, 1.0);
 
-            final AffineTransformation3D transformation1 =
-                    new AffineTransformation3D(a, translation);
+            final var transformation1 = new AffineTransformation3D(a, translation);
 
             // generate random planes
-            final int nPlanes = randomizer.nextInt(MIN_PLANES, MAX_PLANES);
-            final List<Plane> inputPlanes = new ArrayList<>();
-            final List<Plane> outputPlanes = new ArrayList<>();
-            final List<Plane> outputPlanesWithError = new ArrayList<>();
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            for (int i = 0; i < nPlanes; i++) {
-                final Plane inputPlane = new Plane(
+            final var nPlanes = randomizer.nextInt(MIN_PLANES, MAX_PLANES);
+            final var inputPlanes = new ArrayList<Plane>();
+            final var outputPlanes = new ArrayList<Plane>();
+            final var outputPlanesWithError = new ArrayList<Plane>();
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            for (var i = 0; i < nPlanes; i++) {
+                final var inputPlane = new Plane(
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                         randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-                final Plane outputPlane = transformation1.transformAndReturnNew(inputPlane);
+                final var outputPlane = transformation1.transformAndReturnNew(inputPlane);
                 final Plane outputPlaneWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // plane is outlier
-                    final double errorA = errorRandomizer.nextDouble();
-                    final double errorB = errorRandomizer.nextDouble();
-                    final double errorC = errorRandomizer.nextDouble();
-                    final double errorD = errorRandomizer.nextDouble();
+                    final var errorA = errorRandomizer.nextDouble();
+                    final var errorB = errorRandomizer.nextDouble();
+                    final var errorC = errorRandomizer.nextDouble();
+                    final var errorD = errorRandomizer.nextDouble();
                     outputPlaneWithError = new Plane(
                             outputPlane.getA() + errorA,
                             outputPlane.getB() + errorB,
@@ -612,9 +529,8 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
                 outputPlanesWithError.add(outputPlaneWithError);
             }
 
-            final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator =
-                    new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
-                            this, inputPlanes, outputPlanesWithError);
+            final var estimator = new RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(this,
+                    inputPlanes, outputPlanesWithError);
 
             estimator.setThreshold(THRESHOLD);
             estimator.setResultRefined(true);
@@ -629,21 +545,17 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final AffineTransformation3D transformation2 = estimator.estimate();
+            final var transformation2 = estimator.estimate();
 
             assertNotNull(estimator.getInliersData());
             assertNotNull(estimator.getInliersData().getInliers());
             assertNotNull(estimator.getInliersData().getResiduals());
             assertTrue(estimator.getInliersData().getNumInliers() > 0);
             assertNotNull(estimator.getCovariance());
-            assertEquals(estimator.getCovariance().getRows(),
-                    AffineTransformation3D.INHOM_COORDS *
-                            AffineTransformation3D.INHOM_COORDS +
-                            AffineTransformation3D.NUM_TRANSLATION_COORDS);
-            assertEquals(estimator.getCovariance().getColumns(),
-                    AffineTransformation3D.INHOM_COORDS *
-                            AffineTransformation3D.INHOM_COORDS +
-                            AffineTransformation3D.NUM_TRANSLATION_COORDS);
+            assertEquals(AffineTransformation3D.INHOM_COORDS * AffineTransformation3D.INHOM_COORDS
+                            + AffineTransformation3D.NUM_TRANSLATION_COORDS, estimator.getCovariance().getRows());
+            assertEquals(AffineTransformation3D.INHOM_COORDS * AffineTransformation3D.INHOM_COORDS
+                            + AffineTransformation3D.NUM_TRANSLATION_COORDS, estimator.getCovariance().getColumns());
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -655,15 +567,12 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
             // using estimated transformation (transformation2) and checking
             // that output planes are equal to the original output planes without
             // error
-            Plane p1;
-            Plane p2;
-            for (int i = 0; i < nPlanes; i++) {
-                p1 = outputPlanes.get(i);
-                p2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
+            for (var i = 0; i < nPlanes; i++) {
+                final var p1 = outputPlanes.get(i);
+                final var p2 = transformation2.transformAndReturnNew(inputPlanes.get(i));
                 p1.normalize();
                 p2.normalize();
-                assertEquals(0.0,
-                        PlaneCorrespondenceAffineTransformation3DRobustEstimator.getResidual(p1, p2),
+                assertEquals(0.0, PlaneCorrespondenceAffineTransformation3DRobustEstimator.getResidual(p1, p2),
                         ABSOLUTE_ERROR);
                 assertTrue(p1.equals(p2, ABSOLUTE_ERROR));
             }
@@ -677,71 +586,36 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimatorTest
     }
 
     @Override
-    public void onEstimateEnd(
-            final AffineTransformation3DRobustEstimator estimator) {
+    public void onEstimateEnd(final AffineTransformation3DRobustEstimator estimator) {
         estimateEnd++;
         checkLocked((RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateNextIteration(
-            final AffineTransformation3DRobustEstimator estimator, final int iteration) {
+    public void onEstimateNextIteration(final AffineTransformation3DRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
         checkLocked((RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateProgressChange(
-            final AffineTransformation3DRobustEstimator estimator, final float progress) {
+    public void onEstimateProgressChange(final AffineTransformation3DRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
         checkLocked((RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator) estimator);
     }
 
     private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
+        estimateStart = estimateEnd = estimateNextIteration = estimateProgressChange = 0;
     }
 
-    private void checkLocked(
-            final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator) {
-        final List<Plane> planes = new ArrayList<>();
-        try {
-            estimator.setPlanes(planes, planes);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(0.01f);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setThreshold(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setConfidence(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setMaxIterations(10);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
+    private static void checkLocked(final RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator estimator) {
+        final var planes = new ArrayList<Plane>();
+        assertThrows(LockedException.class, () -> estimator.setPlanes(planes, planes));
+        assertThrows(LockedException.class, () -> estimator.setListener(null));
+        assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.01f));
+        assertThrows(LockedException.class, () -> estimator.setThreshold(0.5));
+        assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+        assertThrows(LockedException.class, () -> estimator.setMaxIterations(10));
+        assertThrows(LockedException.class, estimator::estimate);
         assertTrue(estimator.isLocked());
     }
 }

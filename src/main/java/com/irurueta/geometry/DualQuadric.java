@@ -51,10 +51,8 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @param j Parameter J of the quadric.
      */
     public DualQuadric(
-            final double a, final double b, final double c,
-            final double d, final double e, final double f,
-            final double g, final double h, final double i,
-            final double j) {
+            final double a, final double b, final double c, final double d, final double e, final double f,
+            final double g, final double h, final double i, final double j) {
         super(a, b, c, d, e, f, g, h, i, j);
     }
 
@@ -91,12 +89,10 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      *                                   degeneracy.
      */
     public DualQuadric(
-            final Plane plane1, final Plane plane2, final Plane plane3,
-            final Plane plane4, final Plane plane5, final Plane plane6,
-            final Plane plane7, final Plane plane8, final Plane plane9)
+            final Plane plane1, final Plane plane2, final Plane plane3, final Plane plane4, final Plane plane5,
+            final Plane plane6, final Plane plane7, final Plane plane8, final Plane plane9)
             throws CoincidentPlanesException {
-        setParametersFromPlanes(plane1, plane2, plane3, plane4, plane5, plane6,
-                plane7, plane8, plane9);
+        setParametersFromPlanes(plane1, plane2, plane3, plane4, plane5, plane6, plane7, plane8, plane9);
     }
 
     /**
@@ -114,21 +110,20 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean isLocus(final Plane plane, final double threshold) {
-
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
         try {
             normalize();
-            final Matrix dualQ = asMatrix();
-            final Matrix homPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
+            final var dualQ = asMatrix();
+            final var homPlane = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
             plane.normalize();
             homPlane.setElementAt(0, 0, plane.getA());
             homPlane.setElementAt(1, 0, plane.getB());
             homPlane.setElementAt(2, 0, plane.getC());
             homPlane.setElementAt(3, 0, plane.getD());
-            final Matrix locusMatrix = homPlane.transposeAndReturnNew();
+            final var locusMatrix = homPlane.transposeAndReturnNew();
             locusMatrix.multiply(dualQ);
             locusMatrix.multiply(homPlane);
 
@@ -167,21 +162,21 @@ public class DualQuadric extends BaseQuadric implements Serializable {
         try {
             // retrieve quadric as matrix
             normalize();
-            final Matrix dualQ = asMatrix();
-            final Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);
+            final var dualQ = asMatrix();
+            final var transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);
             planeA.normalize();
             transHomPlaneA.setElementAt(0, 0, planeA.getA());
             transHomPlaneA.setElementAt(0, 1, planeA.getB());
             transHomPlaneA.setElementAt(0, 2, planeA.getC());
             transHomPlaneA.setElementAt(0, 3, planeA.getD());
 
-            final Matrix tmp = transHomPlaneA.multiplyAndReturnNew(dualQ);
+            final var tmp = transHomPlaneA.multiplyAndReturnNew(dualQ);
             tmp.multiply(transHomPlaneA.transposeAndReturnNew()); //This is
             // homPlaneA' * dualQ * homPlaneA
 
-            final double normA = tmp.getElementAt(0, 0);
+            final var normA = tmp.getElementAt(0, 0);
 
-            final Matrix homPlaneB = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
+            final var homPlaneB = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
             planeB.normalize();
             homPlaneB.setElementAt(0, 0, planeB.getA());
             homPlaneB.setElementAt(1, 0, planeB.getB());
@@ -192,15 +187,15 @@ public class DualQuadric extends BaseQuadric implements Serializable {
             tmp.multiply(dualQ);
             tmp.multiply(homPlaneB);
 
-            final double normB = tmp.getElementAt(0, 0);
+            final var normB = tmp.getElementAt(0, 0);
 
             transHomPlaneA.multiply(dualQ);
             transHomPlaneA.multiply(homPlaneB);
             // This is homPlaneA' * dualQ * homPlaneB
 
-            final double angleNumerator = transHomPlaneA.getElementAt(0, 0);
+            final var angleNumerator = transHomPlaneA.getElementAt(0, 0);
 
-            final double cosTheta = angleNumerator / Math.sqrt(normA * normB);
+            final var cosTheta = angleNumerator / Math.sqrt(normA * normB);
             return Math.acos(cosTheta);
         } catch (final WrongSizeException ignore) {
             // This will never happen
@@ -222,20 +217,17 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is
      *                                  negative.
      */
-    public boolean arePerpendicularPlanes(
-            final Plane planeA, final Plane planeB, final double threshold) {
+    public boolean arePerpendicularPlanes(final Plane planeA, final Plane planeB, final double threshold) {
         try {
             // retrieve quadric as matrix
-            final Matrix transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);
+            final var transHomPlaneA = new Matrix(1, Plane.PLANE_NUMBER_PARAMS);
             planeA.normalize();
             transHomPlaneA.setElementAt(0, 0, planeA.getA());
             transHomPlaneA.setElementAt(0, 1, planeA.getB());
             transHomPlaneA.setElementAt(0, 2, planeA.getC());
             transHomPlaneA.setElementAt(0, 3, planeA.getD());
 
-            final Matrix homPlaneB =
-                    new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,
-                            1);
+            final var homPlaneB = new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             planeB.normalize();
             homPlaneB.setElementAt(0, 0, planeB.getA());
             homPlaneB.setElementAt(1, 0, planeB.getB());
@@ -243,12 +235,12 @@ public class DualQuadric extends BaseQuadric implements Serializable {
             homPlaneB.setElementAt(3, 0, planeB.getD());
 
             normalize();
-            final Matrix dualQ = asMatrix();
+            final var dualQ = asMatrix();
             transHomPlaneA.multiply(dualQ);
             transHomPlaneA.multiply(homPlaneB);
             // This is homPlaneA' * dualQ * homPlaneB
 
-            final double perpend = transHomPlaneA.getElementAt(0, 0);
+            final var perpend = transHomPlaneA.getElementAt(0, 0);
 
             return Math.abs(perpend) < threshold;
         } catch (final WrongSizeException ignore) {
@@ -266,8 +258,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @return True if provided planes are perpendicular, false otherwise.
      */
     public boolean arePerpendicularPlanes(final Plane planeA, final Plane planeB) {
-        return arePerpendicularPlanes(planeA, planeB,
-                DEFAULT_PERPENDICULAR_THRESHOLD);
+        return arePerpendicularPlanes(planeA, planeB, DEFAULT_PERPENDICULAR_THRESHOLD);
     }
 
     /**
@@ -279,7 +270,7 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      *                                      instability.
      */
     public Quadric getQuadric() throws QuadricNotAvailableException {
-        final Quadric q = new Quadric();
+        final var q = new Quadric();
         quadric(q);
         return q;
     }
@@ -294,28 +285,21 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      *                                      instability.
      */
     public void quadric(final Quadric quadric) throws QuadricNotAvailableException {
-
-        final Matrix dualQuadricMatrix = asMatrix();
+        final var dualQuadricMatrix = asMatrix();
         try {
-            final Matrix invMatrix = com.irurueta.algebra.Utils.inverse(
-                    dualQuadricMatrix);
+            final var invMatrix = com.irurueta.algebra.Utils.inverse(dualQuadricMatrix);
 
-            final double a = invMatrix.getElementAt(0, 0);
-            final double b = invMatrix.getElementAt(1, 1);
-            final double c = invMatrix.getElementAt(2, 2);
-            final double d = 0.5 * (invMatrix.getElementAt(0, 1) +
-                    invMatrix.getElementAt(1, 0));
-            final double e = 0.5 * (invMatrix.getElementAt(2, 1) +
-                    invMatrix.getElementAt(1, 2));
-            final double f = 0.5 * (invMatrix.getElementAt(2, 0) +
-                    invMatrix.getElementAt(0, 2));
-            final double g = 0.5 * (invMatrix.getElementAt(3, 0) +
-                    invMatrix.getElementAt(0, 3));
-            final double h = 0.5 * (invMatrix.getElementAt(3, 1) +
-                    invMatrix.getElementAt(1, 3));
-            final double i = 0.5 * (invMatrix.getElementAt(3, 2) +
-                    invMatrix.getElementAt(2, 3));
-            final double j = invMatrix.getElementAt(3, 3);
+            final var a = invMatrix.getElementAt(0, 0);
+            final var b = invMatrix.getElementAt(1, 1);
+            final var c = invMatrix.getElementAt(2, 2);
+            final var d = 0.5 * (invMatrix.getElementAt(0, 1) + invMatrix.getElementAt(1, 0));
+            final var e = 0.5 * (invMatrix.getElementAt(2, 1) + invMatrix.getElementAt(1, 2));
+            final var f = 0.5 * (invMatrix.getElementAt(2, 0) + invMatrix.getElementAt(0, 2));
+            final var g = 0.5 * (invMatrix.getElementAt(3, 0) + invMatrix.getElementAt(0, 3));
+            final double h = 0.5 * (invMatrix.getElementAt(3, 1)
+                    + invMatrix.getElementAt(1, 3));
+            final var i = 0.5 * (invMatrix.getElementAt(3, 2) + invMatrix.getElementAt(2, 3));
+            final var j = invMatrix.getElementAt(3, 3);
             quadric.setParameters(a, b, c, d, e, f, g, h, i, j);
         } catch (final AlgebraException e) {
             throw new QuadricNotAvailableException(e);
@@ -339,9 +323,8 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      *                                   produce a degenerated configuration.
      */
     public final void setParametersFromPlanes(
-            final Plane plane1, final Plane plane2, final Plane plane3,
-            final Plane plane4, final Plane plane5, final Plane plane6,
-            final Plane plane7, final Plane plane8, final Plane plane9)
+            final Plane plane1, final Plane plane2, final Plane plane3, final Plane plane4, final Plane plane5,
+            final Plane plane6, final Plane plane7, final Plane plane8, final Plane plane9)
             throws CoincidentPlanesException {
 
         // normalize planes to increase accuracy
@@ -361,11 +344,11 @@ public class DualQuadric extends BaseQuadric implements Serializable {
             // pA^2 + pB^2 + pC^2 + 2*pA*pB + 2*pA*pC + 2*pB*pC + 2*pA*pD +
             // 2*pB*pD + 2*pC*pD + pD^2 = 0
 
-            final Matrix m = new Matrix(9, 10);
-            double pA = plane1.getA();
-            double pB = plane1.getB();
-            double pC = plane1.getC();
-            double pD = plane1.getD();
+            final var m = new Matrix(9, 10);
+            var pA = plane1.getA();
+            var pB = plane1.getB();
+            var pC = plane1.getC();
+            var pD = plane1.getD();
             m.setElementAt(0, 0, pA * pA);
             m.setElementAt(0, 1, pB * pB);
             m.setElementAt(0, 2, pC * pC);
@@ -490,17 +473,16 @@ public class DualQuadric extends BaseQuadric implements Serializable {
             m.setElementAt(8, 9, pD * pD);
 
             // normalize each row to increase accuracy
-            final double[] row = new double[10];
+            final var row = new double[10];
             double rowNorm;
-
-            for (int j = 0; j < 9; j++) {
+            for (var j = 0; j < 9; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 9, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for (int i = 0; i < 10; i++)
+                for (var i = 0; i < 10; i++)
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
             }
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             if (decomposer.getRank() < 9) {
@@ -509,20 +491,20 @@ public class DualQuadric extends BaseQuadric implements Serializable {
 
             // the right null-space of m contains the parameters a, b, c, d, e ,f
             // of the conic
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
-            final double a = v.getElementAt(0, 9);
-            final double b = v.getElementAt(1, 9);
-            final double c = v.getElementAt(2, 9);
-            final double d = v.getElementAt(3, 9);
+            final var a = v.getElementAt(0, 9);
+            final var b = v.getElementAt(1, 9);
+            final var c = v.getElementAt(2, 9);
+            final var d = v.getElementAt(3, 9);
 
-            final double f = v.getElementAt(4, 9);
-            final double e = v.getElementAt(5, 9);
+            final var f = v.getElementAt(4, 9);
+            final var e = v.getElementAt(5, 9);
 
-            final double g = v.getElementAt(6, 9);
-            final double h = v.getElementAt(7, 9);
-            final double i = v.getElementAt(8, 9);
-            final double j = v.getElementAt(9, 9);
+            final var g = v.getElementAt(6, 9);
+            final var h = v.getElementAt(7, 9);
+            final var i = v.getElementAt(8, 9);
+            final var j = v.getElementAt(9, 9);
 
             setParameters(a, b, c, d, e, f, g, h, i, j);
         } catch (final AlgebraException ex) {
@@ -541,7 +523,6 @@ public class DualQuadric extends BaseQuadric implements Serializable {
      * @return a canonical instance of the dual absolute quadric
      */
     public static DualQuadric createCanonicalDualAbsoluteQuadric() {
-        return new DualQuadric(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                0.0);
+        return new DualQuadric(1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
     }
 }

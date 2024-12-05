@@ -25,7 +25,6 @@ import com.irurueta.geometry.estimators.NotReadyException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class performs Euclidean transformations on 2D space.
@@ -34,8 +33,7 @@ import java.util.List;
  * Scale cannot be modified on Euclidean scale.
  */
 @SuppressWarnings("DuplicatedCode")
-public class EuclideanTransformation2D extends Transformation2D
-        implements Serializable {
+public class EuclideanTransformation2D extends Transformation2D implements Serializable {
 
     /**
      * Constant indicating number of coordinates required in translation arrays.
@@ -111,7 +109,6 @@ public class EuclideanTransformation2D extends Transformation2D
      *                                  to NUM_TRANSLATION_COORDS.
      */
     public EuclideanTransformation2D(final Rotation2D rotation, final double[] translation) {
-
         if (rotation == null) {
             throw new NullPointerException();
         }
@@ -141,12 +138,10 @@ public class EuclideanTransformation2D extends Transformation2D
      *                                   points or numerical instabilities).
      */
     public EuclideanTransformation2D(
-            final Point2D inputPoint1, final Point2D inputPoint2,
-            final Point2D inputPoint3, final Point2D outputPoint1,
-            final Point2D outputPoint2, final Point2D outputPoint3)
-            throws CoincidentPointsException {
-        internalSetTransformationFromPoints(inputPoint1, inputPoint2,
-                inputPoint3, outputPoint1, outputPoint2, outputPoint3);
+            final Point2D inputPoint1, final Point2D inputPoint2, final Point2D inputPoint3, final Point2D outputPoint1,
+            final Point2D outputPoint2, final Point2D outputPoint3) throws CoincidentPointsException {
+        internalSetTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, outputPoint1, outputPoint2,
+                outputPoint3);
     }
 
     /**
@@ -283,7 +278,7 @@ public class EuclideanTransformation2D extends Transformation2D
      * @return a new point containing translation coordinates.
      */
     public Point2D getTranslationPoint() {
-        final Point2D out = Point2D.create();
+        final var out = Point2D.create();
         getTranslationPoint(out);
         return out;
     }
@@ -376,10 +371,8 @@ public class EuclideanTransformation2D extends Transformation2D
         m.initialize(0.0);
 
         // set rotation
-        m.setSubmatrix(0, 0,
-                Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS - 1,
-                Rotation2D.ROTATION2D_INHOM_MATRIX_COLS - 1,
-                rotation.asInhomogeneousMatrix());
+        m.setSubmatrix(0, 0, Rotation2D.ROTATION2D_INHOM_MATRIX_ROWS - 1,
+                Rotation2D.ROTATION2D_INHOM_MATRIX_COLS - 1, rotation.asInhomogeneousMatrix());
 
         // set translation
         m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
@@ -398,11 +391,9 @@ public class EuclideanTransformation2D extends Transformation2D
      */
     @Override
     public void transform(final Point2D inputPoint, final Point2D outputPoint) {
-
         inputPoint.normalize();
         rotation.rotate(inputPoint, outputPoint);
-        outputPoint.setInhomogeneousCoordinates(
-                outputPoint.getInhomX() + translation[0],
+        outputPoint.setInhomogeneousCoordinates(outputPoint.getInhomX() + translation[0],
                 outputPoint.getInhomY() + translation[1]);
     }
 
@@ -417,8 +408,7 @@ public class EuclideanTransformation2D extends Transformation2D
      *                                     the resulting output conic matrix is not considered to be symmetric.
      */
     @Override
-    public void transform(final Conic inputConic, final Conic outputConic)
-            throws NonSymmetricMatrixException {
+    public void transform(final Conic inputConic, final Conic outputConic) throws NonSymmetricMatrixException {
         // point' * conic * point = 0
         // point' * T' * transformedConic * T * point = 0
         // where:
@@ -429,13 +419,13 @@ public class EuclideanTransformation2D extends Transformation2D
 
         inputConic.normalize();
 
-        final Matrix c = inputConic.asMatrix();
-        final Matrix invT = inverseAndReturnNew().asMatrix();
+        final var c = inputConic.asMatrix();
+        final var invT = inverseAndReturnNew().asMatrix();
         // normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(invT);
+        var norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
 
-        final Matrix m = invT.transposeAndReturnNew();
+        final var m = invT.transposeAndReturnNew();
         try {
             m.multiply(c);
             m.multiply(invT);
@@ -473,13 +463,13 @@ public class EuclideanTransformation2D extends Transformation2D
 
         inputDualConic.normalize();
 
-        final Matrix dualC = inputDualConic.asMatrix();
-        final Matrix t = asMatrix();
+        final var dualC = inputDualConic.asMatrix();
+        final var t = asMatrix();
         // normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(t);
+        var norm = Utils.normF(t);
         t.multiplyByScalar(1.0 / norm);
 
-        final Matrix transT = t.transposeAndReturnNew();
+        final var transT = t.transposeAndReturnNew();
         try {
             t.multiply(dualC);
             t.multiply(transT);
@@ -512,11 +502,11 @@ public class EuclideanTransformation2D extends Transformation2D
 
         inputLine.normalize();
 
-        final Matrix invT = inverseAndReturnNew().asMatrix();
-        final Matrix l = Matrix.newFromArray(inputLine.asArray());
+        final var invT = inverseAndReturnNew().asMatrix();
+        final var l = Matrix.newFromArray(inputLine.asArray());
 
         // normalize transformation matrix T to increase accuracy
-        final double norm = Utils.normF(invT);
+        final var norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
 
         invT.transpose();
@@ -535,8 +525,7 @@ public class EuclideanTransformation2D extends Transformation2D
      * @return this transformation converted into a metric transformation.
      */
     public MetricTransformation2D toMetric() {
-        return new MetricTransformation2D(rotation, translation,
-                MetricTransformation2D.DEFAULT_SCALE);
+        return new MetricTransformation2D(rotation, translation, MetricTransformation2D.DEFAULT_SCALE);
     }
 
     /**
@@ -553,7 +542,7 @@ public class EuclideanTransformation2D extends Transformation2D
      * @return inverse transformation.
      */
     public Transformation2D inverseAndReturnNew() {
-        final EuclideanTransformation2D result = new EuclideanTransformation2D();
+        final var result = new EuclideanTransformation2D();
         inverse(result);
         return result;
     }
@@ -579,10 +568,9 @@ public class EuclideanTransformation2D extends Transformation2D
      * @return a new transformation resulting of the combination with this
      * transformation and provided transformation.
      */
-    public EuclideanTransformation2D combineAndReturnNew(
-            final EuclideanTransformation2D transformation) {
+    public EuclideanTransformation2D combineAndReturnNew(final EuclideanTransformation2D transformation) {
 
-        final EuclideanTransformation2D result = new EuclideanTransformation2D();
+        final var result = new EuclideanTransformation2D();
         combine(transformation, result);
         return result;
     }
@@ -605,12 +593,10 @@ public class EuclideanTransformation2D extends Transformation2D
      *                                   points or numerical instabilities).
      */
     public void setTransformationFromPoints(
-            final Point2D inputPoint1, final Point2D inputPoint2,
-            final Point2D inputPoint3, final Point2D outputPoint1,
-            final Point2D outputPoint2, final Point2D outputPoint3)
-            throws CoincidentPointsException {
-        internalSetTransformationFromPoints(inputPoint1, inputPoint2,
-                inputPoint3, outputPoint1, outputPoint2, outputPoint3);
+            final Point2D inputPoint1, final Point2D inputPoint2, final Point2D inputPoint3, final Point2D outputPoint1,
+            final Point2D outputPoint2, final Point2D outputPoint3) throws CoincidentPointsException {
+        internalSetTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, outputPoint1, outputPoint2,
+                outputPoint3);
     }
 
     /**
@@ -628,9 +614,9 @@ public class EuclideanTransformation2D extends Transformation2D
         result.rotation = rotation.inverseRotation();
 
         // reverse translation
-        final Matrix t = Matrix.newFromArray(translation, true);
+        final var t = Matrix.newFromArray(translation, true);
         t.multiplyByScalar(-1.0);
-        final Matrix invRot = result.rotation.asInhomogeneousMatrix();
+        final var invRot = result.rotation.asInhomogeneousMatrix();
         try {
             invRot.multiply(t);
         } catch (final WrongSizeException ignore) {
@@ -649,25 +635,22 @@ public class EuclideanTransformation2D extends Transformation2D
      * @param inputTransformation  transformation to be combined with.
      * @param outputTransformation transformation where result will be stored.
      */
-    private void combine(final EuclideanTransformation2D inputTransformation,
-                         final EuclideanTransformation2D outputTransformation) {
+    private void combine(
+            final EuclideanTransformation2D inputTransformation, final EuclideanTransformation2D outputTransformation) {
         // combination in matrix representation is:
         // [R1 t1] * [R2 t2] = [R1*R2 + t1*0T  R1*t2 + t1*1] = [R1*R2 R1*t2 + t1]
         // [0T 1 ]   [0T 1 ]   [0T*R2 + 1*0T   0T*t2 + 1*1 ]   [0T    1         ]
 
         try {
             // we do translation first, because this.rotation might change later
-            final Matrix r1 = this.rotation.asInhomogeneousMatrix();
-            final Matrix t2 = Matrix.newFromArray(inputTransformation.translation,
-                    true);
+            final var r1 = this.rotation.asInhomogeneousMatrix();
+            final var t2 = Matrix.newFromArray(inputTransformation.translation, true);
             // this is R1 * t2
             r1.multiply(t2);
 
-            ArrayUtils.sum(r1.toArray(), this.translation,
-                    outputTransformation.translation);
+            ArrayUtils.sum(r1.toArray(), this.translation, outputTransformation.translation);
 
-            outputTransformation.rotation = this.rotation.combineAndReturnNew(
-                    inputTransformation.rotation);
+            outputTransformation.rotation = this.rotation.combineAndReturnNew(inputTransformation.rotation);
 
         } catch (final WrongSizeException ignore) {
             // never happens
@@ -692,23 +675,19 @@ public class EuclideanTransformation2D extends Transformation2D
      *                                   points or numerical instabilities).
      */
     private void internalSetTransformationFromPoints(
-            final Point2D inputPoint1, final Point2D inputPoint2,
-            final Point2D inputPoint3, final Point2D outputPoint1,
-            final Point2D outputPoint2, final Point2D outputPoint3)
-            throws CoincidentPointsException {
-        final List<Point2D> inputPoints = new ArrayList<>();
+            final Point2D inputPoint1, final Point2D inputPoint2, final Point2D inputPoint3, final Point2D outputPoint1,
+            final Point2D outputPoint2, final Point2D outputPoint3) throws CoincidentPointsException {
+        final var inputPoints = new ArrayList<Point2D>();
         inputPoints.add(inputPoint1);
         inputPoints.add(inputPoint2);
         inputPoints.add(inputPoint3);
 
-        final List<Point2D> outputPoints = new ArrayList<>();
+        final var outputPoints = new ArrayList<Point2D>();
         outputPoints.add(outputPoint1);
         outputPoints.add(outputPoint2);
         outputPoints.add(outputPoint3);
 
-        final EuclideanTransformation2DEstimator estimator =
-                new EuclideanTransformation2DEstimator(inputPoints,
-                        outputPoints);
+        final var estimator = new EuclideanTransformation2DEstimator(inputPoints, outputPoints);
 
         try {
             estimator.estimate(this);

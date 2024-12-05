@@ -28,14 +28,13 @@ import java.util.List;
  * Implementations of this class should be able to detect and discard outliers
  * in order to find the best solution.
  */
-public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator extends
-        AffineTransformation2DRobustEstimator {
+public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator
+        extends AffineTransformation2DRobustEstimator {
 
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of lines to be used to estimate an affine 2D transformation.
@@ -44,7 +43,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * position. Hence, both input lines and output lines must have the
      * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
-    protected List<Line2D> mInputLines;
+    protected List<Line2D> inputLines;
 
     /**
      * List of lines to be used to estimate an affine 2D transformation.
@@ -53,7 +52,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * position. Hence, both input lines and output lines must have the
      * same size, and their size must be greater or equal than MINIMUM_SIZE.
      */
-    protected List<Line2D> mOutputLines;
+    protected List<Line2D> outputLines;
 
     /**
      * Constructor.
@@ -128,7 +127,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * transformation.
      */
     public List<Line2D> getInputLines() {
-        return mInputLines;
+        return inputLines;
     }
 
     /**
@@ -143,7 +142,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * transformation.
      */
     public List<Line2D> getOutputLines() {
-        return mOutputLines;
+        return outputLines;
     }
 
     /**
@@ -161,8 +160,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * @throws LockedException          if estimator is locked because a computation is
      *                                  already in progress.
      */
-    public final void setLines(final List<Line2D> inputLines,
-                               final List<Line2D> outputLines) throws LockedException {
+    public final void setLines(final List<Line2D> inputLines, final List<Line2D> outputLines) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -178,9 +176,8 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mInputLines != null && mOutputLines != null &&
-                mInputLines.size() == mOutputLines.size() &&
-                mInputLines.size() >= MINIMUM_SIZE;
+        return inputLines != null && outputLines != null && inputLines.size() == outputLines.size()
+                && inputLines.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -219,21 +216,14 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *               best affine 2D transformation.
      * @return an instance of affine 2D transformation estimator.
      */
-    public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
-            case MSAC:
-                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator();
-            case PROSAC:
-                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator();
-        }
+    public static LineCorrespondenceAffineTransformation2DRobustEstimator create(final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
+            case MSAC -> new MSACLineCorrespondenceAffineTransformation2DRobustEstimator();
+            case PROSAC -> new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator();
+            case PROMEDS -> new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
+            default -> new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator();
+        };
     }
 
     /**
@@ -251,26 +241,14 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case MSAC:
-                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case PROSAC:
-                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-        }
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(inputLines, outputLines);
+            case MSAC -> new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(inputLines, outputLines);
+            case PROSAC -> new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(inputLines, outputLines);
+            case PROMEDS -> new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(inputLines, outputLines);
+            default -> new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(inputLines, outputLines);
+        };
     }
 
     /**
@@ -284,26 +262,14 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
-            final AffineTransformation2DRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener);
-        }
+            final AffineTransformation2DRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(listener);
+            case MSAC -> new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(listener);
+            case PROSAC -> new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(listener);
+            case PROMEDS -> new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(listener);
+            default -> new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -324,26 +290,19 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
             final AffineTransformation2DRobustEstimatorListener listener,
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case MSAC:
-                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case PROSAC:
-                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-        }
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            case MSAC -> new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            case PROSAC -> new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            case PROMEDS -> new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            default -> new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+        };
     }
 
     /**
@@ -358,21 +317,13 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
-            case MSAC:
-                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator();
-            case PROSAC:
-                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator();
+            case MSAC -> new MSACLineCorrespondenceAffineTransformation2DRobustEstimator();
+            case PROSAC -> new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(qualityScores);
+            default -> new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator();
+        };
     }
 
     /**
@@ -392,26 +343,17 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case MSAC:
-                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-            case PROSAC:
-                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        inputLines, outputLines, qualityScores);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        inputLines, outputLines, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        inputLines, outputLines);
-        }
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(inputLines, outputLines);
+            case MSAC -> new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(inputLines, outputLines);
+            case PROSAC -> new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    inputLines, outputLines, qualityScores);
+            case PROMEDS -> new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    inputLines, outputLines, qualityScores);
+            default -> new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(inputLines, outputLines);
+        };
     }
 
     /**
@@ -427,26 +369,15 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
-            final AffineTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener);
-        }
+            final AffineTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(listener);
+            case MSAC -> new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(listener);
+            case PROSAC -> new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(listener, qualityScores);
+            default -> new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -469,26 +400,20 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
             final AffineTransformation2DRobustEstimatorListener listener,
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case MSAC:
-                return new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-            case PROSAC:
-                return new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines, qualityScores);
-            case PROMEDS:
-                return new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(
-                        listener, inputLines, outputLines);
-        }
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            case MSAC -> new MSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+            case PROSAC -> new PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines, qualityScores);
+            case PROMEDS -> new PROMedSLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines, qualityScores);
+            default -> new RANSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+                    listener, inputLines, outputLines);
+        };
     }
 
     /**
@@ -548,8 +473,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
             final AffineTransformation2DRobustEstimatorListener listener,
             final List<Line2D> inputLines, final List<Line2D> outputLines) {
-        return create(listener, inputLines, outputLines,
-                DEFAULT_ROBUST_METHOD);
+        return create(listener, inputLines, outputLines, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -560,8 +484,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *                      points.
      * @return an instance of affine 2D transformation estimator.
      */
-    public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
-            final double[] qualityScores) {
+    public static LineCorrespondenceAffineTransformation2DRobustEstimator create(final double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -580,10 +503,8 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores) {
-        return create(inputLines, outputLines, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores) {
+        return create(inputLines, outputLines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -597,8 +518,7 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * @return an instance of affine 2D transformation estimator.
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
-            final AffineTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final AffineTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -620,10 +540,8 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      */
     public static LineCorrespondenceAffineTransformation2DRobustEstimator create(
             final AffineTransformation2DRobustEstimatorListener listener,
-            final List<Line2D> inputLines, final List<Line2D> outputLines,
-            final double[] qualityScores) {
-        return create(listener, inputLines, outputLines, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final List<Line2D> inputLines, final List<Line2D> outputLines, final double[] qualityScores) {
+        return create(listener, inputLines, outputLines, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -638,16 +556,15 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * @throws IllegalArgumentException if provided lists of lines don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    private void internalSetLines(final List<Line2D> inputLines,
-                                  final List<Line2D> outputLines) {
+    private void internalSetLines(final List<Line2D> inputLines, final List<Line2D> outputLines) {
         if (inputLines.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
         if (inputLines.size() != outputLines.size()) {
             throw new IllegalArgumentException();
         }
-        mInputLines = inputLines;
-        mOutputLines = outputLines;
+        this.inputLines = inputLines;
+        this.outputLines = outputLines;
     }
 
     /**
@@ -669,9 +586,8 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
         line.normalize();
         transformedLine.normalize();
 
-        final double dotProduct = Math.abs(line.getA() * transformedLine.getA() +
-                line.getB() * transformedLine.getB() +
-                line.getC() * transformedLine.getC());
+        final var dotProduct = Math.abs(line.getA() * transformedLine.getA() + line.getB() * transformedLine.getB()
+                + line.getC() * transformedLine.getC());
         return 1.0 - dotProduct;
     }
 
@@ -688,22 +604,18 @@ public abstract class LineCorrespondenceAffineTransformation2DRobustEstimator ex
      * non-refined solution if not requested or refinement failed.
      */
     @SuppressWarnings("DuplicatedCode")
-    protected AffineTransformation2D attemptRefine(
-            final AffineTransformation2D transformation) {
-        if (mRefineResult) {
-            final LineCorrespondenceAffineTransformation2DRefiner refiner =
-                    new LineCorrespondenceAffineTransformation2DRefiner(
-                            transformation, mKeepCovariance, getInliersData(),
-                            mInputLines, mOutputLines,
-                            getRefinementStandardDeviation());
+    protected AffineTransformation2D attemptRefine(final AffineTransformation2D transformation) {
+        if (refineResult) {
+            final var refiner = new LineCorrespondenceAffineTransformation2DRefiner(transformation, keepCovariance,
+                    getInliersData(), inputLines, outputLines, getRefinementStandardDeviation());
 
             try {
-                final AffineTransformation2D result = new AffineTransformation2D();
-                final boolean improved = refiner.refine(result);
+                final var result = new AffineTransformation2D();
+                final var improved = refiner.refine(result);
 
-                if (mKeepCovariance) {
+                if (keepCovariance) {
                     // keep covariance
-                    mCovariance = refiner.getCovariance();
+                    covariance = refiner.getCovariance();
                 }
 
                 return improved ? result : transformation;

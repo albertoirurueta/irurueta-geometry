@@ -34,8 +34,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * List of points to be used to estimate a projective 2D transformation.
@@ -44,7 +43,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
      */
-    protected List<Point2D> mInputPoints;
+    protected List<Point2D> inputPoints;
 
     /**
      * List of points to be used to estimate a projective 2D transformation.
@@ -53,7 +52,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * position. Hence, both input points and output points must have the same
      * size, and their size must be greater or equal than MINIMUM_SIZE.
      */
-    protected List<Point2D> mOutputPoints;
+    protected List<Point2D> outputPoints;
 
     /**
      * Constructor.
@@ -128,7 +127,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * transformation.
      */
     public List<Point2D> getInputPoints() {
-        return mInputPoints;
+        return inputPoints;
     }
 
     /**
@@ -143,7 +142,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * transformation.
      */
     public List<Point2D> getOutputPoints() {
-        return mOutputPoints;
+        return outputPoints;
     }
 
     /**
@@ -162,8 +161,8 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * @throws LockedException          if estimator is locked because a computation is
      *                                  already in progress.
      */
-    public final void setPoints(final List<Point2D> inputPoints,
-                                final List<Point2D> outputPoints) throws LockedException {
+    public final void setPoints(final List<Point2D> inputPoints, final List<Point2D> outputPoints)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -179,9 +178,8 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mInputPoints != null && mOutputPoints != null &&
-                mInputPoints.size() == mOutputPoints.size() &&
-                mInputPoints.size() >= MINIMUM_SIZE;
+        return inputPoints != null && outputPoints != null && inputPoints.size() == outputPoints.size()
+                && inputPoints.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -222,19 +220,13 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case MSAC:
-                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case PROSAC:
-                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case PROMEDS:
-                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();
+            case MSAC -> new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();
+            case PROSAC -> new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();
+            case PROMEDS -> new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();
+            default -> new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();
+        };
     }
 
     /**
@@ -252,26 +244,19 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case MSAC:
-                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case PROSAC:
-                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case PROMEDS:
-                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case RANSAC:
-            default:
-                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-        }
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputPoints, outputPoints);
+            case MSAC -> new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputPoints, outputPoints);
+            case PROSAC -> new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputPoints, outputPoints);
+            case PROMEDS -> new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputPoints, outputPoints);
+            default -> new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputPoints, outputPoints);
+        };
     }
 
     /**
@@ -285,26 +270,14 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * @return an instance of projective 2D transformation estimator.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case PROMEDS:
-                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case RANSAC:
-            default:
-                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-        }
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            case MSAC -> new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            case PROSAC -> new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            case PROMEDS -> new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            default -> new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -324,27 +297,20 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case MSAC:
-                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case PROSAC:
-                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case PROMEDS:
-                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case RANSAC:
-            default:
-                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-        }
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints);
+            case MSAC -> new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints);
+            case PROSAC -> new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints);
+            case PROMEDS -> new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints);
+            default -> new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints);
+        };
     }
 
     /**
@@ -361,21 +327,13 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case MSAC:
-                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();
-            case PROSAC:
-                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator();
+            case MSAC -> new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();
+            case PROSAC -> new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(qualityScores);
+            default -> new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator();
+        };
     }
 
     /**
@@ -398,24 +356,18 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final List<Point2D> inputPoints, final List<Point2D> outputPoints,
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case MSAC:
-                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-            case PROSAC:
-                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, qualityScores);
-            case PROMEDS:
-                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputPoints, outputPoints, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        inputPoints, outputPoints);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputPoints, outputPoints);
+            case MSAC -> new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputPoints, outputPoints);
+            case PROSAC -> new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, qualityScores);
+            case PROMEDS -> new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputPoints, outputPoints, qualityScores);
+            default -> new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    inputPoints, outputPoints);
+        };
     }
 
     /**
@@ -431,26 +383,17 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * @return an instance of projective 2D transformation estimator.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener);
-        }
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            case MSAC -> new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+            case PROSAC -> new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, qualityScores);
+            case PROMEDS -> new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, qualityScores);
+            default -> new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -472,27 +415,20 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case MSAC:
-                return new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-            case PROSAC:
-                return new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints, qualityScores);
-            case PROMEDS:
-                return new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
-                        listener, inputPoints, outputPoints);
-        }
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints);
+            case MSAC -> new MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints);
+            case PROSAC -> new PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, qualityScores);
+            case PROMEDS -> new PROMedSPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints, qualityScores);
+            default -> new RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+                    listener, inputPoints, outputPoints);
+        };
     }
 
     /**
@@ -552,8 +488,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final ProjectiveTransformation2DRobustEstimatorListener listener,
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
-        return create(listener, inputPoints, outputPoints,
-                DEFAULT_ROBUST_METHOD);
+        return create(listener, inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -564,8 +499,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      *                      points.
      * @return an instance of projective 2D transformation estimator.
      */
-    public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final double[] qualityScores) {
+    public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(final double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -584,10 +518,8 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
-        return create(inputPoints, outputPoints, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores) {
+        return create(inputPoints, outputPoints, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -601,8 +533,7 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * @return an instance of affine 2D transformation estimator.
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
-            final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -624,10 +555,8 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      */
     public static PointCorrespondenceProjectiveTransformation2DRobustEstimator create(
             final ProjectiveTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
-        return create(listener, inputPoints, outputPoints, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores) {
+        return create(listener, inputPoints, outputPoints, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -643,23 +572,18 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * non-refined solution if not requested or refinement failed.
      */
     @SuppressWarnings("DuplicatedCode")
-    protected ProjectiveTransformation2D attemptRefine(
-            final ProjectiveTransformation2D transformation) {
-        if (mRefineResult) {
-            final PointCorrespondenceProjectiveTransformation2DRefiner refiner =
-                    new PointCorrespondenceProjectiveTransformation2DRefiner(
-                            transformation, mKeepCovariance, getInliersData(),
-                            mInputPoints, mOutputPoints,
-                            getRefinementStandardDeviation());
+    protected ProjectiveTransformation2D attemptRefine(final ProjectiveTransformation2D transformation) {
+        if (refineResult) {
+            final var refiner = new PointCorrespondenceProjectiveTransformation2DRefiner(transformation, keepCovariance,
+                    getInliersData(), inputPoints, outputPoints, getRefinementStandardDeviation());
 
             try {
-                final ProjectiveTransformation2D result =
-                        new ProjectiveTransformation2D();
-                final boolean improved = refiner.refine(result);
+                final var result = new ProjectiveTransformation2D();
+                final var improved = refiner.refine(result);
 
-                if (mKeepCovariance) {
+                if (keepCovariance) {
                     // keep covariance
-                    mCovariance = refiner.getCovariance();
+                    covariance = refiner.getCovariance();
                 }
 
                 return improved ? result : transformation;
@@ -684,15 +608,14 @@ public abstract class PointCorrespondenceProjectiveTransformation2DRobustEstimat
      * @throws IllegalArgumentException if provided lists of points don't have
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
-    private void internalSetPoints(final List<Point2D> inputPoints,
-                                   final List<Point2D> outputPoints) {
+    private void internalSetPoints(final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         if (inputPoints.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
         if (inputPoints.size() != outputPoints.size()) {
             throw new IllegalArgumentException();
         }
-        mInputPoints = inputPoints;
-        mOutputPoints = outputPoints;
+        this.inputPoints = inputPoints;
+        this.outputPoints = outputPoints;
     }
 }

@@ -46,8 +46,7 @@ public class DualConic extends BaseConic implements Serializable {
      * @param e Parameter E of the conic.
      * @param f Parameter F of the conic.
      */
-    public DualConic(final double a, final double b, final double c, final double d, final double e,
-                     final double f) {
+    public DualConic(final double a, final double b, final double c, final double d, final double e, final double f) {
         super(a, b, c, d, e, f);
     }
 
@@ -76,8 +75,7 @@ public class DualConic extends BaseConic implements Serializable {
      * @throws CoincidentLinesException Raised if provided lines are coincident
      *                                  (more than one line is equal) or produce a degenerate configuration.
      */
-    public DualConic(final Line2D line1, final Line2D line2, final Line2D line3,
-                     final Line2D line4, final Line2D line5)
+    public DualConic(final Line2D line1, final Line2D line2, final Line2D line3, final Line2D line4, final Line2D line5)
             throws CoincidentLinesException {
         setParametersFromLines(line1, line2, line3, line4, line5);
     }
@@ -96,21 +94,19 @@ public class DualConic extends BaseConic implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean isLocus(final Line2D line, final double threshold) {
-
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
         try {
             normalize();
-            final Matrix dualC = asMatrix();
-            final Matrix homLine =
-                    new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);
+            final var dualC = asMatrix();
+            final var homLine = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);
             line.normalize();
             homLine.setElementAt(0, 0, line.getA());
             homLine.setElementAt(1, 0, line.getB());
             homLine.setElementAt(2, 0, line.getC());
-            final Matrix locusMatrix = homLine.transposeAndReturnNew();
+            final var locusMatrix = homLine.transposeAndReturnNew();
             locusMatrix.multiply(dualC);
             locusMatrix.multiply(homLine);
 
@@ -145,21 +141,21 @@ public class DualConic extends BaseConic implements Serializable {
         try {
             // retrieve conic as matrix
             normalize();
-            final Matrix dualC = asMatrix();
-            final Matrix transHomLineA = new Matrix(1, Line2D.LINE_NUMBER_PARAMS);
+            final var dualC = asMatrix();
+            final var transHomLineA = new Matrix(1, Line2D.LINE_NUMBER_PARAMS);
             lineA.normalize();
             transHomLineA.setElementAt(0, 0, lineA.getA());
             transHomLineA.setElementAt(0, 1, lineA.getB());
             transHomLineA.setElementAt(0, 2, lineA.getC());
 
 
-            final Matrix tmp = transHomLineA.multiplyAndReturnNew(dualC);
+            final var tmp = transHomLineA.multiplyAndReturnNew(dualC);
             tmp.multiply(transHomLineA.transposeAndReturnNew()); //This is 
             // homLineA' * dualC * homLineA
 
-            final double normA = tmp.getElementAt(0, 0);
+            final var normA = tmp.getElementAt(0, 0);
 
-            final Matrix homLineB = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);
+            final var homLineB = new Matrix(Line2D.LINE_NUMBER_PARAMS, 1);
             lineB.normalize();
             homLineB.setElementAt(0, 0, lineB.getA());
             homLineB.setElementAt(1, 0, lineB.getB());
@@ -169,15 +165,15 @@ public class DualConic extends BaseConic implements Serializable {
             tmp.multiply(dualC);
             tmp.multiply(homLineB);
 
-            final double normB = tmp.getElementAt(0, 0);
+            final var normB = tmp.getElementAt(0, 0);
 
             transHomLineA.multiply(dualC);
             transHomLineA.multiply(homLineB);
             // This is homLineA' * dualC * homLineB
 
-            final double angleNumerator = transHomLineA.getElementAt(0, 0);
+            final var angleNumerator = transHomLineA.getElementAt(0, 0);
 
-            final double cosTheta = angleNumerator / Math.sqrt(normA * normB);
+            final var cosTheta = angleNumerator / Math.sqrt(normA * normB);
             return Math.acos(cosTheta);
         } catch (final WrongSizeException ignore) {
             // This will never happen
@@ -198,31 +194,28 @@ public class DualConic extends BaseConic implements Serializable {
      * @return True if provided lines are perpendicular, false otherwise.
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
-    public boolean arePerpendicularLines(final Line2D lineA, final Line2D lineB,
-                                         final double threshold) {
+    public boolean arePerpendicularLines(final Line2D lineA, final Line2D lineB, final double threshold) {
         try {
             // retrieve conic as matrix
-            final Matrix transHomLineA = new Matrix(1, Line2D.LINE_NUMBER_PARAMS);
+            final var transHomLineA = new Matrix(1, Line2D.LINE_NUMBER_PARAMS);
             lineA.normalize();
             transHomLineA.setElementAt(0, 0, lineA.getA());
             transHomLineA.setElementAt(0, 1, lineA.getB());
             transHomLineA.setElementAt(0, 2, lineA.getC());
 
-            final Matrix homLineB =
-                    new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH,
-                            1);
+            final var homLineB = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             lineB.normalize();
             homLineB.setElementAt(0, 0, lineB.getA());
             homLineB.setElementAt(1, 0, lineB.getB());
             homLineB.setElementAt(2, 0, lineB.getC());
 
             normalize();
-            final Matrix dualC = asMatrix();
+            final var dualC = asMatrix();
             transHomLineA.multiply(dualC);
             transHomLineA.multiply(homLineB);
             // This is homLineA' * dualC * homLineB
 
-            final double perpend = transHomLineA.getElementAt(0, 0);
+            final var perpend = transHomLineA.getElementAt(0, 0);
 
             return Math.abs(perpend) < threshold;
         } catch (final WrongSizeException ignore) {
@@ -240,8 +233,7 @@ public class DualConic extends BaseConic implements Serializable {
      * @return True if provided lines are perpendicular, false otherwise.
      */
     public boolean arePerpendicularLines(final Line2D lineA, final Line2D lineB) {
-        return arePerpendicularLines(lineA, lineB,
-                DEFAULT_PERPENDICULAR_THRESHOLD);
+        return arePerpendicularLines(lineA, lineB, DEFAULT_PERPENDICULAR_THRESHOLD);
     }
 
     /**
@@ -252,7 +244,7 @@ public class DualConic extends BaseConic implements Serializable {
      *                                    matrix is not complete due to wrong parameters or numerical instability.
      */
     public Conic getConic() throws ConicNotAvailableException {
-        final Conic c = new Conic();
+        final var c = new Conic();
         conic(c);
         return c;
     }
@@ -266,23 +258,18 @@ public class DualConic extends BaseConic implements Serializable {
      *                                    matrix is not complete due to wrong parameters or numerical instability.
      */
     public void conic(final Conic conic) throws ConicNotAvailableException {
-
-        final Matrix dualConicMatrix = asMatrix();
+        final var dualConicMatrix = asMatrix();
         try {
-            final Matrix invMatrix = com.irurueta.algebra.Utils.inverse(
-                    dualConicMatrix);
+            final var invMatrix = com.irurueta.algebra.Utils.inverse(dualConicMatrix);
 
             // ensure that resulting matrix after inversion is symmetric
             // by computing the mean of off-diagonal elements
-            final double a = invMatrix.getElementAt(0, 0);
-            final double b = 0.5 * (invMatrix.getElementAt(0, 1) +
-                    invMatrix.getElementAt(1, 0));
-            final double c = invMatrix.getElementAt(1, 1);
-            final double d = 0.5 * (invMatrix.getElementAt(0, 2) +
-                    invMatrix.getElementAt(2, 0));
-            final double e = 0.5 * (invMatrix.getElementAt(1, 2) +
-                    invMatrix.getElementAt(2, 1));
-            final double f = invMatrix.getElementAt(2, 2);
+            final var a = invMatrix.getElementAt(0, 0);
+            final var b = 0.5 * (invMatrix.getElementAt(0, 1) + invMatrix.getElementAt(1, 0));
+            final var c = invMatrix.getElementAt(1, 1);
+            final var d = 0.5 * (invMatrix.getElementAt(0, 2) + invMatrix.getElementAt(2, 0));
+            final var e = 0.5 * (invMatrix.getElementAt(1, 2) + invMatrix.getElementAt(2, 1));
+            final var f = invMatrix.getElementAt(2, 2);
             conic.setParameters(a, b, c, d, e, f);
         } catch (final AlgebraException e) {
             throw new ConicNotAvailableException(e);
@@ -302,8 +289,8 @@ public class DualConic extends BaseConic implements Serializable {
      *                                  produce a degenerated configuration.
      */
     public final void setParametersFromLines(
-            final Line2D line1, final Line2D line2, final Line2D line3,
-            final Line2D line4, final Line2D line5) throws CoincidentLinesException {
+            final Line2D line1, final Line2D line2, final Line2D line3, final Line2D line4, final Line2D line5)
+            throws CoincidentLinesException {
 
         try {
             line1.normalize();
@@ -312,13 +299,12 @@ public class DualConic extends BaseConic implements Serializable {
             line4.normalize();
             line5.normalize();
 
-
             // estimate dual conic that lines inside provided 5 lines
-            final Matrix m = new Matrix(5, 6);
+            final var m = new Matrix(5, 6);
 
-            double l1 = line1.getA();
-            double l2 = line1.getB();
-            double l3 = line1.getC();
+            var l1 = line1.getA();
+            var l2 = line1.getB();
+            var l3 = line1.getC();
             m.setElementAt(0, 0, l1 * l1);
             m.setElementAt(0, 1, 2.0 * l1 * l2);
             m.setElementAt(0, 2, l2 * l2);
@@ -367,18 +353,18 @@ public class DualConic extends BaseConic implements Serializable {
             m.setElementAt(4, 5, l3 * l3);
 
             // normalize each row to increase accuracy
-            final double[] row = new double[6];
+            final var row = new double[6];
             double rowNorm;
 
-            for (int j = 0; j < 5; j++) {
+            for (var j = 0; j < 5; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 5, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for (int i = 0; i < 6; i++) {
+                for (var i = 0; i < 6; i++) {
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
                 }
             }
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             if (decomposer.getRank() < 5) {
@@ -387,15 +373,15 @@ public class DualConic extends BaseConic implements Serializable {
 
             // the right null-space of m contains the parameters a, b, c, d, e ,f
             // of the conic
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
             // l1^ + 2*l1*l2 + l2^2 + 2*l1*l3 + 2*l2*l3 + l3^2 = 0
-            final double a = v.getElementAt(0, 5);
-            final double b = v.getElementAt(1, 5);
-            final double c = v.getElementAt(2, 5);
-            final double d = v.getElementAt(3, 5);
-            final double e = v.getElementAt(4, 5);
-            final double f = v.getElementAt(5, 5);
+            final var a = v.getElementAt(0, 5);
+            final var b = v.getElementAt(1, 5);
+            final var c = v.getElementAt(2, 5);
+            final var d = v.getElementAt(3, 5);
+            final var e = v.getElementAt(4, 5);
+            final var f = v.getElementAt(5, 5);
 
             setParameters(a, b, c, d, e, f);
         } catch (final AlgebraException ex) {

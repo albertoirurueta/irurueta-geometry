@@ -48,9 +48,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
     /**
      * Default type of coordinates.
      */
-    public static final CoordinatesType DEFAULT_COORDINATES_TYPE =
-            CoordinatesType.HOMOGENEOUS_COORDINATES;
-
+    public static final CoordinatesType DEFAULT_COORDINATES_TYPE = CoordinatesType.HOMOGENEOUS_COORDINATES;
 
     /**
      * Constructor of this class.
@@ -70,14 +68,11 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @throws IllegalArgumentException Raised if the size of provided array is
      *                                  not valid.
      */
-    public static Point2D create(final CoordinatesType coordinatesType,
-                                 final double[] v) {
-        switch (coordinatesType) {
-            case INHOMOGENEOUS_COORDINATES:
-                return new InhomogeneousPoint2D(v);
-            case HOMOGENEOUS_COORDINATES:
-            default:
-                return new HomogeneousPoint2D(v);
+    public static Point2D create(final CoordinatesType coordinatesType, final double[] v) {
+        if (coordinatesType == CoordinatesType.INHOMOGENEOUS_COORDINATES) {
+            return new InhomogeneousPoint2D(v);
+        } else {
+            return new HomogeneousPoint2D(v);
         }
     }
 
@@ -105,12 +100,10 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @return Created Point2D.
      */
     public static Point2D create(final CoordinatesType coordinatesType) {
-        switch (coordinatesType) {
-            case INHOMOGENEOUS_COORDINATES:
-                return new InhomogeneousPoint2D();
-            case HOMOGENEOUS_COORDINATES:
-            default:
-                return new HomogeneousPoint2D();
+        if (coordinatesType == CoordinatesType.INHOMOGENEOUS_COORDINATES) {
+            return new InhomogeneousPoint2D();
+        } else {
+            return new HomogeneousPoint2D();
         }
     }
 
@@ -186,8 +179,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @param homY y homogeneous coordinate.
      * @param homW w homogeneous coordinate.
      */
-    public abstract void setHomogeneousCoordinates(
-            final double homX, final double homY, final double homW);
+    public abstract void setHomogeneousCoordinates(final double homX, final double homY, final double homW);
 
     /**
      * Returns X inhomogeneous coordinate of this 2d point.
@@ -224,8 +216,7 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @param inhomX x inhomogeneous coordinate.
      * @param inhomY y inhomogeneous coordinate.
      */
-    public abstract void setInhomogeneousCoordinates(
-            final double inhomX, final double inhomY);
+    public abstract void setInhomogeneousCoordinates(final double inhomX, final double inhomY);
 
     /**
      * Checks if the 2d point described by this class equals the input {@link Point2D}
@@ -260,14 +251,13 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      */
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof Point2D)) {
+        if (!(obj instanceof Point2D point)) {
             return false;
         }
         if (obj == this) {
             return true;
         }
 
-        final Point2D point = (Point2D) obj;
         return equals(point);
     }
 
@@ -337,12 +327,10 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
             throw new IllegalArgumentException();
         }
 
-        switch (dim) {
-            case 0:
-                return getInhomX();
-            case 1:
-            default:
-                return getInhomY();
+        if (dim == 0) {
+            return getInhomX();
+        } else {
+            return getInhomY();
         }
     }
 
@@ -386,8 +374,8 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      */
     @Override
     public double sqrDistanceTo(final Point2D point) {
-        final double diffX = getInhomX() - point.getInhomX();
-        final double diffY = getInhomY() - point.getInhomY();
+        final var diffX = getInhomX() - point.getInhomX();
+        final var diffY = getInhomY() - point.getInhomY();
 
         return diffX * diffX + diffY * diffY;
     }
@@ -401,21 +389,17 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
      * @return dot product value.
      */
     public double dotProduct(final Point2D point) {
+        final var thisHomX = getHomX();
+        final var thisHomY = getHomY();
+        final var thisHomW = getHomW();
+        final var otherHomX = point.getHomX();
+        final var otherHomY = point.getHomY();
+        final var otherHomW = point.getHomW();
 
-        final double thisHomX = getHomX();
-        final double thisHomY = getHomY();
-        final double thisHomW = getHomW();
-        final double otherHomX = point.getHomX();
-        final double otherHomY = point.getHomY();
-        final double otherHomW = point.getHomW();
-
-        final double thisNormSqr = thisHomX * thisHomX + thisHomY * thisHomY +
-                thisHomW * thisHomW;
-        final double otherNormSqr = otherHomX * otherHomX + otherHomY * otherHomY +
-                otherHomW * otherHomW;
-        final double denom = Math.sqrt(thisNormSqr * otherNormSqr);
-        final double num = thisHomX * otherHomX + thisHomY * otherHomY +
-                thisHomW * otherHomW;
+        final var thisNormSqr = thisHomX * thisHomX + thisHomY * thisHomY + thisHomW * thisHomW;
+        final var otherNormSqr = otherHomX * otherHomX + otherHomY * otherHomY + otherHomW * otherHomW;
+        final var denom = Math.sqrt(thisNormSqr * otherNormSqr);
+        final var num = thisHomX * otherHomX + thisHomY * otherHomY + thisHomW * otherHomW;
 
         return num / denom;
     }
@@ -448,7 +432,6 @@ public abstract class Point2D implements Serializable, Point<Point2D> {
         // If this point is between point1 and point2 then,
         // dist(point1,this) + dist(point2, this) == dist(point1,point2) except
         // for some small difference due to machine precision
-        return Math.abs(distanceTo(point1) + distanceTo(point2) -
-                point1.distanceTo(point2)) <= threshold;
+        return Math.abs(distanceTo(point1) + distanceTo(point2) - point1.distanceTo(point2)) <= threshold;
     }
 }

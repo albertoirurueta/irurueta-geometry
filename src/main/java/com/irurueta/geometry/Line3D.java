@@ -47,12 +47,12 @@ public class Line3D implements Serializable {
     /**
      * 1st plane forming this 3D line.
      */
-    private Plane mPlane1;
+    private Plane plane1;
 
     /**
      * 2nd plane forming this 3D line.
      */
-    private Plane mPlane2;
+    private Plane plane2;
 
     /**
      * Constructor.
@@ -77,8 +77,7 @@ public class Line3D implements Serializable {
      * @throws CoincidentPointsException Raised if provided points are
      *                                   considered to be equal.
      */
-    public Line3D(final Point3D point1, final Point3D point2)
-            throws CoincidentPointsException {
+    public Line3D(final Point3D point1, final Point3D point2) throws CoincidentPointsException {
         setPlanesFromPoints(point1, point2);
     }
 
@@ -96,7 +95,7 @@ public class Line3D implements Serializable {
         plane2.normalize();
 
         try {
-            final Matrix m = new Matrix(2, Plane.PLANE_NUMBER_PARAMS);
+            final var m = new Matrix(2, Plane.PLANE_NUMBER_PARAMS);
             m.setElementAt(0, 0, plane1.getA());
             m.setElementAt(0, 1, plane1.getB());
             m.setElementAt(0, 2, plane1.getC());
@@ -135,14 +134,13 @@ public class Line3D implements Serializable {
      *                                   coincident. Notice that parallel planes are not coincident and they
      *                                   intersect at infinity.
      */
-    public final void setPlanes(final Plane plane1, final Plane plane2)
-            throws CoincidentPlanesException {
+    public final void setPlanes(final Plane plane1, final Plane plane2) throws CoincidentPlanesException {
         if (areCoincidentPlanes(plane1, plane2)) {
             throw new CoincidentPlanesException();
         }
 
-        mPlane1 = plane1;
-        mPlane2 = plane2;
+        this.plane1 = plane1;
+        this.plane2 = plane2;
     }
 
     /**
@@ -153,18 +151,17 @@ public class Line3D implements Serializable {
      * @throws CoincidentPointsException Raised if provided points are equal
      *                                   and hence a line cannot be determined.
      */
-    public final void setPlanesFromPoints(final Point3D point1, final Point3D point2)
-            throws CoincidentPointsException {
+    public final void setPlanesFromPoints(final Point3D point1, final Point3D point2) throws CoincidentPointsException {
         // build matrix containing director vector on a row
         try {
-            final Matrix m = new Matrix(1, INHOM_VECTOR_SIZE);
+            final var m = new Matrix(1, INHOM_VECTOR_SIZE);
             m.setElementAt(0, 0, point2.getInhomX() - point1.getInhomX());
             m.setElementAt(0, 1, point2.getInhomY() - point1.getInhomY());
             m.setElementAt(0, 2, point2.getInhomZ() - point1.getInhomZ());
 
             // m matrix will have rank 1 and nullity 2. The null-space will be
             // formed by two vectors perpendicular to the director vector
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             // check that points are not coincident, and hence all the values of
@@ -175,13 +172,13 @@ public class Line3D implements Serializable {
 
             // last two columns of V contains director vectors of plane1 and
             // plane2
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
-            final double[] directorVector1 = v.getSubmatrixAsArray(0, 1, 2, 1);
-            final double[] directorVector2 = v.getSubmatrixAsArray(0, 2, 2, 2);
+            final var directorVector1 = v.getSubmatrixAsArray(0, 1, 2, 1);
+            final var directorVector2 = v.getSubmatrixAsArray(0, 2, 2, 2);
 
-            mPlane1 = new Plane(point1, directorVector1);
-            mPlane2 = new Plane(point1, directorVector2);
+            plane1 = new Plane(point1, directorVector1);
+            plane2 = new Plane(point1, directorVector2);
         } catch (final AlgebraException e) {
             throw new CoincidentPointsException(e);
         }
@@ -194,7 +191,7 @@ public class Line3D implements Serializable {
      * @return 1st plane.
      */
     public Plane getPlane1() {
-        return mPlane1;
+        return plane1;
     }
 
     /**
@@ -204,7 +201,7 @@ public class Line3D implements Serializable {
      * @return 2nd plane.
      */
     public Plane getPlane2() {
-        return mPlane2;
+        return plane2;
     }
 
     /**
@@ -218,8 +215,7 @@ public class Line3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public boolean isLocus(final Point3D point, final double threshold) {
-        return mPlane1.isLocus(point, threshold) &&
-                mPlane2.isLocus(point, threshold);
+        return plane1.isLocus(point, threshold) && plane2.isLocus(point, threshold);
     }
 
     /**
@@ -241,7 +237,7 @@ public class Line3D implements Serializable {
      * @return Shortest distance of provided point to this 3D line.
      */
     public double getDistance(final Point3D point) {
-        final Point3D closestPoint = getClosestPoint(point);
+        final var closestPoint = getClosestPoint(point);
         return point.distanceTo(closestPoint);
     }
 
@@ -265,7 +261,7 @@ public class Line3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided threshold is negative.
      */
     public Point3D getClosestPoint(final Point3D point, final double threshold) {
-        final Point3D result = Point3D.create();
+        final var result = Point3D.create();
         closestPoint(point, result, threshold);
         return result;
     }
@@ -306,7 +302,7 @@ public class Line3D implements Serializable {
 
         // This is a plane having as director vector this line 3D and passing
         // through provided point
-        final Plane p = new Plane(point, getDirection());
+        final var p = new Plane(point, getDirection());
         try {
             intersection(p, result);
         } catch (final NoIntersectionException ignore) {
@@ -318,8 +314,8 @@ public class Line3D implements Serializable {
      * Normalize the planes forming this 3D line.
      */
     public void normalize() {
-        mPlane1.normalize();
-        mPlane2.normalize();
+        plane1.normalize();
+        plane2.normalize();
     }
 
     /**
@@ -329,7 +325,7 @@ public class Line3D implements Serializable {
      * otherwise.
      */
     public boolean isNormalized() {
-        return mPlane1.isNormalized() && mPlane2.isNormalized();
+        return plane1.isNormalized() && plane2.isNormalized();
     }
 
     /**
@@ -340,8 +336,7 @@ public class Line3D implements Serializable {
      */
     public double[] getDirection() {
         try {
-            return Utils.crossProduct(mPlane1.getDirectorVector(),
-                    mPlane2.getDirectorVector());
+            return Utils.crossProduct(plane1.getDirectorVector(), plane2.getDirectorVector());
         } catch (final AlgebraException ignore) {
             return null;
         }
@@ -356,7 +351,7 @@ public class Line3D implements Serializable {
      *                                 intersect this 3D line.
      */
     public Point3D getIntersection(final Plane plane) throws NoIntersectionException {
-        Point3D result = Point3D.create();
+        final var result = Point3D.create();
         intersection(plane, result);
         return result;
     }
@@ -370,9 +365,8 @@ public class Line3D implements Serializable {
      * @throws NoIntersectionException Raised if provided plane does not
      *                                 intersect this 3D line.
      */
-    public void intersection(final Plane plane, final Point3D result)
-            throws NoIntersectionException {
+    public void intersection(final Plane plane, final Point3D result) throws NoIntersectionException {
         // use plane1, plane2 and provided plane to find an intersection
-        plane.intersection(mPlane1, mPlane2, result);
+        plane.intersection(plane1, plane2, result);
     }
 }

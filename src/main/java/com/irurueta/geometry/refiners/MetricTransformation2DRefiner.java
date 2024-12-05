@@ -24,7 +24,6 @@ import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
 import com.irurueta.numerical.robust.InliersData;
@@ -42,14 +41,12 @@ import java.util.List;
  */
 @SuppressWarnings("DuplicatedCode")
 public class MetricTransformation2DRefiner extends
-        PairMatchesAndInliersDataRefiner<MetricTransformation2D, Point2D,
-                Point2D> {
+        PairMatchesAndInliersDataRefiner<MetricTransformation2D, Point2D, Point2D> {
 
     /**
      * Point to be reused when computing residuals.
      */
-    private final Point2D mResidualTestPoint = Point2D.create(
-            CoordinatesType.HOMOGENEOUS_COORDINATES);
+    private final Point2D residualTestPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
     /**
      * Standard deviation used for Levenberg-Marquardt fitting during
@@ -60,7 +57,7 @@ public class MetricTransformation2DRefiner extends
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
-    private double mRefinementStandardDeviation;
+    private double refinementStandardDeviation;
 
     /**
      * Constructor.
@@ -85,11 +82,9 @@ public class MetricTransformation2DRefiner extends
     public MetricTransformation2DRefiner(
             final MetricTransformation2D initialEstimation, final boolean keepCovariance,
             final BitSet inliers, final double[] residuals, final int numInliers,
-            final List<Point2D> samples1, final List<Point2D> samples2,
-            final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2);
-        mRefinementStandardDeviation = refinementStandardDeviation;
+            final List<Point2D> samples1, final List<Point2D> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2);
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -107,11 +102,10 @@ public class MetricTransformation2DRefiner extends
      */
     public MetricTransformation2DRefiner(
             final MetricTransformation2D initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<Point2D> samples1,
-            final List<Point2D> samples2, final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2);
-        mRefinementStandardDeviation = refinementStandardDeviation;
+            final InliersData inliersData, final List<Point2D> samples1, final List<Point2D> samples2,
+            final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2);
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -126,7 +120,7 @@ public class MetricTransformation2DRefiner extends
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
-        return mRefinementStandardDeviation;
+        return refinementStandardDeviation;
     }
 
     /**
@@ -142,12 +136,11 @@ public class MetricTransformation2DRefiner extends
      *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
-    public void setRefinementStandardDeviation(
-            final double refinementStandardDeviation) throws LockedException {
+    public void setRefinementStandardDeviation(final double refinementStandardDeviation) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefinementStandardDeviation = refinementStandardDeviation;
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -161,9 +154,8 @@ public class MetricTransformation2DRefiner extends
      *                           to converge to a result).
      */
     @Override
-    public MetricTransformation2D refine() throws NotReadyException,
-            LockedException, RefinerException {
-        final MetricTransformation2D result = new MetricTransformation2D();
+    public MetricTransformation2D refine() throws NotReadyException, LockedException, RefinerException {
+        final var result = new MetricTransformation2D();
         refine(result);
         return result;
     }
@@ -183,8 +175,8 @@ public class MetricTransformation2DRefiner extends
      *                           to converge to a result).
      */
     @Override
-    public boolean refine(final MetricTransformation2D result)
-            throws NotReadyException, LockedException, RefinerException {
+    public boolean refine(final MetricTransformation2D result) throws NotReadyException, LockedException,
+            RefinerException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -192,39 +184,35 @@ public class MetricTransformation2DRefiner extends
             throw new NotReadyException();
         }
 
-        mLocked = true;
+        locked = true;
 
-        if (mListener != null) {
-            mListener.onRefineStart(this, mInitialEstimation);
+        if (listener != null) {
+            listener.onRefineStart(this, initialEstimation);
         }
 
-        final double initialTotalResidual = totalResidual(mInitialEstimation);
+        final var initialTotalResidual = totalResidual(initialEstimation);
 
         try {
             // parameters: rotation angle + scale + translation
-            final double[] initParams = new double[2 +
-                    EuclideanTransformation2D.NUM_TRANSLATION_COORDS];
+            final var initParams = new double[2 + EuclideanTransformation2D.NUM_TRANSLATION_COORDS];
             // copy values
-            initParams[0] = mInitialEstimation.getScale();
-            initParams[1] = mInitialEstimation.getRotation().getTheta();
-            System.arraycopy(mInitialEstimation.getTranslation(), 0, initParams,
-                    2, EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
+            initParams[0] = initialEstimation.getScale();
+            initParams[1] = initialEstimation.getRotation().getTheta();
+            System.arraycopy(initialEstimation.getTranslation(), 0, initParams, 2,
+                    EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
 
             // output values to be fitted/optimized will contain residuals
-            final double[] y = new double[mNumInliers];
+            final var y = new double[numInliers];
             // input values will contain 2 sets of 2D points to compute residuals
-            final int nDims =
-                    2 * Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH;
-            final Matrix x = new Matrix(mNumInliers, nDims);
-            final int nSamples = mInliers.length();
-            int pos = 0;
-            Point2D inputPoint;
-            Point2D outputPoint;
-            for (int i = 0; i < nSamples; i++) {
-                if (mInliers.get(i)) {
+            final var nDims = 2 * Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH;
+            final var x = new Matrix(numInliers, nDims);
+            final var nSamples = inliers.length();
+            var pos = 0;
+            for (var i = 0; i < nSamples; i++) {
+                if (inliers.get(i)) {
                     // sample is inlier
-                    inputPoint = mSamples1.get(i);
-                    outputPoint = mSamples2.get(i);
+                    final var inputPoint = samples1.get(i);
+                    final var outputPoint = samples2.get(i);
                     inputPoint.normalize();
                     outputPoint.normalize();
                     x.setElementAt(pos, 0, inputPoint.getHomX());
@@ -234,81 +222,65 @@ public class MetricTransformation2DRefiner extends
                     x.setElementAt(pos, 4, outputPoint.getHomY());
                     x.setElementAt(pos, 5, outputPoint.getHomW());
 
-                    y[pos] = mResiduals[i];
+                    y[pos] = residuals[i];
                     pos++;
                 }
             }
 
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
-                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
+            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-                        private final Point2D mInputPoint = Point2D.create(
-                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+                private final Point2D inputPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                        private final Point2D mOutputPoint = Point2D.create(
-                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+                private final Point2D outputPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                        private final MetricTransformation2D mTransformation =
-                                new MetricTransformation2D();
+                private final MetricTransformation2D transformation = new MetricTransformation2D();
 
-                        private final GradientEstimator mGradientEstimator =
-                                new GradientEstimator(
-                                        new MultiDimensionFunctionEvaluatorListener() {
-                                            @Override
-                                            public double evaluate(final double[] params) {
-                                                // copy values
-                                                mTransformation.setScale(params[0]);
-                                                mTransformation.getRotation().setTheta(params[1]);
-                                                System.arraycopy(params, 2,
-                                                        mTransformation.getTranslation(), 0,
-                                                        EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
+                private final GradientEstimator gradientEstimator = new GradientEstimator(params -> {
+                    // copy values
+                    transformation.setScale(params[0]);
+                    transformation.getRotation().setTheta(params[1]);
+                    System.arraycopy(params, 2, transformation.getTranslation(), 0,
+                            EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
 
-                                                return residual(mTransformation, mInputPoint,
-                                                        mOutputPoint);
-                                            }
-                                        });
+                    return residual(transformation, inputPoint, outputPoint);
+                });
 
-                        @Override
-                        public int getNumberOfDimensions() {
-                            return nDims;
-                        }
+                @Override
+                public int getNumberOfDimensions() {
+                    return nDims;
+                }
 
-                        @Override
-                        public double[] createInitialParametersArray() {
-                            return initParams;
-                        }
+                @Override
+                public double[] createInitialParametersArray() {
+                    return initParams;
+                }
 
-                        @Override
-                        public double evaluate(final int i, final double[] point, final double[] params,
-                                               final double[] derivatives) throws EvaluationException {
-                            mInputPoint.setHomogeneousCoordinates(point[0], point[1],
-                                    point[2]);
-                            mOutputPoint.setHomogeneousCoordinates(point[3], point[4],
-                                    point[5]);
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+                    inputPoint.setHomogeneousCoordinates(point[0], point[1], point[2]);
+                    outputPoint.setHomogeneousCoordinates(point[3], point[4], point[5]);
 
-                            // copy values
-                            mTransformation.setScale(params[0]);
-                            mTransformation.getRotation().setTheta(params[1]);
-                            System.arraycopy(params, 2,
-                                    mTransformation.getTranslation(), 0,
-                                    EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
+                    // copy values
+                    transformation.setScale(params[0]);
+                    transformation.getRotation().setTheta(params[1]);
+                    System.arraycopy(params, 2, transformation.getTranslation(), 0,
+                            EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
 
-                            final double y = residual(mTransformation, mInputPoint,
-                                    mOutputPoint);
-                            mGradientEstimator.gradient(params, derivatives);
+                    final var y = residual(transformation, inputPoint, outputPoint);
+                    gradientEstimator.gradient(params, derivatives);
 
-                            return y;
-                        }
-                    };
+                    return y;
+                }
+            };
 
-            final LevenbergMarquardtMultiDimensionFitter fitter =
-                    new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-                            getRefinementStandardDeviation());
+            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+                    getRefinementStandardDeviation());
 
             fitter.fit();
 
             // obtain estimated params
-            final double[] params = fitter.getA();
+            final var params = fitter.getA();
 
             // update transformation
             result.setScale(params[0]);
@@ -316,17 +288,16 @@ public class MetricTransformation2DRefiner extends
             System.arraycopy(params, 2, result.getTranslation(), 0,
                     EuclideanTransformation2D.NUM_TRANSLATION_COORDS);
 
-            if (mKeepCovariance) {
+            if (keepCovariance) {
                 // keep covariance
-                mCovariance = fitter.getCovar();
+                covariance = fitter.getCovar();
             }
 
-            final double finalTotalResidual = totalResidual(result);
-            final boolean errorDecreased = finalTotalResidual < initialTotalResidual;
+            final var finalTotalResidual = totalResidual(result);
+            final var errorDecreased = finalTotalResidual < initialTotalResidual;
 
-            if (mListener != null) {
-                mListener.onRefineEnd(this, mInitialEstimation, result,
-                        errorDecreased);
+            if (listener != null) {
+                listener.onRefineEnd(this, initialEstimation, result, errorDecreased);
             }
 
             return errorDecreased;
@@ -334,7 +305,7 @@ public class MetricTransformation2DRefiner extends
         } catch (final Exception e) {
             throw new RefinerException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -347,13 +318,13 @@ public class MetricTransformation2DRefiner extends
      * @param outputPoint    output 2D point.
      * @return residual.
      */
-    private double residual(final MetricTransformation2D transformation,
-                            final Point2D inputPoint, final Point2D outputPoint) {
+    private double residual(final MetricTransformation2D transformation, final Point2D inputPoint,
+                            final Point2D outputPoint) {
         inputPoint.normalize();
         outputPoint.normalize();
 
-        transformation.transform(inputPoint, mResidualTestPoint);
-        return mResidualTestPoint.distanceTo(outputPoint);
+        transformation.transform(inputPoint, residualTestPoint);
+        return residualTestPoint.distanceTo(outputPoint);
     }
 
     /**
@@ -363,16 +334,14 @@ public class MetricTransformation2DRefiner extends
      * @return total residual.
      */
     private double totalResidual(final MetricTransformation2D transformation) {
-        double result = 0.0;
+        var result = 0.0;
 
-        final int nSamples = mInliers.length();
-        Point2D inputPoint;
-        Point2D outputPoint;
-        for (int i = 0; i < nSamples; i++) {
-            if (mInliers.get(i)) {
+        final var nSamples = inliers.length();
+        for (var i = 0; i < nSamples; i++) {
+            if (inliers.get(i)) {
                 // sample is inlier
-                inputPoint = mSamples1.get(i);
-                outputPoint = mSamples2.get(i);
+                final var inputPoint = samples1.get(i);
+                final var outputPoint = samples2.get(i);
                 inputPoint.normalize();
                 outputPoint.normalize();
                 result += residual(transformation, inputPoint, outputPoint);

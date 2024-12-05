@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CoplanarPointsExceptionTest {
+class CoplanarPointsExceptionTest {
 
     @Test
-    public void testConstructor() {
-        CoplanarPointsException ex = new CoplanarPointsException();
+    void testConstructor() {
+        var ex = new CoplanarPointsException();
         assertNotNull(ex);
 
         ex = new CoplanarPointsException("message");

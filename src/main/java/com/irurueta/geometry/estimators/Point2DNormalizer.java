@@ -42,64 +42,64 @@ public class Point2DNormalizer {
     /**
      * Collection of points used to compute normalization.
      */
-    private List<Point2D> mPoints;
+    private List<Point2D> points;
 
     /**
      * Flag indicating that this instance is locked because computation is
      * in progress.
      */
-    private boolean mLocked;
+    private boolean locked;
 
     /**
      * Minimum x inhomogeneous coordinate found in provided points.
      */
-    private double mMinInhomX;
+    private double minInhomX;
 
     /**
      * Minimum y inhomogeneous coordinate found in provided points.
      */
-    private double mMinInhomY;
+    private double minInhomY;
 
     /**
      * Maximum x inhomogeneous coordinate found in provided points.
      */
-    private double mMaxInhomX;
+    private double maxInhomX;
 
     /**
      * Maximum y inhomogeneous coordinate found in provided points.
      */
-    private double mMaxInhomY;
+    private double maxInhomY;
 
     /**
      * Computed scale on x coordinates to normalize points.
      */
-    private double mScaleX;
+    private double scaleX;
 
     /**
      * Computed scale on y coordinates to normalize points.
      */
-    private double mScaleY;
+    private double scaleY;
 
     /**
      * Computed x coordinate of centroid of points.
      */
-    private double mCentroidX;
+    private double centroidX;
 
     /**
      * Computed y coordinate of centroid of points.
      */
-    private double mCentroidY;
+    private double centroidY;
 
     /**
      * Transformation to normalize points.
      */
-    private ProjectiveTransformation2D mTransformation;
+    private ProjectiveTransformation2D transformation;
 
     /**
      * Transformation to denormalize points, which corresponds to the inverse
      * transformation.
      */
-    private ProjectiveTransformation2D mInverseTransformation;
+    private ProjectiveTransformation2D inverseTransformation;
 
     /**
      * Constructor.
@@ -119,7 +119,7 @@ public class Point2DNormalizer {
      * @return collection of points used to compute normalization.
      */
     public List<Point2D> getPoints() {
-        return mPoints;
+        return points;
     }
 
     /**
@@ -146,7 +146,7 @@ public class Point2DNormalizer {
      * @return true if this instance is ready, false otherwise.
      */
     public boolean isReady() {
-        return mPoints != null && mPoints.size() >= MIN_POINTS;
+        return points != null && points.size() >= MIN_POINTS;
     }
 
     /**
@@ -158,7 +158,7 @@ public class Point2DNormalizer {
      * @return true if instance is locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -167,7 +167,7 @@ public class Point2DNormalizer {
      * @return minimum x inhomogeneous coordinate found in provided points.
      */
     public double getMinInhomX() {
-        return mMinInhomX;
+        return minInhomX;
     }
 
     /**
@@ -176,7 +176,7 @@ public class Point2DNormalizer {
      * @return minimum y inhomogeneous coordinate found in provided points.
      */
     public double getMinInhomY() {
-        return mMinInhomY;
+        return minInhomY;
     }
 
     /**
@@ -185,7 +185,7 @@ public class Point2DNormalizer {
      * @return maximum x inhomogeneous coordinate found in provided points.
      */
     public double getMaxInhomX() {
-        return mMaxInhomX;
+        return maxInhomX;
     }
 
     /**
@@ -194,7 +194,7 @@ public class Point2DNormalizer {
      * @return maximum y inhomogeneous coordinate found in provided points.
      */
     public double getMaxInhomY() {
-        return mMaxInhomY;
+        return maxInhomY;
     }
 
     /**
@@ -203,7 +203,7 @@ public class Point2DNormalizer {
      * @return computed scale to normalize points on x coordinate.
      */
     public double getScaleX() {
-        return mScaleX;
+        return scaleX;
     }
 
     /**
@@ -212,7 +212,7 @@ public class Point2DNormalizer {
      * @return computed scale to normalize points on y coordinate.
      */
     public double getScaleY() {
-        return mScaleY;
+        return scaleY;
     }
 
     /**
@@ -221,7 +221,7 @@ public class Point2DNormalizer {
      * @return computed x coordinate of centroid of points.
      */
     public double getCentroidX() {
-        return mCentroidX;
+        return centroidX;
     }
 
     /**
@@ -230,7 +230,7 @@ public class Point2DNormalizer {
      * @return computed y coordinate of centroid of points.
      */
     public double getCentroidY() {
-        return mCentroidY;
+        return centroidY;
     }
 
     /**
@@ -239,7 +239,7 @@ public class Point2DNormalizer {
      * @return transformation to normalize points.
      */
     public ProjectiveTransformation2D getTransformation() {
-        return mTransformation;
+        return transformation;
     }
 
     /**
@@ -249,7 +249,7 @@ public class Point2DNormalizer {
      * @return transformation to denormalize points.
      */
     public ProjectiveTransformation2D getInverseTransformation() {
-        return mInverseTransformation;
+        return inverseTransformation;
     }
 
     /**
@@ -259,7 +259,7 @@ public class Point2DNormalizer {
      * @return true if result is available, false otherwise.
      */
     public boolean isResultAvailable() {
-        return mTransformation != null;
+        return transformation != null;
     }
 
     /**
@@ -274,8 +274,7 @@ public class Point2DNormalizer {
      *                             close to each other, which results in a singularity when computing proper
      *                             normalization scale.
      */
-    public void compute() throws NotReadyException, LockedException,
-            NormalizerException {
+    public void compute() throws NotReadyException, LockedException, NormalizerException {
         if (!isReady()) {
             throw new NotReadyException();
         }
@@ -283,61 +282,57 @@ public class Point2DNormalizer {
             throw new LockedException();
         }
         try {
-            mLocked = true;
+            locked = true;
 
             reset();
             computeLimits();
 
             // compute scale and centroids
-            final double width = mMaxInhomX - mMinInhomX;
-            final double height = mMaxInhomY - mMinInhomY;
+            final var width = maxInhomX - minInhomX;
+            final var height = maxInhomY - minInhomY;
 
             if (width < Double.MIN_VALUE || height < Double.MIN_VALUE) {
                 // numerical degeneracy
                 throw new NormalizerException();
             }
 
-            mScaleX = 1.0 / width;
-            mScaleY = 1.0 / height;
+            scaleX = 1.0 / width;
+            scaleY = 1.0 / height;
 
             // centroids of points
-            mCentroidX = (mMinInhomX + mMaxInhomX) / 2.0;
-            mCentroidY = (mMinInhomY + mMaxInhomY) / 2.0;
+            centroidX = (minInhomX + maxInhomX) / 2.0;
+            centroidY = (minInhomY + maxInhomY) / 2.0;
 
             // transformation to normalize points
-            final Matrix t = new Matrix(
-                    ProjectiveTransformation2D.HOM_COORDS,
-                    ProjectiveTransformation2D.HOM_COORDS);
+            final var t = new Matrix(ProjectiveTransformation2D.HOM_COORDS, ProjectiveTransformation2D.HOM_COORDS);
 
             // X' = s * X + s * t -->
             // s * X = X' - s * t -->
             // X = 1/s*X' - t
-            t.setElementAt(0, 0, mScaleX);
-            t.setElementAt(1, 1, mScaleY);
-            t.setElementAt(0, 2, -mScaleX * mCentroidX);
-            t.setElementAt(1, 2, -mScaleY * mCentroidY);
+            t.setElementAt(0, 0, scaleX);
+            t.setElementAt(1, 1, scaleY);
+            t.setElementAt(0, 2, -scaleX * centroidX);
+            t.setElementAt(1, 2, -scaleY * centroidY);
             t.setElementAt(2, 2, 1.0);
 
-            mTransformation = new ProjectiveTransformation2D(t);
-            mTransformation.normalize();
+            transformation = new ProjectiveTransformation2D(t);
+            transformation.normalize();
 
             // transformation to denormalize points
-            final Matrix invT = new Matrix(
-                    ProjectiveTransformation2D.HOM_COORDS,
-                    ProjectiveTransformation2D.HOM_COORDS);
+            final var invT = new Matrix(ProjectiveTransformation2D.HOM_COORDS, ProjectiveTransformation2D.HOM_COORDS);
 
             invT.setElementAt(0, 0, width);
             invT.setElementAt(1, 1, height);
-            invT.setElementAt(0, 2, mCentroidX);
-            invT.setElementAt(1, 2, mCentroidY);
+            invT.setElementAt(0, 2, centroidX);
+            invT.setElementAt(1, 2, centroidY);
             invT.setElementAt(2, 2, 1.0);
 
-            mInverseTransformation = new ProjectiveTransformation2D(invT);
-            mInverseTransformation.normalize();
+            inverseTransformation = new ProjectiveTransformation2D(invT);
+            inverseTransformation.normalize();
         } catch (final Exception e) {
             throw new NormalizerException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -347,21 +342,21 @@ public class Point2DNormalizer {
      */
     @SuppressWarnings("DuplicatedCode")
     private void computeLimits() {
-        for (final Point2D point : mPoints) {
-            final double inhomX = point.getInhomX();
-            final double inhomY = point.getInhomY();
-            if (inhomX < mMinInhomX) {
-                mMinInhomX = inhomX;
+        for (final var point : points) {
+            final var inhomX = point.getInhomX();
+            final var inhomY = point.getInhomY();
+            if (inhomX < minInhomX) {
+                minInhomX = inhomX;
             }
-            if (inhomY < mMinInhomY) {
-                mMinInhomY = inhomY;
+            if (inhomY < minInhomY) {
+                minInhomY = inhomY;
             }
 
-            if (inhomX > mMaxInhomX) {
-                mMaxInhomX = inhomX;
+            if (inhomX > maxInhomX) {
+                maxInhomX = inhomX;
             }
-            if (inhomY > mMaxInhomY) {
-                mMaxInhomY = inhomY;
+            if (inhomY > maxInhomY) {
+                maxInhomY = inhomY;
             }
         }
     }
@@ -377,7 +372,7 @@ public class Point2DNormalizer {
         if (points.size() < MIN_POINTS) {
             throw new IllegalArgumentException();
         }
-        mPoints = points;
+        this.points = points;
     }
 
     /**
@@ -385,11 +380,11 @@ public class Point2DNormalizer {
      */
     private void reset() {
         // reset result
-        mTransformation = mInverseTransformation = null;
+        transformation = inverseTransformation = null;
         // reset limits
-        mMinInhomX = mMinInhomY = Double.MAX_VALUE;
-        mMaxInhomX = mMaxInhomY = -Double.MAX_VALUE;
-        mScaleX = mScaleY = 1.0;
-        mCentroidX = mCentroidY = 0.0;
+        minInhomX = minInhomY = Double.MAX_VALUE;
+        maxInhomX = maxInhomY = -Double.MAX_VALUE;
+        scaleX = scaleY = 1.0;
+        centroidX = centroidY = 0.0;
     }
 }

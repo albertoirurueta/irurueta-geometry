@@ -18,8 +18,7 @@ package com.irurueta.geometry;
 /**
  * Raised when provided pinhole camera intrinsic parameters matrix is not valid.
  */
-public class InvalidPinholeCameraIntrinsicParametersException
-        extends GeometryException {
+public class InvalidPinholeCameraIntrinsicParametersException extends GeometryException {
 
     /**
      * Constructor.
@@ -43,8 +42,7 @@ public class InvalidPinholeCameraIntrinsicParametersException
      * @param message Message describing the cause of the exception.
      * @param cause   Instance containing the cause of the exception.
      */
-    public InvalidPinholeCameraIntrinsicParametersException(final String message,
-                                                            final Throwable cause) {
+    public InvalidPinholeCameraIntrinsicParametersException(final String message, final Throwable cause) {
         super(message, cause);
     }
 

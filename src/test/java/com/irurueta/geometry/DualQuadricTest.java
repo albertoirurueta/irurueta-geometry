@@ -17,14 +17,13 @@ package com.irurueta.geometry;
 
 import com.irurueta.algebra.*;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class DualQuadricTest {
+class DualQuadricTest {
 
     private static final double MIN_RANDOM_VALUE = -10.0;
     private static final double MAX_RANDOM_VALUE = 10.0;
@@ -39,7 +38,7 @@ public class DualQuadricTest {
     private static final int TIMES = 10;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(4, BaseQuadric.BASEQUADRIC_MATRIX_ROW_SIZE);
         assertEquals(4, BaseQuadric.BASEQUADRIC_MATRIX_COLUMN_SIZE);
         assertEquals(10, BaseQuadric.N_PARAMS);
@@ -49,14 +48,13 @@ public class DualQuadricTest {
     }
 
     @Test
-    public void testConstructor() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException,
+    void testConstructor() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException,
             DecomposerException, CoincidentPlanesException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
         // Constructor
-        DualQuadric dualQuadric = new DualQuadric();
+        var dualQuadric = new DualQuadric();
         assertEquals(0.0, dualQuadric.getA(), 0.0);
         assertEquals(0.0, dualQuadric.getB(), 0.0);
         assertEquals(0.0, dualQuadric.getC(), 0.0);
@@ -70,16 +68,16 @@ public class DualQuadricTest {
         assertFalse(dualQuadric.isNormalized());
 
         // Constructor with params
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         dualQuadric = new DualQuadric(a, b, c, d, e, f, g, h, i, j);
         assertEquals(a, dualQuadric.getA(), 0.0);
         assertEquals(b, dualQuadric.getB(), 0.0);
@@ -135,62 +133,50 @@ public class DualQuadricTest {
         assertEquals(m.getElementAt(3, 3), dualQuadric.getJ(), 0.0);
 
         // Constructor using matrix with wrong size exception
-        m = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS + 1);
-        dualQuadric = null;
-        try {
-            dualQuadric = new DualQuadric(m);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(dualQuadric);
+        final var wrong1 = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS + 1);
+        assertThrows(IllegalArgumentException.class, () -> new DualQuadric(wrong1));
 
         // Constructor using non-symmetric matrix
-        m = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS);
-        m.setElementAt(0, 0, a);
-        m.setElementAt(1, 1, b);
-        m.setElementAt(2, 2, c);
-        m.setElementAt(3, 3, j);
-        m.setElementAt(1, 0, d);
-        m.setElementAt(0, 1, d + 1.0);
-        m.setElementAt(2, 1, e);
-        m.setElementAt(1, 2, e + 1.0);
-        m.setElementAt(2, 0, f);
-        m.setElementAt(0, 2, f + 1.0);
-        m.setElementAt(3, 0, g);
-        m.setElementAt(0, 3, g + 1.0);
-        m.setElementAt(3, 1, h);
-        m.setElementAt(1, 3, h + 1.0);
-        m.setElementAt(3, 2, i);
-        m.setElementAt(2, 3, i + 1.0);
+        final var wrong2 = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS);
+        wrong2.setElementAt(0, 0, a);
+        wrong2.setElementAt(1, 1, b);
+        wrong2.setElementAt(2, 2, c);
+        wrong2.setElementAt(3, 3, j);
+        wrong2.setElementAt(1, 0, d);
+        wrong2.setElementAt(0, 1, d + 1.0);
+        wrong2.setElementAt(2, 1, e);
+        wrong2.setElementAt(1, 2, e + 1.0);
+        wrong2.setElementAt(2, 0, f);
+        wrong2.setElementAt(0, 2, f + 1.0);
+        wrong2.setElementAt(3, 0, g);
+        wrong2.setElementAt(0, 3, g + 1.0);
+        wrong2.setElementAt(3, 1, h);
+        wrong2.setElementAt(1, 3, h + 1.0);
+        wrong2.setElementAt(3, 2, i);
+        wrong2.setElementAt(2, 3, i + 1.0);
 
-        try {
-            dualQuadric = new DualQuadric(m);
-            fail("NonSymmetricMatrixException expected but not thrown");
-        } catch (final NonSymmetricMatrixException ignore) {
-        }
-        assertNull(dualQuadric);
+        assertThrows(NonSymmetricMatrixException.class, () -> new DualQuadric(wrong2));
 
         // Constructor from 9 planes
-        m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        Plane plane1 = new Plane(m.getElementAt(0, 0), m.getElementAt(0, 1),
+        var plane1 = new Plane(m.getElementAt(0, 0), m.getElementAt(0, 1),
                 m.getElementAt(0, 2), m.getElementAt(0, 3));
-        Plane plane2 = new Plane(m.getElementAt(1, 0), m.getElementAt(1, 1),
+        var plane2 = new Plane(m.getElementAt(1, 0), m.getElementAt(1, 1),
                 m.getElementAt(1, 2), m.getElementAt(1, 3));
-        Plane plane3 = new Plane(m.getElementAt(2, 0), m.getElementAt(2, 1),
+        var plane3 = new Plane(m.getElementAt(2, 0), m.getElementAt(2, 1),
                 m.getElementAt(2, 2), m.getElementAt(2, 3));
-        Plane plane4 = new Plane(m.getElementAt(3, 0), m.getElementAt(3, 1),
+        var plane4 = new Plane(m.getElementAt(3, 0), m.getElementAt(3, 1),
                 m.getElementAt(3, 2), m.getElementAt(3, 3));
-        Plane plane5 = new Plane(m.getElementAt(4, 0), m.getElementAt(4, 1),
+        var plane5 = new Plane(m.getElementAt(4, 0), m.getElementAt(4, 1),
                 m.getElementAt(4, 2), m.getElementAt(4, 3));
-        Plane plane6 = new Plane(m.getElementAt(5, 0), m.getElementAt(5, 1),
+        var plane6 = new Plane(m.getElementAt(5, 0), m.getElementAt(5, 1),
                 m.getElementAt(5, 2), m.getElementAt(5, 3));
-        Plane plane7 = new Plane(m.getElementAt(6, 0), m.getElementAt(6, 1),
+        var plane7 = new Plane(m.getElementAt(6, 0), m.getElementAt(6, 1),
                 m.getElementAt(6, 2), m.getElementAt(6, 3));
-        Plane plane8 = new Plane(m.getElementAt(7, 0), m.getElementAt(7, 1),
+        var plane8 = new Plane(m.getElementAt(7, 0), m.getElementAt(7, 1),
                 m.getElementAt(7, 2), m.getElementAt(7, 3));
-        Plane plane9 = new Plane(m.getElementAt(8, 0), m.getElementAt(8, 1),
+        var plane9 = new Plane(m.getElementAt(8, 0), m.getElementAt(8, 1),
                 m.getElementAt(8, 2), m.getElementAt(8, 3));
 
         plane1.normalize();
@@ -205,11 +191,11 @@ public class DualQuadricTest {
 
         // estimate dual quadric that lies inside of provided 9 planes
 
-        Matrix m2 = new Matrix(9, 10);
-        double pA = plane1.getA();
-        double pB = plane1.getB();
-        double pC = plane1.getC();
-        double pD = plane1.getD();
+        var m2 = new Matrix(9, 10);
+        var pA = plane1.getA();
+        var pB = plane1.getB();
+        var pC = plane1.getC();
+        var pD = plane1.getD();
         m2.setElementAt(0, 0, pA * pA);
         m2.setElementAt(0, 1, pB * pB);
         m2.setElementAt(0, 2, pC * pC);
@@ -334,8 +320,7 @@ public class DualQuadricTest {
         m2.setElementAt(8, 9, pD * pD);
 
         while (com.irurueta.algebra.Utils.rank(m2) < 9) {
-            m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             plane1 = new Plane(m.getElementAt(0, 0), m.getElementAt(0, 1),
                     m.getElementAt(0, 2), m.getElementAt(0, 3));
@@ -497,8 +482,7 @@ public class DualQuadricTest {
             m2.setElementAt(8, 9, pD * pD);
         }
 
-        dualQuadric = new DualQuadric(plane1, plane2, plane3, plane4, plane5,
-                plane6, plane7, plane8, plane9);
+        dualQuadric = new DualQuadric(plane1, plane2, plane3, plane4, plane5, plane6, plane7, plane8, plane9);
         assertTrue(dualQuadric.isLocus(plane1, PRECISION_ERROR));
         assertTrue(dualQuadric.isLocus(plane2, PRECISION_ERROR));
         assertTrue(dualQuadric.isLocus(plane3, PRECISION_ERROR));
@@ -510,33 +494,34 @@ public class DualQuadricTest {
         assertTrue(dualQuadric.isLocus(plane9, PRECISION_ERROR));
 
         // Force CoincidentPlanesException
-        dualQuadric = null;
-        try {
-            dualQuadric = new DualQuadric(plane1, plane2, plane3, plane4,
-                    plane5, plane6, plane7, plane8, plane8);
-            fail("CoincidentPlanesException expected but not thrown");
-        } catch (final CoincidentPlanesException ignore) {
-        }
-        assertNull(dualQuadric);
+        final var finalPlane1 = plane1;
+        final var finalPlane2 = plane2;
+        final var finalPlane3 = plane3;
+        final var finalPlane4 = plane4;
+        final var finalPlane5 = plane5;
+        final var finalPlane6 = plane6;
+        final var finalPlane7 = plane7;
+        final var finalPlane8 = plane8;
+        assertThrows(CoincidentPlanesException.class, () -> new DualQuadric(finalPlane1, finalPlane2, finalPlane3,
+                finalPlane4, finalPlane5, finalPlane6, finalPlane7, finalPlane8, finalPlane8));
     }
 
     @Test
-    public void testGettersAndSetters() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testGettersAndSetters() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        DualQuadric dualQuadric = new DualQuadric();
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var dualQuadric = new DualQuadric();
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         dualQuadric.setA(a);
         dualQuadric.setB(b);
         dualQuadric.setC(c);
@@ -581,7 +566,7 @@ public class DualQuadricTest {
         assertEquals(j, dualQuadric.getJ(), 0.0);
 
         dualQuadric = new DualQuadric();
-        final Matrix m = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS);
+        final var m = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS);
         a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -621,23 +606,22 @@ public class DualQuadricTest {
     }
 
     @Test
-    public void testAsMatrix() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testAsMatrix() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        final DualQuadric dualQuadric = new DualQuadric();
-        final Matrix m = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS);
-        final double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var dualQuadric = new DualQuadric();
+        final var m = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS);
+        final var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         m.setElementAt(0, 0, a);
         m.setElementAt(1, 1, b);
         m.setElementAt(2, 2, c);
@@ -655,38 +639,35 @@ public class DualQuadricTest {
         m.setElementAt(3, 2, i);
         m.setElementAt(2, 3, i);
         dualQuadric.setParameters(m);
-        final Matrix m2 = dualQuadric.asMatrix();
+        final var m2 = dualQuadric.asMatrix();
 
         assertTrue(m.equals(m2, PRECISION_ERROR));
     }
 
     @Test
-    public void testIsLocus() throws WrongSizeException, DecomposerException,
-            NotReadyException, LockedException,
-            com.irurueta.algebra.NotAvailableException,
-            RankDeficientMatrixException, IllegalArgumentException,
+    void testIsLocus() throws WrongSizeException, DecomposerException, NotReadyException, LockedException,
+            com.irurueta.algebra.NotAvailableException, RankDeficientMatrixException, IllegalArgumentException,
             NonSymmetricMatrixException {
 
-        Matrix m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        Plane plane1 = new Plane(m.getElementAt(0, 0), m.getElementAt(0, 1),
+        var plane1 = new Plane(m.getElementAt(0, 0), m.getElementAt(0, 1),
                 m.getElementAt(0, 2), m.getElementAt(0, 3));
-        Plane plane2 = new Plane(m.getElementAt(1, 0), m.getElementAt(1, 1),
+        var plane2 = new Plane(m.getElementAt(1, 0), m.getElementAt(1, 1),
                 m.getElementAt(1, 2), m.getElementAt(1, 3));
-        Plane plane3 = new Plane(m.getElementAt(2, 0), m.getElementAt(2, 1),
+        var plane3 = new Plane(m.getElementAt(2, 0), m.getElementAt(2, 1),
                 m.getElementAt(2, 2), m.getElementAt(2, 3));
-        Plane plane4 = new Plane(m.getElementAt(3, 0), m.getElementAt(3, 1),
+        var plane4 = new Plane(m.getElementAt(3, 0), m.getElementAt(3, 1),
                 m.getElementAt(3, 2), m.getElementAt(3, 3));
-        Plane plane5 = new Plane(m.getElementAt(4, 0), m.getElementAt(4, 1),
+        var plane5 = new Plane(m.getElementAt(4, 0), m.getElementAt(4, 1),
                 m.getElementAt(4, 2), m.getElementAt(4, 3));
-        Plane plane6 = new Plane(m.getElementAt(5, 0), m.getElementAt(5, 1),
+        var plane6 = new Plane(m.getElementAt(5, 0), m.getElementAt(5, 1),
                 m.getElementAt(5, 2), m.getElementAt(5, 3));
-        Plane plane7 = new Plane(m.getElementAt(6, 0), m.getElementAt(6, 1),
+        var plane7 = new Plane(m.getElementAt(6, 0), m.getElementAt(6, 1),
                 m.getElementAt(6, 2), m.getElementAt(6, 3));
-        Plane plane8 = new Plane(m.getElementAt(7, 0), m.getElementAt(7, 1),
+        var plane8 = new Plane(m.getElementAt(7, 0), m.getElementAt(7, 1),
                 m.getElementAt(7, 2), m.getElementAt(7, 3));
-        Plane plane9 = new Plane(m.getElementAt(8, 0), m.getElementAt(8, 1),
+        var plane9 = new Plane(m.getElementAt(8, 0), m.getElementAt(8, 1),
                 m.getElementAt(8, 2), m.getElementAt(8, 3));
 
         plane1.normalize();
@@ -701,11 +682,11 @@ public class DualQuadricTest {
 
         // estimate dual quadric that lies inside of provided 9 planes
 
-        Matrix m2 = new Matrix(9, 10);
-        double pA = plane1.getA();
-        double pB = plane1.getB();
-        double pC = plane1.getC();
-        double pD = plane1.getD();
+        var m2 = new Matrix(9, 10);
+        var pA = plane1.getA();
+        var pB = plane1.getB();
+        var pC = plane1.getC();
+        var pD = plane1.getD();
         m2.setElementAt(0, 0, pA * pA);
         m2.setElementAt(0, 1, pB * pB);
         m2.setElementAt(0, 2, pC * pC);
@@ -830,8 +811,7 @@ public class DualQuadricTest {
         m2.setElementAt(8, 9, pD * pD);
 
         while (com.irurueta.algebra.Utils.rank(m2) < 9) {
-            m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             plane1 = new Plane(m.getElementAt(0, 0), m.getElementAt(0, 1),
                     m.getElementAt(0, 2), m.getElementAt(0, 3));
@@ -993,34 +973,33 @@ public class DualQuadricTest {
             m2.setElementAt(8, 9, pD * pD);
         }
 
-        final SingularValueDecomposer decomposer = new SingularValueDecomposer(m2);
+        final var decomposer = new SingularValueDecomposer(m2);
         decomposer.decompose();
 
-        final Matrix v = decomposer.getV();
+        final var v = decomposer.getV();
 
-        final double a = v.getElementAt(0, 9);
-        final double b = v.getElementAt(1, 9);
-        final double c = v.getElementAt(2, 9);
-        final double d = v.getElementAt(3, 9);
+        final var a = v.getElementAt(0, 9);
+        final var b = v.getElementAt(1, 9);
+        final var c = v.getElementAt(2, 9);
+        final var d = v.getElementAt(3, 9);
 
-        final double f = v.getElementAt(4, 9);
-        final double e = v.getElementAt(5, 9);
+        final var f = v.getElementAt(4, 9);
+        final var e = v.getElementAt(5, 9);
 
-        final double g = v.getElementAt(6, 9);
-        final double h = v.getElementAt(7, 9);
-        final double i = v.getElementAt(8, 9);
-        final double j = v.getElementAt(9, 9);
+        final var g = v.getElementAt(6, 9);
+        final var h = v.getElementAt(7, 9);
+        final var i = v.getElementAt(8, 9);
+        final var j = v.getElementAt(9, 9);
 
-        final Matrix dualQuadricPlane = new Matrix(HOM_COORDS, 1);
+        final var dualQuadricPlane = new Matrix(HOM_COORDS, 1);
         dualQuadricPlane.setElementAt(0, 0, plane1.getA());
         dualQuadricPlane.setElementAt(1, 0, plane1.getB());
         dualQuadricPlane.setElementAt(2, 0, plane1.getC());
 
-        double norm = com.irurueta.algebra.Utils.normF(dualQuadricPlane);
+        var norm = com.irurueta.algebra.Utils.normF(dualQuadricPlane);
         dualQuadricPlane.multiplyByScalar(1.0 / norm);
 
-        final Matrix dualQuadricMatrix = new Matrix(DUAL_QUADRIC_ROWS,
-                DUAL_QUADRIC_COLS);
+        final var dualQuadricMatrix = new Matrix(DUAL_QUADRIC_ROWS, DUAL_QUADRIC_COLS);
         dualQuadricMatrix.setElementAt(0, 0, a);
         dualQuadricMatrix.setElementAt(1, 1, b);
         dualQuadricMatrix.setElementAt(2, 2, c);
@@ -1042,15 +1021,14 @@ public class DualQuadricTest {
         dualQuadricMatrix.multiplyByScalar(1.0 / norm);
 
         // find point where line is tangent to quadric
-        final Matrix homPointMatrix = dualQuadricMatrix.multiplyAndReturnNew(
-                dualQuadricPlane);
+        final var homPointMatrix = dualQuadricMatrix.multiplyAndReturnNew(dualQuadricPlane);
 
         // add director vector of tangent plane to get a point outside of quadric
-        double directVectorA = dualQuadricPlane.getElementAtIndex(0);
-        double directVectorB = dualQuadricPlane.getElementAtIndex(1);
-        double directVectorC = dualQuadricPlane.getElementAtIndex(2);
-        final double directVectorNorm = Math.sqrt(directVectorA * directVectorA +
-                directVectorB * directVectorB + directVectorC * directVectorC);
+        var directVectorA = dualQuadricPlane.getElementAtIndex(0);
+        var directVectorB = dualQuadricPlane.getElementAtIndex(1);
+        var directVectorC = dualQuadricPlane.getElementAtIndex(2);
+        final var directVectorNorm = Math.sqrt(directVectorA * directVectorA + directVectorB * directVectorB
+                + directVectorC * directVectorC);
         directVectorA /= directVectorNorm;
         directVectorB /= directVectorNorm;
         directVectorC /= directVectorNorm;
@@ -1066,19 +1044,17 @@ public class DualQuadricTest {
         homPointMatrix.multiplyByScalar(1.0 / norm);
 
         // get quadric matrix by inverting dual quadric matrix
-        Matrix quadricMatrix = com.irurueta.algebra.Utils.inverse(
-                dualQuadricMatrix);
+        var quadricMatrix = com.irurueta.algebra.Utils.inverse(dualQuadricMatrix);
 
         // find plane vector outside dual quadric as the product of quadric
         // matrix and point outside of quadric
-        final Matrix outsidePlaneMatrix = quadricMatrix.multiplyAndReturnNew(
-                homPointMatrix);
+        final var outsidePlaneMatrix = quadricMatrix.multiplyAndReturnNew(homPointMatrix);
 
         // instantiate plane outside dual quadric using computed vector
-        final Plane outsidePlane = new Plane(outsidePlaneMatrix.toArray());
+        final var outsidePlane = new Plane(outsidePlaneMatrix.toArray());
 
         // instantiate new dual quadric instance
-        final DualQuadric dualQuadric = new DualQuadric(dualQuadricMatrix);
+        final var dualQuadric = new DualQuadric(dualQuadricMatrix);
 
         // check that initial 9 planes lie inside the dual quadric
         assertTrue(dualQuadric.isLocus(plane1, LOCUS_THRESHOLD));
@@ -1096,121 +1072,112 @@ public class DualQuadricTest {
     }
 
     @Test
-    public void testAngleBetweenPlanes() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testAngleBetweenPlanes() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
 
         // initial planes
-        final Matrix planeMatrix1 = Matrix.createWithUniformRandomValues(HOM_COORDS,
+        final var planeMatrix1 = Matrix.createWithUniformRandomValues(HOM_COORDS,
                 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Matrix planeMatrix2 = Matrix.createWithUniformRandomValues(HOM_COORDS,
+        final var planeMatrix2 = Matrix.createWithUniformRandomValues(HOM_COORDS,
                 1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
         // transformation matrix
-        final Matrix transform = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var transform = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
 
         // transform planes
-        final Matrix tPlane1 = transform.multiplyAndReturnNew(planeMatrix1);
-        final Matrix tPlane2 = transform.multiplyAndReturnNew(planeMatrix2);
+        final var tPlane1 = transform.multiplyAndReturnNew(planeMatrix1);
+        final var tPlane2 = transform.multiplyAndReturnNew(planeMatrix2);
 
-        final double norm1 = com.irurueta.algebra.Utils.normF(tPlane1);
-        final double norm2 = com.irurueta.algebra.Utils.normF(tPlane2);
+        final var norm1 = com.irurueta.algebra.Utils.normF(tPlane1);
+        final var norm2 = com.irurueta.algebra.Utils.normF(tPlane2);
 
-        final double numerator = tPlane1.transposeAndReturnNew().multiplyAndReturnNew(
-                tPlane2).getElementAt(0, 0);
+        final var numerator = tPlane1.transposeAndReturnNew().multiplyAndReturnNew(tPlane2)
+                .getElementAt(0, 0);
 
-        final double cosAngle = numerator / (norm1 * norm2);
+        final var cosAngle = numerator / (norm1 * norm2);
 
-        final double angle = Math.acos(cosAngle);
+        final var angle = Math.acos(cosAngle);
 
         // compute dual quadric matrix as the product of transposed transform
         // matrix with itself
-        final Matrix transposedTransform = transform.transposeAndReturnNew();
-        final Matrix dualQuadricMatrix = transposedTransform.multiplyAndReturnNew(
-                transform);
+        final var transposedTransform = transform.transposeAndReturnNew();
+        final var dualQuadricMatrix = transposedTransform.multiplyAndReturnNew(transform);
 
         // normalize conic matrix
-        final double normDualQuadric = com.irurueta.algebra.Utils.normF(
-                dualQuadricMatrix);
+        final var normDualQuadric = com.irurueta.algebra.Utils.normF(dualQuadricMatrix);
         dualQuadricMatrix.multiplyByScalar(1.0 / normDualQuadric);
 
-        final DualQuadric dualQuadric = new DualQuadric(dualQuadricMatrix);
+        final var dualQuadric = new DualQuadric(dualQuadricMatrix);
 
-        final Plane plane1 = new Plane(planeMatrix1.getElementAt(0, 0),
+        final var plane1 = new Plane(planeMatrix1.getElementAt(0, 0),
                 planeMatrix1.getElementAt(1, 0),
                 planeMatrix1.getElementAt(2, 0),
                 planeMatrix1.getElementAt(3, 0));
-        final Plane plane2 = new Plane(planeMatrix2.getElementAt(0, 0),
+        final var plane2 = new Plane(planeMatrix2.getElementAt(0, 0),
                 planeMatrix2.getElementAt(1, 0),
                 planeMatrix2.getElementAt(2, 0),
                 planeMatrix2.getElementAt(3, 0));
 
-        assertEquals(dualQuadric.angleBetweenPlanes(plane1, plane2), angle,
-                PRECISION_ERROR);
+        assertEquals(dualQuadric.angleBetweenPlanes(plane1, plane2), angle, PRECISION_ERROR);
     }
 
     @Test
-    public void testArePerpendicularPlanes() throws WrongSizeException,
-            DecomposerException, RankDeficientMatrixException,
+    void testArePerpendicularPlanes() throws WrongSizeException, DecomposerException, RankDeficientMatrixException,
             IllegalArgumentException, NonSymmetricMatrixException {
 
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
             // trying perpendicular angle
-            Matrix matrixPlane1 = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                    1, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            var matrixPlane1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
 
-            double norm = com.irurueta.algebra.Utils.normF(matrixPlane1);
+            var norm = com.irurueta.algebra.Utils.normF(matrixPlane1);
             matrixPlane1.multiplyByScalar(1.0 / norm);
 
-            Matrix matrixPlane2 = new Matrix(HOM_COORDS, 1);
-            matrixPlane2.setElementAt(0, 0, matrixPlane1.getElementAt(1, 0) +
-                    matrixPlane1.getElementAt(2, 0));
+            var matrixPlane2 = new Matrix(HOM_COORDS, 1);
+            matrixPlane2.setElementAt(0, 0, matrixPlane1.getElementAt(1, 0)
+                    + matrixPlane1.getElementAt(2, 0));
             matrixPlane2.setElementAt(1, 0, -matrixPlane1.getElementAt(0, 0));
             matrixPlane2.setElementAt(2, 0, -matrixPlane1.getElementAt(0, 0));
 
             norm = com.irurueta.algebra.Utils.normF(matrixPlane2);
             matrixPlane2.multiplyByScalar(1.0 / norm);
 
-            Matrix transform = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                    HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            var transform = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
             while (com.irurueta.algebra.Utils.rank(transform) < 3) {
-                transform = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                        HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                transform = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
             }
 
-            final Matrix invTransform = com.irurueta.algebra.Utils.inverse(transform);
+            final var invTransform = com.irurueta.algebra.Utils.inverse(transform);
 
-            Matrix transformPlaneMatrix1 = transform.multiplyAndReturnNew(
-                    matrixPlane1);
-            Matrix transformPlaneMatrix2 = transform.multiplyAndReturnNew(
-                    matrixPlane2);
+            var transformPlaneMatrix1 = transform.multiplyAndReturnNew(matrixPlane1);
+            var transformPlaneMatrix2 = transform.multiplyAndReturnNew(matrixPlane2);
 
-            final Matrix transInvTransform = invTransform.transposeAndReturnNew();
+            final var transInvTransform = invTransform.transposeAndReturnNew();
 
-            final Matrix dualQuadricMatrix = transInvTransform.multiplyAndReturnNew(
-                    invTransform);
+            final var dualQuadricMatrix = transInvTransform.multiplyAndReturnNew(invTransform);
             norm = com.irurueta.algebra.Utils.normF(dualQuadricMatrix);
             dualQuadricMatrix.multiplyByScalar(1.0 / norm);
 
-            Plane transformPlane1 = new Plane(transformPlaneMatrix1.toArray());
-            Plane transformPlane2 = new Plane(transformPlaneMatrix2.toArray());
+            var transformPlane1 = new Plane(transformPlaneMatrix1.toArray());
+            var transformPlane2 = new Plane(transformPlaneMatrix2.toArray());
 
-            DualQuadric dualQuadric = new DualQuadric(dualQuadricMatrix);
+            var dualQuadric = new DualQuadric(dualQuadricMatrix);
 
-            assertTrue(dualQuadric.arePerpendicularPlanes(transformPlane1,
-                    transformPlane2, PERPENDICULAR_THRESHOLD));
+            assertTrue(dualQuadric.arePerpendicularPlanes(transformPlane1, transformPlane2, PERPENDICULAR_THRESHOLD));
 
             // trying non-perpendicular points
             double dotProduct;
 
-            matrixPlane1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            matrixPlane1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
             norm = com.irurueta.algebra.Utils.normF(matrixPlane1);
             matrixPlane1.multiplyByScalar(1.0 / norm);
 
-            matrixPlane2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            matrixPlane2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
             norm = com.irurueta.algebra.Utils.normF(matrixPlane2);
             matrixPlane2.multiplyByScalar(1.0 / norm);
 
@@ -1219,18 +1186,18 @@ public class DualQuadricTest {
 
             // ensure lines are not perpendicular
             while (Math.abs(dotProduct) < PERPENDICULAR_THRESHOLD) {
-                matrixPlane1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                        MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                matrixPlane1 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
                 norm = com.irurueta.algebra.Utils.normF(matrixPlane1);
                 matrixPlane1.multiplyByScalar(1.0 / norm);
 
-                matrixPlane2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1,
-                        MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                matrixPlane2 = Matrix.createWithUniformRandomValues(HOM_COORDS, 1, MIN_RANDOM_VALUE,
+                        MAX_RANDOM_VALUE);
                 norm = com.irurueta.algebra.Utils.normF(matrixPlane2);
                 matrixPlane2.multiplyByScalar(1.0 / norm);
 
-                dotProduct = matrixPlane1.transposeAndReturnNew().
-                        multiplyAndReturnNew(matrixPlane2).getElementAt(0, 0);
+                dotProduct = matrixPlane1.transposeAndReturnNew().multiplyAndReturnNew(matrixPlane2)
+                        .getElementAt(0, 0);
             }
 
             transformPlaneMatrix1 = transform.multiplyAndReturnNew(matrixPlane1);
@@ -1242,8 +1209,7 @@ public class DualQuadricTest {
             if (dualQuadric.arePerpendicularPlanes(transformPlane1, transformPlane2, PERPENDICULAR_THRESHOLD)) {
                 continue;
             }
-            assertFalse(dualQuadric.arePerpendicularPlanes(transformPlane1,
-                    transformPlane2, PERPENDICULAR_THRESHOLD));
+            assertFalse(dualQuadric.arePerpendicularPlanes(transformPlane1, transformPlane2, PERPENDICULAR_THRESHOLD));
 
             dualQuadric = DualQuadric.createCanonicalDualAbsoluteQuadric();
             transformPlane1 = new Plane(1.0, 0.0, 0.0, 0.0);
@@ -1257,45 +1223,41 @@ public class DualQuadricTest {
     }
 
     @Test
-    public void testGetQuadric() throws WrongSizeException, DecomposerException,
-            RankDeficientMatrixException, IllegalArgumentException,
-            NonSymmetricMatrixException, QuadricNotAvailableException {
+    void testGetQuadric() throws WrongSizeException, DecomposerException, RankDeficientMatrixException,
+            IllegalArgumentException, NonSymmetricMatrixException, QuadricNotAvailableException {
 
-        Matrix transformMatrix = Matrix.createWithUniformRandomValues(
-                HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var transformMatrix = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                MAX_RANDOM_VALUE);
         while (com.irurueta.algebra.Utils.rank(transformMatrix) != 4) {
-            transformMatrix = Matrix.createWithUniformRandomValues(HOM_COORDS,
-                    HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            transformMatrix = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE,
+                    MAX_RANDOM_VALUE);
         }
 
-        final Matrix transformTransposedMatrix =
-                transformMatrix.transposeAndReturnNew();
+        final var transformTransposedMatrix = transformMatrix.transposeAndReturnNew();
 
-        final Matrix dualQuadricMatrix =
-                transformTransposedMatrix.multiplyAndReturnNew(transformMatrix);
+        final var dualQuadricMatrix = transformTransposedMatrix.multiplyAndReturnNew(transformMatrix);
 
-        final Matrix quadricMatrix1 = com.irurueta.algebra.Utils.inverse(
-                dualQuadricMatrix);
+        final var quadricMatrix1 = com.irurueta.algebra.Utils.inverse(dualQuadricMatrix);
 
-        final DualQuadric dualQuadric = new DualQuadric(dualQuadricMatrix);
+        final var dualQuadric = new DualQuadric(dualQuadricMatrix);
 
-        final Quadric quadric = dualQuadric.getQuadric();
-        final Quadric quadric2 = new Quadric();
+        final var quadric = dualQuadric.getQuadric();
+        final var quadric2 = new Quadric();
         dualQuadric.quadric(quadric2);
 
         assertEquals(quadric.asMatrix(), quadric2.asMatrix());
 
-        final Matrix quadricMatrix2 = quadric.asMatrix();
+        final var quadricMatrix2 = quadric.asMatrix();
 
         // normalize quadric matrices
-        double norm = com.irurueta.algebra.Utils.normF(quadricMatrix1);
+        var norm = com.irurueta.algebra.Utils.normF(quadricMatrix1);
         quadricMatrix1.multiplyByScalar(1.0 / norm);
 
         norm = com.irurueta.algebra.Utils.normF(quadricMatrix2);
         quadricMatrix2.multiplyByScalar(1.0 / norm);
 
         // compute difference of normalized quadric matrices
-        final Matrix diffMatrix = quadricMatrix1.subtractAndReturnNew(quadricMatrix2);
+        final var diffMatrix = quadricMatrix1.subtractAndReturnNew(quadricMatrix2);
 
         // ensure that difference matrix is almost zero by checking its norm
         norm = com.irurueta.algebra.Utils.normF(diffMatrix);
@@ -1303,27 +1265,26 @@ public class DualQuadricTest {
     }
 
     @Test
-    public void testSetParametersFromPlanes() throws WrongSizeException, DecomposerException, CoincidentPlanesException {
-        Matrix m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+    void testSetParametersFromPlanes() throws WrongSizeException, DecomposerException, CoincidentPlanesException {
+        var m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
-        Plane plane1 = new Plane(m.getElementAt(0, 0), m.getElementAt(0, 1),
+        var plane1 = new Plane(m.getElementAt(0, 0), m.getElementAt(0, 1),
                 m.getElementAt(0, 2), m.getElementAt(0, 3));
-        Plane plane2 = new Plane(m.getElementAt(1, 0), m.getElementAt(1, 1),
+        var plane2 = new Plane(m.getElementAt(1, 0), m.getElementAt(1, 1),
                 m.getElementAt(1, 2), m.getElementAt(1, 3));
-        Plane plane3 = new Plane(m.getElementAt(2, 0), m.getElementAt(2, 1),
+        var plane3 = new Plane(m.getElementAt(2, 0), m.getElementAt(2, 1),
                 m.getElementAt(2, 2), m.getElementAt(2, 3));
-        Plane plane4 = new Plane(m.getElementAt(3, 0), m.getElementAt(3, 1),
+        var plane4 = new Plane(m.getElementAt(3, 0), m.getElementAt(3, 1),
                 m.getElementAt(3, 2), m.getElementAt(3, 3));
-        Plane plane5 = new Plane(m.getElementAt(4, 0), m.getElementAt(4, 1),
+        var plane5 = new Plane(m.getElementAt(4, 0), m.getElementAt(4, 1),
                 m.getElementAt(4, 2), m.getElementAt(4, 3));
-        Plane plane6 = new Plane(m.getElementAt(5, 0), m.getElementAt(5, 1),
+        var plane6 = new Plane(m.getElementAt(5, 0), m.getElementAt(5, 1),
                 m.getElementAt(5, 2), m.getElementAt(5, 3));
-        Plane plane7 = new Plane(m.getElementAt(6, 0), m.getElementAt(6, 1),
+        var plane7 = new Plane(m.getElementAt(6, 0), m.getElementAt(6, 1),
                 m.getElementAt(6, 2), m.getElementAt(6, 3));
-        Plane plane8 = new Plane(m.getElementAt(7, 0), m.getElementAt(7, 1),
+        var plane8 = new Plane(m.getElementAt(7, 0), m.getElementAt(7, 1),
                 m.getElementAt(7, 2), m.getElementAt(7, 3));
-        Plane plane9 = new Plane(m.getElementAt(8, 0), m.getElementAt(8, 1),
+        var plane9 = new Plane(m.getElementAt(8, 0), m.getElementAt(8, 1),
                 m.getElementAt(8, 2), m.getElementAt(8, 3));
 
         plane1.normalize();
@@ -1337,12 +1298,12 @@ public class DualQuadricTest {
         plane9.normalize();
 
         // estimate dual quadric that lies inside of provided 9 planes
-        Matrix m2 = new Matrix(9, 10);
+        var m2 = new Matrix(9, 10);
 
-        double pA = plane1.getA();
-        double pB = plane1.getB();
-        double pC = plane1.getC();
-        double pD = plane1.getD();
+        var pA = plane1.getA();
+        var pB = plane1.getB();
+        var pC = plane1.getC();
+        var pD = plane1.getD();
         m2.setElementAt(0, 0, pA * pA);
         m2.setElementAt(0, 1, pB * pB);
         m2.setElementAt(0, 2, pC * pC);
@@ -1467,8 +1428,7 @@ public class DualQuadricTest {
         m2.setElementAt(8, 9, pD * pD);
 
         while (com.irurueta.algebra.Utils.rank(m2) < 9) {
-            m = Matrix.createWithUniformRandomValues(9, HOM_COORDS,
-                    MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+            m = Matrix.createWithUniformRandomValues(9, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
 
             plane1 = new Plane(m.getElementAt(0, 0), m.getElementAt(0, 1),
                     m.getElementAt(0, 2), m.getElementAt(0, 3));
@@ -1630,8 +1590,7 @@ public class DualQuadricTest {
             m2.setElementAt(8, 9, pD * pD);
         }
 
-        final DualQuadric dualQuadric = new DualQuadric(plane1, plane2, plane3, plane4, plane5,
-                plane6, plane7, plane8, plane9);
+        final var dualQuadric = new DualQuadric(plane1, plane2, plane3, plane4, plane5, plane6, plane7, plane8, plane9);
         assertTrue(dualQuadric.isLocus(plane1, PRECISION_ERROR));
         assertTrue(dualQuadric.isLocus(plane2, PRECISION_ERROR));
         assertTrue(dualQuadric.isLocus(plane3, PRECISION_ERROR));
@@ -1643,26 +1602,29 @@ public class DualQuadricTest {
         assertTrue(dualQuadric.isLocus(plane9, PRECISION_ERROR));
 
         // Force CoincidentPlanesException
-        try {
-            dualQuadric.setParametersFromPlanes(plane1, plane2, plane3, plane4,
-                    plane5, plane6, plane7, plane8, plane8);
-            fail("CoincidentPlanesException expected but not thrown");
-        } catch (final CoincidentPlanesException ignore) {
-        }
+        final var finalPlane1 = plane1;
+        final var finalPlane2 = plane2;
+        final var finalPlane3 = plane3;
+        final var finalPlane4 = plane4;
+        final var finalPlane5 = plane5;
+        final var finalPlane6 = plane6;
+        final var finalPlane7 = plane7;
+        final var finalPlane8 = plane8;
+        assertThrows(CoincidentPlanesException.class,
+                () -> dualQuadric.setParametersFromPlanes(finalPlane1, finalPlane2, finalPlane3, finalPlane4,
+                        finalPlane5, finalPlane6, finalPlane7, finalPlane8, finalPlane8));
     }
 
     @Test
-    public void testNormalize() throws WrongSizeException,
-            IllegalArgumentException, NonSymmetricMatrixException {
+    void testNormalize() throws WrongSizeException, IllegalArgumentException, NonSymmetricMatrixException {
 
-        final Matrix t = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS,
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final Matrix transT = t.transposeAndReturnNew();
+        final var t = Matrix.createWithUniformRandomValues(HOM_COORDS, HOM_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var transT = t.transposeAndReturnNew();
 
         // make symmetric matrix
-        final Matrix dualQuadricMatrix = transT.multiplyAndReturnNew(t);
+        final var dualQuadricMatrix = transT.multiplyAndReturnNew(t);
 
-        final DualQuadric dualQuadric = new DualQuadric(dualQuadricMatrix);
+        final var dualQuadric = new DualQuadric(dualQuadricMatrix);
         assertFalse(dualQuadric.isNormalized());
 
         // normalize dual quadric
@@ -1670,19 +1632,18 @@ public class DualQuadricTest {
         assertTrue(dualQuadric.isNormalized());
 
         // return quadric as matrix
-        final Matrix dualQuadricMatrix2 = dualQuadric.asMatrix();
+        final var dualQuadricMatrix2 = dualQuadric.asMatrix();
 
         // compare that both matrices are equal up to scale, for that reason we
         // first normalize both matrices
-        double norm = com.irurueta.algebra.Utils.normF(dualQuadricMatrix);
+        var norm = com.irurueta.algebra.Utils.normF(dualQuadricMatrix);
         dualQuadricMatrix.multiplyByScalar(1.0 / norm);
 
         norm = com.irurueta.algebra.Utils.normF(dualQuadricMatrix2);
         dualQuadricMatrix2.multiplyByScalar(1.0 / norm);
 
         // compute their difference
-        final Matrix diffMatrix = dualQuadricMatrix.subtractAndReturnNew(
-                dualQuadricMatrix2);
+        final var diffMatrix = dualQuadricMatrix.subtractAndReturnNew(dualQuadricMatrix2);
 
         // finally, ensure that the norm of the difference matrix is almost zero
         // up to machine precision
@@ -1690,9 +1651,8 @@ public class DualQuadricTest {
         assertEquals(0.0, norm, PRECISION_ERROR);
 
         // check that when setting new values quadric becomes non-normalized
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double value = randomizer.nextDouble(MIN_RANDOM_VALUE,
-                MAX_RANDOM_VALUE);
+        final var randomizer = new UniformRandomizer();
+        final var value = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
         dualQuadric.setA(value);
         assertFalse(dualQuadric.isNormalized());
 
@@ -1743,8 +1703,7 @@ public class DualQuadricTest {
 
         dualQuadric.normalize();
         assertTrue(dualQuadric.isNormalized());
-        dualQuadric.setParameters(value, value, value, value, value, value,
-                value, value, value, value);
+        dualQuadric.setParameters(value, value, value, value, value, value, value, value, value, value);
         assertFalse(dualQuadric.isNormalized());
 
         dualQuadric.normalize();
@@ -1753,16 +1712,15 @@ public class DualQuadricTest {
         assertFalse(dualQuadric.isNormalized());
 
         // when setting all values to zero, attempting to normalize has no effect
-        dualQuadric.setParameters(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                0.0);
+        dualQuadric.setParameters(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
         assertFalse(dualQuadric.isNormalized());
         dualQuadric.normalize();
         assertFalse(dualQuadric.isNormalized());
     }
 
     @Test
-    public void testCreateCanonicalDualAbsoluteQuadric() throws WrongSizeException {
-        final DualQuadric daq = DualQuadric.createCanonicalDualAbsoluteQuadric();
+    void testCreateCanonicalDualAbsoluteQuadric() throws WrongSizeException {
+        final var daq = DualQuadric.createCanonicalDualAbsoluteQuadric();
 
         assertEquals(1.0, daq.getA(), 0.0);
         assertEquals(1.0, daq.getB(), 0.0);
@@ -1775,26 +1733,26 @@ public class DualQuadricTest {
         assertEquals(0.0, daq.getI(), 0.0);
         assertEquals(0.0, daq.getJ(), 0.0);
 
-        final Matrix m = Matrix.identity(4, 4);
+        final var m = Matrix.identity(4, 4);
         m.setElementAt(3, 3, 0.0);
         assertEquals(daq.asMatrix(), m);
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer();
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
 
-        double a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        double j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
-        final DualQuadric dualQuadric1 = new DualQuadric(a, b, c, d, e, f, g, h, i, j);
+        var a = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var b = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var c = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var d = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var e = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var f = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var g = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var h = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var i = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        var j = randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+        final var dualQuadric1 = new DualQuadric(a, b, c, d, e, f, g, h, i, j);
 
         // check
         assertEquals(a, dualQuadric1.getA(), 0.0);
@@ -1810,8 +1768,8 @@ public class DualQuadricTest {
         assertFalse(dualQuadric1.isNormalized());
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(dualQuadric1);
-        final DualQuadric dualQuadric2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(dualQuadric1);
+        final var dualQuadric2 = SerializationHelper.<DualQuadric>deserialize(bytes);
 
         // check
         assertEquals(dualQuadric1.getA(), dualQuadric2.getA(), 0.0);

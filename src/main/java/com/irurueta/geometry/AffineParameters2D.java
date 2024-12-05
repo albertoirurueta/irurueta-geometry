@@ -323,11 +323,11 @@ public class AffineParameters2D implements Serializable {
         }
 
         // check is upper triangular
-        final int rows = m.getRows();
-        final int cols = m.getColumns();
+        final var rows = m.getRows();
+        final var cols = m.getColumns();
 
-        for (int v = 0; v < cols; v++) {
-            for (int u = 0; u < rows; u++) {
+        for (var v = 0; v < cols; v++) {
+            for (var u = 0; u < rows; u++) {
                 if (u > v && Math.abs(m.getElementAt(u, v)) > threshold) {
                     return false;
                 }

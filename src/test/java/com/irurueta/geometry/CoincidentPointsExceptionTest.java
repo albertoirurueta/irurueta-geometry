@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CoincidentPointsExceptionTest {
+class CoincidentPointsExceptionTest {
 
     @Test
-    public void testConstructor() {
-        CoincidentPointsException ex = new CoincidentPointsException();
+    void testConstructor() {
+        var ex = new CoincidentPointsException();
         assertNotNull(ex);
 
         ex = new CoincidentPointsException("message");

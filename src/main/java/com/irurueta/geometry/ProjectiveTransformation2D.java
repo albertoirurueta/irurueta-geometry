@@ -33,8 +33,7 @@ import java.util.Arrays;
  * applied to 2D points.
  */
 @SuppressWarnings("DuplicatedCode")
-public class ProjectiveTransformation2D extends Transformation2D
-        implements Serializable {
+public class ProjectiveTransformation2D extends Transformation2D implements Serializable {
 
     /**
      * Constant indicating number of coordinates required in translation arrays.
@@ -114,7 +113,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      *              objects.
      */
     public ProjectiveTransformation2D(final double scale) {
-        final double[] diag = new double[HOM_COORDS];
+        final var diag = new double[HOM_COORDS];
         Arrays.fill(diag, scale);
         // set last element to 1.0
         diag[HOM_COORDS - 1] = 1.0;
@@ -144,9 +143,9 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public ProjectiveTransformation2D(final double scale, final Rotation2D rotation) {
         try {
-            final double[] diag = new double[INHOM_COORDS];
+            final var diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            final Matrix a = Matrix.diagonal(diag);
+            final var a = Matrix.diagonal(diag);
             a.multiply(rotation.asInhomogeneousMatrix());
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             t.setSubmatrix(0, 0, INHOM_COORDS - 1,
@@ -166,10 +165,9 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws NullPointerException raised if provided parameters are null or
      *                              if provided rotation is null.
      */
-    public ProjectiveTransformation2D(final AffineParameters2D params,
-                                      final Rotation2D rotation) {
+    public ProjectiveTransformation2D(final AffineParameters2D params, final Rotation2D rotation) {
         try {
-            final Matrix a = params.asMatrix();
+            final var a = params.asMatrix();
             a.multiply(rotation.asInhomogeneousMatrix());
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             t.setSubmatrix(0, 0, INHOM_COORDS - 1,
@@ -249,7 +247,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             throw new IllegalArgumentException();
         }
 
-        final double[] diag = new double[HOM_COORDS];
+        final var diag = new double[HOM_COORDS];
         Arrays.fill(diag, scale);
         // set last element to 1.0
         diag[HOM_COORDS - 1] = 1.0;
@@ -299,16 +297,15 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided translation does not
      *                                  have length 2.
      */
-    public ProjectiveTransformation2D(final double scale, final Rotation2D rotation,
-                                      final double[] translation) {
+    public ProjectiveTransformation2D(final double scale, final Rotation2D rotation, final double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
 
         try {
-            final double[] diag = new double[INHOM_COORDS];
+            final var diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            final Matrix a = Matrix.diagonal(diag);
+            final var a = Matrix.diagonal(diag);
             a.multiply(rotation.asInhomogeneousMatrix());
 
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
@@ -340,8 +337,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided translation does not
      *                                  have length 2 or if projective parameters array doesn't have length 3.
      */
-    public ProjectiveTransformation2D(final double scale, final Rotation2D rotation,
-                                      final double[] translation, final double[] projectiveParameters) {
+    public ProjectiveTransformation2D(final double scale, final Rotation2D rotation, final double[] translation,
+                                      final double[] projectiveParameters) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -350,10 +347,10 @@ public class ProjectiveTransformation2D extends Transformation2D
         }
 
         try {
-            final double value = projectiveParameters[HOM_COORDS - 1];
-            final double[] diag = new double[INHOM_COORDS];
+            final var value = projectiveParameters[HOM_COORDS - 1];
+            final var diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            final Matrix a = Matrix.diagonal(diag);
+            final var a = Matrix.diagonal(diag);
             a.multiply(rotation.asInhomogeneousMatrix());
 
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
@@ -387,14 +384,14 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided translation does not
      *                                  have length 2.
      */
-    public ProjectiveTransformation2D(final AffineParameters2D params,
-                                      final Rotation2D rotation, final double[] translation) {
+    public ProjectiveTransformation2D(final AffineParameters2D params, final Rotation2D rotation,
+                                      final double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
 
         try {
-            final Matrix a = params.asMatrix();
+            final var a = params.asMatrix();
             a.multiply(rotation.asInhomogeneousMatrix());
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             // set A
@@ -425,9 +422,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws IllegalArgumentException raised if provided translation does not
      *                                  have length 2 or if projective parameters array doesn't have length 3.
      */
-    public ProjectiveTransformation2D(final AffineParameters2D params,
-                                      final Rotation2D rotation, final double[] translation,
-                                      final double[] projectiveParameters) {
+    public ProjectiveTransformation2D(final AffineParameters2D params, final Rotation2D rotation,
+                                      final double[] translation, final double[] projectiveParameters) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -436,19 +432,20 @@ public class ProjectiveTransformation2D extends Transformation2D
         }
 
         try {
-            final Matrix a = params.asMatrix();
+            final var a = params.asMatrix();
             a.multiply(rotation.asInhomogeneousMatrix());
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             // set A
-            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
             // set translation
             t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
-            final double value = projectiveParameters[HOM_COORDS - 1];
+            final var value = projectiveParameters[HOM_COORDS - 1];
             t.multiplyByScalar(value);
 
-            t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1,
-                    projectiveParameters);
+            t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,
+                    HOM_COORDS - 1, projectiveParameters);
         } catch (final WrongSizeException ignore) {
             // never happens
         }
@@ -476,18 +473,16 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                                   points or numerical instabilities).
      */
     public ProjectiveTransformation2D(
-            final Point2D inputPoint1, final Point2D inputPoint2, final Point2D inputPoint3,
-            final Point2D inputPoint4, final Point2D outputPoint1, final Point2D outputPoint2,
-            final Point2D outputPoint3, final Point2D outputPoint4)
-            throws CoincidentPointsException {
+            final Point2D inputPoint1, final Point2D inputPoint2, final Point2D inputPoint3, final Point2D inputPoint4,
+            final Point2D outputPoint1, final Point2D outputPoint2, final Point2D outputPoint3,
+            final Point2D outputPoint4) throws CoincidentPointsException {
         try {
             t = new Matrix(HOM_COORDS, HOM_COORDS);
         } catch (final WrongSizeException ignore) {
             // never happens
         }
-        setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3,
-                inputPoint4, outputPoint1, outputPoint2, outputPoint3,
-                outputPoint4);
+        setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, inputPoint4, outputPoint1, outputPoint2,
+                outputPoint3, outputPoint4);
     }
 
     /**
@@ -507,12 +502,11 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                                  or numerical instabilities).
      */
     public ProjectiveTransformation2D(
-            final Line2D inputLine1, final Line2D inputLine2, final Line2D inputLine3,
-            final Line2D inputLine4, final Line2D outputLine1, final Line2D outputLine2,
-            final Line2D outputLine3, final Line2D outputLine4)
+            final Line2D inputLine1, final Line2D inputLine2, final Line2D inputLine3, final Line2D inputLine4,
+            final Line2D outputLine1, final Line2D outputLine2, final Line2D outputLine3, final Line2D outputLine4)
             throws CoincidentLinesException {
-        setTransformationFromLines(inputLine1, inputLine2, inputLine3,
-                inputLine4, outputLine1, outputLine2, outputLine3, outputLine4);
+        setTransformationFromLines(inputLine1, inputLine2, inputLine3, inputLine4, outputLine1, outputLine2,
+                outputLine3, outputLine4);
     }
 
     /**
@@ -567,7 +561,7 @@ public class ProjectiveTransformation2D extends Transformation2D
         }
 
         try {
-            final LUDecomposer decomposer = new LUDecomposer(t);
+            final var decomposer = new LUDecomposer(t);
             decomposer.decompose();
             return decomposer.isSingular();
         } catch (final AlgebraException e) {
@@ -594,10 +588,9 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @see AffineTransformation2D
      */
     public Matrix getA() {
-        final Matrix a = t.getSubmatrix(0, 0,
+        final var a = t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1);
-        a.multiplyByScalar(1.0 / t.getElementAt(HOM_COORDS - 1,
-                HOM_COORDS - 1));
+        a.multiplyByScalar(1.0 / t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1));
         return a;
     }
 
@@ -618,10 +611,8 @@ public class ProjectiveTransformation2D extends Transformation2D
             throw new IllegalArgumentException();
         }
 
-        t.setSubmatrix(0, 0, INHOM_COORDS - 1,
-                INHOM_COORDS - 1,
-                a.multiplyByScalarAndReturnNew(t.getElementAt(
-                        HOM_COORDS - 1, HOM_COORDS - 1)));
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
+                a.multiplyByScalarAndReturnNew(t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1)));
         normalized = false;
     }
 
@@ -630,7 +621,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public final void normalize() {
         if (!normalized) {
-            final double norm = Utils.normF(t);
+            final var norm = Utils.normF(t);
             if (norm > EPS) {
                 t.multiplyByScalar(1.0 / norm);
             }
@@ -651,12 +642,11 @@ public class ProjectiveTransformation2D extends Transformation2D
         // Use QR decomposition to retrieve rotation component of this
         // transformation
         normalize();
-        final RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
+        final var decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         try {
             decomposer.decompose();
-            return new Rotation2D(decomposer.getQ(),
-                    LARGE_ROTATION_MATRIX_THRESHOLD); //a large threshold is 
+            return new Rotation2D(decomposer.getQ(), LARGE_ROTATION_MATRIX_THRESHOLD); //a large threshold is
             // used because Q matrix is always assumed to be orthonormal
         } catch (final InvalidRotationMatrixException ignore) {
             return null;
@@ -673,16 +663,17 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                              transformation).
      */
     public void setRotation(final Rotation2D rotation) throws AlgebraException {
-        final Matrix rotMatrix = rotation.asInhomogeneousMatrix();
+        final var rotMatrix = rotation.asInhomogeneousMatrix();
 
         // Use QR decomposition to retrieve parameters matrix
-        final RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
+        final var decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
         // retrieves params matrix
-        final Matrix localA = decomposer.getR();
+        final var localA = decomposer.getR();
         localA.multiply(rotMatrix);
-        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, localA);
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
+                localA);
         normalized = false;
     }
 
@@ -696,7 +687,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                          transformation).
      */
     public void addRotation(final Rotation2D rotation) throws AlgebraException {
-        final Rotation2D localRotation = getRotation();
+        final var localRotation = getRotation();
         localRotation.combine(rotation);
         setRotation(localRotation);
     }
@@ -714,16 +705,16 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public void setScale(final double scale) throws AlgebraException {
         normalize();
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        final RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
-        final Matrix localA = decomposer.getR(); //params
+        final var localA = decomposer.getR(); //params
         localA.setElementAt(0, 0, scale * value);
         localA.setElementAt(1, 1, scale * value);
         localA.multiply(decomposer.getQ());
-        t.setSubmatrix(0, 0, INHOM_COORDS - 1,
-                INHOM_COORDS - 1, localA);
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
+                localA);
         normalized = false;
     }
 
@@ -738,7 +729,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                          of the internal matrix of this instance).
      */
     public AffineParameters2D getAffineParameters() throws AlgebraException {
-        final AffineParameters2D parameters = new AffineParameters2D();
+        final var parameters = new AffineParameters2D();
         getAffineParameters(parameters);
         return parameters;
     }
@@ -754,14 +745,13 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                          parameters cannot be retrieved (usually because of numerical instability
      *                          of the internal matrix of this instance).
      */
-    public void getAffineParameters(final AffineParameters2D result)
-            throws AlgebraException {
+    public void getAffineParameters(final AffineParameters2D result) throws AlgebraException {
         normalize();
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        final RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
-        final Matrix r = decomposer.getR();
+        final var r = decomposer.getR();
         r.multiplyByScalar(1.0 / value);
         result.fromMatrix(r);
     }
@@ -776,22 +766,22 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                          parameters cannot be set (usually because of numerical instability of
      *                          the internal matrix of this instance).
      */
-    public void setAffineParameters(final AffineParameters2D parameters)
-            throws AlgebraException {
+    public void setAffineParameters(final AffineParameters2D parameters) throws AlgebraException {
         normalize();
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        final RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
-        final Matrix params = parameters.asMatrix();
-        final Matrix rotation = decomposer.getQ();
+        final var params = parameters.asMatrix();
+        final var rotation = decomposer.getQ();
 
         // params is equivalent to A because it
         // has been multiplied by rotation
         params.multiply(rotation);
         // normalize
         params.multiplyByScalar(value);
-        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, params);
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
+                params);
         normalized = false;
     }
 
@@ -846,9 +836,9 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public double[] getTranslation() {
         normalize();
-        final double[] translation = t.getSubmatrixAsArray(0, HOM_COORDS - 1,
+        final var translation = t.getSubmatrixAsArray(0, HOM_COORDS - 1,
                 INHOM_COORDS - 1, HOM_COORDS - 1);
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
         ArrayUtils.multiplyByScalar(translation, 1.0 / value, translation);
         return translation;
     }
@@ -865,7 +855,7 @@ public class ProjectiveTransformation2D extends Transformation2D
     public void getTranslation(final double[] out) throws WrongSizeException {
         t.getSubmatrixAsArray(0, HOM_COORDS - 1,
                 INHOM_COORDS - 1, HOM_COORDS - 1, out);
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
         ArrayUtils.multiplyByScalar(out, 1.0 / value, out);
     }
 
@@ -882,9 +872,8 @@ public class ProjectiveTransformation2D extends Transformation2D
             throw new IllegalArgumentException();
         }
 
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        final double[] translation2 = ArrayUtils.multiplyByScalarAndReturnNew(
-                translation, value);
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var translation2 = ArrayUtils.multiplyByScalarAndReturnNew(translation, value);
         t.setSubmatrix(0, HOM_COORDS - 1, translation2.length - 1,
                 HOM_COORDS - 1, translation2);
         normalized = false;
@@ -900,7 +889,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                                  length equal to NUM_TRANSLATION_COORDS.
      */
     public void addTranslation(final double[] translation) {
-        final double[] currentTranslation = getTranslation();
+        final var currentTranslation = getTranslation();
         ArrayUtils.sum(currentTranslation, translation, currentTranslation);
         setTranslation(currentTranslation);
     }
@@ -912,8 +901,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public double getTranslationX() {
         normalize();
-        return t.getElementAt(0, HOM_COORDS - 1) / t.getElementAt(
-                HOM_COORDS - 1, HOM_COORDS - 1);
+        return t.getElementAt(0, HOM_COORDS - 1)
+                / t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
     }
 
     /**
@@ -922,8 +911,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @param translationX X coordinate translation to be set.
      */
     public void setTranslationX(final double translationX) {
-        t.setElementAt(0, HOM_COORDS - 1, translationX * t.getElementAt(
-                HOM_COORDS - 1, HOM_COORDS - 1));
+        t.setElementAt(0, HOM_COORDS - 1,
+                translationX * t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1));
         normalized = false;
     }
 
@@ -934,8 +923,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      */
     public double getTranslationY() {
         normalize();
-        return t.getElementAt(1, HOM_COORDS - 1) / t.getElementAt(
-                HOM_COORDS - 1, HOM_COORDS - 1);
+        return t.getElementAt(1, HOM_COORDS - 1)
+                / t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
     }
 
     /**
@@ -944,8 +933,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @param translationY Y coordinate translation to be set.
      */
     public void setTranslationY(final double translationY) {
-        t.setElementAt(1, HOM_COORDS - 1, translationY * t.getElementAt(
-                HOM_COORDS - 1, HOM_COORDS - 1));
+        t.setElementAt(1, HOM_COORDS - 1,
+                translationY * t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1));
         normalized = false;
     }
 
@@ -976,7 +965,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @return a new point containing translation coordinates.
      */
     public Point2D getTranslationPoint() {
-        final Point2D out = Point2D.create();
+        final var out = Point2D.create();
         getTranslationPoint(out);
         return out;
     }
@@ -1075,13 +1064,12 @@ public class ProjectiveTransformation2D extends Transformation2D
         inputPoint.normalize();
         normalize();
         try {
-            final Matrix point = new Matrix(
-                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
+            final var point = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             point.setElementAtIndex(0, inputPoint.getHomX());
             point.setElementAtIndex(1, inputPoint.getHomY());
             point.setElementAtIndex(2, inputPoint.getHomW());
 
-            final Matrix transformedPoint = t.multiplyAndReturnNew(point);
+            final var transformedPoint = t.multiplyAndReturnNew(point);
 
             outputPoint.setHomogeneousCoordinates(
                     transformedPoint.getElementAtIndex(0),
@@ -1105,8 +1093,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                                     numerical instabilities.
      */
     @Override
-    public void transform(final Conic inputConic, final Conic outputConic)
-            throws NonSymmetricMatrixException, AlgebraException {
+    public void transform(final Conic inputConic, final Conic outputConic) throws NonSymmetricMatrixException,
+            AlgebraException {
         // point' * conic * point = 0
         // point' * t' * transformedConic * t * point = 0
         // where:
@@ -1117,15 +1105,15 @@ public class ProjectiveTransformation2D extends Transformation2D
 
         inputConic.normalize();
 
-        final Matrix c = inputConic.asMatrix();
+        final var c = inputConic.asMatrix();
         normalize();
 
-        final Matrix invT = inverseAndReturnNew().asMatrix();
+        final var invT = inverseAndReturnNew().asMatrix();
         // normalize transformation matrix invT to increase accuracy
-        double norm = Utils.normF(invT);
+        var norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
 
-        final Matrix m = invT.transposeAndReturnNew();
+        final var m = invT.transposeAndReturnNew();
         try {
             m.multiply(c);
             m.multiply(invT);
@@ -1166,15 +1154,15 @@ public class ProjectiveTransformation2D extends Transformation2D
         inputDualConic.normalize();
         normalize();
 
-        final Matrix dualC = inputDualConic.asMatrix();
-        final Matrix transT = t.transposeAndReturnNew();
+        final var dualC = inputDualConic.asMatrix();
+        final var transT = t.transposeAndReturnNew();
 
-        final Matrix m = t.multiplyAndReturnNew(dualC);
+        final var m = t.multiplyAndReturnNew(dualC);
         m.multiply(transT);
 
         // normalize resulting m matrix to increase accuracy so that it can be
         // considered symmetric
-        final double norm = Utils.normF(m);
+        final var norm = Utils.normF(m);
         m.multiplyByScalar(1.0 / norm);
 
         outputDualConic.setParameters(m);
@@ -1190,20 +1178,18 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                          of numerical instabilities.
      */
     @Override
-    public void transform(final Line2D inputLine, final Line2D outputLine)
-            throws AlgebraException {
+    public void transform(final Line2D inputLine, final Line2D outputLine) throws AlgebraException {
         // line' * point = 0 --> line' * t^-1 * t * point
         // (line' * t^-1)*(t*point) = (t^-1'*line)'*(t*point)
         // where:
         // - transformedLine = t^-1'*line
         // - transformedPoint = t*point
 
-
         inputLine.normalize();
         normalize();
 
-        final Matrix invT = inverseAndReturnNew().asMatrix();
-        final Matrix l = Matrix.newFromArray(inputLine.asArray());
+        final var invT = inverseAndReturnNew().asMatrix();
+        final var l = Matrix.newFromArray(inputLine.asArray());
 
         invT.transpose();
         invT.multiply(l);
@@ -1230,7 +1216,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                          of numerical instabilities.
      */
     public Transformation2D inverseAndReturnNew() throws AlgebraException {
-        final ProjectiveTransformation2D result = new ProjectiveTransformation2D();
+        final var result = new ProjectiveTransformation2D();
         inverse(result);
         return result;
     }
@@ -1243,9 +1229,7 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @throws AlgebraException if inverse transform cannot be computed because
      *                          of numerical instabilities.
      */
-    protected void inverse(final ProjectiveTransformation2D result)
-            throws AlgebraException {
-
+    protected void inverse(final ProjectiveTransformation2D result) throws AlgebraException {
         result.t = Utils.inverse(t);
         result.normalized = false;
     }
@@ -1271,10 +1255,8 @@ public class ProjectiveTransformation2D extends Transformation2D
      * @return a new transformation resulting of the combination with this
      * transformation and provided transformation.
      */
-    public ProjectiveTransformation2D combineAndReturnNew(
-            final ProjectiveTransformation2D transformation) {
-
-        final ProjectiveTransformation2D result = new ProjectiveTransformation2D();
+    public ProjectiveTransformation2D combineAndReturnNew(final ProjectiveTransformation2D transformation) {
+        final var result = new ProjectiveTransformation2D();
         combine(transformation, result);
         return result;
     }
@@ -1291,14 +1273,11 @@ public class ProjectiveTransformation2D extends Transformation2D
     private void combine(final ProjectiveTransformation2D inputTransformation,
                          final ProjectiveTransformation2D outputTransformation) {
         // combination in matrix representation is: T1 * T2
-
         normalize();
         inputTransformation.normalize();
 
-
         try {
-            outputTransformation.t = this.t.multiplyAndReturnNew(
-                    inputTransformation.t);
+            outputTransformation.t = this.t.multiplyAndReturnNew(inputTransformation.t);
             outputTransformation.normalized = false;
 
         } catch (final WrongSizeException ignore) {
@@ -1327,9 +1306,9 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                                   points or numerical instabilities).
      */
     public final void setTransformationFromPoints(
-            final Point2D inputPoint1, final Point2D inputPoint2, final Point2D inputPoint3,
-            final Point2D inputPoint4, final Point2D outputPoint1, final Point2D outputPoint2,
-            final Point2D outputPoint3, final Point2D outputPoint4) throws CoincidentPointsException {
+            final Point2D inputPoint1, final Point2D inputPoint2, final Point2D inputPoint3, final Point2D inputPoint4,
+            final Point2D outputPoint1, final Point2D outputPoint2, final Point2D outputPoint3,
+            final Point2D outputPoint4) throws CoincidentPointsException {
 
         // normalize points to increase accuracy
         inputPoint1.normalize();
@@ -1351,29 +1330,28 @@ public class ProjectiveTransformation2D extends Transformation2D
             m = new Matrix(8, 9);
 
             // 1st pair of points
-            double iX = inputPoint1.getHomX();
-            double iY = inputPoint1.getHomY();
-            double iW = inputPoint1.getHomW();
+            var iX = inputPoint1.getHomX();
+            var iY = inputPoint1.getHomY();
+            var iW = inputPoint1.getHomW();
 
-            double oX = outputPoint1.getHomX();
-            double oY = outputPoint1.getHomY();
-            double oW = outputPoint1.getHomW();
+            var oX = outputPoint1.getHomX();
+            var oY = outputPoint1.getHomY();
+            var oW = outputPoint1.getHomW();
 
-            double oWiX = oW * iX;
-            double oWiY = oW * iY;
-            double oWiW = oW * iW;
+            var oWiX = oW * iX;
+            var oWiY = oW * iY;
+            var oWiW = oW * iW;
 
-            double oXiX = oX * iX;
-            double oXiY = oX * iY;
-            double oXiW = oX * iW;
+            var oXiX = oX * iX;
+            var oXiY = oX * iY;
+            var oXiW = oX * iW;
 
-            double oYiX = oY * iX;
-            double oYiY = oY * iY;
-            double oYiW = oY * iW;
+            var oYiX = oY * iX;
+            var oYiY = oY * iY;
+            var oYiW = oY * iW;
 
-            double tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
-            double norm = Math.sqrt(tmp +
-                    oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
+            var tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
+            var norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
 
             m.setElementAt(0, 0, oWiX / norm);
             m.setElementAt(0, 1, oWiY / norm);
@@ -1382,8 +1360,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             m.setElementAt(0, 7, -oXiY / norm);
             m.setElementAt(0, 8, -oXiW / norm);
 
-            norm = Math.sqrt(tmp +
-                    oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
 
             m.setElementAt(1, 3, oWiX / norm);
             m.setElementAt(1, 4, oWiY / norm);
@@ -1414,8 +1391,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             oYiW = oY * iW;
 
             tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
-            norm = Math.sqrt(tmp +
-                    oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
+            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
 
             m.setElementAt(2, 0, oWiX / norm);
             m.setElementAt(2, 1, oWiY / norm);
@@ -1424,8 +1400,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             m.setElementAt(2, 7, -oXiY / norm);
             m.setElementAt(2, 8, -oXiW / norm);
 
-            norm = Math.sqrt(tmp +
-                    oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
 
             m.setElementAt(3, 3, oWiX / norm);
             m.setElementAt(3, 4, oWiY / norm);
@@ -1456,8 +1431,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             oYiW = oY * iW;
 
             tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
-            norm = Math.sqrt(tmp +
-                    oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
+            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
 
             m.setElementAt(4, 0, oWiX / norm);
             m.setElementAt(4, 1, oWiY / norm);
@@ -1466,8 +1440,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             m.setElementAt(4, 7, -oXiY / norm);
             m.setElementAt(4, 8, -oXiW / norm);
 
-            norm = Math.sqrt(tmp +
-                    oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
 
             m.setElementAt(5, 3, oWiX / norm);
             m.setElementAt(5, 4, oWiY / norm);
@@ -1498,8 +1471,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             oYiW = oY * iW;
 
             tmp = oWiX * oWiX + oWiY * oWiY + oWiW * oWiW;
-            norm = Math.sqrt(tmp +
-                    oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
+            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiW * oXiW);
 
             m.setElementAt(6, 0, oWiX / norm);
             m.setElementAt(6, 1, oWiY / norm);
@@ -1508,8 +1480,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             m.setElementAt(6, 7, -oXiY / norm);
             m.setElementAt(6, 8, -oXiW / norm);
 
-            norm = Math.sqrt(tmp +
-                    oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiW * oYiW);
 
             m.setElementAt(7, 3, oWiX / norm);
             m.setElementAt(7, 4, oWiY / norm);
@@ -1524,7 +1495,7 @@ public class ProjectiveTransformation2D extends Transformation2D
         // use SVD to decompose matrix m
         Matrix v;
         try {
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             // ensure that matrix m has enough rank and there is a unique
@@ -1566,9 +1537,9 @@ public class ProjectiveTransformation2D extends Transformation2D
      *                                  line or numerical instabilities).
      */
     public final void setTransformationFromLines(
-            final Line2D inputLine1, final Line2D inputLine2, final Line2D inputLine3,
-            final Line2D inputLine4, final Line2D outputLine1, final Line2D outputLine2,
-            final Line2D outputLine3, final Line2D outputLine4) throws CoincidentLinesException {
+            final Line2D inputLine1, final Line2D inputLine2, final Line2D inputLine3, final Line2D inputLine4,
+            final Line2D outputLine1, final Line2D outputLine2, final Line2D outputLine3, final Line2D outputLine4)
+            throws CoincidentLinesException {
 
         // normalize lines to increase accuracy
         inputLine1.normalize();
@@ -1590,29 +1561,28 @@ public class ProjectiveTransformation2D extends Transformation2D
             m = new Matrix(8, 9);
 
             // 1st pair of lines
-            double iA = inputLine1.getA();
-            double iB = inputLine1.getB();
-            double iC = inputLine1.getC();
+            var iA = inputLine1.getA();
+            var iB = inputLine1.getB();
+            var iC = inputLine1.getC();
 
-            double oA = outputLine1.getA();
-            double oB = outputLine1.getB();
-            double oC = outputLine1.getC();
+            var oA = outputLine1.getA();
+            var oB = outputLine1.getB();
+            var oC = outputLine1.getC();
 
-            double oCiA = oC * iA;
-            double oCiB = oC * iB;
-            double oCiC = oC * iC;
+            var oCiA = oC * iA;
+            var oCiB = oC * iB;
+            var oCiC = oC * iC;
 
-            double oAiA = oA * iA;
-            double oAiB = oA * iB;
-            double oAiC = oA * iC;
+            var oAiA = oA * iA;
+            var oAiB = oA * iB;
+            var oAiC = oA * iC;
 
-            double oBiA = oB * iA;
-            double oBiB = oB * iB;
-            double oBiC = oB * iC;
+            var oBiA = oB * iA;
+            var oBiB = oB * iB;
+            var oBiC = oB * iC;
 
-            double tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;
-            double norm = Math.sqrt(tmp +
-                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
+            var tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;
+            var norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
 
             m.setElementAt(0, 0, oCiA / norm);
             m.setElementAt(0, 1, oCiB / norm);
@@ -1621,8 +1591,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             m.setElementAt(0, 7, -oAiB / norm);
             m.setElementAt(0, 8, -oAiC / norm);
 
-            norm = Math.sqrt(tmp +
-                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
 
             m.setElementAt(1, 3, oCiA / norm);
             m.setElementAt(1, 4, oCiB / norm);
@@ -1653,8 +1622,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             oBiC = oB * iC;
 
             tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;
-            norm = Math.sqrt(tmp +
-                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
 
             m.setElementAt(2, 0, oCiA / norm);
             m.setElementAt(2, 1, oCiB / norm);
@@ -1663,8 +1631,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             m.setElementAt(2, 7, -oAiB / norm);
             m.setElementAt(2, 8, -oAiC / norm);
 
-            norm = Math.sqrt(tmp +
-                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
 
             m.setElementAt(3, 3, oCiA / norm);
             m.setElementAt(3, 4, oCiB / norm);
@@ -1695,8 +1662,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             oBiC = oB * iC;
 
             tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;
-            norm = Math.sqrt(tmp +
-                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
 
             m.setElementAt(4, 0, oCiA / norm);
             m.setElementAt(4, 1, oCiB / norm);
@@ -1705,8 +1671,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             m.setElementAt(4, 7, -oAiB / norm);
             m.setElementAt(4, 8, -oAiC / norm);
 
-            norm = Math.sqrt(tmp +
-                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
 
             m.setElementAt(5, 3, oCiA / norm);
             m.setElementAt(5, 4, oCiB / norm);
@@ -1737,8 +1702,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             oBiC = oB * iC;
 
             tmp = oCiA * oCiA + oCiB * oCiB + oCiC * oCiC;
-            norm = Math.sqrt(tmp +
-                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC);
 
             m.setElementAt(6, 0, oCiA / norm);
             m.setElementAt(6, 1, oCiB / norm);
@@ -1747,8 +1711,7 @@ public class ProjectiveTransformation2D extends Transformation2D
             m.setElementAt(6, 7, -oAiB / norm);
             m.setElementAt(6, 8, -oAiC / norm);
 
-            norm = Math.sqrt(tmp +
-                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC);
 
             m.setElementAt(7, 3, oCiA / norm);
             m.setElementAt(7, 4, oCiB / norm);
@@ -1763,7 +1726,7 @@ public class ProjectiveTransformation2D extends Transformation2D
         // use SVD to decompose matrix m
         Matrix v;
         try {
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             // ensure that matrix m has enough rank and there is a unique
@@ -1775,10 +1738,10 @@ public class ProjectiveTransformation2D extends Transformation2D
             v = decomposer.getV();
 
             // last column of V will contain parameters of transformation
-            final Matrix transInvT = new Matrix(HOM_COORDS, HOM_COORDS);
-            transInvT.setSubmatrix(0, 0, HOM_COORDS - 1, HOM_COORDS - 1,
-                    v.getSubmatrix(0, 8, 8, 8).toArray(),
-                    false);
+            final var transInvT = new Matrix(HOM_COORDS, HOM_COORDS);
+            transInvT.setSubmatrix(0, 0, HOM_COORDS - 1,
+                    HOM_COORDS - 1, v.getSubmatrix(0, 8, 8,
+                            8).toArray(), false);
             // this is now invT
             transInvT.transpose();
             t = Utils.inverse(transInvT);

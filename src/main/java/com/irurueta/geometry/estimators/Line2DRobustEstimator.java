@@ -81,26 +81,25 @@ public abstract class Line2DRobustEstimator {
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected Line2DRobustEstimatorListener mListener;
+    protected Line2DRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -108,28 +107,28 @@ public abstract class Line2DRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * List of points to be used to estimate a 2D line. Provided list must have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    protected List<Point2D> mPoints;
+    protected List<Point2D> points;
 
     /**
      * Constructor.
      */
     protected Line2DRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -139,10 +138,10 @@ public abstract class Line2DRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      */
     protected Line2DRobustEstimator(final Line2DRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -153,9 +152,9 @@ public abstract class Line2DRobustEstimator {
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
     protected Line2DRobustEstimator(final List<Point2D> points) {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -168,12 +167,11 @@ public abstract class Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    protected Line2DRobustEstimator(final Line2DRobustEstimatorListener listener,
-                                    final List<Point2D> points) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+    protected Line2DRobustEstimator(final Line2DRobustEstimatorListener listener, final List<Point2D> points) {
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -185,7 +183,7 @@ public abstract class Line2DRobustEstimator {
      * @return listener to be notified of events.
      */
     public Line2DRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -195,12 +193,11 @@ public abstract class Line2DRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(final Line2DRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final Line2DRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -210,7 +207,7 @@ public abstract class Line2DRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -219,7 +216,7 @@ public abstract class Line2DRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -230,7 +227,7 @@ public abstract class Line2DRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -248,11 +245,10 @@ public abstract class Line2DRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -264,7 +260,7 @@ public abstract class Line2DRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -286,7 +282,7 @@ public abstract class Line2DRobustEstimator {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -297,7 +293,7 @@ public abstract class Line2DRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -317,7 +313,7 @@ public abstract class Line2DRobustEstimator {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -327,7 +323,7 @@ public abstract class Line2DRobustEstimator {
      * @return list of points to be used to estimate a 2D line.
      */
     public List<Point2D> getPoints() {
-        return mPoints;
+        return points;
     }
 
     /**
@@ -354,7 +350,7 @@ public abstract class Line2DRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mPoints != null && mPoints.size() >= MINIMUM_SIZE;
+        return points != null && points.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -393,19 +389,13 @@ public abstract class Line2DRobustEstimator {
      * @return an instance of a 2D line robust estimator.
      */
     public static Line2DRobustEstimator create(final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLine2DRobustEstimator();
-            case MSAC:
-                return new MSACLine2DRobustEstimator();
-            case PROSAC:
-                return new PROSACLine2DRobustEstimator();
-            case PROMEDS:
-                return new PROMedSLine2DRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACLine2DRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSLine2DRobustEstimator();
+            case MSAC -> new MSACLine2DRobustEstimator();
+            case PROSAC -> new PROSACLine2DRobustEstimator();
+            case PROMEDS -> new PROMedSLine2DRobustEstimator();
+            default -> new RANSACLine2DRobustEstimator();
+        };
     }
 
     /**
@@ -419,21 +409,14 @@ public abstract class Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of points doesn't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public static Line2DRobustEstimator create(final List<Point2D> points,
-                                               final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLine2DRobustEstimator(points);
-            case MSAC:
-                return new MSACLine2DRobustEstimator(points);
-            case PROSAC:
-                return new PROSACLine2DRobustEstimator(points);
-            case PROMEDS:
-                return new PROMedSLine2DRobustEstimator(points);
-            case RANSAC:
-            default:
-                return new RANSACLine2DRobustEstimator(points);
-        }
+    public static Line2DRobustEstimator create(final List<Point2D> points, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLine2DRobustEstimator(points);
+            case MSAC -> new MSACLine2DRobustEstimator(points);
+            case PROSAC -> new PROSACLine2DRobustEstimator(points);
+            case PROMEDS -> new PROMedSLine2DRobustEstimator(points);
+            default -> new RANSACLine2DRobustEstimator(points);
+        };
     }
 
     /**
@@ -447,21 +430,14 @@ public abstract class Line2DRobustEstimator {
      * @return an instance of a 2D line robust estimator.
      */
     public static Line2DRobustEstimator create(
-            final Line2DRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLine2DRobustEstimator(listener);
-            case MSAC:
-                return new MSACLine2DRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACLine2DRobustEstimator(listener);
-            case PROMEDS:
-                return new PROMedSLine2DRobustEstimator(listener);
-            case RANSAC:
-            default:
-                return new RANSACLine2DRobustEstimator(listener);
-        }
+            final Line2DRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLine2DRobustEstimator(listener);
+            case MSAC -> new MSACLine2DRobustEstimator(listener);
+            case PROSAC -> new PROSACLine2DRobustEstimator(listener);
+            case PROMEDS -> new PROMedSLine2DRobustEstimator(listener);
+            default -> new RANSACLine2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -480,19 +456,13 @@ public abstract class Line2DRobustEstimator {
     public static Line2DRobustEstimator create(
             final Line2DRobustEstimatorListener listener, final List<Point2D> points,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLine2DRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACLine2DRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACLine2DRobustEstimator(listener, points);
-            case PROMEDS:
-                return new PROMedSLine2DRobustEstimator(listener, points);
-            case RANSAC:
-            default:
-                return new RANSACLine2DRobustEstimator(listener, points);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSLine2DRobustEstimator(listener, points);
+            case MSAC -> new MSACLine2DRobustEstimator(listener, points);
+            case PROSAC -> new PROSACLine2DRobustEstimator(listener, points);
+            case PROMEDS -> new PROMedSLine2DRobustEstimator(listener, points);
+            default -> new RANSACLine2DRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -506,21 +476,14 @@ public abstract class Line2DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 2 points).
      */
-    public static Line2DRobustEstimator create(
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLine2DRobustEstimator();
-            case MSAC:
-                return new MSACLine2DRobustEstimator();
-            case PROSAC:
-                return new PROSACLine2DRobustEstimator(qualityScores);
-            case PROMEDS:
-                return new PROMedSLine2DRobustEstimator(qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLine2DRobustEstimator();
-        }
+    public static Line2DRobustEstimator create(final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLine2DRobustEstimator();
+            case MSAC -> new MSACLine2DRobustEstimator();
+            case PROSAC -> new PROSACLine2DRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSLine2DRobustEstimator(qualityScores);
+            default -> new RANSACLine2DRobustEstimator();
+        };
     }
 
     /**
@@ -537,21 +500,14 @@ public abstract class Line2DRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static Line2DRobustEstimator create(
-            final List<Point2D> points, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLine2DRobustEstimator(points);
-            case MSAC:
-                return new MSACLine2DRobustEstimator(points);
-            case PROSAC:
-                return new PROSACLine2DRobustEstimator(points, qualityScores);
-            case PROMEDS:
-                return new PROMedSLine2DRobustEstimator(points, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLine2DRobustEstimator(points);
-        }
+            final List<Point2D> points, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLine2DRobustEstimator(points);
+            case MSAC -> new MSACLine2DRobustEstimator(points);
+            case PROSAC -> new PROSACLine2DRobustEstimator(points, qualityScores);
+            case PROMEDS -> new PROMedSLine2DRobustEstimator(points, qualityScores);
+            default -> new RANSACLine2DRobustEstimator(points);
+        };
     }
 
     /**
@@ -570,19 +526,13 @@ public abstract class Line2DRobustEstimator {
     public static Line2DRobustEstimator create(
             final Line2DRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLine2DRobustEstimator(listener);
-            case MSAC:
-                return new MSACLine2DRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACLine2DRobustEstimator(listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSLine2DRobustEstimator(listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLine2DRobustEstimator(listener);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSLine2DRobustEstimator(listener);
+            case MSAC -> new MSACLine2DRobustEstimator(listener);
+            case PROSAC -> new PROSACLine2DRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSLine2DRobustEstimator(listener, qualityScores);
+            default -> new RANSACLine2DRobustEstimator(listener);
+        };
     }
 
     /**
@@ -601,23 +551,15 @@ public abstract class Line2DRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static Line2DRobustEstimator create(
-            final Line2DRobustEstimatorListener listener, final List<Point2D> points,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSLine2DRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACLine2DRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACLine2DRobustEstimator(listener, points,
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSLine2DRobustEstimator(listener, points,
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACLine2DRobustEstimator(listener, points);
-        }
+            final Line2DRobustEstimatorListener listener, final List<Point2D> points, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSLine2DRobustEstimator(listener, points);
+            case MSAC -> new MSACLine2DRobustEstimator(listener, points);
+            case PROSAC -> new PROSACLine2DRobustEstimator(listener, points, qualityScores);
+            case PROMEDS -> new PROMedSLine2DRobustEstimator(listener, points, qualityScores);
+            default -> new RANSACLine2DRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -651,8 +593,7 @@ public abstract class Line2DRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @return an instance of a 2D line robust estimator.
      */
-    public static Line2DRobustEstimator create(
-            final Line2DRobustEstimatorListener listener) {
+    public static Line2DRobustEstimator create(final Line2DRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -696,8 +637,7 @@ public abstract class Line2DRobustEstimator {
      *                                  the same size as the list of provided quality scores, or if their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public static Line2DRobustEstimator create(final List<Point2D> points,
-                                               final double[] qualityScores) {
+    public static Line2DRobustEstimator create(final List<Point2D> points, final double[] qualityScores) {
         return create(points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -731,8 +671,7 @@ public abstract class Line2DRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static Line2DRobustEstimator create(
-            final Line2DRobustEstimatorListener listener, final List<Point2D> points,
-            final double[] qualityScores) {
+            final Line2DRobustEstimatorListener listener, final List<Point2D> points, final double[] qualityScores) {
         return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -748,8 +687,7 @@ public abstract class Line2DRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract Line2D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract Line2D estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -771,7 +709,7 @@ public abstract class Line2DRobustEstimator {
         if (points.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
-        mPoints = points;
+        this.points = points;
     }
 
     /**

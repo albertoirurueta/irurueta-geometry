@@ -18,14 +18,14 @@ package com.irurueta.geometry;
 import com.irurueta.algebra.ArrayUtils;
 import com.irurueta.algebra.Utils;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Polygon2DTest {
+class Polygon2DTest {
 
     private static final int MIN_SIDES = 6;
     private static final int MAX_SIDES = 12;
@@ -41,122 +41,110 @@ public class Polygon2DTest {
     private static final int TIMES = 100;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(1e-9, Polygon2D.DEFAULT_THRESHOLD, 0.0);
         assertEquals(0.0, Polygon2D.MIN_THRESHOLD, 0.0);
         assertEquals(3, Polygon2D.MIN_VERTICES);
-        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR,
-                Polygon2D.DEFAULT_TRIANGULATOR_METHOD);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, Polygon2D.DEFAULT_TRIANGULATOR_METHOD);
     }
 
     @Test
-    public void testConstructor() throws NotEnoughVerticesException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+    void testConstructor() throws NotEnoughVerticesException {
+        final var randomizer = new UniformRandomizer();
+        final var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         // build vertices list
         final List<Point2D> vertices = buildPolygonVertices(sides, radius);
 
         // build polygon
-        Polygon2D polygon = new Polygon2D(vertices);
+        var polygon = new Polygon2D(vertices);
 
         // check correctness
         assertFalse(polygon.isTriangulated());
         assertEquals(polygon.getVertices(), vertices);
-        assertEquals(Polygon2D.DEFAULT_TRIANGULATOR_METHOD,
-                polygon.getTriangulatorMethod());
+        assertEquals(Polygon2D.DEFAULT_TRIANGULATOR_METHOD, polygon.getTriangulatorMethod());
 
-        final Iterator<Point2D> iterator1 = polygon.getVertices().iterator();
-        final Iterator<Point2D> iterator2 = vertices.iterator();
+        final var iterator1 = polygon.getVertices().iterator();
+        final var iterator2 = vertices.iterator();
 
-        Point2D vertex1;
-        Point2D vertex2;
         while (iterator1.hasNext() && iterator2.hasNext()) {
-            vertex1 = iterator1.next();
-            vertex2 = iterator2.next();
+            final var vertex1 = iterator1.next();
+            final var vertex2 = iterator2.next();
             assertTrue(vertex1.equals(vertex2, ABSOLUTE_ERROR));
         }
 
         // Force NotEnoughVerticesException
-        vertex1 = vertices.get(0);
-        vertex2 = vertices.get(1);
+        final var vertex1 = vertices.get(0);
+        final var vertex2 = vertices.get(1);
         vertices.clear();
         vertices.add(vertex1);
         vertices.add(vertex2);
-        polygon = null;
-        try {
-            polygon = new Polygon2D(vertices);
-            fail("NotEnoughVerticesException expected but not thrown");
-        } catch (final NotEnoughVerticesException ignore) {
-        }
-        assertNull(polygon);
+        assertThrows(NotEnoughVerticesException.class, () -> new Polygon2D(vertices));
     }
 
     @Test
-    public void testGetSetTriangulatorMethod() throws NotEnoughVerticesException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+    void testGetSetTriangulatorMethod() throws NotEnoughVerticesException {
+        final var randomizer = new UniformRandomizer();
+        final var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         // build vertices list
-        final List<Point2D> vertices = buildPolygonVertices(sides, radius);
+        final var vertices = buildPolygonVertices(sides, radius);
 
         // build polygon
-        final Polygon2D polygon = new Polygon2D(vertices);
+        final var polygon = new Polygon2D(vertices);
 
         // check correctness
-        assertEquals(Polygon2D.DEFAULT_TRIANGULATOR_METHOD,
-                polygon.getTriangulatorMethod());
+        assertEquals(Polygon2D.DEFAULT_TRIANGULATOR_METHOD, polygon.getTriangulatorMethod());
 
         // set new method
         polygon.setTriangulatorMethod(TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
         // check correctness
-        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR,
-                polygon.getTriangulatorMethod());
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, polygon.getTriangulatorMethod());
     }
 
     @Test
-    public void testGetSetVertices1() throws NotEnoughVerticesException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+    void testGetSetVertices1() throws NotEnoughVerticesException {
+        final var randomizer = new UniformRandomizer();
+        var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         // build vertices list
-        final List<Point2D> vertices = buildPolygonVertices(sides, radius);
+        final var vertices = buildPolygonVertices(sides, radius);
 
         // build polygon vertices
-        final Polygon2D polygon = new Polygon2D(vertices);
+        final var polygon = new Polygon2D(vertices);
         assertEquals(vertices, polygon.getVertices());
 
         // build new vertices
         sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
-        final List<Point2D> vertices2 = buildPolygonVertices(sides, radius);
+        final var vertices2 = buildPolygonVertices(sides, radius);
 
         polygon.setVertices(vertices2);
         assertEquals(vertices2, polygon.getVertices());
     }
 
     @Test
-    public void testGetSetVertices2() throws NotEnoughVerticesException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+    void testGetSetVertices2() throws NotEnoughVerticesException {
+        final var randomizer = new UniformRandomizer();
+        var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         // build vertices list
-        final List<Point2D> vertices = new LinkedList<>(buildPolygonVertices(sides, radius));
+        final var vertices = new LinkedList<>(buildPolygonVertices(sides, radius));
 
         // build polygon vertices
-        final Polygon2D polygon = new Polygon2D(vertices);
+        final var polygon = new Polygon2D(vertices);
         assertEquals(polygon.getVertices(), vertices);
 
         // build new vertices
         sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
         radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
-        final List<Point2D> vertices2 = new LinkedList<>(buildPolygonVertices(sides, radius));
+        final var vertices2 = new LinkedList<>(buildPolygonVertices(sides, radius));
 
         polygon.setVertices(vertices2);
         assertEquals(vertices2, polygon.getVertices());
@@ -164,31 +152,28 @@ public class Polygon2DTest {
 
 
     @Test
-    public void testTriangulateIsTriangulatedAndArea()
-            throws NotEnoughVerticesException, TriangulatorException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+    void testTriangulateIsTriangulatedAndArea() throws NotEnoughVerticesException, TriangulatorException {
+        final var randomizer = new UniformRandomizer();
+        final var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         // build vertices list
-        final List<Point2D> vertices = buildPolygonVertices(sides, radius);
+        final var vertices = buildPolygonVertices(sides, radius);
 
-        final Polygon2D polygon = new Polygon2D(vertices);
+        final var polygon = new Polygon2D(vertices);
 
         // polygon is regular, hence its area will be:
-        final double area = 0.5 * sides * radius * radius * Math.sin(
-                2.0 * Math.PI / (double) sides);
+        final var area = 0.5 * sides * radius * radius * Math.sin(2.0 * Math.PI / (double) sides);
 
         assertFalse(polygon.isTriangulated());
-        final List<Triangle2D> triangles = polygon.getTriangles();
+        final var triangles = polygon.getTriangles();
         assertTrue(polygon.isTriangulated());
 
-        final double areaTriangles;
-        double signedAreaTriangles = 0.0;
-        for (final Triangle2D triangle : triangles) {
+        var signedAreaTriangles = 0.0;
+        for (final var triangle : triangles) {
             signedAreaTriangles += triangle.getSignedArea();
         }
-        areaTriangles = Math.abs(signedAreaTriangles);
+        final var areaTriangles = Math.abs(signedAreaTriangles);
 
         assertEquals(area, polygon.getArea(), ABSOLUTE_ERROR);
         assertEquals(areaTriangles, polygon.getArea(), ABSOLUTE_ERROR);
@@ -201,20 +186,18 @@ public class Polygon2DTest {
     }
 
     @Test
-    public void testGetAreaSignedAreaAndAreVerticesClockwise()
-            throws NotEnoughVerticesException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+    void testGetAreaSignedAreaAndAreVerticesClockwise() throws NotEnoughVerticesException {
+        final var randomizer = new UniformRandomizer();
+        var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         // build vertices list
-        final List<Point2D> vertices = buildPolygonVertices(sides, radius);
+        final var vertices = buildPolygonVertices(sides, radius);
 
-        final Polygon2D polygon = new Polygon2D(vertices);
+        final var polygon = new Polygon2D(vertices);
 
         // polygon is regular, hence its area will be:
-        double area = 0.5 * sides * radius * radius * Math.sin(
-                2.0 * Math.PI / (double) sides);
+        var area = 0.5 * sides * radius * radius * Math.sin(2.0 * Math.PI / (double) sides);
         // because vertices are defined counterclockwise, signed area will be
         // positive
         assertEquals(area, polygon.getSignedArea(), ABSOLUTE_ERROR);
@@ -234,8 +217,8 @@ public class Polygon2DTest {
 
         // Test for a triangle
         sides = 3;
-        final List<Point2D> vertices2 = buildPolygonVertices(sides, radius);
-        final Triangle2D triangle = new Triangle2D(vertices2.get(0), vertices2.get(1), vertices2.get(2));
+        final var vertices2 = buildPolygonVertices(sides, radius);
+        final var triangle = new Triangle2D(vertices2.get(0), vertices2.get(1), vertices2.get(2));
         polygon.setVertices(vertices2);
         area = 0.5 * sides * radius * radius * Math.sin(2.0 * Math.PI / (double) sides);
 
@@ -254,22 +237,21 @@ public class Polygon2DTest {
     }
 
     @Test
-    public void testPerimeter() throws NotEnoughVerticesException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+    void testPerimeter() throws NotEnoughVerticesException {
+        final var randomizer = new UniformRandomizer();
+        var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         // build vertices list
-        final List<Point2D> vertices = buildPolygonVertices(sides, radius);
+        final var vertices = buildPolygonVertices(sides, radius);
 
-        final Polygon2D polygon = new Polygon2D(vertices);
+        final var polygon = new Polygon2D(vertices);
 
-        final Iterator<Point2D> iterator = vertices.iterator();
-        Point2D prevVertex = iterator.next();
-        Point2D curVertex;
-        double perimeter = 0.0;
+        final var iterator = vertices.iterator();
+        var prevVertex = iterator.next();
+        var perimeter = 0.0;
         while (iterator.hasNext()) {
-            curVertex = iterator.next();
+            final var curVertex = iterator.next();
             perimeter += curVertex.distanceTo(prevVertex);
             prevVertex = curVertex;
         }
@@ -281,34 +263,32 @@ public class Polygon2DTest {
 
         // Test for a triangle
         sides = 3;
-        final List<Point2D> vertices2 = buildPolygonVertices(sides, radius);
-        final Triangle2D triangle = new Triangle2D(vertices2.get(0), vertices2.get(1), vertices2.get(2));
+        final var vertices2 = buildPolygonVertices(sides, radius);
+        final var triangle = new Triangle2D(vertices2.get(0), vertices2.get(1), vertices2.get(2));
         polygon.setVertices(vertices2);
         assertEquals(triangle.getPerimeter(), polygon.getPerimeter(), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testIsInside() throws NotEnoughVerticesException,
-            TriangulatorException {
+    void testIsInside() throws NotEnoughVerticesException, TriangulatorException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+        final var randomizer = new UniformRandomizer();
+        final var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         // build vertices list
-        final List<Point2D> vertices = buildPolygonVertices(sides, radius);
+        final var vertices = buildPolygonVertices(sides, radius);
 
-        final Polygon2D polygon = new Polygon2D(vertices);
+        final var polygon = new Polygon2D(vertices);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES,
-                MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
         // create point inside of vertex
-        final Point2D inside = new InhomogeneousPoint2D(
+        final var inside = new InhomogeneousPoint2D(
                 radius / 2.0 * Math.cos(theta),
                 radius / 2.0 * Math.sin(theta));
 
         // create point outside of vertex
-        final Point2D outside = new InhomogeneousPoint2D(
+        final var outside = new InhomogeneousPoint2D(
                 2.0 * radius * Math.cos(theta),
                 2.0 * radius * Math.sin(theta));
 
@@ -318,90 +298,82 @@ public class Polygon2DTest {
         assertFalse(polygon.isInside(outside, ABSOLUTE_ERROR));
 
         // check that vertices are inside
-        for (final Point2D vertex : vertices) {
+        for (final var vertex : vertices) {
             assertTrue(polygon.isInside(vertex));
             assertTrue(polygon.isInside(vertex, ABSOLUTE_ERROR));
         }
 
         // Force IllegalArgumentException
-        try {
-            polygon.isInside(inside, -ABSOLUTE_ERROR);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> polygon.isInside(inside, -ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testCenter() throws NotEnoughVerticesException {
+    void testCenter() throws NotEnoughVerticesException {
         // Generate random vertices
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+        final var randomizer = new UniformRandomizer();
+        final var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         // build vertices list
-        final List<Point2D> vertices = buildPolygonVertices(sides, radius);
+        final var vertices = buildPolygonVertices(sides, radius);
 
-        double inhomX = 0.0;
-        double inhomY = 0.0;
-        for (final Point2D vertex : vertices) {
+        var inhomX = 0.0;
+        var inhomY = 0.0;
+        for (final var vertex : vertices) {
             inhomX += vertex.getInhomX() / (double) sides;
             inhomY += vertex.getInhomY() / (double) sides;
         }
 
-        final Point2D center = new InhomogeneousPoint2D(inhomX, inhomY);
+        final var center = new InhomogeneousPoint2D(inhomX, inhomY);
 
-        final Polygon2D polygon = new Polygon2D(vertices);
+        final var polygon = new Polygon2D(vertices);
 
         assertTrue(center.equals(polygon.getCenter(), ABSOLUTE_ERROR));
-        final Point2D center2 = Point2D.create();
+        final var center2 = Point2D.create();
         polygon.center(center2);
         assertTrue(center.equals(center2, ABSOLUTE_ERROR));
     }
 
     @Test
-    public void testIsLocusGetShortestDistanceAndClosestPoint()
-            throws NotEnoughVerticesException, TriangulatorException {
+    void testIsLocusGetShortestDistanceAndClosestPoint() throws NotEnoughVerticesException, TriangulatorException {
 
-        int numValid = 0;
-        for (int t = 0; t < TIMES; t++) {
-            final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-            final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-            final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
-            double dist = randomizer.nextDouble(2.0 * ABSOLUTE_ERROR, radius / 2.0);
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            final var randomizer = new UniformRandomizer();
+            final var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+            final var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+            var dist = randomizer.nextDouble(2.0 * ABSOLUTE_ERROR, radius / 2.0);
 
-            final double theta = randomizer.nextDouble(0.0,
-                    2.0 * MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+            final var theta = Math.toRadians(randomizer.nextDouble(0.0, 2.0 * MAX_ANGLE_DEGREES));
 
-            int n = (int) (theta / (2 * Math.PI) * (double) sides);
+            var n = (int) (theta / (2 * Math.PI) * (double) sides);
 
-            final List<Point2D> vertices = buildPolygonVertices(sides, radius);
+            final var vertices = buildPolygonVertices(sides, radius);
 
-            final Point2D point1 = vertices.get(n);
+            final var point1 = vertices.get(n);
             n = (n + 1) % sides;
-            final Point2D point2 = vertices.get(n);
+            final var point2 = vertices.get(n);
 
-            final Line2D line = new Line2D(point1, point2);
+            final var line = new Line2D(point1, point2);
             line.normalize();
 
-            final double[] directorVector = line.getDirectorVector();
-            final double norm = Utils.normF(directorVector);
-            ArrayUtils.multiplyByScalar(directorVector, 1.0 / norm,
-                    directorVector);
+            final var directorVector = line.getDirectorVector();
+            final var norm = Utils.normF(directorVector);
+            ArrayUtils.multiplyByScalar(directorVector, 1.0 / norm, directorVector);
 
             // find point laying on the line between polygon vertices
-            final Point2D testPoint = new InhomogeneousPoint2D(
-                    radius * Math.cos(theta), radius * Math.sin(theta));
+            final var testPoint = new InhomogeneousPoint2D(radius * Math.cos(theta), radius * Math.sin(theta));
             // point below is locus of polygon
-            final Point2D locusPoint = line.getClosestPoint(testPoint);
+            final var locusPoint = line.getClosestPoint(testPoint);
             // locus point is between point1 and point2
             assertTrue(locusPoint.isBetween(point1, point2));
 
             // move point a little bit away from locus
-            final Point2D notLocusPoint = new InhomogeneousPoint2D(
+            final var notLocusPoint = new InhomogeneousPoint2D(
                     locusPoint.getInhomX() + dist * directorVector[0],
                     locusPoint.getInhomY() + dist * directorVector[1]);
             // ensure that notLocusPoint lies outside of polygon
-            final Polygon2D polygon = new Polygon2D(vertices);
+            final var polygon = new Polygon2D(vertices);
 
             if (polygon.isInside(notLocusPoint)) {
                 // change sign of dist to move point in opposite direction
@@ -422,7 +394,7 @@ public class Polygon2DTest {
             // the closest point
             assertEquals(0.0, polygon.getShortestDistance(locusPoint), ABSOLUTE_ERROR);
             assertTrue(polygon.getClosestPoint(locusPoint).equals(locusPoint, ABSOLUTE_ERROR));
-            final Point2D closestPoint = Point2D.create();
+            final var closestPoint = Point2D.create();
             polygon.closestPoint(locusPoint, closestPoint);
             assertTrue(closestPoint.equals(locusPoint, ABSOLUTE_ERROR));
             assertTrue(closestPoint.equals(locusPoint, ABSOLUTE_ERROR));
@@ -446,7 +418,7 @@ public class Polygon2DTest {
             assertTrue(polygon.isLocus(notLocusPoint, radius * radius));
 
             // all vertices of polygon are also locus
-            for (final Point2D vertex : vertices) {
+            for (final var vertex : vertices) {
                 assertTrue(polygon.isLocus(vertex));
                 assertTrue(polygon.isLocus(vertex, ABSOLUTE_ERROR));
                 // because vertices are locus, shortest distance is 0.0 and it is
@@ -459,11 +431,7 @@ public class Polygon2DTest {
             }
 
             // Force IllegalArgumentException
-            try {
-                polygon.isLocus(locusPoint, -ABSOLUTE_ERROR);
-                fail("IllegalArgumentException expected but not thrown");
-            } catch (final IllegalArgumentException ignore) {
-            }
+            assertThrows(IllegalArgumentException.class, () -> polygon.isLocus(locusPoint, -ABSOLUTE_ERROR));
 
             numValid++;
             break;
@@ -473,39 +441,36 @@ public class Polygon2DTest {
     }
 
     @Test
-    public void testSerializeDeserialize() throws NotEnoughVerticesException,
-            TriangulatorException, IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+    void testSerializeDeserialize() throws NotEnoughVerticesException, TriangulatorException, IOException,
+            ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
+        final var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         // build vertices list
-        final List<Point2D> vertices = buildPolygonVertices(sides, radius);
+        final var vertices = buildPolygonVertices(sides, radius);
 
-        final Polygon2D polygon1 = new Polygon2D(vertices);
+        final var polygon1 = new Polygon2D(vertices);
         polygon1.triangulate();
 
         assertSame(vertices, polygon1.getVertices());
         assertFalse(polygon1.getTriangles().isEmpty());
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(polygon1);
-        final Polygon2D polygon2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(polygon1);
+        final var polygon2 = SerializationHelper.<Polygon2D>deserialize(bytes);
 
         assertNotSame(polygon1, polygon2);
         assertEquals(polygon1.getVertices(), polygon2.getVertices());
         assertNotSame(polygon1.getVertices(), polygon2.getVertices());
-        assertEquals(polygon1.getTriangles().size(),
-                polygon2.getTriangles().size());
+        assertEquals(polygon1.getTriangles().size(), polygon2.getTriangles().size());
     }
 
-    private List<Point2D> buildPolygonVertices(final int sides, final double radius) {
-        final List<Point2D> vertices = new ArrayList<>(sides);
-        Point2D vertex;
-        for (int i = 0; i < sides; i++) {
-            final double angle = (double) i / (double) sides * 2.0 * Math.PI;
-            vertex = new InhomogeneousPoint2D(radius * Math.cos(angle),
-                    radius * Math.sin(angle));
+    private static List<Point2D> buildPolygonVertices(final int sides, final double radius) {
+        final var vertices = new ArrayList<Point2D>(sides);
+        for (var i = 0; i < sides; i++) {
+            final var angle = (double) i / (double) sides * 2.0 * Math.PI;
+            final var vertex = new InhomogeneousPoint2D(radius * Math.cos(angle), radius * Math.sin(angle));
             vertices.add(vertex);
         }
         return vertices;

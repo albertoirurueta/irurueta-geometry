@@ -123,7 +123,7 @@ public abstract class Rotation3D implements Serializable {
      * @throws RotationException Raised if numerical instabilities happen.
      */
     public double[] getRotationAxis() throws RotationException {
-        final double[] axis = new double[INHOM_COORDS];
+        final var axis = new double[INHOM_COORDS];
         rotationAxis(axis);
         return axis;
     }
@@ -137,8 +137,7 @@ public abstract class Rotation3D implements Serializable {
      *                                  length 3.
      * @throws RotationException        Raised if numerical instabilities happen.
      */
-    public abstract void rotationAxis(final double[] axis)
-            throws RotationException;
+    public abstract void rotationAxis(final double[] axis) throws RotationException;
 
     /**
      * Returns rotation amount or angle in radians around the rotation axis
@@ -225,14 +224,11 @@ public abstract class Rotation3D implements Serializable {
      *                                        negative.
      *                                        {@link #isValidRotationMatrix(Matrix)}
      */
-    public final void fromMatrix(final Matrix m, final double threshold)
-            throws InvalidRotationMatrixException {
-        if (m.getRows() == INHOM_COORDS &&
-                m.getColumns() == INHOM_COORDS) {
+    public final void fromMatrix(final Matrix m, final double threshold) throws InvalidRotationMatrixException {
+        if (m.getRows() == INHOM_COORDS && m.getColumns() == INHOM_COORDS) {
             // inhomogeneous matrix
             fromInhomogeneousMatrix(m, threshold);
-        } else if (m.getRows() == HOM_COORDS &&
-                m.getColumns() == HOM_COORDS) {
+        } else if (m.getRows() == HOM_COORDS && m.getColumns() == HOM_COORDS) {
             // homogeneous matrix
             fromHomogeneousMatrix(m, threshold);
         } else {
@@ -254,8 +250,7 @@ public abstract class Rotation3D implements Serializable {
      *                                        valid (has wrong size, or it is not orthonormal).
      *                                        {@link #isValidRotationMatrix(Matrix)}
      */
-    public final void fromMatrix(final Matrix m)
-            throws InvalidRotationMatrixException {
+    public final void fromMatrix(final Matrix m) throws InvalidRotationMatrixException {
         fromMatrix(m, DEFAULT_VALID_THRESHOLD);
     }
 
@@ -289,8 +284,7 @@ public abstract class Rotation3D implements Serializable {
      *                                        valid (has wrong size, or it is not orthonormal).
      *                                        {@link #isValidRotationMatrix(Matrix)}
      */
-    public void fromInhomogeneousMatrix(final Matrix m)
-            throws InvalidRotationMatrixException {
+    public void fromInhomogeneousMatrix(final Matrix m) throws InvalidRotationMatrixException {
         fromInhomogeneousMatrix(m, DEFAULT_VALID_THRESHOLD);
     }
 
@@ -326,8 +320,7 @@ public abstract class Rotation3D implements Serializable {
      *                                        valid (has wrong size, or it is not orthonormal).
      *                                        {@link #isValidRotationMatrix(Matrix)}
      */
-    public void fromHomogeneousMatrix(final Matrix m)
-            throws InvalidRotationMatrixException {
+    public void fromHomogeneousMatrix(final Matrix m) throws InvalidRotationMatrixException {
         fromHomogeneousMatrix(m, DEFAULT_VALID_THRESHOLD);
     }
 
@@ -353,7 +346,7 @@ public abstract class Rotation3D implements Serializable {
      * @return Rotated point.
      */
     public Point3D rotate(final Point3D point) {
-        final Point3D result = new HomogeneousPoint3D();
+        final var result = new HomogeneousPoint3D();
         rotate(point, result);
         return result;
     }
@@ -368,7 +361,7 @@ public abstract class Rotation3D implements Serializable {
      */
     public void rotate(final Plane inputPlane, final Plane resultPlane) {
         try {
-            final Matrix r = asHomogeneousMatrix();
+            final var r = asHomogeneousMatrix();
             // because of the duality theorem:
             // P'*M = 0 --> P*R^-1*R*M = 0 --> P2' = P'*R^-1 and M2 = R*M
             // where P2 and M2 are rotated plane and point, however rotated
@@ -376,7 +369,7 @@ public abstract class Rotation3D implements Serializable {
             // Hence P2' = P' * R', and by undoing the transposition
             // P2 = (P' * R')' = R'' * P'' = R * P
 
-            final Matrix p = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
+            final var p = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);
 
             // to increase accuracy
             inputPlane.normalize();
@@ -388,9 +381,8 @@ public abstract class Rotation3D implements Serializable {
             // Rotated plane below is R * P
             r.multiply(p);
 
-            resultPlane.setParameters(r.getElementAt(0, 0),
-                    r.getElementAt(1, 0), r.getElementAt(2, 0),
-                    r.getElementAt(3, 0));
+            resultPlane.setParameters(r.getElementAt(0, 0), r.getElementAt(1, 0),
+                    r.getElementAt(2, 0), r.getElementAt(3, 0));
         } catch (final WrongSizeException ignore) {
             // never happens
         }
@@ -407,7 +399,7 @@ public abstract class Rotation3D implements Serializable {
      * @return Rotated plane.
      */
     public Plane rotate(final Plane plane) {
-        final Plane result = new Plane();
+        final var result = new Plane();
         rotate(plane, result);
         return result;
     }
@@ -431,8 +423,7 @@ public abstract class Rotation3D implements Serializable {
         }
 
         try {
-            return Utils.isOrthogonal(m, threshold) &&
-                    Math.abs(Math.abs(Utils.det(m)) - 1.0) < threshold;
+            return Utils.isOrthogonal(m, threshold) && Math.abs(Math.abs(Utils.det(m)) - 1.0) < threshold;
         } catch (final AlgebraException e) {
             return false;
         }
@@ -493,15 +484,11 @@ public abstract class Rotation3D implements Serializable {
      * @return A 3D rotation.
      */
     public static Rotation3D create(final Rotation3DType type) {
-        switch (type) {
-            case AXIS_ROTATION3D:
-                return new AxisRotation3D();
-            case MATRIX_ROTATION3D:
-                return new MatrixRotation3D();
-            case QUATERNION:
-            default:
-                return new Quaternion();
-        }
+        return switch (type) {
+            case AXIS_ROTATION3D -> new AxisRotation3D();
+            case MATRIX_ROTATION3D -> new MatrixRotation3D();
+            default -> new Quaternion();
+        };
     }
 
     /**
@@ -532,17 +519,12 @@ public abstract class Rotation3D implements Serializable {
      * @throws IllegalArgumentException Raised if provided axis array does not
      *                                  have length 3.
      */
-    public static Rotation3D create(final double[] axis, final double theta,
-                                    final Rotation3DType type) {
-        switch (type) {
-            case AXIS_ROTATION3D:
-                return new AxisRotation3D(axis, theta);
-            case MATRIX_ROTATION3D:
-                return new MatrixRotation3D(axis, theta);
-            case QUATERNION:
-            default:
-                return new Quaternion(axis, theta);
-        }
+    public static Rotation3D create(final double[] axis, final double theta, final Rotation3DType type) {
+        return switch (type) {
+            case AXIS_ROTATION3D -> new AxisRotation3D(axis, theta);
+            case MATRIX_ROTATION3D -> new MatrixRotation3D(axis, theta);
+            default -> new Quaternion(axis, theta);
+        };
     }
 
     /**
@@ -556,8 +538,7 @@ public abstract class Rotation3D implements Serializable {
      * @param theta Rotation angle around axis expressed in radians.
      * @return A 3D rotation instance.
      */
-    public static Rotation3D create(final double axisX, final double axisY, final double axisZ,
-                                    final double theta) {
+    public static Rotation3D create(final double axisX, final double axisY, final double axisZ, final double theta) {
         return create(axisX, axisY, axisZ, theta, DEFAULT_TYPE);
     }
 
@@ -574,8 +555,8 @@ public abstract class Rotation3D implements Serializable {
      * @param type  Rotation type.
      * @return A 3D rotation instance.
      */
-    public static Rotation3D create(final double axisX, final double axisY, final double axisZ,
-                                    final double theta, final Rotation3DType type) {
+    public static Rotation3D create(
+            final double axisX, final double axisY, final double axisZ, final double theta, final Rotation3DType type) {
         switch (type) {
             case AXIS_ROTATION3D:
                 return new AxisRotation3D(axisX, axisY, axisZ, theta);
@@ -583,7 +564,7 @@ public abstract class Rotation3D implements Serializable {
                 return new MatrixRotation3D(axisX, axisY, axisZ, theta);
             case QUATERNION:
             default:
-                final Quaternion result = new Quaternion();
+                final var result = new Quaternion();
                 result.setAxisAndRotation(axisX, axisY, axisZ, theta);
                 return result;
         }
@@ -599,25 +580,24 @@ public abstract class Rotation3D implements Serializable {
      * @throws IllegalArgumentException if threshold is negative.
      * @throws RotationException        if rotation angle or axis cannot be determined.
      */
-    public boolean equals(final Rotation3D other, final double threshold)
-            throws RotationException {
+    public boolean equals(final Rotation3D other, final double threshold) throws RotationException {
 
         if (threshold < MIN_COMPARISON_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
-        final double[] thisAxis = getRotationAxis();
-        final double thisAngle = getRotationAngle();
-        final double[] otherAxis = other.getRotationAxis();
-        final double otherAngle = other.getRotationAngle();
+        final var thisAxis = getRotationAxis();
+        final var thisAngle = getRotationAngle();
+        final var otherAxis = other.getRotationAxis();
+        final var otherAngle = other.getRotationAngle();
 
-        final double cosAngle = ArrayUtils.dotProduct(thisAxis, otherAxis);
+        final var cosAngle = ArrayUtils.dotProduct(thisAxis, otherAxis);
         if (cosAngle >= 0.0) {
             // axis have same direction
-            final double diffX = thisAxis[0] - otherAxis[0];
-            final double diffY = thisAxis[1] - otherAxis[1];
-            final double diffZ = thisAxis[2] - otherAxis[2];
-            final double sqrNormDiff = diffX * diffX + diffY * diffY + diffZ * diffZ;
+            final var diffX = thisAxis[0] - otherAxis[0];
+            final var diffY = thisAxis[1] - otherAxis[1];
+            final var diffZ = thisAxis[2] - otherAxis[2];
+            final var sqrNormDiff = diffX * diffX + diffY * diffY + diffZ * diffZ;
 
             if (sqrNormDiff > threshold) {
                 // axes are not equal
@@ -625,14 +605,14 @@ public abstract class Rotation3D implements Serializable {
             }
 
             // compare difference of angles
-            return Math.abs(thisAngle - otherAngle) <= threshold ||
-                    Math.abs(thisAngle - otherAngle - 2 * Math.PI) <= threshold;
+            return Math.abs(thisAngle - otherAngle) <= threshold
+                    || Math.abs(thisAngle - otherAngle - 2 * Math.PI) <= threshold;
         } else {
             // axis might be reversed, hence also angle is reversed
-            final double sumX = thisAxis[0] + otherAxis[0];
-            final double sumY = thisAxis[1] + otherAxis[1];
-            final double sumZ = thisAxis[2] + otherAxis[2];
-            final double sqrNormSum = sumX * sumX + sumY * sumY + sumZ * sumZ;
+            final var sumX = thisAxis[0] + otherAxis[0];
+            final var sumY = thisAxis[1] + otherAxis[1];
+            final var sumZ = thisAxis[2] + otherAxis[2];
+            final var sqrNormSum = sumX * sumX + sumY * sumY + sumZ * sumZ;
 
             if (sqrNormSum > threshold) {
                 // axes are not equal
@@ -640,8 +620,8 @@ public abstract class Rotation3D implements Serializable {
             }
 
             // compare sum of angles (because rotation angle is also reversed)
-            return Math.abs(thisAngle + otherAngle) <= threshold ||
-                    Math.abs(thisAngle + otherAngle - 2 * Math.PI) <= threshold;
+            return Math.abs(thisAngle + otherAngle) <= threshold
+                    || Math.abs(thisAngle + otherAngle - 2 * Math.PI) <= threshold;
         }
     }
 
@@ -708,8 +688,7 @@ public abstract class Rotation3D implements Serializable {
      * @param rot an axis rotation to set values from.
      */
     public void fromRotation(final AxisRotation3D rot) {
-        setAxisAndRotation(rot.getAxisX(), rot.getAxisY(), rot.getAxisZ(),
-                rot.getRotationAngle());
+        setAxisAndRotation(rot.getAxisX(), rot.getAxisY(), rot.getAxisZ(), rot.getRotationAngle());
     }
 
     /**
@@ -761,7 +740,7 @@ public abstract class Rotation3D implements Serializable {
      * @return a new 3D matrix rotation equivalent to this rotation.
      */
     public MatrixRotation3D toMatrixRotation() {
-        final MatrixRotation3D r = new MatrixRotation3D();
+        final var r = new MatrixRotation3D();
         toMatrixRotation(r);
         return r;
     }
@@ -783,7 +762,7 @@ public abstract class Rotation3D implements Serializable {
      * @return a new axis rotation equivalent to this rotation.
      */
     public AxisRotation3D toAxisRotation() {
-        final AxisRotation3D r = new AxisRotation3D();
+        final var r = new AxisRotation3D();
         toAxisRotation(r);
         return r;
     }
@@ -805,7 +784,7 @@ public abstract class Rotation3D implements Serializable {
      * @return a new quaternion equivalent to this rotation.
      */
     public Quaternion toQuaternion() {
-        final Quaternion q = new Quaternion();
+        final var q = new Quaternion();
         toQuaternion(q);
         return q;
     }

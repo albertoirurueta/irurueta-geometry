@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class NonSymmetricMatrixExceptionTest {
+class NonSymmetricMatrixExceptionTest {
 
     @Test
-    public void testConstructor() {
-        NonSymmetricMatrixException ex = new NonSymmetricMatrixException();
+    void testConstructor() {
+        var ex = new NonSymmetricMatrixException();
         assertNotNull(ex);
 
         ex = new NonSymmetricMatrixException("message");
@@ -32,8 +32,7 @@ public class NonSymmetricMatrixExceptionTest {
         ex = new NonSymmetricMatrixException(new Exception());
         assertNotNull(ex);
 
-        ex = new NonSymmetricMatrixException("message",
-                new Exception());
+        ex = new NonSymmetricMatrixException("message", new Exception());
         assertNotNull(ex);
     }
 }

@@ -48,20 +48,20 @@ public class Circle implements Serializable {
     /**
      * Center of circle.
      */
-    private Point2D mCenter;
+    private Point2D center;
 
     /**
      * Radius of circle.
      */
-    private double mRadius;
+    private double radius;
 
     /**
      * Empty constructor.
      * Creates circle located at space origin (0,0) with radius 1.0.
      */
     public Circle() {
-        mCenter = Point2D.create();
-        mRadius = 1.0;
+        center = Point2D.create();
+        radius = 1.0;
     }
 
     /**
@@ -88,8 +88,7 @@ public class Circle implements Serializable {
      *                                 since a circle having an infinite radius would be required to contain all
      *                                 three points in its locus.
      */
-    public Circle(final Point2D point1, final Point2D point2, final Point2D point3)
-            throws ColinearPointsException {
+    public Circle(final Point2D point1, final Point2D point2, final Point2D point3) throws ColinearPointsException {
         setParametersFromPoints(point1, point2, point3);
     }
 
@@ -110,7 +109,7 @@ public class Circle implements Serializable {
      * @return Center of circle.
      */
     public Point2D getCenter() {
-        return mCenter;
+        return center;
     }
 
     /**
@@ -123,7 +122,7 @@ public class Circle implements Serializable {
         if (center == null) {
             throw new NullPointerException();
         }
-        mCenter = center;
+        this.center = center;
     }
 
     /**
@@ -132,7 +131,7 @@ public class Circle implements Serializable {
      * @return Radius of circle.
      */
     public double getRadius() {
-        return mRadius;
+        return radius;
     }
 
     /**
@@ -146,7 +145,7 @@ public class Circle implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        mRadius = radius;
+        this.radius = radius;
     }
 
     /**
@@ -175,8 +174,7 @@ public class Circle implements Serializable {
      *                                 three points in its locus.
      */
     public final void setParametersFromPoints(
-            final Point2D point1, final Point2D point2,
-            final Point2D point3) throws ColinearPointsException {
+            final Point2D point1, final Point2D point2, final Point2D point3) throws ColinearPointsException {
 
         // normalize points to increase accuracy
         point1.normalize();
@@ -184,13 +182,13 @@ public class Circle implements Serializable {
         point3.normalize();
 
         try {
-            final Matrix m = new Matrix(3, 3);
-            final double[] b = new double[3];
+            final var m = new Matrix(3, 3);
+            final var b = new double[3];
 
             // 1st point
-            double x = point1.getHomX();
-            double y = point1.getHomY();
-            double w = point1.getHomW();
+            var x = point1.getHomX();
+            var y = point1.getHomY();
+            var w = point1.getHomW();
             m.setElementAt(0, 0, 2.0 * x * w);
             m.setElementAt(0, 1, 2.0 * y * w);
             m.setElementAt(0, 2, w * w);
@@ -215,7 +213,7 @@ public class Circle implements Serializable {
             b[2] = -x * x - y * y;
 
             // normalize each row to increase accuracy
-            final double[] row = new double[3];
+            final var row = new double[3];
             double rowNorm;
 
             for (int j = 0; j < 3; j++) {
@@ -227,25 +225,24 @@ public class Circle implements Serializable {
                 b[j] /= rowNorm;
             }
 
-            final double[] params = com.irurueta.algebra.Utils.solve(m, b);
+            final var params = com.irurueta.algebra.Utils.solve(m, b);
 
             // d = -cx
-            final double d = params[0];
+            final var d = params[0];
             // e = -cy
-            final double e = params[1];
+            final var e = params[1];
             // f = cx^2 + cy^2 - R^2
-            final double f = params[2];
+            final var f = params[2];
 
             // compute center
-            final double inhomCx = -d;
-            final double inhomCy = -e;
-            final Point2D center = new InhomogeneousPoint2D(inhomCx, inhomCy);
+            final var inhomCx = -d;
+            final var inhomCy = -e;
+            final var c = new InhomogeneousPoint2D(inhomCx, inhomCy);
 
             // compute radius
-            final double radius = Math.sqrt(inhomCx * inhomCx +
-                    inhomCy * inhomCy - f);
+            final var r = Math.sqrt(inhomCx * inhomCx + inhomCy * inhomCy - f);
 
-            setCenterAndRadius(center, radius);
+            setCenterAndRadius(c, r);
         } catch (final AlgebraException e) {
             throw new ColinearPointsException(e);
         }
@@ -271,7 +268,7 @@ public class Circle implements Serializable {
      * @return Area of this circle.
      */
     public double getArea() {
-        return area(mRadius);
+        return area(radius);
     }
 
     /**
@@ -294,7 +291,7 @@ public class Circle implements Serializable {
      * @return Perimeter of this circle.
      */
     public double getPerimeter() {
-        return perimeter(mRadius);
+        return perimeter(radius);
     }
 
     /**
@@ -315,7 +312,7 @@ public class Circle implements Serializable {
      * @return curvature of circle.
      */
     public double getCurvature() {
-        return curvature(mRadius);
+        return curvature(radius);
     }
 
     /**
@@ -332,7 +329,7 @@ public class Circle implements Serializable {
      * otherwise.
      */
     public boolean isInside(final Point2D point, final double threshold) {
-        return point.distanceTo(mCenter) - threshold <= mRadius;
+        return point.distanceTo(center) - threshold <= radius;
     }
 
     /**
@@ -405,9 +402,8 @@ public class Circle implements Serializable {
      * @throws UndefinedPointException Raised if provided point is at circle
      *                                 center or very close to it.
      */
-    public Point2D getClosestPoint(final Point2D point)
-            throws UndefinedPointException {
-        final Point2D result = Point2D.create();
+    public Point2D getClosestPoint(final Point2D point) throws UndefinedPointException {
+        final var result = Point2D.create();
         closestPoint(point, result);
         return result;
     }
@@ -421,15 +417,13 @@ public class Circle implements Serializable {
      * @throws UndefinedPointException Raised if provided point is at circle
      *                                 center or very close to ti.
      */
-    public void closestPoint(final Point2D point, final Point2D result)
-            throws UndefinedPointException {
+    public void closestPoint(final Point2D point, final Point2D result) throws UndefinedPointException {
 
-        double directionX = point.getInhomX() - mCenter.getInhomX();
-        double directionY = point.getInhomY() - mCenter.getInhomY();
+        var directionX = point.getInhomX() - center.getInhomX();
+        var directionY = point.getInhomY() - center.getInhomY();
         // normalize direction and multiply by radius to set result as locus of
         // circle
-        final double norm = Math.sqrt(directionX * directionX +
-                directionY * directionY);
+        final var norm = Math.sqrt(directionX * directionX + directionY * directionY);
 
         // check if point is at center or very close to center, in that case the
         // closest point cannot be found (would be all points of a circle)
@@ -437,11 +431,11 @@ public class Circle implements Serializable {
             throw new UndefinedPointException();
         }
 
-        directionX *= mRadius / norm;
-        directionY *= mRadius / norm;
+        directionX *= radius / norm;
+        directionY *= radius / norm;
 
-        result.setInhomogeneousCoordinates(mCenter.getInhomX() + directionX,
-                mCenter.getInhomY() + directionY);
+        result.setInhomogeneousCoordinates(center.getInhomX() + directionX,
+                center.getInhomY() + directionY);
     }
 
     /**
@@ -460,7 +454,7 @@ public class Circle implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        return Math.abs(point.distanceTo(mCenter) - mRadius) <= threshold;
+        return Math.abs(point.distanceTo(center) - radius) <= threshold;
     }
 
     /**
@@ -499,10 +493,8 @@ public class Circle implements Serializable {
      *                                  up to provided threshold.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public Line2D getTangentLineAt(final Point2D point, final double threshold)
-            throws NotLocusException {
-
-        final Line2D line = new Line2D();
+    public Line2D getTangentLineAt(final Point2D point, final double threshold) throws NotLocusException {
+        final var line = new Line2D();
         tangentLineAt(point, line, threshold);
         return line;
     }
@@ -519,15 +511,13 @@ public class Circle implements Serializable {
      *                                  up to provided threshold.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public void tangentLineAt(final Point2D point, final Line2D line,
-                              final double threshold) throws NotLocusException {
-
+    public void tangentLineAt(final Point2D point, final Line2D line, final double threshold) throws NotLocusException {
         if (!isLocus(point, threshold)) {
             throw new NotLocusException();
         }
 
         point.normalize();
-        mCenter.normalize();
+        center.normalize();
 
         // C =   [1  0   d]
         //       [0  1   e]
@@ -536,18 +526,18 @@ public class Circle implements Serializable {
         // Hence line is l = C * p, where C is the circle conic and p is a
         // point in the locus of the circle
 
-        final double homX = point.getHomX();
-        final double homY = point.getHomY();
-        final double homW = point.getHomW();
-        final double cx = mCenter.getInhomX();
-        final double cy = mCenter.getInhomY();
-        final double conicD = -cx;
-        final double conicE = -cy;
-        final double conicF = cx * cx + cy * cy - mRadius * mRadius;
+        final var homX = point.getHomX();
+        final var homY = point.getHomY();
+        final var homW = point.getHomW();
+        final var cx = center.getInhomX();
+        final var cy = center.getInhomY();
+        final var conicD = -cx;
+        final var conicE = -cy;
+        final var conicF = cx * cx + cy * cy - radius * radius;
 
-        final double lineA = homX + conicD * homW;
-        final double lineB = homY + conicE * homW;
-        final double lineC = conicD * homX + conicE * homY + conicF * homW;
+        final var lineA = homX + conicD * homW;
+        final var lineB = homY + conicE * homW;
+        final var lineC = conicD * homX + conicE * homY + conicF * homW;
         line.setParameters(lineA, lineB, lineC);
     }
 
@@ -558,17 +548,17 @@ public class Circle implements Serializable {
      * @return A conic representing this circle.
      */
     public Conic toConic() {
-        mCenter.normalize();
+        center.normalize();
         // use inhomogeneous center coordinates
-        final double cx = mCenter.getInhomX();
-        final double cy = mCenter.getInhomY();
+        final var cx = center.getInhomX();
+        final var cy = center.getInhomY();
 
-        final double a = 1.0;
-        final double b = 0.0;
-        final double c = 1.0;
-        final double d = -cx;
-        final double e = -cy;
-        final double f = cx * cx + cy * cy - mRadius * mRadius;
+        final var a = 1.0;
+        final var b = 0.0;
+        final var c = 1.0;
+        final var d = -cx;
+        final var e = -cy;
+        final var f = cx * cx + cy * cy - radius * radius;
 
         return new Conic(a, b, c, d, e, f);
     }
@@ -587,18 +577,18 @@ public class Circle implements Serializable {
 
         conic.normalize();
 
-        final double a = conic.getA();
+        final var a = conic.getA();
         // normalize parameters so that a = 1.0, d = -cx, e = -cy and
         // f = cx^ + cy^2 - r^
-        final double normD = conic.getD() / a;
-        final double normE = conic.getE() / a;
-        final double normF = conic.getF() / a;
+        final var normD = conic.getD() / a;
+        final var normE = conic.getE() / a;
+        final var normF = conic.getF() / a;
 
-        final double cx = -normD;
-        final double cy = -normE;
-        final double radius = Math.sqrt(cx * cx + cy * cy - normF);
+        final var cx = -normD;
+        final var cy = -normE;
+        final var r = Math.sqrt(cx * cx + cy * cy - normF);
 
-        mCenter = new InhomogeneousPoint2D(cx, cy);
-        mRadius = radius;
+        center = new InhomogeneousPoint2D(cx, cy);
+        radius = r;
     }
 }

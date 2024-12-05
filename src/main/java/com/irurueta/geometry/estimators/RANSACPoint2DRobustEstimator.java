@@ -63,26 +63,26 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a sampled line.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Indicates whether inliers must be computed and kept.
      */
-    private boolean mComputeAndKeepInliers;
+    private boolean computeAndKeepInliers;
 
     /**
      * Indicates whether residuals must be computed and kept.
      */
-    private boolean mComputeAndKeepResiduals;
+    private boolean computeAndKeepResiduals;
 
     /**
      * Constructor.
      */
     public RANSACPoint2DRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -94,9 +94,9 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     public RANSACPoint2DRobustEstimator(final List<Line2D> lines) {
         super(lines);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -107,9 +107,9 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     public RANSACPoint2DRobustEstimator(final Point2DRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
 
@@ -122,12 +122,11 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * @throws IllegalArgumentException if provided list of lines don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public RANSACPoint2DRobustEstimator(final Point2DRobustEstimatorListener listener,
-                                        final List<Line2D> lines) {
+    public RANSACPoint2DRobustEstimator(final Point2DRobustEstimatorListener listener, final List<Line2D> lines) {
         super(listener, lines);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -140,7 +139,7 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -162,7 +161,7 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -172,7 +171,7 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-        return mComputeAndKeepInliers;
+        return computeAndKeepInliers;
     }
 
     /**
@@ -182,12 +181,11 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      *                              false if inliers only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
-            throws LockedException {
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepInliers = computeAndKeepInliers;
+        this.computeAndKeepInliers = computeAndKeepInliers;
     }
 
     /**
@@ -197,7 +195,7 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-        return mComputeAndKeepResiduals;
+        return computeAndKeepResiduals;
     }
 
     /**
@@ -207,12 +205,11 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      *                                kept, false if residuals only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepResidualsEnabled(
-            final boolean computeAndKeepResiduals) throws LockedException {
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepResiduals = computeAndKeepResiduals;
+        this.computeAndKeepResiduals = computeAndKeepResiduals;
     }
 
     /**
@@ -228,8 +225,7 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Point2D estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Point2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -237,101 +233,92 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
             throw new NotReadyException();
         }
 
-        final RANSACRobustEstimator<Point2D> innerEstimator =
-                new RANSACRobustEstimator<>(
-                        new RANSACRobustEstimatorListener<Point2D>() {
+        final var innerEstimator = new RANSACRobustEstimator<>(new RANSACRobustEstimatorListener<Point2D>() {
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+            @Override
+            public double getThreshold() {
+                return threshold;
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mLines.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return lines.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return Point2DRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return Point2DRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<Point2D> solutions) {
-                                final Line2D line1 = mLines.get(samplesIndices[0]);
-                                final Line2D line2 = mLines.get(samplesIndices[1]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Point2D> solutions) {
+                final var line1 = lines.get(samplesIndices[0]);
+                final var line2 = lines.get(samplesIndices[1]);
 
-                                try {
-                                    final Point2D point = line1.getIntersection(line2);
-                                    solutions.add(point);
-                                } catch (final NoIntersectionException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var point = line1.getIntersection(line2);
+                    solutions.add(point);
+                } catch (final NoIntersectionException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final Point2D currentEstimation, final int i) {
-                                return residual(currentEstimation, mLines.get(i));
-                            }
+            @Override
+            public double computeResidual(final Point2D currentEstimation, final int i) {
+                return residual(currentEstimation, lines.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return RANSACPoint2DRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return RANSACPoint2DRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<Point2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(RANSACPoint2DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Point2D> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(RANSACPoint2DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<Point2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(RANSACPoint2DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Point2D> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(RANSACPoint2DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Point2D> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            RANSACPoint2DRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Point2D> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(RANSACPoint2DRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Point2D> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            RANSACPoint2DRobustEstimator.this, progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Point2D> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(RANSACPoint2DRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setComputeAndKeepInliersEnabled(
-                    mComputeAndKeepInliers || mRefineResult);
-            innerEstimator.setComputeAndKeepResidualsEnabled(
-                    mComputeAndKeepResiduals || mRefineResult);
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final Point2D result = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setComputeAndKeepInliersEnabled(computeAndKeepInliers || refineResult);
+            innerEstimator.setComputeAndKeepResidualsEnabled(computeAndKeepResiduals || refineResult);
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var result = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(result);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -358,6 +345,6 @@ public class RANSACPoint2DRobustEstimator extends Point2DRobustEstimator {
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        return mThreshold;
+        return threshold;
     }
 }

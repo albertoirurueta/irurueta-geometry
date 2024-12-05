@@ -32,8 +32,7 @@ import java.util.List;
  * matched 3D points using RANSAC algorithm.
  */
 @SuppressWarnings("DuplicatedCode")
-public class RANSACMetricTransformation3DRobustEstimator extends
-        MetricTransformation3DRobustEstimator {
+public class RANSACMetricTransformation3DRobustEstimator extends MetricTransformation3DRobustEstimator {
 
     /**
      * Constant defining default threshold to determine whether points are
@@ -65,26 +64,26 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a matched pair of points.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Indicates whether inliers must be computed and kept.
      */
-    private boolean mComputeAndKeepInliers;
+    private boolean computeAndKeepInliers;
 
     /**
      * Indicates whether residuals must be computed and kept.
      */
-    private boolean mComputeAndKeepResiduals;
+    private boolean computeAndKeepResiduals;
 
     /**
      * Constructor.
      */
     public RANSACMetricTransformation3DRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -104,9 +103,9 @@ public class RANSACMetricTransformation3DRobustEstimator extends
     public RANSACMetricTransformation3DRobustEstimator(
             final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
         super(inputPoints, outputPoints);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -115,12 +114,11 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public RANSACMetricTransformation3DRobustEstimator(
-            final MetricTransformation3DRobustEstimatorListener listener) {
+    public RANSACMetricTransformation3DRobustEstimator(final MetricTransformation3DRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -143,9 +141,9 @@ public class RANSACMetricTransformation3DRobustEstimator extends
             final MetricTransformation3DRobustEstimatorListener listener,
             final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
         super(listener, inputPoints, outputPoints);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -153,12 +151,11 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      *
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      */
-    public RANSACMetricTransformation3DRobustEstimator(
-            final boolean weakMinimumSizeAllowed) {
+    public RANSACMetricTransformation3DRobustEstimator(final boolean weakMinimumSizeAllowed) {
         super(weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -180,9 +177,9 @@ public class RANSACMetricTransformation3DRobustEstimator extends
             final List<Point3D> inputPoints, final List<Point3D> outputPoints,
             final boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -193,12 +190,11 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      */
     public RANSACMetricTransformation3DRobustEstimator(
-            final MetricTransformation3DRobustEstimatorListener listener,
-            final boolean weakMinimumSizeAllowed) {
+            final MetricTransformation3DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
         super(listener, weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -220,12 +216,11 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      */
     public RANSACMetricTransformation3DRobustEstimator(
             final MetricTransformation3DRobustEstimatorListener listener,
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints, final boolean weakMinimumSizeAllowed) {
         super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -238,7 +233,7 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -260,7 +255,7 @@ public class RANSACMetricTransformation3DRobustEstimator extends
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -270,7 +265,7 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      * need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-        return mComputeAndKeepInliers;
+        return computeAndKeepInliers;
     }
 
     /**
@@ -280,12 +275,11 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      *                              false if inliers only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
-            throws LockedException {
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepInliers = computeAndKeepInliers;
+        this.computeAndKeepInliers = computeAndKeepInliers;
     }
 
     /**
@@ -295,7 +289,7 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-        return mComputeAndKeepResiduals;
+        return computeAndKeepResiduals;
     }
 
     /**
@@ -305,12 +299,11 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      *                                kept, false if residuals only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepResidualsEnabled(
-            final boolean computeAndKeepResiduals) throws LockedException {
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepResiduals = computeAndKeepResiduals;
+        this.computeAndKeepResiduals = computeAndKeepResiduals;
     }
 
     /**
@@ -327,8 +320,7 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public MetricTransformation3D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public MetricTransformation3D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -336,136 +328,117 @@ public class RANSACMetricTransformation3DRobustEstimator extends
             throw new NotReadyException();
         }
 
-        final RANSACRobustEstimator<MetricTransformation3D> innerEstimator =
-                new RANSACRobustEstimator<>(
-                        new RANSACRobustEstimatorListener<MetricTransformation3D>() {
+        final var innerEstimator = new RANSACRobustEstimator<>(
+                new RANSACRobustEstimatorListener<MetricTransformation3D>() {
 
-                            // point to be reused when computing residuals
-                            private final Point3D mTestPoint = Point3D.create(
-                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+                    // point to be reused when computing residuals
+                    private final Point3D testPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                            private final MetricTransformation3DEstimator mNonRobustEstimator =
-                                    new MetricTransformation3DEstimator(
-                                            isWeakMinimumSizeAllowed());
+                    private final MetricTransformation3DEstimator nonRobustEstimator =
+                            new MetricTransformation3DEstimator(isWeakMinimumSizeAllowed());
 
-                            private final List<Point3D> mSubsetInputPoints =
-                                    new ArrayList<>();
-                            private final List<Point3D> mSubsetOutputPoints =
-                                    new ArrayList<>();
+                    private final List<Point3D> subsetInputPoints = new ArrayList<>();
+                    private final List<Point3D> subsetOutputPoints = new ArrayList<>();
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+                    @Override
+                    public double getThreshold() {
+                        return threshold;
+                    }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputPoints.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputPoints.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return mNonRobustEstimator.getMinimumPoints();
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return nonRobustEstimator.getMinimumPoints();
+                    }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<MetricTransformation3D> solutions) {
-                                mSubsetInputPoints.clear();
-                                mSubsetOutputPoints.clear();
-                                for (final int samplesIndex : samplesIndices) {
-                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));
-                                    mSubsetOutputPoints.add(mOutputPoints.get(
-                                            samplesIndex));
-                                }
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<MetricTransformation3D> solutions) {
+                        subsetInputPoints.clear();
+                        subsetOutputPoints.clear();
+                        for (final var samplesIndex : samplesIndices) {
+                            subsetInputPoints.add(inputPoints.get(samplesIndex));
+                            subsetOutputPoints.add(outputPoints.get(samplesIndex));
+                        }
 
-                                try {
-                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,
-                                            mSubsetOutputPoints);
-                                    solutions.add(mNonRobustEstimator.estimate());
-                                } catch (final Exception e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            nonRobustEstimator.setPoints(subsetInputPoints, subsetOutputPoints);
+                            solutions.add(nonRobustEstimator.estimate());
+                        } catch (final Exception e) {
+                            // if points are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(
-                                    final MetricTransformation3D currentEstimation, final int i) {
-                                final Point3D inputPoint = mInputPoints.get(i);
-                                final Point3D outputPoint = mOutputPoints.get(i);
+                    @Override
+                    public double computeResidual(final MetricTransformation3D currentEstimation, final int i) {
+                        final var inputPoint = inputPoints.get(i);
+                        final var outputPoint = outputPoints.get(i);
 
-                                // transform input point and store result in mTestPoint
-                                currentEstimation.transform(inputPoint, mTestPoint);
+                        // transform input point and store result in mTestPoint
+                        currentEstimation.transform(inputPoint, testPoint);
 
-                                return outputPoint.distanceTo(mTestPoint);
-                            }
+                        return outputPoint.distanceTo(testPoint);
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return RANSACMetricTransformation3DRobustEstimator.this.
-                                        isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return RANSACMetricTransformation3DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<MetricTransformation3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            RANSACMetricTransformation3DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<MetricTransformation3D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(RANSACMetricTransformation3DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<MetricTransformation3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            RANSACMetricTransformation3DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<MetricTransformation3D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(RANSACMetricTransformation3DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<MetricTransformation3D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            RANSACMetricTransformation3DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<MetricTransformation3D> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(
+                                    RANSACMetricTransformation3DRobustEstimator.this, iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<MetricTransformation3D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            RANSACMetricTransformation3DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
-                        });
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<MetricTransformation3D> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(
+                                    RANSACMetricTransformation3DRobustEstimator.this, progress);
+                        }
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setComputeAndKeepInliersEnabled(
-                    mComputeAndKeepInliers || mRefineResult);
-            innerEstimator.setComputeAndKeepResidualsEnabled(
-                    mComputeAndKeepResiduals || mRefineResult);
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final MetricTransformation3D transformation = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setComputeAndKeepInliersEnabled(computeAndKeepInliers || refineResult);
+            innerEstimator.setComputeAndKeepResidualsEnabled(computeAndKeepResiduals || refineResult);
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -492,6 +465,6 @@ public class RANSACMetricTransformation3DRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        return mThreshold;
+        return threshold;
     }
 }

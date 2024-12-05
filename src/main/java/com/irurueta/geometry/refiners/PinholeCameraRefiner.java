@@ -21,9 +21,7 @@ import com.irurueta.geometry.InhomogeneousPoint3D;
 import com.irurueta.geometry.NotAvailableException;
 import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.PinholeCameraIntrinsicParameters;
-import com.irurueta.geometry.Point3D;
 import com.irurueta.geometry.Quaternion;
-import com.irurueta.geometry.Rotation3D;
 import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.robust.InliersData;
@@ -44,8 +42,7 @@ import java.util.List;
  * @param <S2> type of matched samples in 2nd set.
  */
 @SuppressWarnings("DuplicatedCode")
-public abstract class PinholeCameraRefiner<S1, S2> extends
-        PairMatchesAndInliersDataRefiner<PinholeCamera, S1, S2> {
+public abstract class PinholeCameraRefiner<S1, S2> extends PairMatchesAndInliersDataRefiner<PinholeCamera, S1, S2> {
 
     /**
      * Default value indicating whether skewness value is suggested or not.
@@ -63,15 +60,13 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * Default value indicating whether horizontal focal length value is
      * suggested or not. By default, this is disabled.
      */
-    public static final boolean DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED =
-            false;
+    public static final boolean DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED = false;
 
     /**
      * Default value indicating whether vertical focal length value is suggested
      * or not. By default, this is disabled.
      */
-    public static final boolean DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED =
-            false;
+    public static final boolean DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED = false;
 
     /**
      * Default value indicating whether aspect ratio is suggested or not. By
@@ -113,7 +108,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
-    protected double mRefinementStandardDeviation;
+    protected double refinementStandardDeviation;
 
     /**
      * Indicates whether skewness value is suggested or not. When enabled, the
@@ -123,8 +118,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    private boolean mSuggestSkewnessValueEnabled =
-            DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED;
+    private boolean suggestSkewnessValueEnabled = DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED;
 
     /**
      * Suggested skewness value to be reached when suggestion is enabled.
@@ -132,7 +126,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * otherwise the iterative refinement might not converge to provided
      * value.
      */
-    private double mSuggestedSkewnessValue = DEFAULT_SUGGESTED_SKEWNESS_VALUE;
+    private double suggestedSkewnessValue = DEFAULT_SUGGESTED_SKEWNESS_VALUE;
 
     /**
      * Indicates whether horizontal focal length is suggested or not. When
@@ -142,8 +136,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    private boolean mSuggestHorizontalFocalLengthEnabled =
-            DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED;
+    private boolean suggestHorizontalFocalLengthEnabled = DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED;
 
     /**
      * Suggested horizontal focal length value to be reached when suggestion is
@@ -151,7 +144,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    private double mSuggestedHorizontalFocalLengthValue;
+    private double suggestedHorizontalFocalLengthValue;
 
     /**
      * Indicates whether vertical focal length is suggested or not. When
@@ -161,8 +154,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    private boolean mSuggestVerticalFocalLengthEnabled =
-            DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED;
+    private boolean suggestVerticalFocalLengthEnabled = DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED;
 
     /**
      * Suggested vertical focal length value to be reached when suggestion is
@@ -170,7 +162,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    private double mSuggestedVerticalFocalLengthValue;
+    private double suggestedVerticalFocalLengthValue;
 
     /**
      * Indicates whether aspect ratio is suggested or not. When enabled, the
@@ -180,16 +172,14 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    private boolean mSuggestAspectRatioEnabled =
-            DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED;
+    private boolean suggestAspectRatioEnabled = DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED;
 
     /**
      * Suggested aspect ratio value to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    private double mSuggestedAspectRatioValue =
-            DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE;
+    private double suggestedAspectRatioValue = DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE;
 
     /**
      * Indicates whether principal point is suggested or not. When enabled, the
@@ -199,15 +189,14 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    private boolean mSuggestPrincipalPointEnabled =
-            DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED;
+    private boolean suggestPrincipalPointEnabled = DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED;
 
     /**
      * Suggested principal point value to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    private InhomogeneousPoint2D mSuggestedPrincipalPointValue;
+    private InhomogeneousPoint2D suggestedPrincipalPointValue;
 
     /**
      * Indicates whether camera rotation is suggested or not. When enabled, the
@@ -217,15 +206,14 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    private boolean mSuggestRotationEnabled =
-            DEFAULT_SUGGEST_ROTATION_ENABLED;
+    private boolean suggestRotationEnabled = DEFAULT_SUGGEST_ROTATION_ENABLED;
 
     /**
      * Suggested rotation to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    private Quaternion mSuggestedRotationValue;
+    private Quaternion suggestedRotationValue;
 
     /**
      * Indicates whether camera center is suggested or not. When enabled, the
@@ -235,34 +223,34 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    private boolean mSuggestCenterEnabled;
+    private boolean suggestCenterEnabled;
 
     /**
      * Suggested center to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    private InhomogeneousPoint3D mSuggestedCenterValue;
+    private InhomogeneousPoint3D suggestedCenterValue;
 
     /**
      * Instance to be reused to compute residual for intrinsic parameters.
      */
-    private PinholeCameraIntrinsicParameters mResidualIntrinsic;
+    private PinholeCameraIntrinsicParameters residualIntrinsic;
 
     /**
      * Instance to be reused to compute residual on principal point.
      */
-    private InhomogeneousPoint2D mResidualPrincipalPoint;
+    private InhomogeneousPoint2D residualPrincipalPoint;
 
     /**
      * Instance to be reused to compute residual on rotation.
      */
-    private Quaternion mResidualRotation;
+    private Quaternion residualRotation;
 
     /**
      * Instance to be reused to compute center.
      */
-    private InhomogeneousPoint3D mResidualCenter;
+    private InhomogeneousPoint3D residualCenter;
 
     /**
      * Constructor.
@@ -285,13 +273,11 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                                    Levenberg-Marquardt fitting.
      */
     protected PinholeCameraRefiner(
-            final PinholeCamera initialEstimation, final boolean keepCovariance,
-            final BitSet inliers, final double[] residuals, final int numInliers,
-            final List<S1> samples1, final List<S2> samples2,
+            final PinholeCamera initialEstimation, final boolean keepCovariance, final BitSet inliers,
+            final double[] residuals, final int numInliers, final List<S1> samples1, final List<S2> samples2,
             final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2);
-        mRefinementStandardDeviation = refinementStandardDeviation;
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2);
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -308,12 +294,10 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                                    Levenberg-Marquardt fitting.
      */
     protected PinholeCameraRefiner(
-            final PinholeCamera initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<S1> samples1,
-            final List<S2> samples2, final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2);
-        mRefinementStandardDeviation = refinementStandardDeviation;
+            final PinholeCamera initialEstimation, final boolean keepCovariance, final InliersData inliersData,
+            final List<S1> samples1, final List<S2> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2);
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -328,7 +312,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
-        return mRefinementStandardDeviation;
+        return refinementStandardDeviation;
     }
 
     /**
@@ -344,12 +328,11 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
-    public void setRefinementStandardDeviation(
-            final double refinementStandardDeviation) throws LockedException {
+    public void setRefinementStandardDeviation(final double refinementStandardDeviation) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefinementStandardDeviation = refinementStandardDeviation;
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -363,7 +346,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return true if skewness value is suggested, false otherwise.
      */
     public boolean isSuggestSkewnessValueEnabled() {
-        return mSuggestSkewnessValueEnabled;
+        return suggestSkewnessValueEnabled;
     }
 
     /**
@@ -378,12 +361,11 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                                    false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestSkewnessValueEnabled(
-            final boolean suggestSkewnessValueEnabled) throws LockedException {
+    public void setSuggestSkewnessValueEnabled(final boolean suggestSkewnessValueEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestSkewnessValueEnabled = suggestSkewnessValueEnabled;
+        this.suggestSkewnessValueEnabled = suggestSkewnessValueEnabled;
     }
 
     /**
@@ -394,7 +376,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return suggested skewness value.
      */
     public double getSuggestedSkewnessValue() {
-        return mSuggestedSkewnessValue;
+        return suggestedSkewnessValue;
     }
 
     /**
@@ -405,12 +387,11 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @param suggestedSkewnessValue suggested skewness value.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedSkewnessValue(final double suggestedSkewnessValue)
-            throws LockedException {
+    public void setSuggestedSkewnessValue(final double suggestedSkewnessValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedSkewnessValue = suggestedSkewnessValue;
+        this.suggestedSkewnessValue = suggestedSkewnessValue;
     }
 
     /**
@@ -424,7 +405,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return true if horizontal focal length is suggested, false otherwise.
      */
     public boolean isSuggestHorizontalFocalLengthEnabled() {
-        return mSuggestHorizontalFocalLengthEnabled;
+        return suggestHorizontalFocalLengthEnabled;
     }
 
     /**
@@ -439,14 +420,12 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                                            length is suggested, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestHorizontalFocalLengthEnabled(
-            final boolean suggestHorizontalFocalLengthEnabled)
+    public void setSuggestHorizontalFocalLengthEnabled(final boolean suggestHorizontalFocalLengthEnabled)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestHorizontalFocalLengthEnabled =
-                suggestHorizontalFocalLengthEnabled;
+        this.suggestHorizontalFocalLengthEnabled = suggestHorizontalFocalLengthEnabled;
     }
 
     /**
@@ -458,7 +437,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return suggested horizontal focal length value.
      */
     public double getSuggestedHorizontalFocalLengthValue() {
-        return mSuggestedHorizontalFocalLengthValue;
+        return suggestedHorizontalFocalLengthValue;
     }
 
     /**
@@ -471,13 +450,12 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                                            length value.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedHorizontalFocalLengthValue(
-            final double suggestedHorizontalFocalLengthValue) throws LockedException {
+    public void setSuggestedHorizontalFocalLengthValue(final double suggestedHorizontalFocalLengthValue)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedHorizontalFocalLengthValue =
-                suggestedHorizontalFocalLengthValue;
+        this.suggestedHorizontalFocalLengthValue = suggestedHorizontalFocalLengthValue;
     }
 
     /**
@@ -491,7 +469,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return true if vertical focal length is suggested, false otherwise.
      */
     public boolean isSuggestVerticalFocalLengthEnabled() {
-        return mSuggestVerticalFocalLengthEnabled;
+        return suggestVerticalFocalLengthEnabled;
     }
 
     /**
@@ -506,12 +484,12 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                                          suggested, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestVerticalFocalLengthEnabled(
-            final boolean suggestVerticalFocalLengthEnabled) throws LockedException {
+    public void setSuggestVerticalFocalLengthEnabled(final boolean suggestVerticalFocalLengthEnabled)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestVerticalFocalLengthEnabled = suggestVerticalFocalLengthEnabled;
+        this.suggestVerticalFocalLengthEnabled = suggestVerticalFocalLengthEnabled;
     }
 
     /**
@@ -523,7 +501,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return suggested vertical focal length.
      */
     public double getSuggestedVerticalFocalLengthValue() {
-        return mSuggestedVerticalFocalLengthValue;
+        return suggestedVerticalFocalLengthValue;
     }
 
     /**
@@ -535,12 +513,12 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @param suggestedVerticalFocalLengthValue suggested vertical focal length.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedVerticalFocalLengthValue(
-            final double suggestedVerticalFocalLengthValue) throws LockedException {
+    public void setSuggestedVerticalFocalLengthValue(final double suggestedVerticalFocalLengthValue)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedVerticalFocalLengthValue = suggestedVerticalFocalLengthValue;
+        this.suggestedVerticalFocalLengthValue = suggestedVerticalFocalLengthValue;
     }
 
     /**
@@ -554,7 +532,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return true if aspect ratio is suggested, false otherwise.
      */
     public boolean isSuggestAspectRatioEnabled() {
-        return mSuggestAspectRatioEnabled;
+        return suggestAspectRatioEnabled;
     }
 
     /**
@@ -569,12 +547,11 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                                  otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestAspectRatioEnabled(final boolean suggestAspectRatioEnabled)
-            throws LockedException {
+    public void setSuggestAspectRatioEnabled(final boolean suggestAspectRatioEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestAspectRatioEnabled = suggestAspectRatioEnabled;
+        this.suggestAspectRatioEnabled = suggestAspectRatioEnabled;
     }
 
     /**
@@ -585,7 +562,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return suggested aspect ratio value.
      */
     public double getSuggestedAspectRatioValue() {
-        return mSuggestedAspectRatioValue;
+        return suggestedAspectRatioValue;
     }
 
     /**
@@ -596,12 +573,11 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @param suggestedAspectRatioValue suggested aspect ratio value.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedAspectRatioValue(final double suggestedAspectRatioValue)
-            throws LockedException {
+    public void setSuggestedAspectRatioValue(final double suggestedAspectRatioValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedAspectRatioValue = suggestedAspectRatioValue;
+        this.suggestedAspectRatioValue = suggestedAspectRatioValue;
     }
 
     /**
@@ -615,7 +591,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return true if principal point is suggested, false otherwise.
      */
     public boolean isSuggestPrincipalPointEnabled() {
-        return mSuggestPrincipalPointEnabled;
+        return suggestPrincipalPointEnabled;
     }
 
     /**
@@ -630,15 +606,13 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                                     false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestPrincipalPointEnabled(
-            final boolean suggestPrincipalPointEnabled) throws LockedException {
+    public void setSuggestPrincipalPointEnabled(final boolean suggestPrincipalPointEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestPrincipalPointEnabled = suggestPrincipalPointEnabled;
-        if (suggestPrincipalPointEnabled &&
-                mSuggestedPrincipalPointValue == null) {
-            mSuggestedPrincipalPointValue = new InhomogeneousPoint2D();
+        this.suggestPrincipalPointEnabled = suggestPrincipalPointEnabled;
+        if (suggestPrincipalPointEnabled && suggestedPrincipalPointValue == null) {
+            suggestedPrincipalPointValue = new InhomogeneousPoint2D();
         }
     }
 
@@ -651,7 +625,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * enabled.
      */
     public InhomogeneousPoint2D getSuggestedPrincipalPointValue() {
-        return mSuggestedPrincipalPointValue;
+        return suggestedPrincipalPointValue;
     }
 
     /**
@@ -663,13 +637,12 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                                     reached when suggestion is enabled.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedPrincipalPointValue(
-            final InhomogeneousPoint2D suggestedPrincipalPointValue)
+    public void setSuggestedPrincipalPointValue(final InhomogeneousPoint2D suggestedPrincipalPointValue)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedPrincipalPointValue = suggestedPrincipalPointValue;
+        this.suggestedPrincipalPointValue = suggestedPrincipalPointValue;
     }
 
     /**
@@ -683,7 +656,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return true if camera rotation is suggested, false otherwise.
      */
     public boolean isSuggestRotationEnabled() {
-        return mSuggestRotationEnabled;
+        return suggestRotationEnabled;
     }
 
     /**
@@ -698,14 +671,13 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                               otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestRotationEnabled(final boolean suggestRotationEnabled)
-            throws LockedException {
+    public void setSuggestRotationEnabled(final boolean suggestRotationEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestRotationEnabled = suggestRotationEnabled;
-        if (suggestRotationEnabled && mSuggestedRotationValue == null) {
-            mSuggestedRotationValue = new Quaternion();
+        this.suggestRotationEnabled = suggestRotationEnabled;
+        if (suggestRotationEnabled && suggestedRotationValue == null) {
+            suggestedRotationValue = new Quaternion();
         }
 
     }
@@ -718,7 +690,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return suggested rotation to be reached when suggestion is enabled.
      */
     public Quaternion getSuggestedRotationValue() {
-        return mSuggestedRotationValue;
+        return suggestedRotationValue;
     }
 
     /**
@@ -730,12 +702,11 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                               suggestion is enabled.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedRotationValue(final Quaternion suggestedRotationValue)
-            throws LockedException {
+    public void setSuggestedRotationValue(final Quaternion suggestedRotationValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedRotationValue = suggestedRotationValue;
+        this.suggestedRotationValue = suggestedRotationValue;
     }
 
     /**
@@ -749,7 +720,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return true if camera center is suggested, false otherwise.
      */
     public boolean isSuggestCenterEnabled() {
-        return mSuggestCenterEnabled;
+        return suggestCenterEnabled;
     }
 
     /**
@@ -763,14 +734,13 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @param suggestCenterEnabled true if camera is suggested, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestCenterEnabled(final boolean suggestCenterEnabled)
-            throws LockedException {
+    public void setSuggestCenterEnabled(final boolean suggestCenterEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestCenterEnabled = suggestCenterEnabled;
-        if (suggestCenterEnabled && mSuggestedCenterValue == null) {
-            mSuggestedCenterValue = new InhomogeneousPoint3D();
+        this.suggestCenterEnabled = suggestCenterEnabled;
+        if (suggestCenterEnabled && suggestedCenterValue == null) {
+            suggestedCenterValue = new InhomogeneousPoint3D();
         }
     }
 
@@ -782,7 +752,7 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @return suggested center to be reached when suggestion is enabled.
      */
     public InhomogeneousPoint3D getSuggestedCenterValue() {
-        return mSuggestedCenterValue;
+        return suggestedCenterValue;
     }
 
     /**
@@ -794,12 +764,11 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                             suggestion is enabled.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedCenterValue(
-            final InhomogeneousPoint3D suggestedCenterValue) throws LockedException {
+    public void setSuggestedCenterValue(final InhomogeneousPoint3D suggestedCenterValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedCenterValue = suggestedCenterValue;
+        this.suggestedCenterValue = suggestedCenterValue;
     }
 
     /**
@@ -813,9 +782,8 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      *                           to converge to a result).
      */
     @Override
-    public PinholeCamera refine() throws NotReadyException, LockedException,
-            RefinerException {
-        final PinholeCamera result = new PinholeCamera();
+    public PinholeCamera refine() throws NotReadyException, LockedException, RefinerException {
+        final var result = new PinholeCamera();
         refine(result);
         return result;
     }
@@ -834,70 +802,57 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
     protected double suggestionResidual(final double[] params, final double weight) {
         double residual = 0.0;
 
-        if (mSuggestSkewnessValueEnabled) {
-            residual += Math.pow(params[0] - mSuggestedSkewnessValue, 2.0);
+        if (suggestSkewnessValueEnabled) {
+            residual += Math.pow(params[0] - suggestedSkewnessValue, 2.0);
         }
 
-        if (mSuggestHorizontalFocalLengthEnabled) {
-            residual += Math.pow(
-                    params[1] - mSuggestedHorizontalFocalLengthValue, 2.0);
+        if (suggestHorizontalFocalLengthEnabled) {
+            residual += Math.pow(params[1] - suggestedHorizontalFocalLengthValue, 2.0);
         }
 
-        if (mSuggestVerticalFocalLengthEnabled) {
-            residual += Math.pow(
-                    params[2] - mSuggestedVerticalFocalLengthValue, 2.0);
+        if (suggestVerticalFocalLengthEnabled) {
+            residual += Math.pow(params[2] - suggestedVerticalFocalLengthValue, 2.0);
         }
 
-        if (mSuggestAspectRatioEnabled) {
-            double aspectRatio = params[2] / params[1];
-            residual += Math.pow(aspectRatio - mSuggestedAspectRatioValue, 2.0);
+        if (suggestAspectRatioEnabled) {
+            final var aspectRatio = params[2] / params[1];
+            residual += Math.pow(aspectRatio - suggestedAspectRatioValue, 2.0);
         }
 
-        if (mSuggestPrincipalPointEnabled) {
-            if (mResidualPrincipalPoint == null) {
-                mResidualPrincipalPoint = new InhomogeneousPoint2D(
-                        params[3], params[4]);
+        if (suggestPrincipalPointEnabled) {
+            if (residualPrincipalPoint == null) {
+                residualPrincipalPoint = new InhomogeneousPoint2D(params[3], params[4]);
             } else {
-                mResidualPrincipalPoint.setInhomogeneousCoordinates(
-                        params[3], params[4]);
+                residualPrincipalPoint.setInhomogeneousCoordinates(params[3], params[4]);
             }
 
-            residual += Math.pow(mResidualPrincipalPoint.distanceTo(
-                    mSuggestedPrincipalPointValue), 2.0);
+            residual += Math.pow(residualPrincipalPoint.distanceTo(suggestedPrincipalPointValue), 2.0);
         }
 
-        if (mSuggestRotationEnabled) {
-            if (mResidualRotation == null) {
-                mResidualRotation = new Quaternion(params[5], params[6],
-                        params[7], params[8]);
+        if (suggestRotationEnabled) {
+            if (residualRotation == null) {
+                residualRotation = new Quaternion(params[5], params[6], params[7], params[8]);
             } else {
-                mResidualRotation.setA(params[5]);
-                mResidualRotation.setB(params[6]);
-                mResidualRotation.setC(params[7]);
-                mResidualRotation.setD(params[8]);
+                residualRotation.setA(params[5]);
+                residualRotation.setB(params[6]);
+                residualRotation.setC(params[7]);
+                residualRotation.setD(params[8]);
             }
-            mResidualRotation.normalize();
-            mSuggestedRotationValue.normalize();
-            residual += Math.pow(mResidualRotation.getA() -
-                    mSuggestedRotationValue.getA(), 2.0) +
-                    Math.pow(mResidualRotation.getB() -
-                            mSuggestedRotationValue.getB(), 2.0) +
-                    Math.pow(mResidualRotation.getC() -
-                            mSuggestedRotationValue.getC(), 2.0) +
-                    Math.pow(mResidualRotation.getD() -
-                            mSuggestedRotationValue.getD(), 2.0);
+            residualRotation.normalize();
+            suggestedRotationValue.normalize();
+            residual += Math.pow(residualRotation.getA() - suggestedRotationValue.getA(), 2.0)
+                    + Math.pow(residualRotation.getB() - suggestedRotationValue.getB(), 2.0)
+                    + Math.pow(residualRotation.getC() - suggestedRotationValue.getC(), 2.0)
+                    + Math.pow(residualRotation.getD() - suggestedRotationValue.getD(), 2.0);
         }
 
-        if (mSuggestCenterEnabled) {
-            if (mResidualCenter == null) {
-                mResidualCenter = new InhomogeneousPoint3D(
-                        params[9], params[10], params[11]);
+        if (suggestCenterEnabled) {
+            if (residualCenter == null) {
+                residualCenter = new InhomogeneousPoint3D(params[9], params[10], params[11]);
             } else {
-                mResidualCenter.setInhomogeneousCoordinates(
-                        params[9], params[10], params[11]);
+                residualCenter.setInhomogeneousCoordinates(params[9], params[10], params[11]);
             }
-            residual += Math.pow(
-                    mResidualCenter.distanceTo(mSuggestedCenterValue), 2.0);
+            residual += Math.pow(residualCenter.distanceTo(suggestedCenterValue), 2.0);
         }
 
         return weight * residual;
@@ -915,37 +870,33 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      */
     protected void parametersToCamera(final double[] params, final PinholeCamera result) {
 
-        if (mResidualIntrinsic == null) {
-            mResidualIntrinsic = new PinholeCameraIntrinsicParameters();
+        if (residualIntrinsic == null) {
+            residualIntrinsic = new PinholeCameraIntrinsicParameters();
         }
-        mResidualIntrinsic.setSkewness(params[0]);
-        mResidualIntrinsic.setHorizontalFocalLength(params[1]);
-        mResidualIntrinsic.setVerticalFocalLength(params[2]);
-        mResidualIntrinsic.setHorizontalPrincipalPoint(params[3]);
-        mResidualIntrinsic.setVerticalPrincipalPoint(params[4]);
+        residualIntrinsic.setSkewness(params[0]);
+        residualIntrinsic.setHorizontalFocalLength(params[1]);
+        residualIntrinsic.setVerticalFocalLength(params[2]);
+        residualIntrinsic.setHorizontalPrincipalPoint(params[3]);
+        residualIntrinsic.setVerticalPrincipalPoint(params[4]);
 
-        if (mResidualRotation == null) {
-            mResidualRotation = new Quaternion(params[5], params[6],
-                    params[7], params[8]);
+        if (residualRotation == null) {
+            residualRotation = new Quaternion(params[5], params[6], params[7], params[8]);
         } else {
-            mResidualRotation.setA(params[5]);
-            mResidualRotation.setB(params[6]);
-            mResidualRotation.setC(params[7]);
-            mResidualRotation.setD(params[8]);
+            residualRotation.setA(params[5]);
+            residualRotation.setB(params[6]);
+            residualRotation.setC(params[7]);
+            residualRotation.setD(params[8]);
         }
-        mResidualRotation.normalize();
+        residualRotation.normalize();
 
-        if (mResidualCenter == null) {
-            mResidualCenter = new InhomogeneousPoint3D(params[9], params[10],
-                    params[11]);
+        if (residualCenter == null) {
+            residualCenter = new InhomogeneousPoint3D(params[9], params[10], params[11]);
         } else {
-            mResidualCenter.setInhomogeneousCoordinates(params[9], params[10],
-                    params[11]);
+            residualCenter.setInhomogeneousCoordinates(params[9], params[10], params[11]);
         }
-        mResidualCenter.normalize();
+        residualCenter.normalize();
 
-        result.setIntrinsicAndExtrinsicParameters(mResidualIntrinsic,
-                mResidualRotation, mResidualCenter);
+        result.setIntrinsicAndExtrinsicParameters(residualIntrinsic, residualRotation, residualCenter);
         result.normalize();
     }
 
@@ -963,33 +914,32 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * @throws NotAvailableException if any camera component cannot be
      *                               retrieved.
      */
-    protected void cameraToParameters(final PinholeCamera camera, final double[] result)
-            throws CameraException, NotAvailableException {
+    protected void cameraToParameters(final PinholeCamera camera, final double[] result) throws CameraException,
+            NotAvailableException {
 
         camera.decompose();
 
-        final PinholeCameraIntrinsicParameters intrinsic =
-                camera.getIntrinsicParameters();
+        final var intrinsic = camera.getIntrinsicParameters();
         result[0] = intrinsic.getSkewness();
         result[1] = intrinsic.getHorizontalFocalLength();
         result[2] = intrinsic.getVerticalFocalLength();
         result[3] = intrinsic.getHorizontalPrincipalPoint();
         result[4] = intrinsic.getVerticalPrincipalPoint();
 
-        final Rotation3D rotation = camera.getCameraRotation();
-        if (mResidualRotation == null) {
-            mResidualRotation = rotation.toQuaternion();
+        final var rotation = camera.getCameraRotation();
+        if (residualRotation == null) {
+            residualRotation = rotation.toQuaternion();
         } else {
-            rotation.toQuaternion(mResidualRotation);
+            rotation.toQuaternion(residualRotation);
         }
-        mResidualRotation.normalize();
+        residualRotation.normalize();
 
-        result[5] = mResidualRotation.getA();
-        result[6] = mResidualRotation.getB();
-        result[7] = mResidualRotation.getC();
-        result[8] = mResidualRotation.getD();
+        result[5] = residualRotation.getA();
+        result[6] = residualRotation.getB();
+        result[7] = residualRotation.getC();
+        result[8] = residualRotation.getD();
 
-        final Point3D center = camera.getCameraCenter();
+        final var center = camera.getCameraCenter();
 
         result[9] = center.getInhomX();
         result[10] = center.getInhomY();
@@ -1015,10 +965,8 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * false otherwise.
      */
     private boolean hasIntrinsicSuggestions() {
-        return mSuggestSkewnessValueEnabled ||
-                mSuggestHorizontalFocalLengthEnabled ||
-                mSuggestVerticalFocalLengthEnabled ||
-                mSuggestAspectRatioEnabled;
+        return suggestSkewnessValueEnabled || suggestHorizontalFocalLengthEnabled || suggestVerticalFocalLengthEnabled
+                || suggestAspectRatioEnabled;
     }
 
     /**
@@ -1029,7 +977,6 @@ public abstract class PinholeCameraRefiner<S1, S2> extends
      * false otherwise.
      */
     private boolean hasExtrinsicSuggestions() {
-        return mSuggestPrincipalPointEnabled ||
-                mSuggestRotationEnabled || mSuggestCenterEnabled;
+        return suggestPrincipalPointEnabled || suggestRotationEnabled || suggestCenterEnabled;
     }
 }

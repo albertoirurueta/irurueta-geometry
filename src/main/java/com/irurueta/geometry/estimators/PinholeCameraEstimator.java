@@ -47,15 +47,13 @@ public abstract class PinholeCameraEstimator {
      * Default value indicating whether horizontal focal length value is
      * suggested or not. By default, this is disabled.
      */
-    public static final boolean DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED =
-            false;
+    public static final boolean DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED = false;
 
     /**
      * Default value indicating whether vertical focal length value is suggested
      * or not. By default, this is disabled.
      */
-    public static final boolean DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED =
-            false;
+    public static final boolean DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED = false;
 
     /**
      * Default value indicating whether aspect ratio is suggested or not. By
@@ -122,13 +120,13 @@ public abstract class PinholeCameraEstimator {
     /**
      * True when an estimator is estimating a camera.
      */
-    protected boolean mLocked;
+    protected boolean locked;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or estimation progress changes.
      */
-    protected PinholeCameraEstimatorListener mListener;
+    protected PinholeCameraEstimatorListener listener;
 
     /**
      * Indicates whether skewness value is suggested or not. When enabled, the
@@ -138,8 +136,7 @@ public abstract class PinholeCameraEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestSkewnessValueEnabled =
-            DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED;
+    protected boolean suggestSkewnessValueEnabled = DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED;
 
     /**
      * Suggested skewness value to be reached when suggestion is enabled.
@@ -147,7 +144,7 @@ public abstract class PinholeCameraEstimator {
      * otherwise the iterative refinement might not converge to provided
      * value.
      */
-    protected double mSuggestedSkewnessValue = DEFAULT_SUGGESTED_SKEWNESS_VALUE;
+    protected double suggestedSkewnessValue = DEFAULT_SUGGESTED_SKEWNESS_VALUE;
 
     /**
      * Indicates whether horizontal focal length is suggested or not. When
@@ -157,8 +154,7 @@ public abstract class PinholeCameraEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestHorizontalFocalLengthEnabled =
-            DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED;
+    protected boolean suggestHorizontalFocalLengthEnabled = DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED;
 
     /**
      * Suggested horizontal focal length value to be reached when suggestion is
@@ -166,7 +162,7 @@ public abstract class PinholeCameraEstimator {
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected double mSuggestedHorizontalFocalLengthValue;
+    protected double suggestedHorizontalFocalLengthValue;
 
     /**
      * Indicates whether vertical focal length is suggested or not. When
@@ -176,8 +172,7 @@ public abstract class PinholeCameraEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestVerticalFocalLengthEnabled =
-            DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED;
+    protected boolean suggestVerticalFocalLengthEnabled = DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED;
 
     /**
      * Suggested vertical focal length value to be reached when suggestion is
@@ -185,7 +180,7 @@ public abstract class PinholeCameraEstimator {
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected double mSuggestedVerticalFocalLengthValue;
+    protected double suggestedVerticalFocalLengthValue;
 
     /**
      * Indicates whether aspect ratio is suggested or not. When enabled, the
@@ -195,16 +190,14 @@ public abstract class PinholeCameraEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestAspectRatioEnabled =
-            DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED;
+    protected boolean suggestAspectRatioEnabled = DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED;
 
     /**
      * Suggested aspect ratio value to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected double mSuggestedAspectRatioValue =
-            DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE;
+    protected double suggestedAspectRatioValue = DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE;
 
     /**
      * Indicates whether principal point is suggested or not. When enabled, the
@@ -214,15 +207,14 @@ public abstract class PinholeCameraEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestPrincipalPointEnabled =
-            DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED;
+    protected boolean suggestPrincipalPointEnabled = DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED;
 
     /**
      * Suggested principal point value to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected InhomogeneousPoint2D mSuggestedPrincipalPointValue;
+    protected InhomogeneousPoint2D suggestedPrincipalPointValue;
 
     /**
      * Indicates whether camera rotation is suggested or not. When enabled, the
@@ -232,15 +224,14 @@ public abstract class PinholeCameraEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestRotationEnabled =
-            DEFAULT_SUGGEST_ROTATION_ENABLED;
+    protected boolean suggestRotationEnabled = DEFAULT_SUGGEST_ROTATION_ENABLED;
 
     /**
      * Suggested rotation to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected Quaternion mSuggestedRotationValue;
+    protected Quaternion suggestedRotationValue;
 
     /**
      * Indicates whether camera center is suggested or not. When enabled, the
@@ -250,14 +241,14 @@ public abstract class PinholeCameraEstimator {
      * suggested value if the initial value largely differs from the suggested
      * value.
      */
-    protected boolean mSuggestCenterEnabled;
+    protected boolean suggestCenterEnabled;
 
     /**
      * Suggested center to be reached when suggestion is enabled.
      * Suggested value should be close to the initially estimated value
      * otherwise the iterative refinement might not converge to provided value.
      */
-    protected InhomogeneousPoint3D mSuggestedCenterValue;
+    protected InhomogeneousPoint3D suggestedCenterValue;
 
     /**
      * Minimum suggestion weight. This weight is used to slowly draw original
@@ -267,7 +258,7 @@ public abstract class PinholeCameraEstimator {
      * The faster the weights are increased the less likely that suggested
      * values can be converged if they differ too much from the original ones.
      */
-    protected double mMinSuggestionWeight = DEFAULT_MIN_SUGGESTION_WEIGHT;
+    protected double minSuggestionWeight = DEFAULT_MIN_SUGGESTION_WEIGHT;
 
     /**
      * Maximum suggestion weight. This weight is used to slowly draw original
@@ -277,7 +268,7 @@ public abstract class PinholeCameraEstimator {
      * The faster the weights are increased the less likely that suggested
      * values can be converged if they differ too much from the original ones.
      */
-    protected double mMaxSuggestionWeight = DEFAULT_MAX_SUGGESTION_WEIGHT;
+    protected double maxSuggestionWeight = DEFAULT_MAX_SUGGESTION_WEIGHT;
 
     /**
      * Step to increase suggestion weight. This weight is used to slowly draw
@@ -287,14 +278,14 @@ public abstract class PinholeCameraEstimator {
      * faster the weights are increased the less likely that suggested values
      * can be converged if they differ too much from the original ones.
      */
-    protected double mSuggestionWeightStep = DEFAULT_SUGGESTION_WEIGHT_STEP;
+    protected double suggestionWeightStep = DEFAULT_SUGGESTION_WEIGHT_STEP;
 
     /**
      * Constructor.
      */
     protected PinholeCameraEstimator() {
-        mLocked = false;
-        mListener = null;
+        locked = false;
+        listener = null;
     }
 
     /**
@@ -304,8 +295,8 @@ public abstract class PinholeCameraEstimator {
      *                 starts, ends or estimation progress changes.
      */
     protected PinholeCameraEstimator(final PinholeCameraEstimatorListener listener) {
-        mLocked = false;
-        mListener = listener;
+        locked = false;
+        this.listener = listener;
     }
 
     /**
@@ -315,7 +306,7 @@ public abstract class PinholeCameraEstimator {
      * @return listener to be notified of events.
      */
     public PinholeCameraEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -325,12 +316,11 @@ public abstract class PinholeCameraEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if estimator is locked.
      */
-    public void setListener(final PinholeCameraEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final PinholeCameraEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -344,7 +334,7 @@ public abstract class PinholeCameraEstimator {
      * @return true if skewness value is suggested, false otherwise.
      */
     public boolean isSuggestSkewnessValueEnabled() {
-        return mSuggestSkewnessValueEnabled;
+        return suggestSkewnessValueEnabled;
     }
 
     /**
@@ -359,12 +349,11 @@ public abstract class PinholeCameraEstimator {
      *                                    false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestSkewnessValueEnabled(
-            final boolean suggestSkewnessValueEnabled) throws LockedException {
+    public void setSuggestSkewnessValueEnabled(final boolean suggestSkewnessValueEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestSkewnessValueEnabled = suggestSkewnessValueEnabled;
+        this.suggestSkewnessValueEnabled = suggestSkewnessValueEnabled;
     }
 
     /**
@@ -375,7 +364,7 @@ public abstract class PinholeCameraEstimator {
      * @return suggested skewness value.
      */
     public double getSuggestedSkewnessValue() {
-        return mSuggestedSkewnessValue;
+        return suggestedSkewnessValue;
     }
 
     /**
@@ -386,12 +375,11 @@ public abstract class PinholeCameraEstimator {
      * @param suggestedSkewnessValue suggested skewness value.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedSkewnessValue(final double suggestedSkewnessValue)
-            throws LockedException {
+    public void setSuggestedSkewnessValue(final double suggestedSkewnessValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedSkewnessValue = suggestedSkewnessValue;
+        this.suggestedSkewnessValue = suggestedSkewnessValue;
     }
 
     /**
@@ -405,7 +393,7 @@ public abstract class PinholeCameraEstimator {
      * @return true if horizontal focal length is suggested, false otherwise.
      */
     public boolean isSuggestHorizontalFocalLengthEnabled() {
-        return mSuggestHorizontalFocalLengthEnabled;
+        return suggestHorizontalFocalLengthEnabled;
     }
 
     /**
@@ -420,13 +408,12 @@ public abstract class PinholeCameraEstimator {
      *                                            length is suggested, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestHorizontalFocalLengthEnabled(
-            final boolean suggestHorizontalFocalLengthEnabled)
+    public void setSuggestHorizontalFocalLengthEnabled(final boolean suggestHorizontalFocalLengthEnabled)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestHorizontalFocalLengthEnabled =
+        this.suggestHorizontalFocalLengthEnabled =
                 suggestHorizontalFocalLengthEnabled;
     }
 
@@ -439,7 +426,7 @@ public abstract class PinholeCameraEstimator {
      * @return suggested horizontal focal length value.
      */
     public double getSuggestedHorizontalFocalLengthValue() {
-        return mSuggestedHorizontalFocalLengthValue;
+        return suggestedHorizontalFocalLengthValue;
     }
 
     /**
@@ -452,13 +439,12 @@ public abstract class PinholeCameraEstimator {
      *                                            length value.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedHorizontalFocalLengthValue(
-            final double suggestedHorizontalFocalLengthValue) throws LockedException {
+    public void setSuggestedHorizontalFocalLengthValue(final double suggestedHorizontalFocalLengthValue)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedHorizontalFocalLengthValue =
-                suggestedHorizontalFocalLengthValue;
+        this.suggestedHorizontalFocalLengthValue = suggestedHorizontalFocalLengthValue;
     }
 
     /**
@@ -472,7 +458,7 @@ public abstract class PinholeCameraEstimator {
      * @return true if vertical focal length is suggested, false otherwise.
      */
     public boolean isSuggestVerticalFocalLengthEnabled() {
-        return mSuggestVerticalFocalLengthEnabled;
+        return suggestVerticalFocalLengthEnabled;
     }
 
     /**
@@ -487,12 +473,12 @@ public abstract class PinholeCameraEstimator {
      *                                          suggested, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestVerticalFocalLengthEnabled(
-            final boolean suggestVerticalFocalLengthEnabled) throws LockedException {
+    public void setSuggestVerticalFocalLengthEnabled(final boolean suggestVerticalFocalLengthEnabled)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestVerticalFocalLengthEnabled = suggestVerticalFocalLengthEnabled;
+        this.suggestVerticalFocalLengthEnabled = suggestVerticalFocalLengthEnabled;
     }
 
     /**
@@ -504,7 +490,7 @@ public abstract class PinholeCameraEstimator {
      * @return suggested vertical focal length.
      */
     public double getSuggestedVerticalFocalLengthValue() {
-        return mSuggestedVerticalFocalLengthValue;
+        return suggestedVerticalFocalLengthValue;
     }
 
     /**
@@ -516,12 +502,12 @@ public abstract class PinholeCameraEstimator {
      * @param suggestedVerticalFocalLengthValue suggested vertical focal length.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedVerticalFocalLengthValue(
-            final double suggestedVerticalFocalLengthValue) throws LockedException {
+    public void setSuggestedVerticalFocalLengthValue(final double suggestedVerticalFocalLengthValue)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedVerticalFocalLengthValue = suggestedVerticalFocalLengthValue;
+        this.suggestedVerticalFocalLengthValue = suggestedVerticalFocalLengthValue;
     }
 
     /**
@@ -535,7 +521,7 @@ public abstract class PinholeCameraEstimator {
      * @return true if aspect ratio is suggested, false otherwise.
      */
     public boolean isSuggestAspectRatioEnabled() {
-        return mSuggestAspectRatioEnabled;
+        return suggestAspectRatioEnabled;
     }
 
     /**
@@ -550,12 +536,11 @@ public abstract class PinholeCameraEstimator {
      *                                  otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestAspectRatioEnabled(final boolean suggestAspectRatioEnabled)
-            throws LockedException {
+    public void setSuggestAspectRatioEnabled(final boolean suggestAspectRatioEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestAspectRatioEnabled = suggestAspectRatioEnabled;
+        this.suggestAspectRatioEnabled = suggestAspectRatioEnabled;
     }
 
     /**
@@ -566,7 +551,7 @@ public abstract class PinholeCameraEstimator {
      * @return suggested aspect ratio value.
      */
     public double getSuggestedAspectRatioValue() {
-        return mSuggestedAspectRatioValue;
+        return suggestedAspectRatioValue;
     }
 
     /**
@@ -577,12 +562,11 @@ public abstract class PinholeCameraEstimator {
      * @param suggestedAspectRatioValue suggested aspect ratio value.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedAspectRatioValue(final double suggestedAspectRatioValue)
-            throws LockedException {
+    public void setSuggestedAspectRatioValue(final double suggestedAspectRatioValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedAspectRatioValue = suggestedAspectRatioValue;
+        this.suggestedAspectRatioValue = suggestedAspectRatioValue;
     }
 
     /**
@@ -596,7 +580,7 @@ public abstract class PinholeCameraEstimator {
      * @return true if principal point is suggested, false otherwise.
      */
     public boolean isSuggestPrincipalPointEnabled() {
-        return mSuggestPrincipalPointEnabled;
+        return suggestPrincipalPointEnabled;
     }
 
     /**
@@ -611,15 +595,13 @@ public abstract class PinholeCameraEstimator {
      *                                     false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestPrincipalPointEnabled(
-            final boolean suggestPrincipalPointEnabled) throws LockedException {
+    public void setSuggestPrincipalPointEnabled(final boolean suggestPrincipalPointEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestPrincipalPointEnabled = suggestPrincipalPointEnabled;
-        if (suggestPrincipalPointEnabled &&
-                mSuggestedPrincipalPointValue == null) {
-            mSuggestedPrincipalPointValue = new InhomogeneousPoint2D();
+        this.suggestPrincipalPointEnabled = suggestPrincipalPointEnabled;
+        if (suggestPrincipalPointEnabled && suggestedPrincipalPointValue == null) {
+            suggestedPrincipalPointValue = new InhomogeneousPoint2D();
         }
     }
 
@@ -632,7 +614,7 @@ public abstract class PinholeCameraEstimator {
      * enabled.
      */
     public InhomogeneousPoint2D getSuggestedPrincipalPointValue() {
-        return mSuggestedPrincipalPointValue;
+        return suggestedPrincipalPointValue;
     }
 
     /**
@@ -644,13 +626,12 @@ public abstract class PinholeCameraEstimator {
      *                                     reached when suggestion is enabled.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedPrincipalPointValue(
-            final InhomogeneousPoint2D suggestedPrincipalPointValue)
+    public void setSuggestedPrincipalPointValue(final InhomogeneousPoint2D suggestedPrincipalPointValue)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedPrincipalPointValue = suggestedPrincipalPointValue;
+        this.suggestedPrincipalPointValue = suggestedPrincipalPointValue;
     }
 
     /**
@@ -664,7 +645,7 @@ public abstract class PinholeCameraEstimator {
      * @return true if camera rotation is suggested, false otherwise.
      */
     public boolean isSuggestRotationEnabled() {
-        return mSuggestRotationEnabled;
+        return suggestRotationEnabled;
     }
 
     /**
@@ -679,16 +660,14 @@ public abstract class PinholeCameraEstimator {
      *                               otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestRotationEnabled(final boolean suggestRotationEnabled)
-            throws LockedException {
+    public void setSuggestRotationEnabled(final boolean suggestRotationEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestRotationEnabled = suggestRotationEnabled;
-        if (suggestRotationEnabled && mSuggestedRotationValue == null) {
-            mSuggestedRotationValue = new Quaternion();
+        this.suggestRotationEnabled = suggestRotationEnabled;
+        if (suggestRotationEnabled && suggestedRotationValue == null) {
+            suggestedRotationValue = new Quaternion();
         }
-
     }
 
     /**
@@ -699,7 +678,7 @@ public abstract class PinholeCameraEstimator {
      * @return suggested rotation to be reached when suggestion is enabled.
      */
     public Quaternion getSuggestedRotationValue() {
-        return mSuggestedRotationValue;
+        return suggestedRotationValue;
     }
 
     /**
@@ -711,12 +690,11 @@ public abstract class PinholeCameraEstimator {
      *                               suggestion is enabled.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedRotationValue(final Quaternion suggestedRotationValue)
-            throws LockedException {
+    public void setSuggestedRotationValue(final Quaternion suggestedRotationValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedRotationValue = suggestedRotationValue;
+        this.suggestedRotationValue = suggestedRotationValue;
     }
 
     /**
@@ -730,7 +708,7 @@ public abstract class PinholeCameraEstimator {
      * @return true if camera center is suggested, false otherwise.
      */
     public boolean isSuggestCenterEnabled() {
-        return mSuggestCenterEnabled;
+        return suggestCenterEnabled;
     }
 
     /**
@@ -744,14 +722,13 @@ public abstract class PinholeCameraEstimator {
      * @param suggestCenterEnabled true if camera is suggested, false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestCenterEnabled(final boolean suggestCenterEnabled)
-            throws LockedException {
+    public void setSuggestCenterEnabled(final boolean suggestCenterEnabled) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestCenterEnabled = suggestCenterEnabled;
-        if (suggestCenterEnabled && mSuggestedCenterValue == null) {
-            mSuggestedCenterValue = new InhomogeneousPoint3D();
+        this.suggestCenterEnabled = suggestCenterEnabled;
+        if (suggestCenterEnabled && suggestedCenterValue == null) {
+            suggestedCenterValue = new InhomogeneousPoint3D();
         }
     }
 
@@ -763,7 +740,7 @@ public abstract class PinholeCameraEstimator {
      * @return suggested center to be reached when suggestion is enabled.
      */
     public InhomogeneousPoint3D getSuggestedCenterValue() {
-        return mSuggestedCenterValue;
+        return suggestedCenterValue;
     }
 
     /**
@@ -775,12 +752,11 @@ public abstract class PinholeCameraEstimator {
      *                             suggestion is enabled.
      * @throws LockedException if estimator is locked.
      */
-    public void setSuggestedCenterValue(
-            final InhomogeneousPoint3D suggestedCenterValue) throws LockedException {
+    public void setSuggestedCenterValue(final InhomogeneousPoint3D suggestedCenterValue) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mSuggestedCenterValue = suggestedCenterValue;
+        this.suggestedCenterValue = suggestedCenterValue;
     }
 
     /**
@@ -794,7 +770,7 @@ public abstract class PinholeCameraEstimator {
      * @return minimum suggestion weight.
      */
     public double getMinSuggestionWeight() {
-        return mMinSuggestionWeight;
+        return minSuggestionWeight;
     }
 
     /**
@@ -808,12 +784,11 @@ public abstract class PinholeCameraEstimator {
      * @param minSuggestionWeight minimum suggestion weight.
      * @throws LockedException if estimator is locked.
      */
-    public void setMinSuggestionWeight(final double minSuggestionWeight)
-            throws LockedException {
+    public void setMinSuggestionWeight(final double minSuggestionWeight) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mMinSuggestionWeight = minSuggestionWeight;
+        this.minSuggestionWeight = minSuggestionWeight;
     }
 
     /**
@@ -827,7 +802,7 @@ public abstract class PinholeCameraEstimator {
      * @return maximum suggestion weight.
      */
     public double getMaxSuggestionWeight() {
-        return mMaxSuggestionWeight;
+        return maxSuggestionWeight;
     }
 
     /**
@@ -841,12 +816,11 @@ public abstract class PinholeCameraEstimator {
      * @param maxSuggestionWeight maximum suggestion weight.
      * @throws LockedException if estimator is locked.
      */
-    public void setMaxSuggestionWeight(final double maxSuggestionWeight)
-            throws LockedException {
+    public void setMaxSuggestionWeight(final double maxSuggestionWeight) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mMaxSuggestionWeight = maxSuggestionWeight;
+        this.maxSuggestionWeight = maxSuggestionWeight;
     }
 
     /**
@@ -863,8 +837,8 @@ public abstract class PinholeCameraEstimator {
      * @throws IllegalArgumentException if minimum suggestion weight is greater
      *                                  or equal than maximum value.
      */
-    public void setMinMaxSuggestionWeight(final double minSuggestionWeight,
-                                          final double maxSuggestionWeight) throws LockedException {
+    public void setMinMaxSuggestionWeight(final double minSuggestionWeight, final double maxSuggestionWeight)
+            throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -872,8 +846,8 @@ public abstract class PinholeCameraEstimator {
             throw new IllegalArgumentException();
         }
 
-        mMinSuggestionWeight = minSuggestionWeight;
-        mMaxSuggestionWeight = maxSuggestionWeight;
+        this.minSuggestionWeight = minSuggestionWeight;
+        this.maxSuggestionWeight = maxSuggestionWeight;
     }
 
     /**
@@ -887,7 +861,7 @@ public abstract class PinholeCameraEstimator {
      * @return step to increase suggestion weight.
      */
     public double getSuggestionWeightStep() {
-        return mSuggestionWeightStep;
+        return suggestionWeightStep;
     }
 
     /**
@@ -902,8 +876,7 @@ public abstract class PinholeCameraEstimator {
      * @throws LockedException          if estimator is locked.
      * @throws IllegalArgumentException if provided step is negative or zero.
      */
-    public void setSuggestionWeightStep(final double suggestionWeightStep)
-            throws LockedException {
+    public void setSuggestionWeightStep(final double suggestionWeightStep) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -911,7 +884,7 @@ public abstract class PinholeCameraEstimator {
             throw new IllegalArgumentException();
         }
 
-        mSuggestionWeightStep = suggestionWeightStep;
+        this.suggestionWeightStep = suggestionWeightStep;
     }
 
     /**
@@ -921,7 +894,7 @@ public abstract class PinholeCameraEstimator {
      * otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -940,8 +913,7 @@ public abstract class PinholeCameraEstimator {
      * @throws PinholeCameraEstimatorException if an error occurs during
      *                                         estimation, usually because input data is not valid.
      */
-    public abstract PinholeCamera estimate() throws LockedException,
-            NotReadyException, PinholeCameraEstimatorException;
+    public abstract PinholeCamera estimate() throws LockedException, NotReadyException, PinholeCameraEstimatorException;
 
     /**
      * Returns type of pinhole camera estimator.
@@ -965,19 +937,14 @@ public abstract class PinholeCameraEstimator {
      * @param type type of pinhole camera estimator.
      * @return an instance of a pinhole camera estimator.
      */
-    public static PinholeCameraEstimator create(
-            final PinholeCameraEstimatorType type) {
-        switch (type) {
-            case DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR:
-                return new DLTLinePlaneCorrespondencePinholeCameraEstimator();
-            case WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR:
-                return new WeightedLinePlaneCorrespondencePinholeCameraEstimator();
-            case WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR:
-                return new WeightedPointCorrespondencePinholeCameraEstimator();
-            case DLT_POINT_PINHOLE_CAMERA_ESTIMATOR:
-            default:
-                return new DLTPointCorrespondencePinholeCameraEstimator();
-        }
+    public static PinholeCameraEstimator create(final PinholeCameraEstimatorType type) {
+        return switch (type) {
+            case DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR -> new DLTLinePlaneCorrespondencePinholeCameraEstimator();
+            case WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR ->
+                    new WeightedLinePlaneCorrespondencePinholeCameraEstimator();
+            case WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR -> new WeightedPointCorrespondencePinholeCameraEstimator();
+            default -> new DLTPointCorrespondencePinholeCameraEstimator();
+        };
     }
 
     /**
@@ -1009,10 +976,8 @@ public abstract class PinholeCameraEstimator {
      * false otherwise.
      */
     private boolean hasIntrinsicSuggestions() {
-        return mSuggestSkewnessValueEnabled ||
-                mSuggestHorizontalFocalLengthEnabled ||
-                mSuggestVerticalFocalLengthEnabled ||
-                mSuggestAspectRatioEnabled;
+        return suggestSkewnessValueEnabled || suggestHorizontalFocalLengthEnabled || suggestVerticalFocalLengthEnabled
+                || suggestAspectRatioEnabled;
     }
 
     /**
@@ -1023,7 +988,6 @@ public abstract class PinholeCameraEstimator {
      * false otherwise.
      */
     private boolean hasExtrinsicSuggestions() {
-        return mSuggestPrincipalPointEnabled ||
-                mSuggestRotationEnabled || mSuggestCenterEnabled;
+        return suggestPrincipalPointEnabled || suggestRotationEnabled || suggestCenterEnabled;
     }
 }

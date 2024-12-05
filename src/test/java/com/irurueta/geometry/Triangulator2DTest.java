@@ -16,15 +16,14 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class Triangulator2DTest {
+class Triangulator2DTest {
 
     private static final int MIN_SIDES = 3;
     private static final int MAX_SIDES = 12;
@@ -38,20 +37,18 @@ public class Triangulator2DTest {
     private static final double ABSOLUTE_ERROR = 1e-8;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(3, Triangulator2D.MIN_VERTICES);
-        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR,
-                Triangulator2D.DEFAULT_TRIANGULATOR_METHOD);
+        assertEquals(TriangulatorMethod.VAN_GOGH_TRIANGULATOR, Triangulator2D.DEFAULT_TRIANGULATOR_METHOD);
     }
 
     @Test
-    public void testCreateAndGetMethod() {
-        Triangulator2D triangulator = Triangulator2D.create();
+    void testCreateAndGetMethod() {
+        var triangulator = Triangulator2D.create();
         assertNotNull(triangulator);
 
         // check method correctness
-        assertEquals(Triangulator2D.DEFAULT_TRIANGULATOR_METHOD,
-                triangulator.getMethod());
+        assertEquals(Triangulator2D.DEFAULT_TRIANGULATOR_METHOD, triangulator.getMethod());
 
         // create with method
         triangulator = Triangulator2D.create(TriangulatorMethod.VAN_GOGH_TRIANGULATOR);
@@ -61,38 +58,38 @@ public class Triangulator2DTest {
     }
 
     @Test
-    public void testTriangulate() throws NotEnoughVerticesException, TriangulatorException {
+    void testTriangulate() throws NotEnoughVerticesException, TriangulatorException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final int sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
-        final double radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
+        final var randomizer = new UniformRandomizer();
+        final var sides = randomizer.nextInt(MIN_SIDES, MAX_SIDES);
+        final var radius = randomizer.nextDouble(MIN_RADIUS, MAX_RADIUS);
 
         // build vertices list
-        final List<Point2D> vertices = buildPolygonVertices(sides, radius);
+        final var vertices = buildPolygonVertices(sides, radius);
 
         // build polygon
-        final Polygon2D polygon = new Polygon2D(vertices);
+        final var polygon = new Polygon2D(vertices);
 
-        final double theta = randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES) * Math.PI / 180.0;
+        final var theta = Math.toRadians(randomizer.nextDouble(MIN_ANGLE_DEGREES, MAX_ANGLE_DEGREES));
         // create point inside of vertex
-        final Point2D point1 = new InhomogeneousPoint2D(
+        final var point1 = new InhomogeneousPoint2D(
                 radius / 2.0 * Math.cos(theta),
                 radius / 2.0 * Math.sin(theta));
 
         // create point outside of vertex
-        final Point2D point2 = new InhomogeneousPoint2D(
+        final var point2 = new InhomogeneousPoint2D(
                 2.0 * radius * Math.cos(theta),
                 2.0 * radius * Math.sin(theta));
 
-        final Triangulator2D triangulator = Triangulator2D.create();
-        final List<Triangle2D> triangles1 = triangulator.triangulate(polygon);
-        final List<Triangle2D> triangles2 = triangulator.triangulate(vertices);
+        final var triangulator = Triangulator2D.create();
+        final var triangles1 = triangulator.triangulate(polygon);
+        final var triangles2 = triangulator.triangulate(vertices);
 
-        double signedArea1 = 0.0;
-        double area1 = 0.0;
-        boolean inside1 = false;
-        boolean inside2 = false;
-        for (final Triangle2D triangle : triangles1) {
+        var signedArea1 = 0.0;
+        var area1 = 0.0;
+        var inside1 = false;
+        var inside2 = false;
+        for (final var triangle : triangles1) {
             signedArea1 += triangle.getSignedArea();
             area1 += triangle.getArea();
             if (triangle.isInside(point1)) {
@@ -113,10 +110,10 @@ public class Triangulator2DTest {
         assertFalse(polygon.isInside(point2));
         assertFalse(inside2);
 
-        double signedArea2 = 0.0;
-        double area2 = 0.0;
+        var signedArea2 = 0.0;
+        var area2 = 0.0;
         inside1 = false;
-        for (Triangle2D triangle : triangles2) {
+        for (final var triangle : triangles2) {
             signedArea2 += triangle.getSignedArea();
             area2 += triangle.getArea();
             if (triangle.isInside(point1)) {
@@ -138,13 +135,11 @@ public class Triangulator2DTest {
         assertFalse(inside2);
     }
 
-    private List<Point2D> buildPolygonVertices(final int sides, final double radius) {
-        final List<Point2D> vertices = new ArrayList<>(sides);
-        Point2D vertex;
-        for (int i = 0; i < sides; i++) {
-            final double angle = (double) i / (double) sides * 2.0 * Math.PI;
-            vertex = new InhomogeneousPoint2D(radius * Math.cos(angle),
-                    radius * Math.sin(angle));
+    private static List<Point2D> buildPolygonVertices(final int sides, final double radius) {
+        final var vertices = new ArrayList<Point2D>(sides);
+        for (var i = 0; i < sides; i++) {
+            final var angle = (double) i / (double) sides * 2.0 * Math.PI;
+            final var vertex = new InhomogeneousPoint2D(radius * Math.cos(angle), radius * Math.sin(angle));
             vertices.add(vertex);
         }
         return vertices;

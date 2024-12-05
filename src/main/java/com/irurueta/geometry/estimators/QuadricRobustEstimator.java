@@ -84,26 +84,25 @@ public abstract class QuadricRobustEstimator {
     /**
      * Default robust estimator method when none is provided.
      */
-    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD =
-            RobustEstimatorMethod.PROMEDS;
+    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;
 
     /**
      * Listener to be notified of events such as when estimation starts, ends
      * or its progress significantly changes.
      */
-    protected QuadricRobustEstimatorListener mListener;
+    protected QuadricRobustEstimatorListener listener;
 
     /**
      * Indicates if this estimator is locked because an estimation is being
      * computed.
      */
-    protected volatile boolean mLocked;
+    protected volatile boolean locked;
 
     /**
      * Amount of progress variation before notifying a progress change during
      * estimation.
      */
-    protected float mProgressDelta;
+    protected float progressDelta;
 
     /**
      * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
@@ -111,40 +110,40 @@ public abstract class QuadricRobustEstimator {
      * that the estimated result is correct. Usually this value will be close
      * to 1.0, but not exactly 1.0.
      */
-    protected double mConfidence;
+    protected double confidence;
 
     /**
      * Maximum allowed number of iterations. When the maximum number of
      * iterations is exceeded, result will not be available, however an
      * approximate result will be available for retrieval.
      */
-    protected int mMaxIterations;
+    protected int maxIterations;
 
     /**
      * List of points to be used to estimate a quadric. Provided list must have
      * a size greater or equal than MINIMUM_SIZE.
      */
-    protected List<Point3D> mPoints;
+    protected List<Point3D> points;
 
     /**
      * Matrix representation of a 3D point to be reused when computing
      * residuals.
      */
-    private Matrix mTestPoint;
+    private Matrix testPoint;
 
     /**
      * Matrix representation of a quadric to be reused when computing
      * residuals.
      */
-    private Matrix mTestQ;
+    private Matrix testQ;
 
     /**
      * Constructor.
      */
     protected QuadricRobustEstimator() {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -154,10 +153,10 @@ public abstract class QuadricRobustEstimator {
      *                 stars, ends or its progress significantly changes.
      */
     protected QuadricRobustEstimator(final QuadricRobustEstimatorListener listener) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
     }
 
     /**
@@ -168,9 +167,9 @@ public abstract class QuadricRobustEstimator {
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
     protected QuadricRobustEstimator(final List<Point3D> points) {
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -183,12 +182,11 @@ public abstract class QuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    protected QuadricRobustEstimator(final QuadricRobustEstimatorListener listener,
-                                     final List<Point3D> points) {
-        mListener = listener;
-        mProgressDelta = DEFAULT_PROGRESS_DELTA;
-        mConfidence = DEFAULT_CONFIDENCE;
-        mMaxIterations = DEFAULT_MAX_ITERATIONS;
+    protected QuadricRobustEstimator(final QuadricRobustEstimatorListener listener, final List<Point3D> points) {
+        this.listener = listener;
+        progressDelta = DEFAULT_PROGRESS_DELTA;
+        confidence = DEFAULT_CONFIDENCE;
+        maxIterations = DEFAULT_MAX_ITERATIONS;
         internalSetPoints(points);
     }
 
@@ -200,7 +198,7 @@ public abstract class QuadricRobustEstimator {
      * @return listener to be notified of events.
      */
     public QuadricRobustEstimatorListener getListener() {
-        return mListener;
+        return listener;
     }
 
     /**
@@ -210,12 +208,11 @@ public abstract class QuadricRobustEstimator {
      * @param listener listener to be notified of events.
      * @throws LockedException if robust estimator is locked.
      */
-    public void setListener(final QuadricRobustEstimatorListener listener)
-            throws LockedException {
+    public void setListener(final QuadricRobustEstimatorListener listener) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mListener = listener;
+        this.listener = listener;
     }
 
     /**
@@ -225,7 +222,7 @@ public abstract class QuadricRobustEstimator {
      * @return true if available, false otherwise.
      */
     public boolean isListenerAvailable() {
-        return mListener != null;
+        return listener != null;
     }
 
     /**
@@ -234,7 +231,7 @@ public abstract class QuadricRobustEstimator {
      * @return true if locked, false otherwise.
      */
     public boolean isLocked() {
-        return mLocked;
+        return locked;
     }
 
     /**
@@ -245,7 +242,7 @@ public abstract class QuadricRobustEstimator {
      * during estimation.
      */
     public float getProgressDelta() {
-        return mProgressDelta;
+        return progressDelta;
     }
 
     /**
@@ -263,11 +260,10 @@ public abstract class QuadricRobustEstimator {
         if (isLocked()) {
             throw new LockedException();
         }
-        if (progressDelta < MIN_PROGRESS_DELTA ||
-                progressDelta > MAX_PROGRESS_DELTA) {
+        if (progressDelta < MIN_PROGRESS_DELTA || progressDelta > MAX_PROGRESS_DELTA) {
             throw new IllegalArgumentException();
         }
-        mProgressDelta = progressDelta;
+        this.progressDelta = progressDelta;
     }
 
     /**
@@ -279,7 +275,7 @@ public abstract class QuadricRobustEstimator {
      * @return amount of confidence as a value between 0.0 and 1.0.
      */
     public double getConfidence() {
-        return mConfidence;
+        return confidence;
     }
 
     /**
@@ -301,7 +297,7 @@ public abstract class QuadricRobustEstimator {
         if (confidence < MIN_CONFIDENCE || confidence > MAX_CONFIDENCE) {
             throw new IllegalArgumentException();
         }
-        mConfidence = confidence;
+        this.confidence = confidence;
     }
 
     /**
@@ -312,7 +308,7 @@ public abstract class QuadricRobustEstimator {
      * @return maximum allowed number of iterations.
      */
     public int getMaxIterations() {
-        return mMaxIterations;
+        return maxIterations;
     }
 
     /**
@@ -332,7 +328,7 @@ public abstract class QuadricRobustEstimator {
         if (maxIterations < MIN_ITERATIONS) {
             throw new IllegalArgumentException();
         }
-        mMaxIterations = maxIterations;
+        this.maxIterations = maxIterations;
     }
 
     /**
@@ -342,7 +338,7 @@ public abstract class QuadricRobustEstimator {
      * @return list of points to be used to estimate a quadric.
      */
     public List<Point3D> getPoints() {
-        return mPoints;
+        return points;
     }
 
     /**
@@ -369,7 +365,7 @@ public abstract class QuadricRobustEstimator {
      * @return true if estimator is ready, false otherwise.
      */
     public boolean isReady() {
-        return mPoints != null && mPoints.size() >= MINIMUM_SIZE;
+        return points != null && points.size() >= MINIMUM_SIZE;
     }
 
     /**
@@ -409,19 +405,13 @@ public abstract class QuadricRobustEstimator {
      * @return an instance of a quadric robust estimator.
      */
     public static QuadricRobustEstimator create(final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSQuadricRobustEstimator();
-            case MSAC:
-                return new MSACQuadricRobustEstimator();
-            case PROSAC:
-                return new PROSACQuadricRobustEstimator();
-            case PROMEDS:
-                return new PROMedSQuadricRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACQuadricRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSQuadricRobustEstimator();
+            case MSAC -> new MSACQuadricRobustEstimator();
+            case PROSAC -> new PROSACQuadricRobustEstimator();
+            case PROMEDS -> new PROMedSQuadricRobustEstimator();
+            default -> new RANSACQuadricRobustEstimator();
+        };
     }
 
     /**
@@ -435,21 +425,14 @@ public abstract class QuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public static QuadricRobustEstimator create(final List<Point3D> points,
-                                                final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSQuadricRobustEstimator(points);
-            case MSAC:
-                return new MSACQuadricRobustEstimator(points);
-            case PROSAC:
-                return new PROSACQuadricRobustEstimator(points);
-            case PROMEDS:
-                return new PROMedSQuadricRobustEstimator(points);
-            case RANSAC:
-            default:
-                return new RANSACQuadricRobustEstimator(points);
-        }
+    public static QuadricRobustEstimator create(final List<Point3D> points, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSQuadricRobustEstimator(points);
+            case MSAC -> new MSACQuadricRobustEstimator(points);
+            case PROSAC -> new PROSACQuadricRobustEstimator(points);
+            case PROMEDS -> new PROMedSQuadricRobustEstimator(points);
+            default -> new RANSACQuadricRobustEstimator(points);
+        };
     }
 
     /**
@@ -463,21 +446,14 @@ public abstract class QuadricRobustEstimator {
      * @return an instance of a quadric robust estimator.
      */
     public static QuadricRobustEstimator create(
-            final QuadricRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSQuadricRobustEstimator(listener);
-            case MSAC:
-                return new MSACQuadricRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACQuadricRobustEstimator(listener);
-            case PROMEDS:
-                return new PROMedSQuadricRobustEstimator(listener);
-            case RANSAC:
-            default:
-                return new RANSACQuadricRobustEstimator(listener);
-        }
+            final QuadricRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSQuadricRobustEstimator(listener);
+            case MSAC -> new MSACQuadricRobustEstimator(listener);
+            case PROSAC -> new PROSACQuadricRobustEstimator(listener);
+            case PROMEDS -> new PROMedSQuadricRobustEstimator(listener);
+            default -> new RANSACQuadricRobustEstimator(listener);
+        };
     }
 
     /**
@@ -496,19 +472,13 @@ public abstract class QuadricRobustEstimator {
     public static QuadricRobustEstimator create(
             final QuadricRobustEstimatorListener listener, final List<Point3D> points,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSQuadricRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACQuadricRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACQuadricRobustEstimator(listener, points);
-            case PROMEDS:
-                return new PROMedSQuadricRobustEstimator(listener, points);
-            case RANSAC:
-            default:
-                return new RANSACQuadricRobustEstimator(listener, points);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSQuadricRobustEstimator(listener, points);
+            case MSAC -> new MSACQuadricRobustEstimator(listener, points);
+            case PROSAC -> new PROSACQuadricRobustEstimator(listener, points);
+            case PROMEDS -> new PROMedSQuadricRobustEstimator(listener, points);
+            default -> new RANSACQuadricRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -522,21 +492,14 @@ public abstract class QuadricRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 9 points).
      */
-    public static QuadricRobustEstimator create(final double[] qualityScores,
-                                                final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSQuadricRobustEstimator();
-            case MSAC:
-                return new MSACQuadricRobustEstimator();
-            case PROSAC:
-                return new PROSACQuadricRobustEstimator(qualityScores);
-            case PROMEDS:
-                return new PROMedSQuadricRobustEstimator(qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACQuadricRobustEstimator();
-        }
+    public static QuadricRobustEstimator create(final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSQuadricRobustEstimator();
+            case MSAC -> new MSACQuadricRobustEstimator();
+            case PROSAC -> new PROSACQuadricRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSQuadricRobustEstimator(qualityScores);
+            default -> new RANSACQuadricRobustEstimator();
+        };
     }
 
     /**
@@ -553,21 +516,14 @@ public abstract class QuadricRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static QuadricRobustEstimator create(
-            final List<Point3D> points, final double[] qualityScores,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSQuadricRobustEstimator(points);
-            case MSAC:
-                return new MSACQuadricRobustEstimator(points);
-            case PROSAC:
-                return new PROSACQuadricRobustEstimator(points, qualityScores);
-            case PROMEDS:
-                return new PROMedSQuadricRobustEstimator(points, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACQuadricRobustEstimator(points);
-        }
+            final List<Point3D> points, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSQuadricRobustEstimator(points);
+            case MSAC -> new MSACQuadricRobustEstimator(points);
+            case PROSAC -> new PROSACQuadricRobustEstimator(points, qualityScores);
+            case PROMEDS -> new PROMedSQuadricRobustEstimator(points, qualityScores);
+            default -> new RANSACQuadricRobustEstimator(points);
+        };
     }
 
     /**
@@ -586,19 +542,13 @@ public abstract class QuadricRobustEstimator {
     public static QuadricRobustEstimator create(
             final QuadricRobustEstimatorListener listener, final double[] qualityScores,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSQuadricRobustEstimator(listener);
-            case MSAC:
-                return new MSACQuadricRobustEstimator(listener);
-            case PROSAC:
-                return new PROSACQuadricRobustEstimator(listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSQuadricRobustEstimator(listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACQuadricRobustEstimator(listener);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSQuadricRobustEstimator(listener);
+            case MSAC -> new MSACQuadricRobustEstimator(listener);
+            case PROSAC -> new PROSACQuadricRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSQuadricRobustEstimator(listener, qualityScores);
+            default -> new RANSACQuadricRobustEstimator(listener);
+        };
     }
 
     /**
@@ -617,23 +567,15 @@ public abstract class QuadricRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static QuadricRobustEstimator create(
-            final QuadricRobustEstimatorListener listener, final List<Point3D> points,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSQuadricRobustEstimator(listener, points);
-            case MSAC:
-                return new MSACQuadricRobustEstimator(listener, points);
-            case PROSAC:
-                return new PROSACQuadricRobustEstimator(listener, points,
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSQuadricRobustEstimator(listener, points,
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACQuadricRobustEstimator(listener, points);
-        }
+            final QuadricRobustEstimatorListener listener, final List<Point3D> points, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSQuadricRobustEstimator(listener, points);
+            case MSAC -> new MSACQuadricRobustEstimator(listener, points);
+            case PROSAC -> new PROSACQuadricRobustEstimator(listener, points, qualityScores);
+            case PROMEDS -> new PROMedSQuadricRobustEstimator(listener, points, qualityScores);
+            default -> new RANSACQuadricRobustEstimator(listener, points);
+        };
     }
 
     /**
@@ -667,8 +609,7 @@ public abstract class QuadricRobustEstimator {
      *                 starts, ends or its progress significantly changes.
      * @return an instance of a quadric robust estimator.
      */
-    public static QuadricRobustEstimator create(
-            final QuadricRobustEstimatorListener listener) {
+    public static QuadricRobustEstimator create(final QuadricRobustEstimatorListener listener) {
         return create(listener, DEFAULT_ROBUST_METHOD);
     }
 
@@ -684,8 +625,7 @@ public abstract class QuadricRobustEstimator {
      *                                  size greater or equal than MINIMUM_SIZE.
      */
     public static QuadricRobustEstimator create(
-            final QuadricRobustEstimatorListener listener,
-            final List<Point3D> points) {
+            final QuadricRobustEstimatorListener listener, final List<Point3D> points) {
         return create(listener, points, DEFAULT_ROBUST_METHOD);
     }
 
@@ -713,8 +653,7 @@ public abstract class QuadricRobustEstimator {
      *                                  the same size as the list of provided quality scores, or it their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public static QuadricRobustEstimator create(final List<Point3D> points,
-                                                final double[] qualityScores) {
+    public static QuadricRobustEstimator create(final List<Point3D> points, final double[] qualityScores) {
         return create(points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -730,8 +669,7 @@ public abstract class QuadricRobustEstimator {
      *                                  smaller than MINIMUM_SIZE (i.e. 9 points).
      */
     public static QuadricRobustEstimator create(
-            final QuadricRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final QuadricRobustEstimatorListener listener, final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -749,9 +687,7 @@ public abstract class QuadricRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public static QuadricRobustEstimator create(
-            final QuadricRobustEstimatorListener listener,
-            final List<Point3D> points,
-            final double[] qualityScores) {
+            final QuadricRobustEstimatorListener listener, final List<Point3D> points, final double[] qualityScores) {
         return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -768,8 +704,7 @@ public abstract class QuadricRobustEstimator {
      * @throws RobustEstimatorException if estimation fails for any reason
      *                                  (i.e. numerical instability, no solution available, etc).
      */
-    public abstract Quadric estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException;
+    public abstract Quadric estimate() throws LockedException, NotReadyException, RobustEstimatorException;
 
     /**
      * Returns method being used for robust estimation.
@@ -790,7 +725,7 @@ public abstract class QuadricRobustEstimator {
         if (points.size() < MINIMUM_SIZE) {
             throw new IllegalArgumentException();
         }
-        mPoints = points;
+        this.points = points;
     }
 
     /**
@@ -803,25 +738,23 @@ public abstract class QuadricRobustEstimator {
     protected double residual(final Quadric q, final Point3D point) {
         q.normalize();
         try {
-            if (mTestQ == null) {
-                mTestQ = q.asMatrix();
+            if (testQ == null) {
+                testQ = q.asMatrix();
             } else {
-                q.asMatrix(mTestQ);
+                q.asMatrix(testQ);
             }
 
-            if (mTestPoint == null) {
-                mTestPoint = new Matrix(
-                        Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,
-                        1);
+            if (testPoint == null) {
+                testPoint = new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             }
             point.normalize();
-            mTestPoint.setElementAt(0, 0, point.getHomX());
-            mTestPoint.setElementAt(1, 0, point.getHomY());
-            mTestPoint.setElementAt(2, 0, point.getHomZ());
-            mTestPoint.setElementAt(3, 0, point.getHomW());
-            final Matrix locusMatrix = mTestPoint.transposeAndReturnNew();
-            locusMatrix.multiply(mTestQ);
-            locusMatrix.multiply(mTestPoint);
+            testPoint.setElementAt(0, 0, point.getHomX());
+            testPoint.setElementAt(1, 0, point.getHomY());
+            testPoint.setElementAt(2, 0, point.getHomZ());
+            testPoint.setElementAt(3, 0, point.getHomW());
+            final var locusMatrix = testPoint.transposeAndReturnNew();
+            locusMatrix.multiply(testQ);
+            locusMatrix.multiply(testPoint);
             return Math.abs(locusMatrix.getElementAt(0, 0));
         } catch (final AlgebraException e) {
             return Double.MAX_VALUE;

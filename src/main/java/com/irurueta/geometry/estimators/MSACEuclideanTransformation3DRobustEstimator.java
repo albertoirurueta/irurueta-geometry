@@ -32,8 +32,7 @@ import java.util.List;
  * matched 3D points using MSAC algorithm.
  */
 @SuppressWarnings("DuplicatedCode")
-public class MSACEuclideanTransformation3DRobustEstimator extends
-        EuclideanTransformation3DRobustEstimator {
+public class MSACEuclideanTransformation3DRobustEstimator extends EuclideanTransformation3DRobustEstimator {
 
     /**
      * Constant defining default threshold to determine whether points are
@@ -55,14 +54,14 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
      * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a matched pair of points.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Constructor.
      */
     public MSACEuclideanTransformation3DRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -82,7 +81,7 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
     public MSACEuclideanTransformation3DRobustEstimator(
             final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
         super(inputPoints, outputPoints);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -94,7 +93,7 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
     public MSACEuclideanTransformation3DRobustEstimator(
             final EuclideanTransformation3DRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -117,7 +116,7 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
             final EuclideanTransformation3DRobustEstimatorListener listener,
             final List<Point3D> inputPoints, final List<Point3D> outputPoints) {
         super(listener, inputPoints, outputPoints);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -125,10 +124,9 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
      *
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      */
-    public MSACEuclideanTransformation3DRobustEstimator(
-            final boolean weakMinimumSizeAllowed) {
+    public MSACEuclideanTransformation3DRobustEstimator(final boolean weakMinimumSizeAllowed) {
         super(weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -147,10 +145,9 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public MSACEuclideanTransformation3DRobustEstimator(
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints, final boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -161,10 +158,9 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
      * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
      */
     public MSACEuclideanTransformation3DRobustEstimator(
-            final EuclideanTransformation3DRobustEstimatorListener listener,
-            final boolean weakMinimumSizeAllowed) {
+            final EuclideanTransformation3DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
         super(listener, weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -186,10 +182,9 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
      */
     public MSACEuclideanTransformation3DRobustEstimator(
             final EuclideanTransformation3DRobustEstimatorListener listener,
-            final List<Point3D> inputPoints, final List<Point3D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
+            final List<Point3D> inputPoints, final List<Point3D> outputPoints, final boolean weakMinimumSizeAllowed) {
         super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -202,7 +197,7 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -225,7 +220,7 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -242,8 +237,7 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public EuclideanTransformation3D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public EuclideanTransformation3D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -251,133 +245,115 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
             throw new NotReadyException();
         }
 
-        final MSACRobustEstimator<EuclideanTransformation3D> innerEstimator =
-                new MSACRobustEstimator<>(
-                        new MSACRobustEstimatorListener<EuclideanTransformation3D>() {
+        final var innerEstimator = new MSACRobustEstimator<>(
+                new MSACRobustEstimatorListener<EuclideanTransformation3D>() {
 
-                            // point to be reused when computing residuals
-                            private final Point3D mTestPoint = Point3D.create(
-                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+                    // point to be reused when computing residuals
+                    private final Point3D testPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                            private final EuclideanTransformation3DEstimator mNonRobustEstimator =
-                                    new EuclideanTransformation3DEstimator(
-                                            isWeakMinimumSizeAllowed());
+                    private final EuclideanTransformation3DEstimator nonRobustEstimator =
+                            new EuclideanTransformation3DEstimator(isWeakMinimumSizeAllowed());
 
-                            private final List<Point3D> mSubsetInputPoints =
-                                    new ArrayList<>();
-                            private final List<Point3D> mSubsetOutputPoints =
-                                    new ArrayList<>();
+                    private final List<Point3D> subsetInputPoints = new ArrayList<>();
+                    private final List<Point3D> subsetOutputPoints = new ArrayList<>();
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+                    @Override
+                    public double getThreshold() {
+                        return threshold;
+                    }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputPoints.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputPoints.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return mNonRobustEstimator.getMinimumPoints();
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return nonRobustEstimator.getMinimumPoints();
+                    }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<EuclideanTransformation3D> solutions) {
-                                mSubsetInputPoints.clear();
-                                mSubsetOutputPoints.clear();
-                                for (final int samplesIndex : samplesIndices) {
-                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));
-                                    mSubsetOutputPoints.add(mOutputPoints.get(
-                                            samplesIndex));
-                                }
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<EuclideanTransformation3D> solutions) {
+                        subsetInputPoints.clear();
+                        subsetOutputPoints.clear();
+                        for (final var samplesIndex : samplesIndices) {
+                            subsetInputPoints.add(inputPoints.get(samplesIndex));
+                            subsetOutputPoints.add(outputPoints.get(samplesIndex));
+                        }
 
-                                try {
-                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,
-                                            mSubsetOutputPoints);
-                                    solutions.add(mNonRobustEstimator.estimate());
-                                } catch (final Exception e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            nonRobustEstimator.setPoints(subsetInputPoints, subsetOutputPoints);
+                            solutions.add(nonRobustEstimator.estimate());
+                        } catch (final Exception e) {
+                            // if points are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(
-                                    final EuclideanTransformation3D currentEstimation, final int i) {
-                                final Point3D inputPoint = mInputPoints.get(i);
-                                final Point3D outputPoint = mOutputPoints.get(i);
+                    @Override
+                    public double computeResidual(final EuclideanTransformation3D currentEstimation, final int i) {
+                        final var inputPoint = inputPoints.get(i);
+                        final var outputPoint = outputPoints.get(i);
 
-                                // transform input point and store result in mTestPoint
-                                currentEstimation.transform(inputPoint, mTestPoint);
+                        // transform input point and store result in mTestPoint
+                        currentEstimation.transform(inputPoint, testPoint);
 
-                                return outputPoint.distanceTo(mTestPoint);
-                            }
+                        return outputPoint.distanceTo(testPoint);
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return MSACEuclideanTransformation3DRobustEstimator.this.
-                                        isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return MSACEuclideanTransformation3DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<EuclideanTransformation3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            MSACEuclideanTransformation3DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<EuclideanTransformation3D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(MSACEuclideanTransformation3DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<EuclideanTransformation3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            MSACEuclideanTransformation3DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<EuclideanTransformation3D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(MSACEuclideanTransformation3DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<EuclideanTransformation3D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            MSACEuclideanTransformation3DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<EuclideanTransformation3D> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(
+                                    MSACEuclideanTransformation3DRobustEstimator.this, iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<EuclideanTransformation3D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            MSACEuclideanTransformation3DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
-                        });
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<EuclideanTransformation3D> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(
+                                    MSACEuclideanTransformation3DRobustEstimator.this, progress);
+                        }
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final EuclideanTransformation3D transformation =
-                    innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -404,6 +380,6 @@ public class MSACEuclideanTransformation3DRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        return mThreshold;
+        return threshold;
     }
 }

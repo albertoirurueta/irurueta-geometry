@@ -93,21 +93,19 @@ public class Conic extends BaseConic implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean isLocus(final Point2D point, final double threshold) {
-
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
         try {
             normalize();
-            final Matrix c = asMatrix();
-            final Matrix homPoint = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH,
-                    1);
+            final var c = asMatrix();
+            final var homPoint = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             point.normalize();
             homPoint.setElementAt(0, 0, point.getHomX());
             homPoint.setElementAt(1, 0, point.getHomY());
             homPoint.setElementAt(2, 0, point.getHomW());
-            Matrix locusMatrix = homPoint.transposeAndReturnNew();
+            final var locusMatrix = homPoint.transposeAndReturnNew();
             locusMatrix.multiply(c);
             locusMatrix.multiply(homPoint);
 
@@ -140,22 +138,20 @@ public class Conic extends BaseConic implements Serializable {
         try {
             // retrieve conic as matrix
             normalize();
-            final Matrix c = asMatrix();
-            final Matrix transHomPointA = new Matrix(1, Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
+            final var c = asMatrix();
+            final var transHomPointA = new Matrix(1, Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
             pointA.normalize();
             transHomPointA.setElementAt(0, 0, pointA.getHomX());
             transHomPointA.setElementAt(0, 1, pointA.getHomY());
             transHomPointA.setElementAt(0, 2, pointA.getHomW());
 
-
-            final Matrix tmp = transHomPointA.multiplyAndReturnNew(c);
+            final var tmp = transHomPointA.multiplyAndReturnNew(c);
             tmp.multiply(transHomPointA.transposeAndReturnNew()); //This is 
             // homPointA' * C * homPointA
 
-            final double normA = tmp.getElementAt(0, 0);
+            final var normA = tmp.getElementAt(0, 0);
 
-            final Matrix homPointB = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH,
-                    1);
+            final var homPointB = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             pointB.normalize();
             homPointB.setElementAt(0, 0, pointB.getHomX());
             homPointB.setElementAt(1, 0, pointB.getHomY());
@@ -165,15 +161,15 @@ public class Conic extends BaseConic implements Serializable {
             tmp.multiply(c);
             tmp.multiply(homPointB);
 
-            final double normB = tmp.getElementAt(0, 0);
+            final var normB = tmp.getElementAt(0, 0);
 
             transHomPointA.multiply(c);
             transHomPointA.multiply(homPointB);
             // This is homPointA' * C * homPointB
 
-            final double angleNumerator = transHomPointA.getElementAt(0, 0);
+            final var angleNumerator = transHomPointA.getElementAt(0, 0);
 
-            final double cosTheta = angleNumerator / Math.sqrt(normA * normB);
+            final var cosTheta = angleNumerator / Math.sqrt(normA * normB);
             return Math.acos(cosTheta);
         } catch (final WrongSizeException ignore) {
             // This will never happen
@@ -196,31 +192,28 @@ public class Conic extends BaseConic implements Serializable {
      * @return True if points are perpendicular, false otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean arePerpendicularPoints(final Point2D pointA, final Point2D pointB,
-                                          final double threshold) {
-
+    public boolean arePerpendicularPoints(final Point2D pointA, final Point2D pointB, final double threshold) {
         try {
             // retrieve conic as matrix
-            final Matrix transHomPointA = new Matrix(1, Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
+            final var transHomPointA = new Matrix(1, Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
             pointA.normalize();
             transHomPointA.setElementAt(0, 0, pointA.getHomX());
             transHomPointA.setElementAt(0, 1, pointA.getHomY());
             transHomPointA.setElementAt(0, 2, pointA.getHomW());
 
-            final Matrix homPointB = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH,
-                    1);
+            final var homPointB = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             pointB.normalize();
             homPointB.setElementAt(0, 0, pointB.getHomX());
             homPointB.setElementAt(1, 0, pointB.getHomY());
             homPointB.setElementAt(2, 0, pointB.getHomW());
 
             normalize();
-            final Matrix c = asMatrix();
+            final var c = asMatrix();
             transHomPointA.multiply(c);
             transHomPointA.multiply(homPointB);
             // This is homPointA' * C * homPointB
 
-            final double perpend = transHomPointA.getElementAt(0, 0);
+            final var perpend = transHomPointA.getElementAt(0, 0);
 
             return Math.abs(perpend) < threshold;
         } catch (final WrongSizeException ignore) {
@@ -240,24 +233,20 @@ public class Conic extends BaseConic implements Serializable {
      *                                        exist because this conic instance is degenerate (its inverse cannot be
      *                                        computed).
      */
-    public void dualConic(final DualConic dualConic)
-            throws DualConicNotAvailableException {
+    public void dualConic(final DualConic dualConic) throws DualConicNotAvailableException {
 
-        final Matrix conicMatrix = asMatrix();
+        final var conicMatrix = asMatrix();
         try {
-            final Matrix invMatrix = com.irurueta.algebra.Utils.inverse(conicMatrix);
+            final var invMatrix = com.irurueta.algebra.Utils.inverse(conicMatrix);
 
             // ensure that resulting matrix after inversion is symmetric
             // by computing the mean of off-diagonal elements
-            final double a = invMatrix.getElementAt(0, 0);
-            final double b = 0.5 * (invMatrix.getElementAt(0, 1) +
-                    invMatrix.getElementAt(1, 0));
-            final double c = invMatrix.getElementAt(1, 1);
-            final double d = 0.5 * (invMatrix.getElementAt(0, 2) +
-                    invMatrix.getElementAt(2, 0));
-            final double e = 0.5 * (invMatrix.getElementAt(1, 2) +
-                    invMatrix.getElementAt(2, 1));
-            final double f = invMatrix.getElementAt(2, 2);
+            final var a = invMatrix.getElementAt(0, 0);
+            final var b = 0.5 * (invMatrix.getElementAt(0, 1) + invMatrix.getElementAt(1, 0));
+            final var c = invMatrix.getElementAt(1, 1);
+            final var d = 0.5 * (invMatrix.getElementAt(0, 2) + invMatrix.getElementAt(2, 0));
+            final var e = 0.5 * (invMatrix.getElementAt(1, 2) + invMatrix.getElementAt(2, 1));
+            final var f = invMatrix.getElementAt(2, 2);
             dualConic.setParameters(a, b, c, d, e, f);
         } catch (final AlgebraException e) {
             throw new DualConicNotAvailableException(e);
@@ -274,7 +263,7 @@ public class Conic extends BaseConic implements Serializable {
      *                                        computed).
      */
     public DualConic getDualConic() throws DualConicNotAvailableException {
-        final DualConic dualConic = new DualConic();
+        final var dualConic = new DualConic();
         dualConic(dualConic);
         return dualConic;
     }
@@ -289,10 +278,10 @@ public class Conic extends BaseConic implements Serializable {
      */
     public ConicType getConicType() {
         // computes and evaluates the following expression: b^2 - 4ac
-        final double expression = (mB * mB) - (mA * mC);
+        final var expression = (b * b) - (a * c);
 
         if (expression < 0) {
-            if (mA == mC && mB == 0) {
+            if (a == c && b == 0) {
                 return ConicType.CIRCLE_CONIC_TYPE;
             } else {
                 return ConicType.ELLIPSE_CONIC_TYPE;
@@ -301,7 +290,7 @@ public class Conic extends BaseConic implements Serializable {
             return ConicType.PARABOLA_CONIC_TYPE;
         } else {
             // expression > 0
-            if ((mA + mC) == 0) {
+            if ((a + c) == 0) {
                 return ConicType.RECTANGULAR_HYPERBOLA_CONIC_TYPE;
             } else {
                 return ConicType.HYPERBOLA_CONIC_TYPE;
@@ -321,9 +310,9 @@ public class Conic extends BaseConic implements Serializable {
      * @throws CoincidentPointsException Raised if points are coincident or
      *                                   produce a degenerated configuration.
      */
-    public final void setParametersFromPoints(final Point2D point1, final Point2D point2,
-                                              final Point2D point3, final Point2D point4, final Point2D point5)
-            throws CoincidentPointsException {
+    public final void setParametersFromPoints(
+            final Point2D point1, final Point2D point2, final Point2D point3, final Point2D point4,
+            final Point2D point5) throws CoincidentPointsException {
 
         // normalize points to increase accuracy
         point1.normalize();
@@ -336,10 +325,10 @@ public class Conic extends BaseConic implements Serializable {
             // each point belonging to a conic follows equation:
             // p' * C * p = 0 ==>
             // x^2 + y^2 + w^2 + 2*x*y + 2*x*w + 2*y*w = 0
-            final Matrix m = new Matrix(5, 6);
-            double x = point1.getHomX();
-            double y = point1.getHomY();
-            double w = point1.getHomW();
+            final var m = new Matrix(5, 6);
+            var x = point1.getHomX();
+            var y = point1.getHomY();
+            var w = point1.getHomW();
             m.setElementAt(0, 0, x * x);
             m.setElementAt(0, 1, 2.0 * x * y);
             m.setElementAt(0, 2, y * y);
@@ -384,18 +373,18 @@ public class Conic extends BaseConic implements Serializable {
             m.setElementAt(4, 5, w * w);
 
             // normalize each row to increase accuracy
-            final double[] row = new double[6];
+            final var row = new double[6];
             double rowNorm;
 
-            for (int j = 0; j < 5; j++) {
+            for (var j = 0; j < 5; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 5, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for (int i = 0; i < 6; i++) {
+                for (var i = 0; i < 6; i++) {
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
                 }
             }
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             if (decomposer.getRank() < 5) {
@@ -404,14 +393,14 @@ public class Conic extends BaseConic implements Serializable {
 
             // the right null-space of m contains the parameters a, b, c, d, e ,f
             // of the conic
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
-            final double a = v.getElementAt(0, 5);
-            final double b = v.getElementAt(1, 5);
-            final double c = v.getElementAt(2, 5);
-            final double d = v.getElementAt(3, 5);
-            final double e = v.getElementAt(4, 5);
-            final double f = v.getElementAt(5, 5);
+            final var a = v.getElementAt(0, 5);
+            final var b = v.getElementAt(1, 5);
+            final var c = v.getElementAt(2, 5);
+            final var d = v.getElementAt(3, 5);
+            final var e = v.getElementAt(4, 5);
+            final var f = v.getElementAt(5, 5);
 
             setParameters(a, b, c, d, e, f);
         } catch (final AlgebraException ex) {
@@ -429,7 +418,7 @@ public class Conic extends BaseConic implements Serializable {
      *                           to DEFAULT_LOCUS_THRESHOLD.
      */
     public Line2D getTangentLineAt(final Point2D point) throws NotLocusException {
-        final Line2D line = new Line2D();
+        final var line = new Line2D();
         tangentLineAt(point, line, DEFAULT_LOCUS_THRESHOLD);
         return line;
     }
@@ -445,9 +434,7 @@ public class Conic extends BaseConic implements Serializable {
      *                                  to provided threshold.
      * @throws IllegalArgumentException if provided threshold is negative.
      */
-    public void tangentLineAt(final Point2D point, final Line2D line, final double threshold)
-            throws NotLocusException {
-
+    public void tangentLineAt(final Point2D point, final Line2D line, final double threshold) throws NotLocusException {
         if (!isLocus(point, threshold)) {
             throw new NotLocusException();
         }
@@ -455,11 +442,10 @@ public class Conic extends BaseConic implements Serializable {
         point.normalize();
         normalize();
 
-        final Matrix c = asMatrix();
+        final var c = asMatrix();
 
         try {
-            final Matrix p = new Matrix(
-                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
+            final var p = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             p.setElementAt(0, 0, point.getHomX());
             p.setElementAt(1, 0, point.getHomY());
             p.setElementAt(2, 0, point.getHomW());
@@ -486,7 +472,6 @@ public class Conic extends BaseConic implements Serializable {
     public static Conic createCanonicalAbsoluteConic() {
         return new Conic(1.0, 0.0, 1.0, 0.0, 0.0, 1.0);
     }
-
 
     //TODO: shortest distance of point to conic
     //TODO: closest point to conic

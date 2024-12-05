@@ -72,14 +72,14 @@ public class LMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Constructor.
      */
     public LMedSQuadricRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -91,7 +91,7 @@ public class LMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     public LMedSQuadricRobustEstimator(final List<Point3D> points) {
         super(points);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -102,7 +102,7 @@ public class LMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      */
     public LMedSQuadricRobustEstimator(final QuadricRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -114,10 +114,9 @@ public class LMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * @throws IllegalArgumentException if provided list of points don't have a
      *                                  size greater or equal than MINIMUM_SIZE.
      */
-    public LMedSQuadricRobustEstimator(final QuadricRobustEstimatorListener listener,
-                                       final List<Point3D> points) {
+    public LMedSQuadricRobustEstimator(final QuadricRobustEstimatorListener listener, final List<Point3D> points) {
         super(listener, points);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -140,7 +139,7 @@ public class LMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -173,7 +172,7 @@ public class LMedSQuadricRobustEstimator extends QuadricRobustEstimator {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -190,8 +189,7 @@ public class LMedSQuadricRobustEstimator extends QuadricRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Quadric estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Quadric estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -199,98 +197,91 @@ public class LMedSQuadricRobustEstimator extends QuadricRobustEstimator {
             throw new NotReadyException();
         }
 
-        final LMedSRobustEstimator<Quadric> innerEstimator =
-                new LMedSRobustEstimator<>(
-                        new LMedSRobustEstimatorListener<Quadric>() {
+        final var innerEstimator = new LMedSRobustEstimator<>(new LMedSRobustEstimatorListener<Quadric>() {
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPoints.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return points.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return QuadricRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return QuadricRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<Quadric> solutions) {
-                                final Point3D point1 = mPoints.get(samplesIndices[0]);
-                                final Point3D point2 = mPoints.get(samplesIndices[1]);
-                                final Point3D point3 = mPoints.get(samplesIndices[2]);
-                                final Point3D point4 = mPoints.get(samplesIndices[3]);
-                                final Point3D point5 = mPoints.get(samplesIndices[4]);
-                                final Point3D point6 = mPoints.get(samplesIndices[5]);
-                                final Point3D point7 = mPoints.get(samplesIndices[6]);
-                                final Point3D point8 = mPoints.get(samplesIndices[7]);
-                                final Point3D point9 = mPoints.get(samplesIndices[8]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Quadric> solutions) {
+                final var point1 = points.get(samplesIndices[0]);
+                final var point2 = points.get(samplesIndices[1]);
+                final var point3 = points.get(samplesIndices[2]);
+                final var point4 = points.get(samplesIndices[3]);
+                final var point5 = points.get(samplesIndices[4]);
+                final var point6 = points.get(samplesIndices[5]);
+                final var point7 = points.get(samplesIndices[6]);
+                final var point8 = points.get(samplesIndices[7]);
+                final var point9 = points.get(samplesIndices[8]);
 
-                                try {
-                                    final Quadric quadric = new Quadric(point1, point2, point3,
-                                            point4, point5, point6, point7, point8, point9);
-                                    solutions.add(quadric);
-                                } catch (final CoincidentPointsException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var quadric = new Quadric(point1, point2, point3, point4, point5, point6, point7, point8,
+                            point9);
+                    solutions.add(quadric);
+                } catch (final CoincidentPointsException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final Quadric currentEstimation, final int i) {
-                                return residual(currentEstimation, mPoints.get(i));
-                            }
+            @Override
+            public double computeResidual(final Quadric currentEstimation, final int i) {
+                return residual(currentEstimation, points.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return LMedSQuadricRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return LMedSQuadricRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<Quadric> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(LMedSQuadricRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Quadric> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(LMedSQuadricRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<Quadric> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(LMedSQuadricRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Quadric> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(LMedSQuadricRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Quadric> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            LMedSQuadricRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<Quadric> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(LMedSQuadricRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Quadric> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            LMedSQuadricRobustEstimator.this, progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<Quadric> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(LMedSQuadricRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            innerEstimator.setStopThreshold(mStopThreshold);
+            locked = true;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            innerEstimator.setStopThreshold(stopThreshold);
             return innerEstimator.estimate();
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 

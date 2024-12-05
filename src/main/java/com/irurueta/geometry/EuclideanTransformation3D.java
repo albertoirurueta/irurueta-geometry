@@ -25,7 +25,6 @@ import com.irurueta.geometry.estimators.NotReadyException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class performs Euclidean transformations on 3D space.
@@ -34,8 +33,7 @@ import java.util.List;
  * Scale cannot be modified on Euclidean transformation.
  */
 @SuppressWarnings("DuplicatedCode")
-public class EuclideanTransformation3D extends Transformation3D
-        implements Serializable {
+public class EuclideanTransformation3D extends Transformation3D implements Serializable {
 
     /**
      * Constant indicating number of coordinates required in translation arrays.
@@ -111,7 +109,6 @@ public class EuclideanTransformation3D extends Transformation3D
      *                                  to NUM_TRANSLATION_COORDS.
      */
     public EuclideanTransformation3D(final Rotation3D rotation, final double[] translation) {
-
         if (rotation == null) {
             throw new NullPointerException();
         }
@@ -144,14 +141,11 @@ public class EuclideanTransformation3D extends Transformation3D
      *                                   points or numerical instabilities).
      */
     public EuclideanTransformation3D(
-            final Point3D inputPoint1, final Point3D inputPoint2,
-            final Point3D inputPoint3, final Point3D inputPoint4,
-            final Point3D outputPoint1, final Point3D outputPoint2,
-            final Point3D outputPoint3, final Point3D outputPoint4)
-            throws CoincidentPointsException {
-        internalSetTransformationFromPoints(inputPoint1, inputPoint2,
-                inputPoint3, inputPoint4, outputPoint1, outputPoint2,
-                outputPoint3, outputPoint4);
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2, final Point3D outputPoint3,
+            final Point3D outputPoint4) throws CoincidentPointsException {
+        internalSetTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, inputPoint4, outputPoint1,
+                outputPoint2, outputPoint3, outputPoint4);
     }
 
     /**
@@ -288,8 +282,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @param translationZ translation z coordinate to be set.
      */
     public void setTranslation(
-            final double translationX, final double translationY,
-            final double translationZ) {
+            final double translationX, final double translationY, final double translationZ) {
         translation[0] = translationX;
         translation[1] = translationY;
         translation[2] = translationZ;
@@ -302,8 +295,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @param translation translation to be set.
      */
     public void setTranslation(final Point3D translation) {
-        setTranslation(translation.getInhomX(), translation.getInhomY(),
-                translation.getInhomZ());
+        setTranslation(translation.getInhomX(), translation.getInhomY(), translation.getInhomZ());
     }
 
     /**
@@ -313,7 +305,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @return a new point containing translation coordinates.
      */
     public Point3D getTranslationPoint() {
-        final Point3D out = Point3D.create();
+        final var out = Point3D.create();
         getTranslationPoint(out);
         return out;
     }
@@ -325,8 +317,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @param out point where translation coordinates will be stored.
      */
     public void getTranslationPoint(final Point3D out) {
-        out.setInhomogeneousCoordinates(translation[0], translation[1],
-                translation[2]);
+        out.setInhomogeneousCoordinates(translation[0], translation[1], translation[2]);
     }
 
     /**
@@ -368,8 +359,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @param translationZ z coordinate to be added to current translation.
      */
     public void addTranslation(
-            final double translationX, final double translationY,
-            final double translationZ) {
+            final double translationX, final double translationY, final double translationZ) {
         translation[0] += translationX;
         translation[1] += translationY;
         translation[2] += translationZ;
@@ -383,8 +373,7 @@ public class EuclideanTransformation3D extends Transformation3D
      *                    translation.
      */
     public void addTranslation(final Point3D translation) {
-        addTranslation(translation.getInhomX(), translation.getInhomY(),
-                translation.getInhomZ());
+        addTranslation(translation.getInhomX(), translation.getInhomY(), translation.getInhomZ());
     }
 
     /**
@@ -423,10 +412,8 @@ public class EuclideanTransformation3D extends Transformation3D
         m.initialize(0.0);
 
         // set rotation
-        m.setSubmatrix(0, 0,
-                Rotation3D.INHOM_COORDS - 1,
-                Rotation3D.INHOM_COORDS - 1,
-                rotation.asInhomogeneousMatrix());
+        m.setSubmatrix(0, 0, Rotation3D.INHOM_COORDS - 1,
+                Rotation3D.INHOM_COORDS - 1, rotation.asInhomogeneousMatrix());
 
         // set translation
         m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
@@ -447,10 +434,8 @@ public class EuclideanTransformation3D extends Transformation3D
     public void transform(final Point3D inputPoint, final Point3D outputPoint) {
         inputPoint.normalize();
         rotation.rotate(inputPoint, outputPoint);
-        outputPoint.setInhomogeneousCoordinates(
-                outputPoint.getInhomX() + translation[0],
-                outputPoint.getInhomY() + translation[1],
-                outputPoint.getInhomZ() + translation[2]);
+        outputPoint.setInhomogeneousCoordinates(outputPoint.getInhomX() + translation[0],
+                outputPoint.getInhomY() + translation[1], outputPoint.getInhomZ() + translation[2]);
     }
 
     /**
@@ -464,8 +449,7 @@ public class EuclideanTransformation3D extends Transformation3D
      *                                     the resulting output quadric matrix is not considered to be symmetric.
      */
     @Override
-    public void transform(final Quadric inputQuadric, final Quadric outputQuadric)
-            throws NonSymmetricMatrixException {
+    public void transform(final Quadric inputQuadric, final Quadric outputQuadric) throws NonSymmetricMatrixException {
         // point' * quadric * point = 0
         // point' * T' * transformedQuadric * T * point = 0
         // where:
@@ -476,13 +460,13 @@ public class EuclideanTransformation3D extends Transformation3D
 
         inputQuadric.normalize();
 
-        final Matrix q = inputQuadric.asMatrix();
-        final Matrix invT = inverseAndReturnNew().asMatrix();
+        final var q = inputQuadric.asMatrix();
+        final var invT = inverseAndReturnNew().asMatrix();
         // normalize transformation matrix invT to increase accuracy
-        double norm = Utils.normF(invT);
+        var norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
 
-        final Matrix m = invT.transposeAndReturnNew();
+        final var m = invT.transposeAndReturnNew();
         try {
             m.multiply(q);
             m.multiply(invT);
@@ -510,8 +494,8 @@ public class EuclideanTransformation3D extends Transformation3D
      *                                     symmetric.
      */
     @Override
-    public void transform(final DualQuadric inputDualQuadric,
-                          final DualQuadric outputDualQuadric) throws NonSymmetricMatrixException {
+    public void transform(final DualQuadric inputDualQuadric, final DualQuadric outputDualQuadric)
+            throws NonSymmetricMatrixException {
         // plane' * dualQuadric * plane = 0
         // plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane
 
@@ -521,13 +505,13 @@ public class EuclideanTransformation3D extends Transformation3D
 
         inputDualQuadric.normalize();
 
-        final Matrix dualQ = inputDualQuadric.asMatrix();
-        final Matrix t = asMatrix();
+        final var dualQ = inputDualQuadric.asMatrix();
+        final var t = asMatrix();
         // normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(t);
+        var norm = Utils.normF(t);
         t.multiplyByScalar(1.0 / norm);
 
-        final Matrix transT = t.transposeAndReturnNew();
+        final var transT = t.transposeAndReturnNew();
         try {
             t.multiply(dualQ);
             t.multiply(transT);
@@ -561,11 +545,11 @@ public class EuclideanTransformation3D extends Transformation3D
 
         inputPlane.normalize();
 
-        final Matrix invT = inverseAndReturnNew().asMatrix();
-        final Matrix plane = Matrix.newFromArray(inputPlane.asArray());
+        final var invT = inverseAndReturnNew().asMatrix();
+        final var plane = Matrix.newFromArray(inputPlane.asArray());
 
         // normalize transformation matrix T to increase accuracy
-        final double norm = Utils.normF(invT);
+        final var norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
 
         invT.transpose();
@@ -587,13 +571,11 @@ public class EuclideanTransformation3D extends Transformation3D
      *                     stored.
      */
     @Override
-    public void transform(final PinholeCamera inputCamera,
-                          final PinholeCamera outputCamera) {
-
+    public void transform(final PinholeCamera inputCamera, final PinholeCamera outputCamera) {
         inputCamera.normalize();
 
-        final Matrix invT = inverseAndReturnNew().asMatrix();
-        final Matrix c = inputCamera.getInternalMatrix();
+        final var invT = inverseAndReturnNew().asMatrix();
+        final var c = inputCamera.getInternalMatrix();
         try {
             c.multiply(invT);
             outputCamera.setInternalMatrix(c);
@@ -608,8 +590,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @return this transformation converted into a metric transformation.
      */
     public MetricTransformation3D toMetric() {
-        return new MetricTransformation3D(rotation, translation,
-                MetricTransformation3D.DEFAULT_SCALE);
+        return new MetricTransformation3D(rotation, translation, MetricTransformation3D.DEFAULT_SCALE);
     }
 
     /**
@@ -626,7 +607,7 @@ public class EuclideanTransformation3D extends Transformation3D
      * @return inverse transformation.
      */
     public Transformation3D inverseAndReturnNew() {
-        final EuclideanTransformation3D result = new EuclideanTransformation3D();
+        final var result = new EuclideanTransformation3D();
         inverse(result);
         return result;
     }
@@ -652,10 +633,8 @@ public class EuclideanTransformation3D extends Transformation3D
      * @return A new transformation resulting of the combination with this
      * transformation and provided transformation.
      */
-    public EuclideanTransformation3D combineAndReturnNew(
-            final EuclideanTransformation3D transformation) {
-
-        final EuclideanTransformation3D result = new EuclideanTransformation3D();
+    public EuclideanTransformation3D combineAndReturnNew(final EuclideanTransformation3D transformation) {
+        final var result = new EuclideanTransformation3D();
         combine(transformation, result);
         return result;
     }
@@ -681,14 +660,11 @@ public class EuclideanTransformation3D extends Transformation3D
      *                                   points or numerical instabilities).
      */
     public void setTransformationFromPoints(
-            final Point3D inputPoint1, final Point3D inputPoint2,
-            final Point3D inputPoint3, final Point3D inputPoint4,
-            final Point3D outputPoint1, final Point3D outputPoint2,
-            final Point3D outputPoint3, final Point3D outputPoint4)
-            throws CoincidentPointsException {
-        internalSetTransformationFromPoints(inputPoint1, inputPoint2,
-                inputPoint3, inputPoint4, outputPoint1, outputPoint2,
-                outputPoint3, outputPoint4);
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2, final Point3D outputPoint3,
+            final Point3D outputPoint4) throws CoincidentPointsException {
+        internalSetTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, inputPoint4, outputPoint1,
+                outputPoint2, outputPoint3, outputPoint4);
     }
 
     /**
@@ -706,9 +682,9 @@ public class EuclideanTransformation3D extends Transformation3D
         result.rotation = rotation.inverseRotationAndReturnNew();
 
         // reverse translation
-        final Matrix t = Matrix.newFromArray(translation, true);
+        final var t = Matrix.newFromArray(translation, true);
         t.multiplyByScalar(-1.0);
-        final Matrix invRot = result.rotation.asInhomogeneousMatrix();
+        final var invRot = result.rotation.asInhomogeneousMatrix();
         try {
             invRot.multiply(t);
         } catch (final WrongSizeException ignore) {
@@ -735,16 +711,14 @@ public class EuclideanTransformation3D extends Transformation3D
 
         try {
             // we do translation first, because this.rotation might change later
-            final Matrix r1 = this.rotation.asInhomogeneousMatrix();
-            final Matrix t2 = Matrix.newFromArray(inputTransformation.translation, true);
+            final var r1 = this.rotation.asInhomogeneousMatrix();
+            final var t2 = Matrix.newFromArray(inputTransformation.translation, true);
             // this is R1 * t2
             r1.multiply(t2);
 
-            ArrayUtils.sum(r1.toArray(), this.translation,
-                    outputTransformation.translation);
+            ArrayUtils.sum(r1.toArray(), this.translation, outputTransformation.translation);
 
-            outputTransformation.rotation = this.rotation.combineAndReturnNew(
-                    inputTransformation.rotation);
+            outputTransformation.rotation = this.rotation.combineAndReturnNew(inputTransformation.rotation);
 
         } catch (final WrongSizeException ignore) {
             // never happens
@@ -772,25 +746,22 @@ public class EuclideanTransformation3D extends Transformation3D
      *                                   points or numerical instabilities).
      */
     private void internalSetTransformationFromPoints(
-            final Point3D inputPoint1, final Point3D inputPoint2,
-            final Point3D inputPoint3, final Point3D inputPoint4,
-            final Point3D outputPoint1, final Point3D outputPoint2,
-            final Point3D outputPoint3, final Point3D outputPoint4) throws CoincidentPointsException {
-        final List<Point3D> inputPoints = new ArrayList<>();
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2, final Point3D outputPoint3,
+            final Point3D outputPoint4) throws CoincidentPointsException {
+        final var inputPoints = new ArrayList<Point3D>();
         inputPoints.add(inputPoint1);
         inputPoints.add(inputPoint2);
         inputPoints.add(inputPoint3);
         inputPoints.add(inputPoint4);
 
-        final List<Point3D> outputPoints = new ArrayList<>();
+        final var outputPoints = new ArrayList<Point3D>();
         outputPoints.add(outputPoint1);
         outputPoints.add(outputPoint2);
         outputPoints.add(outputPoint3);
         outputPoints.add(outputPoint4);
 
-        final EuclideanTransformation3DEstimator estimator =
-                new EuclideanTransformation3DEstimator(inputPoints,
-                        outputPoints);
+        final var estimator = new EuclideanTransformation3DEstimator(inputPoints, outputPoints);
 
         try {
             estimator.estimate(this);

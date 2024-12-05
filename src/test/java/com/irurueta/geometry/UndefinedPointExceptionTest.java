@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class UndefinedPointExceptionTest {
+class UndefinedPointExceptionTest {
 
     @Test
-    public void testConstructor() {
-        UndefinedPointException ex = new UndefinedPointException();
+    void testConstructor() {
+        var ex = new UndefinedPointException();
         assertNotNull(ex);
 
         ex = new UndefinedPointException("message");
@@ -32,8 +32,7 @@ public class UndefinedPointExceptionTest {
         ex = new UndefinedPointException(new Exception());
         assertNotNull(ex);
 
-        ex = new UndefinedPointException("message",
-                new Exception());
+        ex = new UndefinedPointException("message", new Exception());
         assertNotNull(ex);
     }
 }

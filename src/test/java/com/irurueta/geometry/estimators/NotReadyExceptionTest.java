@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry.estimators;
 
-import org.junit.*;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class NotReadyExceptionTest {
+class NotReadyExceptionTest {
 
     @Test
-    public void testConstructor() {
-        NotReadyException ex = new NotReadyException();
+    void testConstructor() {
+        var ex = new NotReadyException();
         assertNotNull(ex);
 
         ex = new NotReadyException("message");

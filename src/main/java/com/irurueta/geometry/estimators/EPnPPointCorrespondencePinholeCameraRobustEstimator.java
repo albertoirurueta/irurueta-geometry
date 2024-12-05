@@ -36,16 +36,15 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
     /**
      * Intrinsic parameters of camera to be estimated.
      */
-    protected PinholeCameraIntrinsicParameters mIntrinsic;
+    protected PinholeCameraIntrinsicParameters intrinsic;
 
     /**
      * Indicates whether planar configuration is checked to determine whether
      * point correspondences are in such configuration and find a specific
      * solution for such case.
      */
-    protected boolean mPlanarConfigurationAllowed =
-            EPnPPointCorrespondencePinholeCameraEstimator.
-                    DEFAULT_PLANAR_CONFIGURATION_ALLOWED;
+    protected boolean planarConfigurationAllowed =
+            EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_CONFIGURATION_ALLOWED;
 
     /**
      * Indicates whether the case where a dimension 2 null-space is allowed.
@@ -53,9 +52,8 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * equality of scales so that less point correspondences are required.
      * Enabling this parameter is usually ok.
      */
-    protected boolean mNullspaceDimension2Allowed =
-            EPnPPointCorrespondencePinholeCameraEstimator.
-                    DEFAULT_NULLSPACE_DIMENSION2_ALLOWED;
+    protected boolean nullspaceDimension2Allowed =
+            EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION2_ALLOWED;
 
     /**
      * Indicates whether the case where a dimension 3 null-space is allowed.
@@ -64,9 +62,8 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * Enabling this parameter is usually ok although less precise than
      * when a null-space of dimension 2 is used.
      */
-    protected boolean mNullspaceDimension3Allowed =
-            EPnPPointCorrespondencePinholeCameraEstimator.
-                    DEFAULT_NULLSPACE_DIMENSION3_ALLOWED;
+    protected boolean nullspaceDimension3Allowed =
+            EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_NULLSPACE_DIMENSION3_ALLOWED;
 
     /**
      * Threshold to determine whether 3D matched points are in a planar
@@ -75,9 +72,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * value of their covariance matrix has a value much smaller than the
      * largest one as many times as this value.
      */
-    protected double mPlanarThreshold =
-            EPnPPointCorrespondencePinholeCameraEstimator.
-                    DEFAULT_PLANAR_THRESHOLD;
+    protected double planarThreshold = EPnPPointCorrespondencePinholeCameraEstimator.DEFAULT_PLANAR_THRESHOLD;
 
     /**
      * Constructor.
@@ -92,8 +87,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    protected EPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener) {
+    protected EPnPPointCorrespondencePinholeCameraRobustEstimator(final PinholeCameraRobustEstimatorListener listener) {
         super(listener);
     }
 
@@ -142,10 +136,9 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *
      * @param intrinsic intrinsic parameters of camera to be estimated.
      */
-    protected EPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraIntrinsicParameters intrinsic) {
+    protected EPnPPointCorrespondencePinholeCameraRobustEstimator(final PinholeCameraIntrinsicParameters intrinsic) {
         this();
-        mIntrinsic = intrinsic;
+        this.intrinsic = intrinsic;
     }
 
     /**
@@ -156,10 +149,9 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @param intrinsic intrinsic parameters of camera to be estimated.
      */
     protected EPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic) {
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic) {
         this(listener);
-        mIntrinsic = intrinsic;
+        this.intrinsic = intrinsic;
     }
 
     /**
@@ -181,7 +173,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
             final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
             final List<Point2D> points2D) {
         this(points3D, points2D);
-        mIntrinsic = intrinsic;
+        this.intrinsic = intrinsic;
     }
 
     /**
@@ -202,11 +194,10 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  correspondences).
      */
     protected EPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
-            final List<Point2D> points2D) {
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
+            final List<Point3D> points3D, final List<Point2D> points2D) {
         this(listener, points3D, points2D);
-        mIntrinsic = intrinsic;
+        this.intrinsic = intrinsic;
     }
 
     /**
@@ -218,7 +209,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * false to always find a solution assuming the general case.
      */
     public boolean isPlanarConfigurationAllowed() {
-        return mPlanarConfigurationAllowed;
+        return planarConfigurationAllowed;
     }
 
     /**
@@ -231,12 +222,11 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                   general case.
      * @throws LockedException if estimator is locked.
      */
-    public void setPlanarConfigurationAllowed(
-            final boolean planarConfigurationAllowed) throws LockedException {
+    public void setPlanarConfigurationAllowed(final boolean planarConfigurationAllowed) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mPlanarConfigurationAllowed = planarConfigurationAllowed;
+        this.planarConfigurationAllowed = planarConfigurationAllowed;
     }
 
     /**
@@ -248,7 +238,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @return true to allow 2-dimensional null-space, false otherwise.
      */
     public boolean isNullspaceDimension2Allowed() {
-        return mNullspaceDimension2Allowed;
+        return nullspaceDimension2Allowed;
     }
 
     /**
@@ -261,12 +251,11 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                   false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setNullspaceDimension2Allowed(
-            final boolean nullspaceDimension2Allowed) throws LockedException {
+    public void setNullspaceDimension2Allowed(final boolean nullspaceDimension2Allowed) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mNullspaceDimension2Allowed = nullspaceDimension2Allowed;
+        this.nullspaceDimension2Allowed = nullspaceDimension2Allowed;
     }
 
     /**
@@ -279,7 +268,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @return true to allow 3-dimensional null-space, false otherwise.
      */
     public boolean isNullspaceDimension3Allowed() {
-        return mNullspaceDimension3Allowed;
+        return nullspaceDimension3Allowed;
     }
 
     /**
@@ -293,12 +282,11 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                   false otherwise.
      * @throws LockedException if estimator is locked.
      */
-    public void setNullspaceDimension3Allowed(
-            final boolean nullspaceDimension3Allowed) throws LockedException {
+    public void setNullspaceDimension3Allowed(final boolean nullspaceDimension3Allowed) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mNullspaceDimension3Allowed = nullspaceDimension3Allowed;
+        this.nullspaceDimension3Allowed = nullspaceDimension3Allowed;
     }
 
     /**
@@ -312,7 +300,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * configuration.
      */
     public double getPlanarThreshold() {
-        return mPlanarThreshold;
+        return planarThreshold;
     }
 
     /**
@@ -327,15 +315,14 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @throws IllegalArgumentException if provided threshold is negative.
      * @throws LockedException          if estimator is locked.
      */
-    public void setPlanarThreshold(final double planarThreshold)
-            throws LockedException {
+    public void setPlanarThreshold(final double planarThreshold) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
         if (planarThreshold < 0.0) {
             throw new IllegalArgumentException();
         }
-        mPlanarThreshold = planarThreshold;
+        this.planarThreshold = planarThreshold;
     }
 
     /**
@@ -344,7 +331,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @return intrinsic parameters of camera to be estimated.
      */
     public PinholeCameraIntrinsicParameters getIntrinsic() {
-        return mIntrinsic;
+        return intrinsic;
     }
 
     /**
@@ -353,12 +340,11 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @param intrinsic intrinsic parameters of camera to be estimated.
      * @throws LockedException if estimator is locked.
      */
-    public void setIntrinsic(final PinholeCameraIntrinsicParameters intrinsic)
-            throws LockedException {
+    public void setIntrinsic(final PinholeCameraIntrinsicParameters intrinsic) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mIntrinsic = intrinsic;
+        this.intrinsic = intrinsic;
     }
 
     /**
@@ -371,7 +357,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mIntrinsic != null;
+        return super.isReady() && intrinsic != null;
     }
 
     /**
@@ -396,8 +382,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                         estimation is already in progress.
      */
     @Override
-    public void setNormalizeSubsetPointCorrespondences(
-            final boolean normalizeSubsetPointCorrespondences)
+    public void setNormalizeSubsetPointCorrespondences(final boolean normalizeSubsetPointCorrespondences)
             throws LockedException {
         if (isLocked()) {
             throw new LockedException();
@@ -412,21 +397,14 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *               pinhole camera.
      * @return an instance of a pinhole camera robust estimator.
      */
-    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator();
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator();
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator();
-        }
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator();
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator();
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator();
+        };
     }
 
     /**
@@ -444,26 +422,14 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        points3D, points2D);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        points3D, points2D);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        points3D, points2D);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        points3D, points2D);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        points3D, points2D);
-        }
+            final List<Point3D> points3D, final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(points3D, points2D);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(points3D, points2D);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(points3D, points2D);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(points3D, points2D);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(points3D, points2D);
+        };
     }
 
     /**
@@ -477,26 +443,14 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @return an instance of a pinhole camera robust estimator.
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-        }
+            final PinholeCameraRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(listener);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(listener);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener);
+        };
     }
 
     /**
@@ -516,27 +470,16 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, points3D, points2D);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, points3D, points2D);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, points3D, points2D);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, points3D, points2D);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, points3D, points2D);
-        }
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, points3D, points2D);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, points3D, points2D);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, points3D, points2D);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, points3D, points2D);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, points3D, points2D);
+        };
     }
 
     /**
@@ -553,21 +496,13 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator();
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        qualityScores);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator();
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator();
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator();
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(qualityScores);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(qualityScores);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator();
+        };
     }
 
     /**
@@ -588,26 +523,17 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        points3D, points2D);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        points3D, points2D);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        points3D, points2D, qualityScores);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        points3D, points2D, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        points3D, points2D);
-        }
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(points3D, points2D);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(points3D, points2D);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    points3D, points2D, qualityScores);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    points3D, points2D, qualityScores);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(points3D, points2D);
+        };
     }
 
     /**
@@ -625,26 +551,15 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  the required minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, qualityScores);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener);
-        }
+            final PinholeCameraRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(listener);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, qualityScores);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, qualityScores);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener);
+        };
     }
 
     /**
@@ -667,27 +582,17 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, points3D, points2D);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, points3D, points2D);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, points3D, points2D, qualityScores);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, points3D, points2D, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, points3D, points2D);
-        }
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, points3D, points2D);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, points3D, points2D);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, points3D, points2D, qualityScores);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, points3D, points2D, qualityScores);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, points3D, points2D);
+        };
     }
 
     /**
@@ -700,26 +605,14 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @return an instance of a pinhole camera robust estimator.
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic);
-        }
+            final PinholeCameraIntrinsicParameters intrinsic, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic);
+        };
     }
 
     /**
@@ -738,27 +631,16 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, points3D, points2D);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, points3D, points2D);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, points3D, points2D);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, points3D, points2D);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, points3D, points2D);
-        }
+            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
+            final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic, points3D, points2D);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic, points3D, points2D);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic, points3D, points2D);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    intrinsic, points3D, points2D);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic, points3D, points2D);
+        };
     }
 
     /**
@@ -773,27 +655,15 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @return an instance of a pinhole camera robust estimator.
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
             final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, intrinsic);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, intrinsic);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, intrinsic);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, intrinsic);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, intrinsic);
+        };
     }
 
     /**
@@ -814,28 +684,20 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, points3D, points2D);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, points3D, points2D);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, points3D, points2D);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, points3D, points2D);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, points3D, points2D);
-        }
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
+            final List<Point3D> points3D, final List<Point2D> points2D, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, points3D, points2D);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, points3D, points2D);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, points3D, points2D);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, points3D, points2D);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, points3D, points2D);
+        };
     }
 
     /**
@@ -852,26 +714,15 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  smaller than required minimum size (6 samples).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, qualityScores);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic);
-        }
+            final PinholeCameraIntrinsicParameters intrinsic, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic, qualityScores);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic, qualityScores);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic);
+        };
     }
 
     /**
@@ -893,27 +744,17 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, points3D, points2D);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, points3D, points2D);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, points3D, points2D, qualityScores);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, points3D, points2D, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        intrinsic, points3D, points2D);
-        }
+            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores, final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic, points3D, points2D);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic, points3D, points2D);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    intrinsic, points3D, points2D, qualityScores);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    intrinsic, points3D, points2D, qualityScores);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(intrinsic, points3D, points2D);
+        };
     }
 
     /**
@@ -932,27 +773,17 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  the required minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
             final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, qualityScores);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic);
-        }
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, intrinsic);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, intrinsic);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, qualityScores);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, qualityScores);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(listener, intrinsic);
+        };
     }
 
     /**
@@ -976,28 +807,21 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores, final RobustEstimatorMethod method) {
-        switch (method) {
-            case LMEDS:
-                return new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, points3D, points2D);
-            case MSAC:
-                return new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, points3D, points2D);
-            case PROSAC:
-                return new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, points3D, points2D, qualityScores);
-            case PROMEDS:
-                return new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, points3D, points2D, qualityScores);
-            case RANSAC:
-            default:
-                return new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-                        listener, intrinsic, points3D, points2D);
-        }
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+        return switch (method) {
+            case LMEDS -> new LMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, points3D, points2D);
+            case MSAC -> new MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, points3D, points2D);
+            case PROSAC -> new PROSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, points3D, points2D, qualityScores);
+            case PROMEDS -> new PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, points3D, points2D, qualityScores);
+            default -> new RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
+                    listener, intrinsic, points3D, points2D);
+        };
     }
 
     /**
@@ -1057,8 +881,8 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D) {
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D) {
         return create(listener, points3D, points2D, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1072,8 +896,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than required minimum size (6 samples).
      */
-    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final double[] qualityScores) {
+    public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(final double[] qualityScores) {
         return create(qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1093,8 +916,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores) {
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores) {
         return create(points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1112,8 +934,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  the required minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final PinholeCameraRobustEstimatorListener listener, final double[] qualityScores) {
         return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1135,11 +956,9 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores) {
-        return create(listener, points3D, points2D, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final PinholeCameraRobustEstimatorListener listener, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores) {
+        return create(listener, points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1168,8 +987,8 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D) {
+            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
+            final List<Point2D> points2D) {
         return create(intrinsic, points3D, points2D, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1184,8 +1003,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      * @return an instance of a pinhole camera robust estimator.
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic) {
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic) {
         return create(listener, intrinsic, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1206,11 +1024,9 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
             final List<Point3D> points3D, final List<Point2D> points2D) {
-        return create(listener, intrinsic, points3D, points2D,
-                DEFAULT_ROBUST_METHOD);
+        return create(listener, intrinsic, points3D, points2D, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1225,8 +1041,7 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  smaller than required minimum size (6 samples).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final double[] qualityScores) {
+            final PinholeCameraIntrinsicParameters intrinsic, final double[] qualityScores) {
         return create(intrinsic, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
@@ -1247,11 +1062,9 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores) {
-        return create(intrinsic, points3D, points2D, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
+            final List<Point2D> points2D, final double[] qualityScores) {
+        return create(intrinsic, points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1269,11 +1082,9 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  the required minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
             final double[] qualityScores) {
-        return create(listener, intrinsic, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+        return create(listener, intrinsic, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 
     /**
@@ -1295,11 +1106,8 @@ public abstract class EPnPPointCorrespondencePinholeCameraRobustEstimator
      *                                  minimum size (6 correspondences).
      */
     public static EPnPPointCorrespondencePinholeCameraRobustEstimator create(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic,
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final double[] qualityScores) {
-        return create(listener, intrinsic, points3D, points2D, qualityScores,
-                DEFAULT_ROBUST_METHOD);
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic,
+            final List<Point3D> points3D, final List<Point2D> points2D, final double[] qualityScores) {
+        return create(listener, intrinsic, points3D, points2D, qualityScores, DEFAULT_ROBUST_METHOD);
     }
 }

@@ -84,11 +84,10 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @throws CoincidentPointsException Raised if points are coincident or
      *                                   produce a degenerated configuration.
      */
-    public Quadric(final Point3D point1, final Point3D point2, final Point3D point3,
-                   final Point3D point4, final Point3D point5, final Point3D point6, final Point3D point7,
-                   final Point3D point8, final Point3D point9) throws CoincidentPointsException {
-        setParametersFromPoints(point1, point2, point3, point4, point5, point6,
-                point7, point8, point9);
+    public Quadric(final Point3D point1, final Point3D point2, final Point3D point3, final Point3D point4,
+                   final Point3D point5, final Point3D point6, final Point3D point7, final Point3D point8,
+                   final Point3D point9) throws CoincidentPointsException {
+        setParametersFromPoints(point1, point2, point3, point4, point5, point6, point7, point8, point9);
     }
 
     /**
@@ -103,22 +102,20 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean isLocus(final Point3D point, final double threshold) {
-
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
         try {
             normalize();
-            final Matrix q = asMatrix();
-            final Matrix homPoint = new Matrix(
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
+            final var q = asMatrix();
+            final var homPoint = new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             point.normalize();
             homPoint.setElementAt(0, 0, point.getHomX());
             homPoint.setElementAt(1, 0, point.getHomY());
             homPoint.setElementAt(2, 0, point.getHomZ());
             homPoint.setElementAt(3, 0, point.getHomW());
-            final Matrix locusMatrix = homPoint.transposeAndReturnNew();
+            final var locusMatrix = homPoint.transposeAndReturnNew();
             locusMatrix.multiply(q);
             locusMatrix.multiply(homPoint);
 
@@ -150,23 +147,21 @@ public class Quadric extends BaseQuadric implements Serializable {
     public double angleBetweenPoints(final Point3D pointA, final Point3D pointB) {
         try {
             // retrieve quadric as matrix
-            final Matrix q = asMatrix();
-            final Matrix transHomPointA = new Matrix(1,
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
+            final var q = asMatrix();
+            final var transHomPointA = new Matrix(1, Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
             pointA.normalize();
             transHomPointA.setElementAt(0, 0, pointA.getHomX());
             transHomPointA.setElementAt(0, 1, pointA.getHomY());
             transHomPointA.setElementAt(0, 2, pointA.getHomZ());
             transHomPointA.setElementAt(0, 3, pointA.getHomW());
 
-            final Matrix tmp = transHomPointA.multiplyAndReturnNew(q);
+            final var tmp = transHomPointA.multiplyAndReturnNew(q);
             tmp.multiply(transHomPointA.transposeAndReturnNew()); //This is
             // homPointA' * Q * homPointA
 
-            final double normA = tmp.getElementAt(0, 0);
+            final var normA = tmp.getElementAt(0, 0);
 
-            final Matrix homPointB = new Matrix(
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
+            final var homPointB = new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             pointB.normalize();
             homPointB.setElementAt(0, 0, pointB.getHomX());
             homPointB.setElementAt(1, 0, pointB.getHomY());
@@ -177,15 +172,15 @@ public class Quadric extends BaseQuadric implements Serializable {
             tmp.multiply(q);
             tmp.multiply(homPointB);
 
-            final double normB = tmp.getElementAt(0, 0);
+            final var normB = tmp.getElementAt(0, 0);
 
             transHomPointA.multiply(q);
             transHomPointA.multiply(homPointB);
             // This is homPointA' * Q * homPointB
 
-            final double angleNumerator = transHomPointA.getElementAt(0, 0);
+            final var angleNumerator = transHomPointA.getElementAt(0, 0);
 
-            final double cosTheta = angleNumerator / Math.sqrt(normA * normB);
+            final var cosTheta = angleNumerator / Math.sqrt(normA * normB);
             return Math.acos(cosTheta);
         } catch (final WrongSizeException ignore) {
             // This will never happen
@@ -208,21 +203,17 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @return True if points are perpendicular, false otherwise.
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
-    public boolean arePerpendicularPoints(final Point3D pointA, final Point3D pointB,
-                                          final double threshold) {
-
+    public boolean arePerpendicularPoints(final Point3D pointA, final Point3D pointB, final double threshold) {
         try {
             // retrieve quadric as matrix
-            final Matrix transHomPointA = new Matrix(1,
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
+            final var transHomPointA = new Matrix(1, Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
             pointA.normalize();
             transHomPointA.setElementAt(0, 0, pointA.getHomX());
             transHomPointA.setElementAt(0, 1, pointA.getHomY());
             transHomPointA.setElementAt(0, 2, pointA.getHomZ());
             transHomPointA.setElementAt(0, 3, pointA.getHomW());
 
-            final Matrix homPointB = new Matrix(
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
+            final var homPointB = new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             pointB.normalize();
             homPointB.setElementAt(0, 0, pointB.getHomX());
             homPointB.setElementAt(1, 0, pointB.getHomY());
@@ -230,12 +221,12 @@ public class Quadric extends BaseQuadric implements Serializable {
             homPointB.setElementAt(3, 0, pointB.getHomW());
 
             normalize();
-            final Matrix q = asMatrix();
+            final var q = asMatrix();
             transHomPointA.multiply(q);
             transHomPointA.multiply(homPointB);
             // This is homPointA' * Q * homPointB
 
-            final double perpend = transHomPointA.getElementAt(0, 0);
+            final var perpend = transHomPointA.getElementAt(0, 0);
 
             return Math.abs(perpend) < threshold;
         } catch (final WrongSizeException ignore) {
@@ -254,8 +245,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @see #arePerpendicularPoints(Point3D, Point3D, double)
      */
     public boolean arePerpendicularPoints(final Point3D pointA, final Point3D pointB) {
-        return arePerpendicularPoints(pointA, pointB,
-                DEFAULT_PERPENDICULAR_THRESHOLD);
+        return arePerpendicularPoints(pointA, pointB, DEFAULT_PERPENDICULAR_THRESHOLD);
     }
 
     /**
@@ -269,31 +259,23 @@ public class Quadric extends BaseQuadric implements Serializable {
      *                                          not exist because this quadric instance is degenerate (its inverse
      *                                          cannot be computed).
      */
-    public void dualQuadric(final DualQuadric dualQuadric)
-            throws DualQuadricNotAvailableException {
-
-        final Matrix quadricMatrix = asMatrix();
+    public void dualQuadric(final DualQuadric dualQuadric) throws DualQuadricNotAvailableException {
+        final var quadricMatrix = asMatrix();
         try {
-            final Matrix invMatrix = com.irurueta.algebra.Utils.inverse(quadricMatrix);
+            final var invMatrix = com.irurueta.algebra.Utils.inverse(quadricMatrix);
 
             // ensure that resulting matrix after inversion is symmetric
             // by computing the mean of off-diagonal elements
-            final double a = invMatrix.getElementAt(0, 0);
-            final double b = invMatrix.getElementAt(1, 1);
-            final double c = invMatrix.getElementAt(2, 2);
-            final double d = 0.5 * (invMatrix.getElementAt(0, 1) +
-                    invMatrix.getElementAt(1, 0));
-            final double e = 0.5 * (invMatrix.getElementAt(2, 1) +
-                    invMatrix.getElementAt(1, 2));
-            final double f = 0.5 * (invMatrix.getElementAt(2, 0) +
-                    invMatrix.getElementAt(0, 2));
-            final double g = 0.5 * (invMatrix.getElementAt(3, 0) +
-                    invMatrix.getElementAt(0, 3));
-            final double h = 0.5 * (invMatrix.getElementAt(3, 1) +
-                    invMatrix.getElementAt(1, 3));
-            final double i = 0.5 * (invMatrix.getElementAt(3, 2) +
-                    invMatrix.getElementAt(2, 3));
-            final double j = invMatrix.getElementAt(3, 3);
+            final var a = invMatrix.getElementAt(0, 0);
+            final var b = invMatrix.getElementAt(1, 1);
+            final var c = invMatrix.getElementAt(2, 2);
+            final var d = 0.5 * (invMatrix.getElementAt(0, 1) + invMatrix.getElementAt(1, 0));
+            final var e = 0.5 * (invMatrix.getElementAt(2, 1) + invMatrix.getElementAt(1, 2));
+            final var f = 0.5 * (invMatrix.getElementAt(2, 0) + invMatrix.getElementAt(0, 2));
+            final var g = 0.5 * (invMatrix.getElementAt(3, 0) + invMatrix.getElementAt(0, 3));
+            final var h = 0.5 * (invMatrix.getElementAt(3, 1) + invMatrix.getElementAt(1, 3));
+            final var i = 0.5 * (invMatrix.getElementAt(3, 2) + invMatrix.getElementAt(2, 3));
+            final var j = invMatrix.getElementAt(3, 3);
             dualQuadric.setParameters(a, b, c, d, e, f, g, h, i, j);
         } catch (final AlgebraException e) {
             throw new DualQuadricNotAvailableException(e);
@@ -311,7 +293,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      *                                          be computed).
      */
     public DualQuadric getDualQuadric() throws DualQuadricNotAvailableException {
-        final DualQuadric dualQuadric = new DualQuadric();
+        final var dualQuadric = new DualQuadric();
         dualQuadric(dualQuadric);
         return dualQuadric;
     }
@@ -333,10 +315,9 @@ public class Quadric extends BaseQuadric implements Serializable {
      *                                   produce a degenerated configuration.
      */
     public final void setParametersFromPoints(
-            final Point3D point1, final Point3D point2, final Point3D point3,
-            final Point3D point4, final Point3D point5, final Point3D point6,
-            final Point3D point7, final Point3D point8, final Point3D point9)
-            throws CoincidentPointsException {
+            final Point3D point1, final Point3D point2, final Point3D point3, final Point3D point4,
+            final Point3D point5, final Point3D point6, final Point3D point7, final Point3D point8,
+            final Point3D point9) throws CoincidentPointsException {
 
         // normalize points to increase accuracy
         point1.normalize();
@@ -355,11 +336,11 @@ public class Quadric extends BaseQuadric implements Serializable {
             // x^2 + y^2 + z^2 + 2*x*y + 2*x*z + 2*y*z + 2*x*w + 2*y*w +
             // 2*z*w + w^2 = 0
 
-            final Matrix m = new Matrix(9, 10);
-            double x = point1.getHomX();
-            double y = point1.getHomY();
-            double z = point1.getHomZ();
-            double w = point1.getHomW();
+            final var m = new Matrix(9, 10);
+            var x = point1.getHomX();
+            var y = point1.getHomY();
+            var z = point1.getHomZ();
+            var w = point1.getHomW();
             m.setElementAt(0, 0, x * x);
             m.setElementAt(0, 1, y * y);
             m.setElementAt(0, 2, z * z);
@@ -484,18 +465,17 @@ public class Quadric extends BaseQuadric implements Serializable {
             m.setElementAt(8, 9, w * w);
 
             // normalize each row to increase accuracy
-            final double[] row = new double[10];
+            final var row = new double[10];
             double rowNorm;
-
-            for (int j = 0; j < 9; j++) {
+            for (var j = 0; j < 9; j++) {
                 m.getSubmatrixAsArray(j, 0, j, 9, row);
                 rowNorm = com.irurueta.algebra.Utils.normF(row);
-                for (int i = 0; i < 10; i++) {
+                for (var i = 0; i < 10; i++) {
                     m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);
                 }
             }
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             if (decomposer.getRank() < 9) {
@@ -504,20 +484,20 @@ public class Quadric extends BaseQuadric implements Serializable {
 
             // the right null-space of m contains the parameters a, b, c, d, e ,f
             // of the conic
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
-            final double a = v.getElementAt(0, 9);
-            final double b = v.getElementAt(1, 9);
-            final double c = v.getElementAt(2, 9);
-            final double d = v.getElementAt(3, 9);
+            final var a = v.getElementAt(0, 9);
+            final var b = v.getElementAt(1, 9);
+            final var c = v.getElementAt(2, 9);
+            final var d = v.getElementAt(3, 9);
 
-            final double f = v.getElementAt(4, 9);
-            final double e = v.getElementAt(5, 9);
+            final var f = v.getElementAt(4, 9);
+            final var e = v.getElementAt(5, 9);
 
-            final double g = v.getElementAt(6, 9);
-            final double h = v.getElementAt(7, 9);
-            final double i = v.getElementAt(8, 9);
-            final double j = v.getElementAt(9, 9);
+            final var g = v.getElementAt(6, 9);
+            final var h = v.getElementAt(7, 9);
+            final var i = v.getElementAt(8, 9);
+            final var j = v.getElementAt(9, 9);
 
             setParameters(a, b, c, d, e, f, g, h, i, j);
         } catch (final AlgebraException ex) {
@@ -534,7 +514,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @throws NotLocusException if provided point is not locus of this quadric.
      */
     public Plane getTangentPlaneAt(final Point3D point) throws NotLocusException {
-        final Plane plane = new Plane();
+        final var plane = new Plane();
         tangentPlaneAt(point, plane, DEFAULT_LOCUS_THRESHOLD);
         return plane;
 
@@ -561,11 +541,10 @@ public class Quadric extends BaseQuadric implements Serializable {
         point.normalize();
         normalize();
 
-        final Matrix q = asMatrix();
+        final var q = asMatrix();
 
         try {
-            final Matrix p = new Matrix(
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
+            final var p = new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             p.setElementAt(0, 0, point.getHomX());
             p.setElementAt(1, 0, point.getHomY());
             p.setElementAt(2, 0, point.getHomZ());
@@ -622,22 +601,22 @@ public class Quadric extends BaseQuadric implements Serializable {
         // A*x^2 + 2*B*x*y + C*y^2 + 2*D*x*w + 2*E*y*w + F*w^2 = 0
 
         // Quadric parameters
-        final double aQ = getA();
-        final double bQ = getB();
-        final double cQ = getC();
-        final double dQ = getD();
-        final double eQ = getE();
-        final double fQ = getF();
-        final double gQ = getG();
-        final double hQ = getH();
-        final double iQ = getI();
-        final double jQ = getJ();
+        final var aQ = getA();
+        final var bQ = getB();
+        final var cQ = getC();
+        final var dQ = getD();
+        final var eQ = getE();
+        final var fQ = getF();
+        final var gQ = getG();
+        final var hQ = getH();
+        final var iQ = getI();
+        final var jQ = getJ();
 
         // Plane parameters
-        final double aP = plane.getA();
-        final double bP = plane.getB();
-        final double cP = plane.getC();
-        final double dP = plane.getD();
+        final var aP = plane.getA();
+        final var bP = plane.getB();
+        final var cP = plane.getC();
+        final var dP = plane.getD();
 
         // we solve the following system of equations:
         // aQ*x^2 + bQ*y^2 + cQ*z^2 + 2*dQ*x*y + 2*eQ*y*z + 2*fQ*x*z + 2*gQ*x*w + 2*hQ*y*w + 2*iQ*z*w + jQ*w^2 = 0
@@ -695,18 +674,17 @@ public class Quadric extends BaseQuadric implements Serializable {
         // eC = hQ - bP*iQ/cP - eQ*dP/cP + cQ*bP*dP/cP^2
         // fC = jQ - 2*dP*iQ/cP + cQ*dP^2/cP^2
 
-        final double aP2 = aP * aP;
-        final double bP2 = bP * bP;
-        final double cP2 = cP * cP;
-        final double dP2 = dP * dP;
+        final var aP2 = aP * aP;
+        final var bP2 = bP * bP;
+        final var cP2 = cP * cP;
+        final var dP2 = dP * dP;
 
-        final double aC = aQ - 2.0 * aP * fQ / cP + cQ * aP2 / cP2;
-        final double bC = dQ - bP * fQ / cP - eQ * aP / cP
-                + aP * bP * cQ / cP2;
-        final double cC = bQ - 2.0 * bP * eQ / cP + cQ * bP2 / cP2;
-        final double dC = gQ - dP * fQ / cP - aP * iQ / cP + cQ * aP * dP / cP2;
-        final double eC = hQ - bP * iQ / cP - eQ * dP / cP + cQ * bP * dP / cP2;
-        final double fC = jQ - 2.0 * dP * iQ / cP + cQ * dP2 / cP2;
+        final var aC = aQ - 2.0 * aP * fQ / cP + cQ * aP2 / cP2;
+        final var bC = dQ - bP * fQ / cP - eQ * aP / cP + aP * bP * cQ / cP2;
+        final var cC = bQ - 2.0 * bP * eQ / cP + cQ * bP2 / cP2;
+        final var dC = gQ - dP * fQ / cP - aP * iQ / cP + cQ * aP * dP / cP2;
+        final var eC = hQ - bP * iQ / cP - eQ * dP / cP + cQ * bP * dP / cP2;
+        final var fC = jQ - 2.0 * dP * iQ / cP + cQ * dP2 / cP2;
 
         result.setParameters(aC, bC, cC, dC, eC, fC);
     }
@@ -718,7 +696,7 @@ public class Quadric extends BaseQuadric implements Serializable {
      * @return conic resulting from the intersection.
      */
     public Conic intersectWith(final Plane plane) {
-        final Conic result = new Conic();
+        final var result = new Conic();
         intersectWith(plane, result);
         return result;
     }

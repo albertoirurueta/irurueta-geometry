@@ -33,8 +33,7 @@ import java.util.Arrays;
  * applied to 3D points.
  */
 @SuppressWarnings("DuplicatedCode")
-public class ProjectiveTransformation3D extends Transformation3D
-        implements Serializable {
+public class ProjectiveTransformation3D extends Transformation3D implements Serializable {
 
     /**
      * Constant indicating number of coordinates required in translation arrays.
@@ -114,7 +113,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      *              objects.
      */
     public ProjectiveTransformation3D(final double scale) {
-        final double[] diag = new double[HOM_COORDS];
+        final var diag = new double[HOM_COORDS];
         Arrays.fill(diag, scale);
         // set last element to 1.0
         diag[HOM_COORDS - 1] = 1.0;
@@ -144,12 +143,13 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public ProjectiveTransformation3D(final double scale, final Rotation3D rotation) {
         try {
-            final double[] diag = new double[INHOM_COORDS];
+            final var diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            final Matrix a = Matrix.diagonal(diag);
+            final var a = Matrix.diagonal(diag);
             a.multiply(rotation.asInhomogeneousMatrix());
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
-            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
         } catch (final WrongSizeException ignore) {
             // never happens
         }
@@ -165,10 +165,9 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws NullPointerException raised if provided parameters are null or
      *                              if provided rotation is null.
      */
-    public ProjectiveTransformation3D(final AffineParameters3D params,
-                                      final Rotation3D rotation) {
+    public ProjectiveTransformation3D(final AffineParameters3D params, final Rotation3D rotation) {
         try {
-            final Matrix a = params.asMatrix();
+            final var a = params.asMatrix();
             a.multiply(rotation.asInhomogeneousMatrix());
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
@@ -220,7 +219,8 @@ public class ProjectiveTransformation3D extends Transformation3D
 
         try {
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
-            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
             t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
         } catch (final WrongSizeException ignore) {
@@ -246,7 +246,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             throw new IllegalArgumentException();
         }
 
-        final double[] diag = new double[HOM_COORDS];
+        final var diag = new double[HOM_COORDS];
         Arrays.fill(diag, scale);
         // set last element to 1.0
         diag[HOM_COORDS - 1] = 1.0;
@@ -296,21 +296,21 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided translation does not
      *                                  have length 3.
      */
-    public ProjectiveTransformation3D(final double scale, final Rotation3D rotation,
-                                      final double[] translation) {
+    public ProjectiveTransformation3D(final double scale, final Rotation3D rotation, final double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
 
         try {
-            final double[] diag = new double[INHOM_COORDS];
+            final var diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            final Matrix a = Matrix.diagonal(diag);
+            final var a = Matrix.diagonal(diag);
             a.multiply(rotation.asInhomogeneousMatrix());
 
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             // set A
-            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
             // set translation
             t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
@@ -336,8 +336,8 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided translation does not
      *                                  have length 3 or if projective parameters array doesn't have length 4.
      */
-    public ProjectiveTransformation3D(final double scale, final Rotation3D rotation,
-                                      final double[] translation, final double[] projectiveParameters) {
+    public ProjectiveTransformation3D(final double scale, final Rotation3D rotation, final double[] translation,
+                                      final double[] projectiveParameters) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -346,22 +346,23 @@ public class ProjectiveTransformation3D extends Transformation3D
         }
 
         try {
-            final double value = projectiveParameters[HOM_COORDS - 1];
-            final double[] diag = new double[INHOM_COORDS];
+            final var value = projectiveParameters[HOM_COORDS - 1];
+            final var diag = new double[INHOM_COORDS];
             Arrays.fill(diag, scale);
-            final Matrix a = Matrix.diagonal(diag);
+            final var a = Matrix.diagonal(diag);
             a.multiply(rotation.asInhomogeneousMatrix());
 
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             // set A
-            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
             // set translation
             t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
             t.multiplyByScalar(value);
 
-            t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1,
-                    projectiveParameters);
+            t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,
+                    HOM_COORDS - 1, projectiveParameters);
         } catch (final WrongSizeException ignore) {
             // never happens
         }
@@ -382,18 +383,19 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided translation does not
      *                                  have length 3.
      */
-    public ProjectiveTransformation3D(final AffineParameters3D params,
-                                      final Rotation3D rotation, final double[] translation) {
+    public ProjectiveTransformation3D(final AffineParameters3D params, final Rotation3D rotation,
+                                      final double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
 
         try {
-            final Matrix a = params.asMatrix();
+            final var a = params.asMatrix();
             a.multiply(rotation.asInhomogeneousMatrix());
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             // set A
-            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
             // set translation
             t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
@@ -419,9 +421,8 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided translation does not
      *                                  have length 3 or if projective parameters array doesn't have length 4.
      */
-    public ProjectiveTransformation3D(final AffineParameters3D params,
-                                      final Rotation3D rotation, final double[] translation,
-                                      final double[] projectiveParameters) {
+    public ProjectiveTransformation3D(final AffineParameters3D params, final Rotation3D rotation,
+                                      final double[] translation, final double[] projectiveParameters) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -430,19 +431,20 @@ public class ProjectiveTransformation3D extends Transformation3D
         }
 
         try {
-            final Matrix a = params.asMatrix();
+            final var a = params.asMatrix();
             a.multiply(rotation.asInhomogeneousMatrix());
             t = Matrix.identity(HOM_COORDS, HOM_COORDS);
             // set A
-            t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1, a);
+            t.setSubmatrix(0, 0, INHOM_COORDS - 1,
+                    INHOM_COORDS - 1, a);
             // set translation
             t.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,
                     HOM_COORDS - 1, translation);
-            final double value = projectiveParameters[HOM_COORDS - 1];
+            final var value = projectiveParameters[HOM_COORDS - 1];
             t.multiplyByScalar(value);
 
-            t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1, HOM_COORDS - 1,
-                    projectiveParameters);
+            t.setSubmatrix(HOM_COORDS - 1, 0, HOM_COORDS - 1,
+                    HOM_COORDS - 1, projectiveParameters);
         } catch (final WrongSizeException ignore) {
             // never happens
         }
@@ -473,18 +475,17 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                                   points or numerical instabilities).
      */
     public ProjectiveTransformation3D(
-            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3,
-            final Point3D inputPoint4, final Point3D inputPoint5, final Point3D outputPoint1,
-            final Point3D outputPoint2, final Point3D outputPoint3, final Point3D outputPoint4,
-            final Point3D outputPoint5) throws CoincidentPointsException {
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D inputPoint5, final Point3D outputPoint1, final Point3D outputPoint2,
+            final Point3D outputPoint3, final Point3D outputPoint4, final Point3D outputPoint5)
+            throws CoincidentPointsException {
         try {
             t = new Matrix(HOM_COORDS, HOM_COORDS);
         } catch (final WrongSizeException ignore) {
             // never happens
         }
-        setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3,
-                inputPoint4, inputPoint5, outputPoint1, outputPoint2,
-                outputPoint3, outputPoint4, outputPoint5);
+        setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, inputPoint4, inputPoint5, outputPoint1,
+                outputPoint2, outputPoint3, outputPoint4, outputPoint5);
     }
 
     /**
@@ -511,13 +512,11 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                                   planes or numerical instabilities).
      */
     public ProjectiveTransformation3D(
-            final Plane inputPlane1, final Plane inputPlane2, final Plane inputPlane3,
-            final Plane inputPlane4, final Plane inputPlane5, final Plane outputPlane1,
-            final Plane outputPlane2, final Plane outputPlane3, final Plane outputPlane4,
-            final Plane outputPlane5) throws CoincidentPlanesException {
-        setTransformationFromPlanes(inputPlane1, inputPlane2, inputPlane3,
-                inputPlane4, inputPlane5, outputPlane1, outputPlane2,
-                outputPlane3, outputPlane4, outputPlane5);
+            final Plane inputPlane1, final Plane inputPlane2, final Plane inputPlane3, final Plane inputPlane4,
+            final Plane inputPlane5, final Plane outputPlane1, final Plane outputPlane2, final Plane outputPlane3,
+            final Plane outputPlane4, final Plane outputPlane5) throws CoincidentPlanesException {
+        setTransformationFromPlanes(inputPlane1, inputPlane2, inputPlane3, inputPlane4, inputPlane5, outputPlane1,
+                outputPlane2, outputPlane3, outputPlane4, outputPlane5);
     }
 
     /**
@@ -535,11 +534,9 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                                  or numerical instabilities).
      */
     public ProjectiveTransformation3D(
-            final Line3D inputLine1, final Line3D inputLine2, final Line3D inputLine3,
-            final Line3D outputLine1, final Line3D outputLine2, final Line3D outputLine3)
-            throws CoincidentLinesException {
-        setTransformationFromLines(inputLine1, inputLine2, inputLine3,
-                outputLine1, outputLine2, outputLine3);
+            final Line3D inputLine1, final Line3D inputLine2, final Line3D inputLine3, final Line3D outputLine1,
+            final Line3D outputLine2, final Line3D outputLine3) throws CoincidentLinesException {
+        setTransformationFromLines(inputLine1, inputLine2, inputLine3, outputLine1, outputLine2, outputLine3);
     }
 
     /**
@@ -594,7 +591,7 @@ public class ProjectiveTransformation3D extends Transformation3D
         }
 
         try {
-            final LUDecomposer decomposer = new LUDecomposer(t);
+            final var decomposer = new LUDecomposer(t);
             decomposer.decompose();
             return decomposer.isSingular();
         } catch (final AlgebraException e) {
@@ -621,10 +618,9 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @see AffineTransformation3D
      */
     public Matrix getA() {
-        final Matrix a = t.getSubmatrix(0, 0, INHOM_COORDS - 1,
+        final var a = t.getSubmatrix(0, 0, INHOM_COORDS - 1,
                 INHOM_COORDS - 1);
-        a.multiplyByScalar(1.0 / t.getElementAt(HOM_COORDS - 1,
-                HOM_COORDS - 1));
+        a.multiplyByScalar(1.0 / t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1));
         return a;
     }
 
@@ -646,9 +642,8 @@ public class ProjectiveTransformation3D extends Transformation3D
         }
 
         t.setSubmatrix(0, 0, INHOM_COORDS - 1,
-                INHOM_COORDS - 1,
-                a.multiplyByScalarAndReturnNew(t.getElementAt(
-                        HOM_COORDS - 1, HOM_COORDS - 1)));
+                INHOM_COORDS - 1, a.multiplyByScalarAndReturnNew(t.getElementAt(HOM_COORDS - 1,
+                        HOM_COORDS - 1)));
         normalized = false;
     }
 
@@ -657,7 +652,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public final void normalize() {
         if (!normalized) {
-            final double norm = Utils.normF(t);
+            final var norm = Utils.normF(t);
             if (norm > EPS) {
                 t.multiplyByScalar(1.0 / norm);
             }
@@ -678,13 +673,12 @@ public class ProjectiveTransformation3D extends Transformation3D
         // Use QR decomposition to retrieve rotation component of this
         // transformation
         normalize();
-        final RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
+        final var decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         try {
             decomposer.decompose();
             //a large threshold is used because Q matrix is always assumed to be orthonormal
-            return new MatrixRotation3D(decomposer.getQ(),
-                    LARGE_ROTATION_MATRIX_THRESHOLD);
+            return new MatrixRotation3D(decomposer.getQ(), LARGE_ROTATION_MATRIX_THRESHOLD);
         } catch (final InvalidRotationMatrixException ignore) {
             return null;
         }
@@ -700,17 +694,17 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                              transformation).
      */
     public void setRotation(final Rotation3D rotation) throws AlgebraException {
-        final Matrix rotMatrix = rotation.asInhomogeneousMatrix();
+        final var rotMatrix = rotation.asInhomogeneousMatrix();
 
         // Use QR decomposition to retrieve parameters matrix
-        final RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
+        final var decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
         // retrieves params matrix
-        final Matrix localA = decomposer.getR();
+        final var localA = decomposer.getR();
         localA.multiply(rotMatrix);
-        t.setSubmatrix(0, 0, INHOM_COORDS - 1,
-                INHOM_COORDS - 1, localA);
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
+                localA);
         normalized = false;
     }
 
@@ -724,7 +718,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                          transformation).
      */
     public void addRotation(final Rotation3D rotation) throws AlgebraException {
-        final Rotation3D localRotation = getRotation();
+        final var localRotation = getRotation();
         localRotation.combine(rotation);
         setRotation(localRotation);
     }
@@ -742,18 +736,18 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public void setScale(final double scale) throws AlgebraException {
         normalize();
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        final RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
         // params
-        final Matrix localA = decomposer.getR();
+        final var localA = decomposer.getR();
         localA.setElementAt(0, 0, scale * value);
         localA.setElementAt(1, 1, scale * value);
         localA.setElementAt(2, 2, scale * value);
         localA.multiply(decomposer.getQ());
-        t.setSubmatrix(0, 0,
-                INHOM_COORDS - 1, INHOM_COORDS - 1, localA);
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
+                localA);
         normalized = false;
     }
 
@@ -768,7 +762,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                          of the internal matrix of this instance).
      */
     public AffineParameters3D getAffineParameters() throws AlgebraException {
-        final AffineParameters3D parameters = new AffineParameters3D();
+        final var parameters = new AffineParameters3D();
         getAffineParameters(parameters);
         return parameters;
     }
@@ -784,14 +778,13 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                          parameters cannot be retrieved (usually because of numerical instability
      *                          of the internal matrix of this instance).
      */
-    public void getAffineParameters(final AffineParameters3D result)
-            throws AlgebraException {
+    public void getAffineParameters(final AffineParameters3D result) throws AlgebraException {
         normalize();
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        final RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
-        final Matrix r = decomposer.getR();
+        final var r = decomposer.getR();
         r.multiplyByScalar(1.0 / value);
         result.fromMatrix(r);
     }
@@ -806,23 +799,22 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                          parameters cannot be set (usually because of numerical instability of
      *                          the internal matrix of this instance).
      */
-    public void setAffineParameters(final AffineParameters3D parameters)
-            throws AlgebraException {
+    public void setAffineParameters(final AffineParameters3D parameters) throws AlgebraException {
         normalize();
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        final RQDecomposer decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var decomposer = new RQDecomposer(t.getSubmatrix(0, 0,
                 INHOM_COORDS - 1, INHOM_COORDS - 1));
         decomposer.decompose();
-        final Matrix params = parameters.asMatrix();
-        final Matrix rotation = decomposer.getQ();
+        final var params = parameters.asMatrix();
+        final var rotation = decomposer.getQ();
 
         // params is equivalent to A because it
         // has been multiplied by rotation
         params.multiply(rotation);
         // normalize
         params.multiplyByScalar(value);
-        t.setSubmatrix(0, 0, INHOM_COORDS - 1,
-                INHOM_COORDS - 1, params);
+        t.setSubmatrix(0, 0, INHOM_COORDS - 1, INHOM_COORDS - 1,
+                params);
         normalized = false;
     }
 
@@ -877,9 +869,9 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     public double[] getTranslation() {
         normalize();
-        final double[] translation = t.getSubmatrixAsArray(0, HOM_COORDS - 1,
+        final var translation = t.getSubmatrixAsArray(0, HOM_COORDS - 1,
                 INHOM_COORDS - 1, HOM_COORDS - 1);
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
         ArrayUtils.multiplyByScalar(translation, 1.0 / value, translation);
         return translation;
     }
@@ -897,7 +889,7 @@ public class ProjectiveTransformation3D extends Transformation3D
     public void getTranslation(final double[] out) throws WrongSizeException {
         t.getSubmatrixAsArray(0, HOM_COORDS - 1, INHOM_COORDS - 1,
                 HOM_COORDS - 1, out);
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
         ArrayUtils.multiplyByScalar(out, 1.0 / value, out);
     }
 
@@ -914,9 +906,8 @@ public class ProjectiveTransformation3D extends Transformation3D
             throw new IllegalArgumentException();
         }
 
-        final double value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
-        final double[] translation2 = ArrayUtils.multiplyByScalarAndReturnNew(
-                translation, value);
+        final var value = t.getElementAt(HOM_COORDS - 1, HOM_COORDS - 1);
+        final var translation2 = ArrayUtils.multiplyByScalarAndReturnNew(translation, value);
         t.setSubmatrix(0, HOM_COORDS - 1, translation2.length - 1,
                 HOM_COORDS - 1, translation2);
         normalized = false;
@@ -932,7 +923,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                                  length equal to NUM_TRANSLATION_COORDS.
      */
     public void addTranslation(final double[] translation) {
-        final double[] currentTranslation = getTranslation();
+        final var currentTranslation = getTranslation();
         ArrayUtils.sum(currentTranslation, translation, currentTranslation);
         setTranslation(currentTranslation);
     }
@@ -1011,8 +1002,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @param translationY translation y coordinate to be set.
      * @param translationZ translation z coordinate to be set.
      */
-    public void setTranslation(
-            final double translationX, final double translationY, final double translationZ) {
+    public void setTranslation(final double translationX, final double translationY, final double translationZ) {
         setTranslationX(translationX);
         setTranslationY(translationY);
         setTranslationZ(translationZ);
@@ -1025,8 +1015,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @param translation translation to be set.
      */
     public void setTranslation(final Point3D translation) {
-        setTranslation(translation.getInhomX(), translation.getInhomY(),
-                translation.getInhomZ());
+        setTranslation(translation.getInhomX(), translation.getInhomY(), translation.getInhomZ());
     }
 
     /**
@@ -1036,7 +1025,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @return a new point containing translation coordinates.
      */
     public Point3D getTranslationPoint() {
-        final Point3D out = Point3D.create();
+        final var out = Point3D.create();
         getTranslationPoint(out);
         return out;
     }
@@ -1048,8 +1037,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @param out point where translation coordinates will be stored.
      */
     public void getTranslationPoint(final Point3D out) {
-        out.setInhomogeneousCoordinates(getTranslationX(), getTranslationY(),
-                getTranslationZ());
+        out.setInhomogeneousCoordinates(getTranslationX(), getTranslationY(), getTranslationZ());
     }
 
     /**
@@ -1090,8 +1078,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @param translationY y coordinate to be added to current translation.
      * @param translationZ z coordinate to be added to current translation.
      */
-    public void addTranslation(
-            final double translationX, final double translationY, final double translationZ) {
+    public void addTranslation(final double translationX, final double translationY, final double translationZ) {
         addTranslationX(translationX);
         addTranslationY(translationY);
         addTranslationZ(translationZ);
@@ -1105,8 +1092,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                    translation.
      */
     public void addTranslation(final Point3D translation) {
-        addTranslation(translation.getInhomX(), translation.getInhomY(),
-                translation.getInhomZ());
+        addTranslation(translation.getInhomX(), translation.getInhomY(), translation.getInhomZ());
     }
 
     /**
@@ -1147,18 +1133,16 @@ public class ProjectiveTransformation3D extends Transformation3D
      */
     @Override
     public void transform(final Point3D inputPoint, final Point3D outputPoint) {
-
         inputPoint.normalize();
         normalize();
         try {
-            final Matrix point = new Matrix(
-                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
+            final var point = new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);
             point.setElementAtIndex(0, inputPoint.getHomX());
             point.setElementAtIndex(1, inputPoint.getHomY());
             point.setElementAtIndex(2, inputPoint.getHomZ());
             point.setElementAtIndex(3, inputPoint.getHomW());
 
-            final Matrix transformedPoint = t.multiplyAndReturnNew(point);
+            final var transformedPoint = t.multiplyAndReturnNew(point);
 
             outputPoint.setHomogeneousCoordinates(
                     transformedPoint.getElementAtIndex(0),
@@ -1183,8 +1167,8 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                                     numerical instabilities.
      */
     @Override
-    public void transform(final Quadric inputQuadric, final Quadric outputQuadric)
-            throws NonSymmetricMatrixException, AlgebraException {
+    public void transform(final Quadric inputQuadric, final Quadric outputQuadric) throws NonSymmetricMatrixException,
+            AlgebraException {
         // point' * quadric * point = 0
         // point' * t' * transformedQuadric * t * point = 0
         // where:
@@ -1195,15 +1179,15 @@ public class ProjectiveTransformation3D extends Transformation3D
 
         inputQuadric.normalize();
 
-        final Matrix q = inputQuadric.asMatrix();
+        final var q = inputQuadric.asMatrix();
         normalize();
 
-        final Matrix invT = inverseAndReturnNew().asMatrix();
+        final var invT = inverseAndReturnNew().asMatrix();
         // normalize transformation matrix invT to increase accuracy
-        double norm = Utils.normF(invT);
+        var norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
 
-        final Matrix m = invT.transposeAndReturnNew();
+        final var m = invT.transposeAndReturnNew();
         try {
             m.multiply(q);
             m.multiply(invT);
@@ -1233,8 +1217,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                                     of numerical instabilities.
      */
     @Override
-    public void transform(
-            final DualQuadric inputDualQuadric, final DualQuadric outputDualQuadric)
+    public void transform(final DualQuadric inputDualQuadric, final DualQuadric outputDualQuadric)
             throws NonSymmetricMatrixException, AlgebraException {
         // plane' * dualQuadric * plane = 0
         // plane' * t^-1 * t * dualQuadric * t' * t^-1'*plane
@@ -1246,15 +1229,15 @@ public class ProjectiveTransformation3D extends Transformation3D
         inputDualQuadric.normalize();
         normalize();
 
-        final Matrix dualQ = inputDualQuadric.asMatrix();
-        final Matrix transT = t.transposeAndReturnNew();
+        final var dualQ = inputDualQuadric.asMatrix();
+        final var transT = t.transposeAndReturnNew();
 
-        final Matrix m = t.multiplyAndReturnNew(dualQ);
+        final var m = t.multiplyAndReturnNew(dualQ);
         m.multiply(transT);
 
         // normalize resulting m matrix to increase accuracy so that it can be
         // considered symmetric
-        final double norm = Utils.normF(m);
+        final var norm = Utils.normF(m);
         m.multiplyByScalar(1.0 / norm);
 
         outputDualQuadric.setParameters(m);
@@ -1271,8 +1254,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                          of numerical instabilities.
      */
     @Override
-    public void transform(final Plane inputPlane, final Plane outputPlane)
-            throws AlgebraException {
+    public void transform(final Plane inputPlane, final Plane outputPlane) throws AlgebraException {
         // plane' * point = 0 --> plane' * t^-1 * t * point
         // (plane' * t^-1)*(t*point) = (t^-1'*plane)'*(t*point)
         // where:
@@ -1283,8 +1265,8 @@ public class ProjectiveTransformation3D extends Transformation3D
         inputPlane.normalize();
         normalize();
 
-        final Matrix invT = inverseAndReturnNew().asMatrix();
-        final Matrix l = Matrix.newFromArray(inputPlane.asArray());
+        final var invT = inverseAndReturnNew().asMatrix();
+        final var l = Matrix.newFromArray(inputPlane.asArray());
 
         invT.transpose();
         invT.multiply(l);
@@ -1303,14 +1285,13 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                          of numerical instabilities.
      */
     @Override
-    public void transform(final PinholeCamera inputCamera,
-                          final PinholeCamera outputCamera) throws AlgebraException {
+    public void transform(final PinholeCamera inputCamera, final PinholeCamera outputCamera) throws AlgebraException {
 
         inputCamera.normalize();
         normalize();
 
-        final Matrix invT = inverseAndReturnNew().asMatrix();
-        final Matrix c = inputCamera.getInternalMatrix();
+        final var invT = inverseAndReturnNew().asMatrix();
+        final var c = inputCamera.getInternalMatrix();
         c.multiply(invT);
         outputCamera.setInternalMatrix(c);
     }
@@ -1334,7 +1315,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                          of numerical instabilities.
      */
     public Transformation3D inverseAndReturnNew() throws AlgebraException {
-        final ProjectiveTransformation3D result = new ProjectiveTransformation3D();
+        final var result = new ProjectiveTransformation3D();
         inverse(result);
         return result;
     }
@@ -1347,9 +1328,7 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @throws AlgebraException if inverse transformAndReturnNew cannot be
      *                          computed because of numerical instabilities.
      */
-    protected void inverse(final ProjectiveTransformation3D result)
-            throws AlgebraException {
-
+    protected void inverse(final ProjectiveTransformation3D result) throws AlgebraException {
         result.t = Utils.inverse(t);
         result.normalized = false;
     }
@@ -1375,10 +1354,8 @@ public class ProjectiveTransformation3D extends Transformation3D
      * @return a new transformation resulting of the combination with this
      * transformation and provided transformation.
      */
-    public ProjectiveTransformation3D combineAndReturnNew(
-            final ProjectiveTransformation3D transformation) {
-
-        final ProjectiveTransformation3D result = new ProjectiveTransformation3D();
+    public ProjectiveTransformation3D combineAndReturnNew(final ProjectiveTransformation3D transformation) {
+        final var result = new ProjectiveTransformation3D();
         combine(transformation, result);
         return result;
     }
@@ -1399,12 +1376,9 @@ public class ProjectiveTransformation3D extends Transformation3D
         normalize();
         inputTransformation.normalize();
 
-
         try {
-            outputTransformation.t = this.t.multiplyAndReturnNew(
-                    inputTransformation.t);
+            outputTransformation.t = this.t.multiplyAndReturnNew(inputTransformation.t);
             outputTransformation.normalized = false;
-
         } catch (final WrongSizeException ignore) {
             // never happens
         }
@@ -1434,10 +1408,10 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                                   points or numerical instabilities).
      */
     public final void setTransformationFromPoints(
-            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3,
-            final Point3D inputPoint4, final Point3D inputPoint5, final Point3D outputPoint1,
-            final Point3D outputPoint2, final Point3D outputPoint3, final Point3D outputPoint4,
-            final Point3D outputPoint5) throws CoincidentPointsException {
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D inputPoint5, final Point3D outputPoint1, final Point3D outputPoint2,
+            final Point3D outputPoint3, final Point3D outputPoint4, final Point3D outputPoint5)
+            throws CoincidentPointsException {
 
         // normalize points to increase accuracy
         inputPoint1.normalize();
@@ -1461,39 +1435,38 @@ public class ProjectiveTransformation3D extends Transformation3D
             m = new Matrix(15, 16);
 
             // 1st pair of points
-            double iX = inputPoint1.getHomX();
-            double iY = inputPoint1.getHomY();
-            double iZ = inputPoint1.getHomZ();
-            double iW = inputPoint1.getHomW();
+            var iX = inputPoint1.getHomX();
+            var iY = inputPoint1.getHomY();
+            var iZ = inputPoint1.getHomZ();
+            var iW = inputPoint1.getHomW();
 
-            double oX = outputPoint1.getHomX();
-            double oY = outputPoint1.getHomY();
-            double oZ = outputPoint1.getHomZ();
-            double oW = outputPoint1.getHomW();
+            var oX = outputPoint1.getHomX();
+            var oY = outputPoint1.getHomY();
+            var oZ = outputPoint1.getHomZ();
+            var oW = outputPoint1.getHomW();
 
-            double oWiX = oW * iX;
-            double oWiY = oW * iY;
-            double oWiZ = oW * iZ;
-            double oWiW = oW * iW;
+            var oWiX = oW * iX;
+            var oWiY = oW * iY;
+            var oWiZ = oW * iZ;
+            var oWiW = oW * iW;
 
-            double oXiX = oX * iX;
-            double oXiY = oX * iY;
-            double oXiZ = oX * iZ;
-            double oXiW = oX * iW;
+            var oXiX = oX * iX;
+            var oXiY = oX * iY;
+            var oXiZ = oX * iZ;
+            var oXiW = oX * iW;
 
-            double oYiX = oY * iX;
-            double oYiY = oY * iY;
-            double oYiZ = oY * iZ;
-            double oYiW = oY * iW;
+            var oYiX = oY * iX;
+            var oYiY = oY * iY;
+            var oYiZ = oY * iZ;
+            var oYiW = oY * iW;
 
-            double oZiX = oZ * iX;
-            double oZiY = oZ * iY;
-            double oZiZ = oZ * iZ;
-            double oZiW = oZ * iW;
+            var oZiX = oZ * iX;
+            var oZiY = oZ * iY;
+            var oZiZ = oZ * iZ;
+            var oZiW = oZ * iW;
 
-            double tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
-            double norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ +
-                    oXiW * oXiW);
+            var tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
+            var norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ + oXiW * oXiW);
 
             m.setElementAt(0, 0, oWiX / norm);
             m.setElementAt(0, 1, oWiY / norm);
@@ -1505,8 +1478,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(0, 14, -oXiZ / norm);
             m.setElementAt(0, 15, -oXiW / norm);
 
-            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ +
-                    oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ + oYiW * oYiW);
 
             m.setElementAt(1, 4, oWiX / norm);
             m.setElementAt(1, 5, oWiY / norm);
@@ -1518,8 +1490,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(1, 14, -oYiZ / norm);
             m.setElementAt(1, 15, -oYiW / norm);
 
-            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ +
-                    oZiW * oZiW);
+            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ + oZiW * oZiW);
 
             m.setElementAt(2, 8, oWiX / norm);
             m.setElementAt(2, 9, oWiY / norm);
@@ -1530,7 +1501,6 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(2, 13, -oZiY / norm);
             m.setElementAt(2, 14, -oZiZ / norm);
             m.setElementAt(2, 15, -oZiW / norm);
-
 
             // 2nd pair of points
             iX = inputPoint2.getHomX();
@@ -1564,8 +1534,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             oZiW = oZ * iW;
 
             tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
-            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ +
-                    oXiW * oXiW);
+            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ + oXiW * oXiW);
 
             m.setElementAt(3, 0, oWiX / norm);
             m.setElementAt(3, 1, oWiY / norm);
@@ -1577,8 +1546,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(3, 14, -oXiZ / norm);
             m.setElementAt(3, 15, -oXiW / norm);
 
-            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ +
-                    oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ + oYiW * oYiW);
 
             m.setElementAt(4, 4, oWiX / norm);
             m.setElementAt(4, 5, oWiY / norm);
@@ -1590,8 +1558,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(4, 14, -oYiZ / norm);
             m.setElementAt(4, 15, -oYiW / norm);
 
-            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ +
-                    oZiW * oZiW);
+            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ + oZiW * oZiW);
 
             m.setElementAt(5, 8, oWiX / norm);
             m.setElementAt(5, 9, oWiY / norm);
@@ -1602,7 +1569,6 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(5, 13, -oZiY / norm);
             m.setElementAt(5, 14, -oZiZ / norm);
             m.setElementAt(5, 15, -oZiW / norm);
-
 
             // 3rd pair of points
             iX = inputPoint3.getHomX();
@@ -1636,8 +1602,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             oZiW = oZ * iW;
 
             tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
-            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ +
-                    oXiW * oXiW);
+            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ + oXiW * oXiW);
 
             m.setElementAt(6, 0, oWiX / norm);
             m.setElementAt(6, 1, oWiY / norm);
@@ -1649,8 +1614,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(6, 14, -oXiZ / norm);
             m.setElementAt(6, 15, -oXiW / norm);
 
-            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ +
-                    oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ + oYiW * oYiW);
 
             m.setElementAt(7, 4, oWiX / norm);
             m.setElementAt(7, 5, oWiY / norm);
@@ -1662,8 +1626,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(7, 14, -oYiZ / norm);
             m.setElementAt(7, 15, -oYiW / norm);
 
-            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ +
-                    oZiW * oZiW);
+            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ + oZiW * oZiW);
 
             m.setElementAt(8, 8, oWiX / norm);
             m.setElementAt(8, 9, oWiY / norm);
@@ -1674,7 +1637,6 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(8, 13, -oZiY / norm);
             m.setElementAt(8, 14, -oZiZ / norm);
             m.setElementAt(8, 15, -oZiW / norm);
-
 
             // 4th pair of points
             iX = inputPoint4.getHomX();
@@ -1708,8 +1670,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             oZiW = oZ * iW;
 
             tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
-            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ +
-                    oXiW * oXiW);
+            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ + oXiW * oXiW);
 
             m.setElementAt(9, 0, oWiX / norm);
             m.setElementAt(9, 1, oWiY / norm);
@@ -1721,8 +1682,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(9, 14, -oXiZ / norm);
             m.setElementAt(9, 15, -oXiW / norm);
 
-            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ +
-                    oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ + oYiW * oYiW);
 
             m.setElementAt(10, 4, oWiX / norm);
             m.setElementAt(10, 5, oWiY / norm);
@@ -1734,8 +1694,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(10, 14, -oYiZ / norm);
             m.setElementAt(10, 15, -oYiW / norm);
 
-            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ +
-                    oZiW * oZiW);
+            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ + oZiW * oZiW);
 
             m.setElementAt(11, 8, oWiX / norm);
             m.setElementAt(11, 9, oWiY / norm);
@@ -1746,7 +1705,6 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(11, 13, -oZiY / norm);
             m.setElementAt(11, 14, -oZiZ / norm);
             m.setElementAt(11, 15, -oZiW / norm);
-
 
             // 5th pair of points
             iX = inputPoint5.getHomX();
@@ -1780,8 +1738,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             oZiW = oZ * iW;
 
             tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
-            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ +
-                    oXiW * oXiW);
+            norm = Math.sqrt(tmp + oXiX * oXiX + oXiY * oXiY + oXiZ * oXiZ + oXiW * oXiW);
 
             m.setElementAt(12, 0, oWiX / norm);
             m.setElementAt(12, 1, oWiY / norm);
@@ -1793,8 +1750,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(12, 14, -oXiZ / norm);
             m.setElementAt(12, 15, -oXiW / norm);
 
-            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ +
-                    oYiW * oYiW);
+            norm = Math.sqrt(tmp + oYiX * oYiX + oYiY * oYiY + oYiZ * oYiZ + oYiW * oYiW);
 
             m.setElementAt(13, 4, oWiX / norm);
             m.setElementAt(13, 5, oWiY / norm);
@@ -1806,8 +1762,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(13, 14, -oYiZ / norm);
             m.setElementAt(13, 15, -oYiW / norm);
 
-            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ +
-                    oZiW * oZiW);
+            norm = Math.sqrt(tmp + oZiX * oZiX + oZiY * oZiY + oZiZ * oZiZ + oZiW * oZiW);
 
             m.setElementAt(14, 8, oWiX / norm);
             m.setElementAt(14, 9, oWiY / norm);
@@ -1825,7 +1780,7 @@ public class ProjectiveTransformation3D extends Transformation3D
         // use SVD to decompose matrix m
         Matrix v;
         try {
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             // ensure that matrix m has enough rank and there is a unique
@@ -1869,10 +1824,9 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                                   plane or numerical instabilities).
      */
     public final void setTransformationFromPlanes(
-            final Plane inputPlane1, final Plane inputPlane2, final Plane inputPlane3,
-            final Plane inputPlane4, final Plane inputPlane5, final Plane outputPlane1,
-            final Plane outputPlane2, final Plane outputPlane3, final Plane outputPlane4,
-            final Plane outputPlane5) throws CoincidentPlanesException {
+            final Plane inputPlane1, final Plane inputPlane2, final Plane inputPlane3, final Plane inputPlane4,
+            final Plane inputPlane5, final Plane outputPlane1, final Plane outputPlane2, final Plane outputPlane3,
+            final Plane outputPlane4, final Plane outputPlane5) throws CoincidentPlanesException {
 
         // normalize lines to increase accuracy
         inputPlane1.normalize();
@@ -1896,39 +1850,38 @@ public class ProjectiveTransformation3D extends Transformation3D
             m = new Matrix(15, 16);
 
             // 1st pair of planes
-            double iA = inputPlane1.getA();
-            double iB = inputPlane1.getB();
-            double iC = inputPlane1.getC();
-            double iD = inputPlane1.getD();
+            var iA = inputPlane1.getA();
+            var iB = inputPlane1.getB();
+            var iC = inputPlane1.getC();
+            var iD = inputPlane1.getD();
 
-            double oA = outputPlane1.getA();
-            double oB = outputPlane1.getB();
-            double oC = outputPlane1.getC();
-            double oD = outputPlane1.getD();
+            var oA = outputPlane1.getA();
+            var oB = outputPlane1.getB();
+            var oC = outputPlane1.getC();
+            var oD = outputPlane1.getD();
 
-            double oDiA = oD * iA;
-            double oDiB = oD * iB;
-            double oDiC = oD * iC;
-            double oDiD = oD * iD;
+            var oDiA = oD * iA;
+            var oDiB = oD * iB;
+            var oDiC = oD * iC;
+            var oDiD = oD * iD;
 
-            double oAiA = oA * iA;
-            double oAiB = oA * iB;
-            double oAiC = oA * iC;
-            double oAiD = oA * iD;
+            var oAiA = oA * iA;
+            var oAiB = oA * iB;
+            var oAiC = oA * iC;
+            var oAiD = oA * iD;
 
-            double oBiA = oB * iA;
-            double oBiB = oB * iB;
-            double oBiC = oB * iC;
-            double oBiD = oB * iD;
+            var oBiA = oB * iA;
+            var oBiB = oB * iB;
+            var oBiC = oB * iC;
+            var oBiD = oB * iD;
 
-            double oCiA = oC * iA;
-            double oCiB = oC * iB;
-            double oCiC = oC * iC;
-            double oCiD = oC * iD;
+            var oCiA = oC * iA;
+            var oCiB = oC * iB;
+            var oCiC = oC * iC;
+            var oCiD = oC * iD;
 
-            double tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + oDiD * oDiD;
-            double norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC +
-                    oAiD * oAiD);
+            var tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + oDiD * oDiD;
+            var norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
 
             m.setElementAt(0, 0, oDiA / norm);
             m.setElementAt(0, 1, oDiB / norm);
@@ -1940,8 +1893,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(0, 14, -oAiC / norm);
             m.setElementAt(0, 15, -oAiD / norm);
 
-            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC +
-                    oBiD * oBiD);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
 
             m.setElementAt(1, 4, oDiA / norm);
             m.setElementAt(1, 5, oDiB / norm);
@@ -1953,8 +1905,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(1, 14, -oBiC / norm);
             m.setElementAt(1, 15, -oBiD / norm);
 
-            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
-                    oCiD * oCiD);
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
 
             m.setElementAt(2, 8, oDiA / norm);
             m.setElementAt(2, 9, oDiB / norm);
@@ -1965,7 +1916,6 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(2, 13, -oCiB / norm);
             m.setElementAt(2, 14, -oCiC / norm);
             m.setElementAt(2, 15, -oCiD / norm);
-
 
             // 2nd pair of planes
             iA = inputPlane2.getA();
@@ -1999,8 +1949,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             oCiD = oC * iD;
 
             tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + oDiD * oDiD;
-            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC +
-                    oAiD * oAiD);
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
 
             m.setElementAt(3, 0, oDiA / norm);
             m.setElementAt(3, 1, oDiB / norm);
@@ -2012,8 +1961,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(3, 14, -oAiC / norm);
             m.setElementAt(3, 15, -oAiD / norm);
 
-            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC +
-                    oBiD * oBiD);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
 
             m.setElementAt(4, 4, oDiA / norm);
             m.setElementAt(4, 5, oDiB / norm);
@@ -2025,8 +1973,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(4, 14, -oBiC / norm);
             m.setElementAt(4, 15, -oBiD / norm);
 
-            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
-                    oCiD * oCiD);
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
 
             m.setElementAt(5, 8, oDiA / norm);
             m.setElementAt(5, 9, oDiB / norm);
@@ -2037,7 +1984,6 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(5, 13, -oCiB / norm);
             m.setElementAt(5, 14, -oCiC / norm);
             m.setElementAt(5, 15, -oCiD / norm);
-
 
             // 3rd pair of planes
             iA = inputPlane3.getA();
@@ -2071,8 +2017,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             oCiD = oC * iD;
 
             tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + oDiD * oDiD;
-            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC +
-                    oAiD * oAiD);
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
 
             m.setElementAt(6, 0, oDiA / norm);
             m.setElementAt(6, 1, oDiB / norm);
@@ -2084,8 +2029,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(6, 14, -oAiC / norm);
             m.setElementAt(6, 15, -oAiD / norm);
 
-            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC +
-                    oBiD * oBiD);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
 
             m.setElementAt(7, 4, oDiA / norm);
             m.setElementAt(7, 5, oDiB / norm);
@@ -2097,8 +2041,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(7, 14, -oBiC / norm);
             m.setElementAt(7, 15, -oBiD / norm);
 
-            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
-                    oCiD * oCiD);
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
 
             m.setElementAt(8, 8, oDiA / norm);
             m.setElementAt(8, 9, oDiB / norm);
@@ -2109,7 +2052,6 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(8, 13, -oCiB / norm);
             m.setElementAt(8, 14, -oCiC / norm);
             m.setElementAt(8, 15, -oCiD / norm);
-
 
             // 4th pair of planes
             iA = inputPlane4.getA();
@@ -2143,8 +2085,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             oCiD = oC * iD;
 
             tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + oDiD * oDiD;
-            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC +
-                    oAiD * oAiD);
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
 
             m.setElementAt(9, 0, oDiA / norm);
             m.setElementAt(9, 1, oDiB / norm);
@@ -2156,8 +2097,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(9, 14, -oAiC / norm);
             m.setElementAt(9, 15, -oAiD / norm);
 
-            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC +
-                    oBiD * oBiD);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
 
             m.setElementAt(10, 4, oDiA / norm);
             m.setElementAt(10, 5, oDiB / norm);
@@ -2169,8 +2109,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(10, 14, -oBiC / norm);
             m.setElementAt(10, 15, -oBiD / norm);
 
-            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
-                    oCiD * oCiD);
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
 
             m.setElementAt(11, 8, oDiA / norm);
             m.setElementAt(11, 9, oDiB / norm);
@@ -2181,7 +2120,6 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(11, 13, -oCiB / norm);
             m.setElementAt(11, 14, -oCiC / norm);
             m.setElementAt(11, 15, -oCiD / norm);
-
 
             // 5th pair of planes
             iA = inputPlane5.getA();
@@ -2215,8 +2153,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             oCiD = oC * iD;
 
             tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC + oDiD * oDiD;
-            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC +
-                    oAiD * oAiD);
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
 
             m.setElementAt(12, 0, oDiA / norm);
             m.setElementAt(12, 1, oDiB / norm);
@@ -2228,8 +2165,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(12, 14, -oAiC / norm);
             m.setElementAt(12, 15, -oAiD / norm);
 
-            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC +
-                    oBiD * oBiD);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
 
             m.setElementAt(13, 4, oDiA / norm);
             m.setElementAt(13, 5, oDiB / norm);
@@ -2241,8 +2177,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             m.setElementAt(13, 14, -oBiC / norm);
             m.setElementAt(13, 15, -oBiD / norm);
 
-            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC +
-                    oCiD * oCiD);
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
 
             m.setElementAt(14, 8, oDiA / norm);
             m.setElementAt(14, 9, oDiB / norm);
@@ -2260,7 +2195,7 @@ public class ProjectiveTransformation3D extends Transformation3D
         // use SVD to decompose matrix m
         Matrix v;
         try {
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             // ensure that matrix m has enough rank and there is a unique
@@ -2272,7 +2207,7 @@ public class ProjectiveTransformation3D extends Transformation3D
             v = decomposer.getV();
 
             // last column of V will contain parameters of transformation
-            final Matrix transInvT = new Matrix(HOM_COORDS, HOM_COORDS);
+            final var transInvT = new Matrix(HOM_COORDS, HOM_COORDS);
             transInvT.setSubmatrix(0, 0, HOM_COORDS - 1,
                     HOM_COORDS - 1,
                     v.getSubmatrix(0, 15, 15, 15).toArray(),
@@ -2303,16 +2238,12 @@ public class ProjectiveTransformation3D extends Transformation3D
      *                                  or numerical instabilities).
      */
     public final void setTransformationFromLines(
-            final Line3D inputLine1, final Line3D inputLine2, final Line3D inputLine3,
-            final Line3D outputLine1, final Line3D outputLine2, final Line3D outputLine3)
-            throws CoincidentLinesException {
+            final Line3D inputLine1, final Line3D inputLine2, final Line3D inputLine3, final Line3D outputLine1,
+            final Line3D outputLine2, final Line3D outputLine3) throws CoincidentLinesException {
         try {
-            setTransformationFromPlanes(inputLine1.getPlane1(),
-                    inputLine1.getPlane2(), inputLine2.getPlane1(),
-                    inputLine2.getPlane2(), inputLine3.getPlane1(),
-                    outputLine1.getPlane1(), outputLine1.getPlane2(),
-                    outputLine2.getPlane1(), outputLine2.getPlane2(),
-                    outputLine3.getPlane1());
+            setTransformationFromPlanes(inputLine1.getPlane1(), inputLine1.getPlane2(), inputLine2.getPlane1(),
+                    inputLine2.getPlane2(), inputLine3.getPlane1(), outputLine1.getPlane1(), outputLine1.getPlane2(),
+                    outputLine2.getPlane1(), outputLine2.getPlane2(), outputLine3.getPlane1());
         } catch (final CoincidentPlanesException e) {
             throw new CoincidentLinesException(e);
         }

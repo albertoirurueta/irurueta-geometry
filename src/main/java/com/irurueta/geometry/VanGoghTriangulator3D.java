@@ -62,15 +62,13 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      *                               Usually this indicates numerical instability or polygon degeneracy.
      */
     @Override
-    public List<Triangle3D> triangulate(final Polygon3D polygon)
-            throws TriangulatorException {
+    public List<Triangle3D> triangulate(final Polygon3D polygon) throws TriangulatorException {
         // triangulation will modify provided list of vertices, so we make a copy
         // of it
 
         //original vertices
-        final List<Point3D> vertices = polygon.getVertices();
-        final List<Point3D> verticesCopy = new ArrayList<>(
-                polygon.getVertices());
+        final var vertices = polygon.getVertices();
+        final var verticesCopy = new ArrayList<>(polygon.getVertices());
         return internalTriangulate(verticesCopy, null, vertices);
     }
 
@@ -83,15 +81,14 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      *                               Usually this indicates numerical instability or polygon degeneracy.
      */
     @Override
-    public List<Triangle3D> triangulate(final List<Point3D> vertices)
-            throws TriangulatorException {
+    public List<Triangle3D> triangulate(final List<Point3D> vertices) throws TriangulatorException {
         if (vertices.size() < MIN_VERTICES) {
             throw new TriangulatorException();
         }
 
         // triangulation will modify provided list of vertices, so we make a copy
         // of it
-        final List<Point3D> verticesCopy = new ArrayList<>(vertices);
+        final var verticesCopy = new ArrayList<>(vertices);
         return internalTriangulate(verticesCopy, null, vertices);
     }
 
@@ -109,8 +106,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      *                               Usually this indicates numerical instability or polygon degeneracy.
      */
     @Override
-    public List<Triangle3D> triangulate(
-            final List<Point3D> vertices, final List<int[]> indices)
+    public List<Triangle3D> triangulate(final List<Point3D> vertices, final List<int[]> indices)
             throws TriangulatorException {
         if (vertices.size() < MIN_VERTICES) {
             throw new TriangulatorException();
@@ -118,7 +114,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
 
         // triangulation will modify provided list of vertices, so we make a copy
         // of it
-        final List<Point3D> verticesCopy = new ArrayList<>(vertices);
+        final var verticesCopy = new ArrayList<>(vertices);
         return internalTriangulate(verticesCopy, indices, vertices);
     }
 
@@ -136,8 +132,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      *                                   cannot be determined, usually because consecutive vertices in a polygon
      *                                   are coincident, there are numerical instabilities or polygon degeneracies.
      */
-    public static boolean isEar(
-            final Triangle3D triangle, final List<Point3D> polygonVertices)
+    public static boolean isEar(final Triangle3D triangle, final List<Point3D> polygonVertices)
             throws CoincidentPointsException {
 
         boolean isInside;
@@ -145,11 +140,11 @@ public class VanGoghTriangulator3D extends Triangulator3D {
         // in a counterclockwise polygon, reversed orientation means that
         // triangle is not convex and cannot be an ear
 
-        final List<Point3D> triangleVertices = triangle.getVertices();
+        final var triangleVertices = triangle.getVertices();
 
         // check that no points in the polygon (aside from points belonging to
         // the triangle) lie inside the triangle
-        for (final Point3D testPoint : polygonVertices) {
+        for (final var testPoint : polygonVertices) {
             // Do not compare with polygon elements which are triangle points
             // if end is reached then polygon and triangle is equal and hence the
             // polygon is the ear
@@ -158,8 +153,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
             }
 
             isInside = triangle.isInside(testPoint);
-            isReversed = isPolygonOrientationReversed(triangleVertices,
-                    polygonVertices);
+            isReversed = isPolygonOrientationReversed(triangleVertices, polygonVertices);
 
             // if a point is inside the triangle or orientation is reversed, then
             // it is not an ear
@@ -188,11 +182,9 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      *                                   are coincident, there are numerical instabilities or polygon degeneracies.
      * @see Polygon3D#getAngleBetweenPolygons(List, List)
      */
-    public static boolean isPolygonOrientationReversed(
-            final List<Point3D> vertices1, final List<Point3D> vertices2)
+    public static boolean isPolygonOrientationReversed(final List<Point3D> vertices1, final List<Point3D> vertices2)
             throws CoincidentPointsException {
-        return isPolygonOrientationReversed(vertices1, vertices2,
-                DEFAULT_ORIENTATION_THRESHOLD);
+        return isPolygonOrientationReversed(vertices1, vertices2, DEFAULT_ORIENTATION_THRESHOLD);
     }
 
     /**
@@ -212,14 +204,13 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      * @see Polygon3D#getAngleBetweenPolygons(List, List)
      */
     public static boolean isPolygonOrientationReversed(
-            final List<Point3D> vertices1, final List<Point3D> vertices2,
-            final double threshold) throws CoincidentPointsException {
+            final List<Point3D> vertices1, final List<Point3D> vertices2, final double threshold)
+            throws CoincidentPointsException {
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
-        return isOrientationReversed(Polygon3D.getAngleBetweenPolygons(
-                vertices1, vertices2), threshold);
+        return isOrientationReversed(Polygon3D.getAngleBetweenPolygons(vertices1, vertices2), threshold);
     }
 
     /**
@@ -243,8 +234,7 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      * @return True if absolute value of angle is larger than provided
      * threshold, false otherwise.
      */
-    public static boolean isOrientationReversed(
-            final double angle, final double threshold) {
+    public static boolean isOrientationReversed(final double angle, final double threshold) {
         return Math.abs(angle) > Math.abs(threshold);
     }
 
@@ -266,13 +256,13 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      *                               Usually this indicates numerical instability or polygon degeneracy.
      */
     private static List<Triangle3D> internalTriangulate(
-            final List<Point3D> verticesCopy, final List<int[]> indices,
-            final List<Point3D> originalVertices) throws TriangulatorException {
+            final List<Point3D> verticesCopy, final List<int[]> indices, final List<Point3D> originalVertices)
+            throws TriangulatorException {
         if (verticesCopy.size() < MIN_VERTICES) {
             throw new TriangulatorException();
         }
 
-        final List<Triangle3D> result = new LinkedList<>();
+        final var result = new LinkedList<Triangle3D>();
 
         boolean isEar;
         boolean madeCut;
@@ -282,10 +272,8 @@ public class VanGoghTriangulator3D extends Triangulator3D {
         // Second, apply algorithm
         while (verticesCopy.size() > MIN_VERTICES) {
             madeCut = false;
-            final int lastElement = verticesCopy.size() - 1;
+            final var lastElement = verticesCopy.size() - 1;
             for (int i = 0; i <= lastElement; i++) {
-
-
                 if (i == 0) {
                     if (triangle == null) {
                         // instantiate triangle if not already instantiated
@@ -296,12 +284,10 @@ public class VanGoghTriangulator3D extends Triangulator3D {
                                 verticesCopy.get(0), verticesCopy.get(1));
                     }
                 } else if (i == lastElement) {
-                    triangle.setVertices(verticesCopy.get(lastElement - 1),
-                            verticesCopy.get(lastElement),
+                    triangle.setVertices(verticesCopy.get(lastElement - 1), verticesCopy.get(lastElement),
                             verticesCopy.get(0));
                 } else {
-                    triangle.setVertices(verticesCopy.get(i - 1),
-                            verticesCopy.get(i), verticesCopy.get(i + 1));
+                    triangle.setVertices(verticesCopy.get(i - 1), verticesCopy.get(i), verticesCopy.get(i + 1));
                 }
 
                 try {
@@ -334,11 +320,9 @@ public class VanGoghTriangulator3D extends Triangulator3D {
         }
 
         // instantiate final triangle
-        triangle = new Triangle3D(verticesCopy.get(0),
-                verticesCopy.get(1), verticesCopy.get(2));
+        triangle = new Triangle3D(verticesCopy.get(0), verticesCopy.get(1), verticesCopy.get(2));
 
-
-        final boolean arePointsColinear = triangle.areVerticesColinear();
+        final var arePointsColinear = triangle.areVerticesColinear();
 
         // only add final triangle if not co-linear (area greater than small
         // threshold)
@@ -348,7 +332,6 @@ public class VanGoghTriangulator3D extends Triangulator3D {
 
         // add indices of triangles verticesCopy
         computeIndices(originalVertices, result, indices);
-
         return result;
     }
 
@@ -362,21 +345,19 @@ public class VanGoghTriangulator3D extends Triangulator3D {
      *                  vertices.
      */
     private static void computeIndices(
-            final List<Point3D> vertices, final List<Triangle3D> triangles,
-            final List<int[]> indices) {
+            final List<Point3D> vertices, final List<Triangle3D> triangles, final List<int[]> indices) {
         if (indices != null) {
             int vertexCounter;
             int triangleVertexCounter;
             int[] triangleIndices;
-            for (final Triangle3D t : triangles) {
+            for (final var t : triangles) {
                 triangleVertexCounter = 0;
                 triangleIndices = new int[Triangle3D.NUM_VERTICES];
-                for (final Point3D p1 : t.getVertices()) {
+                for (final var p1 : t.getVertices()) {
                     vertexCounter = 0;
-                    for (final Point3D p2 : vertices) {
+                    for (final var p2 : vertices) {
                         if (p1 == p2) {
-                            triangleIndices[triangleVertexCounter] =
-                                    vertexCounter;
+                            triangleIndices[triangleVertexCounter] = vertexCounter;
                             break;
                         }
                         vertexCounter++;

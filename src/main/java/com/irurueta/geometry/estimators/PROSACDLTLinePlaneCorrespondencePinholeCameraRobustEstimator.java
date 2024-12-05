@@ -73,32 +73,32 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * The threshold refers to the amount of error a possible solution has on a
      * plane respect the back-projected plane of a line using estimated camera.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Quality scores corresponding to each pair of matched points.
      * The larger the score value the better the quality of the matching.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Indicates whether inliers must be computed and kept.
      */
-    private boolean mComputeAndKeepInliers;
+    private boolean computeAndKeepInliers;
 
     /**
      * Indicates whether residuals must be computed and kept.
      */
-    private boolean mComputeAndKeepResiduals;
+    private boolean computeAndKeepResiduals;
 
     /**
      * Constructor.
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -118,9 +118,9 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             final List<Plane> planes, final List<Line2D> lines) {
         super(planes, lines);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -132,9 +132,9 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             final PinholeCameraRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -154,12 +154,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  size or their size is smaller than required minimum size (4 matches).
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Plane> planes, final List<Line2D> lines) {
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes, final List<Line2D> lines) {
         super(listener, planes, lines);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -170,12 +169,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES (i.e. 4 samples).
      */
-    public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            final double[] qualityScores) {
+    public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(final double[] qualityScores) {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
         internalSetQualityScores(qualityScores);
     }
 
@@ -204,9 +202,9 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             throw new IllegalArgumentException();
         }
 
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
         internalSetQualityScores(qualityScores);
     }
 
@@ -221,12 +219,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  smaller than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES (i.e. 4 samples).
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final PinholeCameraRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
         internalSetQualityScores(qualityScores);
     }
 
@@ -249,17 +246,17 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  size or their size is smaller than required minimum size (4 matches).
      */
     public PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Plane> planes, final List<Line2D> lines, final double[] qualityScores) {
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes, final List<Line2D> lines,
+            final double[] qualityScores) {
         super(listener, planes, lines);
 
         if (qualityScores.length != planes.size()) {
             throw new IllegalArgumentException();
         }
 
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
         internalSetQualityScores(qualityScores);
     }
 
@@ -282,7 +279,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * @return threshold to determine whether matched planes are inliers or not.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -315,7 +312,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -326,7 +323,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -358,8 +355,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mPlanes.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == planes.size();
     }
 
     /**
@@ -369,7 +365,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-        return mComputeAndKeepInliers;
+        return computeAndKeepInliers;
     }
 
     /**
@@ -379,12 +375,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                              false if inliers only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
-            throws LockedException {
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepInliers = computeAndKeepInliers;
+        this.computeAndKeepInliers = computeAndKeepInliers;
     }
 
     /**
@@ -394,7 +389,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-        return mComputeAndKeepResiduals;
+        return computeAndKeepResiduals;
     }
 
     /**
@@ -404,12 +399,11 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                kept, false if residuals only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepResidualsEnabled(
-            final boolean computeAndKeepResiduals) throws LockedException {
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepResiduals = computeAndKeepResiduals;
+        this.computeAndKeepResiduals = computeAndKeepResiduals;
     }
 
     /**
@@ -426,8 +420,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public PinholeCamera estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public PinholeCamera estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -436,168 +429,142 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
         }
 
         // pinhole camera estimator using DLT (Direct Linear Transform) algorithm
-        final DLTLinePlaneCorrespondencePinholeCameraEstimator nonRobustEstimator =
-                new DLTLinePlaneCorrespondencePinholeCameraEstimator();
+        final var nonRobustEstimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator();
 
         nonRobustEstimator.setLMSESolutionAllowed(false);
 
         // suggestions
-        nonRobustEstimator.setSuggestSkewnessValueEnabled(
-                isSuggestSkewnessValueEnabled());
-        nonRobustEstimator.setSuggestedSkewnessValue(
-                getSuggestedSkewnessValue());
-        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(
-                isSuggestHorizontalFocalLengthEnabled());
-        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(
-                getSuggestedHorizontalFocalLengthValue());
-        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(
-                isSuggestVerticalFocalLengthEnabled());
-        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(
-                getSuggestedVerticalFocalLengthValue());
-        nonRobustEstimator.setSuggestAspectRatioEnabled(
-                isSuggestAspectRatioEnabled());
-        nonRobustEstimator.setSuggestedAspectRatioValue(
-                getSuggestedAspectRatioValue());
-        nonRobustEstimator.setSuggestPrincipalPointEnabled(
-                isSuggestPrincipalPointEnabled());
-        nonRobustEstimator.setSuggestedPrincipalPointValue(
-                getSuggestedPrincipalPointValue());
-        nonRobustEstimator.setSuggestRotationEnabled(
-                isSuggestRotationEnabled());
-        nonRobustEstimator.setSuggestedRotationValue(
-                getSuggestedRotationValue());
+        nonRobustEstimator.setSuggestSkewnessValueEnabled(isSuggestSkewnessValueEnabled());
+        nonRobustEstimator.setSuggestedSkewnessValue(getSuggestedSkewnessValue());
+        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(isSuggestHorizontalFocalLengthEnabled());
+        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(getSuggestedHorizontalFocalLengthValue());
+        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(isSuggestVerticalFocalLengthEnabled());
+        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(getSuggestedVerticalFocalLengthValue());
+        nonRobustEstimator.setSuggestAspectRatioEnabled(isSuggestAspectRatioEnabled());
+        nonRobustEstimator.setSuggestedAspectRatioValue(getSuggestedAspectRatioValue());
+        nonRobustEstimator.setSuggestPrincipalPointEnabled(isSuggestPrincipalPointEnabled());
+        nonRobustEstimator.setSuggestedPrincipalPointValue(getSuggestedPrincipalPointValue());
+        nonRobustEstimator.setSuggestRotationEnabled(isSuggestRotationEnabled());
+        nonRobustEstimator.setSuggestedRotationValue(getSuggestedRotationValue());
         nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());
         nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());
 
-        final PROSACRobustEstimator<PinholeCamera> innerEstimator =
-                new PROSACRobustEstimator<>(
-                        new PROSACRobustEstimatorListener<PinholeCamera>() {
+        final var innerEstimator = new PROSACRobustEstimator<>(new PROSACRobustEstimatorListener<PinholeCamera>() {
 
-                            // 3D planes for a subset of samples
-                            private final List<Plane> mSubsetPlanes = new ArrayList<>();
+            // 3D planes for a subset of samples
+            private final List<Plane> subsetPlanes = new ArrayList<>();
 
-                            // 2D lines for a subset of samples
-                            private final List<Line2D> mSubsetLines = new ArrayList<>();
+            // 2D lines for a subset of samples
+            private final List<Line2D> subsetLines = new ArrayList<>();
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+            @Override
+            public double getThreshold() {
+                return threshold;
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPlanes.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return planes.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return LinePlaneCorrespondencePinholeCameraEstimator.
-                                        MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return LinePlaneCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<PinholeCamera> solutions) {
-                                mSubsetPlanes.clear();
-                                mSubsetPlanes.add(mPlanes.get(samplesIndices[0]));
-                                mSubsetPlanes.add(mPlanes.get(samplesIndices[1]));
-                                mSubsetPlanes.add(mPlanes.get(samplesIndices[2]));
-                                mSubsetPlanes.add(mPlanes.get(samplesIndices[3]));
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<PinholeCamera> solutions) {
+                subsetPlanes.clear();
+                subsetPlanes.add(planes.get(samplesIndices[0]));
+                subsetPlanes.add(planes.get(samplesIndices[1]));
+                subsetPlanes.add(planes.get(samplesIndices[2]));
+                subsetPlanes.add(planes.get(samplesIndices[3]));
 
-                                mSubsetLines.clear();
-                                mSubsetLines.add(mLines.get(samplesIndices[0]));
-                                mSubsetLines.add(mLines.get(samplesIndices[1]));
-                                mSubsetLines.add(mLines.get(samplesIndices[2]));
-                                mSubsetLines.add(mLines.get(samplesIndices[3]));
+                subsetLines.clear();
+                subsetLines.add(lines.get(samplesIndices[0]));
+                subsetLines.add(lines.get(samplesIndices[1]));
+                subsetLines.add(lines.get(samplesIndices[2]));
+                subsetLines.add(lines.get(samplesIndices[3]));
 
-                                try {
-                                    nonRobustEstimator.setLists(mSubsetPlanes, mSubsetLines);
+                try {
+                    nonRobustEstimator.setLists(subsetPlanes, subsetLines);
 
-                                    final PinholeCamera cam = nonRobustEstimator.estimate();
-                                    solutions.add(cam);
-                                } catch (final Exception e) {
-                                    // if lines/planes configuration is degenerate, no solution
-                                    // is added
-                                }
-                            }
+                    final var cam = nonRobustEstimator.estimate();
+                    solutions.add(cam);
+                } catch (final Exception e) {
+                    // if lines/planes configuration is degenerate, no solution
+                    // is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final PinholeCamera currentEstimation,
-                                                          final int i) {
-                                final Line2D inputLine = mLines.get(i);
-                                final Plane inputPlane = mPlanes.get(i);
+            @Override
+            public double computeResidual(final PinholeCamera currentEstimation, final int i) {
+                final var inputLine = lines.get(i);
+                final var inputPlane = planes.get(i);
 
-                                return singleBackprojectionResidual(currentEstimation,
-                                        inputLine, inputPlane);
-                            }
+                return singleBackprojectionResidual(currentEstimation, inputLine, inputPlane);
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.
-                                        this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<PinholeCamera> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<PinholeCamera> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(
+                            PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<PinholeCamera> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<PinholeCamera> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<PinholeCamera> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<PinholeCamera> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(
+                            PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<PinholeCamera> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this,
-                                            progress);
-                                }
-                            }
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<PinholeCamera> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(
+                            PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, progress);
+                }
+            }
 
-                            @Override
-                            public double[] getQualityScores() {
-                                return mQualityScores;
-                            }
-                        });
+            @Override
+            public double[] getQualityScores() {
+                return qualityScores;
+            }
+        });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setComputeAndKeepInliersEnabled(
-                    mComputeAndKeepInliers || mRefineResult);
-            innerEstimator.setComputeAndKeepResidualsEnabled(
-                    mComputeAndKeepResiduals || mRefineResult);
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final PinholeCamera result = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
-            return attemptRefine(result,
-                    nonRobustEstimator.getMaxSuggestionWeight());
+            locked = true;
+            inliersData = null;
+            innerEstimator.setComputeAndKeepInliersEnabled(computeAndKeepInliers || refineResult);
+            innerEstimator.setComputeAndKeepResidualsEnabled(computeAndKeepResiduals || refineResult);
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var result = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
+            return attemptRefine(result, nonRobustEstimator.getMaxSuggestionWeight());
 
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -624,7 +591,7 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -641,6 +608,6 @@ public class PROSACDLTLinePlaneCorrespondencePinholeCameraRobustEstimator
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

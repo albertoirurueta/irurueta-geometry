@@ -15,15 +15,15 @@
  */
 package com.irurueta.geometry.refiners;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class RefinerExceptionTest {
+class RefinerExceptionTest {
 
     @Test
-    public void testConstructor() {
-        RefinerException ex = new RefinerException();
+    void testConstructor() {
+        var ex = new RefinerException();
         assertNotNull(ex);
 
         ex = new RefinerException("message");

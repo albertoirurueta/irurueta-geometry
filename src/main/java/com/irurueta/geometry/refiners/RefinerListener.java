@@ -39,6 +39,5 @@ public interface RefinerListener<T> {
      * @param errorDecreased    true if error decreased after refinement, false
      *                          otherwise.
      */
-    void onRefineEnd(final Refiner<T> refiner, final T initialEstimation, final T result,
-                     final boolean errorDecreased);
+    void onRefineEnd(final Refiner<T> refiner, final T initialEstimation, final T result, final boolean errorDecreased);
 }

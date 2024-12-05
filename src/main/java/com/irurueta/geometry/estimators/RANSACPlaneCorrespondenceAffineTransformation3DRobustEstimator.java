@@ -73,26 +73,26 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * The threshold refers to the amount of error a possible solution has on a
      * matched pair of lines.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Indicates whether inliers must be computed and kept.
      */
-    private boolean mComputeAndKeepInliers;
+    private boolean computeAndKeepInliers;
 
     /**
      * Indicates whether residuals must be computed and kept.
      */
-    private boolean mComputeAndKeepResiduals;
+    private boolean computeAndKeepResiduals;
 
     /**
      * Constructor.
      */
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -112,9 +112,9 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             final List<Plane> inputPlanes, final List<Plane> outputPlanes) {
         super(inputPlanes, outputPlanes);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -126,9 +126,9 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
     public RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator(
             final AffineTransformation3DRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -151,9 +151,9 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
             final AffineTransformation3DRobustEstimatorListener listener,
             final List<Plane> inputPlanes, final List<Plane> outputPlanes) {
         super(listener, inputPlanes, outputPlanes);
-        mThreshold = DEFAULT_THRESHOLD;
-        mComputeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
-        mComputeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
+        threshold = DEFAULT_THRESHOLD;
+        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;
+        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;
     }
 
     /**
@@ -173,7 +173,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * @return threshold to determine whether matched planes are inliers or not.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -204,7 +204,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -214,7 +214,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * need to be computed but not kept.
      */
     public boolean isComputeAndKeepInliersEnabled() {
-        return mComputeAndKeepInliers;
+        return computeAndKeepInliers;
     }
 
     /**
@@ -224,12 +224,11 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                              false if inliers only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers)
-            throws LockedException {
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepInliers = computeAndKeepInliers;
+        this.computeAndKeepInliers = computeAndKeepInliers;
     }
 
     /**
@@ -239,7 +238,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      * only need to be computed but not kept.
      */
     public boolean isComputeAndKeepResidualsEnabled() {
-        return mComputeAndKeepResiduals;
+        return computeAndKeepResiduals;
     }
 
     /**
@@ -249,12 +248,11 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                                kept, false if residuals only need to be computed but not kept.
      * @throws LockedException if estimator is locked.
      */
-    public void setComputeAndKeepResidualsEnabled(
-            final boolean computeAndKeepResiduals) throws LockedException {
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mComputeAndKeepResiduals = computeAndKeepResiduals;
+        this.computeAndKeepResiduals = computeAndKeepResiduals;
     }
 
     /**
@@ -271,8 +269,7 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public AffineTransformation3D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public AffineTransformation3D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -280,137 +277,126 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
             throw new NotReadyException();
         }
 
-        final RANSACRobustEstimator<AffineTransformation3D> innerEstimator =
-                new RANSACRobustEstimator<>(
-                        new RANSACRobustEstimatorListener<AffineTransformation3D>() {
+        final var innerEstimator = new RANSACRobustEstimator<>(
+                new RANSACRobustEstimatorListener<AffineTransformation3D>() {
 
-                            // plane to be reused when computing residuals
-                            private final Plane mTestPlane = new Plane();
+                    // plane to be reused when computing residuals
+                    private final Plane testPlane = new Plane();
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+                    @Override
+                    public double getThreshold() {
+                        return threshold;
+                    }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputPlanes.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputPlanes.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;
+                    }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<AffineTransformation3D> solutions) {
-                                final Plane inputPlane1 = mInputPlanes.get(samplesIndices[0]);
-                                final Plane inputPlane2 = mInputPlanes.get(samplesIndices[1]);
-                                final Plane inputPlane3 = mInputPlanes.get(samplesIndices[2]);
-                                final Plane inputPlane4 = mInputPlanes.get(samplesIndices[3]);
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<AffineTransformation3D> solutions) {
+                        final var inputPlane1 = inputPlanes.get(samplesIndices[0]);
+                        final var inputPlane2 = inputPlanes.get(samplesIndices[1]);
+                        final var inputPlane3 = inputPlanes.get(samplesIndices[2]);
+                        final var inputPlane4 = inputPlanes.get(samplesIndices[3]);
 
-                                final Plane outputPlane1 = mOutputPlanes.get(samplesIndices[0]);
-                                final Plane outputPlane2 = mOutputPlanes.get(samplesIndices[1]);
-                                final Plane outputPlane3 = mOutputPlanes.get(samplesIndices[2]);
-                                final Plane outputPlane4 = mOutputPlanes.get(samplesIndices[3]);
+                        final var outputPlane1 = outputPlanes.get(samplesIndices[0]);
+                        final var outputPlane2 = outputPlanes.get(samplesIndices[1]);
+                        final var outputPlane3 = outputPlanes.get(samplesIndices[2]);
+                        final var outputPlane4 = outputPlanes.get(samplesIndices[3]);
 
-                                try {
-                                    final AffineTransformation3D transformation =
-                                            new AffineTransformation3D(inputPlane1, inputPlane2,
-                                                    inputPlane3, inputPlane4, outputPlane1,
-                                                    outputPlane2, outputPlane3, outputPlane4);
-                                    solutions.add(transformation);
-                                } catch (final CoincidentPlanesException e) {
-                                    // if lines are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            final var transformation = new AffineTransformation3D(inputPlane1, inputPlane2, inputPlane3,
+                                    inputPlane4, outputPlane1, outputPlane2, outputPlane3, outputPlane4);
+                            solutions.add(transformation);
+                        } catch (final CoincidentPlanesException e) {
+                            // if lines are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(
-                                    final AffineTransformation3D currentEstimation, final int i) {
-                                final Plane inputPlane = mInputPlanes.get(i);
-                                final Plane outputPlane = mOutputPlanes.get(i);
+                    @Override
+                    public double computeResidual(final AffineTransformation3D currentEstimation, final int i) {
+                        final var inputPlane = inputPlanes.get(i);
+                        final var outputPlane = outputPlanes.get(i);
 
-                                // transform input plane and store result in mTestPlane
-                                try {
-                                    currentEstimation.transform(inputPlane, mTestPlane);
+                        // transform input plane and store result in mTestPlane
+                        try {
+                            currentEstimation.transform(inputPlane, testPlane);
 
-                                    return getResidual(outputPlane, mTestPlane);
-                                } catch (final AlgebraException e) {
-                                    // this happens when internal matrix of affine transformation
-                                    // cannot be reversed (i.e. transformation is not well-defined,
-                                    // numerical instabilities, etc.)
-                                    return Double.MAX_VALUE;
-                                }
-                            }
+                            return getResidual(outputPlane, testPlane);
+                        } catch (final AlgebraException e) {
+                            // this happens when internal matrix of affine transformation
+                            // cannot be reversed (i.e. transformation is not well-defined,
+                            // numerical instabilities, etc.)
+                            return Double.MAX_VALUE;
+                        }
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.
-                                        this.isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<AffineTransformation3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<AffineTransformation3D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(
+                                    RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<AffineTransformation3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<AffineTransformation3D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(
+                                    RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<AffineTransformation3D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<AffineTransformation3D> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(
+                                    RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
+                                    iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<AffineTransformation3D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
-                        });
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<AffineTransformation3D> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(
+                                    RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
+                                    progress);
+                        }
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setComputeAndKeepInliersEnabled(
-                    mComputeAndKeepInliers || mRefineResult);
-            innerEstimator.setComputeAndKeepResidualsEnabled(
-                    mComputeAndKeepResiduals || mRefineResult);
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            AffineTransformation3D transformation = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setComputeAndKeepInliersEnabled(computeAndKeepInliers || refineResult);
+            innerEstimator.setComputeAndKeepResidualsEnabled(computeAndKeepResiduals || refineResult);
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -437,6 +423,6 @@ public class RANSACPlaneCorrespondenceAffineTransformation3DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        return mThreshold;
+        return threshold;
     }
 }

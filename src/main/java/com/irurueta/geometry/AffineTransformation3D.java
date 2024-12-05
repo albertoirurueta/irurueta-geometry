@@ -36,8 +36,7 @@ import java.util.Arrays;
  * those cases use a ProjectiveTransformation3D instead.
  */
 @SuppressWarnings("DuplicatedCode")
-public class AffineTransformation3D extends Transformation3D
-        implements Serializable {
+public class AffineTransformation3D extends Transformation3D implements Serializable {
 
     /**
      * Constant indicating number of coordinates required in translation arrays.
@@ -101,7 +100,7 @@ public class AffineTransformation3D extends Transformation3D
      *              objects.
      */
     public AffineTransformation3D(final double scale) {
-        final double[] diag = new double[INHOM_COORDS];
+        final var diag = new double[INHOM_COORDS];
         Arrays.fill(diag, scale);
         a = Matrix.diagonal(diag);
         translation = new double[NUM_TRANSLATION_COORDS];
@@ -128,7 +127,7 @@ public class AffineTransformation3D extends Transformation3D
      * @throws NullPointerException raised if provided rotation is null.
      */
     public AffineTransformation3D(final double scale, final Rotation3D rotation) {
-        final double[] diag = new double[INHOM_COORDS];
+        final var diag = new double[INHOM_COORDS];
         Arrays.fill(diag, scale);
         a = Matrix.diagonal(diag);
         try {
@@ -148,8 +147,7 @@ public class AffineTransformation3D extends Transformation3D
      * @throws NullPointerException raised if provided parameters are null or
      *                              if provided rotation is null.
      */
-    public AffineTransformation3D(final AffineParameters3D params,
-                                  final Rotation3D rotation) {
+    public AffineTransformation3D(final AffineParameters3D params, final Rotation3D rotation) {
         a = params.asMatrix();
         try {
             a.multiply(rotation.asInhomogeneousMatrix());
@@ -219,7 +217,7 @@ public class AffineTransformation3D extends Transformation3D
             throw new IllegalArgumentException();
         }
 
-        final double[] diag = new double[INHOM_COORDS];
+        final var diag = new double[INHOM_COORDS];
         Arrays.fill(diag, scale);
         a = Matrix.diagonal(diag);
 
@@ -260,13 +258,12 @@ public class AffineTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided translation does not
      *                                  have length 3.
      */
-    public AffineTransformation3D(final double scale, final Rotation3D rotation,
-                                  final double[] translation) {
+    public AffineTransformation3D(final double scale, final Rotation3D rotation, final double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
 
-        final double[] diag = new double[INHOM_COORDS];
+        final var diag = new double[INHOM_COORDS];
         Arrays.fill(diag, scale);
         a = Matrix.diagonal(diag);
         try {
@@ -292,8 +289,8 @@ public class AffineTransformation3D extends Transformation3D
      * @throws IllegalArgumentException raised if provided translation does not
      *                                  have length 3.
      */
-    public AffineTransformation3D(final AffineParameters3D params,
-                                  final Rotation3D rotation, final double[] translation) {
+    public AffineTransformation3D(final AffineParameters3D params, final Rotation3D rotation,
+                                  final double[] translation) {
         if (translation.length != NUM_TRANSLATION_COORDS) {
             throw new IllegalArgumentException();
         }
@@ -328,18 +325,17 @@ public class AffineTransformation3D extends Transformation3D
      *                                   points or numerical instabilities).
      */
     public AffineTransformation3D(
-            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3,
-            final Point3D inputPoint4, final Point3D outputPoint1, final Point3D outputPoint2,
-            final Point3D outputPoint3, final Point3D outputPoint4) throws CoincidentPointsException {
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2, final Point3D outputPoint3,
+            final Point3D outputPoint4) throws CoincidentPointsException {
         try {
             a = new Matrix(INHOM_COORDS, INHOM_COORDS);
         } catch (final WrongSizeException ignore) {
             // never happens
         }
         translation = new double[NUM_TRANSLATION_COORDS];
-        setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3,
-                inputPoint4, outputPoint1, outputPoint2, outputPoint3,
-                outputPoint4);
+        setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, inputPoint4, outputPoint1, outputPoint2,
+                outputPoint3, outputPoint4);
     }
 
     /**
@@ -363,12 +359,11 @@ public class AffineTransformation3D extends Transformation3D
      *                                   planes or numerical instabilities).
      */
     public AffineTransformation3D(
-            final Plane inputPlane1, final Plane inputPlane2, final Plane inputPlane3,
-            final Plane inputPlane4, final Plane outputPlane1, final Plane outputPlane2,
-            final Plane outputPlane3, final Plane outputPlane4) throws CoincidentPlanesException {
-        setTransformationFromPlanes(inputPlane1, inputPlane2, inputPlane3,
-                inputPlane4, outputPlane1, outputPlane2, outputPlane3,
-                outputPlane4);
+            final Plane inputPlane1, final Plane inputPlane2, final Plane inputPlane3, final Plane inputPlane4,
+            final Plane outputPlane1, final Plane outputPlane2, final Plane outputPlane3, final Plane outputPlane4)
+            throws CoincidentPlanesException {
+        setTransformationFromPlanes(inputPlane1, inputPlane2, inputPlane3, inputPlane4, outputPlane1, outputPlane2,
+                outputPlane3, outputPlane4);
     }
 
     /**
@@ -384,10 +379,9 @@ public class AffineTransformation3D extends Transformation3D
      *                                  or numerical instabilities).
      */
     public AffineTransformation3D(
-            final Line3D inputLine1, final Line3D inputLine2, final Line3D outputLine1,
-            final Line3D outputLine2) throws CoincidentLinesException {
-        setTransformationFromLines(inputLine1, inputLine2, outputLine1,
-                outputLine2);
+            final Line3D inputLine1, final Line3D inputLine2, final Line3D outputLine1, final Line3D outputLine2)
+            throws CoincidentLinesException {
+        setTransformationFromLines(inputLine1, inputLine2, outputLine1, outputLine2);
     }
 
     /**
@@ -431,7 +425,7 @@ public class AffineTransformation3D extends Transformation3D
      */
     public Rotation3D getRotation() throws AlgebraException {
         // Use QR decomposition to retrieve rotation
-        final RQDecomposer decomposer = new RQDecomposer(a);
+        final var decomposer = new RQDecomposer(a);
         try {
             decomposer.decompose();
             return new MatrixRotation3D(decomposer.getQ());
@@ -450,13 +444,13 @@ public class AffineTransformation3D extends Transformation3D
      *                              transformation).
      */
     public void setRotation(final Rotation3D rotation) throws AlgebraException {
-        final Matrix rotMatrix = rotation.asInhomogeneousMatrix();
+        final var rotMatrix = rotation.asInhomogeneousMatrix();
 
         // Use QR decomposition to retrieve parameters matrix
-        final RQDecomposer decomposer = new RQDecomposer(a);
+        final var decomposer = new RQDecomposer(a);
         decomposer.decompose();
         // retrieves params matrix
-        final Matrix localA = decomposer.getR();
+        final var localA = decomposer.getR();
         localA.multiply(rotMatrix);
         this.a = localA;
     }
@@ -471,7 +465,7 @@ public class AffineTransformation3D extends Transformation3D
      *                          transformation).
      */
     public void addRotation(final Rotation3D rotation) throws AlgebraException {
-        final Rotation3D localRotation = getRotation();
+        final var localRotation = getRotation();
         localRotation.combine(rotation);
         setRotation(localRotation);
     }
@@ -488,11 +482,10 @@ public class AffineTransformation3D extends Transformation3D
      *                          transformation).
      */
     public void setScale(final double scale) throws AlgebraException {
-
-        final RQDecomposer decomposer = new RQDecomposer(a);
+        final var decomposer = new RQDecomposer(a);
         decomposer.decompose();
         // params
-        final Matrix localA = decomposer.getR();
+        final var localA = decomposer.getR();
         localA.setElementAt(0, 0, scale);
         localA.setElementAt(1, 1, scale);
         // multiply by rotation
@@ -511,7 +504,7 @@ public class AffineTransformation3D extends Transformation3D
      *                          in matrix a).
      */
     public AffineParameters3D getParameters() throws AlgebraException {
-        final AffineParameters3D parameters = new AffineParameters3D();
+        final var parameters = new AffineParameters3D();
         getParameters(parameters);
         return parameters;
     }
@@ -527,11 +520,10 @@ public class AffineTransformation3D extends Transformation3D
      *                          parameters cannot be retrieved (usually because of numerical instability
      *                          in matrix a).
      */
-    public void getParameters(final AffineParameters3D result)
-            throws AlgebraException {
-        final RQDecomposer decomposer = new RQDecomposer(a);
+    public void getParameters(final AffineParameters3D result) throws AlgebraException {
+        final var decomposer = new RQDecomposer(a);
         decomposer.decompose();
-        final Matrix params = decomposer.getR();
+        final var params = decomposer.getR();
         result.fromMatrix(params);
     }
 
@@ -545,12 +537,11 @@ public class AffineTransformation3D extends Transformation3D
      *                          parameters cannot be set (usually because of numerical instability in
      *                          current matrix a).
      */
-    public void setParameters(final AffineParameters3D parameters)
-            throws AlgebraException {
-        final RQDecomposer decomposer = new RQDecomposer(a);
+    public void setParameters(final AffineParameters3D parameters) throws AlgebraException {
+        final var decomposer = new RQDecomposer(a);
         decomposer.decompose();
-        final Matrix params = parameters.asMatrix();
-        final Matrix rotation = decomposer.getQ();
+        final var params = parameters.asMatrix();
+        final var rotation = decomposer.getQ();
 
         params.multiply(rotation);
         a = params;
@@ -657,8 +648,7 @@ public class AffineTransformation3D extends Transformation3D
      * @param translationY translation y coordinate to be set.
      * @param translationZ translation z coordinate to be set.
      */
-    public void setTranslation(
-            final double translationX, final double translationY, final double translationZ) {
+    public void setTranslation(final double translationX, final double translationY, final double translationZ) {
         translation[0] = translationX;
         translation[1] = translationY;
         translation[2] = translationZ;
@@ -671,8 +661,7 @@ public class AffineTransformation3D extends Transformation3D
      * @param translation translation to be set.
      */
     public void setTranslation(final Point3D translation) {
-        setTranslation(translation.getInhomX(), translation.getInhomY(),
-                translation.getInhomZ());
+        setTranslation(translation.getInhomX(), translation.getInhomY(), translation.getInhomZ());
     }
 
     /**
@@ -682,7 +671,7 @@ public class AffineTransformation3D extends Transformation3D
      * @return a new point containing translation coordinates.
      */
     public Point3D getTranslationPoint() {
-        final Point3D out = Point3D.create();
+        final var out = Point3D.create();
         getTranslationPoint(out);
         return out;
     }
@@ -694,8 +683,7 @@ public class AffineTransformation3D extends Transformation3D
      * @param out point where translation coordinates will be stored.
      */
     public void getTranslationPoint(final Point3D out) {
-        out.setInhomogeneousCoordinates(translation[0], translation[1],
-                translation[2]);
+        out.setInhomogeneousCoordinates(translation[0], translation[1], translation[2]);
     }
 
     /**
@@ -736,8 +724,7 @@ public class AffineTransformation3D extends Transformation3D
      * @param translationY y coordinate to be added to current translation.
      * @param translationZ z coordinate to be added to current translation.
      */
-    public void addTranslation(
-            final double translationX, final double translationY, final double translationZ) {
+    public void addTranslation(final double translationX, final double translationY, final double translationZ) {
         translation[0] += translationX;
         translation[1] += translationY;
         translation[2] += translationZ;
@@ -751,8 +738,7 @@ public class AffineTransformation3D extends Transformation3D
      *                    translation.
      */
     public void addTranslation(final Point3D translation) {
-        addTranslation(translation.getInhomX(), translation.getInhomY(),
-                translation.getInhomZ());
+        addTranslation(translation.getInhomX(), translation.getInhomY(), translation.getInhomZ());
     }
 
     /**
@@ -789,12 +775,10 @@ public class AffineTransformation3D extends Transformation3D
         }
 
         // set rotation
-        m.setSubmatrix(0, 0, 2, 2,
-                a);
+        m.setSubmatrix(0, 0, 2, 2, a);
 
         // set translation
-        m.setSubmatrix(0, 3, 2, 3,
-                translation);
+        m.setSubmatrix(0, 3, 2, 3, translation);
 
         // set last element
         m.setElementAt(3, 0, 0.0);
@@ -813,19 +797,15 @@ public class AffineTransformation3D extends Transformation3D
     @Override
     public void transform(final Point3D inputPoint, final Point3D outputPoint) {
         try {
-            final double[] coords = new double[
-                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
+            final var coords = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];
             coords[0] = inputPoint.getInhomX();
             coords[1] = inputPoint.getInhomY();
             coords[2] = inputPoint.getInhomZ();
 
-            final Matrix p = a.multiplyAndReturnNew(Matrix.newFromArray(coords,
-                    true));
+            final var p = a.multiplyAndReturnNew(Matrix.newFromArray(coords, true));
 
-            outputPoint.setInhomogeneousCoordinates(
-                    p.getElementAtIndex(0) + translation[0],
-                    p.getElementAtIndex(1) + translation[1],
-                    p.getElementAtIndex(2) + translation[2]);
+            outputPoint.setInhomogeneousCoordinates(p.getElementAtIndex(0) + translation[0],
+                    p.getElementAtIndex(1) + translation[1], p.getElementAtIndex(2) + translation[2]);
         } catch (final WrongSizeException ignore) {
             // this exception will never be raised
         }
@@ -844,8 +824,8 @@ public class AffineTransformation3D extends Transformation3D
      *                                     numerical instabilities.
      */
     @Override
-    public void transform(final Quadric inputQuadric, final Quadric outputQuadric)
-            throws NonSymmetricMatrixException, AlgebraException {
+    public void transform(final Quadric inputQuadric, final Quadric outputQuadric) throws NonSymmetricMatrixException,
+            AlgebraException {
         // point' * quadric * point = 0
         // point' * T' * transformedQuadric * T * point = 0
         // where:
@@ -856,13 +836,13 @@ public class AffineTransformation3D extends Transformation3D
 
         inputQuadric.normalize();
 
-        final Matrix q = inputQuadric.asMatrix();
-        final Matrix invT = inverseAndReturnNew().asMatrix();
+        final var q = inputQuadric.asMatrix();
+        final var invT = inverseAndReturnNew().asMatrix();
         // normalize transformation matrix invT to increase accuracy
-        double norm = Utils.normF(invT);
+        var norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
 
-        final Matrix m = invT.transposeAndReturnNew();
+        final var m = invT.transposeAndReturnNew();
         try {
             m.multiply(q);
             m.multiply(invT);
@@ -889,8 +869,8 @@ public class AffineTransformation3D extends Transformation3D
      *                                     the resulting output dual conic matrix is not considered to be symmetric.
      */
     @Override
-    public void transform(final DualQuadric inputDualQuadric,
-                          final DualQuadric outputDualQuadric) throws NonSymmetricMatrixException {
+    public void transform(final DualQuadric inputDualQuadric, final DualQuadric outputDualQuadric)
+            throws NonSymmetricMatrixException {
         // plane' * dualQuadric * plane = 0
         // plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane
 
@@ -900,13 +880,13 @@ public class AffineTransformation3D extends Transformation3D
 
         inputDualQuadric.normalize();
 
-        final Matrix dualQ = inputDualQuadric.asMatrix();
-        final Matrix t = asMatrix();
+        final var dualQ = inputDualQuadric.asMatrix();
+        final var t = asMatrix();
         // normalize transformation matrix T to increase accuracy
-        double norm = Utils.normF(t);
+        var norm = Utils.normF(t);
         t.multiplyByScalar(1.0 / norm);
 
-        final Matrix transT = t.transposeAndReturnNew();
+        final var transT = t.transposeAndReturnNew();
         try {
             t.multiply(dualQ);
             t.multiply(transT);
@@ -933,8 +913,7 @@ public class AffineTransformation3D extends Transformation3D
      *                          computed because of numerical instabilities.
      */
     @Override
-    public void transform(final Plane inputPlane, final Plane outputPlane)
-            throws AlgebraException {
+    public void transform(final Plane inputPlane, final Plane outputPlane) throws AlgebraException {
         // plane' * point = 0 --> plane' * T^-1 * T * point
         // (plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)
         // where:
@@ -943,11 +922,11 @@ public class AffineTransformation3D extends Transformation3D
 
         inputPlane.normalize();
 
-        final Matrix invT = inverseAndReturnNew().asMatrix();
-        final Matrix p = Matrix.newFromArray(inputPlane.asArray());
+        final var invT = inverseAndReturnNew().asMatrix();
+        final var p = Matrix.newFromArray(inputPlane.asArray());
 
         // normalize transformation matrix T to increase accuracy
-        final double norm = Utils.normF(invT);
+        final var norm = Utils.normF(invT);
         invT.multiplyByScalar(1.0 / norm);
 
         invT.transpose();
@@ -967,13 +946,12 @@ public class AffineTransformation3D extends Transformation3D
      *                          of numerical instabilities.
      */
     @Override
-    public void transform(final PinholeCamera inputCamera,
-                          final PinholeCamera outputCamera) throws AlgebraException {
+    public void transform(final PinholeCamera inputCamera, final PinholeCamera outputCamera) throws AlgebraException {
 
         inputCamera.normalize();
 
-        final Matrix invT = inverseAndReturnNew().asMatrix();
-        final Matrix c = inputCamera.getInternalMatrix();
+        final var invT = inverseAndReturnNew().asMatrix();
+        final var c = inputCamera.getInternalMatrix();
         c.multiply(invT);
         outputCamera.setInternalMatrix(c);
     }
@@ -997,7 +975,7 @@ public class AffineTransformation3D extends Transformation3D
      *                          of numerical instabilities.
      */
     public Transformation3D inverseAndReturnNew() throws AlgebraException {
-        final AffineTransformation3D result = new AffineTransformation3D();
+        final var result = new AffineTransformation3D();
         inverse(result);
         return result;
     }
@@ -1010,8 +988,7 @@ public class AffineTransformation3D extends Transformation3D
      * @throws AlgebraException if inverse transform cannot be computed because
      *                          of numerical instabilities.
      */
-    public void inverse(final AffineTransformation3D result)
-            throws AlgebraException {
+    public void inverse(final AffineTransformation3D result) throws AlgebraException {
 
         // x' = a * x + t -->
         // a^-1 * x' = a^-1 * a * x + a^-1 * t = x + a^-1 * t -->
@@ -1019,14 +996,14 @@ public class AffineTransformation3D extends Transformation3D
 
         try {
             // reverse rotation
-            final Matrix invA = Utils.inverse(a);
+            final var invA = Utils.inverse(a);
             result.a = invA;
 
             // reverse translation
-            final Matrix t = Matrix.newFromArray(translation, true);
+            final var t = Matrix.newFromArray(translation, true);
             t.multiplyByScalar(-1.0);
 
-            final Matrix resultT = invA.multiplyAndReturnNew(t);
+            final var resultT = invA.multiplyAndReturnNew(t);
             result.translation = resultT.toArray();
         } catch (final WrongSizeException ignore) {
             // never happens
@@ -1063,10 +1040,9 @@ public class AffineTransformation3D extends Transformation3D
      * @return a new transformation resulting of the combination with this
      * transformation and provided transformation.
      */
-    public AffineTransformation3D combineAndReturnNew(
-            final AffineTransformation3D transformation) {
+    public AffineTransformation3D combineAndReturnNew(final AffineTransformation3D transformation) {
 
-        final AffineTransformation3D result = new AffineTransformation3D();
+        final var result = new AffineTransformation3D();
         combine(transformation, result);
         return result;
     }
@@ -1088,16 +1064,14 @@ public class AffineTransformation3D extends Transformation3D
 
         try {
             // we do translation first, because this.rotation might change later
-            final Matrix a1 = new Matrix(this.a);
-            final Matrix t2 = Matrix.newFromArray(inputTransformation.translation, true);
+            final var a1 = new Matrix(this.a);
+            final var t2 = Matrix.newFromArray(inputTransformation.translation, true);
             // this is R1 * t2
             a1.multiply(t2);
 
-            ArrayUtils.sum(a1.toArray(), this.translation,
-                    outputTransformation.translation);
+            ArrayUtils.sum(a1.toArray(), this.translation, outputTransformation.translation);
 
-            outputTransformation.a = this.a.multiplyAndReturnNew(
-                    inputTransformation.a);
+            outputTransformation.a = this.a.multiplyAndReturnNew(inputTransformation.a);
 
         } catch (final WrongSizeException ignore) {
             // never happens
@@ -1125,9 +1099,9 @@ public class AffineTransformation3D extends Transformation3D
      *                                   points or numerical instabilities).
      */
     public final void setTransformationFromPoints(
-            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3,
-            final Point3D inputPoint4, final Point3D outputPoint1, final Point3D outputPoint2,
-            final Point3D outputPoint3, final Point3D outputPoint4) throws CoincidentPointsException {
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2, final Point3D outputPoint3,
+            final Point3D outputPoint4) throws CoincidentPointsException {
 
         // normalize points to increase accuracy
         inputPoint1.normalize();
@@ -1149,27 +1123,27 @@ public class AffineTransformation3D extends Transformation3D
             m = new Matrix(12, 13);
 
             // 1st pair of points
-            double iX = inputPoint1.getHomX();
-            double iY = inputPoint1.getHomY();
-            double iZ = inputPoint1.getHomZ();
-            double iW = inputPoint1.getHomW();
+            var iX = inputPoint1.getHomX();
+            var iY = inputPoint1.getHomY();
+            var iZ = inputPoint1.getHomZ();
+            var iW = inputPoint1.getHomW();
 
-            double oX = outputPoint1.getHomX();
-            double oY = outputPoint1.getHomY();
-            double oZ = outputPoint1.getHomZ();
-            double oW = outputPoint1.getHomW();
+            var oX = outputPoint1.getHomX();
+            var oY = outputPoint1.getHomY();
+            var oZ = outputPoint1.getHomZ();
+            var oW = outputPoint1.getHomW();
 
-            double oWiX = oW * iX;
-            double oWiY = oW * iY;
-            double oWiZ = oW * iZ;
-            double oWiW = oW * iW;
+            var oWiX = oW * iX;
+            var oWiY = oW * iY;
+            var oWiZ = oW * iZ;
+            var oWiW = oW * iW;
 
-            double oXiW = oX * iW;
-            double oYiW = oY * iW;
-            double oZiW = oZ * iW;
+            var oXiW = oX * iW;
+            var oYiW = oY * iW;
+            var oZiW = oZ * iW;
 
-            double tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
-            double norm = Math.sqrt(tmp + oXiW * oXiW);
+            var tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;
+            var norm = Math.sqrt(tmp + oXiW * oXiW);
 
             m.setElementAt(0, 0, oWiX / norm);
             m.setElementAt(0, 1, oWiY / norm);
@@ -1192,7 +1166,6 @@ public class AffineTransformation3D extends Transformation3D
             m.setElementAt(2, 8, oWiZ / norm);
             m.setElementAt(2, 11, oWiW / norm);
             m.setElementAt(2, 12, -oZiW / norm);
-
 
             // 2nd pair of points
             iX = inputPoint2.getHomX();
@@ -1239,7 +1212,6 @@ public class AffineTransformation3D extends Transformation3D
             m.setElementAt(5, 11, oWiW / norm);
             m.setElementAt(5, 12, -oZiW / norm);
 
-
             // 3rd pair of points
             iX = inputPoint3.getHomX();
             iY = inputPoint3.getHomY();
@@ -1284,7 +1256,6 @@ public class AffineTransformation3D extends Transformation3D
             m.setElementAt(8, 8, oWiZ / norm);
             m.setElementAt(8, 11, oWiW / norm);
             m.setElementAt(8, 12, -oZiW / norm);
-
 
             // 4th pair of points
             iX = inputPoint4.getHomX();
@@ -1337,7 +1308,7 @@ public class AffineTransformation3D extends Transformation3D
         // use SVD to decompose matrix m
         Matrix v;
         try {
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             // ensure that matrix m has enough rank and there is a unique
@@ -1349,7 +1320,7 @@ public class AffineTransformation3D extends Transformation3D
             v = decomposer.getV();
 
             // last column of V will contain parameters of transformation
-            final double value = v.getElementAt(12, 12);
+            final var value = v.getElementAt(12, 12);
             a.setElementAt(0, 0, v.getElementAt(0, 12) / value);
             a.setElementAt(0, 1, v.getElementAt(1, 12) / value);
             a.setElementAt(0, 2, v.getElementAt(2, 12) / value);
@@ -1390,9 +1361,9 @@ public class AffineTransformation3D extends Transformation3D
      *                                   points or numerical instabilities).
      */
     public final void setTransformationFromPlanes(
-            final Plane inputPlane1, final Plane inputPlane2, final Plane inputPlane3,
-            final Plane inputPlane4, final Plane outputPlane1, final Plane outputPlane2,
-            final Plane outputPlane3, final Plane outputPlane4) throws CoincidentPlanesException {
+            final Plane inputPlane1, final Plane inputPlane2, final Plane inputPlane3, final Plane inputPlane4,
+            final Plane outputPlane1, final Plane outputPlane2, final Plane outputPlane3, final Plane outputPlane4)
+            throws CoincidentPlanesException {
 
         // normalize points to increase accuracy
         inputPlane1.normalize();
@@ -1414,39 +1385,37 @@ public class AffineTransformation3D extends Transformation3D
             m = new Matrix(12, 13);
 
             // 1st pair of planes
-            double iA = inputPlane1.getA();
-            double iB = inputPlane1.getB();
-            double iC = inputPlane1.getC();
-            double iD = inputPlane1.getD();
+            var iA = inputPlane1.getA();
+            var iB = inputPlane1.getB();
+            var iC = inputPlane1.getC();
+            var iD = inputPlane1.getD();
 
-            double oA = outputPlane1.getA();
-            double oB = outputPlane1.getB();
-            double oC = outputPlane1.getC();
-            double oD = outputPlane1.getD();
+            var oA = outputPlane1.getA();
+            var oB = outputPlane1.getB();
+            var oC = outputPlane1.getC();
+            var oD = outputPlane1.getD();
 
-            double oDiA = oD * iA;
-            double oDiB = oD * iB;
-            double oDiC = oD * iC;
+            var oDiA = oD * iA;
+            var oDiB = oD * iB;
+            var oDiC = oD * iC;
 
-            double oAiA = oA * iA;
-            double oAiB = oA * iB;
-            double oAiC = oA * iC;
-            double oAiD = oA * iD;
+            var oAiA = oA * iA;
+            var oAiB = oA * iB;
+            var oAiC = oA * iC;
+            var oAiD = oA * iD;
 
-            double oBiA = oB * iA;
-            double oBiB = oB * iB;
-            double oBiC = oB * iC;
-            double oBiD = oB * iD;
+            var oBiA = oB * iA;
+            var oBiB = oB * iB;
+            var oBiC = oB * iC;
+            var oBiD = oB * iD;
 
-            double oCiA = oC * iA;
-            double oCiB = oC * iB;
-            double oCiC = oC * iC;
-            double oCiD = oC * iD;
+            var oCiA = oC * iA;
+            var oCiB = oC * iB;
+            var oCiC = oC * iC;
+            var oCiD = oC * iD;
 
-
-            double tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;
-            double norm = Math.sqrt(tmp +
-                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
+            var tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;
+            var norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
 
             m.setElementAt(0, 0, oDiA / norm);
             m.setElementAt(0, 1, oDiB / norm);
@@ -1456,8 +1425,7 @@ public class AffineTransformation3D extends Transformation3D
             m.setElementAt(0, 11, -oAiC / norm);
             m.setElementAt(0, 12, -oAiD / norm);
 
-            norm = Math.sqrt(tmp +
-                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
 
             m.setElementAt(1, 3, oDiA / norm);
             m.setElementAt(1, 4, oDiB / norm);
@@ -1467,8 +1435,7 @@ public class AffineTransformation3D extends Transformation3D
             m.setElementAt(1, 11, -oBiC / norm);
             m.setElementAt(1, 12, -oBiD / norm);
 
-            norm = Math.sqrt(tmp +
-                    oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
 
             m.setElementAt(2, 6, oDiA / norm);
             m.setElementAt(2, 7, oDiB / norm);
@@ -1509,8 +1476,7 @@ public class AffineTransformation3D extends Transformation3D
             oCiD = oC * iD;
 
             tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;
-            norm = Math.sqrt(tmp +
-                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
 
             m.setElementAt(3, 0, oDiA / norm);
             m.setElementAt(3, 1, oDiB / norm);
@@ -1520,8 +1486,7 @@ public class AffineTransformation3D extends Transformation3D
             m.setElementAt(3, 11, -oAiC / norm);
             m.setElementAt(3, 12, -oAiD / norm);
 
-            norm = Math.sqrt(tmp +
-                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
 
             m.setElementAt(4, 3, oDiA / norm);
             m.setElementAt(4, 4, oDiB / norm);
@@ -1531,8 +1496,7 @@ public class AffineTransformation3D extends Transformation3D
             m.setElementAt(4, 11, -oBiC / norm);
             m.setElementAt(4, 12, -oBiD / norm);
 
-            norm = Math.sqrt(tmp +
-                    oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
 
             m.setElementAt(5, 6, oDiA / norm);
             m.setElementAt(5, 7, oDiB / norm);
@@ -1573,8 +1537,7 @@ public class AffineTransformation3D extends Transformation3D
             oCiD = oC * iD;
 
             tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;
-            norm = Math.sqrt(tmp +
-                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
 
             m.setElementAt(6, 0, oDiA / norm);
             m.setElementAt(6, 1, oDiB / norm);
@@ -1584,8 +1547,7 @@ public class AffineTransformation3D extends Transformation3D
             m.setElementAt(6, 11, -oAiC / norm);
             m.setElementAt(6, 12, -oAiD / norm);
 
-            norm = Math.sqrt(tmp +
-                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
 
             m.setElementAt(7, 3, oDiA / norm);
             m.setElementAt(7, 4, oDiB / norm);
@@ -1595,8 +1557,7 @@ public class AffineTransformation3D extends Transformation3D
             m.setElementAt(7, 11, -oBiC / norm);
             m.setElementAt(7, 12, -oBiD / norm);
 
-            norm = Math.sqrt(tmp +
-                    oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
 
             m.setElementAt(8, 6, oDiA / norm);
             m.setElementAt(8, 7, oDiB / norm);
@@ -1637,8 +1598,7 @@ public class AffineTransformation3D extends Transformation3D
             oCiD = oC * iD;
 
             tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;
-            norm = Math.sqrt(tmp +
-                    oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
+            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);
 
             m.setElementAt(9, 0, oDiA / norm);
             m.setElementAt(9, 1, oDiB / norm);
@@ -1648,8 +1608,7 @@ public class AffineTransformation3D extends Transformation3D
             m.setElementAt(9, 11, -oAiC / norm);
             m.setElementAt(9, 12, -oAiD / norm);
 
-            norm = Math.sqrt(tmp +
-                    oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
+            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);
 
             m.setElementAt(10, 3, oDiA / norm);
             m.setElementAt(10, 4, oDiB / norm);
@@ -1659,8 +1618,7 @@ public class AffineTransformation3D extends Transformation3D
             m.setElementAt(10, 11, -oBiC / norm);
             m.setElementAt(10, 12, -oBiD / norm);
 
-            norm = Math.sqrt(tmp +
-                    oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
+            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);
 
             m.setElementAt(11, 6, oDiA / norm);
             m.setElementAt(11, 7, oDiB / norm);
@@ -1676,7 +1634,7 @@ public class AffineTransformation3D extends Transformation3D
         // use SVD to decompose matrix m
         Matrix v;
         try {
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(m);
+            final var decomposer = new SingularValueDecomposer(m);
             decomposer.decompose();
 
             // ensure that matrix m has enough rank and there is a unique
@@ -1688,10 +1646,9 @@ public class AffineTransformation3D extends Transformation3D
             v = decomposer.getV();
 
             // last column of V will contain parameters of transformation
-            final double value = v.getElementAt(12, 12);
+            final var value = v.getElementAt(12, 12);
 
-            final Matrix invTransA = new Matrix(AffineParameters3D.INHOM_COORDS,
-                    AffineParameters3D.INHOM_COORDS);
+            final var invTransA = new Matrix(AffineParameters3D.INHOM_COORDS, AffineParameters3D.INHOM_COORDS);
             // copy former 9 elements of 13th column of V into "a" in row order
             invTransA.setSubmatrix(0, 0, 2, 2,
                     v.getSubmatrixAsArray(0, 12, 8, 12),
@@ -1702,9 +1659,9 @@ public class AffineTransformation3D extends Transformation3D
             // initially "a contains the inverse of its transpose, so to obtain "a", we need
             // to transpose it and invert it
             invTransA.transpose();
-            final Matrix a1 = Utils.inverse(invTransA);
+            final var a1 = Utils.inverse(invTransA);
 
-            final Matrix invt = new Matrix(1, 3);
+            final var invt = new Matrix(1, 3);
             invt.setSubmatrix(0, 0, 0, 2,
                     v.getSubmatrixAsArray(9, 12, 11, 12),
                     false);
@@ -1712,7 +1669,7 @@ public class AffineTransformation3D extends Transformation3D
             invt.multiplyByScalar(-1.0 / value);
             invt.transpose();
 
-            final Matrix t = a1.multiplyAndReturnNew(invt);
+            final var t = a1.multiplyAndReturnNew(invt);
 
             this.a = a1;
             this.translation = t.getBuffer();
@@ -1734,14 +1691,11 @@ public class AffineTransformation3D extends Transformation3D
      *                                  or numerical instabilities).
      */
     public final void setTransformationFromLines(
-            final Line3D inputLine1, final Line3D inputLine2,
-            final Line3D outputLine1, final Line3D outputLine2)
+            final Line3D inputLine1, final Line3D inputLine2, final Line3D outputLine1, final Line3D outputLine2)
             throws CoincidentLinesException {
         try {
-            setTransformationFromPlanes(inputLine1.getPlane1(),
-                    inputLine1.getPlane2(), inputLine2.getPlane1(),
-                    inputLine2.getPlane2(), outputLine1.getPlane1(),
-                    outputLine1.getPlane2(), outputLine2.getPlane1(),
+            setTransformationFromPlanes(inputLine1.getPlane1(), inputLine1.getPlane2(), inputLine2.getPlane1(),
+                    inputLine2.getPlane2(), outputLine1.getPlane1(), outputLine1.getPlane2(), outputLine2.getPlane1(),
                     outputLine2.getPlane2());
         } catch (final CoincidentPlanesException e) {
             throw new CoincidentLinesException(e);

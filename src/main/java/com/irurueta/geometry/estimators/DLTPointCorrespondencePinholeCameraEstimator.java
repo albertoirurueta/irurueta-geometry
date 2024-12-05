@@ -21,7 +21,6 @@ import com.irurueta.geometry.PinholeCamera;
 import com.irurueta.geometry.Point2D;
 import com.irurueta.geometry.Point3D;
 
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -29,8 +28,7 @@ import java.util.List;
  * algorithm and point correspondences.
  */
 @SuppressWarnings("DuplicatedCode")
-public class DLTPointCorrespondencePinholeCameraEstimator extends
-        PointCorrespondencePinholeCameraEstimator {
+public class DLTPointCorrespondencePinholeCameraEstimator extends PointCorrespondencePinholeCameraEstimator {
 
     /**
      * Minimum number of required equations to estimate a pinhole camera.
@@ -49,14 +47,14 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
      * exceeding correspondences will be ignored and only the 6 first
      * correspondences will be used.
      */
-    private boolean mAllowLMSESolution;
+    private boolean allowLMSESolution;
 
     /**
      * Constructor.
      */
     public DLTPointCorrespondencePinholeCameraEstimator() {
         super();
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -65,10 +63,9 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or estimation progress changes.
      */
-    public DLTPointCorrespondencePinholeCameraEstimator(
-            final PinholeCameraEstimatorListener listener) {
+    public DLTPointCorrespondencePinholeCameraEstimator(final PinholeCameraEstimatorListener listener) {
         super(listener);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -81,10 +78,9 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     public DLTPointCorrespondencePinholeCameraEstimator(
-            final List<Point3D> points3D, final List<Point2D> points2D)
-            throws WrongListSizesException {
+            final List<Point3D> points3D, final List<Point2D> points2D) throws WrongListSizesException {
         super(points3D, points2D);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -99,11 +95,10 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
      *                                  the same size and enough points.
      */
     public DLTPointCorrespondencePinholeCameraEstimator(
-            final List<Point3D> points3D, final List<Point2D> points2D,
-            final PinholeCameraEstimatorListener listener)
+            final List<Point3D> points3D, final List<Point2D> points2D, final PinholeCameraEstimatorListener listener)
             throws WrongListSizesException {
         super(points3D, points2D, listener);
-        mAllowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
+        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;
     }
 
     /**
@@ -115,7 +110,7 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
      * @return true if LMSE solution is allowed, false otherwise.
      */
     public boolean isLMSESolutionAllowed() {
-        return mAllowLMSESolution;
+        return allowLMSESolution;
     }
 
     /**
@@ -131,7 +126,7 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
         if (isLocked()) {
             throw new LockedException();
         }
-        mAllowLMSESolution = allowed;
+        allowLMSESolution = allowed;
     }
 
     /**
@@ -141,7 +136,7 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
      */
     @Override
     public boolean isReady() {
-        return areListsAvailable() && areValidLists(mPoints3D, mPoints2D);
+        return areListsAvailable() && areValidLists(points3D, points2D);
     }
 
     /**
@@ -160,11 +155,10 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
      */
     @Override
     protected Matrix internalEstimate(
-            final List<Point3D> points3D, final List<Point2D> points2D)
-            throws PinholeCameraEstimatorException {
+            final List<Point3D> points3D, final List<Point2D> points2D) throws PinholeCameraEstimatorException {
 
         try {
-            final int nPoints = points2D.size();
+            final var nPoints = points2D.size();
 
             final Matrix a;
             if (isLMSESolutionAllowed()) {
@@ -176,12 +170,12 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
                 a = new Matrix(MIN_NUMBER_OF_EQUATIONS, 12);
             }
 
-            final Iterator<Point2D> iterator2D = points2D.iterator();
-            final Iterator<Point3D> iterator3D = points3D.iterator();
+            final var iterator2D = points2D.iterator();
+            final var iterator3D = points3D.iterator();
 
             Point2D point2D;
             Point3D point3D;
-            int counter = 0;
+            var counter = 0;
             double homImageX;
             double homImageY;
             double homImageW;
@@ -221,32 +215,23 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
                 a.setElementAt(counter, 11, -homImageX * homWorldW);
 
                 // normalize row
-                rowNorm = Math.sqrt(
-                        Math.pow(a.getElementAt(counter, 0), 2.0) +
-                                Math.pow(a.getElementAt(counter, 1), 2.0) +
-                                Math.pow(a.getElementAt(counter, 2), 2.0) +
-                                Math.pow(a.getElementAt(counter, 3), 2.0) +
-                                Math.pow(a.getElementAt(counter, 8), 2.0) +
-                                Math.pow(a.getElementAt(counter, 9), 2.0) +
-                                Math.pow(a.getElementAt(counter, 10), 2.0) +
-                                Math.pow(a.getElementAt(counter, 11), 2.0));
+                rowNorm = Math.sqrt(Math.pow(a.getElementAt(counter, 0), 2.0)
+                        + Math.pow(a.getElementAt(counter, 1), 2.0)
+                        + Math.pow(a.getElementAt(counter, 2), 2.0)
+                        + Math.pow(a.getElementAt(counter, 3), 2.0)
+                        + Math.pow(a.getElementAt(counter, 8), 2.0)
+                        + Math.pow(a.getElementAt(counter, 9), 2.0)
+                        + Math.pow(a.getElementAt(counter, 10), 2.0)
+                        + Math.pow(a.getElementAt(counter, 11), 2.0));
 
-                a.setElementAt(counter, 0, a.getElementAt(counter, 0) /
-                        rowNorm);
-                a.setElementAt(counter, 1, a.getElementAt(counter, 1) /
-                        rowNorm);
-                a.setElementAt(counter, 2, a.getElementAt(counter, 2) /
-                        rowNorm);
-                a.setElementAt(counter, 3, a.getElementAt(counter, 3) /
-                        rowNorm);
-                a.setElementAt(counter, 8, a.getElementAt(counter, 8) /
-                        rowNorm);
-                a.setElementAt(counter, 9, a.getElementAt(counter, 9) /
-                        rowNorm);
-                a.setElementAt(counter, 10, a.getElementAt(counter, 10) /
-                        rowNorm);
-                a.setElementAt(counter, 11, a.getElementAt(counter, 11) /
-                        rowNorm);
+                a.setElementAt(counter, 0, a.getElementAt(counter, 0) / rowNorm);
+                a.setElementAt(counter, 1, a.getElementAt(counter, 1) / rowNorm);
+                a.setElementAt(counter, 2, a.getElementAt(counter, 2) / rowNorm);
+                a.setElementAt(counter, 3, a.getElementAt(counter, 3) / rowNorm);
+                a.setElementAt(counter, 8, a.getElementAt(counter, 8) / rowNorm);
+                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / rowNorm);
+                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / rowNorm);
+                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / rowNorm);
                 counter++;
 
                 // in case we want an exact solution (up to scale) when LMSE is
@@ -270,36 +255,27 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
                 a.setElementAt(counter, 11, -homImageY * homWorldW);
 
                 // normalize row
-                rowNorm = Math.sqrt(
-                        Math.pow(a.getElementAt(counter, 4), 2.0) +
-                                Math.pow(a.getElementAt(counter, 5), 2.0) +
-                                Math.pow(a.getElementAt(counter, 6), 2.0) +
-                                Math.pow(a.getElementAt(counter, 7), 2.0) +
-                                Math.pow(a.getElementAt(counter, 8), 2.0) +
-                                Math.pow(a.getElementAt(counter, 9), 2.0) +
-                                Math.pow(a.getElementAt(counter, 10), 2.0) +
-                                Math.pow(a.getElementAt(counter, 11), 2.0));
+                rowNorm = Math.sqrt(Math.pow(a.getElementAt(counter, 4), 2.0)
+                        + Math.pow(a.getElementAt(counter, 5), 2.0)
+                        + Math.pow(a.getElementAt(counter, 6), 2.0)
+                        + Math.pow(a.getElementAt(counter, 7), 2.0)
+                        + Math.pow(a.getElementAt(counter, 8), 2.0)
+                        + Math.pow(a.getElementAt(counter, 9), 2.0)
+                        + Math.pow(a.getElementAt(counter, 10), 2.0)
+                        + Math.pow(a.getElementAt(counter, 11), 2.0));
 
-                a.setElementAt(counter, 4, a.getElementAt(counter, 4) /
-                        rowNorm);
-                a.setElementAt(counter, 5, a.getElementAt(counter, 5) /
-                        rowNorm);
-                a.setElementAt(counter, 6, a.getElementAt(counter, 6) /
-                        rowNorm);
-                a.setElementAt(counter, 7, a.getElementAt(counter, 7) /
-                        rowNorm);
-                a.setElementAt(counter, 8, a.getElementAt(counter, 8) /
-                        rowNorm);
-                a.setElementAt(counter, 9, a.getElementAt(counter, 9) /
-                        rowNorm);
-                a.setElementAt(counter, 10, a.getElementAt(counter, 10) /
-                        rowNorm);
-                a.setElementAt(counter, 11, a.getElementAt(counter, 11) /
-                        rowNorm);
+                a.setElementAt(counter, 4, a.getElementAt(counter, 4) / rowNorm);
+                a.setElementAt(counter, 5, a.getElementAt(counter, 5) / rowNorm);
+                a.setElementAt(counter, 6, a.getElementAt(counter, 6) / rowNorm);
+                a.setElementAt(counter, 7, a.getElementAt(counter, 7) / rowNorm);
+                a.setElementAt(counter, 8, a.getElementAt(counter, 8) / rowNorm);
+                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / rowNorm);
+                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / rowNorm);
+                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / rowNorm);
                 counter++;
             }
 
-            final SingularValueDecomposer decomposer = new SingularValueDecomposer(a);
+            final var decomposer = new SingularValueDecomposer(a);
             decomposer.decompose();
 
             if (decomposer.getNullity() > 1) {
@@ -309,16 +285,15 @@ public class DLTPointCorrespondencePinholeCameraEstimator extends
                 throw new PinholeCameraEstimatorException();
             }
 
-            final Matrix v = decomposer.getV();
+            final var v = decomposer.getV();
 
             // use last column of V as pinhole camera vector
 
             // the last column of V contains pinhole camera matrix ordered by
             // rows as: P11, P12, P13, P14, P21, P22, P23, P24, P31, P32, P33,
             // P34, hence we reorder p
-            final Matrix pinholeCameraMatrix = new Matrix(
-                    PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS,
-                    PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
+            final var pinholeCameraMatrix = new Matrix(
+                    PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS, PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
 
             pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));
             pinholeCameraMatrix.setElementAt(0, 1, v.getElementAt(1, 11));

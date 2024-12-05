@@ -52,7 +52,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
     /**
      * Internal matrix defining the intrinsic parameters of a camera.
      */
-    private Matrix mInternalMatrix;
+    private Matrix internalMatrix;
 
     /**
      * Constructor.
@@ -61,8 +61,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      */
     public PinholeCameraIntrinsicParameters() {
         try {
-            mInternalMatrix = Matrix.identity(INTRINSIC_MATRIX_ROWS,
-                    INTRINSIC_MATRIX_COLS);
+            internalMatrix = Matrix.identity(INTRINSIC_MATRIX_ROWS, INTRINSIC_MATRIX_COLS);
         } catch (final WrongSizeException ignore) {
             // never happens
         }
@@ -73,9 +72,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      *
      * @param params Intrinsic parameters to be copied.
      */
-    public PinholeCameraIntrinsicParameters(
-            final PinholeCameraIntrinsicParameters params) {
-        mInternalMatrix = new Matrix(params.mInternalMatrix);
+    public PinholeCameraIntrinsicParameters(final PinholeCameraIntrinsicParameters params) {
+        internalMatrix = new Matrix(params.internalMatrix);
     }
 
     /**
@@ -109,8 +107,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      *                                                          provided matrix is not 3x3 or upper triangular.
      * @throws IllegalArgumentException                         thrown if provided threshold is negative.
      */
-    public PinholeCameraIntrinsicParameters(final Matrix internalMatrix,
-                                            final double threshold)
+    public PinholeCameraIntrinsicParameters(final Matrix internalMatrix, final double threshold)
             throws InvalidPinholeCameraIntrinsicParametersException {
         setInternalMatrix(internalMatrix, threshold);
     }
@@ -143,14 +140,12 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      *                                 slanted) x-y axes will be on projected images.
      */
     public PinholeCameraIntrinsicParameters(
-            final double horizontalFocalLength, final double verticalFocalLength,
-            final double horizontalPrincipalPoint, final double verticalPrincipalPoint,
-            final double skewness) {
+            final double horizontalFocalLength, final double verticalFocalLength, final double horizontalPrincipalPoint,
+            final double verticalPrincipalPoint, final double skewness) {
 
         // create instance initialized to the identity
         try {
-            mInternalMatrix = Matrix.identity(INTRINSIC_MATRIX_ROWS,
-                    INTRINSIC_MATRIX_COLS);
+            internalMatrix = Matrix.identity(INTRINSIC_MATRIX_ROWS, INTRINSIC_MATRIX_COLS);
         } catch (final WrongSizeException ignore) {
             // never happens
         }
@@ -169,7 +164,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @return A copy of the internal matrix of this instance.
      */
     public Matrix getInternalMatrix() {
-        return new Matrix(mInternalMatrix);
+        return new Matrix(internalMatrix);
     }
 
     /**
@@ -202,8 +197,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      *                                                          provided matrix is not 3x3 or upper triangular.
      * @throws IllegalArgumentException                         thrown if provided threshold is negative.
      */
-    public final void setInternalMatrix(final Matrix internalMatrix,
-                                        final double threshold)
+    public final void setInternalMatrix(final Matrix internalMatrix, final double threshold)
             throws InvalidPinholeCameraIntrinsicParametersException {
 
         // normalizes provided matrix to ensure that element 3,3 is 1
@@ -212,12 +206,12 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
         // check that provided matrix is upper-triangular and that lower right
         // element is 1.0 (using provided threshold as a measure of error
         // tolerance)
-        final boolean valid = isValidMatrix(internalMatrix, threshold);
+        final var valid = isValidMatrix(internalMatrix, threshold);
         if (!valid) {
             throw new InvalidPinholeCameraIntrinsicParametersException();
         }
 
-        mInternalMatrix = internalMatrix;
+        this.internalMatrix = internalMatrix;
     }
 
     /**
@@ -249,19 +243,18 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @param result instance where result will be stored.
      */
     public void getInverseInternalMatrix(Matrix result) {
-        final double horizontalFocalLength = getHorizontalFocalLength();
-        final double verticalFocalLength = getVerticalFocalLength();
-        final double skewness = getSkewness();
-        final double horizontalPrincipalPoint = getHorizontalPrincipalPoint();
-        final double verticalPrincipalPoint = getVerticalPrincipalPoint();
+        final var horizontalFocalLength = getHorizontalFocalLength();
+        final var verticalFocalLength = getVerticalFocalLength();
+        final var skewness = getSkewness();
+        final var horizontalPrincipalPoint = getHorizontalPrincipalPoint();
+        final var verticalPrincipalPoint = getVerticalPrincipalPoint();
 
         result.setElementAt(0, 0, 1.0 / horizontalFocalLength);
-        result.setElementAt(0, 1, -skewness /
-                (horizontalFocalLength * verticalFocalLength));
+        result.setElementAt(0, 1, -skewness / (horizontalFocalLength * verticalFocalLength));
         result.setElementAt(1, 1, 1.0 / verticalFocalLength);
-        result.setElementAt(0, 2, (skewness * verticalPrincipalPoint -
-                verticalFocalLength * horizontalPrincipalPoint) /
-                (horizontalFocalLength * verticalFocalLength));
+        result.setElementAt(0, 2,
+                (skewness * verticalPrincipalPoint - verticalFocalLength * horizontalPrincipalPoint)
+                        / (horizontalFocalLength * verticalFocalLength));
         result.setElementAt(1, 2, -verticalPrincipalPoint / verticalFocalLength);
         result.setElementAt(2, 2, 1.0);
     }
@@ -277,7 +270,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @return Horizontal focal length.
      */
     public double getHorizontalFocalLength() {
-        return mInternalMatrix.getElementAt(0, 0);
+        return internalMatrix.getElementAt(0, 0);
     }
 
     /**
@@ -291,7 +284,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @param horizontalFocalLength Horizontal focal length to be set.
      */
     public final void setHorizontalFocalLength(final double horizontalFocalLength) {
-        mInternalMatrix.setElementAt(0, 0, horizontalFocalLength);
+        internalMatrix.setElementAt(0, 0, horizontalFocalLength);
     }
 
     /**
@@ -305,7 +298,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @return Vertical focal length.
      */
     public double getVerticalFocalLength() {
-        return mInternalMatrix.getElementAt(1, 1);
+        return internalMatrix.getElementAt(1, 1);
     }
 
     /**
@@ -319,7 +312,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @param verticalFocalLength Vertical focal length to be set.
      */
     public final void setVerticalFocalLength(final double verticalFocalLength) {
-        mInternalMatrix.setElementAt(1, 1, verticalFocalLength);
+        internalMatrix.setElementAt(1, 1, verticalFocalLength);
     }
 
     /**
@@ -333,8 +326,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @return Aspect ratio.
      */
     public double getAspectRatio() {
-        return mInternalMatrix.getElementAt(1, 1) /
-                mInternalMatrix.getElementAt(0, 0);
+        return internalMatrix.getElementAt(1, 1) / internalMatrix.getElementAt(0, 0);
     }
 
     /**
@@ -347,8 +339,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @param aspectRatio Aspect ratio to be set.
      */
     public void setAspectRatioKeepingHorizontalFocalLength(final double aspectRatio) {
-        mInternalMatrix.setElementAt(1, 1,
-                aspectRatio * mInternalMatrix.getElementAt(0, 0));
+        internalMatrix.setElementAt(1, 1,
+                aspectRatio * internalMatrix.getElementAt(0, 0));
     }
 
     /**
@@ -361,8 +353,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @param aspectRatio Aspect ratio to be set.
      */
     public void setAspectRatioKeepingVerticalFocalLength(final double aspectRatio) {
-        mInternalMatrix.setElementAt(0, 0,
-                mInternalMatrix.getElementAt(1, 1) / aspectRatio);
+        internalMatrix.setElementAt(0, 0,
+                internalMatrix.getElementAt(1, 1) / aspectRatio);
     }
 
     /**
@@ -378,7 +370,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @return Horizontal principal point.
      */
     public double getHorizontalPrincipalPoint() {
-        return mInternalMatrix.getElementAt(0, 2);
+        return internalMatrix.getElementAt(0, 2);
     }
 
     /**
@@ -393,9 +385,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      *
      * @param horizontalPrincipalPoint Horizontal principal point to be set.
      */
-    public final void setHorizontalPrincipalPoint(
-            final double horizontalPrincipalPoint) {
-        mInternalMatrix.setElementAt(0, 2, horizontalPrincipalPoint);
+    public final void setHorizontalPrincipalPoint(final double horizontalPrincipalPoint) {
+        internalMatrix.setElementAt(0, 2, horizontalPrincipalPoint);
     }
 
     /**
@@ -411,7 +402,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @return Vertical principal point.
      */
     public double getVerticalPrincipalPoint() {
-        return mInternalMatrix.getElementAt(1, 2);
+        return internalMatrix.getElementAt(1, 2);
     }
 
     /**
@@ -427,7 +418,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @param verticalPrincipalPoint Vertical principal point to be set.
      */
     public final void setVerticalPrincipalPoint(final double verticalPrincipalPoint) {
-        mInternalMatrix.setElementAt(1, 2, verticalPrincipalPoint);
+        internalMatrix.setElementAt(1, 2, verticalPrincipalPoint);
     }
 
     /**
@@ -438,7 +429,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @return Skewness of axes.
      */
     public double getSkewness() {
-        return mInternalMatrix.getElementAt(0, 1);
+        return internalMatrix.getElementAt(0, 1);
     }
 
     /**
@@ -449,7 +440,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @param skewness Skewness of axes to be set.
      */
     public final void setSkewness(final double skewness) {
-        mInternalMatrix.setElementAt(0, 1, skewness);
+        internalMatrix.setElementAt(0, 1, skewness);
     }
 
     /**
@@ -462,8 +453,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @return Skewness angle in radians.
      */
     public double getSkewnessAngle() {
-        return Math.atan2(mInternalMatrix.getElementAt(0, 1),
-                mInternalMatrix.getElementAt(1, 1));
+        return Math.atan2(internalMatrix.getElementAt(0, 1),
+                internalMatrix.getElementAt(1, 1));
     }
 
     /**
@@ -476,8 +467,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @param skewnessAngle Skewness angle in radians to be set.
      */
     public void setSkewnessAngle(final double skewnessAngle) {
-        mInternalMatrix.setElementAt(0, 1, mInternalMatrix.getElementAt(1, 1) *
-                Math.tan(skewnessAngle));
+        internalMatrix.setElementAt(0, 1,
+                internalMatrix.getElementAt(1, 1) * Math.tan(skewnessAngle));
     }
 
     /**
@@ -508,13 +499,13 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        final double focalLength = (imageWidth + imageHeight) / 2.0;
-        final double horizontalPrincipalPoint = imageWidth / 2.0;
-        final double verticalPrincipalPoint = imageHeight / 2.0;
-        final double skewness = 0.0;
+        final var focalLength = (imageWidth + imageHeight) / 2.0;
+        final var horizontalPrincipalPoint = imageWidth / 2.0;
+        final var verticalPrincipalPoint = imageHeight / 2.0;
+        final var skewness = 0.0;
 
-        return new PinholeCameraIntrinsicParameters(focalLength, focalLength,
-                horizontalPrincipalPoint, verticalPrincipalPoint, skewness);
+        return new PinholeCameraIntrinsicParameters(focalLength, focalLength, horizontalPrincipalPoint,
+                verticalPrincipalPoint, skewness);
     }
 
     /**
@@ -548,16 +539,15 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        if (m.getRows() != INTRINSIC_MATRIX_ROWS ||
-                m.getColumns() != INTRINSIC_MATRIX_COLS) {
+        if (m.getRows() != INTRINSIC_MATRIX_ROWS || m.getColumns() != INTRINSIC_MATRIX_COLS) {
             return false;
         }
 
         // TODO: create isUpperTriangular and isLowerTriangular methods in Utils class within Algebra library
 
         // check that provided matrix is upper triangular
-        for (int u = 0; u < INTRINSIC_MATRIX_ROWS; u++) {
-            for (int v = 0; v < u; v++) {
+        for (var u = 0; u < INTRINSIC_MATRIX_ROWS; u++) {
+            for (var v = 0; v < u; v++) {
                 if (Math.abs(m.getElementAt(u, v)) > threshold) {
                     return false;
                 }
@@ -574,7 +564,7 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @param m Matrix to be normalized.
      */
     private static void normalize(final Matrix m) {
-        final double norm = m.getElementAt(2, 2);
+        final var norm = m.getElementAt(2, 2);
         m.multiplyByScalar(1.0 / norm);
     }
 
@@ -586,8 +576,8 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      */
     @Override
     public PinholeCameraIntrinsicParameters clone() throws CloneNotSupportedException {
-        final PinholeCameraIntrinsicParameters result = (PinholeCameraIntrinsicParameters) super.clone();
-        result.mInternalMatrix = new Matrix(this.mInternalMatrix);
+        final var result = (PinholeCameraIntrinsicParameters) super.clone();
+        result.internalMatrix = new Matrix(this.internalMatrix);
         return result;
     }
 
@@ -607,19 +597,18 @@ public class PinholeCameraIntrinsicParameters implements Serializable {
      * @return an instance of pinhole camera intrinsic parameters.
      */
     public static PinholeCameraIntrinsicParameters create(
-            final double focalLength, final double sensorWidth,
-            final double sensorHeight, final int imageWidth,
+            final double focalLength, final double sensorWidth, final double sensorHeight, final int imageWidth,
             final int imageHeight) {
 
         // compute the size of a pixel taking into account sensor and image sizes
-        final double pixelWidth = sensorWidth / imageWidth; // mm/px
-        final double pixelHeight = sensorHeight / imageHeight; // mm/px
+        final var pixelWidth = sensorWidth / imageWidth; // mm/px
+        final var pixelHeight = sensorHeight / imageHeight; // mm/px
 
         // compute focal lengths expressed in pixels
-        final double horizontalFocalLength = focalLength / pixelWidth;
-        final double verticalFocalLength = focalLength / pixelHeight;
+        final var horizontalFocalLength = focalLength / pixelWidth;
+        final var verticalFocalLength = focalLength / pixelHeight;
 
-        return new PinholeCameraIntrinsicParameters(horizontalFocalLength,
-                verticalFocalLength, 0.0, 0.0, 0.0);
+        return new PinholeCameraIntrinsicParameters(horizontalFocalLength, verticalFocalLength, 0.0,
+                0.0, 0.0);
     }
 }

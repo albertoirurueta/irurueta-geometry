@@ -22,16 +22,13 @@ import com.irurueta.numerical.robust.RobustEstimatorException;
 import com.irurueta.numerical.robust.RobustEstimatorMethod;
 import com.irurueta.statistics.GaussianRandomizer;
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class RANSACCircleRobustEstimatorTest implements
-        CircleRobustEstimatorListener {
+class RANSACCircleRobustEstimatorTest implements CircleRobustEstimatorListener {
 
     private static final double MIN_RANDOM_VALUE = -1000.0;
     private static final double MAX_RANDOM_VALUE = 1000.0;
@@ -55,7 +52,7 @@ public class RANSACCircleRobustEstimatorTest implements
     private int estimateProgressChange;
 
     @Test
-    public void testConstants() {
+    void testConstants() {
         assertEquals(3, CircleRobustEstimator.MINIMUM_SIZE);
         assertEquals(0.05f, CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, 0.0f);
         assertEquals(0.0f, CircleRobustEstimator.MIN_PROGRESS_DELTA, 0.0f);
@@ -71,100 +68,83 @@ public class RANSACCircleRobustEstimatorTest implements
     }
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test constructor without arguments
-        RANSACCircleRobustEstimator estimator = new RANSACCircleRobustEstimator();
+        var estimator = new RANSACCircleRobustEstimator();
 
         // check correctness
-        assertEquals(RANSACCircleRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACCircleRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // test constructor with points
-        final List<Point2D> points = new ArrayList<>();
-        for (int i = 0; i < CircleRobustEstimator.MINIMUM_SIZE; i++) {
+        final var points = new ArrayList<Point2D>();
+        for (var i = 0; i < CircleRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point2D.create());
         }
 
         estimator = new RANSACCircleRobustEstimator(points);
 
         // check correctness
-        assertEquals(RANSACCircleRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACCircleRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertNull(estimator.getListener());
         assertFalse(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        final List<Point2D> emptyPoints = new ArrayList<>();
-        estimator = null;
-        try {
-            estimator = new RANSACCircleRobustEstimator(emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        final var emptyPoints = new ArrayList<Point2D>();
+        assertThrows(IllegalArgumentException.class, () -> new RANSACCircleRobustEstimator(emptyPoints));
 
         // test constructor with listener
-        final CircleRobustEstimatorListener listener =
-                new CircleRobustEstimatorListener() {
+        final var listener = new CircleRobustEstimatorListener() {
 
-                    @Override
-                    public void onEstimateStart(final CircleRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateStart(final CircleRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateEnd(final CircleRobustEstimator estimator) {
-                    }
+            @Override
+            public void onEstimateEnd(final CircleRobustEstimator estimator) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateNextIteration(final CircleRobustEstimator estimator,
-                                                        final int iteration) {
-                    }
+            @Override
+            public void onEstimateNextIteration(final CircleRobustEstimator estimator, final int iteration) {
+                // no action needed
+            }
 
-                    @Override
-                    public void onEstimateProgressChange(final CircleRobustEstimator estimator,
-                                                         final float progress) {
-                    }
-                };
+            @Override
+            public void onEstimateProgressChange(final CircleRobustEstimator estimator, final float progress) {
+                // no action needed
+            }
+        };
 
         estimator = new RANSACCircleRobustEstimator(listener);
 
         // check correctness
-        assertEquals(RANSACCircleRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACCircleRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
         assertNull(estimator.getQualityScores());
@@ -173,40 +153,28 @@ public class RANSACCircleRobustEstimatorTest implements
         estimator = new RANSACCircleRobustEstimator(listener, points);
 
         // check correctness
-        assertEquals(RANSACCircleRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACCircleRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
         assertEquals(RobustEstimatorMethod.RANSAC, estimator.getMethod());
         assertSame(listener, estimator.getListener());
         assertTrue(estimator.isListenerAvailable());
         assertFalse(estimator.isLocked());
-        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
-        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
-        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
         assertSame(points, estimator.getPoints());
         assertTrue(estimator.isReady());
         assertNull(estimator.getQualityScores());
 
         // Force IllegalArgumentException
-        estimator = null;
-        try {
-            estimator = new RANSACCircleRobustEstimator(listener, emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(estimator);
+        assertThrows(IllegalArgumentException.class, () -> new RANSACCircleRobustEstimator(listener, emptyPoints));
     }
 
     @Test
-    public void testGetSetThreshold() throws LockedException {
-        final RANSACCircleRobustEstimator estimator =
-                new RANSACCircleRobustEstimator();
+    void testGetSetThreshold() throws LockedException {
+        final var estimator = new RANSACCircleRobustEstimator();
 
         // check default value
-        assertEquals(RANSACCircleRobustEstimator.DEFAULT_THRESHOLD,
-                estimator.getThreshold(), 0.0);
+        assertEquals(RANSACCircleRobustEstimator.DEFAULT_THRESHOLD, estimator.getThreshold(), 0.0);
 
         // set new value
         estimator.setThreshold(0.5);
@@ -215,17 +183,12 @@ public class RANSACCircleRobustEstimatorTest implements
         assertEquals(0.5, estimator.getThreshold(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setThreshold(0.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setThreshold(0.0));
     }
 
     @Test
-    public void testGetSetListener() throws LockedException {
-        final RANSACCircleRobustEstimator estimator =
-                new RANSACCircleRobustEstimator();
+    void testGetSetListener() throws LockedException {
+        final var estimator = new RANSACCircleRobustEstimator();
 
         // check default value
         assertNull(estimator.getListener());
@@ -240,13 +203,11 @@ public class RANSACCircleRobustEstimatorTest implements
     }
 
     @Test
-    public void testGetSetProgressDelta() throws LockedException {
-        final RANSACCircleRobustEstimator estimator =
-                new RANSACCircleRobustEstimator();
+    void testGetSetProgressDelta() throws LockedException {
+        final var estimator = new RANSACCircleRobustEstimator();
 
         // check default value
-        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA,
-                estimator.getProgressDelta(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_PROGRESS_DELTA, estimator.getProgressDelta(), 0.0);
 
         // set new value
         estimator.setProgressDelta(0.5f);
@@ -255,26 +216,16 @@ public class RANSACCircleRobustEstimatorTest implements
         assertEquals(0.5f, estimator.getProgressDelta(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setProgressDelta(-1.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(2.0f);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(-1.0f));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setProgressDelta(2.0f));
     }
 
     @Test
-    public void testGetSetConfidence() throws LockedException {
-        final RANSACCircleRobustEstimator estimator =
-                new RANSACCircleRobustEstimator();
+    void testGetSetConfidence() throws LockedException {
+        final var estimator = new RANSACCircleRobustEstimator();
 
         // check default value
-        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE,
-                estimator.getConfidence(), 0.0);
+        assertEquals(CircleRobustEstimator.DEFAULT_CONFIDENCE, estimator.getConfidence(), 0.0);
 
         // set new value
         estimator.setConfidence(0.5);
@@ -283,26 +234,16 @@ public class RANSACCircleRobustEstimatorTest implements
         assertEquals(0.5, estimator.getConfidence(), 0.0);
 
         // Force IllegalArgumentException
-        try {
-            estimator.setConfidence(-1.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        try {
-            estimator.setConfidence(2.0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(-1.0));
+        assertThrows(IllegalArgumentException.class, () -> estimator.setConfidence(2.0));
     }
 
     @Test
-    public void testGetSetMaxIterations() throws LockedException {
-        final RANSACCircleRobustEstimator estimator =
-                new RANSACCircleRobustEstimator();
+    void testGetSetMaxIterations() throws LockedException {
+        final var estimator = new RANSACCircleRobustEstimator();
 
         // check default value
-        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS,
-                estimator.getMaxIterations());
+        assertEquals(CircleRobustEstimator.DEFAULT_MAX_ITERATIONS, estimator.getMaxIterations());
 
         // set new value
         estimator.setMaxIterations(1);
@@ -311,25 +252,20 @@ public class RANSACCircleRobustEstimatorTest implements
         assertEquals(1, estimator.getMaxIterations());
 
         // Force IllegalArgumentException
-        try {
-            estimator.setMaxIterations(0);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> estimator.setMaxIterations(0));
     }
 
     @Test
-    public void testGetSetPoints() throws LockedException {
-        final RANSACCircleRobustEstimator estimator =
-                new RANSACCircleRobustEstimator();
+    void testGetSetPoints() throws LockedException {
+        final var estimator = new RANSACCircleRobustEstimator();
 
         // check default value
         assertNull(estimator.getPoints());
         assertFalse(estimator.isReady());
 
         // set new value
-        final List<Point2D> points = new ArrayList<>();
-        for (int i = 0; i < CircleRobustEstimator.MINIMUM_SIZE; i++) {
+        final var points = new ArrayList<Point2D>();
+        for (var i = 0; i < CircleRobustEstimator.MINIMUM_SIZE; i++) {
             points.add(Point2D.create());
         }
         estimator.setPoints(points);
@@ -344,22 +280,17 @@ public class RANSACCircleRobustEstimatorTest implements
         assertFalse(estimator.isReady());
 
         // Force IllegalArgumentException
-        final List<Point2D> emptyPoints = new ArrayList<>();
-        try {
-            estimator.setPoints(emptyPoints);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        final var emptyPoints = new ArrayList<Point2D>();
+        assertThrows(IllegalArgumentException.class, () -> estimator.setPoints(emptyPoints));
     }
 
     @Test
-    public void testGetSetQualityScores() throws LockedException {
-        final RANSACCircleRobustEstimator estimator =
-                new RANSACCircleRobustEstimator();
+    void testGetSetQualityScores() throws LockedException {
+        final var estimator = new RANSACCircleRobustEstimator();
 
         assertNull(estimator.getQualityScores());
 
-        final double[] qualityScores = new double[CircleRobustEstimator.MINIMUM_SIZE];
+        final var qualityScores = new double[CircleRobustEstimator.MINIMUM_SIZE];
         estimator.setQualityScores(qualityScores);
 
         // check correctness
@@ -367,41 +298,36 @@ public class RANSACCircleRobustEstimatorTest implements
     }
 
     @Test
-    public void testEstimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    void testEstimate() throws LockedException, NotReadyException, RobustEstimatorException {
 
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
+        final var randomizer = new UniformRandomizer();
 
-        for (int t = 0; t < TIMES; t++) {
+        for (var t = 0; t < TIMES; t++) {
             // instantiate a random circle
-            final Point2D center = new HomogeneousPoint2D(
+            final var center = new HomogeneousPoint2D(
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                     randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), 1.0);
-            final double radius = Math.abs(randomizer.nextDouble(
-                    MAX_RANDOM_VALUE / 2.0,
-                    MAX_RANDOM_VALUE));
+            final var radius = Math.abs(randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE));
 
-            final Circle circle = new Circle(center, radius);
+            final var circle = new Circle(center, radius);
 
             // compute points in the circle locus
-            final int nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
-            final double theta = (double) nPoints / 360.0 * Math.PI / 180.0;
-            final GaussianRandomizer errorRandomizer = new GaussianRandomizer(
-                    new Random(), 0.0, STD_ERROR);
-            final List<Point2D> points = new ArrayList<>();
-            final List<Point2D> pointsWithError = new ArrayList<>();
-            Point2D point;
-            Point2D pointWithError;
-            for (int i = 0; i < nPoints; i++) {
-                final double angle = theta * (double) i;
-                point = new HomogeneousPoint2D(
+            final var nPoints = randomizer.nextInt(MIN_POINTS, MAX_POINTS);
+            final var theta = (double) nPoints / 360.0 * Math.PI / 180.0;
+            final var errorRandomizer = new GaussianRandomizer(0.0, STD_ERROR);
+            final var points = new ArrayList<Point2D>();
+            final var pointsWithError = new ArrayList<Point2D>();
+            for (var i = 0; i < nPoints; i++) {
+                final var angle = theta * (double) i;
+                final var point = new HomogeneousPoint2D(
                         center.getInhomX() + radius * Math.cos(angle),
                         center.getInhomY() + radius * Math.sin(angle), 1.0);
 
+                Point2D pointWithError;
                 if (randomizer.nextInt(0, 100) < PERCENTAGE_OUTLIER) {
                     // point is outlier
-                    final double errorX = errorRandomizer.nextDouble();
-                    final double errorY = errorRandomizer.nextDouble();
+                    final var errorX = errorRandomizer.nextDouble();
+                    final var errorY = errorRandomizer.nextDouble();
                     pointWithError = new HomogeneousPoint2D(
                             point.getInhomX() + errorX,
                             point.getInhomY() + errorY, 1.0);
@@ -417,8 +343,7 @@ public class RANSACCircleRobustEstimatorTest implements
                 assertTrue(circle.isLocus(point, ABSOLUTE_ERROR));
             }
 
-            final RANSACCircleRobustEstimator estimator =
-                    new RANSACCircleRobustEstimator(this, pointsWithError);
+            final var estimator = new RANSACCircleRobustEstimator(this, pointsWithError);
 
             estimator.setThreshold(THRESHOLD);
 
@@ -429,7 +354,7 @@ public class RANSACCircleRobustEstimatorTest implements
             assertTrue(estimator.isReady());
             assertFalse(estimator.isLocked());
 
-            final Circle circle2 = estimator.estimate();
+            final var circle2 = estimator.estimate();
 
             assertEquals(1, estimateStart);
             assertEquals(1, estimateEnd);
@@ -439,15 +364,13 @@ public class RANSACCircleRobustEstimatorTest implements
 
             // check correctness of estimation by checking that all points
             // are within the estimated circle locus
-            for (final Point2D p : points) {
+            for (final var p : points) {
                 assertTrue(circle2.isLocus(p, ABSOLUTE_ERROR));
             }
 
             // check that both circles are equal
-            assertEquals(0.0,
-                    circle.getCenter().distanceTo(circle2.getCenter()), ABSOLUTE_ERROR);
-            assertEquals(circle.getRadius(), circle2.getRadius(),
-                    ABSOLUTE_ERROR);
+            assertEquals(0.0, circle.getCenter().distanceTo(circle2.getCenter()), ABSOLUTE_ERROR);
+            assertEquals(circle.getRadius(), circle2.getRadius(), ABSOLUTE_ERROR);
         }
     }
 
@@ -464,61 +387,28 @@ public class RANSACCircleRobustEstimatorTest implements
     }
 
     @Override
-    public void onEstimateNextIteration(final CircleRobustEstimator estimator,
-                                        final int iteration) {
+    public void onEstimateNextIteration(final CircleRobustEstimator estimator, final int iteration) {
         estimateNextIteration++;
         checkLocked((RANSACCircleRobustEstimator) estimator);
     }
 
     @Override
-    public void onEstimateProgressChange(final CircleRobustEstimator estimator,
-                                         final float progress) {
+    public void onEstimateProgressChange(final CircleRobustEstimator estimator, final float progress) {
         estimateProgressChange++;
         checkLocked((RANSACCircleRobustEstimator) estimator);
     }
 
     private void reset() {
-        estimateStart = estimateEnd = estimateNextIteration =
-                estimateProgressChange = 0;
+        estimateStart = estimateEnd = estimateNextIteration = estimateProgressChange = 0;
     }
 
-    private void checkLocked(final RANSACCircleRobustEstimator estimator) {
-        try {
-            estimator.setThreshold(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setListener(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setProgressDelta(0.5f);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setConfidence(0.5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setMaxIterations(5);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.setPoints(null);
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        }
-        try {
-            estimator.estimate();
-            fail("LockedException expected but not thrown");
-        } catch (final LockedException ignore) {
-        } catch (final Exception e) {
-            fail("LockedException expected but not thrown");
-        }
+    private static void checkLocked(final RANSACCircleRobustEstimator estimator) {
+        assertThrows(LockedException.class, () -> estimator.setThreshold(0.5));
+        assertThrows(LockedException.class, () -> estimator.setListener(null));
+        assertThrows(LockedException.class, () -> estimator.setProgressDelta(0.5f));
+        assertThrows(LockedException.class, () -> estimator.setConfidence(0.5));
+        assertThrows(LockedException.class, () -> estimator.setMaxIterations(5));
+        assertThrows(LockedException.class, () -> estimator.setPoints(null));
+        assertThrows(LockedException.class, estimator::estimate);
     }
 }

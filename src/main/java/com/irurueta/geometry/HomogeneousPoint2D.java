@@ -45,31 +45,31 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
     /**
      * Defines the X coordinate of an homogeneous 2D point.
      */
-    private double mX;
+    private double x;
 
     /**
      * Defines the Y coordinate of an homogeneous 2D point.
      */
-    private double mY;
+    private double y;
 
     /**
      * Defines the W coordinate of an homogeneous 2D point.
      */
-    private double mW;
+    private double w;
 
     /**
      * Determines whether this point is already normalized.
      */
-    private boolean mNormalized;
+    private boolean normalized;
 
     /**
      * Empty constructor.
      */
     public HomogeneousPoint2D() {
         super();
-        mX = mY = 0.0;
-        mW = 1.0;
-        mNormalized = false;
+        x = y = 0.0;
+        w = 1.0;
+        normalized = false;
     }
 
     /**
@@ -95,10 +95,10 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @param w W coordinate of the given 2D point.
      */
     public HomogeneousPoint2D(final double x, final double y, final double w) {
-        mX = x;
-        mY = y;
-        mW = w;
-        mNormalized = false;
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        normalized = false;
     }
 
     /**
@@ -117,7 +117,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @return X coordinate.
      */
     public double getX() {
-        return mX;
+        return x;
     }
 
     /**
@@ -126,8 +126,8 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @param x X coordinate.
      */
     public void setX(final double x) {
-        mX = x;
-        mNormalized = false;
+        this.x = x;
+        normalized = false;
     }
 
     /**
@@ -136,7 +136,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @return Y coordinate.
      */
     public double getY() {
-        return mY;
+        return y;
     }
 
     /**
@@ -145,8 +145,8 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @param y Y coordinate.
      */
     public void setY(final double y) {
-        mY = y;
-        mNormalized = false;
+        this.y = y;
+        normalized = false;
     }
 
     /**
@@ -155,7 +155,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @return W coordinate.
      */
     public double getW() {
-        return mW;
+        return w;
     }
 
     /**
@@ -164,8 +164,8 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @param w W coordinate.
      */
     public void setW(final double w) {
-        mW = w;
-        mNormalized = false;
+        this.w = w;
+        normalized = false;
     }
 
     /**
@@ -177,10 +177,10 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @param w W coordinate.
      */
     public void setCoordinates(final double x, final double y, final double w) {
-        mX = x;
-        mY = y;
-        mW = w;
-        mNormalized = false;
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        normalized = false;
     }
 
     /**
@@ -196,10 +196,10 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
         if (v.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         } else {
-            mX = v[0];
-            mY = v[1];
-            mW = v[2];
-            mNormalized = false;
+            x = v[0];
+            y = v[1];
+            w = v[2];
+            normalized = false;
         }
     }
 
@@ -213,20 +213,20 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
     public final void setCoordinates(final Point2D point) {
         switch (point.getType()) {
             case INHOMOGENEOUS_COORDINATES:
-                final InhomogeneousPoint2D inhomPoint = (InhomogeneousPoint2D) point;
-                mX = inhomPoint.getX();
-                mY = inhomPoint.getY();
-                mW = 1.0;
-                mNormalized = false;
+                final var inhomPoint = (InhomogeneousPoint2D) point;
+                x = inhomPoint.getX();
+                y = inhomPoint.getY();
+                w = 1.0;
+                normalized = false;
                 break;
 
             case HOMOGENEOUS_COORDINATES:
             default:
-                final HomogeneousPoint2D homPoint = (HomogeneousPoint2D) point;
-                mX = homPoint.getX();
-                mY = homPoint.getY();
-                mW = homPoint.getW();
-                mNormalized = false;
+                final var homPoint = (HomogeneousPoint2D) point;
+                x = homPoint.getX();
+                y = homPoint.getY();
+                w = homPoint.getW();
+                normalized = false;
                 break;
         }
     }
@@ -270,8 +270,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @param homW w homogeneous coordinate.
      */
     @Override
-    public void setHomogeneousCoordinates(final double homX, final double homY,
-                                          final double homW) {
+    public void setHomogeneousCoordinates(final double homX, final double homY, final double homW) {
         setCoordinates(homX, homY, homW);
     }
 
@@ -282,7 +281,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public double getInhomX() {
-        return (mX / mW);
+        return (x / w);
     }
 
     /**
@@ -292,8 +291,8 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public void setInhomX(final double inhomX) {
-        mX = inhomX * mW;
-        mNormalized = false;
+        x = inhomX * w;
+        normalized = false;
     }
 
     /**
@@ -303,7 +302,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public double getInhomY() {
-        return (mY / mW);
+        return (y / w);
     }
 
     /**
@@ -313,8 +312,8 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public void setInhomY(final double inhomY) {
-        mY = inhomY * mW;
-        mNormalized = false;
+        y = inhomY * w;
+        normalized = false;
     }
 
     /**
@@ -326,10 +325,10 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public void setInhomogeneousCoordinates(final double inhomX, final double inhomY) {
-        mX = inhomX;
-        mY = inhomY;
-        mW = 1.0;
-        mNormalized = false;
+        x = inhomX;
+        y = inhomY;
+        w = 1.0;
+        normalized = false;
     }
 
     /**
@@ -340,14 +339,13 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public boolean equals(final Object obj) {
-        if (!(obj instanceof Point2D)) {
+        if (!(obj instanceof Point2D point)) {
             return false;
         }
         if (obj == this) {
             return true;
         }
 
-        final Point2D point = (Point2D) obj;
         return equals(point);
     }
 
@@ -358,7 +356,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(mX, mY, mW);
+        return Objects.hash(x, y, w);
     }
 
     /**
@@ -376,12 +374,10 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public boolean equals(final Point2D point, final double threshold) {
-        switch (point.getType()) {
-            case INHOMOGENEOUS_COORDINATES:
-                return equals((InhomogeneousPoint2D) point, threshold);
-            case HOMOGENEOUS_COORDINATES:
-            default:
-                return equals((HomogeneousPoint2D) point, threshold);
+        if (point.getType() == CoordinatesType.INHOMOGENEOUS_COORDINATES) {
+            return equals((InhomogeneousPoint2D) point, threshold);
+        } else {
+            return equals((HomogeneousPoint2D) point, threshold);
         }
     }
 
@@ -399,7 +395,6 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean equals(final HomogeneousPoint2D point, final double threshold) {
-
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
@@ -408,19 +403,15 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
         point.normalize();
 
         // compute sign for the case when points have different sign
-        final double signThis = (mW > 0.0) ? 1.0 : -1.0;
-        final double signPoint = (point.mW > 0.0) ? 1.0 : -1.0;
+        final var signThis = (w > 0.0) ? 1.0 : -1.0;
+        final var signPoint = (point.w > 0.0) ? 1.0 : -1.0;
 
-        final double normThis = Math.sqrt(mX * mX + mY * mY + mW * mW) * signThis;
-        final double normPoint = Math.sqrt(point.mX * point.mX + point.mY * point.mY +
-                point.mW * point.mW) * signPoint;
+        final var normThis = Math.sqrt(x * x + y * y + w * w) * signThis;
+        final var normPoint = Math.sqrt(point.x * point.x + point.y * point.y + point.w * point.w) * signPoint;
 
-        final boolean validX = Math.abs(mX / normThis - point.mX / normPoint)
-                <= threshold;
-        final boolean validY = Math.abs(mY / normThis - point.mY / normPoint)
-                <= threshold;
-        final boolean validW = Math.abs(mW / normThis - point.mW / normPoint)
-                <= threshold;
+        final var validX = Math.abs(x / normThis - point.x / normPoint) <= threshold;
+        final var validY = Math.abs(y / normThis - point.y / normPoint) <= threshold;
+        final var validW = Math.abs(w / normThis - point.w / normPoint) <= threshold;
 
         return (validX && validY && validW);
     }
@@ -451,13 +442,12 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @throws IllegalArgumentException Raised if threshold is negative.
      */
     public boolean equals(final InhomogeneousPoint2D point, final double threshold) {
-
         if (threshold < MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
 
-        final boolean dX = Math.abs(point.getX() - (mX / mW)) <= threshold;
-        final boolean dY = Math.abs(point.getY() - (mY / mW)) <= threshold;
+        final var dX = Math.abs(point.getX() - (x / w)) <= threshold;
+        final var dY = Math.abs(point.getY() - (y / w)) <= threshold;
         return (dX && dY);
     }
 
@@ -499,7 +489,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
             throw new IllegalArgumentException();
         }
 
-        return (Math.abs(mW) <= threshold);
+        return (Math.abs(w) <= threshold);
     }
 
     /**
@@ -520,13 +510,13 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
     @SuppressWarnings("DuplicatedCode")
     @Override
     public void normalize() {
-        if (!mNormalized) {
-            double norm = Math.sqrt(mX * mX + mY * mY + mW * mW);
+        if (!normalized) {
+            final var norm = Math.sqrt(x * x + y * y + w * w);
             if (norm > PRECISION) {
-                mX /= norm;
-                mY /= norm;
-                mW /= norm;
-                mNormalized = true;
+                x /= norm;
+                y /= norm;
+                w /= norm;
+                normalized = true;
             }
         }
     }
@@ -538,7 +528,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public boolean isNormalized() {
-        return mNormalized;
+        return normalized;
     }
 
     /**
@@ -548,7 +538,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      * @return Converts and returns this point as an inhomogeneous 2D point.
      */
     public InhomogeneousPoint2D toInhomogeneous() {
-        return new InhomogeneousPoint2D(mX / mW, mY / mW);
+        return new InhomogeneousPoint2D(x / w, y / w);
     }
 
     /**
@@ -558,7 +548,7 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
      */
     @Override
     public double[] asArray() {
-        double[] out = new double[POINT2D_HOMOGENEOUS_COORDINATES_LENGTH];
+        final var out = new double[POINT2D_HOMOGENEOUS_COORDINATES_LENGTH];
         asArray(out);
         return out;
     }
@@ -574,8 +564,8 @@ public class HomogeneousPoint2D extends Point2D implements Serializable {
         if (array.length != POINT2D_HOMOGENEOUS_COORDINATES_LENGTH) {
             throw new IllegalArgumentException();
         }
-        array[0] = mX;
-        array[1] = mY;
-        array[2] = mW;
+        array[0] = x;
+        array[1] = y;
+        array[2] = w;
     }
 }

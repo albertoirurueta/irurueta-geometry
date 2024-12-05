@@ -74,7 +74,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
 
     /**
@@ -82,7 +82,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     public LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -102,7 +102,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
     public LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             final List<Line2D> inputLines, final List<Line2D> outputLines) {
         super(inputLines, outputLines);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -114,7 +114,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
     public LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator(
             final ProjectiveTransformation2DRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -137,7 +137,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
             final ProjectiveTransformation2DRobustEstimatorListener listener,
             final List<Line2D> inputLines, final List<Line2D> outputLines) {
         super(listener, inputLines, outputLines);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -160,7 +160,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -193,7 +193,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -210,8 +210,7 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public ProjectiveTransformation2D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public ProjectiveTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -219,130 +218,120 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
             throw new NotReadyException();
         }
 
-        final LMedSRobustEstimator<ProjectiveTransformation2D> innerEstimator =
-                new LMedSRobustEstimator<>(
-                        new LMedSRobustEstimatorListener<ProjectiveTransformation2D>() {
+        final var innerEstimator = new LMedSRobustEstimator<>(
+                new LMedSRobustEstimatorListener<ProjectiveTransformation2D>() {
 
-                            // line to be reused when computing residuals
-                            private final Line2D mTestLine = new Line2D();
+                    // line to be reused when computing residuals
+                    private final Line2D testLine = new Line2D();
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputLines.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputLines.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE;
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE;
+                    }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<ProjectiveTransformation2D> solutions) {
-                                final Line2D inputLine1 = mInputLines.get(samplesIndices[0]);
-                                final Line2D inputLine2 = mInputLines.get(samplesIndices[1]);
-                                final Line2D inputLine3 = mInputLines.get(samplesIndices[2]);
-                                final Line2D inputLine4 = mInputLines.get(samplesIndices[3]);
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<ProjectiveTransformation2D> solutions) {
+                        final var inputLine1 = inputLines.get(samplesIndices[0]);
+                        final var inputLine2 = inputLines.get(samplesIndices[1]);
+                        final var inputLine3 = inputLines.get(samplesIndices[2]);
+                        final var inputLine4 = inputLines.get(samplesIndices[3]);
 
-                                final Line2D outputLine1 = mOutputLines.get(samplesIndices[0]);
-                                final Line2D outputLine2 = mOutputLines.get(samplesIndices[1]);
-                                final Line2D outputLine3 = mOutputLines.get(samplesIndices[2]);
-                                final Line2D outputLine4 = mOutputLines.get(samplesIndices[3]);
+                        final var outputLine1 = outputLines.get(samplesIndices[0]);
+                        final var outputLine2 = outputLines.get(samplesIndices[1]);
+                        final var outputLine3 = outputLines.get(samplesIndices[2]);
+                        final var outputLine4 = outputLines.get(samplesIndices[3]);
 
-                                try {
-                                    final ProjectiveTransformation2D transformation =
-                                            new ProjectiveTransformation2D(inputLine1,
-                                                    inputLine2, inputLine3, inputLine4, outputLine1,
-                                                    outputLine2, outputLine3, outputLine4);
-                                    solutions.add(transformation);
-                                } catch (final CoincidentLinesException e) {
-                                    // if lines are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            final var transformation = new ProjectiveTransformation2D(inputLine1, inputLine2,
+                                    inputLine3, inputLine4, outputLine1, outputLine2, outputLine3, outputLine4);
+                            solutions.add(transformation);
+                        } catch (final CoincidentLinesException e) {
+                            // if lines are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(final ProjectiveTransformation2D currentEstimation,
-                                                          final int i) {
-                                final Line2D inputLine = mInputLines.get(i);
-                                final Line2D outputLine = mOutputLines.get(i);
+                    @Override
+                    public double computeResidual(final ProjectiveTransformation2D currentEstimation, final int i) {
+                        final var inputLine = inputLines.get(i);
+                        final var outputLine = outputLines.get(i);
 
-                                // transform input line and store result in mTestLine
-                                try {
-                                    currentEstimation.transform(inputLine, mTestLine);
+                        // transform input line and store result in mTestLine
+                        try {
+                            currentEstimation.transform(inputLine, testLine);
 
-                                    return getResidual(outputLine, mTestLine);
-                                } catch (final AlgebraException e) {
-                                    // this happens when internal matrix of affine transformation
-                                    // cannot be reverse (i.e. transformation is not well-defined,
-                                    // numerical instabilities, etc.)
-                                    return Double.MAX_VALUE;
-                                }
-                            }
+                            return getResidual(outputLine, testLine);
+                        } catch (final AlgebraException e) {
+                            // this happens when internal matrix of affine transformation
+                            // cannot be reverse (i.e. transformation is not well-defined,
+                            // numerical instabilities, etc.)
+                            return Double.MAX_VALUE;
+                        }
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.
-                                        this.isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<ProjectiveTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<ProjectiveTransformation2D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(
+                                    LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<ProjectiveTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<ProjectiveTransformation2D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(
+                                    LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<ProjectiveTransformation2D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<ProjectiveTransformation2D> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(
+                                    LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this,
+                                    iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<ProjectiveTransformation2D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
-                        });
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<ProjectiveTransformation2D> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(
+                                    LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator.this,
+                                    progress);
+                        }
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            innerEstimator.setStopThreshold(mStopThreshold);
-            final ProjectiveTransformation2D transformation =
-                    innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            innerEstimator.setStopThreshold(stopThreshold);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -369,11 +358,10 @@ public class LMedSLineCorrespondenceProjectiveTransformation2DRobustEstimator
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        final LMedSRobustEstimator.LMedSInliersData inliersData =
-                (LMedSRobustEstimator.LMedSInliersData) getInliersData();
+        final var inliersData = (LMedSRobustEstimator.LMedSInliersData) getInliersData();
 
         // avoid setting a threshold too strict
-        final double threshold = inliersData.getEstimatedThreshold();
-        return Math.max(threshold, mStopThreshold);
+        final var threshold = inliersData.getEstimatedThreshold();
+        return Math.max(threshold, stopThreshold);
     }
 }

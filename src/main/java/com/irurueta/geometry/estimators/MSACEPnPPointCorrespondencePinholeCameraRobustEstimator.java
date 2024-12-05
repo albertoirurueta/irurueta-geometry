@@ -57,14 +57,14 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * The threshold refers to the amount of error (i.e. distance) a possible
      * solution has on a matched pair of points.
      */
-    private double mThreshold;
+    private double threshold;
 
     /**
      * Constructor.
      */
     public MSACEPnPPointCorrespondencePinholeCameraRobustEstimator() {
         super();
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -76,7 +76,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
             final PinholeCameraRobustEstimatorListener listener) {
         super(listener);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -95,7 +95,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
     public MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
             final List<Point3D> points3D, final List<Point2D> points2D) {
         super(points3D, points2D);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -118,7 +118,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
             final PinholeCameraRobustEstimatorListener listener,
             final List<Point3D> points3D, final List<Point2D> points2D) {
         super(listener, points3D, points2D);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -126,10 +126,9 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      *
      * @param intrinsic intrinsic parameters of camera to be estimated.
      */
-    public MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraIntrinsicParameters intrinsic) {
+    public MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(final PinholeCameraIntrinsicParameters intrinsic) {
         super(intrinsic);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -140,10 +139,9 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * @param intrinsic intrinsic parameters of camera to be estimated.
      */
     public MSACEPnPPointCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final PinholeCameraIntrinsicParameters intrinsic) {
+            final PinholeCameraRobustEstimatorListener listener, final PinholeCameraIntrinsicParameters intrinsic) {
         super(listener, intrinsic);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -165,7 +163,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
             final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
             final List<Point2D> points2D) {
         super(intrinsic, points3D, points2D);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -190,7 +188,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
             final PinholeCameraIntrinsicParameters intrinsic, final List<Point3D> points3D,
             final List<Point2D> points2D) {
         super(listener, intrinsic, points3D, points2D);
-        mThreshold = DEFAULT_THRESHOLD;
+        threshold = DEFAULT_THRESHOLD;
     }
 
     /**
@@ -203,7 +201,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      * testing possible estimation solutions.
      */
     public double getThreshold() {
-        return mThreshold;
+        return threshold;
     }
 
     /**
@@ -225,7 +223,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
         if (threshold <= MIN_THRESHOLD) {
             throw new IllegalArgumentException();
         }
-        mThreshold = threshold;
+        this.threshold = threshold;
     }
 
     /**
@@ -242,8 +240,7 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public PinholeCamera estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public PinholeCamera estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -253,178 +250,148 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
 
         // pinhole camera estimator using EPnP (Efficient Perspective-n-Point)
         // algorithm
-        final EPnPPointCorrespondencePinholeCameraEstimator nonRobustEstimator =
-                new EPnPPointCorrespondencePinholeCameraEstimator(mIntrinsic);
+        final var nonRobustEstimator = new EPnPPointCorrespondencePinholeCameraEstimator(intrinsic);
 
-        nonRobustEstimator.setPlanarConfigurationAllowed(
-                mPlanarConfigurationAllowed);
-        nonRobustEstimator.setNullspaceDimension2Allowed(
-                mNullspaceDimension2Allowed);
-        nonRobustEstimator.setNullspaceDimension3Allowed(
-                mNullspaceDimension3Allowed);
-        nonRobustEstimator.setPlanarThreshold(mPlanarThreshold);
+        nonRobustEstimator.setPlanarConfigurationAllowed(planarConfigurationAllowed);
+        nonRobustEstimator.setNullspaceDimension2Allowed(nullspaceDimension2Allowed);
+        nonRobustEstimator.setNullspaceDimension3Allowed(nullspaceDimension3Allowed);
+        nonRobustEstimator.setPlanarThreshold(planarThreshold);
 
         // suggestions
-        nonRobustEstimator.setSuggestSkewnessValueEnabled(
-                isSuggestSkewnessValueEnabled());
-        nonRobustEstimator.setSuggestedSkewnessValue(
-                getSuggestedSkewnessValue());
-        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(
-                isSuggestHorizontalFocalLengthEnabled());
-        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(
-                getSuggestedHorizontalFocalLengthValue());
-        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(
-                isSuggestVerticalFocalLengthEnabled());
-        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(
-                getSuggestedVerticalFocalLengthValue());
-        nonRobustEstimator.setSuggestAspectRatioEnabled(
-                isSuggestAspectRatioEnabled());
-        nonRobustEstimator.setSuggestedAspectRatioValue(
-                getSuggestedAspectRatioValue());
-        nonRobustEstimator.setSuggestPrincipalPointEnabled(
-                isSuggestPrincipalPointEnabled());
-        nonRobustEstimator.setSuggestedPrincipalPointValue(
-                getSuggestedPrincipalPointValue());
-        nonRobustEstimator.setSuggestRotationEnabled(
-                isSuggestRotationEnabled());
-        nonRobustEstimator.setSuggestedRotationValue(
-                getSuggestedRotationValue());
+        nonRobustEstimator.setSuggestSkewnessValueEnabled(isSuggestSkewnessValueEnabled());
+        nonRobustEstimator.setSuggestedSkewnessValue(getSuggestedSkewnessValue());
+        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(isSuggestHorizontalFocalLengthEnabled());
+        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(getSuggestedHorizontalFocalLengthValue());
+        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(isSuggestVerticalFocalLengthEnabled());
+        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(getSuggestedVerticalFocalLengthValue());
+        nonRobustEstimator.setSuggestAspectRatioEnabled(isSuggestAspectRatioEnabled());
+        nonRobustEstimator.setSuggestedAspectRatioValue(getSuggestedAspectRatioValue());
+        nonRobustEstimator.setSuggestPrincipalPointEnabled(isSuggestPrincipalPointEnabled());
+        nonRobustEstimator.setSuggestedPrincipalPointValue(getSuggestedPrincipalPointValue());
+        nonRobustEstimator.setSuggestRotationEnabled(isSuggestRotationEnabled());
+        nonRobustEstimator.setSuggestedRotationValue(getSuggestedRotationValue());
         nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());
-        nonRobustEstimator.setSuggestedCenterValue(
-                getSuggestedCenterValue());
+        nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());
 
+        final var innerEstimator = new MSACRobustEstimator<>(new MSACRobustEstimatorListener<PinholeCamera>() {
 
-        final MSACRobustEstimator<PinholeCamera> innerEstimator =
-                new MSACRobustEstimator<>(
-                        new MSACRobustEstimatorListener<PinholeCamera>() {
+            // point to be reused when computing residuals
+            private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                            // point to be reused when computing residuals
-                            private final Point2D mTestPoint = Point2D.create(
-                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+            // 3D points for a subset of samples
+            private final List<Point3D> subset3D = new ArrayList<>();
 
-                            // 3D points for a subset of samples
-                            private final List<Point3D> mSubset3D = new ArrayList<>();
+            // 2D points for a subset of samples
+            private final List<Point2D> subset2D = new ArrayList<>();
 
-                            // 2D points for a subset of samples
-                            private final List<Point2D> mSubset2D = new ArrayList<>();
+            @Override
+            public double getThreshold() {
+                return threshold;
+            }
 
-                            @Override
-                            public double getThreshold() {
-                                return mThreshold;
-                            }
+            @Override
+            public int getTotalSamples() {
+                return points3D.size();
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPoints3D.size();
-                            }
+            @Override
+            public int getSubsetSize() {
+                return PointCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES;
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return PointCorrespondencePinholeCameraEstimator.
-                                        MIN_NUMBER_OF_POINT_CORRESPONDENCES;
-                            }
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<PinholeCamera> solutions) {
+                subset3D.clear();
+                subset3D.add(points3D.get(samplesIndices[0]));
+                subset3D.add(points3D.get(samplesIndices[1]));
+                subset3D.add(points3D.get(samplesIndices[2]));
+                subset3D.add(points3D.get(samplesIndices[3]));
+                subset3D.add(points3D.get(samplesIndices[4]));
+                subset3D.add(points3D.get(samplesIndices[5]));
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<PinholeCamera> solutions) {
-                                mSubset3D.clear();
-                                mSubset3D.add(mPoints3D.get(samplesIndices[0]));
-                                mSubset3D.add(mPoints3D.get(samplesIndices[1]));
-                                mSubset3D.add(mPoints3D.get(samplesIndices[2]));
-                                mSubset3D.add(mPoints3D.get(samplesIndices[3]));
-                                mSubset3D.add(mPoints3D.get(samplesIndices[4]));
-                                mSubset3D.add(mPoints3D.get(samplesIndices[5]));
+                subset2D.clear();
+                subset2D.add(points2D.get(samplesIndices[0]));
+                subset2D.add(points2D.get(samplesIndices[1]));
+                subset2D.add(points2D.get(samplesIndices[2]));
+                subset2D.add(points2D.get(samplesIndices[3]));
+                subset2D.add(points2D.get(samplesIndices[4]));
+                subset2D.add(points2D.get(samplesIndices[5]));
 
-                                mSubset2D.clear();
-                                mSubset2D.add(mPoints2D.get(samplesIndices[0]));
-                                mSubset2D.add(mPoints2D.get(samplesIndices[1]));
-                                mSubset2D.add(mPoints2D.get(samplesIndices[2]));
-                                mSubset2D.add(mPoints2D.get(samplesIndices[3]));
-                                mSubset2D.add(mPoints2D.get(samplesIndices[4]));
-                                mSubset2D.add(mPoints2D.get(samplesIndices[5]));
+                try {
+                    nonRobustEstimator.setLists(subset3D, subset2D);
 
-                                try {
-                                    nonRobustEstimator.setLists(mSubset3D, mSubset2D);
+                    final var cam = nonRobustEstimator.estimate();
+                    solutions.add(cam);
+                } catch (final Exception e) {
+                    // if points configuration is degenerate, no solution is
+                    // added
+                }
+            }
 
-                                    final PinholeCamera cam = nonRobustEstimator.estimate();
-                                    solutions.add(cam);
-                                } catch (final Exception e) {
-                                    // if points configuration is degenerate, no solution is
-                                    // added
-                                }
-                            }
+            @Override
+            public double computeResidual(final PinholeCamera currentEstimation, final int i) {
+                // pick i-th points
+                final var point3D = points3D.get(i);
+                final var point2D = points2D.get(i);
 
-                            @Override
-                            public double computeResidual(final PinholeCamera currentEstimation,
-                                                          final int i) {
-                                // pick i-th points
-                                final Point3D point3D = mPoints3D.get(i);
-                                final Point2D point2D = mPoints2D.get(i);
+                // project point3D into test point
+                currentEstimation.project(point3D, testPoint);
 
-                                // project point3D into test point
-                                currentEstimation.project(point3D, mTestPoint);
+                // compare test point and 2D point
+                return testPoint.distanceTo(point2D);
+            }
 
-                                // compare test point and 2D point
-                                return mTestPoint.distanceTo(point2D);
-                            }
+            @Override
+            public boolean isReady() {
+                return MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                                        this.isReady();
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<PinholeCamera> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<PinholeCamera> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<PinholeCamera> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<PinholeCamera> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<PinholeCamera> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(
+                            MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<PinholeCamera> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.
-                                            this, iteration);
-                                }
-                            }
-
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<PinholeCamera> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this,
-                                            progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<PinholeCamera> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(
+                            MSACEPnPPointCorrespondencePinholeCameraRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final PinholeCamera result = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
-            return attemptRefine(result,
-                    nonRobustEstimator.getMaxSuggestionWeight());
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var result = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
+            return attemptRefine(result, nonRobustEstimator.getMaxSuggestionWeight());
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -451,6 +418,6 @@ public class MSACEPnPPointCorrespondencePinholeCameraRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        return mThreshold;
+        return threshold;
     }
 }

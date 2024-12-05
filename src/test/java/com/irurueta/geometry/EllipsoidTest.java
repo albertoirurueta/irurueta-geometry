@@ -16,15 +16,14 @@
 package com.irurueta.geometry;
 
 import com.irurueta.statistics.UniformRandomizer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Random;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class EllipsoidTest {
+class EllipsoidTest {
 
     private static final double ABSOLUTE_ERROR = 1e-6;
     private static final double MIN_RANDOM_VALUE = -100.0;
@@ -34,33 +33,27 @@ public class EllipsoidTest {
     private static final double MAX_RANDOM_DEGREES = 180.0;
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         // test empty constructor.
-        Ellipsoid ellipsoid = new Ellipsoid();
+        var ellipsoid = new Ellipsoid();
 
         // check center is at origin and axes are unitary
-        assertTrue(ellipsoid.getCenter().equals(new InhomogeneousPoint3D(0.0,
-                0.0, 0.0), ABSOLUTE_ERROR));
-        assertArrayEquals(ellipsoid.getSemiAxesLengths(),
-                new double[]{1.0, 1.0, 1.0}, ABSOLUTE_ERROR);
+        assertTrue(ellipsoid.getCenter().equals(new InhomogeneousPoint3D(0.0, 0.0, 0.0), ABSOLUTE_ERROR));
+        assertArrayEquals(new double[]{1.0, 1.0, 1.0}, ellipsoid.getSemiAxesLengths(), ABSOLUTE_ERROR);
         assertEquals(ellipsoid.getRotation(), Rotation3D.create());
 
         // test constructor with center, axes and rotation
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint3D(
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
                 randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double[] semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
-        randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final Quaternion rotation = new Quaternion(roll, pitch, yaw);
+        final var semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
+        randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var rotation = new Quaternion(roll, pitch, yaw);
         ellipsoid = new Ellipsoid(center, semiAxesLengths, rotation);
 
         // check correctness
@@ -69,26 +62,19 @@ public class EllipsoidTest {
         assertEquals(rotation, ellipsoid.getRotation());
 
         // Force IllegalArgumentException
-        ellipsoid = null;
-        try {
-            ellipsoid = new Ellipsoid(center, new double[1], rotation);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
-        assertNull(ellipsoid);
+        assertThrows(IllegalArgumentException.class, () -> new Ellipsoid(center, new double[1], rotation));
     }
 
     @Test
-    public void testGetSetCenter() {
-        final Ellipsoid ellipsoid = new Ellipsoid();
+    void testGetSetCenter() {
+        final var ellipsoid = new Ellipsoid();
 
         // check default value
-        assertTrue(ellipsoid.getCenter().equals(new InhomogeneousPoint3D(0.0, 0.0, 0.0),
-                ABSOLUTE_ERROR));
+        assertTrue(ellipsoid.getCenter().equals(new InhomogeneousPoint3D(0.0, 0.0, 0.0), ABSOLUTE_ERROR));
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint3D(randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
                 MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
@@ -99,44 +85,36 @@ public class EllipsoidTest {
     }
 
     @Test
-    public void testGetSetSemiAxesLengths() {
-        final Ellipsoid ellipsoid = new Ellipsoid();
+    void testGetSetSemiAxesLengths() {
+        final var ellipsoid = new Ellipsoid();
 
         // check default value
-        assertArrayEquals(ellipsoid.getSemiAxesLengths(),
-                new double[]{1.0, 1.0, 1.0}, ABSOLUTE_ERROR);
+        assertArrayEquals(new double[]{1.0, 1.0, 1.0}, ellipsoid.getSemiAxesLengths(), ABSOLUTE_ERROR);
 
         // set new value
-        final double[] axes = new double[Ellipsoid.DIMENSIONS];
+        final var axes = new double[Ellipsoid.DIMENSIONS];
         ellipsoid.setSemiAxesLengths(axes);
 
         // check correctness
         assertSame(axes, ellipsoid.getSemiAxesLengths());
 
         // Force IllegalArgumentException
-        try {
-            ellipsoid.setSemiAxesLengths(new double[1]);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class, () -> ellipsoid.setSemiAxesLengths(new double[1]));
     }
 
     @Test
-    public void testGetSetRotation() {
-        final Ellipsoid ellipsoid = new Ellipsoid();
+    void testGetSetRotation() {
+        final var ellipsoid = new Ellipsoid();
 
         // check default value
         assertEquals(ellipsoid.getRotation(), Rotation3D.create());
 
         // set new value
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final Quaternion rotation = new Quaternion(roll, pitch, yaw);
+        final var randomizer = new UniformRandomizer();
+        final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var rotation = new Quaternion(roll, pitch, yaw);
         ellipsoid.setRotation(rotation);
 
         // check correctness
@@ -144,23 +122,18 @@ public class EllipsoidTest {
     }
 
     @Test
-    public void testSetCenterAxesAndRotation() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double[] semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
-        randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final Quaternion rotation = new Quaternion(roll, pitch, yaw);
-        final Ellipsoid ellipsoid = new Ellipsoid();
+    void testSetCenterAxesAndRotation() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint3D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
+        randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var rotation = new Quaternion(roll, pitch, yaw);
+        final var ellipsoid = new Ellipsoid();
         ellipsoid.setCenterAxesAndRotation(center, semiAxesLengths, rotation);
 
         // check correctness
@@ -169,104 +142,86 @@ public class EllipsoidTest {
         assertEquals(rotation, ellipsoid.getRotation());
 
         // Force IllegalArgumentException
-        try {
-            ellipsoid.setCenterAxesAndRotation(center, new double[1], rotation);
-            fail("IllegalArgumentException expected but not thrown");
-        } catch (final IllegalArgumentException ignore) {
-        }
+        assertThrows(IllegalArgumentException.class,
+                () -> ellipsoid.setCenterAxesAndRotation(center, new double[1], rotation));
     }
 
     @Test
-    public void testGetVolume() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double[] semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
-        randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final Quaternion rotation = new Quaternion(roll, pitch, yaw);
-        final Ellipsoid ellipsoid = new Ellipsoid(center, semiAxesLengths, rotation);
+    void testGetVolume() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint3D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
+        randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var rotation = new Quaternion(roll, pitch, yaw);
+        final var ellipsoid = new Ellipsoid(center, semiAxesLengths, rotation);
 
         // check correctness
-        final double a = semiAxesLengths[0];
-        final double b = semiAxesLengths[1];
-        final double c = semiAxesLengths[2];
+        final var a = semiAxesLengths[0];
+        final var b = semiAxesLengths[1];
+        final var c = semiAxesLengths[2];
 
-        assertEquals(ellipsoid.getVolume(), 4.0 / 3.0 * Math.PI * a * b * c,
-                ABSOLUTE_ERROR);
+        assertEquals(ellipsoid.getVolume(), 4.0 / 3.0 * Math.PI * a * b * c, ABSOLUTE_ERROR);
 
         // test from circle
-        final double radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final Sphere sphere = new Sphere(center, radius);
+        final var radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var sphere = new Sphere(center, radius);
         ellipsoid.setFromSphere(sphere);
 
         assertEquals(sphere.getVolume(), ellipsoid.getVolume(), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testGetSurface() {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double[] semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
-        randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final Quaternion rotation = new Quaternion(roll, pitch, yaw);
-        final Ellipsoid ellipsoid = new Ellipsoid(center, semiAxesLengths, rotation);
+    void testGetSurface() {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint3D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
+        randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var rotation = new Quaternion(roll, pitch, yaw);
+        final var ellipsoid = new Ellipsoid(center, semiAxesLengths, rotation);
 
         // check correctness
-        final double a = semiAxesLengths[0];
-        final double b = semiAxesLengths[1];
-        final double c = semiAxesLengths[2];
+        final var a = semiAxesLengths[0];
+        final var b = semiAxesLengths[1];
+        final var c = semiAxesLengths[2];
 
-        final double p = 1.6075;
+        final var p = 1.6075;
         assertEquals(4.0 * Math.PI * Math.pow(
-                (Math.pow(a * b, p) + Math.pow(a * c, p) + Math.pow(b * c, p)) / 3.0, 1.0 / p),
-                ellipsoid.getSurface(),  ABSOLUTE_ERROR);
+                (Math.pow(a * b, p) + Math.pow(a * c, p) + Math.pow(b * c, p)) / 3.0, 1.0 / p), ellipsoid.getSurface(),
+                ABSOLUTE_ERROR);
 
         // test from circle
-        final double radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final Sphere sphere = new Sphere(center, radius);
+        final var radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var sphere = new Sphere(center, radius);
         ellipsoid.setFromSphere(sphere);
 
         assertEquals(sphere.getSurface(), ellipsoid.getSurface(), ABSOLUTE_ERROR);
     }
 
     @Test
-    public void testToQuadric() throws GeometryException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double[] semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
+    void testToQuadric() throws GeometryException {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint3D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var radius = randomizer.nextDouble(MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
         Arrays.fill(semiAxesLengths, radius);
-        final Rotation3D rotation = Rotation3D.create();
-        final Ellipsoid ellipsoid = new Ellipsoid(center, semiAxesLengths, rotation);
-        final Quadric quadric1 = ellipsoid.toQuadric();
+        final var rotation = Rotation3D.create();
+        final var ellipsoid = new Ellipsoid(center, semiAxesLengths, rotation);
+        final var quadric1 = ellipsoid.toQuadric();
 
-        final Sphere sphere = new Sphere(center, radius);
-        final Quadric quadric2 = sphere.toQuadric();
+        final var sphere = new Sphere(center, radius);
+        final var quadric2 = sphere.toQuadric();
 
         quadric1.normalize();
         quadric2.normalize();
@@ -284,24 +239,19 @@ public class EllipsoidTest {
     }
 
     @Test
-    public void testSerializeDeserialize() throws IOException, ClassNotFoundException {
-        final UniformRandomizer randomizer = new UniformRandomizer(new Random());
-        final Point3D center = new InhomogeneousPoint3D(randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE), randomizer.nextDouble(
-                MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
-        final double[] semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
-        randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0,
-                MAX_RANDOM_VALUE);
-        final double roll = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double pitch = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final double yaw = Utils.convertToRadians(randomizer.nextDouble(
-                MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
-        final Quaternion rotation = new Quaternion(roll, pitch, yaw);
+    void testSerializeDeserialize() throws IOException, ClassNotFoundException {
+        final var randomizer = new UniformRandomizer();
+        final var center = new InhomogeneousPoint3D(randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE));
+        final var semiAxesLengths = new double[Ellipsoid.DIMENSIONS];
+        randomizer.fill(semiAxesLengths, MAX_RANDOM_VALUE / 2.0, MAX_RANDOM_VALUE);
+        final var roll = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var pitch = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var yaw = Utils.convertToRadians(randomizer.nextDouble(MIN_RANDOM_DEGREES, MAX_RANDOM_DEGREES));
+        final var rotation = new Quaternion(roll, pitch, yaw);
 
-        final Ellipsoid ellipsoid1 = new Ellipsoid(center, semiAxesLengths, rotation);
+        final var ellipsoid1 = new Ellipsoid(center, semiAxesLengths, rotation);
 
         // check
         assertSame(center, ellipsoid1.getCenter());
@@ -309,13 +259,12 @@ public class EllipsoidTest {
         assertSame(rotation, ellipsoid1.getRotation());
 
         // serialize and deserialize
-        final byte[] bytes = SerializationHelper.serialize(ellipsoid1);
-        final Ellipsoid ellipsoid2 = SerializationHelper.deserialize(bytes);
+        final var bytes = SerializationHelper.serialize(ellipsoid1);
+        final var ellipsoid2 = SerializationHelper.<Ellipsoid>deserialize(bytes);
 
         // check
         assertEquals(ellipsoid1.getCenter(), ellipsoid2.getCenter());
-        assertArrayEquals(ellipsoid1.getSemiAxesLengths(),
-                ellipsoid2.getSemiAxesLengths(), 0.0);
+        assertArrayEquals(ellipsoid1.getSemiAxesLengths(), ellipsoid2.getSemiAxesLengths(), 0.0);
         assertEquals(ellipsoid1.getRotation(), ellipsoid2.getRotation());
     }
 }

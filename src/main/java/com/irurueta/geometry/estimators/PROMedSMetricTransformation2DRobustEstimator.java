@@ -31,8 +31,7 @@ import java.util.List;
  * Finds the best metric 2D transformation for provided collections of
  * matched 2D point using PROMedS algorithm.
  */
-public class PROMedSMetricTransformation2DRobustEstimator extends
-        MetricTransformation2DRobustEstimator {
+public class PROMedSMetricTransformation2DRobustEstimator extends MetricTransformation2DRobustEstimator {
 
     /**
      * Default value to be used for stop threshold. Stop threshold can be used
@@ -73,20 +72,20 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Quality scores corresponding to each pair of matched points.
      * The larger the score value the better the quality of the matching.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Constructor.
      */
     public PROMedSMetricTransformation2DRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -106,7 +105,7 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
     public PROMedSMetricTransformation2DRobustEstimator(
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         super(inputPoints, outputPoints);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -115,10 +114,9 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public PROMedSMetricTransformation2DRobustEstimator(
-            final MetricTransformation2DRobustEstimatorListener listener) {
+    public PROMedSMetricTransformation2DRobustEstimator(final MetricTransformation2DRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -141,7 +139,7 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
             final MetricTransformation2DRobustEstimatorListener listener,
             final List<Point2D> inputPoints, final List<Point2D> outputPoints) {
         super(listener, inputPoints, outputPoints);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -152,10 +150,9 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
-    public PROMedSMetricTransformation2DRobustEstimator(
-            final double[] qualityScores) {
+    public PROMedSMetricTransformation2DRobustEstimator(final double[] qualityScores) {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -177,15 +174,14 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      *                                  MINIMUM_SIZE.
      */
     public PROMedSMetricTransformation2DRobustEstimator(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores) {
         super(inputPoints, outputPoints);
 
         if (qualityScores.length != inputPoints.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -200,10 +196,9 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSMetricTransformation2DRobustEstimator(
-            final MetricTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+            final MetricTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -227,15 +222,14 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      */
     public PROMedSMetricTransformation2DRobustEstimator(
             final MetricTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores) {
         super(listener, inputPoints, outputPoints);
 
         if (qualityScores.length != inputPoints.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -244,10 +238,9 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      *
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      */
-    public PROMedSMetricTransformation2DRobustEstimator(
-            final boolean weakMinimumSizeAllowed) {
+    public PROMedSMetricTransformation2DRobustEstimator(final boolean weakMinimumSizeAllowed) {
         super(weakMinimumSizeAllowed);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -266,10 +259,9 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROMedSMetricTransformation2DRobustEstimator(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -280,10 +272,9 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
      */
     public PROMedSMetricTransformation2DRobustEstimator(
-            final MetricTransformation2DRobustEstimatorListener listener,
-            final boolean weakMinimumSizeAllowed) {
+            final MetricTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
         super(listener, weakMinimumSizeAllowed);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -305,10 +296,9 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      */
     public PROMedSMetricTransformation2DRobustEstimator(
             final MetricTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final boolean weakMinimumSizeAllowed) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final boolean weakMinimumSizeAllowed) {
         super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -323,7 +313,7 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
     public PROMedSMetricTransformation2DRobustEstimator(
             final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
         super(weakMinimumSizeAllowed);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -346,15 +336,15 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      *                                  MINIMUM_SIZE.
      */
     public PROMedSMetricTransformation2DRobustEstimator(
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+            final List<Point2D> inputPoints, final List<Point2D> outputPoints, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed) {
         super(inputPoints, outputPoints, weakMinimumSizeAllowed);
 
         if (qualityScores.length != inputPoints.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -370,10 +360,10 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
      */
     public PROMedSMetricTransformation2DRobustEstimator(
-            final MetricTransformation2DRobustEstimatorListener listener,
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+            final MetricTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed) {
         super(listener, weakMinimumSizeAllowed);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -397,16 +387,15 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      *                                  the same size or their size is smaller than MINIMUM_SIZE.
      */
     public PROMedSMetricTransformation2DRobustEstimator(
-            final MetricTransformation2DRobustEstimatorListener listener,
-            final List<Point2D> inputPoints, final List<Point2D> outputPoints,
-            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+            final MetricTransformation2DRobustEstimatorListener listener, final List<Point2D> inputPoints,
+            final List<Point2D> outputPoints, final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
         super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
 
         if (qualityScores.length != inputPoints.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -431,7 +420,7 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -465,7 +454,7 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -476,7 +465,7 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -508,8 +497,7 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mInputPoints.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == inputPoints.size();
     }
 
     /**
@@ -527,8 +515,7 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      */
     @SuppressWarnings("DuplicatedCode")
     @Override
-    public MetricTransformation2D estimate() throws LockedException,
-            NotReadyException, RobustEstimatorException {
+    public MetricTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -536,138 +523,121 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
             throw new NotReadyException();
         }
 
-        final PROMedSRobustEstimator<MetricTransformation2D> innerEstimator =
-                new PROMedSRobustEstimator<>(
-                        new PROMedSRobustEstimatorListener<MetricTransformation2D>() {
+        final var innerEstimator = new PROMedSRobustEstimator<>(
+                new PROMedSRobustEstimatorListener<MetricTransformation2D>() {
 
-                            // point to be reused when computing residuals
-                            private final Point2D mTestPoint = Point2D.create(
-                                    CoordinatesType.HOMOGENEOUS_COORDINATES);
+                    // point to be reused when computing residuals
+                    private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                            private final MetricTransformation2DEstimator mNonRobustEstimator =
-                                    new MetricTransformation2DEstimator(
-                                            isWeakMinimumSizeAllowed());
+                    private final MetricTransformation2DEstimator nonRobustEstimator =
+                            new MetricTransformation2DEstimator(isWeakMinimumSizeAllowed());
 
-                            private final List<Point2D> mSubsetInputPoints =
-                                    new ArrayList<>();
-                            private final List<Point2D> mSubsetOutputPoints =
-                                    new ArrayList<>();
+                    private final List<Point2D> subsetInputPoints = new ArrayList<>();
+                    private final List<Point2D> subsetOutputPoints = new ArrayList<>();
 
-                            @Override
-                            public double getThreshold() {
-                                return mStopThreshold;
-                            }
+                    @Override
+                    public double getThreshold() {
+                        return stopThreshold;
+                    }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mInputPoints.size();
-                            }
+                    @Override
+                    public int getTotalSamples() {
+                        return inputPoints.size();
+                    }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return MetricTransformation2DRobustEstimator.MINIMUM_SIZE;
-                            }
+                    @Override
+                    public int getSubsetSize() {
+                        return MetricTransformation2DRobustEstimator.MINIMUM_SIZE;
+                    }
 
-                            @SuppressWarnings("DuplicatedCode")
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<MetricTransformation2D> solutions) {
-                                mSubsetInputPoints.clear();
-                                mSubsetOutputPoints.clear();
-                                for (final int samplesIndex : samplesIndices) {
-                                    mSubsetInputPoints.add(mInputPoints.get(samplesIndex));
-                                    mSubsetOutputPoints.add(mOutputPoints.get(
-                                            samplesIndex));
-                                }
+                    @SuppressWarnings("DuplicatedCode")
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List<MetricTransformation2D> solutions) {
+                        subsetInputPoints.clear();
+                        subsetOutputPoints.clear();
+                        for (final var samplesIndex : samplesIndices) {
+                            subsetInputPoints.add(inputPoints.get(samplesIndex));
+                            subsetOutputPoints.add(outputPoints.get(samplesIndex));
+                        }
 
-                                try {
-                                    mNonRobustEstimator.setPoints(mSubsetInputPoints,
-                                            mSubsetOutputPoints);
-                                    solutions.add(mNonRobustEstimator.estimate());
-                                } catch (final Exception e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                        try {
+                            nonRobustEstimator.setPoints(subsetInputPoints, subsetOutputPoints);
+                            solutions.add(nonRobustEstimator.estimate());
+                        } catch (final Exception e) {
+                            // if points are coincident, no solution is added
+                        }
+                    }
 
-                            @Override
-                            public double computeResidual(
-                                    final MetricTransformation2D currentEstimation, final int i) {
-                                final Point2D inputPoint = mInputPoints.get(i);
-                                final Point2D outputPoint = mOutputPoints.get(i);
+                    @Override
+                    public double computeResidual(final MetricTransformation2D currentEstimation, final int i) {
+                        final var inputPoint = inputPoints.get(i);
+                        final var outputPoint = outputPoints.get(i);
 
-                                // transform input point and store result in mTestPoint
-                                currentEstimation.transform(inputPoint, mTestPoint);
+                        // transform input point and store result in mTestPoint
+                        currentEstimation.transform(inputPoint, testPoint);
 
-                                return outputPoint.distanceTo(mTestPoint);
-                            }
+                        return outputPoint.distanceTo(testPoint);
+                    }
 
-                            @Override
-                            public boolean isReady() {
-                                return PROMedSMetricTransformation2DRobustEstimator.this.
-                                        isReady();
-                            }
+                    @Override
+                    public boolean isReady() {
+                        return PROMedSMetricTransformation2DRobustEstimator.this.isReady();
+                    }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<MetricTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            PROMedSMetricTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateStart(final RobustEstimator<MetricTransformation2D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateStart(PROMedSMetricTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<MetricTransformation2D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            PROMedSMetricTransformation2DRobustEstimator.this);
-                                }
-                            }
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator<MetricTransformation2D> estimator) {
+                        if (listener != null) {
+                            listener.onEstimateEnd(PROMedSMetricTransformation2DRobustEstimator.this);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<MetricTransformation2D> estimator,
-                                    final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            PROMedSMetricTransformation2DRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator<MetricTransformation2D> estimator, final int iteration) {
+                        if (listener != null) {
+                            listener.onEstimateNextIteration(
+                                    PROMedSMetricTransformation2DRobustEstimator.this, iteration);
+                        }
+                    }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<MetricTransformation2D> estimator,
-                                    final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            PROMedSMetricTransformation2DRobustEstimator.this,
-                                            progress);
-                                }
-                            }
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator<MetricTransformation2D> estimator, final float progress) {
+                        if (listener != null) {
+                            listener.onEstimateProgressChange(
+                                    PROMedSMetricTransformation2DRobustEstimator.this, progress);
+                        }
+                    }
 
-                            @Override
-                            public double[] getQualityScores() {
-                                return mQualityScores;
-                            }
-                        });
+                    @Override
+                    public double[] getQualityScores() {
+                        return qualityScores;
+                    }
+                });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final MetricTransformation2D transformation = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var transformation = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(transformation);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -694,8 +664,7 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        final PROMedSRobustEstimator.PROMedSInliersData inliersData =
-                (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
+        final var inliersData = (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
         return inliersData.getEstimatedThreshold();
     }
 
@@ -713,6 +682,6 @@ public class PROMedSMetricTransformation2DRobustEstimator extends
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

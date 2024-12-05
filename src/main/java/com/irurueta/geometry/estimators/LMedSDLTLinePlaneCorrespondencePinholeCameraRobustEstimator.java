@@ -74,14 +74,14 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Constructor.
      */
     public LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -101,7 +101,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
     public LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             final List<Plane> planes, final List<Line2D> lines) {
         super(planes, lines);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -113,7 +113,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
     public LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
             final PinholeCameraRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -133,10 +133,9 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
      *                                  size or their size is smaller than required minimum size (4 matches).
      */
     public LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
-            final PinholeCameraRobustEstimatorListener listener,
-            final List<Plane> planes, final List<Line2D> lines) {
+            final PinholeCameraRobustEstimatorListener listener, final List<Plane> planes, final List<Line2D> lines) {
         super(listener, planes, lines);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -159,7 +158,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -192,7 +191,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -209,8 +208,7 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public PinholeCamera estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public PinholeCamera estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -219,161 +217,130 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
         }
 
         // pinhole camera estimator using DLT (Direct Linear Transform) algorithm
-        final DLTLinePlaneCorrespondencePinholeCameraEstimator nonRobustEstimator =
-                new DLTLinePlaneCorrespondencePinholeCameraEstimator();
+        final var nonRobustEstimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator();
 
         nonRobustEstimator.setLMSESolutionAllowed(false);
 
         // suggestions
-        nonRobustEstimator.setSuggestSkewnessValueEnabled(
-                isSuggestSkewnessValueEnabled());
-        nonRobustEstimator.setSuggestedSkewnessValue(
-                getSuggestedSkewnessValue());
-        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(
-                isSuggestHorizontalFocalLengthEnabled());
-        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(
-                getSuggestedHorizontalFocalLengthValue());
-        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(
-                isSuggestVerticalFocalLengthEnabled());
-        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(
-                getSuggestedVerticalFocalLengthValue());
-        nonRobustEstimator.setSuggestAspectRatioEnabled(
-                isSuggestAspectRatioEnabled());
-        nonRobustEstimator.setSuggestedAspectRatioValue(
-                getSuggestedAspectRatioValue());
-        nonRobustEstimator.setSuggestPrincipalPointEnabled(
-                isSuggestPrincipalPointEnabled());
-        nonRobustEstimator.setSuggestedPrincipalPointValue(
-                getSuggestedPrincipalPointValue());
-        nonRobustEstimator.setSuggestRotationEnabled(
-                isSuggestRotationEnabled());
-        nonRobustEstimator.setSuggestedRotationValue(
-                getSuggestedRotationValue());
-        nonRobustEstimator.setSuggestCenterEnabled(
-                isSuggestCenterEnabled());
-        nonRobustEstimator.setSuggestedCenterValue(
-                getSuggestedCenterValue());
+        nonRobustEstimator.setSuggestSkewnessValueEnabled(isSuggestSkewnessValueEnabled());
+        nonRobustEstimator.setSuggestedSkewnessValue(getSuggestedSkewnessValue());
+        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(isSuggestHorizontalFocalLengthEnabled());
+        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(getSuggestedHorizontalFocalLengthValue());
+        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(isSuggestVerticalFocalLengthEnabled());
+        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(getSuggestedVerticalFocalLengthValue());
+        nonRobustEstimator.setSuggestAspectRatioEnabled(isSuggestAspectRatioEnabled());
+        nonRobustEstimator.setSuggestedAspectRatioValue(getSuggestedAspectRatioValue());
+        nonRobustEstimator.setSuggestPrincipalPointEnabled(isSuggestPrincipalPointEnabled());
+        nonRobustEstimator.setSuggestedPrincipalPointValue(getSuggestedPrincipalPointValue());
+        nonRobustEstimator.setSuggestRotationEnabled(isSuggestRotationEnabled());
+        nonRobustEstimator.setSuggestedRotationValue(getSuggestedRotationValue());
+        nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());
+        nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());
 
-        final LMedSRobustEstimator<PinholeCamera> innerEstimator =
-                new LMedSRobustEstimator<>(
-                        new LMedSRobustEstimatorListener<PinholeCamera>() {
+        final var innerEstimator = new LMedSRobustEstimator<>(new LMedSRobustEstimatorListener<PinholeCamera>() {
 
-                            // 3D planes for a subset of samples
-                            private final List<Plane> mSubsetPlanes = new ArrayList<>();
+            // 3D planes for a subset of samples
+            private final List<Plane> subsetPlanes = new ArrayList<>();
 
-                            // 2D lines for a subset of samples
-                            private final List<Line2D> mSubsetLines = new ArrayList<>();
+            // 2D lines for a subset of samples
+            private final List<Line2D> subsetLines = new ArrayList<>();
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPlanes.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return planes.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return LinePlaneCorrespondencePinholeCameraEstimator.
-                                        MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return LinePlaneCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<PinholeCamera> solutions) {
-                                mSubsetPlanes.clear();
-                                mSubsetPlanes.add(mPlanes.get(samplesIndices[0]));
-                                mSubsetPlanes.add(mPlanes.get(samplesIndices[1]));
-                                mSubsetPlanes.add(mPlanes.get(samplesIndices[2]));
-                                mSubsetPlanes.add(mPlanes.get(samplesIndices[3]));
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<PinholeCamera> solutions) {
+                subsetPlanes.clear();
+                subsetPlanes.add(planes.get(samplesIndices[0]));
+                subsetPlanes.add(planes.get(samplesIndices[1]));
+                subsetPlanes.add(planes.get(samplesIndices[2]));
+                subsetPlanes.add(planes.get(samplesIndices[3]));
 
-                                mSubsetLines.clear();
-                                mSubsetLines.add(mLines.get(samplesIndices[0]));
-                                mSubsetLines.add(mLines.get(samplesIndices[1]));
-                                mSubsetLines.add(mLines.get(samplesIndices[2]));
-                                mSubsetLines.add(mLines.get(samplesIndices[3]));
+                subsetLines.clear();
+                subsetLines.add(lines.get(samplesIndices[0]));
+                subsetLines.add(lines.get(samplesIndices[1]));
+                subsetLines.add(lines.get(samplesIndices[2]));
+                subsetLines.add(lines.get(samplesIndices[3]));
 
-                                try {
-                                    nonRobustEstimator.setLists(mSubsetPlanes, mSubsetLines);
+                try {
+                    nonRobustEstimator.setLists(subsetPlanes, subsetLines);
 
-                                    final PinholeCamera cam = nonRobustEstimator.estimate();
-                                    solutions.add(cam);
-                                } catch (final Exception e) {
-                                    // if lines/planes configuration is degenerate, no solution
-                                    // is added
-                                }
-                            }
+                    final var cam = nonRobustEstimator.estimate();
+                    solutions.add(cam);
+                } catch (final Exception e) {
+                    // if lines/planes configuration is degenerate, no solution
+                    // is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final PinholeCamera currentEstimation,
-                                                          final int i) {
-                                final Line2D inputLine = mLines.get(i);
-                                final Plane inputPlane = mPlanes.get(i);
+            @Override
+            public double computeResidual(final PinholeCamera currentEstimation, final int i) {
+                final var inputLine = lines.get(i);
+                final var inputPlane = planes.get(i);
 
-                                return singleBackprojectionResidual(currentEstimation,
-                                        inputLine, inputPlane);
-                            }
+                return singleBackprojectionResidual(currentEstimation, inputLine, inputPlane);
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.
-                                        this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(
-                                    final RobustEstimator<PinholeCamera> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<PinholeCamera> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(
-                                    final RobustEstimator<PinholeCamera> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(
-                                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<PinholeCamera> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<PinholeCamera> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this,
-                                            iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator<PinholeCamera> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(
+                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<PinholeCamera> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this,
-                                            progress);
-                                }
-                            }
-                        });
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator<PinholeCamera> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(
+                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, progress);
+                }
+            }
+        });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            innerEstimator.setStopThreshold(mStopThreshold);
-            final PinholeCamera result = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
-            return attemptRefine(result,
-                    nonRobustEstimator.getMaxSuggestionWeight());
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            innerEstimator.setStopThreshold(stopThreshold);
+            final var result = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
+            return attemptRefine(result, nonRobustEstimator.getMaxSuggestionWeight());
 
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -400,11 +367,10 @@ public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        final LMedSRobustEstimator.LMedSInliersData inliersData =
-                (LMedSRobustEstimator.LMedSInliersData) getInliersData();
+        final var inliersData = (LMedSRobustEstimator.LMedSInliersData) getInliersData();
 
         // avoid setting a threshold too strict
-        final double threshold = inliersData.getEstimatedThreshold();
-        return Math.max(threshold, mStopThreshold);
+        final var threshold = inliersData.getEstimatedThreshold();
+        return Math.max(threshold, stopThreshold);
     }
 }

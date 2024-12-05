@@ -15,18 +15,15 @@
  */
 package com.irurueta.geometry;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CameraTest {
+class CameraTest {
 
     @Test
-    public void testCreate() {
-        Camera c = Camera.create();
+    void testCreate() {
+        final var c = Camera.create();
         assertEquals(Camera.DEFAULT_CAMERA_TYPE, c.getType());
-
-        c = Camera.create(CameraType.PINHOLE_CAMERA);
-        assertEquals(CameraType.PINHOLE_CAMERA, c.getType());
     }
 }

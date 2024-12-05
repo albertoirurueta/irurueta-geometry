@@ -72,20 +72,20 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      * lower than the one typically used in RANSAC, and yet the algorithm could
      * still produce even smaller thresholds in estimated results.
      */
-    private double mStopThreshold;
+    private double stopThreshold;
 
     /**
      * Quality scores corresponding to each provided point.
      * The larger the score value the better the quality of the sample.
      */
-    private double[] mQualityScores;
+    private double[] qualityScores;
 
     /**
      * Constructor.
      */
     public PROMedSPoint3DRobustEstimator() {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -97,7 +97,7 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     public PROMedSPoint3DRobustEstimator(final List<Plane> planes) {
         super(planes);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -106,10 +106,9 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @param listener listener to be notified of events such as when estimation
      *                 starts, ends or its progress significantly changes.
      */
-    public PROMedSPoint3DRobustEstimator(
-            final Point3DRobustEstimatorListener listener) {
+    public PROMedSPoint3DRobustEstimator(final Point3DRobustEstimatorListener listener) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
 
@@ -122,11 +121,9 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided list of planes doesn't have
      *                                  a size greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPoint3DRobustEstimator(
-            final Point3DRobustEstimatorListener listener,
-            final List<Plane> planes) {
+    public PROMedSPoint3DRobustEstimator(final Point3DRobustEstimatorListener listener, final List<Plane> planes) {
         super(listener, planes);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
     }
 
     /**
@@ -138,7 +135,7 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     public PROMedSPoint3DRobustEstimator(final double[] qualityScores) {
         super();
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -151,15 +148,14 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      *                                  the same size as the list of provided quality scores, or it their size
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
-    public PROMedSPoint3DRobustEstimator(final List<Plane> planes,
-                                         final double[] qualityScores) {
+    public PROMedSPoint3DRobustEstimator(final List<Plane> planes, final double[] qualityScores) {
         super(planes);
 
         if (qualityScores.length != planes.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -172,11 +168,9 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      * @throws IllegalArgumentException if provided quality scores length is
      *                                  smaller than MINIMUM_SIZE (i.e. 3 planes).
      */
-    public PROMedSPoint3DRobustEstimator(
-            final Point3DRobustEstimatorListener listener,
-            final double[] qualityScores) {
+    public PROMedSPoint3DRobustEstimator(final Point3DRobustEstimatorListener listener, final double[] qualityScores) {
         super(listener);
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -193,15 +187,14 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      *                                  is not greater or equal than MINIMUM_SIZE.
      */
     public PROMedSPoint3DRobustEstimator(
-            final Point3DRobustEstimatorListener listener,
-            final List<Plane> planes, final double[] qualityScores) {
+            final Point3DRobustEstimatorListener listener, final List<Plane> planes, final double[] qualityScores) {
         super(listener, planes);
 
         if (qualityScores.length != planes.size()) {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = DEFAULT_STOP_THRESHOLD;
+        stopThreshold = DEFAULT_STOP_THRESHOLD;
         internalSetQualityScores(qualityScores);
     }
 
@@ -225,7 +218,7 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      * accuracy has been reached.
      */
     public double getStopThreshold() {
-        return mStopThreshold;
+        return stopThreshold;
     }
 
     /**
@@ -258,7 +251,7 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
             throw new IllegalArgumentException();
         }
 
-        mStopThreshold = stopThreshold;
+        this.stopThreshold = stopThreshold;
     }
 
     /**
@@ -269,7 +262,7 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     @Override
     public double[] getQualityScores() {
-        return mQualityScores;
+        return qualityScores;
     }
 
     /**
@@ -299,8 +292,7 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     @Override
     public boolean isReady() {
-        return super.isReady() && mQualityScores != null &&
-                mQualityScores.length == mPlanes.size();
+        return super.isReady() && qualityScores != null && qualityScores.length == planes.size();
     }
 
     /**
@@ -316,8 +308,7 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      *                                  (i.e. numerical instability, no solution available, etc).
      */
     @Override
-    public Point3D estimate() throws LockedException, NotReadyException,
-            RobustEstimatorException {
+    public Point3D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -325,104 +316,98 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
             throw new NotReadyException();
         }
 
-        final PROMedSRobustEstimator<Point3D> innerEstimator =
-                new PROMedSRobustEstimator<>(
-                        new PROMedSRobustEstimatorListener<Point3D>() {
+        final var innerEstimator = new PROMedSRobustEstimator<>(new PROMedSRobustEstimatorListener<Point3D>() {
 
-                            @Override
-                            public double getThreshold() {
-                                return mStopThreshold;
-                            }
+            @Override
+            public double getThreshold() {
+                return stopThreshold;
+            }
 
-                            @Override
-                            public int getTotalSamples() {
-                                return mPlanes.size();
-                            }
+            @Override
+            public int getTotalSamples() {
+                return planes.size();
+            }
 
-                            @Override
-                            public int getSubsetSize() {
-                                return Point3DRobustEstimator.MINIMUM_SIZE;
-                            }
+            @Override
+            public int getSubsetSize() {
+                return Point3DRobustEstimator.MINIMUM_SIZE;
+            }
 
-                            @Override
-                            public void estimatePreliminarSolutions(final int[] samplesIndices,
-                                                                    final List<Point3D> solutions) {
-                                final Plane plane1 = mPlanes.get(samplesIndices[0]);
-                                final Plane plane2 = mPlanes.get(samplesIndices[1]);
-                                final Plane plane3 = mPlanes.get(samplesIndices[2]);
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List<Point3D> solutions) {
+                final var plane1 = planes.get(samplesIndices[0]);
+                final var plane2 = planes.get(samplesIndices[1]);
+                final var plane3 = planes.get(samplesIndices[2]);
 
-                                try {
-                                    final Point3D point = plane1.getIntersection(plane2, plane3);
-                                    solutions.add(point);
-                                } catch (final NoIntersectionException e) {
-                                    // if points are coincident, no solution is added
-                                }
-                            }
+                try {
+                    final var point = plane1.getIntersection(plane2, plane3);
+                    solutions.add(point);
+                } catch (final NoIntersectionException e) {
+                    // if points are coincident, no solution is added
+                }
+            }
 
-                            @Override
-                            public double computeResidual(final Point3D currentEstimation, final int i) {
-                                return residual(currentEstimation, mPlanes.get(i));
-                            }
+            @Override
+            public double computeResidual(final Point3D currentEstimation, final int i) {
+                return residual(currentEstimation, planes.get(i));
+            }
 
-                            @Override
-                            public boolean isReady() {
-                                return PROMedSPoint3DRobustEstimator.this.isReady();
-                            }
+            @Override
+            public boolean isReady() {
+                return PROMedSPoint3DRobustEstimator.this.isReady();
+            }
 
-                            @Override
-                            public void onEstimateStart(final RobustEstimator<Point3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateStart(
-                                            PROMedSPoint3DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateStart(final RobustEstimator<Point3D> estimator) {
+                if (listener != null) {
+                    listener.onEstimateStart(PROMedSPoint3DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateEnd(final RobustEstimator<Point3D> estimator) {
-                                if (mListener != null) {
-                                    mListener.onEstimateEnd(PROMedSPoint3DRobustEstimator.this);
-                                }
-                            }
+            @Override
+            public void onEstimateEnd(final RobustEstimator<Point3D> estimator) {
+                if (listener != null) {
+                    listener.onEstimateEnd(PROMedSPoint3DRobustEstimator.this);
+                }
+            }
 
-                            @Override
-                            public void onEstimateNextIteration(
-                                    final RobustEstimator<Point3D> estimator, final int iteration) {
-                                if (mListener != null) {
-                                    mListener.onEstimateNextIteration(
-                                            PROMedSPoint3DRobustEstimator.this, iteration);
-                                }
-                            }
+            @Override
+            public void onEstimateNextIteration(
+                    final RobustEstimator<Point3D> estimator, final int iteration) {
+                if (listener != null) {
+                    listener.onEstimateNextIteration(PROMedSPoint3DRobustEstimator.this, iteration);
+                }
+            }
 
-                            @Override
-                            public void onEstimateProgressChange(
-                                    final RobustEstimator<Point3D> estimator, final float progress) {
-                                if (mListener != null) {
-                                    mListener.onEstimateProgressChange(
-                                            PROMedSPoint3DRobustEstimator.this, progress);
-                                }
-                            }
+            @Override
+            public void onEstimateProgressChange(
+                    final RobustEstimator<Point3D> estimator, final float progress) {
+                if (listener != null) {
+                    listener.onEstimateProgressChange(PROMedSPoint3DRobustEstimator.this, progress);
+                }
+            }
 
-                            @Override
-                            public double[] getQualityScores() {
-                                return mQualityScores;
-                            }
-                        });
+            @Override
+            public double[] getQualityScores() {
+                return qualityScores;
+            }
+        });
 
         try {
-            mLocked = true;
-            mInliersData = null;
-            innerEstimator.setConfidence(mConfidence);
-            innerEstimator.setMaxIterations(mMaxIterations);
-            innerEstimator.setProgressDelta(mProgressDelta);
-            final Point3D result = innerEstimator.estimate();
-            mInliersData = innerEstimator.getInliersData();
+            locked = true;
+            inliersData = null;
+            innerEstimator.setConfidence(confidence);
+            innerEstimator.setMaxIterations(maxIterations);
+            innerEstimator.setProgressDelta(progressDelta);
+            final var result = innerEstimator.estimate();
+            inliersData = innerEstimator.getInliersData();
             return attemptRefine(result);
         } catch (final com.irurueta.numerical.LockedException e) {
             throw new LockedException(e);
         } catch (final com.irurueta.numerical.NotReadyException e) {
             throw new NotReadyException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
     }
 
@@ -449,8 +434,7 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
      */
     @Override
     protected double getRefinementStandardDeviation() {
-        final PROMedSRobustEstimator.PROMedSInliersData inliersData =
-                (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
+        final var inliersData = (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();
         return inliersData.getEstimatedThreshold();
     }
 
@@ -468,6 +452,6 @@ public class PROMedSPoint3DRobustEstimator extends Point3DRobustEstimator {
             throw new IllegalArgumentException();
         }
 
-        mQualityScores = qualityScores;
+        this.qualityScores = qualityScores;
     }
 }

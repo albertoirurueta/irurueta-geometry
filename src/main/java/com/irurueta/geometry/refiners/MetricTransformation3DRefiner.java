@@ -21,7 +21,6 @@ import com.irurueta.geometry.estimators.LockedException;
 import com.irurueta.geometry.estimators.NotReadyException;
 import com.irurueta.numerical.EvaluationException;
 import com.irurueta.numerical.GradientEstimator;
-import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
 import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
 import com.irurueta.numerical.robust.InliersData;
@@ -39,19 +38,17 @@ import java.util.List;
  */
 @SuppressWarnings("DuplicatedCode")
 public class MetricTransformation3DRefiner extends
-        PairMatchesAndInliersDataRefiner<MetricTransformation3D, Point3D,
-                Point3D> {
+        PairMatchesAndInliersDataRefiner<MetricTransformation3D, Point3D, Point3D> {
 
     /**
      * Point to be reused when computing residuals.
      */
-    private final Point3D mResidualTestPoint = Point3D.create(
-            CoordinatesType.HOMOGENEOUS_COORDINATES);
+    private final Point3D residualTestPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
     /**
      * Quaternion to be reused for refinement computations.
      */
-    private Quaternion mQuaternion = new Quaternion();
+    private Quaternion quaternion = new Quaternion();
 
     /**
      * Standard deviation used for Levenberg-Marquardt fitting during
@@ -62,7 +59,7 @@ public class MetricTransformation3DRefiner extends
      * estimation, since residuals of found inliers are within the range of
      * such threshold.
      */
-    private double mRefinementStandardDeviation;
+    private double refinementStandardDeviation;
 
     /**
      * Constructor.
@@ -87,11 +84,9 @@ public class MetricTransformation3DRefiner extends
     public MetricTransformation3DRefiner(
             final MetricTransformation3D initialEstimation, final boolean keepCovariance,
             final BitSet inliers, final double[] residuals, final int numInliers,
-            final List<Point3D> samples1, final List<Point3D> samples2,
-            final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliers, residuals, numInliers,
-                samples1, samples2);
-        mRefinementStandardDeviation = refinementStandardDeviation;
+            final List<Point3D> samples1, final List<Point3D> samples2, final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2);
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -109,11 +104,10 @@ public class MetricTransformation3DRefiner extends
      */
     public MetricTransformation3DRefiner(
             final MetricTransformation3D initialEstimation, final boolean keepCovariance,
-            final InliersData inliersData, final List<Point3D> samples1,
-            final List<Point3D> samples2, final double refinementStandardDeviation) {
-        super(initialEstimation, keepCovariance, inliersData, samples1,
-                samples2);
-        mRefinementStandardDeviation = refinementStandardDeviation;
+            final InliersData inliersData, final List<Point3D> samples1, final List<Point3D> samples2,
+            final double refinementStandardDeviation) {
+        super(initialEstimation, keepCovariance, inliersData, samples1, samples2);
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -128,7 +122,7 @@ public class MetricTransformation3DRefiner extends
      * @return standard deviation used for refinement.
      */
     public double getRefinementStandardDeviation() {
-        return mRefinementStandardDeviation;
+        return refinementStandardDeviation;
     }
 
     /**
@@ -144,12 +138,11 @@ public class MetricTransformation3DRefiner extends
      *                                    refinement.
      * @throws LockedException if estimator is locked.
      */
-    public void setRefinementStandardDeviation(
-            final double refinementStandardDeviation) throws LockedException {
+    public void setRefinementStandardDeviation(final double refinementStandardDeviation) throws LockedException {
         if (isLocked()) {
             throw new LockedException();
         }
-        mRefinementStandardDeviation = refinementStandardDeviation;
+        this.refinementStandardDeviation = refinementStandardDeviation;
     }
 
     /**
@@ -163,9 +156,8 @@ public class MetricTransformation3DRefiner extends
      *                           to converge to a result).
      */
     @Override
-    public MetricTransformation3D refine() throws NotReadyException,
-            LockedException, RefinerException {
-        final MetricTransformation3D result = new MetricTransformation3D();
+    public MetricTransformation3D refine() throws NotReadyException, LockedException, RefinerException {
+        final var result = new MetricTransformation3D();
         refine(result);
         return result;
     }
@@ -185,8 +177,8 @@ public class MetricTransformation3DRefiner extends
      *                           to converge to a result).
      */
     @Override
-    public boolean refine(final MetricTransformation3D result)
-            throws NotReadyException, LockedException, RefinerException {
+    public boolean refine(final MetricTransformation3D result) throws NotReadyException, LockedException,
+            RefinerException {
         if (isLocked()) {
             throw new LockedException();
         }
@@ -194,53 +186,48 @@ public class MetricTransformation3DRefiner extends
             throw new NotReadyException();
         }
 
-        mLocked = true;
+        locked = true;
 
-        if (mListener != null) {
-            mListener.onRefineStart(this, mInitialEstimation);
+        if (listener != null) {
+            listener.onRefineStart(this, initialEstimation);
         }
 
-        final double initialTotalResidual = totalResidual(mInitialEstimation);
+        final var initialTotalResidual = totalResidual(initialEstimation);
 
         try {
             // parameters: rotation angle + scale + translation
-            final double[] initParams = new double[1 + Quaternion.N_PARAMS +
-                    EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
+            final var initParams = new double[1 + Quaternion.N_PARAMS
+                    + EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
             // copy rotation values
-            if (mInitialEstimation.getRotation().getType() ==
-                    Rotation3DType.QUATERNION) {
-                mQuaternion = (Quaternion) mInitialEstimation.getRotation();
+            if (initialEstimation.getRotation().getType() == Rotation3DType.QUATERNION) {
+                quaternion = (Quaternion) initialEstimation.getRotation();
             } else {
-                mQuaternion = mInitialEstimation.getRotation().toQuaternion();
+                quaternion = initialEstimation.getRotation().toQuaternion();
             }
-            mQuaternion.normalize();
+            quaternion.normalize();
 
             // copy values
-            initParams[0] = mInitialEstimation.getScale();
-            initParams[1] = mQuaternion.getA();
-            initParams[2] = mQuaternion.getB();
-            initParams[3] = mQuaternion.getC();
-            initParams[4] = mQuaternion.getD();
+            initParams[0] = initialEstimation.getScale();
+            initParams[1] = quaternion.getA();
+            initParams[2] = quaternion.getB();
+            initParams[3] = quaternion.getC();
+            initParams[4] = quaternion.getD();
 
-            System.arraycopy(mInitialEstimation.getTranslation(), 0, initParams,
-                    Quaternion.N_PARAMS + 1,
+            System.arraycopy(initialEstimation.getTranslation(), 0, initParams, Quaternion.N_PARAMS + 1,
                     EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
 
             // output values to be fitted/optimized will contain residuals
-            final double[] y = new double[mNumInliers];
+            final var y = new double[numInliers];
             // input values will contain 2 sets of 2D points to compute residuals
-            final int nDims =
-                    2 * Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
-            final Matrix x = new Matrix(mNumInliers, nDims);
-            final int nSamples = mInliers.length();
-            int pos = 0;
-            Point3D inputPoint;
-            Point3D outputPoint;
-            for (int i = 0; i < nSamples; i++) {
-                if (mInliers.get(i)) {
+            final var nDims = 2 * Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;
+            final var x = new Matrix(numInliers, nDims);
+            final var nSamples = inliers.length();
+            var pos = 0;
+            for (var i = 0; i < nSamples; i++) {
+                if (inliers.get(i)) {
                     // sample is inlier
-                    inputPoint = mSamples1.get(i);
-                    outputPoint = mSamples2.get(i);
+                    final var inputPoint = samples1.get(i);
+                    final var outputPoint = samples2.get(i);
                     inputPoint.normalize();
                     outputPoint.normalize();
                     x.setElementAt(pos, 0, inputPoint.getHomX());
@@ -252,114 +239,96 @@ public class MetricTransformation3DRefiner extends
                     x.setElementAt(pos, 6, outputPoint.getHomZ());
                     x.setElementAt(pos, 7, outputPoint.getHomW());
 
-                    y[pos] = mResiduals[i];
+                    y[pos] = residuals[i];
                     pos++;
                 }
             }
 
-            final LevenbergMarquardtMultiDimensionFunctionEvaluator evaluator =
-                    new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
+            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {
 
-                        private final Point3D mInputPoint = Point3D.create(
-                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+                private final Point3D inputPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                        private final Point3D mOutputPoint = Point3D.create(
-                                CoordinatesType.HOMOGENEOUS_COORDINATES);
+                private final Point3D outputPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);
 
-                        private final MetricTransformation3D mTransformation =
-                                new MetricTransformation3D();
+                private final MetricTransformation3D transformation = new MetricTransformation3D();
 
-                        private final GradientEstimator mGradientEstimator =
-                                new GradientEstimator(
-                                        new MultiDimensionFunctionEvaluatorListener() {
-                                            @Override
-                                            public double evaluate(final double[] params) {
-                                                // copy values
-                                                mTransformation.setScale(params[0]);
-                                                mQuaternion.setA(params[1]);
-                                                mQuaternion.setB(params[2]);
-                                                mQuaternion.setC(params[3]);
-                                                mQuaternion.setD(params[4]);
-                                                mTransformation.setRotation(mQuaternion);
+                private final GradientEstimator gradientEstimator = new GradientEstimator(params -> {
+                    // copy values
+                    transformation.setScale(params[0]);
+                    quaternion.setA(params[1]);
+                    quaternion.setB(params[2]);
+                    quaternion.setC(params[3]);
+                    quaternion.setD(params[4]);
+                    transformation.setRotation(quaternion);
 
-                                                System.arraycopy(params, 1 + Quaternion.N_PARAMS,
-                                                        mTransformation.getTranslation(), 0,
-                                                        EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
+                    System.arraycopy(params, 1 + Quaternion.N_PARAMS, transformation.getTranslation(), 0,
+                            EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
 
-                                                return residual(mTransformation, mInputPoint,
-                                                        mOutputPoint);
-                                            }
-                                        });
+                    return residual(transformation, inputPoint, outputPoint);
+                });
 
-                        @Override
-                        public int getNumberOfDimensions() {
-                            return nDims;
-                        }
+                @Override
+                public int getNumberOfDimensions() {
+                    return nDims;
+                }
 
-                        @Override
-                        public double[] createInitialParametersArray() {
-                            return initParams;
-                        }
+                @Override
+                public double[] createInitialParametersArray() {
+                    return initParams;
+                }
 
-                        @Override
-                        public double evaluate(final int i, final double[] point, final double[] params,
-                                               final double[] derivatives) throws EvaluationException {
-                            mInputPoint.setHomogeneousCoordinates(point[0], point[1],
-                                    point[2], point[3]);
-                            mOutputPoint.setHomogeneousCoordinates(point[4], point[5],
-                                    point[6], point[7]);
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+                    inputPoint.setHomogeneousCoordinates(point[0], point[1], point[2], point[3]);
+                    outputPoint.setHomogeneousCoordinates(point[4], point[5], point[6], point[7]);
 
-                            // copy values
-                            mTransformation.setScale(params[0]);
-                            mQuaternion.setA(params[1]);
-                            mQuaternion.setB(params[2]);
-                            mQuaternion.setC(params[3]);
-                            mQuaternion.setD(params[4]);
-                            mTransformation.setRotation(mQuaternion);
+                    // copy values
+                    transformation.setScale(params[0]);
+                    quaternion.setA(params[1]);
+                    quaternion.setB(params[2]);
+                    quaternion.setC(params[3]);
+                    quaternion.setD(params[4]);
+                    transformation.setRotation(quaternion);
 
-                            System.arraycopy(params, 1 + Quaternion.N_PARAMS,
-                                    mTransformation.getTranslation(), 0,
-                                    EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
+                    System.arraycopy(params, 1 + Quaternion.N_PARAMS, transformation.getTranslation(), 0,
+                            EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
 
-                            final double y = residual(mTransformation, mInputPoint,
-                                    mOutputPoint);
-                            mGradientEstimator.gradient(params, derivatives);
+                    final var y = residual(transformation, inputPoint, outputPoint);
+                    gradientEstimator.gradient(params, derivatives);
 
-                            return y;
-                        }
-                    };
+                    return y;
+                }
+            };
 
-            final LevenbergMarquardtMultiDimensionFitter fitter =
-                    new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
-                            getRefinementStandardDeviation());
+            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,
+                    getRefinementStandardDeviation());
 
             fitter.fit();
 
             // obtain estimated params
-            final double[] params = fitter.getA();
+            final var params = fitter.getA();
 
             // update transformation
             result.setScale(params[0]);
-            mQuaternion.setA(params[1]);
-            mQuaternion.setB(params[2]);
-            mQuaternion.setC(params[3]);
-            mQuaternion.setD(params[4]);
-            result.setRotation(mQuaternion);
-            System.arraycopy(params, 1 + Quaternion.N_PARAMS,
-                    result.getTranslation(), 0,
+            quaternion.setA(params[1]);
+            quaternion.setB(params[2]);
+            quaternion.setC(params[3]);
+            quaternion.setD(params[4]);
+            result.setRotation(quaternion);
+            System.arraycopy(params, 1 + Quaternion.N_PARAMS, result.getTranslation(), 0,
                     EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
 
-            if (mKeepCovariance) {
+            if (keepCovariance) {
                 // keep covariance
-                mCovariance = fitter.getCovar();
+                covariance = fitter.getCovar();
             }
 
-            final double finalTotalResidual = totalResidual(result);
-            final boolean errorDecreased = finalTotalResidual < initialTotalResidual;
+            final var finalTotalResidual = totalResidual(result);
+            final var errorDecreased = finalTotalResidual < initialTotalResidual;
 
-            if (mListener != null) {
-                mListener.onRefineEnd(this, mInitialEstimation, result,
-                        errorDecreased);
+            if (listener != null) {
+                listener.onRefineEnd(this, initialEstimation, result, errorDecreased);
             }
 
             return errorDecreased;
@@ -367,9 +336,8 @@ public class MetricTransformation3DRefiner extends
         } catch (final Exception e) {
             throw new RefinerException(e);
         } finally {
-            mLocked = false;
+            locked = false;
         }
-
     }
 
     /**
@@ -381,13 +349,13 @@ public class MetricTransformation3DRefiner extends
      * @param outputPoint    output 3D point.
      * @return residual.
      */
-    private double residual(final MetricTransformation3D transformation,
-                            final Point3D inputPoint, final Point3D outputPoint) {
+    private double residual(final MetricTransformation3D transformation, final Point3D inputPoint,
+                            final Point3D outputPoint) {
         inputPoint.normalize();
         outputPoint.normalize();
 
-        transformation.transform(inputPoint, mResidualTestPoint);
-        return mResidualTestPoint.distanceTo(outputPoint);
+        transformation.transform(inputPoint, residualTestPoint);
+        return residualTestPoint.distanceTo(outputPoint);
     }
 
     /**
@@ -397,16 +365,14 @@ public class MetricTransformation3DRefiner extends
      * @return total residual.
      */
     private double totalResidual(final MetricTransformation3D transformation) {
-        double result = 0.0;
+        var result = 0.0;
 
-        final int nSamples = mInliers.length();
-        Point3D inputPoint;
-        Point3D outputPoint;
-        for (int i = 0; i < nSamples; i++) {
-            if (mInliers.get(i)) {
+        final var nSamples = inliers.length();
+        for (var i = 0; i < nSamples; i++) {
+            if (inliers.get(i)) {
                 // sample is inlier
-                inputPoint = mSamples1.get(i);
-                outputPoint = mSamples2.get(i);
+                final var inputPoint = samples1.get(i);
+                final var outputPoint = samples2.get(i);
                 inputPoint.normalize();
                 outputPoint.normalize();
                 result += residual(transformation, inputPoint, outputPoint);
