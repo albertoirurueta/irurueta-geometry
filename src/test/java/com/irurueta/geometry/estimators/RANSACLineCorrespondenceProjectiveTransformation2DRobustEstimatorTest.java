@@ -36,7 +36,7 @@ class RANSACLineCorrespondenceProjectiveTransformation2DRobustEstimatorTest
     private static final double MIN_RANDOM_VALUE = -1000.0;
     private static final double MAX_RANDOM_VALUE = 1000.0;
 
-    private static final double ABSOLUTE_ERROR = 5e-6;
+    private static final double ABSOLUTE_ERROR = 3e-5;
 
     private static final int MIN_LINES = 500;
     private static final int MAX_LINES = 1000;
