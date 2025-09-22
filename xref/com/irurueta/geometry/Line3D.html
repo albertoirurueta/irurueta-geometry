@@ -1,0 +1,385 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="" lang="">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Line3D xref</title>
+<link type="text/css" rel="stylesheet" href="../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../apidocs/com/irurueta/geometry/Line3D.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   <em class="jxr_comment"> * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)</em>
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <em class="jxr_comment"> * Licensed under the Apache License, Version 2.0 (the "License");</em>
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <em class="jxr_comment"> * you may not use this file except in compliance with the License.</em>
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <em class="jxr_comment"> * You may obtain a copy of the License at</em>
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_comment"> *         <a href="http://www.apache.org/licenses/LICENSE-2.0" target="alexandria_uri">http://www.apache.org/licenses/LICENSE-2.0</a></em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_comment"> *</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_comment"> * Unless required by applicable law or agreed to in writing, software</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_comment"> * distributed under the License is distributed on an "AS IS" BASIS,</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</em>
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_comment"> * See the License for the specific language governing permissions and</em>
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <em class="jxr_comment"> * limitations under the License.</em>
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <em class="jxr_comment"> */</em>
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">package</strong> com.irurueta.geometry;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> com.irurueta.algebra.AlgebraException;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> com.irurueta.algebra.Matrix;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> com.irurueta.algebra.SingularValueDecomposer;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> com.irurueta.algebra.Utils;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> java.io.Serializable;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> * This class defines a lines in 3D space.</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_javadoccomment"> * A line in 3D space is defined as the intersection of two non-parallel planes.</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a name="Line3D" href="../../../com/irurueta/geometry/Line3D.html#Line3D">Line3D</a> <strong class="jxr_keyword">implements</strong> Serializable {
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <em class="jxr_javadoccomment">     * Positive threshold determine whether points lay inside (is locus) of a</em>
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <em class="jxr_javadoccomment">     * given line or not.</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> DEFAULT_LOCUS_THRESHOLD = 1e-12;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  <em class="jxr_javadoccomment">     * Minimum allowed threshold</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> MIN_THRESHOLD = 0.0;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  <em class="jxr_javadoccomment">     * Constant defining the size of vector that define the direction of a line</em>
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>      <strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> INHOM_VECTOR_SIZE = 3;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <em class="jxr_javadoccomment">     * 1st plane forming this 3D line.</em>
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>      <strong class="jxr_keyword">private</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> plane1;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  <em class="jxr_javadoccomment">     * 2nd plane forming this 3D line.</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>      <strong class="jxr_keyword">private</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> plane2;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  <em class="jxr_javadoccomment">     * Constructor.</em>
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  <em class="jxr_javadoccomment">     * Sets planes intersecting into this 3D line.</em>
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  <em class="jxr_javadoccomment">     * @param plane1 1st plane.</em>
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  <em class="jxr_javadoccomment">     * @param plane2 2nd plane.</em>
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  <em class="jxr_javadoccomment">     * @throws CoincidentPlanesException Raised if provided planes are</em>
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  <em class="jxr_javadoccomment">     *                                   coincident and hence never intersect. Notice that parallel planes are</em>
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  <em class="jxr_javadoccomment">     *                                   not coincident and they intersect at infinity.</em>
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>      <strong class="jxr_keyword">public</strong> <a name="Line3D" href="../../../com/irurueta/geometry/Line3D.html#Line3D">Line3D</a>(<strong class="jxr_keyword">final</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> plane1, <strong class="jxr_keyword">final</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> plane2) <strong class="jxr_keyword">throws</strong> <a name="CoincidentPlanesException" href="../../../com/irurueta/geometry/CoincidentPlanesException.html#CoincidentPlanesException">CoincidentPlanesException</a> {
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          setPlanes(plane1, plane2);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>      }
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  <em class="jxr_javadoccomment">     * Constructor.</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  <em class="jxr_javadoccomment">     * Builds a 3D line passing through provided 2 points.</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  <em class="jxr_javadoccomment">     * @param point1 1st point.</em>
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  <em class="jxr_javadoccomment">     * @param point2 2nd point.</em>
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  <em class="jxr_javadoccomment">     * @throws CoincidentPointsException Raised if provided points are</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  <em class="jxr_javadoccomment">     *                                   considered to be equal.</em>
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>      <strong class="jxr_keyword">public</strong> <a name="Line3D" href="../../../com/irurueta/geometry/Line3D.html#Line3D">Line3D</a>(<strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> point1, <strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> point2) <strong class="jxr_keyword">throws</strong> <a name="CoincidentPointsException" href="../../../com/irurueta/geometry/CoincidentPointsException.html#CoincidentPointsException">CoincidentPointsException</a> {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>          setPlanesFromPoints(point1, point2);
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>      }
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  <em class="jxr_javadoccomment">     * Determines whether provided planes are coincident.</em>
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  <em class="jxr_javadoccomment">     * Two planes are considered coincident if they are equal up to scale.</em>
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  <em class="jxr_javadoccomment">     * @param plane1 1st plane.</em>
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  <em class="jxr_javadoccomment">     * @param plane2 2nd plane.</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  <em class="jxr_javadoccomment">     * @return True if planes are coincident, false otherwise.</em>
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> areCoincidentPlanes(<strong class="jxr_keyword">final</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> plane1, <strong class="jxr_keyword">final</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> plane2) {
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>          <em class="jxr_comment">// normalize planes to increase accuracy</em>
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>          plane1.normalize();
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>          plane2.normalize();
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>          <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>              <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> Matrix(2, Plane.PLANE_NUMBER_PARAMS);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>              m.setElementAt(0, 0, plane1.getA());
+<a class="jxr_linenumber" name="L100" href="#L100">100</a>             m.setElementAt(0, 1, plane1.getB());
+<a class="jxr_linenumber" name="L101" href="#L101">101</a>             m.setElementAt(0, 2, plane1.getC());
+<a class="jxr_linenumber" name="L102" href="#L102">102</a>             m.setElementAt(0, 3, plane1.getD());
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 
+<a class="jxr_linenumber" name="L104" href="#L104">104</a>             m.setElementAt(1, 0, plane2.getA());
+<a class="jxr_linenumber" name="L105" href="#L105">105</a>             m.setElementAt(1, 1, plane2.getB());
+<a class="jxr_linenumber" name="L106" href="#L106">106</a>             m.setElementAt(1, 2, plane2.getC());
+<a class="jxr_linenumber" name="L107" href="#L107">107</a>             m.setElementAt(1, 3, plane2.getD());
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 
+<a class="jxr_linenumber" name="L109" href="#L109">109</a>             <em class="jxr_comment">// check that matrix rank is 2 (and its nullity is also 2), in that</em>
+<a class="jxr_linenumber" name="L110" href="#L110">110</a>             <em class="jxr_comment">// case its right null-space has dimension two, which is linear</em>
+<a class="jxr_linenumber" name="L111" href="#L111">111</a>             <em class="jxr_comment">// combination of two 3D points (a line in 3D), and line is defined.</em>
+<a class="jxr_linenumber" name="L112" href="#L112">112</a>             <em class="jxr_comment">// Note that rank cannot be greater than 2 because matrix m has only</em>
+<a class="jxr_linenumber" name="L113" href="#L113">113</a>             <em class="jxr_comment">// 2 rows.</em>
+<a class="jxr_linenumber" name="L114" href="#L114">114</a>             <em class="jxr_comment">// If rank is smaller than 2, then the 2 planes are parallel, and the</em>
+<a class="jxr_linenumber" name="L115" href="#L115">115</a>             <em class="jxr_comment">// null-space has at least dimension 3, which is a perpendicular</em>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a>             <em class="jxr_comment">// plane or the whole space (Depending whether nullity is 3 or 4)</em>
+<a class="jxr_linenumber" name="L117" href="#L117">117</a>             <strong class="jxr_keyword">return</strong> Utils.rank(m) &lt; 2;
+<a class="jxr_linenumber" name="L118" href="#L118">118</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> AlgebraException e) {
+<a class="jxr_linenumber" name="L119" href="#L119">119</a>             <em class="jxr_comment">// if for numerical reasons it cannot be determined whether planes</em>
+<a class="jxr_linenumber" name="L120" href="#L120">120</a>             <em class="jxr_comment">// are parallel, it will be assumed the worst case, which is that</em>
+<a class="jxr_linenumber" name="L121" href="#L121">121</a>             <em class="jxr_comment">// planes are parallel, which is something common for very large</em>
+<a class="jxr_linenumber" name="L122" href="#L122">122</a>             <em class="jxr_comment">// values or planes close at infinity</em>
+<a class="jxr_linenumber" name="L123" href="#L123">123</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L124" href="#L124">124</a>         }
+<a class="jxr_linenumber" name="L125" href="#L125">125</a>     }
+<a class="jxr_linenumber" name="L126" href="#L126">126</a> 
+<a class="jxr_linenumber" name="L127" href="#L127">127</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L128" href="#L128">128</a> <em class="jxr_javadoccomment">     * Sets intersecting planes for this 3D line.</em>
+<a class="jxr_linenumber" name="L129" href="#L129">129</a> <em class="jxr_javadoccomment">     * The intersection of provided planes will determine this 3D line.</em>
+<a class="jxr_linenumber" name="L130" href="#L130">130</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L131" href="#L131">131</a> <em class="jxr_javadoccomment">     * @param plane1 1st plane.</em>
+<a class="jxr_linenumber" name="L132" href="#L132">132</a> <em class="jxr_javadoccomment">     * @param plane2 2nd plane.</em>
+<a class="jxr_linenumber" name="L133" href="#L133">133</a> <em class="jxr_javadoccomment">     * @throws CoincidentPlanesException Raised if provided planes are</em>
+<a class="jxr_linenumber" name="L134" href="#L134">134</a> <em class="jxr_javadoccomment">     *                                   coincident. Notice that parallel planes are not coincident and they</em>
+<a class="jxr_linenumber" name="L135" href="#L135">135</a> <em class="jxr_javadoccomment">     *                                   intersect at infinity.</em>
+<a class="jxr_linenumber" name="L136" href="#L136">136</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L137" href="#L137">137</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setPlanes(<strong class="jxr_keyword">final</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> plane1, <strong class="jxr_keyword">final</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> plane2) <strong class="jxr_keyword">throws</strong> <a name="CoincidentPlanesException" href="../../../com/irurueta/geometry/CoincidentPlanesException.html#CoincidentPlanesException">CoincidentPlanesException</a> {
+<a class="jxr_linenumber" name="L138" href="#L138">138</a>         <strong class="jxr_keyword">if</strong> (areCoincidentPlanes(plane1, plane2)) {
+<a class="jxr_linenumber" name="L139" href="#L139">139</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="CoincidentPlanesException" href="../../../com/irurueta/geometry/CoincidentPlanesException.html#CoincidentPlanesException">CoincidentPlanesException</a>();
+<a class="jxr_linenumber" name="L140" href="#L140">140</a>         }
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 
+<a class="jxr_linenumber" name="L142" href="#L142">142</a>         <strong class="jxr_keyword">this</strong>.plane1 = plane1;
+<a class="jxr_linenumber" name="L143" href="#L143">143</a>         <strong class="jxr_keyword">this</strong>.plane2 = plane2;
+<a class="jxr_linenumber" name="L144" href="#L144">144</a>     }
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 
+<a class="jxr_linenumber" name="L146" href="#L146">146</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> <em class="jxr_javadoccomment">     * Sets planes of this 3D line so that it passes through provided points.</em>
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> <em class="jxr_javadoccomment">     * @param point1 1st point.</em>
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> <em class="jxr_javadoccomment">     * @param point2 2nd point.</em>
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> <em class="jxr_javadoccomment">     * @throws CoincidentPointsException Raised if provided points are equal</em>
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> <em class="jxr_javadoccomment">     *                                   and hence a line cannot be determined.</em>
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L154" href="#L154">154</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">void</strong> setPlanesFromPoints(<strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> point1, <strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> point2) <strong class="jxr_keyword">throws</strong> <a name="CoincidentPointsException" href="../../../com/irurueta/geometry/CoincidentPointsException.html#CoincidentPointsException">CoincidentPointsException</a> {
+<a class="jxr_linenumber" name="L155" href="#L155">155</a>         <em class="jxr_comment">// build matrix containing director vector on a row</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> m = <strong class="jxr_keyword">new</strong> Matrix(1, INHOM_VECTOR_SIZE);
+<a class="jxr_linenumber" name="L158" href="#L158">158</a>             m.setElementAt(0, 0, point2.getInhomX() - point1.getInhomX());
+<a class="jxr_linenumber" name="L159" href="#L159">159</a>             m.setElementAt(0, 1, point2.getInhomY() - point1.getInhomY());
+<a class="jxr_linenumber" name="L160" href="#L160">160</a>             m.setElementAt(0, 2, point2.getInhomZ() - point1.getInhomZ());
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 
+<a class="jxr_linenumber" name="L162" href="#L162">162</a>             <em class="jxr_comment">// m matrix will have rank 1 and nullity 2. The null-space will be</em>
+<a class="jxr_linenumber" name="L163" href="#L163">163</a>             <em class="jxr_comment">// formed by two vectors perpendicular to the director vector</em>
+<a class="jxr_linenumber" name="L164" href="#L164">164</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> decomposer = <strong class="jxr_keyword">new</strong> SingularValueDecomposer(m);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a>             decomposer.decompose();
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
+<a class="jxr_linenumber" name="L167" href="#L167">167</a>             <em class="jxr_comment">// check that points are not coincident, and hence all the values of</em>
+<a class="jxr_linenumber" name="L168" href="#L168">168</a>             <em class="jxr_comment">// matrix m are not zero</em>
+<a class="jxr_linenumber" name="L169" href="#L169">169</a>             <strong class="jxr_keyword">if</strong> (decomposer.getRank() &lt; 1) {
+<a class="jxr_linenumber" name="L170" href="#L170">170</a>                 <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="CoincidentPointsException" href="../../../com/irurueta/geometry/CoincidentPointsException.html#CoincidentPointsException">CoincidentPointsException</a>();
+<a class="jxr_linenumber" name="L171" href="#L171">171</a>             }
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 
+<a class="jxr_linenumber" name="L173" href="#L173">173</a>             <em class="jxr_comment">// last two columns of V contains director vectors of plane1 and</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a>             <em class="jxr_comment">// plane2</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> v = decomposer.getV();
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
+<a class="jxr_linenumber" name="L177" href="#L177">177</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> directorVector1 = v.getSubmatrixAsArray(0, 1, 2, 1);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a>             <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> directorVector2 = v.getSubmatrixAsArray(0, 2, 2, 2);
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 
+<a class="jxr_linenumber" name="L180" href="#L180">180</a>             plane1 = <strong class="jxr_keyword">new</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a>(point1, directorVector1);
+<a class="jxr_linenumber" name="L181" href="#L181">181</a>             plane2 = <strong class="jxr_keyword">new</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a>(point1, directorVector2);
+<a class="jxr_linenumber" name="L182" href="#L182">182</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> AlgebraException e) {
+<a class="jxr_linenumber" name="L183" href="#L183">183</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> <a name="CoincidentPointsException" href="../../../com/irurueta/geometry/CoincidentPointsException.html#CoincidentPointsException">CoincidentPointsException</a>(e);
+<a class="jxr_linenumber" name="L184" href="#L184">184</a>         }
+<a class="jxr_linenumber" name="L185" href="#L185">185</a>     }
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 
+<a class="jxr_linenumber" name="L187" href="#L187">187</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> <em class="jxr_javadoccomment">     * Returns 1st plane determining this 3D line.</em>
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> <em class="jxr_javadoccomment">     * The intersection of plane1 and plane2 determines this 3D line.</em>
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> <em class="jxr_javadoccomment">     * @return 1st plane.</em>
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L193" href="#L193">193</a>     <strong class="jxr_keyword">public</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> getPlane1() {
+<a class="jxr_linenumber" name="L194" href="#L194">194</a>         <strong class="jxr_keyword">return</strong> plane1;
+<a class="jxr_linenumber" name="L195" href="#L195">195</a>     }
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 
+<a class="jxr_linenumber" name="L197" href="#L197">197</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> <em class="jxr_javadoccomment">     * Returns 2nd plane determining this 3D line.</em>
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> <em class="jxr_javadoccomment">     * The intersection of plane1 and plane2 determines this 3D line.</em>
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> <em class="jxr_javadoccomment">     * @return 2nd plane.</em>
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L203" href="#L203">203</a>     <strong class="jxr_keyword">public</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> getPlane2() {
+<a class="jxr_linenumber" name="L204" href="#L204">204</a>         <strong class="jxr_keyword">return</strong> plane2;
+<a class="jxr_linenumber" name="L205" href="#L205">205</a>     }
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 
+<a class="jxr_linenumber" name="L207" href="#L207">207</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> <em class="jxr_javadoccomment">     * Determines if provided point is locus of this 3D line up to provided</em>
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> <em class="jxr_javadoccomment">     * threshold.</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> <em class="jxr_javadoccomment">     * @param point     Point to be checked.</em>
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> <em class="jxr_javadoccomment">     * @param threshold Threshold to determine if provided point is locus or</em>
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> <em class="jxr_javadoccomment">     *                  not. This should usually be a small value.</em>
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> <em class="jxr_javadoccomment">     * @return True if provided point belongs to this 3D line, false otherwise.</em>
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException Raised if provided threshold is negative.</em>
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L217" href="#L217">217</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isLocus(<strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> point, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> threshold) {
+<a class="jxr_linenumber" name="L218" href="#L218">218</a>         <strong class="jxr_keyword">return</strong> plane1.isLocus(point, threshold) &amp;&amp; plane2.isLocus(point, threshold);
+<a class="jxr_linenumber" name="L219" href="#L219">219</a>     }
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 
+<a class="jxr_linenumber" name="L221" href="#L221">221</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> <em class="jxr_javadoccomment">     * Raised if provided point is locus of this 3D line.</em>
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> <em class="jxr_javadoccomment">     * @param point Point to be checked.</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> <em class="jxr_javadoccomment">     * @return True if provided point belongs to this 3D line, false otherwise.</em>
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isLocus(<strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> point) {
+<a class="jxr_linenumber" name="L228" href="#L228">228</a>         <strong class="jxr_keyword">return</strong> isLocus(point, DEFAULT_LOCUS_THRESHOLD);
+<a class="jxr_linenumber" name="L229" href="#L229">229</a>     }
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 
+<a class="jxr_linenumber" name="L231" href="#L231">231</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> <em class="jxr_javadoccomment">     * Returns shortest distance of provided point to this 3D line.</em>
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> <em class="jxr_javadoccomment">     * The shortest distance is obtained in perpendicular direction of this</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> <em class="jxr_javadoccomment">     * line.</em>
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> <em class="jxr_javadoccomment">     * @param point Point to be checked.</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> <em class="jxr_javadoccomment">     * @return Shortest distance of provided point to this 3D line.</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong> getDistance(<strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> point) {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> closestPoint = getClosestPoint(point);
+<a class="jxr_linenumber" name="L241" href="#L241">241</a>         <strong class="jxr_keyword">return</strong> point.distanceTo(closestPoint);
+<a class="jxr_linenumber" name="L242" href="#L242">242</a>     }
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 
+<a class="jxr_linenumber" name="L244" href="#L244">244</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> <em class="jxr_javadoccomment">     * Returns closest point belonging to this 3D line respect provided point.</em>
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> <em class="jxr_javadoccomment">     * @param point Point to be checked.</em>
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> <em class="jxr_javadoccomment">     * @return Closest point belonging to this 3D line respect provided point.</em>
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a>     <strong class="jxr_keyword">public</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> getClosestPoint(<strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> point) {
+<a class="jxr_linenumber" name="L251" href="#L251">251</a>         <strong class="jxr_keyword">return</strong> getClosestPoint(point, DEFAULT_LOCUS_THRESHOLD);
+<a class="jxr_linenumber" name="L252" href="#L252">252</a>     }
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 
+<a class="jxr_linenumber" name="L254" href="#L254">254</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">     * Returns closest point belonging to this 3D line respect provided point</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">     * up to provided threshold.</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> <em class="jxr_javadoccomment">     * @param point     Point to be checked.</em>
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> <em class="jxr_javadoccomment">     * @param threshold Threshold to determine the closest point.</em>
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> <em class="jxr_javadoccomment">     * @return Closest point belonging to this 3D line respect provided point.</em>
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException Raised if provided threshold is negative.</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L263" href="#L263">263</a>     <strong class="jxr_keyword">public</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> getClosestPoint(<strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> point, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> threshold) {
+<a class="jxr_linenumber" name="L264" href="#L264">264</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> result = Point3D.create();
+<a class="jxr_linenumber" name="L265" href="#L265">265</a>         closestPoint(point, result, threshold);
+<a class="jxr_linenumber" name="L266" href="#L266">266</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L267" href="#L267">267</a>     }
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 
+<a class="jxr_linenumber" name="L269" href="#L269">269</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">     * Computes closest point belonging to this 3D line respect provided point</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">     * and stores the result in provided instance.</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> <em class="jxr_javadoccomment">     * @param point  Point to be checked.</em>
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> <em class="jxr_javadoccomment">     * @param result Instance where computed point will be stored.</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L276" href="#L276">276</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> closestPoint(<strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> point, <strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> result) {
+<a class="jxr_linenumber" name="L277" href="#L277">277</a>         closestPoint(point, result, DEFAULT_LOCUS_THRESHOLD);
+<a class="jxr_linenumber" name="L278" href="#L278">278</a>     }
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 
+<a class="jxr_linenumber" name="L280" href="#L280">280</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> <em class="jxr_javadoccomment">     * Computes closest point belonging to this 3D line respect provided point</em>
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> <em class="jxr_javadoccomment">     * up to provided threshold and stores the result in provided instance.</em>
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> <em class="jxr_javadoccomment">     * @param point     Point to be checked.</em>
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> <em class="jxr_javadoccomment">     * @param result    Instance where computed point will be stored.</em>
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> <em class="jxr_javadoccomment">     * @param threshold Threshold to determine the closest point.</em>
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> <em class="jxr_javadoccomment">     * @throws IllegalArgumentException Raised if provided threshold is negative.</em>
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L289" href="#L289">289</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> closestPoint(<strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> point, <strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> result, <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">double</strong> threshold) {
+<a class="jxr_linenumber" name="L290" href="#L290">290</a>         <strong class="jxr_keyword">if</strong> (threshold &lt; MIN_THRESHOLD) {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a>             <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L292" href="#L292">292</a>         }
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 
+<a class="jxr_linenumber" name="L294" href="#L294">294</a>         <em class="jxr_comment">// normalize to increase accuracy</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a>         point.normalize();
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
+<a class="jxr_linenumber" name="L297" href="#L297">297</a>         <em class="jxr_comment">// compute director vector perpendicular to director vectors of plane1</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a>         <em class="jxr_comment">// and plane2, and use it along provided point to set a 3rd plane.</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a>         <em class="jxr_comment">// Using plane1, plane2 and the 3rd plane, we can get their intersection</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a>         <em class="jxr_comment">// to obtain a point which will be locus of this line3 and will be</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a>         <em class="jxr_comment">// located at shortest distance of provided point to this line3.</em>
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 
+<a class="jxr_linenumber" name="L303" href="#L303">303</a>         <em class="jxr_comment">// This is a plane having as director vector this line 3D and passing</em>
+<a class="jxr_linenumber" name="L304" href="#L304">304</a>         <em class="jxr_comment">// through provided point</em>
+<a class="jxr_linenumber" name="L305" href="#L305">305</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> p = <strong class="jxr_keyword">new</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a>(point, getDirection());
+<a class="jxr_linenumber" name="L306" href="#L306">306</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L307" href="#L307">307</a>             intersection(p, result);
+<a class="jxr_linenumber" name="L308" href="#L308">308</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> <a name="NoIntersectionException" href="../../../com/irurueta/geometry/NoIntersectionException.html#NoIntersectionException">NoIntersectionException</a> ignore) {
+<a class="jxr_linenumber" name="L309" href="#L309">309</a>             <em class="jxr_comment">// never happens</em>
+<a class="jxr_linenumber" name="L310" href="#L310">310</a>         }
+<a class="jxr_linenumber" name="L311" href="#L311">311</a>     }
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 
+<a class="jxr_linenumber" name="L313" href="#L313">313</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> <em class="jxr_javadoccomment">     * Normalize the planes forming this 3D line.</em>
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L316" href="#L316">316</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> normalize() {
+<a class="jxr_linenumber" name="L317" href="#L317">317</a>         plane1.normalize();
+<a class="jxr_linenumber" name="L318" href="#L318">318</a>         plane2.normalize();
+<a class="jxr_linenumber" name="L319" href="#L319">319</a>     }
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 
+<a class="jxr_linenumber" name="L321" href="#L321">321</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> <em class="jxr_javadoccomment">     * Determines whether the planes forming this 3D line are normalized or not.</em>
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> <em class="jxr_javadoccomment">     * @return True if planes forming this 3D line are normalized, false</em>
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> <em class="jxr_javadoccomment">     * otherwise.</em>
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L327" href="#L327">327</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> isNormalized() {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a>         <strong class="jxr_keyword">return</strong> plane1.isNormalized() &amp;&amp; plane2.isNormalized();
+<a class="jxr_linenumber" name="L329" href="#L329">329</a>     }
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 
+<a class="jxr_linenumber" name="L331" href="#L331">331</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> <em class="jxr_javadoccomment">     * Returns array containing vector that indicates the direction of this 3D</em>
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> <em class="jxr_javadoccomment">     * line.</em>
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> <em class="jxr_javadoccomment">     * @return Returns vector indicating the direction of this 3D line.</em>
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L337" href="#L337">337</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">double</strong>[] getDirection() {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a>         <strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a>             <strong class="jxr_keyword">return</strong> Utils.crossProduct(plane1.getDirectorVector(), plane2.getDirectorVector());
+<a class="jxr_linenumber" name="L340" href="#L340">340</a>         } <strong class="jxr_keyword">catch</strong> (<strong class="jxr_keyword">final</strong> AlgebraException ignore) {
+<a class="jxr_linenumber" name="L341" href="#L341">341</a>             <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L342" href="#L342">342</a>         }
+<a class="jxr_linenumber" name="L343" href="#L343">343</a>     }
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 
+<a class="jxr_linenumber" name="L345" href="#L345">345</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> <em class="jxr_javadoccomment">     * Returns point where provided point intersects this 3D line.</em>
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> <em class="jxr_javadoccomment">     * @param plane Plane to intersect this 3D line.</em>
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> <em class="jxr_javadoccomment">     * @return Point where provided point intersects this 3D line.</em>
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> <em class="jxr_javadoccomment">     * @throws NoIntersectionException Raised if provided plane does not</em>
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> <em class="jxr_javadoccomment">     *                                 intersect this 3D line.</em>
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a>     <strong class="jxr_keyword">public</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> getIntersection(<strong class="jxr_keyword">final</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> plane) <strong class="jxr_keyword">throws</strong> <a name="NoIntersectionException" href="../../../com/irurueta/geometry/NoIntersectionException.html#NoIntersectionException">NoIntersectionException</a> {
+<a class="jxr_linenumber" name="L354" href="#L354">354</a>         <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">var</strong> result = Point3D.create();
+<a class="jxr_linenumber" name="L355" href="#L355">355</a>         intersection(plane, result);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a>         <strong class="jxr_keyword">return</strong> result;
+<a class="jxr_linenumber" name="L357" href="#L357">357</a>     }
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 
+<a class="jxr_linenumber" name="L359" href="#L359">359</a>     <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> <em class="jxr_javadoccomment">     * Computes point where provided point intersects this 3D line and stores</em>
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> <em class="jxr_javadoccomment">     * the result in provided instance.</em>
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> <em class="jxr_javadoccomment">     *</em>
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> <em class="jxr_javadoccomment">     * @param plane  Plane to intersect this 3D line.</em>
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> <em class="jxr_javadoccomment">     * @param result Instance where computes point will be stored.</em>
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> <em class="jxr_javadoccomment">     * @throws NoIntersectionException Raised if provided plane does not</em>
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> <em class="jxr_javadoccomment">     *                                 intersect this 3D line.</em>
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> <em class="jxr_javadoccomment">     */</em>
+<a class="jxr_linenumber" name="L368" href="#L368">368</a>     <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> intersection(<strong class="jxr_keyword">final</strong> <a name="Plane" href="../../../com/irurueta/geometry/Plane.html#Plane">Plane</a> plane, <strong class="jxr_keyword">final</strong> <a name="Point3D" href="../../../com/irurueta/geometry/Point3D.html#Point3D">Point3D</a> result) <strong class="jxr_keyword">throws</strong> <a name="NoIntersectionException" href="../../../com/irurueta/geometry/NoIntersectionException.html#NoIntersectionException">NoIntersectionException</a> {
+<a class="jxr_linenumber" name="L369" href="#L369">369</a>         <em class="jxr_comment">// use plane1, plane2 and provided plane to find an intersection</em>
+<a class="jxr_linenumber" name="L370" href="#L370">370</a>         plane.intersection(plane1, plane2, result);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a>     }
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> }
+</pre>
+<hr/>
+<div id="footer">© 2017–2025</div>
+</body>
+</html>

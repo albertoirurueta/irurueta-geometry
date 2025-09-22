@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Box3D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Box3D.java</span></div><h1>Box3D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.irurueta.geometry;
+
+/**
+ * This class defines a 3D box area aligned with x, y, z axes.
+ * A box is defined by two corners, low, containing minimum coordinate values, and high,
+ * containing maximum coordinate values.
+ * This class is used internally by KD trees and quad trees.
+ */
+public class Box3D extends Box&lt;Point3D&gt; {
+
+    /**
+     * Empty constructor.
+     * Creates a box centered at the origin and having unitary volume.
+     */
+    public Box3D() {
+<span class="fc" id="L32">        super();</span>
+<span class="fc" id="L33">        lo = new InhomogeneousPoint3D(-0.5, -0.5, -0.5);</span>
+<span class="fc" id="L34">        hi = new InhomogeneousPoint3D(0.5, 0.5, 0.5);</span>
+<span class="fc" id="L35">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param lo low coordinate values.
+     * @param hi high coordinate values.
+     */
+    public Box3D(final Point3D lo, final Point3D hi) {
+<span class="fc" id="L44">        super(lo, hi);</span>
+<span class="fc" id="L45">    }</span>
+
+    /**
+     * Sets boundaries.
+     *
+     * @param loX x low coordinate.
+     * @param loY y low coordinate
+     * @param loZ z low coordinate.
+     * @param hiX x high coordinate.
+     * @param hiY y high coordinate.
+     * @param hiZ z high coordinate.
+     */
+    public final void setBounds(final double loX, final double loY, final double loZ,
+                                final double hiX, final double hiY, final double hiZ) {
+<span class="fc" id="L59">        setBounds(new InhomogeneousPoint3D(loX, loY, loZ), new InhomogeneousPoint3D(hiX, hiY, hiZ));</span>
+<span class="fc" id="L60">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

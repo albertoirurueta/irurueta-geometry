@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Accuracy.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Accuracy.java</span></div><h1>Accuracy.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2018 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.NonSymmetricPositiveDefiniteMatrixException;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.statistics.NormalDist;
+
+import java.io.Serializable;
+
+/**
+ * Base class representing the confidence of provided accuracy from a covariance matrix
+ * expressed in the distance unit of such matrix.
+ * This class contains utility methods to convert covariance matrices into geometric figures
+ * with the requested confidence.
+ */
+public abstract class Accuracy implements Serializable {
+
+    /**
+     * Default standard deviation factor to account for a given accuracy confidence.
+     * Typically, a factor of 2.0 will be used, which means that accuracy of position will
+     * be drawn as an ellipse of size equal to one time the standard deviation. Assuming a
+     * Gaussian distribution this is equivalent to providing a 95.44% of confidence on provided
+     * accuracy.
+     */
+    private static final double DEFAULT_STANDARD_DEVIATION_FACTOR = 2.0;
+
+    /**
+     * Covariance matrix representing the accuracy of an estimated position.
+     */
+    private Matrix covarianceMatrix;
+
+    /**
+     * Standard deviation factor to account for a given accuracy confidence.
+     * Typically, a factor of 2.0 will be used, which means that accuracy of a point or
+     * measure will be drawn as a geometric figure (either an ellipse in 2D or an
+     * ellipsoid in 3D) equal to two times the standard deviation. Assuming a
+     * Gaussian distribution this is equivalent to providing a 95.44% of confidence on
+     * provided accuracy.
+     */
+<span class="fc" id="L56">    protected double standardDeviationFactor = DEFAULT_STANDARD_DEVIATION_FACTOR;</span>
+
+    /**
+     * Confidence of provided accuracy of a point for a value located up to the standard
+     * deviation factor distance from the mean.
+     * This is expressed as a value between 0 and 1, where 1 indicates a 100% confidence that
+     * the real position is within provided accuracy.
+     */
+<span class="fc" id="L64">    protected double confidence = 2.0 * NormalDist.cdf(DEFAULT_STANDARD_DEVIATION_FACTOR, 0.0, 1.0) - 1.0;</span>
+
+    /**
+     * Square root of singular values of decomposed covariance matrix.
+     */
+    protected double[] sqrtSingularValues;
+
+    /**
+     * Orthonormal matrix representing a rotation after decomposing covariance matrix.
+     */
+    protected Matrix u;
+
+    /**
+     * Minimum square root of singular value of decomposed covariance matrix. Can be used to
+     * determine the smallest accuracy on a geometric figure (i.e. the shortest semi-axis on
+     * an ellipse or an ellipsoid).
+     */
+<span class="fc" id="L81">    private double minSqrtSingularValue = Double.POSITIVE_INFINITY;</span>
+
+    /**
+     * Maximum square root of singular value of decomposed covariance matrix. Can be used to
+     * determine the largest accuracy on a geometric figure (i.e. the largest semi-axis on
+     * an ellipse or an ellipsoid).
+     */
+<span class="fc" id="L88">    private double maxSqrtSingularValue = Double.POSITIVE_INFINITY;</span>
+
+    /**
+     * Average square root of singular value of decomposed covariance matrix. Can be used to
+     * determine the average accuracy on a geometric figure (i.e. the average semi-axis on
+     * an ellipse or an ellipsoid).
+     */
+<span class="fc" id="L95">    private double avgSqrtSingularValue = Double.POSITIVE_INFINITY;</span>
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L100">    protected Accuracy() {</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param covarianceMatrix covariance matrix to be set. Must be NxN where N
+     *                         is the number of dimensions and positive definite.
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to a geometric figure - e.g. an ellipse or
+     *                                                     an ellipsoid).
+     * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
+     *                                                     positive definite.
+     */
+<span class="fc" id="L114">    protected Accuracy(final Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {</span>
+<span class="fc" id="L115">        setCovarianceMatrix(covarianceMatrix);</span>
+<span class="fc" id="L116">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param confidence confidence of provided accuracy of an estimated position.
+     * @throws IllegalArgumentException if provided value is not within 0 and 1.
+     */
+<span class="fc" id="L124">    protected Accuracy(final double confidence) {</span>
+<span class="fc" id="L125">        setConfidence(confidence);</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param covarianceMatrix covariance matrix to be set. Must be NxN where N
+     *                         is the number of dimensions and positive definite.
+     * @param confidence       confidence of provided accuracy of an estimated position.
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to a geometric figure - e.g. an ellipse or
+     *                                                     an ellipsoid), or if provided confidence value is not within 0 and 1.
+     * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
+     *                                                     positive definite.
+     */
+    protected Accuracy(final Matrix covarianceMatrix, final double confidence)
+<span class="fc" id="L141">            throws NonSymmetricPositiveDefiniteMatrixException {</span>
+<span class="fc" id="L142">        setCovarianceMatrix(covarianceMatrix);</span>
+<span class="fc" id="L143">        setConfidence(confidence);</span>
+<span class="fc" id="L144">    }</span>
+
+    /**
+     * Gets covariance matrix representing the accuracy of an estimated point or measure.
+     *
+     * @return covariance matrix representing the accuracy of an estimated point or measure.
+     */
+    public Matrix getCovarianceMatrix() {
+<span class="fc" id="L152">        return covarianceMatrix;</span>
+    }
+
+    /**
+     * Sets covariance matrix representing the accuracy of an estimated point or measure.
+     *
+     * @param covarianceMatrix covariance matrix representing the accuracy of an estimated
+     *                         point or measure.
+     * @throws IllegalArgumentException                    if provided matrix is not square (it must also be
+     *                                                     positive definite to be properly converted to a geometric figure - e.g. an ellipse
+     *                                                     or an ellipsoid).
+     * @throws NonSymmetricPositiveDefiniteMatrixException if provided matrix is not symmetric and
+     *                                                     positive definite.
+     */
+    public void setCovarianceMatrix(final Matrix covarianceMatrix) throws NonSymmetricPositiveDefiniteMatrixException {
+<span class="fc" id="L167">        final var dims = getNumberOfDimensions();</span>
+<span class="pc bpc" id="L168" title="1 of 4 branches missed.">        if (covarianceMatrix.getRows() != dims || covarianceMatrix.getColumns() != dims) {</span>
+<span class="fc" id="L169">            throw new IllegalArgumentException();</span>
+        }
+
+        try {
+<span class="fc" id="L173">            final var svdDecomposer = new SingularValueDecomposer();</span>
+<span class="fc" id="L174">            svdDecomposer.setInputMatrix(covarianceMatrix);</span>
+<span class="fc" id="L175">            svdDecomposer.decompose();</span>
+
+<span class="fc" id="L177">            final var singularValues = svdDecomposer.getSingularValues();</span>
+<span class="fc" id="L178">            final var sqrtSingularValues = new double[dims];</span>
+
+<span class="fc" id="L180">            var minSqrtSingularValue = Double.MAX_VALUE;</span>
+<span class="fc" id="L181">            var maxSqrtSingularValue = -Double.MAX_VALUE;</span>
+<span class="fc" id="L182">            var avgSqrtSingularValue = 0.0;</span>
+<span class="fc" id="L183">            var i = 0;</span>
+<span class="fc bfc" id="L184" title="All 2 branches covered.">            for (final var singularValue : singularValues) {</span>
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">                if (singularValue &lt; 0.0) {</span>
+                    // matrix is not positive definite
+<span class="nc" id="L187">                    throw new NonSymmetricPositiveDefiniteMatrixException();</span>
+                }
+
+<span class="fc" id="L190">                final var sqrtSingularValue = Math.sqrt(singularValue);</span>
+<span class="fc bfc" id="L191" title="All 2 branches covered.">                if (sqrtSingularValue &lt; minSqrtSingularValue) {</span>
+<span class="fc" id="L192">                    minSqrtSingularValue = sqrtSingularValue;</span>
+                }
+<span class="fc bfc" id="L194" title="All 2 branches covered.">                if (sqrtSingularValue &gt; maxSqrtSingularValue) {</span>
+<span class="fc" id="L195">                    maxSqrtSingularValue = sqrtSingularValue;</span>
+                }
+<span class="fc" id="L197">                avgSqrtSingularValue += sqrtSingularValue / dims;</span>
+
+<span class="fc" id="L199">                sqrtSingularValues[i] = sqrtSingularValue;</span>
+<span class="fc" id="L200">                i++;</span>
+            }
+
+<span class="fc" id="L203">            this.sqrtSingularValues = sqrtSingularValues;</span>
+<span class="fc" id="L204">            u = svdDecomposer.getU();</span>
+
+<span class="fc" id="L206">            this.minSqrtSingularValue = minSqrtSingularValue;</span>
+<span class="fc" id="L207">            this.maxSqrtSingularValue = maxSqrtSingularValue;</span>
+<span class="fc" id="L208">            this.avgSqrtSingularValue = avgSqrtSingularValue;</span>
+
+<span class="fc" id="L210">            this.covarianceMatrix = covarianceMatrix;</span>
+<span class="fc" id="L211">        } catch (final AlgebraException e) {</span>
+<span class="fc" id="L212">            throw new NonSymmetricPositiveDefiniteMatrixException(e);</span>
+<span class="fc" id="L213">        }</span>
+<span class="fc" id="L214">    }</span>
+
+    /**
+     * Gets standard deviation factor to account for a given accuracy confidence.
+     * Typically, a factor of 2.0 will be used, which means that accuracy can be drawn as
+     * a geometric figure of size equal to 2 times the standard deviation. Assuming a
+     * Gaussian distribution this is equivalent to providing a 95.44% confidence on provided
+     * accuracy.
+     *
+     * @return standard deviation factor.
+     */
+    public double getStandardDeviationFactor() {
+<span class="fc" id="L226">        return standardDeviationFactor;</span>
+    }
+
+    /**
+     * Sets standard deviation factor to account for a given accuracy confidence.
+     * Typically, a factor of 2.0 will be used, which means that accuracy can be drawn as
+     * a geometric figure of size equal to 2 times the standard deviation. Assuming a
+     * Gaussian distribution this is equivalent to providing a 95.44% confidence on provided
+     * accuracy.
+     *
+     * @param standardDeviationFactor standard deviation factor to be set.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     */
+    public void setStandardDeviationFactor(final double standardDeviationFactor) {
+<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (standardDeviationFactor &lt;= 0.0) {</span>
+<span class="fc" id="L241">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L243">        this.standardDeviationFactor = standardDeviationFactor;</span>
+<span class="fc" id="L244">        confidence = 2.0 * NormalDist.cdf(this.standardDeviationFactor, 0.0, 1.0) - 1.0;</span>
+<span class="fc" id="L245">    }</span>
+
+    /**
+     * Gets confidence of provided accuracy of estimated point or measure.
+     * This is expressed as a value between 0 and 1, where 1 indicates a 100% confidence
+     * that the real point or measure is within provided accuracy.
+     *
+     * @return confidence of provided accuracy of estimated point or measure.
+     */
+    public double getConfidence() {
+<span class="fc" id="L255">        return confidence;</span>
+    }
+
+    /**
+     * Sets confidence of provided accuracy of estimated point or measure.
+     * This is expressed as a value between 0 and 1, where 1 indicates a 100% confidence
+     * that the real point or measure is within provided accuracy.
+     *
+     * @param confidence confidence of provided accuracy of estimated point or measure.
+     * @throws IllegalArgumentException if provided value is not within 0 and 1.
+     */
+    public void setConfidence(final double confidence) {
+<span class="fc bfc" id="L267" title="All 4 branches covered.">        if (confidence &lt; 0.0 || confidence &gt; 1.0) {</span>
+<span class="fc" id="L268">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L270">        this.confidence = confidence;</span>
+<span class="fc" id="L271">        standardDeviationFactor = NormalDist.invcdf((confidence + 1.0) / 2.0, 0.0, 1.0);</span>
+<span class="fc" id="L272">    }</span>
+
+    /**
+     * Gets smallest (best) accuracy in any direction (i.e. either 2D or 3D).
+     * This value is represented by the smallest semi axis representing the ellipse or ellipsoid of accuracy.
+     *
+     * @return smallest accuracy in any direction.
+     */
+    public double getSmallestAccuracy() {
+<span class="fc" id="L281">        return minSqrtSingularValue * standardDeviationFactor;</span>
+    }
+
+    /**
+     * Gets largest (worse) accuracy in any direction (i.e. either 2D or 3D).
+     * This value is represented by the largest semi axis representing the ellipse or ellipsoid of accuracy.
+     *
+     * @return largest accuracy in any direction.
+     */
+    public double getLargestAccuracy() {
+<span class="fc" id="L291">        return maxSqrtSingularValue * standardDeviationFactor;</span>
+    }
+
+    /**
+     * Gets average accuracy among all directions.
+     * This value is equal to the average value of all semi axes representing the ellipse or ellipsoid of
+     * accuracy.
+     *
+     * @return average accuracy among all directions.
+     */
+    public double getAverageAccuracy() {
+<span class="fc" id="L302">        return avgSqrtSingularValue * standardDeviationFactor;</span>
+    }
+
+    /**
+     * Gets number of dimensions.
+     * This is equal to 2 for 2D, and to 3 for 3D.
+     *
+     * @return number of dimensions.
+     */
+    public abstract int getNumberOfDimensions();
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

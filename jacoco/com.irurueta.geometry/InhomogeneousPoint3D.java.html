@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InhomogeneousPoint3D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">InhomogeneousPoint3D.java</span></div><h1>InhomogeneousPoint3D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.irurueta.geometry;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+/**
+ * Subclass of Point3D defining an inhomogeneous 3D point.
+ * An inhomogeneous 3D point is defined by three coordinates: (x, y, z), where
+ * x, y and z are the horizontal, vertical and depth coordinates, respectively.
+ * Homogeneous 3D points can be transformed into inhomogeneous ones by
+ * normalizing x, y and z coordinates by the w factor as follows:
+ * Homogeneous 3D point (x,y,z,w) -&amp;lt; Inhomogeneous 3D point (x/w,y/w,z/w).
+ * Note that if and homogeneous 3D point is at infinity (w=0), its corresponding
+ * inhomogeneous point will be at infinity by setting (x=inf,y=inf,z=inf).
+ * Because of this, and because of machine precision, usually Homogeneous points
+ * are better suited when working at far distances or for numerical purposes,
+ * and their inhomogeneous counterparts are better suited when computing
+ * Euclidean distances, etc.
+ */
+public class InhomogeneousPoint3D extends Point3D implements Serializable {
+
+    /**
+     * Defines the X coordinate of an inhomogeneous 2D point.
+     */
+    private double x;
+
+    /**
+     * Defines the Y coordinate of an inhomogeneous 2D point.
+     */
+    private double y;
+
+    /**
+     * Defines the Z coordinate of an inhomogeneous 2D point.
+     */
+    private double z;
+
+    /**
+     * Empty constructor.
+     */
+    public InhomogeneousPoint3D() {
+<span class="fc" id="L57">        super();</span>
+<span class="fc" id="L58">        x = y = z = 0.0;</span>
+<span class="fc" id="L59">    }</span>
+
+    /**
+     * Constructor of this class. This constructor sets a new inhomogeneous v
+     * array containing the coordinates X, Y and Z of the given point.
+     *
+     * @param v Array of length 3 containing the 3D coordinates of an
+     *          inhomogeneous point.
+     * @throws IllegalArgumentException Raised when the size of the array is not
+     *                                  2.
+     */
+    public InhomogeneousPoint3D(final double[] v) {
+<span class="fc" id="L71">        super();</span>
+<span class="fc" id="L72">        setCoordinates(v);</span>
+<span class="fc" id="L73">    }</span>
+
+    /**
+     * Constructor of this class. This constructor sets a new inhomogeneous 3D
+     * point using the coordinates x, y and z of the given point.
+     *
+     * @param x X coordinate of the given 3D point.
+     * @param y Y coordinate of the given 3D point.
+     * @param z Z coordinate of the given 3D point.
+     */
+<span class="fc" id="L83">    public InhomogeneousPoint3D(final double x, final double y, final double z) {</span>
+<span class="fc" id="L84">        this.x = x;</span>
+<span class="fc" id="L85">        this.y = y;</span>
+<span class="fc" id="L86">        this.z = z;</span>
+<span class="fc" id="L87">    }</span>
+
+    /**
+     * This constructor sets a new inhomogeneous 3D point using as
+     * initialization provided Point3D instance.
+     *
+     * @param point Point to initialize new instance to.
+     */
+<span class="fc" id="L95">    public InhomogeneousPoint3D(final Point3D point) {</span>
+<span class="fc" id="L96">        setCoordinates(point);</span>
+<span class="fc" id="L97">    }</span>
+
+    /**
+     * Returns the X coordinate of the given homogeneous 3D point instance.
+     *
+     * @return X coordinate.
+     */
+    public double getX() {
+<span class="fc" id="L105">        return x;</span>
+    }
+
+    /**
+     * Sets the X coordinate of this homogeneous point.
+     *
+     * @param x X coordinate.
+     */
+    public void setX(final double x) {
+<span class="fc" id="L114">        this.x = x;</span>
+<span class="fc" id="L115">    }</span>
+
+    /**
+     * Returns the Y coordinate of the given homogeneous 3D point instance.
+     *
+     * @return Y coordinate.
+     */
+    public double getY() {
+<span class="fc" id="L123">        return y;</span>
+    }
+
+    /**
+     * Sets the Y coordinate of this homogeneous point.
+     *
+     * @param y Y coordinate.
+     */
+    public void setY(final double y) {
+<span class="fc" id="L132">        this.y = y;</span>
+<span class="fc" id="L133">    }</span>
+
+    /**
+     * Returns the Z coordinate of the given homogeneous 3D point instance.
+     *
+     * @return Z coordinate.
+     */
+    public double getZ() {
+<span class="fc" id="L141">        return z;</span>
+    }
+
+    /**
+     * Sets the Z coordinate of this homogeneous point.
+     *
+     * @param z Z coordinate.
+     */
+    public void setZ(final double z) {
+<span class="fc" id="L150">        this.z = z;</span>
+<span class="fc" id="L151">    }</span>
+
+    /**
+     * Sets the coordinates of this inhomogeneous 3D point by using provided X,
+     * Y and Z coordinates.
+     *
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param z Z coordinate.
+     */
+    public void setCoordinates(final double x, final double y, final double z) {
+<span class="fc" id="L162">        this.x = x;</span>
+<span class="fc" id="L163">        this.y = y;</span>
+<span class="fc" id="L164">        this.z = z;</span>
+<span class="fc" id="L165">    }</span>
+
+    /**
+     * Sets the coordinates of a 3D point using an array containing its
+     * coordinates.
+     *
+     * @param v Array containing the coordinates of the point.
+     * @throws IllegalArgumentException Raised if provided array does not have a
+     *                                  valid size.
+     */
+    @Override
+    public final void setCoordinates(final double[] v) {
+<span class="fc bfc" id="L177" title="All 2 branches covered.">        if (v.length != POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="fc" id="L178">            throw new IllegalArgumentException();</span>
+        } else {
+<span class="fc" id="L180">            x = v[0];</span>
+<span class="fc" id="L181">            y = v[1];</span>
+<span class="fc" id="L182">            z = v[2];</span>
+        }
+<span class="fc" id="L184">    }</span>
+
+    /**
+     * Sets coordinates of this instance using the coordinates of provided 3D
+     * point.
+     *
+     * @param point Input point.
+     */
+    @Override
+    public final void setCoordinates(final Point3D point) {
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        switch (point.getType()) {</span>
+            case INHOMOGENEOUS_COORDINATES:
+<span class="fc" id="L196">                final var inhomPoint = (InhomogeneousPoint3D) point;</span>
+<span class="fc" id="L197">                x = inhomPoint.getX();</span>
+<span class="fc" id="L198">                y = inhomPoint.getY();</span>
+<span class="fc" id="L199">                z = inhomPoint.getZ();</span>
+<span class="fc" id="L200">                break;</span>
+
+            case HOMOGENEOUS_COORDINATES:
+            default:
+<span class="fc" id="L204">                final var homPoint = (HomogeneousPoint3D) point;</span>
+<span class="fc" id="L205">                x = homPoint.getInhomX();</span>
+<span class="fc" id="L206">                y = homPoint.getInhomY();</span>
+<span class="fc" id="L207">                z = homPoint.getInhomZ();</span>
+                break;
+        }
+<span class="fc" id="L210">    }</span>
+
+    /**
+     * Returns X homogeneous coordinate of this 3D point.
+     *
+     * @return X homogeneous coordinate.
+     */
+    @Override
+    public double getHomX() {
+<span class="fc" id="L219">        return getX();</span>
+    }
+
+    /**
+     * Returns Y homogeneous coordinate of this 3D point.
+     *
+     * @return Y homogeneous coordinate.
+     */
+    @Override
+    public double getHomY() {
+<span class="fc" id="L229">        return getY();</span>
+    }
+
+    /**
+     * Returns Z homogeneous coordinate of this 3D point.
+     *
+     * @return Z homogeneous coordinate.
+     */
+    @Override
+    public double getHomZ() {
+<span class="fc" id="L239">        return getZ();</span>
+    }
+
+    /**
+     * Returns W homogeneous coordinate of this 3D point.
+     *
+     * @return W homogeneous coordinate.
+     */
+    @Override
+    public double getHomW() {
+<span class="fc" id="L249">        return 1.0;</span>
+    }
+
+    /**
+     * Sets coordinates of this 3D point instance using provided homogeneous
+     * coordinates.
+     *
+     * @param homX x homogeneous coordinate.
+     * @param homY y homogeneous coordinate.
+     * @param homZ z homogeneous coordinate.
+     * @param homW w homogeneous coordinate.
+     */
+    @Override
+    public void setHomogeneousCoordinates(final double homX, final double homY, final double homZ, final double homW) {
+<span class="fc" id="L263">        x = homX / homW;</span>
+<span class="fc" id="L264">        y = homY / homW;</span>
+<span class="fc" id="L265">        z = homZ / homW;</span>
+<span class="fc" id="L266">    }</span>
+
+    /**
+     * Returns X inhomogeneous coordinate of this 3D point.
+     *
+     * @return X inhomogeneous coordinate.
+     */
+    @Override
+    public double getInhomX() {
+<span class="fc" id="L275">        return getX();</span>
+    }
+
+    /**
+     * Sets X inhomogeneous coordinate of this 3D point.
+     *
+     * @param inhomX inhomogeneous coordinate.
+     */
+    @Override
+    public void setInhomX(final double inhomX) {
+<span class="fc" id="L285">        x = inhomX;</span>
+<span class="fc" id="L286">    }</span>
+
+    /**
+     * Returns Y inhomogeneous coordinate of this 3D point.
+     *
+     * @return Y inhomogeneous coordinate.
+     */
+    @Override
+    public double getInhomY() {
+<span class="fc" id="L295">        return getY();</span>
+    }
+
+    /**
+     * Sets Y inhomogeneous coordinate of this 3D point.
+     *
+     * @param inhomY Y inhomogeneous coordinate.
+     */
+    @Override
+    public void setInhomY(final double inhomY) {
+<span class="fc" id="L305">        y = inhomY;</span>
+<span class="fc" id="L306">    }</span>
+
+    /**
+     * Returns Z inhomogeneous coordinate of this 3D point.
+     *
+     * @return Z inhomogeneous coordinate.
+     */
+    @Override
+    public double getInhomZ() {
+<span class="fc" id="L315">        return getZ();</span>
+    }
+
+    /**
+     * Sets Z inhomogeneous coordinate of this 3D point.
+     *
+     * @param inhomZ Z inhomogeneous coordinate.
+     */
+    @Override
+    public void setInhomZ(final double inhomZ) {
+<span class="fc" id="L325">        z = inhomZ;</span>
+<span class="fc" id="L326">    }</span>
+
+    /**
+     * Sets coordinates of this 3D point instance using provided inhomogeneous
+     * coordinates.
+     *
+     * @param inhomX x inhomogeneous coordinate.
+     * @param inhomY y inhomogeneous coordinate.
+     * @param inhomZ z inhomogeneous coordinate.
+     */
+    @Override
+    public void setInhomogeneousCoordinates(final double inhomX, final double inhomY, final double inhomZ) {
+<span class="fc" id="L338">        setCoordinates(inhomX, inhomY, inhomZ);</span>
+<span class="fc" id="L339">    }</span>
+
+    /**
+     * Checks if provided object equals current 2D point.
+     *
+     * @param obj Object to compare.
+     * @return True if both objects are considered to be equal, false otherwise.
+     */
+    @Override
+    public boolean equals(final Object obj) {
+<span class="pc bpc" id="L349" title="1 of 2 branches missed.">        if (!(obj instanceof Point3D point)) {</span>
+<span class="nc" id="L350">            return false;</span>
+        }
+<span class="fc bfc" id="L352" title="All 2 branches covered.">        if (obj == this) {</span>
+<span class="fc" id="L353">            return true;</span>
+        }
+
+<span class="fc" id="L356">        return equals(point);</span>
+    }
+
+    /**
+     * Returns hash code value.
+     *
+     * @return Hash code value.
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L366">        return Objects.hash(x, y, z, 1.0);</span>
+    }
+
+    /**
+     * Checks if the homogeneous 3D point described by this instance equals the
+     * input Point3D (using a comparison threshold).
+     *
+     * @param point     Point that will be compared to.
+     * @param threshold threshold grade of tolerance to determine whether the
+     *                  points are equal or not. It is used because due to machine precision, the
+     *                  values might not be exactly equal (if not provided
+     *                  DEFAULT_COMPARISON_THRESHOLD is used).
+     * @return True if current point and input point are the same, false
+     * otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    @Override
+    public boolean equals(final Point3D point, final double threshold) {
+<span class="fc bfc" id="L384" title="All 2 branches covered.">        if (point.getType() == CoordinatesType.INHOMOGENEOUS_COORDINATES) {</span>
+<span class="fc" id="L385">            return equals((InhomogeneousPoint3D) point, threshold);</span>
+        } else {
+<span class="fc" id="L387">            return equals((HomogeneousPoint3D) point, threshold);</span>
+        }
+    }
+
+    /**
+     * Checks if the homogeneous 3D point described by this instance equals the
+     * input HomogeneousPoint3D (using a comparison threshold).
+     *
+     * @param point     Point that will be compared to.
+     * @param threshold threshold grade of tolerance to determine whether the
+     *                  points are equal or not. It is used because due to machine precision, the
+     *                  values might not be exactly equal (if not provided
+     *                  DEFAULT_COMPARISON_THRESHOLD is used).
+     * @return True if current point and input point are the same, false
+     * otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    public boolean equals(final HomogeneousPoint3D point, final double threshold) {
+<span class="fc bfc" id="L405" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L406">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc bfc" id="L409" title="All 2 branches covered.">        final var dX = Math.abs((point.getX() / point.getW()) - x) &lt;= threshold;</span>
+<span class="fc bfc" id="L410" title="All 2 branches covered.">        final var dY = Math.abs((point.getY() / point.getW()) - y) &lt;= threshold;</span>
+<span class="fc bfc" id="L411" title="All 2 branches covered.">        final var dZ = Math.abs((point.getZ() / point.getW()) - z) &lt;= threshold;</span>
+
+<span class="pc bpc" id="L413" title="1 of 6 branches missed.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
+    }
+
+    /**
+     * Checks if the homogeneous 3D point described by this instance equals the
+     * input HomogeneousPoint3D (using a comparison threshold).
+     *
+     * @param point Point that will be compared to.
+     * @return True if current point and input point are the same, false
+     * otherwise
+     */
+    public boolean equals(final HomogeneousPoint3D point) {
+<span class="fc" id="L425">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+    }
+
+    /**
+     * Checks if the homogeneous 3D point described by this instance equals the
+     * input InhomogeneousPoint3D (using a comparison threshold).
+     *
+     * @param point     Point that will be compared to.
+     * @param threshold threshold grade of tolerance to determine whether the
+     *                  points are equal or not. It is used because due to machine precision, the
+     *                  values might not be exactly equal (if not provided
+     *                  DEFAULT_COMPARISON_THRESHOLD is used).
+     * @return True if current point and input point are the same, false
+     * otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    public boolean equals(final InhomogeneousPoint3D point, double threshold) {
+<span class="fc bfc" id="L442" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L443">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc bfc" id="L446" title="All 2 branches covered.">        final var dX = Math.abs(point.getX() - x) &lt;= threshold;</span>
+<span class="fc bfc" id="L447" title="All 2 branches covered.">        final var dY = Math.abs(point.getY() - y) &lt;= threshold;</span>
+<span class="fc bfc" id="L448" title="All 2 branches covered.">        final var dZ = Math.abs(point.getZ() - z) &lt;= threshold;</span>
+
+<span class="fc bfc" id="L450" title="All 6 branches covered.">        return (dX &amp;&amp; dY &amp;&amp; dZ);</span>
+    }
+
+    /**
+     * Checks if the homogeneous 3D point described by this instance equals the
+     * input InhomogeneousPoint3D (using a comparison threshold).
+     *
+     * @param point Point that will be compared to.
+     * @return True if current point and input point are the same, false
+     * otherwise.
+     */
+    public boolean equals(final InhomogeneousPoint3D point) {
+<span class="fc" id="L462">        return equals(point, DEFAULT_COMPARISON_THRESHOLD);</span>
+    }
+
+    /**
+     * Checks whether this Point3D is at infinity or not.
+     *
+     * @return True if the point is at infinity. False otherwise.
+     */
+    @Override
+    public boolean isAtInfinity() {
+<span class="fc bfc" id="L472" title="All 8 branches covered.">        return (Double.isInfinite(x) || Double.isNaN(x) || Double.isInfinite(y) || Double.isNaN(y)</span>
+<span class="fc bfc" id="L473" title="All 4 branches covered.">                || Double.isInfinite(z) || Double.isNaN(z));</span>
+    }
+
+    /**
+     * Returns the type of coordinates used to represent a Point3D.
+     *
+     * @return Type of coordinates of this 3D point.
+     */
+    @Override
+    public CoordinatesType getType() {
+<span class="fc" id="L483">        return CoordinatesType.INHOMOGENEOUS_COORDINATES;</span>
+    }
+
+    /**
+     * Converts this instance into an homogeneous 3D point and returns the
+     * result as a new homogeneous 3D point instance.
+     *
+     * @return Converts and returns this point as an homogeneous 3D point.
+     */
+    public HomogeneousPoint3D toHomogeneous() {
+<span class="fc" id="L493">        return new HomogeneousPoint3D(x, y, z, 1.0);</span>
+    }
+
+    /**
+     * Returns an array containing the coordinates of this Point3D.
+     *
+     * @return Array containing coordinates of this Point3D.
+     */
+    @Override
+    public double[] asArray() {
+<span class="fc" id="L503">        final var out = new double[POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];</span>
+<span class="fc" id="L504">        asArray(out);</span>
+<span class="fc" id="L505">        return out;</span>
+    }
+
+    /**
+     * Uses provided array to store the coordinates of this InhomogeneousPoint3D
+     *
+     * @param array Array where coordinates will be stored.
+     * @throws IllegalArgumentException Raised if length of array is not 2.
+     */
+    @Override
+    public void asArray(double[] array) {
+<span class="pc bpc" id="L516" title="1 of 2 branches missed.">        if (array.length != POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH)</span>
+<span class="nc" id="L517">            throw new IllegalArgumentException();</span>
+<span class="fc" id="L518">        array[0] = x;</span>
+<span class="fc" id="L519">        array[1] = y;</span>
+<span class="fc" id="L520">        array[2] = z;</span>
+<span class="fc" id="L521">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

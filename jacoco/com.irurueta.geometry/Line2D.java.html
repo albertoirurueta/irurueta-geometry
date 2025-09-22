@@ -1,0 +1,808 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Line2D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Line2D.java</span></div><h1>Line2D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+/**
+ * Line2D in R2. Lines can be expressed using the following expression:
+ * A * x + B * y + C = 0
+ * where A and B are different from zero. Changing this expression to a
+ * y = m * x + b format leads to the following definitions:
+ * m: slope of the line. Defined as m = -A/B
+ * b: interception point of this line. Defined as b = -c/B
+ * angle of the line with respect to the x-axis = Math.atan(slope).
+ */
+public class Line2D implements Serializable {
+
+    /**
+     * Number of line parameters.
+     */
+    public static final int LINE_NUMBER_PARAMS = 3;
+
+    /**
+     * Positive threshold determine whether points lay inside (is locus) of a
+     * given line or not.
+     */
+    public static final double DEFAULT_LOCUS_THRESHOLD = 1e-12;
+
+    /**
+     * Minimum allowed threshold.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Defines the threshold used when comparing two values.
+     */
+    public static final double DEFAULT_COMPARISON_THRESHOLD = 1e-10;
+
+    /**
+     * Constant defining the size of vector that define the direction of a line.
+     */
+    private static final int INHOM_VECTOR_SIZE = 2;
+
+    /**
+     * Machine precision.
+     */
+    private static final double PRECISION = 1e-12;
+
+    /**
+     * Parameter A of a line.
+     */
+    private double a;
+
+    /**
+     * Parameter B of a line.
+     */
+    private double b;
+
+    /**
+     * Parameter C of a line.
+     */
+    private double c;
+
+    /**
+     * Indicates if line is normalized or not.
+     */
+    private boolean normalized;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L90">    public Line2D() {</span>
+<span class="fc" id="L91">        a = b = c = 0.0;</span>
+<span class="fc" id="L92">        normalized = false;</span>
+<span class="fc" id="L93">    }</span>
+
+    /**
+     * Constructor with parameters. Parameters of a line are provided in the
+     * following homogeneous format:
+     * A * x + B * y + C = 0
+     *
+     * @param a Parameter A of a line.
+     * @param b Parameter B of a line.
+     * @param c Parameter C of a line.
+     */
+<span class="fc" id="L104">    public Line2D(final double a, final double b, final double c) {</span>
+<span class="fc" id="L105">        setParameters(a, b, c);</span>
+<span class="fc" id="L106">    }</span>
+
+    /**
+     * Constructor. This constructor takes two 2D points to build a line passing
+     * through both of them.
+     *
+     * @param pointA  First point used to compute the line.
+     * @param pointB  Second point used to compute the line.
+     * @param noThrow If true no exception is thrown even if points are
+     *                coincident.
+     * @throws CoincidentPointsException Raised if points are equal.
+     */
+<span class="fc" id="L118">    public Line2D(final Point2D pointA, final Point2D pointB, final boolean noThrow) throws CoincidentPointsException {</span>
+<span class="fc" id="L119">        setParametersFromPairOfPoints(pointA, pointB, noThrow);</span>
+<span class="fc" id="L120">    }</span>
+
+    /**
+     * Constructor. This constructor takes two 2D points to build a line passing
+     * through both of them.
+     *
+     * @param pointA First point used to compute the line.
+     * @param pointB Second point used to compute the line.
+     */
+<span class="fc" id="L129">    public Line2D(final Point2D pointA, final Point2D pointB) {</span>
+<span class="fc" id="L130">        setParametersFromPairOfPoints(pointA, pointB);</span>
+<span class="fc" id="L131">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param array Array containing the three parameters of a line (A, B, C).
+     * @throws IllegalArgumentException Raised if length of provided array is
+     *                                  not three.
+     */
+<span class="fc" id="L140">    public Line2D(final double[] array) {</span>
+<span class="fc" id="L141">        setParameters(array);</span>
+<span class="fc" id="L142">    }</span>
+
+    /**
+     * Constructor of a line from one point and its director vector.
+     *
+     * @param point  point passing through the line.
+     * @param vector director vector.
+     * @throws IllegalArgumentException raised if vector length is not 2.
+     */
+<span class="fc" id="L151">    public Line2D(final Point2D point, final double[] vector) {</span>
+<span class="fc" id="L152">        setParametersFromPointAndDirectorVector(point, vector);</span>
+<span class="fc" id="L153">    }</span>
+
+    /**
+     * Returns parameter A of this line.
+     *
+     * @return Parameter A of this line.
+     */
+    public double getA() {
+<span class="fc" id="L161">        return a;</span>
+    }
+
+    /**
+     * Returns parameter B of this line.
+     *
+     * @return Parameter B of this line.
+     */
+    public double getB() {
+<span class="fc" id="L170">        return b;</span>
+    }
+
+    /**
+     * Returns parameter C of this line.
+     *
+     * @return Parameter C of this line.
+     */
+    public double getC() {
+<span class="fc" id="L179">        return c;</span>
+    }
+
+    /**
+     * Sets parameters of this line.
+     *
+     * @param a Parameter A of this line.
+     * @param b Parameter B of this line.
+     * @param c Parameter C of this line.
+     */
+    public final void setParameters(final double a, final double b, final double c) {
+<span class="fc" id="L190">        this.a = a;</span>
+<span class="fc" id="L191">        this.b = b;</span>
+<span class="fc" id="L192">        this.c = c;</span>
+<span class="fc" id="L193">        normalized = false;</span>
+<span class="fc" id="L194">    }</span>
+
+    /**
+     * Sets parameters of this line.
+     *
+     * @param array Array containing parameters of this line.
+     * @throws IllegalArgumentException Raised if provided array does not
+     *                                  have length equal to 3.
+     */
+    public final void setParameters(final double[] array) {
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        if (array.length != LINE_NUMBER_PARAMS) {</span>
+<span class="fc" id="L205">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L208">        a = array[0];</span>
+<span class="fc" id="L209">        b = array[1];</span>
+<span class="fc" id="L210">        c = array[2];</span>
+<span class="fc" id="L211">        normalized = false;</span>
+<span class="fc" id="L212">    }</span>
+
+    /**
+     * Sets parameter A of this line.
+     *
+     * @param a Parameter A of this line.
+     */
+    public void setA(final double a) {
+<span class="fc" id="L220">        this.a = a;</span>
+<span class="fc" id="L221">        normalized = false;</span>
+<span class="fc" id="L222">    }</span>
+
+    /**
+     * Sets parameter B of this line.
+     *
+     * @param b Parameter B of this line.
+     */
+    public void setB(final double b) {
+<span class="fc" id="L230">        this.b = b;</span>
+<span class="fc" id="L231">        normalized = false;</span>
+<span class="fc" id="L232">    }</span>
+
+    /**
+     * Sets parameter C of this line.
+     *
+     * @param c Parameter C of this line.
+     */
+    public void setC(final double c) {
+<span class="fc" id="L240">        this.c = c;</span>
+<span class="fc" id="L241">        normalized = false;</span>
+<span class="fc" id="L242">    }</span>
+
+    /**
+     * Returns the slope of this line.
+     *
+     * @return Slope of this line.
+     */
+    public double getSlope() {
+<span class="fc" id="L250">        return (-a / b);</span>
+    }
+
+    /**
+     * Sets the slope of this line.
+     *
+     * @param slope Slope of this line.
+     */
+    public void setSlope(final double slope) {
+<span class="fc" id="L259">        normalize();</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        if (Math.abs(slope) &gt; 1.0) {</span>
+<span class="fc" id="L261">            a = 1.0;</span>
+<span class="fc" id="L262">            b = -a / slope;</span>
+        } else {
+<span class="fc" id="L264">            b = 1.0;</span>
+<span class="fc" id="L265">            a = -b * slope;</span>
+        }
+<span class="fc" id="L267">        normalized = false;</span>
+<span class="fc" id="L268">    }</span>
+
+    /**
+     * Returns the angle of this line in radians.
+     *
+     * @return Angle of this line in radians.
+     */
+    public double getAngle() {
+<span class="fc" id="L276">        var alpha = Math.atan2(-a, b);</span>
+        // if alpha is not between -90 and 90 degrees, then fix angle
+<span class="fc bfc" id="L278" title="All 2 branches covered.">        if (alpha &gt; Math.PI / 2.0) {</span>
+<span class="fc" id="L279">            alpha = alpha - Math.PI;</span>
+<span class="fc bfc" id="L280" title="All 2 branches covered.">        } else if (alpha &lt; -Math.PI / 2.0) {</span>
+<span class="fc" id="L281">            alpha = alpha + Math.PI;</span>
+        }
+
+<span class="fc" id="L284">        return alpha;</span>
+    }
+
+    /**
+     * Sets angle of this line in radians.
+     *
+     * @param angle Angle of this line in radians.
+     */
+    public void setAngle(final double angle) {
+<span class="fc" id="L293">        final var slope = Math.tan(angle);</span>
+<span class="fc" id="L294">        setSlope(slope);</span>
+<span class="fc" id="L295">    }</span>
+
+    /**
+     * Returns the y-coordinate intercept point of this line.
+     * For a line following the expression A * X + B * y + C = 0 this method
+     * evaluates y for x = 0.
+     *
+     * @return Vertical coordinate where the line intercepts with the Y axis.
+     */
+    public double getYIntercept() {
+<span class="fc" id="L305">        return -(c / b);</span>
+    }
+
+    /**
+     * Sets the y-coordinate intercept point of this line.
+     * For a line following the expression A * x + B * y + C = 0 this method
+     * recalculates the parameters that define the line.
+     *
+     * @param yIntercept Vertical coordinate where the line intercepts with the
+     *                   Y axis.
+     */
+    public void setYIntercept(final double yIntercept) {
+<span class="fc" id="L317">        c = -b * yIntercept;</span>
+<span class="fc" id="L318">        normalized = false;</span>
+<span class="fc" id="L319">    }</span>
+
+    /**
+     * Sets parameters of this line from a pair of 2D points. The line will pass
+     * through both points.
+     *
+     * @param pointA  First point laying on this line.
+     * @param pointB  Second point laying on this line.
+     * @param noThrow Enables/disables throwing exceptions.
+     * @throws CoincidentPointsException Raised if provided points are equal.
+     */
+    public final void setParametersFromPairOfPoints(
+            final Point2D pointA, final Point2D pointB, final boolean noThrow) throws CoincidentPointsException {
+
+        try {
+<span class="fc" id="L334">            pointA.normalize();</span>
+<span class="fc" id="L335">            pointB.normalize();</span>
+
+<span class="fc" id="L337">            final var m = new Matrix(2, Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);</span>
+
+<span class="fc" id="L339">            m.setElementAt(0, 0, pointA.getHomX());</span>
+<span class="fc" id="L340">            m.setElementAt(0, 1, pointA.getHomY());</span>
+<span class="fc" id="L341">            m.setElementAt(0, 2, pointA.getHomW());</span>
+
+<span class="fc" id="L343">            m.setElementAt(1, 0, pointB.getHomX());</span>
+<span class="fc" id="L344">            m.setElementAt(1, 1, pointB.getHomY());</span>
+<span class="fc" id="L345">            m.setElementAt(1, 2, pointB.getHomW());</span>
+
+            // m = U * S * V', where m is 2x3, U is 2x3, S is 3x3 and V is 3x3
+<span class="fc" id="L348">            final var decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L349">            decomposer.decompose();</span>
+
+            // because we have only 2 points, matrix will be rank 2 only if
+            // points are not linearly dependent, if they are, then they are
+            // coincident because homogeneous points are defined up to scale
+<span class="fc bfc" id="L354" title="All 4 branches covered.">            if (decomposer.getRank() &lt; 2 &amp;&amp; !noThrow) {</span>
+<span class="fc" id="L355">                throw new CoincidentPointsException();</span>
+            }
+
+            // Because m is rank 2, the last column of V, from now on l, will be
+            // the right null-space of m. Hence, m*l = 0, which is the equation of
+            // a line.
+            // Hence, l is the null space for both pointA and pointB, or in other
+            // words, pointA and pointB are the locus of l, or l is the line
+            // passing through both pointA and pointB
+<span class="fc" id="L364">            final var v = decomposer.getV();</span>
+
+<span class="fc" id="L366">            a = v.getElementAt(0, 2);</span>
+<span class="fc" id="L367">            b = v.getElementAt(1, 2);</span>
+<span class="fc" id="L368">            c = v.getElementAt(2, 2);</span>
+<span class="fc" id="L369">            normalized = false;</span>
+<span class="nc" id="L370">        } catch (final AlgebraException ignore) {</span>
+            // never happens
+<span class="fc" id="L372">        }</span>
+<span class="fc" id="L373">    }</span>
+
+    /**
+     * Sets parameters of this line from a pair of 2D points. The line will pass
+     * through both points.
+     *
+     * @param pointA First point laying on this line.
+     * @param pointB Second point laying on this line.
+     */
+    public final void setParametersFromPairOfPoints(final Point2D pointA, final Point2D pointB) {
+        try {
+<span class="fc" id="L384">            setParametersFromPairOfPoints(pointA, pointB, true);</span>
+<span class="nc" id="L385">        } catch (final CoincidentPointsException ignore) {</span>
+            // exception never raised
+            // because of last true parameter
+<span class="fc" id="L388">        }</span>
+<span class="fc" id="L389">    }</span>
+
+    /**
+     * Sets parameters of a 2D line from one point and its director vector.
+     *
+     * @param point  point passing through the line.
+     * @param vector director vector.
+     * @throws IllegalArgumentException raised if vector length is not 2.
+     */
+    public final void setParametersFromPointAndDirectorVector(final Point2D point, final double[] vector) {
+<span class="fc bfc" id="L399" title="All 2 branches covered.">        if (vector.length != INHOM_VECTOR_SIZE) {</span>
+<span class="fc" id="L400">            throw new IllegalArgumentException();</span>
+        }
+
+        // normalize point to increase accuracy
+<span class="fc" id="L404">        point.normalize();</span>
+
+<span class="fc" id="L406">        a = vector[0];</span>
+<span class="fc" id="L407">        b = vector[1];</span>
+
+<span class="fc" id="L409">        c = -(a * point.getHomX() + b * point.getHomY()) / point.getHomW();</span>
+
+<span class="fc" id="L411">        normalized = false;</span>
+<span class="fc" id="L412">    }</span>
+
+    /**
+     * Returns boolean indicating whether provided point lies within this line
+     * (at a maximum distance of provided threshold).
+     *
+     * @param point     Point to be checked.
+     * @param threshold Threshold to determine whether the point lies inside the
+     *                  line.
+     * @return True if point lies inside the line (is locus), false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public boolean isLocus(final Point2D point, final double threshold) {
+<span class="pc bpc" id="L425" title="1 of 2 branches missed.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="nc" id="L426">            throw new IllegalArgumentException();</span>
+        }
+
+        // make dot product of homogeneous coordinates with line
+        // m = [x, y, w], l = [a, b, c], then
+        // x * a + y * b + w * c must be very small to be locus
+
+<span class="fc" id="L433">        point.normalize();</span>
+<span class="fc" id="L434">        normalize();</span>
+
+<span class="fc" id="L436">        final var dotProd = point.getHomX() * a + point.getHomY() * b + point.getHomW() * c;</span>
+
+<span class="fc bfc" id="L438" title="All 2 branches covered.">        return Math.abs(dotProd) &lt; threshold;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether provided point lies within this line
+     * (at a maximum distance of DEFAULT_LOCUS_THRESHOLD).
+     *
+     * @param point Point to be checked.
+     * @return True if point lies inside the line (is locus), false otherwise.
+     */
+    public boolean isLocus(final Point2D point) {
+<span class="fc" id="L449">        return isLocus(point, DEFAULT_LOCUS_THRESHOLD);</span>
+    }
+
+    /**
+     * Distance between a line and a point. Returned distance equals to the
+     * Euclidean distance between this line and provided point but having sign.
+     * Sign indicates whether point is at one side or the other of the line.
+     *
+     * @param point Point whose distance to this line will be computed.
+     * @return Distance between this line and provided point.
+     */
+    public double signedDistance(final Point2D point) {
+<span class="fc" id="L461">        point.normalize();</span>
+<span class="fc" id="L462">        normalize();</span>
+
+        // numerator is the dot product of point and line
+<span class="fc" id="L465">        final var num = point.getHomX() * a + point.getHomY() * b + point.getHomW() * c;</span>
+
+<span class="fc" id="L467">        final var den = Math.sqrt(a * a + b * b) * point.getHomW();</span>
+
+<span class="fc" id="L469">        return num / den;</span>
+    }
+
+    /**
+     * Returns the point belonging to this line closest to provided point, which
+     * will be located at signedDistance(Point2D) from this line.
+     * If provided point belong to this line, then the same point will be
+     * returned as a result.
+     *
+     * @param point Point to be checked.
+     * @return Closest point.
+     */
+    public Point2D getClosestPoint(final Point2D point) {
+<span class="fc" id="L482">        return getClosestPoint(point, DEFAULT_LOCUS_THRESHOLD);</span>
+    }
+
+    /**
+     * Returns the point belonging to this line closest to provided point, which
+     * will be located at signedDistance(Point2D) from this line.
+     * If provided point belong to this line, then the same point will be
+     * returned as a result.
+     *
+     * @param point     Point to be checked.
+     * @param threshold Threshold to determine whether point is locus of line or
+     *                  not.
+     * @return Closest point.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    public Point2D getClosestPoint(final Point2D point, final double threshold) {
+<span class="fc" id="L498">        final var result = Point2D.create();</span>
+<span class="fc" id="L499">        closestPoint(point, result, threshold);</span>
+<span class="fc" id="L500">        return result;</span>
+    }
+
+    /**
+     * Computes the point belonging to this line closest to provided point,
+     * which will be located at signedDistance(Point2D) from this line.
+     * If provided point belongs to this line, then the same point will be
+     * returned as a result.
+     *
+     * @param point  Point to be checked.
+     * @param result Instance where the closest point will be stored.
+     */
+    public void closestPoint(final Point2D point, final Point2D result) {
+<span class="fc" id="L513">        closestPoint(point, result, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L514">    }</span>
+
+    /**
+     * Computes the point belonging to this line closest to provided point,
+     * which will be located at signedDistance(Point2D) from this line.
+     * If provided point belongs to this line, then the same point will be
+     * returned as a result.
+     *
+     * @param point     Point to be checked.
+     * @param result    Instance where the closest point will be stored.
+     * @param threshold threshold to determine whether a point belongs to the
+     *                  line's locus.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    public void closestPoint(final Point2D point, final Point2D result, final double threshold) {
+<span class="fc bfc" id="L529" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L530">            throw new IllegalArgumentException();</span>
+        }
+
+        // normalize point to increase accuracy
+<span class="fc" id="L534">        point.normalize();</span>
+
+<span class="fc bfc" id="L536" title="All 2 branches covered.">        if (isLocus(point, threshold)) {</span>
+            // if point belongs to line, then it is returned as result
+<span class="fc" id="L538">            result.setCoordinates(point);</span>
+<span class="fc" id="L539">            return;</span>
+        }
+
+        // move point in director vector direction until it belong to this line
+        // (point.getInhomX() + mA * amount) * mA + (point.getInhomY() +
+        // mB * amount) * mB + mC = 0
+
+<span class="fc" id="L546">        final var amount = -(point.getHomX() * a + point.getHomY() * b + point.getHomW() * c)</span>
+<span class="fc" id="L547">                / (point.getHomW() * (a * a + b * b));</span>
+<span class="fc" id="L548">        result.setHomogeneousCoordinates(point.getHomX() + a * amount * point.getHomW(),</span>
+<span class="fc" id="L549">                point.getHomY() + b * amount * point.getHomW(), point.getHomW());</span>
+<span class="fc" id="L550">        result.normalize();</span>
+<span class="fc" id="L551">    }</span>
+
+    /**
+     * Returns parameters of this line as an array containing [a, b, c].
+     *
+     * @return Array containing all the parameters that describe this line.
+     */
+    public double[] asArray() {
+<span class="fc" id="L559">        final var array = new double[LINE_NUMBER_PARAMS];</span>
+<span class="fc" id="L560">        asArray(array);</span>
+<span class="fc" id="L561">        return array;</span>
+    }
+
+    /**
+     * Stores the parameters of this line in provided array as [a, b, c].
+     *
+     * @param array Array where parameters of this line will be stored.
+     * @throws IllegalArgumentException Raised if provided array doesn't have
+     *                                  length 3.
+     */
+    public void asArray(final double[] array) {
+<span class="fc bfc" id="L572" title="All 2 branches covered.">        if (array.length != LINE_NUMBER_PARAMS) {</span>
+<span class="fc" id="L573">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L576">        array[0] = a;</span>
+<span class="fc" id="L577">        array[1] = b;</span>
+<span class="fc" id="L578">        array[2] = c;</span>
+<span class="fc" id="L579">    }</span>
+
+    /**
+     * Normalizes the parameters of this line to increase the accuracy of some
+     * computations.
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    public void normalize() {
+<span class="fc bfc" id="L587" title="All 2 branches covered.">        if (!normalized) {</span>
+<span class="fc" id="L588">            var norm = Math.sqrt(a * a + b * b + c * c);</span>
+
+<span class="fc bfc" id="L590" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
+<span class="fc" id="L591">                a /= norm;</span>
+<span class="fc" id="L592">                b /= norm;</span>
+<span class="fc" id="L593">                c /= norm;</span>
+
+<span class="fc" id="L595">                normalized = true;</span>
+            }
+        }
+<span class="fc" id="L598">    }</span>
+
+    /**
+     * Returns boolean indicating whether this line has already been normalized.
+     *
+     * @return True if this line is normalized, false otherwise.
+     */
+    public boolean isNormalized() {
+<span class="fc" id="L606">        return normalized;</span>
+    }
+
+    /**
+     * Returns director vector of this line.
+     *
+     * @return Director vector of this line.
+     */
+    public double[] getDirectorVector() {
+<span class="fc" id="L615">        final var out = new double[INHOM_VECTOR_SIZE];</span>
+<span class="fc" id="L616">        directorVector(out);</span>
+<span class="fc" id="L617">        return out;</span>
+    }
+
+    /**
+     * Computes director vector of this line and stores the result in provided
+     * array.
+     *
+     * @param directorVector Array containing director vector.
+     * @throws IllegalArgumentException Raised if provided array does not have
+     *                                  length 2.
+     */
+    public void directorVector(final double[] directorVector) {
+<span class="pc bpc" id="L629" title="1 of 2 branches missed.">        if (directorVector.length != INHOM_VECTOR_SIZE) {</span>
+<span class="nc" id="L630">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L633">        directorVector[0] = a;</span>
+<span class="fc" id="L634">        directorVector[1] = b;</span>
+<span class="fc" id="L635">    }</span>
+
+    /**
+     * Computes the intersection of this line with provided line.
+     * Notice that parallel lines intersect at infinity.
+     *
+     * @param otherLine other line to be intersected with.
+     * @return A 2D point indicating containing the intersection.
+     * @throws NoIntersectionException if for numerical instabilities the
+     *                                 intersection cannot be computed.
+     */
+    public Point2D getIntersection(final Line2D otherLine) throws NoIntersectionException {
+<span class="fc" id="L647">        final var result = Point2D.create();</span>
+<span class="fc" id="L648">        intersection(otherLine, result);</span>
+<span class="fc" id="L649">        return result;</span>
+    }
+
+    /**
+     * Computes the intersection of this line with provided line.
+     * Notice that parallel lines intersect at infinity.
+     *
+     * @param otherLine other line to be intersected with.
+     * @param result    2D point where intersection will be stored. For greater
+     *                  accuracy it is recommended to use an HomogeneousPoint2D instance.
+     * @throws NoIntersectionException if for numerical instabilities the
+     *                                 intersection cannot be computed.
+     */
+    public void intersection(final Line2D otherLine, final Point2D result) throws NoIntersectionException {
+
+        // normalize lines to increase accuracy
+<span class="fc" id="L665">        normalize();</span>
+<span class="fc" id="L666">        otherLine.normalize();</span>
+
+        // set matrix where each row contains the parameters of the line
+        try {
+<span class="fc" id="L670">            final var m = new Matrix(2, 3);</span>
+<span class="fc" id="L671">            m.setElementAt(0, 0, a);</span>
+<span class="fc" id="L672">            m.setElementAt(0, 1, b);</span>
+<span class="fc" id="L673">            m.setElementAt(0, 2, c);</span>
+
+<span class="fc" id="L675">            m.setElementAt(1, 0, otherLine.getA());</span>
+<span class="fc" id="L676">            m.setElementAt(1, 1, otherLine.getB());</span>
+<span class="fc" id="L677">            m.setElementAt(1, 2, otherLine.getC());</span>
+
+            // If lines are not parallel, then matrix has rank 2, and its right
+            // null-space is equal to their intersection.
+<span class="fc" id="L681">            final var decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L682">            decomposer.decompose();</span>
+
+            // lines are parallel
+<span class="fc bfc" id="L685" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 2) {</span>
+<span class="fc" id="L686">                throw new NoIntersectionException();</span>
+            }
+
+<span class="fc" id="L689">            final var v = decomposer.getV();</span>
+
+            // last column of V contains the right null-space of m, which is the
+            // intersection of lines expressed in homogeneous coordinates.
+            // because column is already normalized by SVD decomposition, point
+            // will also be normalized
+<span class="fc" id="L695">            result.setHomogeneousCoordinates(v.getElementAt(0, 2), v.getElementAt(1, 2),</span>
+<span class="fc" id="L696">                    v.getElementAt(2, 2));</span>
+<span class="nc" id="L697">        } catch (final AlgebraException e) {</span>
+            // lines are numerically unstable
+<span class="nc" id="L699">            throw new NoIntersectionException(e);</span>
+<span class="fc" id="L700">        }</span>
+<span class="fc" id="L701">    }</span>
+
+    /**
+     * Computes the dot product between the parameters A, B,C of this line and
+     * the ones of provided line.
+     * This method normalizes both lines to compute dot product.
+     *
+     * @param line line to compute dot product with.
+     * @return dot product value.
+     */
+    public double dotProduct(final Line2D line) {
+<span class="fc" id="L712">        normalize();</span>
+<span class="fc" id="L713">        line.normalize();</span>
+<span class="fc" id="L714">        return a * line.a + b * line.b + c * line.c;</span>
+    }
+
+    /**
+     * Checks if the line described by this instance equals provided line up to
+     * provided threshold.
+     *
+     * @param line      line to be compared to.
+     * @param threshold threshold grade of tolerance to determine whether the
+     *                  lines are equal or not. It is used because due to machine precision,
+     *                  the values might not be exactly equal (if not provided
+     *                  DEFAULT_COMPARISON_THRESHOLD is used).
+     * @return true if current line and provided one are the same, false
+     * otherwise.
+     * @throws IllegalArgumentException if threshold is negative.
+     */
+    public boolean equals(final Line2D line, final double threshold) {
+<span class="fc bfc" id="L731" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L732">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L735">        normalize();</span>
+<span class="fc" id="L736">        line.normalize();</span>
+
+<span class="fc bfc" id="L738" title="All 2 branches covered.">        return (1.0 - Math.abs(dotProduct(line))) &lt;= threshold;</span>
+    }
+
+    /**
+     * Checks if the line described by this instance equals provided line up to
+     * default comparison threshold.
+     *
+     * @param line line to be compared to.
+     * @return true if current line and provided one are the same, false
+     * otherwise.
+     */
+    public boolean equals(final Line2D line) {
+<span class="fc" id="L750">        return equals(line, DEFAULT_COMPARISON_THRESHOLD);</span>
+    }
+
+    /**
+     * Checks if provided object equals current line.
+     *
+     * @param obj object to compare.
+     * @return true if both objects are considered to be equal, false otherwise.
+     */
+    @Override
+    public boolean equals(final Object obj) {
+<span class="pc bpc" id="L761" title="1 of 2 branches missed.">        if (!(obj instanceof Line2D line)) {</span>
+<span class="nc" id="L762">            return false;</span>
+        }
+<span class="pc bpc" id="L764" title="1 of 2 branches missed.">        if (obj == this) {</span>
+<span class="nc" id="L765">            return true;</span>
+        }
+
+<span class="fc" id="L768">        return equals(line);</span>
+    }
+
+    /**
+     * Returns hash code value. This is only defined to keep the compiler happy.
+     * This method must be overridden in subclasses of this class.
+     *
+     * @return Hash code
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L779">        return Objects.hash(a, b, c);</span>
+    }
+
+    /**
+     * Creates a new instance of a 2D line located at the canonical infinity.
+     * The canonical infinity corresponds to all 2D points located at infinity
+     * (i.e. m = (x,y,w = 0), hence l = (A = 0, B = 0, C = 1))
+     *
+     * @return a new instance of a 2D line located at the canonical infinity.
+     */
+    public static Line2D createCanonicalLineAtInfinity() {
+<span class="fc" id="L790">        final var l = new Line2D();</span>
+<span class="fc" id="L791">        setAsCanonicalLineAtInfinity(l);</span>
+<span class="fc" id="L792">        return l;</span>
+    }
+
+    /**
+     * Sets provided 2D line into the canonical infinity.
+     * The canonical infinity corresponds to all 2D points located at infinity
+     * (i.e. m = (x,y,w = 0), hence l = (A = 0, B = 0, C = 1)).
+     *
+     * @param line 2D line to be set at infinity.
+     */
+    public static void setAsCanonicalLineAtInfinity(final Line2D line) {
+<span class="fc" id="L803">        line.a = line.b = 0.0;</span>
+<span class="fc" id="L804">        line.c = 1.0;</span>
+<span class="fc" id="L805">        line.normalized = true;</span>
+<span class="fc" id="L806">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

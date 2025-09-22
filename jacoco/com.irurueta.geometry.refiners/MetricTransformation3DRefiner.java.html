@@ -1,0 +1,385 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MetricTransformation3DRefiner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.refiners</a> &gt; <span class="el_source">MetricTransformation3DRefiner.java</span></div><h1>MetricTransformation3DRefiner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.refiners;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.*;
+import com.irurueta.geometry.estimators.LockedException;
+import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.GradientEstimator;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
+import com.irurueta.numerical.robust.InliersData;
+
+import java.util.BitSet;
+import java.util.List;
+
+/**
+ * Refines a 3D metric transformation by taking into account an initial
+ * estimation, inlier point matches and their residuals.
+ * This class can be used to find a solution that minimizes error of inliers in
+ * LMSE terms.
+ * Typically, a refiner is used by a robust estimator, however it can also be
+ * useful in some other situations.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class MetricTransformation3DRefiner extends
+        PairMatchesAndInliersDataRefiner&lt;MetricTransformation3D, Point3D, Point3D&gt; {
+
+    /**
+     * Point to be reused when computing residuals.
+     */
+<span class="fc" id="L46">    private final Point3D residualTestPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+    /**
+     * Quaternion to be reused for refinement computations.
+     */
+<span class="fc" id="L51">    private Quaternion quaternion = new Quaternion();</span>
+
+    /**
+     * Standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     */
+    private double refinementStandardDeviation;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L67">    public MetricTransformation3DRefiner() {</span>
+<span class="fc" id="L68">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public MetricTransformation3DRefiner(
+            final MetricTransformation3D initialEstimation, final boolean keepCovariance,
+            final BitSet inliers, final double[] residuals, final int numInliers,
+            final List&lt;Point3D&gt; samples1, final List&lt;Point3D&gt; samples2, final double refinementStandardDeviation) {
+<span class="fc" id="L88">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2);</span>
+<span class="fc" id="L89">        this.refinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L90">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public MetricTransformation3DRefiner(
+            final MetricTransformation3D initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List&lt;Point3D&gt; samples1, final List&lt;Point3D&gt; samples2,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L109">        super(initialEstimation, keepCovariance, inliersData, samples1, samples2);</span>
+<span class="fc" id="L110">        this.refinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L111">    }</span>
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    public double getRefinementStandardDeviation() {
+<span class="fc" id="L125">        return refinementStandardDeviation;</span>
+    }
+
+    /**
+     * Sets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of such
+     * threshold.
+     *
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    refinement.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setRefinementStandardDeviation(final double refinementStandardDeviation) throws LockedException {
+<span class="fc bfc" id="L142" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L143">            throw new LockedException();</span>
+        }
+<span class="fc" id="L145">        this.refinementStandardDeviation = refinementStandardDeviation;</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Refines provided initial estimation.
+     *
+     * @return refines estimation.
+     * @throws NotReadyException if not enough input data has been provided.
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
+     */
+    @Override
+    public MetricTransformation3D refine() throws NotReadyException, LockedException, RefinerException {
+<span class="fc" id="L160">        final var result = new MetricTransformation3D();</span>
+<span class="fc" id="L161">        refine(result);</span>
+<span class="fc" id="L162">        return result;</span>
+    }
+
+    /**
+     * Refines provided initial estimation.
+     * This method always sets a value into provided result instance regardless
+     * of the fact that error has actually improved in LMSE terms or not.
+     *
+     * @param result instance where refined estimation will be stored.
+     * @return true if result improves (error decreases) in LMSE terms respect
+     * to initial estimation, false if no improvement has been achieved.
+     * @throws NotReadyException if not enough input data has been provided.
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
+     */
+    @Override
+    public boolean refine(final MetricTransformation3D result) throws NotReadyException, LockedException,
+            RefinerException {
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L183">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L185" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L186">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L189">        locked = true;</span>
+
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (listener != null) {</span>
+<span class="fc" id="L192">            listener.onRefineStart(this, initialEstimation);</span>
+        }
+
+<span class="fc" id="L195">        final var initialTotalResidual = totalResidual(initialEstimation);</span>
+
+        try {
+            // parameters: rotation angle + scale + translation
+<span class="fc" id="L199">            final var initParams = new double[1 + Quaternion.N_PARAMS</span>
+                    + EuclideanTransformation3D.NUM_TRANSLATION_COORDS];
+            // copy rotation values
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">            if (initialEstimation.getRotation().getType() == Rotation3DType.QUATERNION) {</span>
+<span class="nc" id="L203">                quaternion = (Quaternion) initialEstimation.getRotation();</span>
+            } else {
+<span class="fc" id="L205">                quaternion = initialEstimation.getRotation().toQuaternion();</span>
+            }
+<span class="fc" id="L207">            quaternion.normalize();</span>
+
+            // copy values
+<span class="fc" id="L210">            initParams[0] = initialEstimation.getScale();</span>
+<span class="fc" id="L211">            initParams[1] = quaternion.getA();</span>
+<span class="fc" id="L212">            initParams[2] = quaternion.getB();</span>
+<span class="fc" id="L213">            initParams[3] = quaternion.getC();</span>
+<span class="fc" id="L214">            initParams[4] = quaternion.getD();</span>
+
+<span class="fc" id="L216">            System.arraycopy(initialEstimation.getTranslation(), 0, initParams, Quaternion.N_PARAMS + 1,</span>
+                    EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
+
+            // output values to be fitted/optimized will contain residuals
+<span class="fc" id="L220">            final var y = new double[numInliers];</span>
+            // input values will contain 2 sets of 2D points to compute residuals
+<span class="fc" id="L222">            final var nDims = 2 * Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH;</span>
+<span class="fc" id="L223">            final var x = new Matrix(numInliers, nDims);</span>
+<span class="fc" id="L224">            final var nSamples = inliers.length();</span>
+<span class="fc" id="L225">            var pos = 0;</span>
+<span class="fc bfc" id="L226" title="All 2 branches covered.">            for (var i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L227" title="All 2 branches covered.">                if (inliers.get(i)) {</span>
+                    // sample is inlier
+<span class="fc" id="L229">                    final var inputPoint = samples1.get(i);</span>
+<span class="fc" id="L230">                    final var outputPoint = samples2.get(i);</span>
+<span class="fc" id="L231">                    inputPoint.normalize();</span>
+<span class="fc" id="L232">                    outputPoint.normalize();</span>
+<span class="fc" id="L233">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L234">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
+<span class="fc" id="L235">                    x.setElementAt(pos, 2, inputPoint.getHomZ());</span>
+<span class="fc" id="L236">                    x.setElementAt(pos, 3, inputPoint.getHomW());</span>
+<span class="fc" id="L237">                    x.setElementAt(pos, 4, outputPoint.getHomX());</span>
+<span class="fc" id="L238">                    x.setElementAt(pos, 5, outputPoint.getHomY());</span>
+<span class="fc" id="L239">                    x.setElementAt(pos, 6, outputPoint.getHomZ());</span>
+<span class="fc" id="L240">                    x.setElementAt(pos, 7, outputPoint.getHomW());</span>
+
+<span class="fc" id="L242">                    y[pos] = residuals[i];</span>
+<span class="fc" id="L243">                    pos++;</span>
+                }
+            }
+
+<span class="fc" id="L247">            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+
+<span class="fc" id="L249">                private final Point3D inputPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+<span class="fc" id="L251">                private final Point3D outputPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+<span class="fc" id="L253">                private final MetricTransformation3D transformation = new MetricTransformation3D();</span>
+
+<span class="fc" id="L255">                private final GradientEstimator gradientEstimator = new GradientEstimator(params -&gt; {</span>
+                    // copy values
+<span class="fc" id="L257">                    transformation.setScale(params[0]);</span>
+<span class="fc" id="L258">                    quaternion.setA(params[1]);</span>
+<span class="fc" id="L259">                    quaternion.setB(params[2]);</span>
+<span class="fc" id="L260">                    quaternion.setC(params[3]);</span>
+<span class="fc" id="L261">                    quaternion.setD(params[4]);</span>
+<span class="fc" id="L262">                    transformation.setRotation(quaternion);</span>
+
+<span class="fc" id="L264">                    System.arraycopy(params, 1 + Quaternion.N_PARAMS, transformation.getTranslation(), 0,</span>
+                            EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
+
+<span class="fc" id="L267">                    return residual(transformation, inputPoint, outputPoint);</span>
+                });
+
+                @Override
+                public int getNumberOfDimensions() {
+<span class="fc" id="L272">                    return nDims;</span>
+                }
+
+                @Override
+                public double[] createInitialParametersArray() {
+<span class="fc" id="L277">                    return initParams;</span>
+                }
+
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+<span class="fc" id="L283">                    inputPoint.setHomogeneousCoordinates(point[0], point[1], point[2], point[3]);</span>
+<span class="fc" id="L284">                    outputPoint.setHomogeneousCoordinates(point[4], point[5], point[6], point[7]);</span>
+
+                    // copy values
+<span class="fc" id="L287">                    transformation.setScale(params[0]);</span>
+<span class="fc" id="L288">                    quaternion.setA(params[1]);</span>
+<span class="fc" id="L289">                    quaternion.setB(params[2]);</span>
+<span class="fc" id="L290">                    quaternion.setC(params[3]);</span>
+<span class="fc" id="L291">                    quaternion.setD(params[4]);</span>
+<span class="fc" id="L292">                    transformation.setRotation(quaternion);</span>
+
+<span class="fc" id="L294">                    System.arraycopy(params, 1 + Quaternion.N_PARAMS, transformation.getTranslation(), 0,</span>
+                            EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
+
+<span class="fc" id="L297">                    final var y = residual(transformation, inputPoint, outputPoint);</span>
+<span class="fc" id="L298">                    gradientEstimator.gradient(params, derivatives);</span>
+
+<span class="fc" id="L300">                    return y;</span>
+                }
+            };
+
+<span class="fc" id="L304">            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,</span>
+<span class="fc" id="L305">                    getRefinementStandardDeviation());</span>
+
+<span class="fc" id="L307">            fitter.fit();</span>
+
+            // obtain estimated params
+<span class="fc" id="L310">            final var params = fitter.getA();</span>
+
+            // update transformation
+<span class="fc" id="L313">            result.setScale(params[0]);</span>
+<span class="fc" id="L314">            quaternion.setA(params[1]);</span>
+<span class="fc" id="L315">            quaternion.setB(params[2]);</span>
+<span class="fc" id="L316">            quaternion.setC(params[3]);</span>
+<span class="fc" id="L317">            quaternion.setD(params[4]);</span>
+<span class="fc" id="L318">            result.setRotation(quaternion);</span>
+<span class="fc" id="L319">            System.arraycopy(params, 1 + Quaternion.N_PARAMS, result.getTranslation(), 0,</span>
+                    EuclideanTransformation3D.NUM_TRANSLATION_COORDS);
+
+<span class="pc bpc" id="L322" title="1 of 2 branches missed.">            if (keepCovariance) {</span>
+                // keep covariance
+<span class="fc" id="L324">                covariance = fitter.getCovar();</span>
+            }
+
+<span class="fc" id="L327">            final var finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L328" title="All 2 branches covered.">            final var errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+
+<span class="fc bfc" id="L330" title="All 2 branches covered.">            if (listener != null) {</span>
+<span class="fc" id="L331">                listener.onRefineEnd(this, initialEstimation, result, errorDecreased);</span>
+            }
+
+<span class="fc" id="L334">            return errorDecreased;</span>
+
+<span class="nc" id="L336">        } catch (final Exception e) {</span>
+<span class="nc" id="L337">            throw new RefinerException(e);</span>
+        } finally {
+<span class="fc" id="L339">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Computes the residual between the Euclidean transformation and a pair or
+     * matched points.
+     *
+     * @param transformation a transformation.
+     * @param inputPoint     input 3D point.
+     * @param outputPoint    output 3D point.
+     * @return residual.
+     */
+    private double residual(final MetricTransformation3D transformation, final Point3D inputPoint,
+                            final Point3D outputPoint) {
+<span class="fc" id="L354">        inputPoint.normalize();</span>
+<span class="fc" id="L355">        outputPoint.normalize();</span>
+
+<span class="fc" id="L357">        transformation.transform(inputPoint, residualTestPoint);</span>
+<span class="fc" id="L358">        return residualTestPoint.distanceTo(outputPoint);</span>
+    }
+
+    /**
+     * Computes total residual among all provided inlier samples.
+     *
+     * @param transformation a transformation.
+     * @return total residual.
+     */
+    private double totalResidual(final MetricTransformation3D transformation) {
+<span class="fc" id="L368">        var result = 0.0;</span>
+
+<span class="fc" id="L370">        final var nSamples = inliers.length();</span>
+<span class="fc bfc" id="L371" title="All 2 branches covered.">        for (var i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L372" title="All 2 branches covered.">            if (inliers.get(i)) {</span>
+                // sample is inlier
+<span class="fc" id="L374">                final var inputPoint = samples1.get(i);</span>
+<span class="fc" id="L375">                final var outputPoint = samples2.get(i);</span>
+<span class="fc" id="L376">                inputPoint.normalize();</span>
+<span class="fc" id="L377">                outputPoint.normalize();</span>
+<span class="fc" id="L378">                result += residual(transformation, inputPoint, outputPoint);</span>
+            }
+        }
+
+<span class="fc" id="L382">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

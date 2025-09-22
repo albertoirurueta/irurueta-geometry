@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Utils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Utils.java</span></div><h1>Utils.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+/**
+ * Helper class containing commonly used methods related to geometry.
+ */
+public class Utils {
+    /**
+     * Amount to add/subtract to an angle in degrees to make a half turn.
+     */
+    public static final double HALF_TURN_DEGREES = 180.0;
+    
+    /**
+     * Amount to add/subtract to an angle in radians to make a half turn.
+     */
+    public static final double HALF_TURN_RADIANS = Math.PI;
+
+    /**
+     * Constructor.
+     * Prevents instantiation.
+     */
+    private Utils() { }
+    
+    /**
+     * Converts provided value from radians to degrees.
+     * @param radians Angle in radians.
+     * @return Converted angle in degrees.
+     */
+    public static double convertToDegrees(final double radians) {
+<span class="fc" id="L44">        return radians / Math.PI * 180.0;</span>
+    }
+    
+    /**
+     * Converts provided value from degrees to radians.
+     * @param degrees Angle in degrees.
+     * @return Converted angle in radians.
+     */
+    public static double convertToRadians(final double degrees) {
+<span class="fc" id="L53">        return degrees / 180.0 * Math.PI;</span>
+    }   
+        
+    /**
+     * Normalizes an angle between the range -180...180 by adding or subtracting
+     * the required amount of turns.
+     * @param angle angle to be normalized expressed in degrees.
+     * @return the same angle but normalized.
+     */
+    public static double normalizeAngleDegrees(final double angle) {
+<span class="fc" id="L63">        return normalizeAngle(angle, HALF_TURN_DEGREES);</span>
+    }
+    
+    /**
+     * Normalizes an angle between the range -pi...pi by adding or subtracting 
+     * the required amount of turns.
+     * @param angle angle to be normalized expressed in degrees.
+     * @return the same angle but normalized.
+     */
+    public static double normalizeAngleRadians(final double angle) {
+<span class="fc" id="L73">        return normalizeAngle(angle, HALF_TURN_RADIANS);</span>
+    }
+    
+    /**
+     * Normalizes an angle between the range -pi...pi (or -180...180) by adding
+     * or subtracting the required amount of turns.
+     * This method can work with angles expressed either on degrees or radians
+     * depending on the units used for the definition of a half turn.
+     * @param angle angle to be normalized.
+     * @param halfTurn the definition of a half turn (either in degrees or 
+     * radians).
+     * @return the same angle but normalized.
+     */
+    private static double normalizeAngle(final double angle, final double halfTurn) {
+<span class="fc" id="L87">        var result = angle;</span>
+<span class="fc" id="L88">        final var fullTurn = 2.0 * halfTurn;</span>
+        
+<span class="fc bfc" id="L90" title="All 2 branches covered.">        if (result &lt;= -halfTurn) {</span>
+<span class="fc" id="L91">            var nTurns = (int) Math.ceil(-result / fullTurn);</span>
+<span class="fc" id="L92">            result += nTurns * fullTurn;</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">            if (result &gt; halfTurn) {</span>
+<span class="fc" id="L94">                result -= fullTurn;</span>
+            }
+        }
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (result &gt; halfTurn) {</span>
+<span class="fc" id="L98">            var nTurns = (int) Math.ceil(result / fullTurn);</span>
+<span class="fc" id="L99">            result -= nTurns * fullTurn;</span>
+<span class="pc bpc" id="L100" title="1 of 2 branches missed.">            if(result &lt;= -halfTurn){</span>
+<span class="nc" id="L101">                result += fullTurn;</span>
+            }
+        }
+<span class="fc" id="L104">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RANSACCircleRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">RANSACCircleRobustEstimator.java</span></div><h1>RANSACCircleRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.Circle;
+import com.irurueta.geometry.ColinearPointsException;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.numerical.robust.RANSACRobustEstimator;
+import com.irurueta.numerical.robust.RANSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best circle for provided collection of 2D points using RANSAC
+ * algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class RANSACCircleRobustEstimator extends CircleRobustEstimator {
+    /**
+     * Constant defining default threshold to determine whether points are
+     * inliers or not.
+     * Because typical resolution for points is 1 pixel, then default threshold
+     * is defined as 1.
+     */
+    public static final double DEFAULT_THRESHOLD = 1.0;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to determine whether points are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance) a possible
+     * solution has on a sampled point.
+     */
+    private double threshold;
+
+    /**
+     * Constructor.
+     */
+    public RANSACCircleRobustEstimator() {
+<span class="fc" id="L61">        super();</span>
+<span class="fc" id="L62">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Constructor with points.
+     *
+     * @param points 2D points to estimate a circle.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public RANSACCircleRobustEstimator(final List&lt;Point2D&gt; points) {
+<span class="fc" id="L73">        super(points);</span>
+<span class="fc" id="L74">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public RANSACCircleRobustEstimator(final CircleRobustEstimatorListener listener) {
+<span class="fc" id="L84">        super(listener);</span>
+<span class="fc" id="L85">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L86">    }</span>
+
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points   2D points to estimate a circle.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public RANSACCircleRobustEstimator(final CircleRobustEstimatorListener listener, final List&lt;Point2D&gt; points) {
+<span class="fc" id="L99">        super(listener, points);</span>
+<span class="fc" id="L100">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Returns threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error a possible solution has on a
+     * given point.
+     *
+     * @return threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L113">        return threshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error a possible solution has on
+     * a given point.
+     *
+     * @param threshold threshold to be set.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L130">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L133">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L135">        this.threshold = threshold;</span>
+<span class="fc" id="L136">    }</span>
+
+
+    /**
+     * Estimates a circle using a robust estimator and the best set of 2D points
+     * that fit into the locus of the estimated circle found using the robust
+     * estimator.
+     *
+     * @return a circle.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public Circle estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L154" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L155">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L158">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L161">        final var innerEstimator = new RANSACRobustEstimator&lt;&gt;(new RANSACRobustEstimatorListener&lt;Circle&gt;() {</span>
+
+            @Override
+            public double getThreshold() {
+<span class="fc" id="L165">                return threshold;</span>
+            }
+
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L170">                return points.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L175">                return CircleRobustEstimator.MINIMUM_SIZE;</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List&lt;Circle&gt; solutions) {
+<span class="fc" id="L180">                final var point1 = points.get(samplesIndices[0]);</span>
+<span class="fc" id="L181">                final var point2 = points.get(samplesIndices[1]);</span>
+<span class="fc" id="L182">                final var point3 = points.get(samplesIndices[2]);</span>
+
+                try {
+<span class="fc" id="L185">                    final var circle = new Circle(point1, point2, point3);</span>
+<span class="fc" id="L186">                    solutions.add(circle);</span>
+<span class="nc" id="L187">                } catch (final ColinearPointsException e) {</span>
+                    // if points are coincident, no solution is added
+<span class="fc" id="L189">                }</span>
+<span class="fc" id="L190">            }</span>
+
+            @Override
+            public double computeResidual(final Circle currentEstimation, final int i) {
+<span class="fc" id="L194">                return residual(currentEstimation, points.get(i));</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L199">                return RANSACCircleRobustEstimator.this.isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(final RobustEstimator&lt;Circle&gt; estimator) {
+<span class="pc bpc" id="L204" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L205">                    listener.onEstimateStart(RANSACCircleRobustEstimator.this);</span>
+                }
+<span class="fc" id="L207">            }</span>
+
+            @Override
+            public void onEstimateEnd(final RobustEstimator&lt;Circle&gt; estimator) {
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L212">                    listener.onEstimateEnd(RANSACCircleRobustEstimator.this);</span>
+                }
+<span class="fc" id="L214">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator&lt;Circle&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L219">                    listener.onEstimateNextIteration(RANSACCircleRobustEstimator.this, iteration);</span>
+                }
+<span class="fc" id="L221">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator&lt;Circle&gt; estimator, final float progress) {
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L226">                    listener.onEstimateProgressChange(RANSACCircleRobustEstimator.this, progress);</span>
+                }
+<span class="fc" id="L228">            }</span>
+        });
+
+        try {
+<span class="fc" id="L232">            locked = true;</span>
+<span class="fc" id="L233">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L234">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L235">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L236">            return innerEstimator.estimate();</span>
+<span class="nc" id="L237">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L238">            throw new LockedException(e);</span>
+<span class="nc" id="L239">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L240">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L242">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L253">        return RobustEstimatorMethod.RANSAC;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

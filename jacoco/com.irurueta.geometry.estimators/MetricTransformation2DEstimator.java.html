@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MetricTransformation2DEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">MetricTransformation2DEstimator.java</span></div><h1>MetricTransformation2DEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.Utils;
+import com.irurueta.geometry.CoincidentPointsException;
+import com.irurueta.geometry.InvalidRotationMatrixException;
+import com.irurueta.geometry.MetricTransformation2D;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.Rotation2D;
+
+import java.util.List;
+
+/**
+ * Estimator of a 2D metric transformation based on point correspondences.
+ * A minimum of 3 non-coincident matched 2D input/output points is required for
+ * estimation.
+ * If more points are provided an LMSE (Least Mean Squared Error) solution will
+ * be found.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class MetricTransformation2DEstimator {
+
+    /**
+     * Minimum required number of matched points.
+     */
+    public static final int MINIMUM_SIZE = 3;
+
+    /**
+     * For some point configurations a solution can be found with only 2 points.
+     */
+    public static final int WEAK_MINIMUM_SIZE = 2;
+
+
+    /**
+     * 2D input points.
+     */
+    private List&lt;Point2D&gt; inputPoints;
+
+    /**
+     * 2D output points.
+     */
+    private List&lt;Point2D&gt; outputPoints;
+
+    /**
+     * Listener to be notified of events such as when estimation starts or ends.
+     */
+    private MetricTransformation2DEstimatorListener listener;
+
+    /**
+     * Indicates whether estimation can start with only 2 points or not.
+     * True allows 2 points, false requires 3.
+     */
+    private boolean weakMinimumSizeAllowed;
+
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     */
+    private boolean locked;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L82">    public MetricTransformation2DEstimator() {</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param inputPoints  2D input points.
+     * @param outputPoints 2D output points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 2.
+     */
+<span class="fc" id="L93">    public MetricTransformation2DEstimator(final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {</span>
+<span class="fc" id="L94">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L95">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts or ends.
+     */
+<span class="fc" id="L103">    public MetricTransformation2DEstimator(final MetricTransformation2DEstimatorListener listener) {</span>
+<span class="fc" id="L104">        this.listener = listener;</span>
+<span class="fc" id="L105">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts or ends.
+     * @param inputPoints  3D input points.
+     * @param outputPoints 3D output points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 2.
+     */
+    public MetricTransformation2DEstimator(
+            final MetricTransformation2DEstimatorListener listener,
+<span class="fc" id="L119">            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {</span>
+<span class="fc" id="L120">        this.listener = listener;</span>
+<span class="fc" id="L121">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L122">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+<span class="fc" id="L129">    public MetricTransformation2DEstimator(final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L130">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L131">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param inputPoints            2D input points.
+     * @param outputPoints           2D output points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 2.
+     */
+    public MetricTransformation2DEstimator(
+<span class="fc" id="L143">            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L144">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L145">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts or ends.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public MetricTransformation2DEstimator(
+<span class="fc" id="L156">            final MetricTransformation2DEstimatorListener listener, final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L157">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L158">        this.listener = listener;</span>
+<span class="fc" id="L159">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts or ends.
+     * @param inputPoints            3D input points.
+     * @param outputPoints           3D output points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 2.
+     */
+    public MetricTransformation2DEstimator(
+            final MetricTransformation2DEstimatorListener listener,
+<span class="fc" id="L174">            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L175">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L176">        this.listener = listener;</span>
+<span class="fc" id="L177">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L178">    }</span>
+
+    /**
+     * Returns list of input points to be used to estimate a metric 2D
+     * transformation.
+     * Each point in the list of input points must be matched with the
+     * corresponding point in the list of output points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     *
+     * @return list of input points to be used to estimate a metric 2D
+     * transformation.
+     */
+    public List&lt;Point2D&gt; getInputPoints() {
+<span class="fc" id="L192">        return inputPoints;</span>
+    }
+
+    /**
+     * Returns list of output points to be used to estimate a metric 2D
+     * transformation.
+     * Each point in the list of output points must be matched with the
+     * corresponding point in the list of input points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     *
+     * @return list of output points to be used to estimate a metric 2D
+     * transformation.
+     */
+    public List&lt;Point2D&gt; getOutputPoints() {
+<span class="fc" id="L207">        return outputPoints;</span>
+    }
+
+    /**
+     * Sets list of points to be used to estimate a metric 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate a metric
+     *                     2D transformation.
+     * @param outputPoints list of output points to be used to estimate a metric
+     *                     2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
+     */
+    public void setPoints(final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L227">            throw new LockedException();</span>
+        }
+<span class="fc" id="L229">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L230">    }</span>
+
+    /**
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts or ends.
+     *
+     * @return listener to be notified of events.
+     */
+    public MetricTransformation2DEstimatorListener getListener() {
+<span class="fc" id="L239">        return listener;</span>
+    }
+
+    /**
+     * Sets listener to be notified of events such as when estimation starts or
+     * ends.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setListener(final MetricTransformation2DEstimatorListener listener) throws LockedException {
+<span class="fc bfc" id="L250" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L251">            throw new LockedException();</span>
+        }
+<span class="fc" id="L253">        this.listener = listener;</span>
+<span class="fc" id="L254">    }</span>
+
+    /**
+     * Indicates whether estimation can start with only 2 points or not.
+     *
+     * @return true allows 2 points, false requires 3.
+     */
+    public boolean isWeakMinimumSizeAllowed() {
+<span class="fc" id="L262">        return weakMinimumSizeAllowed;</span>
+    }
+
+    /**
+     * Specifies whether estimation can start with only 2 points or not.
+     *
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed) throws LockedException {
+<span class="fc bfc" id="L272" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L273">            throw new LockedException();</span>
+        }
+<span class="fc" id="L275">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L276">    }</span>
+
+    /**
+     * Required minimum number of point correspondences to start the estimation.
+     * Can be either 2 or 3.
+     *
+     * @return minimum number of point correspondences.
+     */
+    public int getMinimumPoints() {
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        return weakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
+    }
+
+    /**
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L295" title="All 2 branches covered.">        return listener != null;</span>
+    }
+
+    /**
+     * Indicates if this instance is locked because estimation is being
+     * computed.
+     *
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L305">        return locked;</span>
+    }
+
+    /**
+     * Indicates if estimator is ready to start the metric 2D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points) are provided
+     * and a minimum of MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="pc bpc" id="L317" title="2 of 6 branches missed.">        return inputPoints != null &amp;&amp; outputPoints != null &amp;&amp; inputPoints.size() == outputPoints.size()</span>
+<span class="pc bpc" id="L318" title="1 of 2 branches missed.">                &amp;&amp; inputPoints.size() &gt;= getMinimumPoints();</span>
+    }
+
+    /**
+     * Estimates a metric 2D transformation using the list of matched input
+     * and output 2D points.
+     * A minimum of 2 matched non-coincident points is required. If more points
+     * are provided an LMSE (Least Mean Squared Error) solution  will be found.
+     *
+     * @return estimated metric 2D transformation.
+     * @throws LockedException           if estimator is locked.
+     * @throws NotReadyException         if not enough data has been provided.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public MetricTransformation2D estimate() throws LockedException, NotReadyException, CoincidentPointsException {
+<span class="fc" id="L335">        final var result = new MetricTransformation2D();</span>
+<span class="fc" id="L336">        estimate(result);</span>
+<span class="fc" id="L337">        return result;</span>
+    }
+
+    /**
+     * Estimates a metric 2D transformation using the list of matched input and
+     * output 2D points.
+     * A minimum of 2 matched non-coincident points is required. If more points
+     * are provided an LMSE (Least Mean Squared Error) solution will be found.
+     *
+     * @param result instance where result will be stored.
+     * @throws LockedException           if estimator is locked.
+     * @throws NotReadyException         if not enough data has been provided.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public void estimate(final MetricTransformation2D result) throws LockedException, NotReadyException,
+            CoincidentPointsException {
+<span class="fc bfc" id="L355" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L356">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L358" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L359">            throw new NotReadyException();</span>
+        }
+
+        try {
+<span class="fc" id="L363">            locked = true;</span>
+
+<span class="fc bfc" id="L365" title="All 2 branches covered.">            if (listener != null) {</span>
+<span class="fc" id="L366">                listener.onEstimateStart(this);</span>
+            }
+
+<span class="fc" id="L369">            final var inCentroid = computeCentroid(inputPoints);</span>
+<span class="fc" id="L370">            final var outCentroid = computeCentroid(outputPoints);</span>
+
+<span class="fc" id="L372">            final var m = new Matrix(Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH,</span>
+                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
+
+<span class="fc" id="L375">            final var n = inputPoints.size();</span>
+            Point2D inputPoint;
+            Point2D outputPoint;
+<span class="fc" id="L378">            final var col = new Matrix(Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);</span>
+<span class="fc" id="L379">            final var row = new Matrix(1, Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);</span>
+<span class="fc" id="L380">            final var tmp = new Matrix(Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH,</span>
+                    Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH);
+<span class="fc" id="L382">            var inCov = 0.0;</span>
+<span class="fc bfc" id="L383" title="All 2 branches covered.">            for (var i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L384">                inputPoint = inputPoints.get(i);</span>
+<span class="fc" id="L385">                outputPoint = outputPoints.get(i);</span>
+
+<span class="fc" id="L387">                col.setElementAtIndex(0, inputPoint.getInhomX() - inCentroid.getElementAtIndex(0));</span>
+<span class="fc" id="L388">                col.setElementAtIndex(1, inputPoint.getInhomY() - inCentroid.getElementAtIndex(1));</span>
+
+<span class="fc" id="L390">                row.setElementAtIndex(0, outputPoint.getInhomX() - outCentroid.getElementAtIndex(0));</span>
+<span class="fc" id="L391">                row.setElementAtIndex(1, outputPoint.getInhomY() - outCentroid.getElementAtIndex(1));</span>
+
+                // compute covariances of input and output points
+<span class="fc" id="L394">                inCov += Math.pow(Utils.normF(col), 2.0);</span>
+
+<span class="fc" id="L396">                col.multiply(row, tmp);</span>
+<span class="fc" id="L397">                m.add(tmp);</span>
+            }
+
+<span class="pc bpc" id="L400" title="1 of 2 branches missed.">            if (inCov == 0.0) {</span>
+<span class="nc" id="L401">                throw new CoincidentPointsException();</span>
+            }
+
+<span class="fc" id="L404">            final var decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L405">            decomposer.decompose();</span>
+
+<span class="pc bpc" id="L407" title="1 of 4 branches missed.">            if (!weakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
+<span class="nc" id="L408">                throw new CoincidentPointsException();</span>
+            }
+
+<span class="fc" id="L411">            final var u = decomposer.getU();</span>
+<span class="fc" id="L412">            final var v = decomposer.getV();</span>
+
+<span class="fc" id="L414">            final var s = decomposer.getSingularValues();</span>
+
+            // rotation R = V*U^T
+<span class="fc" id="L417">            final var r = v.multiplyAndReturnNew(u.transposeAndReturnNew());</span>
+
+<span class="fc" id="L419">            final var e = new double[]{1.0, 1.0};</span>
+
+<span class="fc bfc" id="L421" title="All 2 branches covered.">            if (Utils.det(r) &lt; 0.0) {</span>
+                // ideally rotation has 2 unitary singular values.
+                // Because of reflection, we must change sign of last singular
+                // value and reconstruct rotation matrix
+
+<span class="fc" id="L426">                e[1] = -1.0;</span>
+
+                // because rotation matrix can be seen as V*e*U^T, we can
+                // simply multiply 3rd column of R by -1
+<span class="fc" id="L430">                r.setElementAt(0, 1, -r.getElementAt(0, 1));</span>
+<span class="fc" id="L431">                r.setElementAt(1, 1, -r.getElementAt(1, 1));</span>
+            }
+
+<span class="fc" id="L434">            final var rotation = new Rotation2D(r);</span>
+
+            // scale
+<span class="fc" id="L437">            final var dot = ArrayUtils.dotProduct(s, e);</span>
+<span class="fc" id="L438">            final var invScale = dot / inCov;</span>
+
+            // translation
+<span class="fc" id="L441">            final var t = r.multiplyAndReturnNew(inCentroid);</span>
+<span class="fc" id="L442">            t.multiplyByScalar(-invScale);</span>
+<span class="fc" id="L443">            t.add(outCentroid);</span>
+
+<span class="fc" id="L445">            result.setRotation(rotation);</span>
+<span class="fc" id="L446">            result.setTranslation(t.getBuffer());</span>
+<span class="fc" id="L447">            result.setScale(invScale);</span>
+
+<span class="fc bfc" id="L449" title="All 2 branches covered.">            if (listener != null) {</span>
+<span class="fc" id="L450">                listener.onEstimateEnd(this);</span>
+            }
+<span class="nc" id="L452">        } catch (final AlgebraException | InvalidRotationMatrixException e) {</span>
+<span class="nc" id="L453">            throw new CoincidentPointsException(e);</span>
+        } finally {
+<span class="fc" id="L455">            locked = false;</span>
+        }
+<span class="fc" id="L457">    }</span>
+
+    /**
+     * Computes centroid of provided list of points using inhomogeneous
+     * coordinates.
+     *
+     * @param points list of points to compute centroid.
+     * @return centroid.
+     * @throws AlgebraException never thrown.
+     */
+    private static Matrix computeCentroid(final List&lt;Point2D&gt; points) throws AlgebraException {
+<span class="fc" id="L468">        var x = 0.0;</span>
+<span class="fc" id="L469">        var y = 0.0;</span>
+<span class="fc" id="L470">        var n = points.size();</span>
+<span class="fc bfc" id="L471" title="All 2 branches covered.">        for (final var p : points) {</span>
+<span class="fc" id="L472">            x += p.getInhomX() / n;</span>
+<span class="fc" id="L473">            y += p.getInhomY() / n;</span>
+<span class="fc" id="L474">        }</span>
+
+<span class="fc" id="L476">        final var result = new Matrix(Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);</span>
+<span class="fc" id="L477">        result.setElementAtIndex(0, x);</span>
+<span class="fc" id="L478">        result.setElementAtIndex(1, y);</span>
+<span class="fc" id="L479">        return result;</span>
+    }
+
+    /**
+     * Internal method to set lists of points to be used to estimate a
+     * metric 2D transformation.
+     * This method does not check whether estimator is locked or not.
+     *
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     metric 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than #getMinimumPoints.
+     */
+    private void internalSetPoints(final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc bfc" id="L495" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L496">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L498" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L499">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L501">        this.inputPoints = inputPoints;</span>
+<span class="fc" id="L502">        this.outputPoints = outputPoints;</span>
+<span class="fc" id="L503">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

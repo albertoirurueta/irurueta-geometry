@@ -1,0 +1,1048 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MatrixRotation3D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">MatrixRotation3D.java</span></div><h1>MatrixRotation3D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.Utils;
+import com.irurueta.algebra.WrongSizeException;
+
+import java.io.Serializable;
+
+/**
+ * This class defines the amount of rotation for 3D points or planes.
+ * Rotation is defined internally as a matrix.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class MatrixRotation3D extends Rotation3D implements Serializable {
+
+    /**
+     * Constant defining the number of rows on a 3D rotation matrix expressed
+     * in inhomogeneous coordinates.
+     */
+    public static final int ROTATION3D_INHOM_MATRIX_ROWS = 3;
+
+    /**
+     * Constant defining the number of columns on a 3D rotation matrix expressed
+     * in inhomogeneous coordinates.
+     */
+    public static final int ROTATION3D_INHOM_MATRIX_COLS = 3;
+
+    /**
+     * Constant defining the number of rows on a 3D rotation matrix expressed
+     * in homogeneous coordinates.
+     */
+    public static final int ROTATION3D_HOM_MATRIX_ROWS = 4;
+
+    /**
+     * Constant defining the number of columns on a 3D rotation matrix expressed
+     * in homogeneous coordinates.
+     */
+    public static final int ROTATION3D_HOM_MATRIX_COLS = 4;
+
+    /**
+     * Threshold to determine that a gimbal locked might have been achieved
+     * when trying to find roll, pitch and yaw angles.
+     */
+    public static final double GIMBAL_THRESHOLD = 1e-6;
+
+    /**
+     * Internal matrix containing rotation using inhomogeneous coordinates.
+     * This matrix will be square, 3x3, orthogonal and will have determinant
+     * equal to one.
+     */
+    protected Matrix internalMatrix;
+
+
+    /**
+     * Empty Constructor.
+     * Initializes rotation so that no rotation exists (i.e. internal matrix is
+     * the identity).
+     */
+<span class="fc" id="L76">    public MatrixRotation3D() {</span>
+        try {
+<span class="fc" id="L78">            internalMatrix = Matrix.identity(ROTATION3D_INHOM_MATRIX_ROWS, ROTATION3D_INHOM_MATRIX_ROWS);</span>
+<span class="nc" id="L79">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L81">        }</span>
+<span class="fc" id="L82">    }</span>
+
+    /**
+     * Copy constructor.
+     * Copies provided rotation into this instance.
+     *
+     * @param rotation Instance to be copied.
+     */
+<span class="fc" id="L90">    public MatrixRotation3D(final MatrixRotation3D rotation) {</span>
+<span class="fc" id="L91">        internalMatrix = new Matrix(rotation.internalMatrix);</span>
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Copy constructor.
+     * Copies and converts provided rotation into this instance.
+     *
+     * @param rotation Instance to be copied.
+     */
+<span class="fc" id="L100">    public MatrixRotation3D(final Rotation3D rotation) {</span>
+<span class="fc" id="L101">        internalMatrix = rotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Constructor.
+     * Creates a 3D rotation using provided matrix.
+     * Provided matrix can be expressed in either homogeneous or inhomogeneous
+     * coordinates, and it must also be orthogonal and having determinant equal
+     * to 1.
+     * The threshold to determine whether provided matrix is orthonormal will
+     * be DEFAULT_VALID_THRESHOLD.
+     *
+     * @param m Matrix to create rotation from.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (its size is wrong, or it is not orthonormal).
+     *                                        {@link #isValidRotationMatrix(Matrix)}.
+     */
+<span class="fc" id="L118">    public MatrixRotation3D(final Matrix m) throws InvalidRotationMatrixException {</span>
+<span class="fc" id="L119">        fromMatrix(m);</span>
+<span class="fc" id="L120">    }</span>
+
+    /**
+     * Constructor.
+     * Creates a 3D rotation using provided matrix.
+     * Provided matrix can be expressed in either homogeneous or inhomogeneous
+     * coordinates, and it must also be orthogonal up to provided threshold, and
+     * must have determinant equal to 1.
+     *
+     * @param m         Matrix to create rotation from.
+     * @param threshold Threshold to determine whether matrix is orthonormal.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (its size is wrong, or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is
+     *                                        negative.
+     *                                        {@link #isValidRotationMatrix(Matrix)}.
+     */
+<span class="fc" id="L137">    public MatrixRotation3D(final Matrix m, final double threshold) throws InvalidRotationMatrixException {</span>
+<span class="fc" id="L138">        fromMatrix(m, threshold);</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * Constructor.
+     * Creates a 3D rotation using provided Euler angles expressed in radians.
+     *
+     * @param alphaEuler Alpha Euler angle expressed in radians.
+     * @param betaEuler  Beta Euler angle expressed in radians.
+     * @param gammaEuler Gamma Euler angle expressed in radians.
+     */
+<span class="fc" id="L149">    public MatrixRotation3D(final double alphaEuler, final double betaEuler, final double gammaEuler) {</span>
+<span class="fc" id="L150">        setEulerAngles(alphaEuler, betaEuler, gammaEuler);</span>
+<span class="fc" id="L151">    }</span>
+
+    /**
+     * Constructor.
+     * Creates a 3D reconstruction using provided rotation axis and rotation
+     * angle expressed in radians.
+     *
+     * @param axis  Axis of rotation. Axis must be a length-3 array containing
+     *              the axis vector. For better accuracy axis coordinates should be
+     *              normalized (norm equal to 1).
+     * @param theta Angle of rotation respect the axis expressed in radians.
+     * @throws IllegalArgumentException Raised if provided axis does not have
+     *                                  length 3.
+     */
+<span class="fc" id="L165">    public MatrixRotation3D(final double[] axis, final double theta) {</span>
+<span class="fc" id="L166">        setAxisAndRotation(axis, theta);</span>
+<span class="fc" id="L167">    }</span>
+
+    /**
+     * Constructor.
+     * Creates a 3D reconstruction using provided rotation axis coordinates and
+     * rotation angle expressed in radians.
+     * Note: for better accuracy axis coordinates should be normalized (norm
+     * equal to 1).
+     *
+     * @param axisX X coordinate of axis.
+     * @param axisY Y coordinate of axis.
+     * @param axisZ Z coordinate of axis.
+     * @param theta Angle of rotation respect the axis expressed in radians.
+     */
+<span class="fc" id="L181">    public MatrixRotation3D(final double axisX, final double axisY, final double axisZ, final double theta) {</span>
+<span class="fc" id="L182">        setAxisAndRotation(axisX, axisY, axisZ, theta);</span>
+<span class="fc" id="L183">    }</span>
+
+    /**
+     * Returns type of this rotation.
+     *
+     * @return Type of this rotation.
+     */
+    @Override
+    public Rotation3DType getType() {
+<span class="fc" id="L192">        return Rotation3DType.MATRIX_ROTATION3D;</span>
+    }
+
+    /**
+     * Returns a copy of the internal matrix so that the internal matrix cannot
+     * be modified accidentally.
+     * Returned matrix will be 3x3, orthogonal and will have determinant equal
+     * to one.
+     *
+     * @return Internal matrix containing rotation of this instance.
+     */
+    public Matrix getInternalMatrix() {
+<span class="fc" id="L204">        return new Matrix(internalMatrix);</span>
+    }
+
+    /**
+     * Sets the internal matrix of this rotation. Provided matrix must be 3x3
+     * and orthonormal (orthogonal with determinant equal to 1).
+     *
+     * @param internalMatrix Internal matrix to be set.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        3x3, or it is not orthonormal.
+     */
+    public final void setInternalMatrix(final Matrix internalMatrix) throws InvalidRotationMatrixException {
+<span class="fc" id="L216">        setInternalMatrix(internalMatrix, DEFAULT_VALID_THRESHOLD);</span>
+<span class="fc" id="L217">    }</span>
+
+    /**
+     * Sets the internal matrix of this rotation. Provided matrix must be 3x3
+     * and orthonormal (orthogonal with determinant equal to 1) up to an error
+     * equal to provided threshold.
+     *
+     * @param m         Internal matrix to be set.
+     * @param threshold Threshold to determine whether matrix is orthonormal or
+     *                  not.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        3x3, or it is not orthonormal.
+     * @throws IllegalArgumentException       Raised if provided threshold is
+     *                                        negative.
+     */
+    public final void setInternalMatrix(final Matrix m, final double threshold) throws InvalidRotationMatrixException {
+<span class="pc bpc" id="L233" title="2 of 4 branches missed.">        if (m.getRows() != ROTATION3D_INHOM_MATRIX_ROWS || m.getColumns() != ROTATION3D_INHOM_MATRIX_COLS) {</span>
+<span class="nc" id="L234">            throw new InvalidRotationMatrixException();</span>
+        }
+<span class="fc bfc" id="L236" title="All 2 branches covered.">        if (!isValidRotationMatrix(m, threshold)) {</span>
+<span class="fc" id="L237">            throw new InvalidRotationMatrixException();</span>
+        }
+
+<span class="fc" id="L240">        internalMatrix = m;</span>
+<span class="fc" id="L241">    }</span>
+
+    /**
+     * Returns alpha euler angle within the range -pi and pi.
+     *
+     * @return Alpha euler angle expressed in radians.
+     */
+    public double getAlphaEulerAngle() {
+<span class="fc" id="L249">        return Math.atan2(-internalMatrix.getElementAt(2, 0),</span>
+<span class="fc" id="L250">                internalMatrix.getElementAt(2, 2));</span>
+    }
+
+    /**
+     * Returns beta euler angle within the range -pi/2 and pi/2.
+     *
+     * @return Beta euler angle expressed in radians.
+     */
+    public double getBetaEulerAngle() {
+<span class="fc" id="L259">        return Math.asin(internalMatrix.getElementAt(2, 1));</span>
+    }
+
+    /**
+     * Returns gamma euler angle within the range -pi and pi.
+     *
+     * @return Gamma euler angle expressed in radians.
+     */
+    public double getGammaEulerAngle() {
+<span class="fc" id="L268">        return Math.atan2(-internalMatrix.getElementAt(0, 1),</span>
+<span class="fc" id="L269">                internalMatrix.getElementAt(1, 1));</span>
+    }
+
+    /**
+     * Sets euler angles of this rotation, expressed in radians.
+     *
+     * @param alphaEuler Alpha euler angle in radians.
+     * @param betaEuler  Beta euler angle in radians.
+     * @param gammaEuler Gamma euler angle in radians.
+     */
+    public final void setEulerAngles(final double alphaEuler, final double betaEuler, final double gammaEuler) {
+<span class="fc" id="L280">        final var sinAlpha = Math.sin(alphaEuler);</span>
+<span class="fc" id="L281">        final var cosAlpha = Math.cos(alphaEuler);</span>
+
+<span class="fc" id="L283">        final var sinBeta = Math.sin(betaEuler);</span>
+<span class="fc" id="L284">        final var cosBeta = Math.cos(betaEuler);</span>
+
+<span class="fc" id="L286">        final var sinGamma = Math.sin(gammaEuler);</span>
+<span class="fc" id="L287">        final var cosGamma = Math.cos(gammaEuler);</span>
+
+        // reuse internal matrix if possible
+        try {
+<span class="fc bfc" id="L291" title="All 2 branches covered.">            if (internalMatrix == null) {</span>
+<span class="fc" id="L292">                internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS, ROTATION3D_INHOM_MATRIX_COLS);</span>
+            }
+
+<span class="fc" id="L295">            internalMatrix.setElementAt(0, 0, cosAlpha * cosGamma - sinAlpha * sinBeta * sinGamma);</span>
+<span class="fc" id="L296">            internalMatrix.setElementAt(1, 0, cosAlpha * sinGamma + sinAlpha * sinBeta * cosGamma);</span>
+<span class="fc" id="L297">            internalMatrix.setElementAt(2, 0, -sinAlpha * cosBeta);</span>
+
+<span class="fc" id="L299">            internalMatrix.setElementAt(0, 1, -cosBeta * sinGamma);</span>
+<span class="fc" id="L300">            internalMatrix.setElementAt(1, 1, cosBeta * cosGamma);</span>
+<span class="fc" id="L301">            internalMatrix.setElementAt(2, 1, sinBeta);</span>
+
+<span class="fc" id="L303">            internalMatrix.setElementAt(0, 2, sinAlpha * cosGamma + cosAlpha * sinBeta * sinGamma);</span>
+<span class="fc" id="L304">            internalMatrix.setElementAt(1, 2, sinAlpha * sinGamma - cosAlpha * sinBeta * cosGamma);</span>
+<span class="fc" id="L305">            internalMatrix.setElementAt(2, 2, cosAlpha * cosBeta);</span>
+<span class="nc" id="L306">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L308">        }</span>
+<span class="fc" id="L309">    }</span>
+
+    /**
+     * Returns roll angle around x-axis expressed in radians for the 1st
+     * possible set of solutions.
+     * When obtaining roll, pitch and yaw angles from a rotation matrix, there
+     * might be two possible sets of solutions (#getRollAngle(),
+     * #getPitchAngle(), #getYawAngle()) or (#getRollAngle2(),
+     * #getPitchAngle2(), #getYawAngle2()).
+     *
+     * @return roll angle around x-axis.
+     * @see &lt;a href=&quot;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&quot;&gt;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&lt;/a&gt;
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public double getRollAngle() {
+<span class="fc" id="L324">        return getRollAngle(getPitchAngle());</span>
+    }
+
+    /**
+     * Returns roll angle around x-axis expressed in radians for the 2nd
+     * possible set of solutions.
+     * When obtaining roll, pitch and yaw angles from a rotation matrix, there
+     * might be two possible sets of solutions (#getRollAngle(),
+     * #getPitchAngle(), #getYawAngle()) or (#getRollAngle2(),
+     * #getPitchAngle2(), #getYawAngle2()).
+     *
+     * @return roll angle around x-axis.
+     * @see &lt;a href=&quot;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&quot;&gt;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&lt;/a&gt;
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public double getRollAngle2() {
+<span class="nc" id="L340">        return getRollAngle(getPitchAngle2());</span>
+    }
+
+    /**
+     * Returns roll angle around x-axis expressed in radians corresponding to
+     * provided pitch value.
+     * This method is used internally.
+     *
+     * @param pitch pitch angle expressed in radians.
+     * @return roll angle around x-axis.
+     */
+    private double getRollAngle(final double pitch) {
+<span class="pc bpc" id="L352" title="1 of 2 branches missed.">        if (!hasGimbalLock()) {</span>
+<span class="fc" id="L353">            final var cosPitch = Math.cos(pitch);</span>
+<span class="fc" id="L354">            return Math.atan2(internalMatrix.getElementAt(2, 1) / cosPitch,</span>
+<span class="fc" id="L355">                    internalMatrix.getElementAt(2, 2) / cosPitch);</span>
+        } else {
+            // gimbal lock (pitch is close to +-90 degrees)
+<span class="nc bnc" id="L358" title="All 2 branches missed.">            if (internalMatrix.getElementAt(2, 0) &lt; 0.0) {</span>
+                // pitch is +90 degrees
+<span class="nc" id="L360">                return Math.atan2(internalMatrix.getElementAt(0, 1),</span>
+<span class="nc" id="L361">                        internalMatrix.getElementAt(0, 2));</span>
+            } else {
+                // pitch is -90 degrees
+<span class="nc" id="L364">                return Math.atan2(-internalMatrix.getElementAt(0, 1),</span>
+<span class="nc" id="L365">                        -internalMatrix.getElementAt(0, 2));</span>
+            }
+        }
+    }
+
+    /**
+     * Returns pitch angle around y-axis expressed in radians for the 1st
+     * possible set of solutions.
+     * When obtaining roll, pitch and yaw angles from a rotation matrix, there
+     * might be two possible sets of solutions (#getRollAngle(),
+     * #getPitchAngle(), #getYawAngle()) or (#getRollAngle2(),
+     * #getPitchAngle2(), #getYawAngle2()).
+     *
+     * @return pitch angle around y-axis.
+     * @see &lt;a href=&quot;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&quot;&gt;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&lt;/a&gt;
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public double getPitchAngle() {
+<span class="fc" id="L383">        return -Math.asin(internalMatrix.getElementAt(2, 0));</span>
+    }
+
+    /**
+     * Returns pitch angle around y-axis expressed in radians for the 2nd
+     * possible set of solutions.
+     * When obtaining roll, pitch and yaw angles from a rotation matrix, there
+     * might be two possible sets of solutions (#getRollAngle(),
+     * #getPitchAngle(), #getYawAngle()) or (#getRollAngle2(),
+     * #getPitchAngle2(), #getYawAngle2()).
+     * When a gimbal lock occurs, both pitch angles are equal because only
+     * yaw is undefined, but pitch and roll are unique.
+     *
+     * @return pitch angle around y-axis.
+     * @see &lt;a href=&quot;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&quot;&gt;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&lt;/a&gt;
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public double getPitchAngle2() {
+<span class="nc bnc" id="L401" title="All 2 branches missed.">        if (!hasGimbalLock()) {</span>
+<span class="nc" id="L402">            return Math.PI - getPitchAngle();</span>
+        } else {
+<span class="nc" id="L404">            return getPitchAngle();</span>
+        }
+    }
+
+    /**
+     * Returns yaw angle around z axis expressed in radians for the 1st possible
+     * set of solutions.
+     * When a gimbal lock occurs (pitch angle is close to +- 90 degrees), then
+     * yaw angle is undefined, and can be any value, although this method will
+     * return 0.0.
+     * When obtaining roll, pitch and yaw angles from a rotation matrix, there
+     * might be two possible sets of solutions (#getRollAngle(),
+     * #getPitchAngle(), #getYawAngle()) or (#getRollAngle2(),
+     * #getPitchAngle2(), #getYawAngle2()).
+     *
+     * @return yaw angle around z axis.
+     * @see &lt;a href=&quot;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&quot;&gt;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&lt;/a&gt;
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public double getYawAngle() {
+<span class="fc" id="L424">        return getYawAngle(getPitchAngle());</span>
+    }
+
+    /**
+     * Returns yaw angle around z axis expressed in radians for the 2nd possible
+     * set of solutions.
+     * When a gimbal lock occurs (pitch angle is close to +- 90 degrees), then
+     * yaw angle is undefined, and can be any value, although this method will
+     * return 0.0.
+     * When obtaining roll, pitch and yaw angles from a rotation matrix, there
+     * might be two possible sets of solutions (#getRollAngle(),
+     * #getPitchAngle(), #getYawAngle()) or (#getRollAngle2(),
+     * #getPitchAngle2(), #getYawAngle2()).
+     *
+     * @return yaw angle around z axis.
+     * @see &lt;a href=&quot;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&quot;&gt;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&lt;/a&gt;
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public double getYawAngle2() {
+<span class="nc" id="L443">        return getYawAngle(getPitchAngle2());</span>
+    }
+
+    /**
+     * Returns yaw angle around x-axis expressed in radians corresponding to
+     * provided pitch value.
+     * This method is used internally.
+     *
+     * @param pitch pitch angle expressed in radians.
+     * @return yaw angle around x-axis.
+     */
+    private double getYawAngle(final double pitch) {
+<span class="pc bpc" id="L455" title="1 of 2 branches missed.">        if (!hasGimbalLock()) {</span>
+<span class="fc" id="L456">            final var cosPitch = Math.cos(pitch);</span>
+<span class="fc" id="L457">            return Math.atan2(internalMatrix.getElementAt(1, 0) / cosPitch,</span>
+<span class="fc" id="L458">                    internalMatrix.getElementAt(0, 0) / cosPitch);</span>
+        } else {
+            // gimbal lock (pitch is close to +-90 degrees)
+            // can be anything.
+<span class="nc" id="L462">            return 0.0;</span>
+        }
+    }
+
+    /**
+     * Indicates whether current rotation contains ambiguities (a.k.a. gimbal
+     * lock). This situation happens when pitch angle is close to +-90 degrees.
+     *
+     * @return true if current rotation contains a gimbal lock, false otherwise.
+     * @see &lt;a href=&quot;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&quot;&gt;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&lt;/a&gt;
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;R2e.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public boolean hasGimbalLock() {
+<span class="fc bfc" id="L475" title="All 2 branches covered.">        return Math.abs(Math.abs(internalMatrix.getElementAt(2, 0)) - 1.0) &lt;</span>
+                GIMBAL_THRESHOLD;
+    }
+
+    /**
+     * Sets rotation angles, expressed in radians.
+     *
+     * @param roll  roll angle in radians around x-axis.
+     * @param pitch pitch angle in radians around y-axis.
+     * @param yaw   yaw angle in radians around z-axis.
+     * @see &lt;a href=&quot;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&quot;&gt;http://www.staff.city.ac.uk/~sbbh653/publications/euler.pdf&lt;/a&gt;
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;e2R.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public void setRollPitchYaw(final double roll, final double pitch, final double yaw) {
+<span class="fc" id="L489">        final var sr = Math.sin(roll);</span>
+<span class="fc" id="L490">        final var cr = Math.cos(roll);</span>
+
+<span class="fc" id="L492">        final var sp = Math.sin(pitch);</span>
+<span class="fc" id="L493">        final var cp = Math.cos(pitch);</span>
+
+<span class="fc" id="L495">        final var sy = Math.sin(yaw);</span>
+<span class="fc" id="L496">        final var cy = Math.cos(yaw);</span>
+
+        try {
+            // reuse internal matrix if possible
+<span class="pc bpc" id="L500" title="1 of 2 branches missed.">            if (internalMatrix == null) {</span>
+<span class="nc" id="L501">                internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS, ROTATION3D_INHOM_MATRIX_COLS);</span>
+            }
+
+<span class="fc" id="L504">            internalMatrix.setElementAt(0, 0, cp * cy);</span>
+<span class="fc" id="L505">            internalMatrix.setElementAt(1, 0, cp * sy);</span>
+<span class="fc" id="L506">            internalMatrix.setElementAt(2, 0, -sp);</span>
+
+<span class="fc" id="L508">            internalMatrix.setElementAt(0, 1, -cr * sy + sr * sp * cy);</span>
+<span class="fc" id="L509">            internalMatrix.setElementAt(1, 1, cr * cy + sr * sp * sy);</span>
+<span class="fc" id="L510">            internalMatrix.setElementAt(2, 1, sr * cp);</span>
+
+<span class="fc" id="L512">            internalMatrix.setElementAt(0, 2, sr * sy + cr * sp * cy);</span>
+<span class="fc" id="L513">            internalMatrix.setElementAt(1, 2, -sr * cy + cr * sp * sy);</span>
+<span class="fc" id="L514">            internalMatrix.setElementAt(2, 2, cr * cp);</span>
+<span class="nc" id="L515">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L517">        }</span>
+<span class="fc" id="L518">    }</span>
+
+    /**
+     * Sets the axis and rotation of this instance.
+     * Once set, points will rotate around provided axis an amount equal to
+     * provided rotation angle in radians.
+     * Note: to avoid numerical instabilities and improve accuracy, axis
+     * coordinates should be normalized (e.g. norm equal to 1).
+     *
+     * @param axisX X coordinate of rotation axis.
+     * @param axisY Y coordinate of rotation axis.
+     * @param axisZ Z coordinate of rotation axis.
+     * @param theta Amount of rotation in radians.
+     */
+    @Override
+    public final void setAxisAndRotation(
+            final double axisX, final double axisY, final double axisZ, final double theta) {
+<span class="fc" id="L535">        final var axisX2 = axisX * axisX;</span>
+<span class="fc" id="L536">        final var axisY2 = axisY * axisY;</span>
+<span class="fc" id="L537">        final var axisZ2 = axisZ * axisZ;</span>
+
+<span class="fc" id="L539">        final var axisXY = axisX * axisY;</span>
+<span class="fc" id="L540">        final var axisXZ = axisX * axisZ;</span>
+<span class="fc" id="L541">        final var axisYZ = axisY * axisZ;</span>
+
+<span class="fc" id="L543">        final var sinTheta = Math.sin(theta);</span>
+<span class="fc" id="L544">        final var cosTheta = Math.cos(theta);</span>
+
+        try {
+<span class="fc bfc" id="L547" title="All 2 branches covered.">            if (internalMatrix == null) {</span>
+<span class="fc" id="L548">                internalMatrix = new Matrix(ROTATION3D_INHOM_MATRIX_ROWS, ROTATION3D_INHOM_MATRIX_COLS);</span>
+            }
+
+<span class="fc" id="L551">            internalMatrix.setElementAt(0, 0, axisX2 + (1.0 - axisX2) * cosTheta);</span>
+<span class="fc" id="L552">            internalMatrix.setElementAt(1, 0, axisXY * (1.0 - cosTheta) + axisZ * sinTheta);</span>
+<span class="fc" id="L553">            internalMatrix.setElementAt(2, 0, axisXZ * (1.0 - cosTheta) - axisY * sinTheta);</span>
+
+<span class="fc" id="L555">            internalMatrix.setElementAt(0, 1, axisXY * (1.0 - cosTheta) - axisZ * sinTheta);</span>
+<span class="fc" id="L556">            internalMatrix.setElementAt(1, 1, axisY2 + (1.0 - axisY2) * cosTheta);</span>
+<span class="fc" id="L557">            internalMatrix.setElementAt(2, 1, axisYZ * (1.0 - cosTheta) + axisX * sinTheta);</span>
+
+<span class="fc" id="L559">            internalMatrix.setElementAt(0, 2, axisXZ * (1.0 - cosTheta) + axisY * sinTheta);</span>
+<span class="fc" id="L560">            internalMatrix.setElementAt(1, 2, axisYZ * (1.0 - cosTheta) - axisX * sinTheta);</span>
+<span class="fc" id="L561">            internalMatrix.setElementAt(2, 2, axisZ2 + (1.0 - axisZ2) * cosTheta);</span>
+<span class="nc" id="L562">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L564">        }</span>
+<span class="fc" id="L565">    }</span>
+
+    /**
+     * Returns rotation axis corresponding to this instance.
+     * Result is stored in provided axis array, which must have length 3.
+     *
+     * @param axis Array where axis coordinates will be stored.
+     * @throws IllegalArgumentException Raised if provided array does not have
+     *                                  length 3.
+     * @throws RotationException        Raised if numerical instabilities happen.
+     *                                  Because internal matrix will always be well-defined (orthogonal and
+     *                                  determinant equal to 1), this exception will rarely happen.
+     */
+    @Override
+    public void rotationAxis(final double[] axis) throws RotationException {
+<span class="pc bpc" id="L580" title="1 of 2 branches missed.">        if (axis.length != ROTATION3D_INHOM_MATRIX_ROWS) {</span>
+<span class="nc" id="L581">            throw new IllegalArgumentException();</span>
+        }
+
+        try {
+            // Rotation axis follows: R*v = v, which means that rotation axis is
+            // left unchanged after rotation. Hence:
+            // R*v = I*v --&gt; (R - I)*v = 0, consequently rotation axis is the
+            // null-space of R-I
+<span class="fc" id="L589">            final Matrix identity = Matrix.identity(ROTATION3D_INHOM_MATRIX_ROWS, ROTATION3D_INHOM_MATRIX_COLS);</span>
+            // line below: identity = internalMatrix - identity
+<span class="fc" id="L591">            internalMatrix.subtract(identity, identity);</span>
+            // internalMatrix - identity
+
+<span class="fc" id="L594">            final SingularValueDecomposer decomposer = new SingularValueDecomposer(identity);</span>
+
+<span class="fc" id="L596">            decomposer.decompose();</span>
+
+<span class="fc" id="L598">            final var v = decomposer.getV();</span>
+
+            // last column of V contains axis values
+<span class="fc" id="L601">            axis[0] = v.getElementAt(0, 2);</span>
+<span class="fc" id="L602">            axis[1] = v.getElementAt(1, 2);</span>
+<span class="fc" id="L603">            axis[2] = v.getElementAt(2, 2);</span>
+<span class="nc" id="L604">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L605">            throw new RotationException(e);</span>
+<span class="fc" id="L606">        }</span>
+<span class="fc" id="L607">    }</span>
+
+    /**
+     * Returns rotation amount or angle in radians around the rotation axis
+     * associated to this instance.
+     *
+     * @return Rotation angle in radians.
+     * @throws RotationException Raised if numerical instabilities happen.
+     *                           Because internal matrix will always be well-defined (orthogonal and
+     *                           determinant equal to 1), this exception will rarely happen.
+     */
+    @Override
+    public double getRotationAngle() throws RotationException {
+
+        // obtain rotation axis
+<span class="fc" id="L622">        final var axis = getRotationAxis();</span>
+
+        try {
+<span class="fc" id="L625">            final var axisMatrix = new Matrix(1, ROTATION3D_INHOM_MATRIX_COLS);</span>
+<span class="fc" id="L626">            axisMatrix.setSubmatrix(0, 0, 0,</span>
+                    ROTATION3D_INHOM_MATRIX_COLS - 1, axis);
+
+<span class="fc" id="L629">            final var decomposer = new SingularValueDecomposer(axisMatrix);</span>
+<span class="fc" id="L630">            decomposer.decompose();</span>
+
+<span class="fc" id="L632">            final var v = decomposer.getV();</span>
+
+            // because axisMatrix has rank 1, its null-space will contain a
+            // two-dimensional space (two vectors) perpendicular to axisMatrix
+<span class="fc" id="L636">            final var perpendicular = v.getSubmatrix(0, 2, 2, 2);</span>
+<span class="fc" id="L637">            final var normPerpendicular = Utils.normF(perpendicular);</span>
+
+            // use internal matrix to rotate perpendicular vector
+<span class="fc" id="L640">            final var rotated = internalMatrix.multiplyAndReturnNew(perpendicular);</span>
+<span class="fc" id="L641">            final var normRotated = Utils.normF(rotated);</span>
+
+            // normalize vectors
+<span class="fc" id="L644">            perpendicular.multiplyByScalar(1.0 / normPerpendicular);</span>
+<span class="fc" id="L645">            rotated.multiplyByScalar(1.0 / normRotated);</span>
+
+            // their dot product is the cosine of their angle
+            // (we transpose rotated matrix to compute dot product)
+<span class="fc" id="L649">            rotated.transpose();</span>
+<span class="fc" id="L650">            rotated.multiply(perpendicular);</span>
+<span class="fc" id="L651">            final var dotProduct = rotated.getElementAtIndex(0);</span>
+
+<span class="fc" id="L653">            final var theta = Math.acos(dotProduct);</span>
+
+            // we need to determine sign of theta, for that reason we instantiate
+            // two camera rotations with theta and -theta using the same rotation
+            // axis and check for the rotation matrix that produces less error
+<span class="fc" id="L658">            final var rotation1 = new MatrixRotation3D(axis, theta);</span>
+<span class="fc" id="L659">            final var rotation2 = new MatrixRotation3D(axis, -theta);</span>
+
+<span class="fc" id="L661">            final var rotationMatrix1 = rotation1.internalMatrix;</span>
+<span class="fc" id="L662">            final var rotationMatrix2 = rotation2.internalMatrix;</span>
+
+            // normalize rotation matrices for their comparison
+<span class="fc" id="L665">            final var norm1 = Utils.normF(rotationMatrix1);</span>
+<span class="fc" id="L666">            final var norm2 = Utils.normF(rotationMatrix2);</span>
+<span class="fc" id="L667">            rotationMatrix1.multiplyByScalar(1.0 / norm1);</span>
+<span class="fc" id="L668">            rotationMatrix2.multiplyByScalar(1.0 / norm2);</span>
+
+            // normalize current internal matrix for its comparison
+<span class="fc" id="L671">            final var internalNorm = Utils.normF(internalMatrix);</span>
+<span class="fc" id="L672">            final var internal = internalMatrix.multiplyByScalarAndReturnNew(1.0 / internalNorm);</span>
+
+            // compare matrices
+<span class="fc" id="L675">            rotationMatrix1.subtract(internal);</span>
+<span class="fc" id="L676">            rotationMatrix2.subtract(internal);</span>
+
+            // now rotation matrices 1 and 2 contain the difference
+<span class="fc" id="L679">            final var normDiff1 = Utils.normF(rotationMatrix1);</span>
+<span class="fc" id="L680">            final var normDiff2 = Utils.normF(rotationMatrix2);</span>
+
+            // pick the rotation matrix that produces less error
+<span class="fc bfc" id="L683" title="All 2 branches covered.">            if (normDiff1 &lt; normDiff2) {</span>
+                // positive theta
+<span class="fc" id="L685">                return theta;</span>
+            } else {
+                // negative theta
+<span class="fc" id="L688">                return -theta;</span>
+            }
+<span class="nc" id="L690">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L691">            throw new RotationException(e);</span>
+        }
+    }
+
+    /**
+     * Returns a 3D rotation which is inverse to this instance.
+     * In other words, the combination of this rotation with its inverse
+     * produces no change.
+     *
+     * @return Inverse 3D rotation.
+     */
+    @Override
+    public MatrixRotation3D inverseRotationAndReturnNew() {
+<span class="fc" id="L704">        final var result = new MatrixRotation3D();</span>
+<span class="fc" id="L705">        inverseRotation(result);</span>
+<span class="fc" id="L706">        return result;</span>
+    }
+
+    /**
+     * Sets into provided MatrixRotation3D instance a rotation inverse to this
+     * instance.
+     * The combination of this rotation with its inverse produces no change.
+     *
+     * @param result Instance where inverse rotation will be set.
+     */
+    public void inverseRotation(final MatrixRotation3D result) {
+        try {
+<span class="fc" id="L718">            result.internalMatrix = Utils.inverse(internalMatrix);</span>
+<span class="nc" id="L719">        } catch (final AlgebraException ignore) {</span>
+            // matrix should always be invertible
+<span class="fc" id="L721">        }</span>
+<span class="fc" id="L722">    }</span>
+
+    /**
+     * Sets into provided MatrixRotation3D instance a rotation inverse to this
+     * instance.
+     * The combination of this rotation with its inverse produces no change.
+     *
+     * @param result Instance where inverse rotation will be set.
+     */
+    @Override
+    public void inverseRotation(final Rotation3D result) {
+<span class="nc bnc" id="L733" title="All 2 branches missed.">        if (result instanceof MatrixRotation3D matrixResult) {</span>
+<span class="nc" id="L734">            inverseRotation(matrixResult);</span>
+<span class="nc bnc" id="L735" title="All 2 branches missed.">        } else if (result instanceof AxisRotation3D) {</span>
+<span class="nc" id="L736">            MatrixRotation3D rot = new MatrixRotation3D();</span>
+<span class="nc" id="L737">            inverseRotation(rot);</span>
+            try {
+<span class="nc" id="L739">                result.fromMatrix(rot.asInhomogeneousMatrix());</span>
+<span class="nc" id="L740">            } catch (final InvalidRotationMatrixException ignore) {</span>
+                // never happens
+<span class="nc" id="L742">            }</span>
+        }
+<span class="nc" id="L744">    }</span>
+
+    /**
+     * Reverses the rotation of this instance.
+     */
+    @Override
+    public void inverseRotation() {
+<span class="fc" id="L751">        inverseRotation(this);</span>
+<span class="fc" id="L752">    }</span>
+
+
+    /**
+     * Returns this 3D rotation instance expressed as a 3x3 inhomogeneous
+     * matrix.
+     * This is equivalent to call getInternalMatrix().
+     *
+     * @return Rotation matrix expressed in inhomogeneous coordinates.
+     */
+    @Override
+    public Matrix asInhomogeneousMatrix() {
+<span class="fc" id="L764">        return getInternalMatrix();</span>
+    }
+
+    /**
+     * Sets into provided Matrix instance this 3D rotation expressed as a
+     * 3x3 inhomogeneous matrix.
+     *
+     * @param result Matrix where rotation will be set.
+     * @throws IllegalArgumentException Raised if provided instance does not
+     *                                  have size 3x3.
+     */
+    @Override
+    public void asInhomogeneousMatrix(final Matrix result) {
+<span class="pc bpc" id="L777" title="1 of 4 branches missed.">        if (result.getRows() != ROTATION3D_INHOM_MATRIX_ROWS || result.getColumns() != ROTATION3D_INHOM_MATRIX_COLS) {</span>
+<span class="fc" id="L778">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L781">        result.copyFrom(internalMatrix);</span>
+<span class="fc" id="L782">    }</span>
+
+    /**
+     * Returns this 3D rotation instance expressed as a 4x4 homogeneous matrix.
+     *
+     * @return Rotation matrix expressed in homogeneous coordinates.
+     */
+    @Override
+    public Matrix asHomogeneousMatrix() {
+<span class="fc" id="L791">        Matrix result = null;</span>
+        try {
+<span class="fc" id="L793">            result = Matrix.identity(ROTATION3D_HOM_MATRIX_ROWS, ROTATION3D_HOM_MATRIX_COLS);</span>
+            // sets into 3x3 top-left sub-matrix the internal matrix of this
+            // instance, the remaining part will continue to be the identity
+<span class="fc" id="L796">            result.setSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1,</span>
+                    ROTATION3D_INHOM_MATRIX_COLS - 1, internalMatrix);
+<span class="nc" id="L798">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L800">        }</span>
+<span class="fc" id="L801">        return result;</span>
+    }
+
+    /**
+     * Sets into provided Matrix instance this 3D rotation expressed as a
+     * 4x4 homogeneous matrix.
+     *
+     * @param result Matrix where rotation will be set.
+     * @throws IllegalArgumentException Raised if provided instance does not
+     *                                  have size 4x4.
+     */
+    @Override
+    public void asHomogeneousMatrix(final Matrix result) {
+<span class="pc bpc" id="L814" title="1 of 4 branches missed.">        if (result.getRows() != ROTATION3D_HOM_MATRIX_ROWS || result.getColumns() != ROTATION3D_HOM_MATRIX_COLS) {</span>
+<span class="fc" id="L815">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L818">        result.initialize(0.0);</span>
+        // sets into 3x3 top-left sub-matrix the internal matrix of this instance
+<span class="fc" id="L820">        result.setSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1,</span>
+                ROTATION3D_INHOM_MATRIX_COLS - 1, internalMatrix);
+        // set las element to 1.0 (to be like the identity
+<span class="fc" id="L823">        result.setElementAt(ROTATION3D_HOM_MATRIX_ROWS - 1, ROTATION3D_HOM_MATRIX_COLS - 1, 1.0);</span>
+<span class="fc" id="L824">    }</span>
+
+    /**
+     * Sets amount of rotation from provided inhomogeneous rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix must also have size 3x3.
+     *
+     * @param m         Provided rotation matrix.
+     * @param threshold Threshold to determine whether matrix is orthonormal.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is
+     *                                        negative.
+     *                                        {@link #isValidRotationMatrix(Matrix)}.
+     */
+    @Override
+    public void fromInhomogeneousMatrix(final Matrix m, final double threshold) throws InvalidRotationMatrixException {
+<span class="fc" id="L842">        setInternalMatrix(m, threshold);</span>
+<span class="fc" id="L843">    }</span>
+
+    /**
+     * Sets amount of rotation from provided homogeneous rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix must also have size 4x4, and its last row and column must
+     * be zero, except for element in last row and column which must be 1.
+     *
+     * @param m         Provided rotation matrix.
+     * @param threshold Threshold to determine whether matrix is orthonormal.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is
+     *                                        negative.
+     *                                        {@link #isValidRotationMatrix(Matrix)}.
+     */
+    @Override
+    public void fromHomogeneousMatrix(final Matrix m, final double threshold) throws InvalidRotationMatrixException {
+<span class="pc bpc" id="L862" title="1 of 4 branches missed.">        if (m.getRows() != ROTATION3D_HOM_MATRIX_ROWS || m.getColumns() != ROTATION3D_HOM_MATRIX_COLS) {</span>
+<span class="fc" id="L863">            throw new InvalidRotationMatrixException();</span>
+        }
+<span class="fc bfc" id="L865" title="All 2 branches covered.">        if (!isValidRotationMatrix(m, threshold)) {</span>
+<span class="fc" id="L866">            throw new InvalidRotationMatrixException();</span>
+        }
+<span class="pc bpc" id="L868" title="1 of 2 branches missed.">        if (Math.abs(m.getElementAt(3, 0)) &gt; threshold</span>
+<span class="pc bpc" id="L869" title="1 of 2 branches missed.">                || Math.abs(m.getElementAt(3, 1)) &gt; threshold</span>
+<span class="pc bpc" id="L870" title="1 of 2 branches missed.">                || Math.abs(m.getElementAt(3, 2)) &gt; threshold</span>
+<span class="pc bpc" id="L871" title="1 of 2 branches missed.">                || Math.abs(m.getElementAt(0, 3)) &gt; threshold</span>
+<span class="pc bpc" id="L872" title="1 of 2 branches missed.">                || Math.abs(m.getElementAt(1, 3)) &gt; threshold</span>
+<span class="pc bpc" id="L873" title="1 of 2 branches missed.">                || Math.abs(m.getElementAt(2, 3)) &gt; threshold</span>
+<span class="pc bpc" id="L874" title="1 of 2 branches missed.">                || Math.abs(m.getElementAt(3, 3) - 1.0) &gt; threshold) {</span>
+<span class="nc" id="L875">            throw new InvalidRotationMatrixException();</span>
+        }
+
+<span class="fc" id="L878">        internalMatrix = m.getSubmatrix(0, 0, ROTATION3D_INHOM_MATRIX_ROWS - 1,</span>
+                ROTATION3D_INHOM_MATRIX_COLS - 1);
+<span class="fc" id="L880">    }</span>
+
+    /**
+     * Rotates a 3D point using the origin of coordinates as the axis of
+     * rotation.
+     * Point will be rotated by the amount of rotation contained in this
+     * instance.
+     *
+     * @param inputPoint  Input point to be rotated.
+     * @param resultPoint Rotated point.
+     */
+    @Override
+    public void rotate(final Point3D inputPoint, final Point3D resultPoint) {
+        try {
+<span class="fc" id="L894">            final var r = asHomogeneousMatrix();</span>
+<span class="fc" id="L895">            final var p = new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH, 1);</span>
+
+            // to increase accuracy
+<span class="fc" id="L898">            inputPoint.normalize();</span>
+<span class="fc" id="L899">            p.setElementAt(0, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L900">            p.setElementAt(1, 0, inputPoint.getHomY());</span>
+<span class="fc" id="L901">            p.setElementAt(2, 0, inputPoint.getHomZ());</span>
+<span class="fc" id="L902">            p.setElementAt(3, 0, inputPoint.getHomW());</span>
+
+            // Rotated point below is R * p
+<span class="fc" id="L905">            r.multiply(p);</span>
+
+<span class="fc" id="L907">            resultPoint.setHomogeneousCoordinates(r.getElementAt(0, 0), r.getElementAt(1, 0),</span>
+<span class="fc" id="L908">                    r.getElementAt(2, 0), r.getElementAt(3, 0));</span>
+<span class="nc" id="L909">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L911">        }</span>
+<span class="fc" id="L912">    }</span>
+
+    /**
+     * Combines provided rotation with this rotation and returns the result as
+     * a new MatrixRotation3D instance.
+     *
+     * @param rotation Input rotation to be combined.
+     * @return Combined rotation, which is equal to the multiplication of the
+     * internal matrix of provided rotation with the internal matrix of this
+     * instance.
+     */
+    public MatrixRotation3D combineAndReturnNew(final MatrixRotation3D rotation) {
+<span class="fc" id="L924">        final var result = new MatrixRotation3D();</span>
+<span class="fc" id="L925">        combine(this, rotation, result);</span>
+<span class="fc" id="L926">        return result;</span>
+    }
+
+    /**
+     * Combines provided rotation with this rotation and returns the result as
+     * a new MatrixRotation3D instance.
+     *
+     * @param rotation Input rotation to be combined.
+     * @return Combined rotation, which is equal to the multiplication of the
+     * internal matrix of provided rotation with the internal matrix of this
+     * instance.
+     */
+    @Override
+    public Rotation3D combineAndReturnNew(final Rotation3D rotation) {
+<span class="nc bnc" id="L940" title="All 2 branches missed.">        if (rotation instanceof MatrixRotation3D matrixRotation) {</span>
+<span class="nc" id="L941">            return combineAndReturnNew(matrixRotation);</span>
+        } else {
+<span class="nc" id="L943">            return combineAndReturnNew(new MatrixRotation3D(rotation));</span>
+        }
+    }
+
+    /**
+     * Combines provided rotation into this rotation resulting in the
+     * multiplication of the internal matrices of both rotations.
+     *
+     * @param rotation Input rotation to be combined.
+     */
+    public void combine(final MatrixRotation3D rotation) {
+<span class="fc" id="L954">        combine(this, rotation, this);</span>
+<span class="fc" id="L955">    }</span>
+
+    /**
+     * Combines provided rotation into this rotation resulting in the
+     * multiplication of the internal matrices of both rotations.
+     *
+     * @param rotation Input rotation to be combined.
+     */
+    @Override
+    public void combine(final Rotation3D rotation) {
+<span class="fc bfc" id="L965" title="All 2 branches covered.">        if (rotation instanceof MatrixRotation3D matrixRotation) {</span>
+<span class="fc" id="L966">            combine(matrixRotation);</span>
+        } else {
+<span class="fc" id="L968">            combine(new MatrixRotation3D(rotation));</span>
+        }
+<span class="fc" id="L970">    }</span>
+
+    /**
+     * Combines the rotation of instances rot1 and rot1 into provided result
+     * instance.
+     *
+     * @param rot1   1st input rotation.
+     * @param rot2   2nd input rotation.
+     * @param result Combined rotation, which is equal to the multiplication of
+     *               the internal matrix of provided rotation with the internal matrix of this
+     *               instance.
+     */
+    public static void combine(
+            final MatrixRotation3D rot1, final MatrixRotation3D rot2, final MatrixRotation3D result) {
+        try {
+<span class="fc" id="L985">            result.internalMatrix = rot1.internalMatrix.multiplyAndReturnNew(rot2.internalMatrix);</span>
+<span class="nc" id="L986">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L988">        }</span>
+<span class="fc" id="L989">    }</span>
+
+    /**
+     * Sets values of this rotation from a 3D matrix rotation.
+     *
+     * @param rot 3D matrix rotation to set values from.
+     */
+    @Override
+    public void fromRotation(final MatrixRotation3D rot) {
+<span class="fc" id="L998">        rot.internalMatrix.copyTo(internalMatrix);</span>
+<span class="fc" id="L999">    }</span>
+
+    /**
+     * Sets values of this rotation from a quaternion.
+     *
+     * @param q a quaternion to set values from.
+     */
+    @Override
+    public void fromRotation(final Quaternion q) {
+<span class="fc" id="L1008">        q.toMatrixRotation(internalMatrix);</span>
+<span class="fc" id="L1009">    }</span>
+
+    /**
+     * Converts this 3D rotation into a matrix rotation storing the result
+     * into provided instance.
+     *
+     * @param result instance where result wil be stored.
+     */
+    @Override
+    public void toMatrixRotation(final MatrixRotation3D result) {
+<span class="fc" id="L1019">        internalMatrix.copyTo(result.internalMatrix);</span>
+<span class="fc" id="L1020">    }</span>
+
+    /**
+     * Converts this 3D rotation into an axis rotation storing the result into
+     * provided instance.
+     *
+     * @param result instance where result will be stored.
+     */
+    @Override
+    public void toAxisRotation(final AxisRotation3D result) {
+        try {
+<span class="fc" id="L1031">            result.fromInhomogeneousMatrix(internalMatrix);</span>
+<span class="nc" id="L1032">        } catch (final InvalidRotationMatrixException ignore) {</span>
+            // never thrown
+<span class="fc" id="L1034">        }</span>
+<span class="fc" id="L1035">    }</span>
+
+    /**
+     * Converts this 3D rotation into a quaternion storing the result into
+     * provided instance.
+     *
+     * @param result instance where result will be stored.
+     */
+    @Override
+    public void toQuaternion(final Quaternion result) {
+<span class="fc" id="L1045">        Quaternion.matrixRotationToQuaternion(internalMatrix, result);</span>
+<span class="fc" id="L1046">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

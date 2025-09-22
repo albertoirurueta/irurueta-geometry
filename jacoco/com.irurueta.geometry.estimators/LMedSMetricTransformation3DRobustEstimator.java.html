@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LMedSMetricTransformation3DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">LMedSMetricTransformation3DRobustEstimator.java</span></div><h1>LMedSMetricTransformation3DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * @file
+ * This file contains implementation of
+ * com.irurueta.geometry.estimators.LMedSMetricTransformation3DRobustEstimator
+ *
+ * @author Alberto Irurueta (alberto@irurueta.com)
+ * @date March 24, 2017.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.MetricTransformation3D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.LMedSRobustEstimator;
+import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best metric 3D transformation for provided collections of
+ * matched 3D points using LMedS algorithm.
+ */
+public class LMedSMetricTransformation3DRobustEstimator extends MetricTransformation3DRobustEstimator {
+
+    /**
+     * Default value ot be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1.0;
+
+    /**
+     * Minimum allowed stop threshold value.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    private double stopThreshold;
+
+    /**
+     * Constructor.
+     */
+    public LMedSMetricTransformation3DRobustEstimator() {
+<span class="fc" id="L74">        super();</span>
+<span class="fc" id="L75">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L76">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     metric 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public LMedSMetricTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L94">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L95">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public LMedSMetricTransformation3DRobustEstimator(final MetricTransformation3DRobustEstimatorListener listener) {
+<span class="fc" id="L105">        super(listener);</span>
+<span class="fc" id="L106">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L107">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     metric 3D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     metric 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public LMedSMetricTransformation3DRobustEstimator(
+            final MetricTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L128">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L129">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L130">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public LMedSMetricTransformation3DRobustEstimator(final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L138">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L139">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L140">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public LMedSMetricTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L159">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L160">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L161">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public LMedSMetricTransformation3DRobustEstimator(
+            final MetricTransformation3DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L172">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L173">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L174">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 3D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public LMedSMetricTransformation3DRobustEstimator(
+            final MetricTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, List&lt;Point3D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L196">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L197">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L198">    }</span>
+
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L220">        return stopThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached
+     * @throws IllegalArgumentException if provided value is zero or negative
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress
+     */
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L247">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L249" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L250">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L253">        this.stopThreshold = stopThreshold;</span>
+<span class="fc" id="L254">    }</span>
+
+    /**
+     * Estimates a metric 3D transformation using a robust estimator and
+     * the best set of matched 3D point correspondences found using the robust
+     * estimator.
+     *
+     * @return a metric 3D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public MetricTransformation3D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L271" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L272">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L274" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L275">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L278">        final var innerEstimator = new LMedSRobustEstimator&lt;&gt;(</span>
+<span class="fc" id="L279">                new LMedSRobustEstimatorListener&lt;MetricTransformation3D&gt;() {</span>
+
+                    // point to be reused when computing residuals
+<span class="fc" id="L282">                    private final Point3D testPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+<span class="fc" id="L284">                    private final MetricTransformation3DEstimator nonRobustEstimator =</span>
+<span class="fc" id="L285">                            new MetricTransformation3DEstimator(isWeakMinimumSizeAllowed());</span>
+
+<span class="fc" id="L287">                    private final List&lt;Point3D&gt; subsetInputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L288">                    private final List&lt;Point3D&gt; subsetOutputPoints = new ArrayList&lt;&gt;();</span>
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L292">                        return inputPoints.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L297">                        return nonRobustEstimator.getMinimumPoints();</span>
+                    }
+
+                    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+                    @Override
+                    public void estimatePreliminarSolutions(final int[] samplesIndices,
+                                                            final List&lt;MetricTransformation3D&gt; solutions) {
+<span class="fc" id="L304">                        subsetInputPoints.clear();</span>
+<span class="fc" id="L305">                        subsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L306" title="All 2 branches covered.">                        for (final var samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L307">                            subsetInputPoints.add(inputPoints.get(samplesIndex));</span>
+<span class="fc" id="L308">                            subsetOutputPoints.add(outputPoints.get(</span>
+                                    samplesIndex));
+                        }
+
+                        try {
+<span class="fc" id="L313">                            nonRobustEstimator.setPoints(subsetInputPoints, subsetOutputPoints);</span>
+<span class="fc" id="L314">                            solutions.add(nonRobustEstimator.estimate());</span>
+<span class="nc" id="L315">                        } catch (final Exception e) {</span>
+                            // if points are coincident, no solution is added
+<span class="fc" id="L317">                        }</span>
+<span class="fc" id="L318">                    }</span>
+
+                    @Override
+                    public double computeResidual(final MetricTransformation3D currentEstimation, final int i) {
+<span class="fc" id="L322">                        final var inputPoint = inputPoints.get(i);</span>
+<span class="fc" id="L323">                        final var outputPoint = outputPoints.get(i);</span>
+
+                        // transform input point and store result in mTestPoint
+<span class="fc" id="L326">                        currentEstimation.transform(inputPoint, testPoint);</span>
+
+<span class="fc" id="L328">                        return outputPoint.distanceTo(testPoint);</span>
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L333">                        return LMedSMetricTransformation3DRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;MetricTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L338" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L339">                            listener.onEstimateStart(LMedSMetricTransformation3DRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L341">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;MetricTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L345" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L346">                            listener.onEstimateEnd(LMedSMetricTransformation3DRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L348">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;MetricTransformation3D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L353" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L354">                            listener.onEstimateNextIteration(</span>
+                                    LMedSMetricTransformation3DRobustEstimator.this, iteration);
+                        }
+<span class="fc" id="L357">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;MetricTransformation3D&gt; estimator, final float progress) {
+<span class="pc bpc" id="L362" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L363">                            listener.onEstimateProgressChange(</span>
+                                    LMedSMetricTransformation3DRobustEstimator.this, progress);
+                        }
+<span class="fc" id="L366">                    }</span>
+                });
+
+        try {
+<span class="fc" id="L370">            locked = true;</span>
+<span class="fc" id="L371">            inliersData = null;</span>
+<span class="fc" id="L372">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L373">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L374">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L375">            innerEstimator.setStopThreshold(stopThreshold);</span>
+<span class="fc" id="L376">            final var transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L377">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L378">            return attemptRefine(transformation);</span>
+<span class="nc" id="L379">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L380">            throw new LockedException(e);</span>
+<span class="nc" id="L381">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L382">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L384">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L395">        return RobustEstimatorMethod.LMEDS;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L411">        final var inliersData = (LMedSRobustEstimator.LMedSInliersData) getInliersData();</span>
+<span class="fc" id="L412">        return inliersData.getEstimatedThreshold();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Polygon2D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Polygon2D.java</span></div><h1>Polygon2D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * This class defines a polygon in 2D space.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class Polygon2D implements Serializable {
+
+    /**
+     * Default threshold value. Thresholds are used to determine whether a point
+     * lies inside the polygon or not, or if it's locus or not, etc.
+     */
+    public static final double DEFAULT_THRESHOLD = 1e-9;
+
+    /**
+     * Minimum allowed threshold value.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Minimum number of vertices that a polygon is allowed to have.
+     */
+    public static final int MIN_VERTICES = 3;
+
+    /**
+     * Default method for triangulation.
+     */
+<span class="fc" id="L47">    public static final TriangulatorMethod DEFAULT_TRIANGULATOR_METHOD = TriangulatorMethod.VAN_GOGH_TRIANGULATOR;</span>
+
+    /**
+     * List containing vertices of this polygon. Each vertex is a 2D point.
+     */
+    private List&lt;Point2D&gt; vertices;
+
+    /**
+     * Boolean indicating whether polygon has already been triangulated.
+     */
+    private boolean triangulated;
+
+    /**
+     * List containing triangles found after triangulating this polygon.
+     * Initially this list will be null until triangulation is done.
+     */
+    private List&lt;Triangle2D&gt; triangles;
+
+    /**
+     * Method to do triangulation.
+     */
+    private TriangulatorMethod triangulatorMethod;
+
+    /**
+     * Constructor.
+     *
+     * @param vertices List of vertices forming this polygon.
+     * @throws NotEnoughVerticesException Raised if list does not contain enough
+     *                                    vertices.
+     * @see #MIN_VERTICES
+     */
+<span class="fc" id="L78">    public Polygon2D(final List&lt;Point2D&gt; vertices) throws NotEnoughVerticesException {</span>
+<span class="fc" id="L79">        setVertices(vertices);</span>
+<span class="fc" id="L80">        triangulatorMethod = DEFAULT_TRIANGULATOR_METHOD;</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Returns triangulator method. Triangulator method determines the way a
+     * polygon is divided into triangles.
+     * If none has been provided DEFAULT_TRIANGULATOR_METHOD will be returned.
+     *
+     * @return Triangulator method.
+     */
+    public TriangulatorMethod getTriangulatorMethod() {
+<span class="fc" id="L91">        return triangulatorMethod;</span>
+    }
+
+    /**
+     * Sets triangulator method. A triangulator method determines the way a
+     * polygon is divided into triangles.
+     *
+     * @param triangulatorMethod A triangulator method.
+     */
+    public void setTriangulatorMethod(final TriangulatorMethod triangulatorMethod) {
+<span class="fc" id="L101">        this.triangulatorMethod = triangulatorMethod;</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Returns the list of vertices forming this polygon.
+     *
+     * @return List of vertices.
+     */
+    public List&lt;Point2D&gt; getVertices() {
+<span class="fc" id="L110">        return vertices;</span>
+    }
+
+    /**
+     * Sets list of vertices forming this polygon.
+     *
+     * @param vertices List of vertices.
+     * @throws NotEnoughVerticesException Raised if provided list does not have
+     *                                    enough vertices.
+     * @see #MIN_VERTICES
+     */
+    public final void setVertices(final List&lt;Point2D&gt; vertices) throws NotEnoughVerticesException {
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        if (vertices.size() &lt; MIN_VERTICES) {</span>
+<span class="fc" id="L123">            throw new NotEnoughVerticesException();</span>
+        }
+
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        if (vertices instanceof Serializable) {</span>
+<span class="fc" id="L127">            this.vertices = vertices;</span>
+        } else {
+<span class="nc" id="L129">            this.vertices = new ArrayList&lt;&gt;(vertices);</span>
+        }
+<span class="fc" id="L131">        triangulated = false;</span>
+<span class="fc" id="L132">        triangles = null;</span>
+<span class="fc" id="L133">    }</span>
+
+    /**
+     * Determines whether this polygon has already been triangulated.
+     * A polygon will only need to be triangulated once, unless the list of
+     * vertices is reset.
+     *
+     * @return True if polygon has already been triangulated, false otherwise.
+     */
+    public boolean isTriangulated() {
+<span class="fc" id="L143">        return triangulated;</span>
+    }
+
+    /**
+     * Returns a list of triangles forming this polygon.
+     * This method checks whether this polygon has already been triangulated,
+     * if not, it performs triangulation first.
+     *
+     * @return A list of triangles forming this polygon.
+     * @throws TriangulatorException Raised if triangulation was needed and
+     *                               failed.
+     */
+    public List&lt;Triangle2D&gt; getTriangles() throws TriangulatorException {
+<span class="fc bfc" id="L156" title="All 2 branches covered.">        if (!isTriangulated()) {</span>
+<span class="fc" id="L157">            triangulate();</span>
+        }
+<span class="fc" id="L159">        return triangles;</span>
+    }
+
+    /**
+     * Returns signed area of this polygon.
+     * The sign of the area determines whether vertices of the polygon are
+     * provided in clockwise (negative sign) or clockwise (positive sign) order.
+     *
+     * @return Signed area of this polygon.
+     */
+    public double getSignedArea() {
+<span class="fc" id="L170">        final var iterator = vertices.iterator();</span>
+
+        // because there are at least 3
+        // vertices
+<span class="fc" id="L174">        var prevPoint = iterator.next();</span>
+        Point2D curPoint;
+<span class="fc" id="L176">        var signedArea = 0.0;</span>
+
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L179">            curPoint = iterator.next();</span>
+
+<span class="fc" id="L181">            signedArea += prevPoint.getInhomX() * (curPoint.getInhomY() - prevPoint.getInhomY());</span>
+<span class="fc" id="L182">            prevPoint = curPoint;</span>
+        }
+        // on last point, check previous with first
+<span class="fc" id="L185">        curPoint = vertices.get(0);</span>
+<span class="fc" id="L186">        signedArea += prevPoint.getInhomX() * (curPoint.getInhomY() - prevPoint.getInhomY());</span>
+
+        // signed area is half the sum of cross products of consecutive vertices
+<span class="fc" id="L189">        return signedArea;</span>
+    }
+
+    /**
+     * Returns area of this polygon.
+     *
+     * @return Area of this polygon.
+     */
+    public double getArea() {
+<span class="fc" id="L198">        return Math.abs(getSignedArea());</span>
+    }
+
+    /**
+     * Determines whether vertices of this polygon are in clockwise order or
+     * in counterclockwise order.
+     *
+     * @param threshold threshold to determine if vertices are in clockwise
+     *                  order. Usually this value is zero.
+     * @return True if vertices are in clockwise order, false otherwise.
+     */
+    public boolean areVerticesClockwise(final double threshold) {
+<span class="fc bfc" id="L210" title="All 2 branches covered.">        return getSignedArea() &lt; threshold;</span>
+    }
+
+    /**
+     * Determines whether vertices of this polygon are in clockwise order or in
+     * counterclockwise order.
+     *
+     * @return True if vertices are in clockwise order, false otherwise.
+     */
+    public boolean areVerticesClockwise() {
+        // default threshold to check sign
+<span class="fc" id="L221">        return areVerticesClockwise(0.0);</span>
+    }
+
+
+    /**
+     * Returns perimeter of this polygon.
+     * The perimeter is computed as the sum of the distances between consecutive
+     * pairs of vertices.
+     *
+     * @return Perimeter of this polygon.
+     */
+    public double getPerimeter() {
+        // iterate over all vertices and compute their distance
+<span class="fc" id="L234">        final var iterator = vertices.iterator();</span>
+<span class="fc" id="L235">        var prevPoint = iterator.next();</span>
+        Point2D point;
+<span class="fc" id="L237">        var perimeter = 0.0;</span>
+<span class="fc bfc" id="L238" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L239">            point = iterator.next();</span>
+<span class="fc" id="L240">            perimeter += prevPoint.distanceTo(point);</span>
+<span class="fc" id="L241">            prevPoint = point;</span>
+        }
+        // get distance from last point with first one
+<span class="fc" id="L244">        perimeter += prevPoint.distanceTo(vertices.get(0));</span>
+<span class="fc" id="L245">        return perimeter;</span>
+    }
+
+    /**
+     * Determines if provided point lies within the region defined by this
+     * polygon.
+     * Notice that this method is only ensured to work for polygons having no
+     * holes or crossing borders. It will safely work on any other polygon,
+     * no matter if it is regular, non-regular, convex or concave.
+     *
+     * @param point Point to be checked.
+     * @return True if point lies within the area defined by this polygon, false
+     * otherwise.
+     * @throws TriangulatorException Raised if triangulation was required but
+     *                               failed.
+     */
+    public boolean isInside(final Point2D point) throws TriangulatorException {
+<span class="fc" id="L262">        return isInside(point, DEFAULT_THRESHOLD);</span>
+    }
+
+    /**
+     * Determines if provided point lies within the region defined by this
+     * polygon.
+     * Notice that this method is only ensured to work for polygons having no
+     * holes or crossing borders. It will safely work on any other polygon,
+     * no matter if it is regular, non-regular, convex or concave.
+     *
+     * @param point     Point to be checked.
+     * @param threshold Threshold to determine whether point lies inside this
+     *                  polygon. Usually this value should be small.
+     * @return True if point lies within the area defined by this polygon, false
+     * otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     * @throws TriangulatorException    Raised if triangulation was required but
+     *                                  failed.
+     */
+    public boolean isInside(final Point2D point, final double threshold) throws TriangulatorException {
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L283">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc bfc" id="L286" title="All 2 branches covered.">        for (final var triangle : getTriangles()) {</span>
+<span class="fc bfc" id="L287" title="All 2 branches covered.">            if (triangle.isInside(point, threshold)) {</span>
+<span class="fc" id="L288">                return true;</span>
+            }
+<span class="fc" id="L290">        }</span>
+<span class="fc" id="L291">        return false;</span>
+    }
+
+    /**
+     * Returns the center of this polygon.
+     * The center is the average point among all the vertices of this polygon.
+     * The center is not ensure to lie within the area formed by this polygon.
+     *
+     * @return Center of this polygon.
+     */
+    public Point2D getCenter() {
+<span class="fc" id="L302">        final var result = Point2D.create();</span>
+<span class="fc" id="L303">        center(result);</span>
+<span class="fc" id="L304">        return result;</span>
+    }
+
+    /**
+     * Computes the center of this polygon.
+     * The center is the average point among all the vertices of this polygon.
+     * The center is not ensured to lie within the area formed by this polygon.
+     *
+     * @param result Instance where the computed center will be stored.
+     */
+    public void center(final Point2D result) {
+        // compute average location of all vertices
+<span class="fc" id="L316">        var inhomX = 0.0;</span>
+<span class="fc" id="L317">        var inhomY = 0.0;</span>
+<span class="fc" id="L318">        final var total = vertices.size();</span>
+
+<span class="fc bfc" id="L320" title="All 2 branches covered.">        for (final var point : vertices) {</span>
+<span class="fc" id="L321">            inhomX += point.getInhomX() / total;</span>
+<span class="fc" id="L322">            inhomY += point.getInhomY() / total;</span>
+<span class="fc" id="L323">        }</span>
+<span class="fc" id="L324">        result.setInhomogeneousCoordinates(inhomX, inhomY);</span>
+<span class="fc" id="L325">    }</span>
+
+    /**
+     * Determines whether provided point is locus of the borders defined by
+     * the vertices of this polygon. A point will be locus if it lies in the
+     * line defined by two consecutive vertices up to a certain threshold of
+     * error.
+     *
+     * @param point     Point to be checked.
+     * @param threshold Threshold of allowed error. This should usually be a
+     *                  small value.
+     * @return True if provided point lies in a border of this polygon, false
+     * otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is negative.
+     */
+    public boolean isLocus(final Point2D point, final double threshold) {
+<span class="fc bfc" id="L341" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L342">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L345">        final var iterator = vertices.iterator();</span>
+        // it's ok because there are at
+        // least 3 vertices
+<span class="fc" id="L348">        var prevPoint = iterator.next();</span>
+        Point2D curPoint;
+<span class="fc bfc" id="L350" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L351">            curPoint = iterator.next();</span>
+<span class="fc bfc" id="L352" title="All 2 branches covered.">            if (point.isBetween(prevPoint, curPoint, threshold)) {</span>
+<span class="fc" id="L353">                return true;</span>
+            }
+<span class="fc" id="L355">            prevPoint = curPoint;</span>
+        }
+
+        // check last point with first
+<span class="fc" id="L359">        return point.isBetween(prevPoint, vertices.get(0), threshold);</span>
+    }
+
+    /**
+     * Determines whether provided point is locus of the borders defined by the
+     * vertices of this polygon. A point will be locus if it lies in the line
+     * defined by two consecutive vertices.
+     *
+     * @param point Point to be checked.
+     * @return True if provided point lies in a border of this polygon, false
+     * otherwise.
+     */
+    public boolean isLocus(final Point2D point) {
+<span class="fc" id="L372">        return isLocus(point, DEFAULT_THRESHOLD);</span>
+    }
+
+    /**
+     * Returns the shortest distance from provided point to a border of this
+     * polygon. Note that borders are segments defined by consecutive vertices.
+     *
+     * @param point Point to be checked.
+     * @return Shortest distance from provided point to this polygon.
+     */
+    public double getShortestDistance(final Point2D point) {
+        // iterate over all vertices and compute their distance
+<span class="fc" id="L384">        var iterator = vertices.iterator();</span>
+<span class="fc" id="L385">        var prevPoint = iterator.next();</span>
+        // to increase accuracy
+<span class="fc" id="L387">        prevPoint.normalize();</span>
+        Point2D curPoint;
+<span class="fc" id="L389">        var bestDist = Double.MAX_VALUE;</span>
+        double dist;
+<span class="fc" id="L391">        var found = false;</span>
+<span class="fc" id="L392">        final var line = new Line2D();</span>
+<span class="fc" id="L393">        final var pointInLine = Point2D.create();</span>
+
+<span class="fc bfc" id="L395" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L396">            curPoint = iterator.next();</span>
+            // to increase accuracy
+<span class="fc" id="L398">            curPoint.normalize();</span>
+
+            // check if point lies in the segment of the boundary of this polygon
+<span class="fc bfc" id="L401" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc" id="L402">                return 0.0;</span>
+            }
+
+<span class="fc" id="L405">            line.setParametersFromPairOfPoints(curPoint, prevPoint);</span>
+            // to increase accuracy
+<span class="fc" id="L407">            line.normalize();</span>
+
+            // find the closest point to line
+<span class="fc" id="L410">            line.closestPoint(point, pointInLine);</span>
+            // to increase accuracy
+<span class="fc" id="L412">            pointInLine.normalize();</span>
+
+<span class="fc bfc" id="L414" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
+                // closest point lies within segment of polygon boundary, so we
+                // keep distance
+<span class="fc" id="L417">                dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L418" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
+                    // a better point has been found
+<span class="fc" id="L420">                    bestDist = dist;</span>
+<span class="fc" id="L421">                    found = true;</span>
+                }
+            }
+
+<span class="fc" id="L425">            prevPoint = curPoint;</span>
+        }
+
+        // try last vertex with first
+        // check if point lies in the segment of the boundary of this polygon
+<span class="fc" id="L430">        final var first = vertices.get(0);</span>
+<span class="pc bpc" id="L431" title="1 of 2 branches missed.">        if (point.isBetween(prevPoint, first)) {</span>
+<span class="nc" id="L432">            return 0.0;</span>
+        }
+
+<span class="fc" id="L435">        line.setParametersFromPairOfPoints(prevPoint, first);</span>
+        // to increase accuracy
+<span class="fc" id="L437">        line.normalize();</span>
+
+        // find the closest point to line
+<span class="fc" id="L440">        line.closestPoint(point, pointInLine);</span>
+        // to increase accuracy
+<span class="fc" id="L442">        pointInLine.normalize();</span>
+
+<span class="pc bpc" id="L444" title="1 of 2 branches missed.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
+            // closest point lies within segment of polygon boundary, so we
+            // keep distance
+<span class="fc" id="L447">            dist = point.distanceTo(pointInLine);</span>
+<span class="pc bpc" id="L448" title="1 of 2 branches missed.">            if (dist &lt; bestDist) {</span>
+                // a better point has been found
+<span class="nc" id="L450">                bestDist = dist;</span>
+<span class="nc" id="L451">                found = true;</span>
+            }
+        }
+
+<span class="pc bpc" id="L455" title="1 of 2 branches missed.">        if (!found) {</span>
+            // no closest point was found on a segment belonging to polygon
+            // boundary, so we search for the closest vertex
+<span class="nc" id="L458">            iterator = vertices.iterator();</span>
+<span class="nc bnc" id="L459" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
+                // a better vertex has been found
+<span class="nc" id="L461">                curPoint = iterator.next();</span>
+<span class="nc" id="L462">                dist = point.distanceTo(curPoint);</span>
+<span class="nc bnc" id="L463" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
+<span class="nc" id="L464">                    bestDist = dist;</span>
+                }
+            }
+        }
+
+<span class="fc" id="L469">        return bestDist;</span>
+    }
+
+    /**
+     * Returns the closest point to provided point that is locus of this
+     * polygon (i.e. lies on a border of this polygon).
+     *
+     * @param point Point to be checked.
+     * @return Closest point being locus of this polygon.
+     */
+    public Point2D getClosestPoint(final Point2D point) {
+<span class="fc" id="L480">        final var result = Point2D.create();</span>
+<span class="fc" id="L481">        closestPoint(point, result);</span>
+<span class="fc" id="L482">        return result;</span>
+    }
+
+    /**
+     * Computes the closes point to provided point that is locus of this
+     * polygon (i.e. lies on a border of this polygon).
+     *
+     * @param point  Point to be checked.
+     * @param result Instance where the closest point will be stored.
+     */
+    public void closestPoint(final Point2D point, final Point2D result) {
+        // iterate over all vertices and compute their distance
+<span class="fc" id="L494">        var iterator = vertices.iterator();</span>
+<span class="fc" id="L495">        var prevPoint = iterator.next();</span>
+        // to increase accuracy
+<span class="fc" id="L497">        prevPoint.normalize();</span>
+
+        Point2D curPoint;
+<span class="fc" id="L500">        var bestDist = Double.MAX_VALUE;</span>
+        double dist;
+<span class="fc" id="L502">        var found = false;</span>
+<span class="fc" id="L503">        final var line = new Line2D();</span>
+<span class="fc" id="L504">        final var pointInLine = Point2D.create();</span>
+
+<span class="fc bfc" id="L506" title="All 2 branches covered.">        while (iterator.hasNext()) {</span>
+<span class="fc" id="L507">            curPoint = iterator.next();</span>
+            // to increase accuracy
+<span class="fc" id="L509">            curPoint.normalize();</span>
+
+            // check if point lies in the segment of the boundary of this polygon
+<span class="fc bfc" id="L512" title="All 2 branches covered.">            if (point.isBetween(curPoint, prevPoint)) {</span>
+<span class="fc" id="L513">                result.setCoordinates(point);</span>
+<span class="fc" id="L514">                return;</span>
+            }
+
+<span class="fc" id="L517">            line.setParametersFromPairOfPoints(curPoint, prevPoint);</span>
+            // to increase accuracy
+<span class="fc" id="L519">            line.normalize();</span>
+
+            // find the closest point to line
+<span class="fc" id="L522">            line.closestPoint(point, pointInLine);</span>
+            // to increase accuracy
+<span class="fc" id="L524">            pointInLine.normalize();</span>
+
+<span class="fc bfc" id="L526" title="All 2 branches covered.">            if (pointInLine.isBetween(curPoint, prevPoint)) {</span>
+                // closest point lies within segment of polygon boundary, so we
+                // keep distance and point
+<span class="fc" id="L529">                dist = point.distanceTo(pointInLine);</span>
+<span class="fc bfc" id="L530" title="All 2 branches covered.">                if (dist &lt; bestDist) {</span>
+                    // a better point has been found
+<span class="fc" id="L532">                    bestDist = dist;</span>
+<span class="fc" id="L533">                    result.setCoordinates(pointInLine);</span>
+<span class="fc" id="L534">                    found = true;</span>
+                }
+            }
+
+<span class="fc" id="L538">            prevPoint = curPoint;</span>
+        }
+
+        // try last vertex with first
+        // check if point lies in the segment of the boundary of this polygon
+<span class="fc" id="L543">        final var first = vertices.get(0);</span>
+<span class="pc bpc" id="L544" title="1 of 2 branches missed.">        if (point.isBetween(prevPoint, first)) {</span>
+<span class="nc" id="L545">            result.setCoordinates(point);</span>
+<span class="nc" id="L546">            return;</span>
+        }
+
+<span class="fc" id="L549">        line.setParametersFromPairOfPoints(prevPoint, first);</span>
+        // to increase accuracy
+<span class="fc" id="L551">        line.normalize();</span>
+
+        // find the closest point to line
+<span class="fc" id="L554">        line.closestPoint(point, pointInLine);</span>
+        // to increase accuracy
+<span class="fc" id="L556">        pointInLine.normalize();</span>
+
+<span class="pc bpc" id="L558" title="1 of 2 branches missed.">        if (pointInLine.isBetween(prevPoint, first)) {</span>
+            // closest point lies within segment of polygon boundary, so we
+            // keep distance
+<span class="fc" id="L561">            dist = point.distanceTo(pointInLine);</span>
+<span class="pc bpc" id="L562" title="1 of 2 branches missed.">            if (dist &lt; bestDist) {</span>
+                // a better point has been found
+<span class="nc" id="L564">                bestDist = dist;</span>
+<span class="nc" id="L565">                result.setCoordinates(pointInLine);</span>
+<span class="nc" id="L566">                found = true;</span>
+            }
+        }
+
+<span class="pc bpc" id="L570" title="1 of 2 branches missed.">        if (!found) {</span>
+            // no closest point was found on a segment belonging to polygon
+            // boundary, so we search for the closest vertex
+<span class="nc" id="L573">            iterator = vertices.iterator();</span>
+<span class="nc bnc" id="L574" title="All 2 branches missed.">            while (iterator.hasNext()) {</span>
+<span class="nc" id="L575">                curPoint = iterator.next();</span>
+<span class="nc" id="L576">                dist = point.distanceTo(curPoint);</span>
+<span class="nc bnc" id="L577" title="All 2 branches missed.">                if (dist &lt; bestDist) {</span>
+                    // a better vertex has been found
+<span class="nc" id="L579">                    bestDist = dist;</span>
+<span class="nc" id="L580">                    result.setCoordinates(curPoint);</span>
+                }
+            }
+        }
+<span class="fc" id="L584">    }</span>
+
+    /**
+     * Triangulates this polygon using this polygon's triangulator method.
+     * A polygon only will be triangulated once when required or this method is
+     * called.
+     * This method will make no action if a polygon is already triangulated
+     * unless it's vertices are reset.
+     *
+     * @throws TriangulatorException Raised if triangulation failed
+     * @see #getTriangulatorMethod
+     * @see #setTriangulatorMethod(TriangulatorMethod)
+     */
+    public void triangulate() throws TriangulatorException {
+<span class="fc bfc" id="L598" title="All 2 branches covered.">        if (!triangulated) {</span>
+<span class="fc" id="L599">            final var triangulator = Triangulator2D.create(triangulatorMethod);</span>
+<span class="fc" id="L600">            triangles = triangulator.triangulate(vertices);</span>
+<span class="fc" id="L601">            triangulated = true;</span>
+        }
+<span class="fc" id="L603">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

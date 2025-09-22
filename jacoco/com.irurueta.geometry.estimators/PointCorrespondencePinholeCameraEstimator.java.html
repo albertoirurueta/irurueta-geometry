@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PointCorrespondencePinholeCameraEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PointCorrespondencePinholeCameraEstimator.java</span></div><h1>PointCorrespondencePinholeCameraEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.Utils;
+import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.geometry.HomogeneousPoint2D;
+import com.irurueta.geometry.NotAvailableException;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.ProjectiveTransformation2D;
+import com.irurueta.geometry.ProjectiveTransformation3D;
+import com.irurueta.geometry.refiners.DecomposedPointCorrespondencePinholeCameraRefiner;
+
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Collections;
+import java.util.List;
+
+/**
+ * This file contains abstract implementation for pinhole camera estimators
+ * based on point correspondences.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public abstract class PointCorrespondencePinholeCameraEstimator extends PinholeCameraEstimator {
+
+    /**
+     * Minimum number of required point correspondences to estimate a pinhole
+     * camera.
+     */
+    public static final int MIN_NUMBER_OF_POINT_CORRESPONDENCES = 6;
+
+    /**
+     * Indicates if by default provided point correspondences are normalized to
+     * increase the accuracy of the estimation.
+     */
+    public static final boolean DEFAULT_NORMALIZE_POINT_CORRESPONDENCES = true;
+
+    /**
+     * Defines tiny value considered as machine precision.
+     */
+    public static final double EPS = 1e-8;
+
+    /**
+     * List of corresponding 3D points.
+     */
+    protected List&lt;Point3D&gt; points3D;
+
+    /**
+     * List of corresponding 2D points.
+     */
+    protected List&lt;Point2D&gt; points2D;
+
+    /**
+     * Indicates if provided point correspondences are normalized to increase
+     * the accuracy of the estimation.
+     */
+    private boolean normalizePointCorrespondences;
+
+    /**
+     * Constructor.
+     */
+    protected PointCorrespondencePinholeCameraEstimator() {
+<span class="fc" id="L79">        super();</span>
+<span class="fc" id="L80">        normalizePointCorrespondences = DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or estimation progress changes.
+     */
+    protected PointCorrespondencePinholeCameraEstimator(final PinholeCameraEstimatorListener listener) {
+<span class="fc" id="L90">        super(listener);</span>
+<span class="fc" id="L91">        normalizePointCorrespondences = DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;</span>
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points.
+     */
+    protected PointCorrespondencePinholeCameraEstimator(final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D)
+            throws WrongListSizesException {
+<span class="fc" id="L105">        super();</span>
+<span class="fc" id="L106">        internalSetLists(points3D, points2D);</span>
+<span class="fc" id="L107">        normalizePointCorrespondences = DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;</span>
+<span class="fc" id="L108">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or estimation progress changes.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points.
+     */
+    protected PointCorrespondencePinholeCameraEstimator(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D, final PinholeCameraEstimatorListener listener)
+            throws WrongListSizesException {
+<span class="fc" id="L124">        super(listener);</span>
+<span class="fc" id="L125">        internalSetLists(points3D, points2D);</span>
+<span class="fc" id="L126">        normalizePointCorrespondences = DEFAULT_NORMALIZE_POINT_CORRESPONDENCES;</span>
+<span class="fc" id="L127">    }</span>
+
+    /**
+     * Internal method to set list of corresponding points (it does not check
+     * if estimator is locked).
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points.
+     */
+    private void internalSetLists(final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D)
+            throws WrongListSizesException {
+
+<span class="fc bfc" id="L142" title="All 4 branches covered.">        if (points3D == null || points2D == null) {</span>
+<span class="fc" id="L143">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc bfc" id="L146" title="All 2 branches covered.">        if (!areValidLists(points3D, points2D)) {</span>
+<span class="fc" id="L147">            throw new WrongListSizesException();</span>
+        }
+
+<span class="fc" id="L150">        this.points3D = points3D;</span>
+<span class="fc" id="L151">        this.points2D = points2D;</span>
+<span class="fc" id="L152">    }</span>
+
+    /**
+     * Sets list of corresponding points.
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @throws LockedException          if estimator is locked.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points.
+     */
+    public void setLists(final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D) throws LockedException,
+            WrongListSizesException {
+<span class="fc bfc" id="L166" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L167">            throw new LockedException();</span>
+        }
+
+<span class="fc" id="L170">        internalSetLists(points3D, points2D);</span>
+<span class="fc" id="L171">    }</span>
+
+    /**
+     * Returns list of corresponding 3D points.
+     * Notice that this method returns an unmodifiable list of points to avoid
+     * undesired modifications.
+     *
+     * @return list of corresponding 3D points.
+     * @throws NotAvailableException if list of points is not yet available.
+     */
+    public List&lt;Point3D&gt; getPoints3D() throws NotAvailableException {
+<span class="fc bfc" id="L182" title="All 2 branches covered.">        if (points3D == null) {</span>
+<span class="fc" id="L183">            throw new NotAvailableException();</span>
+        }
+
+        // to avoid undesired modifications
+<span class="fc" id="L187">        return Collections.unmodifiableList(points3D);</span>
+    }
+
+    /**
+     * Returns list of corresponding 2D points.
+     * Notice that this method returns an unmodifiable list of points to avoid
+     * undesired modifications.
+     *
+     * @return list of corresponding 2D points.
+     * @throws NotAvailableException if list of points is not yet available.
+     */
+    public List&lt;Point2D&gt; getPoints2D() throws NotAvailableException {
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (points2D == null) {</span>
+<span class="fc" id="L200">            throw new NotAvailableException();</span>
+        }
+
+        // to avoid undesired modifications
+<span class="fc" id="L204">        return Collections.unmodifiableList(points2D);</span>
+    }
+
+    /**
+     * Indicates if lists of corresponding 2D/3D points are valid.
+     * Lists are considered valid if they have the same number of points and
+     * both have more than the required minimum of correspondences (which is 6).
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @return true if corresponding 2D/3D points are valid, false otherwise.
+     */
+    public static boolean areValidLists(final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D) {
+<span class="fc bfc" id="L217" title="All 4 branches covered.">        if (points3D == null || points2D == null) {</span>
+<span class="fc" id="L218">            return false;</span>
+        }
+<span class="pc bpc" id="L220" title="1 of 4 branches missed.">        return points3D.size() == points2D.size() &amp;&amp; points3D.size() &gt;= MIN_NUMBER_OF_POINT_CORRESPONDENCES;</span>
+    }
+
+    /**
+     * Indicates if lists have already been provided and are available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean areListsAvailable() {
+<span class="pc bpc" id="L230" title="1 of 4 branches missed.">        return points3D != null &amp;&amp; points2D != null;</span>
+    }
+
+    /**
+     * Indicates if provided point correspondences are normalized to increase
+     * the accuracy of the estimation.
+     *
+     * @return true if input point correspondences will be normalized, false
+     * otherwise.
+     */
+    public boolean arePointCorrespondencesNormalized() {
+<span class="fc" id="L241">        return normalizePointCorrespondences;</span>
+    }
+
+    /**
+     * Specifies whether provided point correspondences are normalized to
+     * increase the accuracy of the estimation.
+     *
+     * @param normalize true if input point correspondences will be normalized,
+     *                  false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setPointCorrespondencesNormalized(final boolean normalize) throws LockedException {
+
+<span class="fc bfc" id="L254" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L255">            throw new LockedException();</span>
+        }
+<span class="fc" id="L257">        normalizePointCorrespondences = normalize;</span>
+<span class="fc" id="L258">    }</span>
+
+    /**
+     * Transforms 2D points so that they have zero mean and unitary standard
+     * deviation. Provided transformation will be updated containing the
+     * transformation used for input points.
+     *
+     * @param list                  list of input 2D points.
+     * @param inverseTransformation inverseTransformation used on input points.
+     *                              This is an output variable.
+     * @return transformed 2D points.
+     * @throws PinholeCameraEstimatorException if transformation cannot be
+     *                                         computed because point configuration might be degenerate.
+     */
+    private List&lt;Point2D&gt; transformPoints2D(
+            final List&lt;Point2D&gt; list, final ProjectiveTransformation2D inverseTransformation)
+            throws PinholeCameraEstimatorException {
+
+        // compute image point coordinates limits
+<span class="fc" id="L277">        var minX = Double.MAX_VALUE;</span>
+<span class="fc" id="L278">        var maxX = -Double.MAX_VALUE;</span>
+<span class="fc" id="L279">        var minY = Double.MAX_VALUE;</span>
+<span class="fc" id="L280">        var maxY = -Double.MAX_VALUE;</span>
+<span class="fc bfc" id="L281" title="All 2 branches covered.">        for (final var point : list) {</span>
+<span class="fc" id="L282">            point.normalize();</span>
+<span class="fc" id="L283">            final var x = point.getInhomX();</span>
+<span class="fc" id="L284">            final var y = point.getInhomY();</span>
+
+<span class="fc bfc" id="L286" title="All 2 branches covered.">            if (x &lt; minX) {</span>
+<span class="fc" id="L287">                minX = x;</span>
+            }
+<span class="fc bfc" id="L289" title="All 2 branches covered.">            if (x &gt; maxX) {</span>
+<span class="fc" id="L290">                maxX = x;</span>
+            }
+<span class="fc bfc" id="L292" title="All 2 branches covered.">            if (y &lt; minY) {</span>
+<span class="fc" id="L293">                minY = y;</span>
+            }
+<span class="fc bfc" id="L295" title="All 2 branches covered.">            if (y &gt; maxY) {</span>
+<span class="fc" id="L296">                maxY = y;</span>
+            }
+<span class="fc" id="L298">        }</span>
+
+        // compute size of image plane (based on 2D coordinates limits), scale
+        // and centroid
+<span class="fc" id="L302">        final var width = maxX - minX;</span>
+<span class="fc" id="L303">        final var height = maxY - minY;</span>
+
+<span class="fc" id="L305">        final var norm = Math.sqrt(width * width + height * height);</span>
+        // points are too close to each other (norm is too small).
+        // This is a degenerate configuration and results will be meaningless
+<span class="pc bpc" id="L308" title="1 of 2 branches missed.">        if (norm &lt; EPS) {</span>
+<span class="nc" id="L309">            throw new PinholeCameraEstimatorException();</span>
+        }
+
+<span class="fc" id="L312">        final var scale = 1.0 / norm;</span>
+<span class="fc" id="L313">        final var centroidX = (minX + maxX) / 2.0;</span>
+<span class="fc" id="L314">        final var centroidY = (minY + maxY) / 2.0;</span>
+
+        // set inverse transformation matrix
+        try {
+<span class="fc" id="L318">            final var inverseTransformationMatrix = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH,</span>
+                    Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH);
+
+<span class="fc" id="L321">            inverseTransformationMatrix.setElementAt(0, 0, norm);</span>
+            // 1.0 / scale
+<span class="fc" id="L323">            inverseTransformationMatrix.setElementAt(1, 1, norm);</span>
+<span class="fc" id="L324">            inverseTransformationMatrix.setElementAt(2, 2, 1.0);</span>
+<span class="fc" id="L325">            inverseTransformationMatrix.setElementAt(0, 2, centroidX);</span>
+<span class="fc" id="L326">            inverseTransformationMatrix.setElementAt(1, 2, centroidY);</span>
+
+<span class="fc" id="L328">            inverseTransformation.setT(inverseTransformationMatrix);</span>
+<span class="nc" id="L329">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L331">        }</span>
+
+<span class="fc" id="L333">        inverseTransformation.normalize();</span>
+
+
+        // transform list of image points
+<span class="fc" id="L337">        final var transformedPoints = new ArrayList&lt;Point2D&gt;(list.size());</span>
+<span class="fc bfc" id="L338" title="All 2 branches covered.">        for (final var point : list) {</span>
+<span class="fc" id="L339">            point.normalize();</span>
+<span class="fc" id="L340">            final var homX = point.getHomX();</span>
+<span class="fc" id="L341">            final var homY = point.getHomY();</span>
+<span class="fc" id="L342">            final var homW = point.getHomW();</span>
+
+<span class="fc" id="L344">            final var homPoint = new HomogeneousPoint2D(</span>
+                    scale * (homX - centroidX * homW),
+                    scale * (homY - centroidY * homW), homW);
+            // normalize point to increase accuracy
+<span class="fc" id="L348">            homPoint.normalize();</span>
+<span class="fc" id="L349">            transformedPoints.add(homPoint);</span>
+<span class="fc" id="L350">        }</span>
+
+<span class="fc" id="L352">        return transformedPoints;</span>
+    }
+
+    /**
+     * Transforms 3D points so that they have zero mean and unitary standard
+     * deviation. Provided transformation will be updated containing the
+     * transformation used for input points.
+     *
+     * @param list           list of input 3D points.
+     * @param transformation transformation used on input points. This is an
+     *                       output variable.
+     * @return transformed 3D points.
+     * @throws PinholeCameraEstimatorException if transformation cannot be
+     *                                         computed because point configuration might be degenerate.
+     */
+    private List&lt;Point3D&gt; transformPoints3D(final List&lt;Point3D&gt; list, final ProjectiveTransformation3D transformation)
+            throws PinholeCameraEstimatorException {
+
+        // compute image point coordinates limits
+<span class="fc" id="L371">        var minX = Double.MAX_VALUE;</span>
+<span class="fc" id="L372">        var maxX = -Double.MAX_VALUE;</span>
+<span class="fc" id="L373">        var minY = Double.MAX_VALUE;</span>
+<span class="fc" id="L374">        var maxY = -Double.MAX_VALUE;</span>
+<span class="fc" id="L375">        var minZ = Double.MAX_VALUE;</span>
+<span class="fc" id="L376">        var maxZ = -Double.MAX_VALUE;</span>
+<span class="fc bfc" id="L377" title="All 2 branches covered.">        for (final var point : list) {</span>
+<span class="fc" id="L378">            point.normalize();</span>
+<span class="fc" id="L379">            final var x = point.getInhomX();</span>
+<span class="fc" id="L380">            final var y = point.getInhomY();</span>
+<span class="fc" id="L381">            final var z = point.getInhomZ();</span>
+
+<span class="fc bfc" id="L383" title="All 2 branches covered.">            if (x &lt; minX) {</span>
+<span class="fc" id="L384">                minX = x;</span>
+            }
+<span class="fc bfc" id="L386" title="All 2 branches covered.">            if (x &gt; maxX) {</span>
+<span class="fc" id="L387">                maxX = x;</span>
+            }
+<span class="fc bfc" id="L389" title="All 2 branches covered.">            if (y &lt; minY) {</span>
+<span class="fc" id="L390">                minY = y;</span>
+            }
+<span class="fc bfc" id="L392" title="All 2 branches covered.">            if (y &gt; maxY) {</span>
+<span class="fc" id="L393">                maxY = y;</span>
+            }
+<span class="fc bfc" id="L395" title="All 2 branches covered.">            if (z &lt; minZ) {</span>
+<span class="fc" id="L396">                minZ = z;</span>
+            }
+<span class="fc bfc" id="L398" title="All 2 branches covered.">            if (z &gt; maxZ) {</span>
+<span class="fc" id="L399">                maxZ = z;</span>
+            }
+<span class="fc" id="L401">        }</span>
+
+        // compute size of image plane (based on 2D coordinates limits), scale
+        // and centroid
+<span class="fc" id="L405">        final var width = maxX - minX;</span>
+<span class="fc" id="L406">        final var height = maxY - minY;</span>
+<span class="fc" id="L407">        final var depth = maxZ - minZ;</span>
+
+<span class="fc" id="L409">        final var norm = Math.sqrt(width * width + height * height + depth * depth);</span>
+        // points are too close to each other (norm is too small).
+        // This is a degenerate configuration and results will be meaningless
+<span class="pc bpc" id="L412" title="1 of 2 branches missed.">        if (norm &lt; EPS) {</span>
+<span class="nc" id="L413">            throw new PinholeCameraEstimatorException();</span>
+        }
+
+<span class="fc" id="L416">        final var scale = 1.0 / norm;</span>
+<span class="fc" id="L417">        final var centroidX = (minX + maxX) / 2.0;</span>
+<span class="fc" id="L418">        final var centroidY = (minY + maxY) / 2.0;</span>
+<span class="fc" id="L419">        final var centroidZ = (minZ + maxZ) / 2.0;</span>
+
+        // set transformation matrix
+        try {
+<span class="fc" id="L423">            final var transformMatrix = new Matrix(Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH,</span>
+                    Point3D.POINT3D_HOMOGENEOUS_COORDINATES_LENGTH);
+<span class="fc" id="L425">            transformMatrix.setElementAt(0, 0, scale);</span>
+<span class="fc" id="L426">            transformMatrix.setElementAt(1, 1, scale);</span>
+<span class="fc" id="L427">            transformMatrix.setElementAt(2, 2, scale);</span>
+<span class="fc" id="L428">            transformMatrix.setElementAt(3, 3, 1.0);</span>
+<span class="fc" id="L429">            transformMatrix.setElementAt(0, 3, -scale * centroidX);</span>
+<span class="fc" id="L430">            transformMatrix.setElementAt(1, 3, -scale * centroidY);</span>
+<span class="fc" id="L431">            transformMatrix.setElementAt(2, 3, -scale * centroidZ);</span>
+
+            // normalize transformation to increase accuracy
+<span class="fc" id="L434">            transformation.setT(transformMatrix);</span>
+<span class="nc" id="L435">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L437">        }</span>
+<span class="fc" id="L438">        transformation.normalize();</span>
+
+        // transform list of world points
+<span class="fc" id="L441">        final var transformedPoints = new ArrayList&lt;Point3D&gt;(list.size());</span>
+<span class="fc bfc" id="L442" title="All 2 branches covered.">        for (final var point : list) {</span>
+<span class="fc" id="L443">            transformedPoints.add(transformation.transformAndReturnNew(point));</span>
+<span class="fc" id="L444">        }</span>
+
+<span class="fc" id="L446">        return transformedPoints;</span>
+    }
+
+    /**
+     * Estimates a pinhole camera.
+     *
+     * @return estimated pinhole camera.
+     * @throws LockedException                 if estimator is locked.
+     * @throws NotReadyException               if input has not yet been provided.
+     * @throws PinholeCameraEstimatorException if an error occurs during
+     *                                         estimation, usually because input data is not valid.
+     */
+    @Override
+    public PinholeCamera estimate() throws LockedException, NotReadyException, PinholeCameraEstimatorException {
+
+<span class="pc bpc" id="L461" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L462">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L464" title="All 2 branches covered.">        if (!isReady()) {</span>
+<span class="fc" id="L465">            throw new NotReadyException();</span>
+        }
+
+        try {
+<span class="fc" id="L469">            locked = true;</span>
+<span class="fc bfc" id="L470" title="All 2 branches covered.">            if (listener != null) {</span>
+<span class="fc" id="L471">                listener.onEstimateStart(this);</span>
+            }
+
+<span class="fc" id="L474">            final var inverseTransformation2D = new ProjectiveTransformation2D();</span>
+<span class="fc" id="L475">            final var transformation3D = new ProjectiveTransformation3D();</span>
+            final List&lt;Point2D&gt; inputPoints2D;
+            final List&lt;Point3D&gt; inputPoints3D;
+
+<span class="pc bpc" id="L479" title="1 of 2 branches missed.">            if (normalizePointCorrespondences) {</span>
+                // normalize 2D and 3D points and update transformations
+<span class="fc" id="L481">                inputPoints2D = transformPoints2D(points2D, inverseTransformation2D);</span>
+<span class="fc" id="L482">                inputPoints3D = transformPoints3D(points3D, transformation3D);</span>
+            } else {
+<span class="nc" id="L484">                inputPoints2D = points2D;</span>
+<span class="nc" id="L485">                inputPoints3D = points3D;</span>
+            }
+
+<span class="fc" id="L488">            var pinholeCameraMatrix = internalEstimate(inputPoints3D, inputPoints2D);</span>
+
+<span class="pc bpc" id="L490" title="1 of 2 branches missed.">            if (normalizePointCorrespondences) {</span>
+<span class="fc" id="L491">                inverseTransformation2D.normalize();</span>
+<span class="fc" id="L492">                transformation3D.normalize();</span>
+
+                // denormalize pinhole camera
+<span class="fc" id="L495">                final var invTrans2DMatrix = inverseTransformation2D.asMatrix();</span>
+<span class="fc" id="L496">                final var trans3DMatrix = transformation3D.asMatrix();</span>
+
+<span class="fc" id="L498">                invTrans2DMatrix.multiply(pinholeCameraMatrix);</span>
+<span class="fc" id="L499">                invTrans2DMatrix.multiply(trans3DMatrix);</span>
+
+<span class="fc" id="L501">                pinholeCameraMatrix = invTrans2DMatrix;</span>
+
+                // normalize by Frobenius norm to increase accuracy after point
+                // de-normalization
+<span class="fc" id="L505">                final var norm = Utils.normF(pinholeCameraMatrix);</span>
+<span class="fc" id="L506">                pinholeCameraMatrix.multiplyByScalar(1.0 / norm);</span>
+            }
+
+<span class="fc" id="L509">            final var camera = new PinholeCamera(pinholeCameraMatrix);</span>
+
+<span class="fc bfc" id="L511" title="All 2 branches covered.">            if (listener != null) {</span>
+<span class="fc" id="L512">                listener.onEstimateEnd(this);</span>
+            }
+
+<span class="fc" id="L515">            return attemptRefine(camera);</span>
+
+<span class="fc" id="L517">        } catch (final PinholeCameraEstimatorException e) {</span>
+<span class="fc" id="L518">            throw e;</span>
+<span class="nc" id="L519">        } catch (final Exception e) {</span>
+<span class="nc" id="L520">            throw new PinholeCameraEstimatorException(e);</span>
+        } finally {
+<span class="fc" id="L522">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Internal method that actually computes the normalized pinhole camera
+     * internal matrix.
+     * Returned matrix must have norm equal to one and might be estimated using
+     * any convenient algorithm (i.e. DLT or weighted DLT).
+     *
+     * @param points3D list of 3D points. Points might or might not be
+     *                 normalized.
+     * @param points2D list of 2D points. Points might or might not be
+     *                 normalized.
+     * @return matrix of estimated pinhole camera.
+     * @throws PinholeCameraEstimatorException if estimation fails for some
+     *                                         reason (i.e. numerical instability or geometric degeneracy).
+     */
+    protected abstract Matrix internalEstimate(final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D)
+            throws PinholeCameraEstimatorException;
+
+    /**
+     * Attempts to refine provided camera using requested suggestions.
+     * If no suggestions are requested or if refinement fails, provided
+     * camera is returned instead.
+     *
+     * @param pinholeCamera camera to be refined.
+     * @return refined camera.
+     */
+    @Override
+    protected PinholeCamera attemptRefine(final PinholeCamera pinholeCamera) {
+<span class="fc bfc" id="L553" title="All 2 branches covered.">        if (hasSuggestions()) {</span>
+<span class="fc" id="L554">            final var numPoints = points3D.size();</span>
+<span class="fc" id="L555">            final var inliers = new BitSet(numPoints);</span>
+<span class="fc" id="L556">            inliers.set(0, numPoints, true);</span>
+<span class="fc" id="L557">            final var residuals = new double[numPoints];</span>
+
+<span class="fc" id="L559">            final var refiner = new DecomposedPointCorrespondencePinholeCameraRefiner(pinholeCamera,</span>
+                    false, inliers, residuals, numPoints, points3D, points2D, 0.0);
+            try {
+<span class="fc" id="L562">                refiner.setMinSuggestionWeight(minSuggestionWeight);</span>
+<span class="fc" id="L563">                refiner.setMaxSuggestionWeight(maxSuggestionWeight);</span>
+<span class="fc" id="L564">                refiner.setSuggestionWeightStep(suggestionWeightStep);</span>
+
+<span class="fc" id="L566">                refiner.setSuggestSkewnessValueEnabled(suggestSkewnessValueEnabled);</span>
+<span class="fc" id="L567">                refiner.setSuggestedSkewnessValue(suggestedSkewnessValue);</span>
+<span class="fc" id="L568">                refiner.setSuggestHorizontalFocalLengthEnabled(suggestHorizontalFocalLengthEnabled);</span>
+<span class="fc" id="L569">                refiner.setSuggestedHorizontalFocalLengthValue(suggestedHorizontalFocalLengthValue);</span>
+<span class="fc" id="L570">                refiner.setSuggestVerticalFocalLengthEnabled(suggestVerticalFocalLengthEnabled);</span>
+<span class="fc" id="L571">                refiner.setSuggestedVerticalFocalLengthValue(suggestedVerticalFocalLengthValue);</span>
+<span class="fc" id="L572">                refiner.setSuggestAspectRatioEnabled(suggestAspectRatioEnabled);</span>
+<span class="fc" id="L573">                refiner.setSuggestedAspectRatioValue(suggestedAspectRatioValue);</span>
+<span class="fc" id="L574">                refiner.setSuggestPrincipalPointEnabled(suggestPrincipalPointEnabled);</span>
+<span class="fc" id="L575">                refiner.setSuggestedPrincipalPointValue(suggestedPrincipalPointValue);</span>
+<span class="fc" id="L576">                refiner.setSuggestRotationEnabled(suggestRotationEnabled);</span>
+<span class="fc" id="L577">                refiner.setSuggestedRotationValue(suggestedRotationValue);</span>
+<span class="fc" id="L578">                refiner.setSuggestCenterEnabled(suggestCenterEnabled);</span>
+<span class="fc" id="L579">                refiner.setSuggestedCenterValue(suggestedCenterValue);</span>
+
+<span class="fc" id="L581">                final var result = new PinholeCamera();</span>
+<span class="fc" id="L582">                final var improved = refiner.refine(result);</span>
+
+<span class="fc bfc" id="L584" title="All 2 branches covered.">                return improved ? result : pinholeCamera;</span>
+
+<span class="nc" id="L586">            } catch (final Exception e) {</span>
+<span class="nc" id="L587">                return pinholeCamera;</span>
+            }
+        } else {
+<span class="fc" id="L590">            return pinholeCamera;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
