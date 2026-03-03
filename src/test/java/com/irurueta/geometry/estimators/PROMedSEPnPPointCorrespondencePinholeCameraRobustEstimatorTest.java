@@ -52,7 +52,7 @@ class PROMedSEPnPPointCorrespondencePinholeCameraRobustEstimatorTest implements 
 
     private static final int PERCENTAGE_OUTLIER = 20;
 
-    private static final int TIMES = 10;
+    private static final int TIMES = 15;
 
     private static final double THRESHOLD = 1e-6;
 
