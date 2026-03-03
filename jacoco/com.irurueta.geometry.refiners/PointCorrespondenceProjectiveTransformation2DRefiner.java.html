@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PointCorrespondenceProjectiveTransformation2DRefiner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.refiners</a> &gt; <span class="el_source">PointCorrespondenceProjectiveTransformation2DRefiner.java</span></div><h1>PointCorrespondenceProjectiveTransformation2DRefiner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.refiners;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.ProjectiveTransformation2D;
+import com.irurueta.geometry.estimators.LockedException;
+import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.GradientEstimator;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
+import com.irurueta.numerical.robust.InliersData;
+
+import java.util.BitSet;
+import java.util.List;
+
+/**
+ * A 2D projective transformation refiner using point correspondences.
+ * This class takes into account an initial estimation, inlier point matches
+ * and their residuals to find a solution that minimizes error of inliers in
+ * LMSE terms.
+ * Typically, a refiner is used by a robust estimator, however it can also be
+ * useful in some other situations.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class PointCorrespondenceProjectiveTransformation2DRefiner extends
+        ProjectiveTransformation2DRefiner&lt;Point2D, Point2D&gt; {
+
+    /**
+     * Point to be reused when computing residuals.
+     */
+<span class="fc" id="L48">    private final Point2D residualTestPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L53">    public PointCorrespondenceProjectiveTransformation2DRefiner() {</span>
+<span class="fc" id="L54">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public PointCorrespondenceProjectiveTransformation2DRefiner(
+            final ProjectiveTransformation2D initialEstimation, final boolean keepCovariance, final BitSet inliers,
+            final double[] residuals, final int numInliers, final List&lt;Point2D&gt; samples1, final List&lt;Point2D&gt; samples2,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L74">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,</span>
+                refinementStandardDeviation);
+<span class="fc" id="L76">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public PointCorrespondenceProjectiveTransformation2DRefiner(
+            final ProjectiveTransformation2D initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List&lt;Point2D&gt; samples1, final List&lt;Point2D&gt; samples2,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L95">        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Refines provided initial estimation.
+     * This method always sets a value into provided result instance regardless
+     * of the fact that error has actually improved in LMSE terms or not.
+     *
+     * @param result instance where refined estimation will be stored.
+     * @return true if result improves (error decreases) in LMSE terms respect
+     * to initial estimation, false if no improvement has been achieved.
+     * @throws NotReadyException if not enough input data has been provided.
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
+     */
+    @Override
+    public boolean refine(final ProjectiveTransformation2D result) throws NotReadyException, LockedException,
+            RefinerException {
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L116">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L118" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L119">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L122">        locked = true;</span>
+
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        if (listener != null) {</span>
+<span class="fc" id="L125">            listener.onRefineStart(this, initialEstimation);</span>
+        }
+
+<span class="fc" id="L128">        initialEstimation.normalize();</span>
+
+<span class="fc" id="L130">        final var initialTotalResidual = totalResidual(initialEstimation);</span>
+
+        try {
+<span class="fc" id="L133">            final var initParams = new double[</span>
+                    ProjectiveTransformation2D.HOM_COORDS * ProjectiveTransformation2D.HOM_COORDS];
+            // copy values
+<span class="fc" id="L136">            System.arraycopy(initialEstimation.getT().getBuffer(), 0, initParams, 0, initParams.length);</span>
+
+            // output values to be fitted/optimized will contain residuals
+<span class="fc" id="L139">            final var y = new double[numInliers];</span>
+            // input values will contain 2 sets of 2D points to compute residuals
+<span class="fc" id="L141">            final var nDims = 2 * Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH;</span>
+<span class="fc" id="L142">            final var x = new Matrix(numInliers, nDims);</span>
+<span class="fc" id="L143">            final var nSamples = inliers.length();</span>
+<span class="fc" id="L144">            var pos = 0;</span>
+<span class="fc bfc" id="L145" title="All 2 branches covered.">            for (var i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L146" title="All 2 branches covered.">                if (inliers.get(i)) {</span>
+                    // sample is inlier
+<span class="fc" id="L148">                    final var inputPoint = samples1.get(i);</span>
+<span class="fc" id="L149">                    final var outputPoint = samples2.get(i);</span>
+<span class="fc" id="L150">                    inputPoint.normalize();</span>
+<span class="fc" id="L151">                    outputPoint.normalize();</span>
+<span class="fc" id="L152">                    x.setElementAt(pos, 0, inputPoint.getHomX());</span>
+<span class="fc" id="L153">                    x.setElementAt(pos, 1, inputPoint.getHomY());</span>
+<span class="fc" id="L154">                    x.setElementAt(pos, 2, inputPoint.getHomW());</span>
+<span class="fc" id="L155">                    x.setElementAt(pos, 3, outputPoint.getHomX());</span>
+<span class="fc" id="L156">                    x.setElementAt(pos, 4, outputPoint.getHomY());</span>
+<span class="fc" id="L157">                    x.setElementAt(pos, 5, outputPoint.getHomW());</span>
+
+<span class="fc" id="L159">                    y[pos] = residuals[i];</span>
+<span class="fc" id="L160">                    pos++;</span>
+                }
+            }
+
+<span class="fc" id="L164">            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+
+<span class="fc" id="L166">                private final Point2D inputPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+<span class="fc" id="L168">                private final Point2D outputPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+<span class="fc" id="L170">                private final ProjectiveTransformation2D transformation = new ProjectiveTransformation2D();</span>
+
+<span class="fc" id="L172">                private final GradientEstimator mGradientEstimator = new GradientEstimator(params -&gt; {</span>
+                    // copy values
+<span class="fc" id="L174">                    System.arraycopy(params, 0, transformation.getT().getBuffer(), 0, params.length);</span>
+<span class="fc" id="L175">                    return residual(transformation, inputPoint, outputPoint);</span>
+                });
+
+                @Override
+                public int getNumberOfDimensions() {
+<span class="fc" id="L180">                    return nDims;</span>
+                }
+
+                @Override
+                public double[] createInitialParametersArray() {
+<span class="fc" id="L185">                    return initParams;</span>
+                }
+
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+<span class="fc" id="L191">                    inputPoint.setHomogeneousCoordinates(point[0], point[1], point[2]);</span>
+<span class="fc" id="L192">                    outputPoint.setHomogeneousCoordinates(point[3], point[4], point[5]);</span>
+
+                    // copy values
+<span class="fc" id="L195">                    System.arraycopy(params, 0, transformation.getT().getBuffer(), 0, params.length);</span>
+
+<span class="fc" id="L197">                    final var y = residual(transformation, inputPoint, outputPoint);</span>
+<span class="fc" id="L198">                    mGradientEstimator.gradient(params, derivatives);</span>
+
+<span class="fc" id="L200">                    return y;</span>
+                }
+            };
+
+<span class="fc" id="L204">            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,</span>
+<span class="fc" id="L205">                    getRefinementStandardDeviation());</span>
+
+<span class="fc" id="L207">            fitter.fit();</span>
+
+            // obtain estimated params
+<span class="fc" id="L210">            final var params = fitter.getA();</span>
+
+            // update transformation
+
+            // copy values
+<span class="fc" id="L215">            System.arraycopy(params, 0, result.getT().getBuffer(), 0, params.length);</span>
+
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">            if (keepCovariance) {</span>
+                // keep covariance
+<span class="fc" id="L219">                covariance = fitter.getCovar();</span>
+            }
+
+<span class="fc" id="L222">            final var finalTotalResidual = totalResidual(result);</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">            final var errorDecreased = finalTotalResidual &lt; initialTotalResidual;</span>
+
+<span class="fc bfc" id="L225" title="All 2 branches covered.">            if (listener != null) {</span>
+<span class="fc" id="L226">                listener.onRefineEnd(this, initialEstimation, result, errorDecreased);</span>
+            }
+
+<span class="fc" id="L229">            return errorDecreased;</span>
+
+<span class="fc" id="L231">        } catch (final Exception e) {</span>
+<span class="fc" id="L232">            throw new RefinerException(e);</span>
+        } finally {
+<span class="fc" id="L234">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Computes the residual between the affine transformation and a pair of
+     * matched points.
+     *
+     * @param transformation a transformation.
+     * @param inputPoint     input 2D point.
+     * @param outputPoint    output 2D point.
+     * @return residual.
+     */
+    private double residual(final ProjectiveTransformation2D transformation, final Point2D inputPoint,
+                            final Point2D outputPoint) {
+<span class="fc" id="L249">        inputPoint.normalize();</span>
+<span class="fc" id="L250">        outputPoint.normalize();</span>
+
+<span class="fc" id="L252">        transformation.transform(inputPoint, residualTestPoint);</span>
+<span class="fc" id="L253">        return residualTestPoint.distanceTo(outputPoint);</span>
+    }
+
+    /**
+     * Computes total residual among all provided inlier samples.
+     *
+     * @param transformation a transformation.
+     * @return total residual.
+     */
+    private double totalResidual(final ProjectiveTransformation2D transformation) {
+<span class="fc" id="L263">        var result = 0.0;</span>
+
+<span class="fc" id="L265">        final var nSamples = inliers.length();</span>
+<span class="fc bfc" id="L266" title="All 2 branches covered.">        for (var i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L267" title="All 2 branches covered.">            if (inliers.get(i)) {</span>
+                // sample is inlier
+<span class="fc" id="L269">                final var inputPoint = samples1.get(i);</span>
+<span class="fc" id="L270">                final var outputPoint = samples2.get(i);</span>
+<span class="fc" id="L271">                inputPoint.normalize();</span>
+<span class="fc" id="L272">                outputPoint.normalize();</span>
+<span class="fc" id="L273">                result += residual(transformation, inputPoint, outputPoint);</span>
+            }
+        }
+
+<span class="fc" id="L277">        return result;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

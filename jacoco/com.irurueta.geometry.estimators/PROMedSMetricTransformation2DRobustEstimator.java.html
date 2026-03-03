@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROMedSMetricTransformation2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PROMedSMetricTransformation2DRobustEstimator.java</span></div><h1>PROMedSMetricTransformation2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.MetricTransformation2D;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.numerical.robust.PROMedSRobustEstimator;
+import com.irurueta.numerical.robust.PROMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best metric 2D transformation for provided collections of
+ * matched 2D point using PROMedS algorithm.
+ */
+public class PROMedSMetricTransformation2DRobustEstimator extends MetricTransformation2DRobustEstimator {
+
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1.0;
+
+    /**
+     * Minimum allowed stop threshold value.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    private double stopThreshold;
+
+    /**
+     * Quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     */
+    private double[] qualityScores;
+
+    /**
+     * Constructor.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator() {
+<span class="fc" id="L87">        super();</span>
+<span class="fc" id="L88">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L89">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     metric 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L107">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L108">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(final MetricTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L118">        super(listener);</span>
+<span class="fc" id="L119">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L120">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     stars, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     metric 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final MetricTransformation2DRobustEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L141">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L142">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L143">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(final double[] qualityScores) {
+<span class="fc" id="L154">        super();</span>
+<span class="fc" id="L155">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L156">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L157">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints   list of input points to be used to estimate a
+     *                      metric 2D transformation.
+     * @param outputPoints  list of output points to be used to estimate a
+     *                      metric 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points and array
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L178">        super(inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L180" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L181">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L184">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L185">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L186">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final MetricTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
+<span class="fc" id="L200">        super(listener);</span>
+<span class="fc" id="L201">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L202">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L203">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      stars, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate a
+     *                      metric 2D transformation.
+     * @param outputPoints  list of output points to be used to estimate a
+     *                      metric 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final MetricTransformation2DRobustEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L226">        super(listener, inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L228" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L229">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L232">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L233">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L234">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L242">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L243">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L244">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points to be used to estimate a
+     *                               metric 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L263">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L264">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L265">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final MetricTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L276">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L277">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L278">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               stars, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate a
+     *                               metric 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final MetricTransformation2DRobustEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L300">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L301">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L302">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L315">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L316">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L317">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L318">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points to be used to estimate a
+     *                               metric 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 2D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided lists of points and array
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L341">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+
+<span class="fc bfc" id="L343" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L344">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L347">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L348">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L349">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final MetricTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L365">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L366">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L367">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L368">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               stars, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate a
+     *                               metric 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 2D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSMetricTransformation2DRobustEstimator(
+            final MetricTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L392">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+
+<span class="fc bfc" id="L394" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L395">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L398">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L399">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L400">    }</span>
+
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS
+     * algorithm iterating too many times in cases where samples have a very
+     * similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L423">        return stopThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS
+     * algorithm iterating too many times in cases where samples have a very
+     * similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L450" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L451">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L453" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L454">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L457">        this.stopThreshold = stopThreshold;</span>
+<span class="fc" id="L458">    }</span>
+
+    /**
+     * Returns quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @return quality scores corresponding to each pair of matched points.
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L468">        return qualityScores;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    @Override
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc bfc" id="L484" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L485">            throw new LockedException();</span>
+        }
+<span class="fc" id="L487">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L488">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the metric 2D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points and quality
+     * scores) are provided and a minimum of MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L500" title="1 of 6 branches missed.">        return super.isReady() &amp;&amp; qualityScores != null &amp;&amp; qualityScores.length == inputPoints.size();</span>
+    }
+
+    /**
+     * Estimates a metric 2D transformation using a robust estimator and
+     * the best set of matched 2D point correspondences found using the robust
+     * estimator.
+     *
+     * @return a metric 2D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    @Override
+    public MetricTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L519" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L520">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L522" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L523">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L526">        final var innerEstimator = new PROMedSRobustEstimator&lt;&gt;(</span>
+<span class="fc" id="L527">                new PROMedSRobustEstimatorListener&lt;MetricTransformation2D&gt;() {</span>
+
+                    // point to be reused when computing residuals
+<span class="fc" id="L530">                    private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+<span class="fc" id="L532">                    private final MetricTransformation2DEstimator nonRobustEstimator =</span>
+<span class="fc" id="L533">                            new MetricTransformation2DEstimator(isWeakMinimumSizeAllowed());</span>
+
+<span class="fc" id="L535">                    private final List&lt;Point2D&gt; subsetInputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L536">                    private final List&lt;Point2D&gt; subsetOutputPoints = new ArrayList&lt;&gt;();</span>
+
+                    @Override
+                    public double getThreshold() {
+<span class="fc" id="L540">                        return stopThreshold;</span>
+                    }
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L545">                        return inputPoints.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L550">                        return MetricTransformation2DRobustEstimator.MINIMUM_SIZE;</span>
+                    }
+
+                    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List&lt;MetricTransformation2D&gt; solutions) {
+<span class="fc" id="L557">                        subsetInputPoints.clear();</span>
+<span class="fc" id="L558">                        subsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L559" title="All 2 branches covered.">                        for (final var samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L560">                            subsetInputPoints.add(inputPoints.get(samplesIndex));</span>
+<span class="fc" id="L561">                            subsetOutputPoints.add(outputPoints.get(samplesIndex));</span>
+                        }
+
+                        try {
+<span class="fc" id="L565">                            nonRobustEstimator.setPoints(subsetInputPoints, subsetOutputPoints);</span>
+<span class="fc" id="L566">                            solutions.add(nonRobustEstimator.estimate());</span>
+<span class="nc" id="L567">                        } catch (final Exception e) {</span>
+                            // if points are coincident, no solution is added
+<span class="fc" id="L569">                        }</span>
+<span class="fc" id="L570">                    }</span>
+
+                    @Override
+                    public double computeResidual(final MetricTransformation2D currentEstimation, final int i) {
+<span class="fc" id="L574">                        final var inputPoint = inputPoints.get(i);</span>
+<span class="fc" id="L575">                        final var outputPoint = outputPoints.get(i);</span>
+
+                        // transform input point and store result in mTestPoint
+<span class="fc" id="L578">                        currentEstimation.transform(inputPoint, testPoint);</span>
+
+<span class="fc" id="L580">                        return outputPoint.distanceTo(testPoint);</span>
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L585">                        return PROMedSMetricTransformation2DRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;MetricTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L590" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L591">                            listener.onEstimateStart(PROMedSMetricTransformation2DRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L593">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;MetricTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L597" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L598">                            listener.onEstimateEnd(PROMedSMetricTransformation2DRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L600">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;MetricTransformation2D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L605" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L606">                            listener.onEstimateNextIteration(</span>
+                                    PROMedSMetricTransformation2DRobustEstimator.this, iteration);
+                        }
+<span class="fc" id="L609">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;MetricTransformation2D&gt; estimator, final float progress) {
+<span class="nc bnc" id="L614" title="All 2 branches missed.">                        if (listener != null) {</span>
+<span class="nc" id="L615">                            listener.onEstimateProgressChange(</span>
+                                    PROMedSMetricTransformation2DRobustEstimator.this, progress);
+                        }
+<span class="nc" id="L618">                    }</span>
+
+                    @Override
+                    public double[] getQualityScores() {
+<span class="fc" id="L622">                        return qualityScores;</span>
+                    }
+                });
+
+        try {
+<span class="fc" id="L627">            locked = true;</span>
+<span class="fc" id="L628">            inliersData = null;</span>
+<span class="fc" id="L629">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L630">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L631">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L632">            final var transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L633">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L634">            return attemptRefine(transformation);</span>
+<span class="nc" id="L635">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L636">            throw new LockedException(e);</span>
+<span class="nc" id="L637">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L638">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L640">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L651">        return RobustEstimatorMethod.PROMEDS;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of such
+     * threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L667">        final var inliersData = (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();</span>
+<span class="fc" id="L668">        return inliersData.getEstimatedThreshold();</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * This method is used internally and does not check whether instance is
+     * locked or not.
+     *
+     * @param qualityScores quality scores to be set.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE.
+     */
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L681" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L682">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L685">        this.qualityScores = qualityScores;</span>
+<span class="fc" id="L686">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

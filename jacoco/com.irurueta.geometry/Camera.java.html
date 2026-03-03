@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Camera.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Camera.java</span></div><h1>Camera.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * A camera defines relations between 3D and 2D worlds.
+ */
+<span class="fc" id="L24">public abstract class Camera {</span>
+
+    /**
+     * Constant defining default camera type.
+     */
+<span class="fc" id="L29">    public static final CameraType DEFAULT_CAMERA_TYPE = CameraType.PINHOLE_CAMERA;</span>
+
+    /**
+     * Projects a 3D point into a 2D point in a retinal plane.
+     *
+     * @param point 3D point to be projected.
+     * @return 2D projected point.
+     */
+    public Point2D project(final Point3D point) {
+<span class="fc" id="L38">        final var projected = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+<span class="fc" id="L39">        project(point, projected);</span>
+<span class="fc" id="L40">        return projected;</span>
+    }
+
+    /**
+     * Projects a 3D point into a 2D point in a retinal plane and stores the
+     * result into provided instance.
+     *
+     * @param inputPoint 3D point to be projected.
+     * @param result     Instance where 2D projected point result is stored.
+     */
+    public abstract void project(final Point3D inputPoint, final Point2D result);
+
+    /**
+     * Projects 3D points into 2D points in a retinal plane.
+     *
+     * @param points 3D points to be projected.
+     * @return 2D projected points.
+     */
+    public List&lt;Point2D&gt; project(final List&lt;Point3D&gt; points) {
+<span class="fc" id="L59">        final var projected = new ArrayList&lt;Point2D&gt;(points.size());</span>
+<span class="fc" id="L60">        project(points, projected);</span>
+<span class="fc" id="L61">        return projected;</span>
+    }
+
+    /**
+     * Projects 3D points into 2D points in a retinal plane and stores the
+     * result into provided list.
+     * Note that if result list is not empty, it will be cleared when calling
+     * this method and then the estimated 2D points will be stored in it.
+     *
+     * @param inputPoints 3D points to be projected.
+     * @param result      Instance where 2D projected points are stored.
+     */
+    public void project(final List&lt;Point3D&gt; inputPoints, final List&lt;Point2D&gt; result) {
+<span class="fc" id="L74">        result.clear();</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        for (final var point : inputPoints) {</span>
+<span class="fc" id="L76">            result.add(project(point));</span>
+<span class="fc" id="L77">        }</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Back-projects a 2D line into a 3D plane.
+     *
+     * @param line 2D line to be back-projected.
+     * @return 3D plane that has been back-projected.
+     */
+    public Plane backProject(final Line2D line) {
+<span class="fc" id="L87">        final var plane = new Plane();</span>
+<span class="fc" id="L88">        backProject(line, plane);</span>
+<span class="fc" id="L89">        return plane;</span>
+    }
+
+    // M^T * PLANE = 0
+    // m^T * l = 0
+    // m = P * M
+    // (P * M)^T * l = 0 --&gt; M^T * (P^T * l) = 0
+    // PLANE = P^T * l
+
+    /**
+     * Back-projects a line into a plane and stores the result into provided
+     * instance.
+     *
+     * @param line   2D line to be back-projected.
+     * @param result Instance where computed back-projected 3D plane data is
+     *               stored.
+     */
+    public abstract void backProject(final Line2D line, final Plane result);
+
+    /**
+     * Back-projects provided 2D lines into their corresponding 3D planes.
+     *
+     * @param lines 2D lines to be back-projected.
+     * @return 3D planes that have been back-projected.
+     */
+    public List&lt;Plane&gt; backProjectLines(final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L115">        final var planes = new ArrayList&lt;Plane&gt;(lines.size());</span>
+<span class="fc" id="L116">        backProjectLines(lines, planes);</span>
+<span class="fc" id="L117">        return planes;</span>
+    }
+
+    /**
+     * Back-projects provided 2D lines into their corresponding 3D planes and
+     * stores the result into provided list.
+     * Note that if result list is not empty, its contents will be cleared when
+     * calling this method and then the estimated 3D planes will be stored in it.
+     *
+     * @param lines  2D lines to be back-projected.
+     * @param result 3D planes that have been back-projected.
+     */
+    public void backProjectLines(final List&lt;Line2D&gt; lines, final List&lt;Plane&gt; result) {
+<span class="fc" id="L130">        result.clear();</span>
+<span class="fc bfc" id="L131" title="All 2 branches covered.">        for (final var line : lines) {</span>
+<span class="fc" id="L132">            result.add(backProject(line));</span>
+<span class="fc" id="L133">        }</span>
+<span class="fc" id="L134">    }</span>
+
+    // Note: multiple point3D points can be back-projected (indeed is a ray of
+    // light). In other words, solution is not unique
+
+    /**
+     * Back-projects provided 2D point into a 3D point.
+     * Notice that estimated solution is not unique, since back-projecting a 2D
+     * point results in an infinite number of 3D points located in the same
+     * ray of light.
+     * This method only returns one possible solution. Any possible solution can
+     * be computed as a linear combination between the camera center and the
+     * estimated point.
+     *
+     * @param point 2D point to be back-projected.
+     * @return A back-projected 3D point.
+     * @throws CameraException thrown if 2D point cannot be back-projected
+     *                         because camera is degenerate.
+     */
+    public Point3D backProject(final Point2D point) throws CameraException {
+<span class="fc" id="L154">        final var result = Point3D.create();</span>
+<span class="fc" id="L155">        backProject(point, result);</span>
+<span class="fc" id="L156">        return result;</span>
+    }
+
+    /**
+     * Back-projects provided 2D point into a 3D point and stores the result into
+     * provided instance.
+     * Notice that estimated solution is not unique, since back-projecting a 2D
+     * point results in an infinite number of 3D points located in the same
+     * ray of light.
+     * This method only computes one possible solution. Any other solution can
+     * be computed as a linear combination between the camera center and the
+     * estimated back-projected point.
+     *
+     * @param point  2D point to be back-projected.
+     * @param result Instance where back-projected 3D point data will be stored
+     * @throws CameraException thrown if 2D point cannot be back-projected
+     *                         because camera is degenerate.
+     */
+    public abstract void backProject(final Point2D point, final Point3D result) throws CameraException;
+
+    /**
+     * Back-projects provided 2D points into their corresponding 3D points.
+     *
+     * @param points 2D points to be back-projected.
+     * @return 3D points that have been back-projected.
+     * @throws CameraException thrown if 2D point cannot be back-projected
+     *                         because camera is degenerate.
+     */
+    public List&lt;Point3D&gt; backProjectPoints(final List&lt;Point2D&gt; points) throws CameraException {
+<span class="fc" id="L185">        final var result = new ArrayList&lt;Point3D&gt;(points.size());</span>
+<span class="fc" id="L186">        backProjectPoints(points, result);</span>
+<span class="fc" id="L187">        return result;</span>
+    }
+
+    /**
+     * Back-projects provided 2D points into their corresponding 3D points and
+     * stores the result into provided list.
+     * Note that if result list is not empty, its contents will be cleared when
+     * calling this method and then the estimated 3D points will be stored in it.
+     *
+     * @param points 2D points to be back-projected.
+     * @param result 3D points that have been back-projected.
+     * @throws CameraException thrown if 2D point cannot be back-projected
+     *                         because camera is degenerate.
+     */
+    public void backProjectPoints(final List&lt;Point2D&gt; points, final List&lt;Point3D&gt; result) throws CameraException {
+
+<span class="fc" id="L203">        result.clear();</span>
+<span class="fc bfc" id="L204" title="All 2 branches covered.">        for (final var point : points) {</span>
+<span class="fc" id="L205">            result.add(backProject(point));</span>
+<span class="fc" id="L206">        }</span>
+<span class="fc" id="L207">    }</span>
+
+    /**
+     * Back-projects a 2D conic into a 3D quadric.
+     *
+     * @param conic 2D conic to be back-projected.
+     * @return A back-projected 3D quadric.
+     */
+    public Quadric backProject(final Conic conic) {
+<span class="fc" id="L216">        final var quadric = new Quadric();</span>
+<span class="fc" id="L217">        backProject(conic, quadric);</span>
+<span class="fc" id="L218">        return quadric;</span>
+    }
+
+    /**
+     * Back-projects a 2D conic into a 3D quadric and stores the result into
+     * provided instance.
+     *
+     * @param conic  2D conic to be back-projected.
+     * @param result Instance where data of back-projected 3D quadric will be
+     *               stored.
+     */
+    public abstract void backProject(final Conic conic, final Quadric result);
+
+    /**
+     * Projects a 3D dual quadric into a 2D dual conic.
+     *
+     * @param dualQuadric 3D dual quadric to be projected.
+     * @return A 2D dual conic.
+     */
+    public DualConic project(final DualQuadric dualQuadric) {
+<span class="fc" id="L238">        final var dualConic = new DualConic();</span>
+<span class="fc" id="L239">        project(dualQuadric, dualConic);</span>
+<span class="fc" id="L240">        return dualConic;</span>
+    }
+
+    /**
+     * Projects a 3D dual quadric into a 2D dual conic and stores the result
+     * into provided instance.
+     *
+     * @param dualQuadric 3D dual quadric to be projected.
+     * @param result      Instance where data of projected 2D dual conic will be
+     *                    stored.
+     */
+    public abstract void project(final DualQuadric dualQuadric, final DualConic result);
+
+    /**
+     * Projects a 3D quadric into a 2D conic.
+     * The internal implementation of this method needs to compute the dual
+     * quadric of provided quadric, and also needs to compute the resulting
+     * conic from an internal dual conic, for that reason a CameraException might
+     * be raised if provided quadric is degenerate or if internal estimated dual
+     * conic is degenerate and cannot be converted into a conic.
+     *
+     * @param quadric 3D quadric to be projected.
+     * @return A projected 2D conic.
+     * @throws CameraException thrown if there are geometric degeneracies.
+     */
+    public Conic project(final Quadric quadric) throws CameraException {
+<span class="fc" id="L266">        final var conic = new Conic();</span>
+<span class="fc" id="L267">        project(quadric, conic);</span>
+<span class="fc" id="L268">        return conic;</span>
+    }
+
+    /**
+     * Projects a 3D quadric into a 2D conic and stores the result into provided
+     * conic instance.
+     * The internal implementation of this method needs to compute the dual
+     * quadric of provided quadric, and also needs to compute the resulting
+     * conic from an internal dual conic, for that reason a
+     * CameraException might be raised if provided quadric is degenerate or
+     * if internal estimated dual conic is degenerate and cannot be converted
+     * into a conic.
+     *
+     * @param quadric 3D quadric to be projected.
+     * @param result  Instance where data of projected 2D conic will be stored.
+     * @throws CameraException thrown if there are geometric degeneracies.
+     */
+    public void project(final Quadric quadric, final Conic result) throws CameraException {
+<span class="fc" id="L286">        quadric.normalize();</span>
+        try {
+<span class="fc" id="L288">            final var dualQuadric = quadric.getDualQuadric();</span>
+<span class="fc" id="L289">            final var dualConic = new DualConic();</span>
+<span class="fc" id="L290">            project(dualQuadric, dualConic);</span>
+<span class="fc" id="L291">            dualConic.conic(result);</span>
+<span class="nc" id="L292">        } catch (final GeometryException e) {</span>
+<span class="nc" id="L293">            throw new CameraException(e);</span>
+<span class="fc" id="L294">        }</span>
+<span class="fc" id="L295">    }</span>
+
+    /**
+     * Back-projects a 2D dual conic into a 3D dual quadric.
+     * The internal implementation of this method needs to compute a conic from
+     * provided dual conic, and also needs to compute the resulting dual quadric
+     * from an internal quadric. For that reason a CameraException might be
+     * raised if provided dual conic is degenerate or if internal estimated
+     * quadric is degenerate and cannot be converted into a dual quadric.
+     *
+     * @param dualConic 2D dual conic to be back-projected.
+     * @return A back-projected 3D dual quadric.
+     * @throws CameraException thrown if there are geometric degeneracies.
+     */
+    public DualQuadric backProject(final DualConic dualConic) throws CameraException {
+<span class="fc" id="L310">        final var dualQuadric = new DualQuadric();</span>
+<span class="fc" id="L311">        backProject(dualConic, dualQuadric);</span>
+<span class="fc" id="L312">        return dualQuadric;</span>
+    }
+
+    /**
+     * Back-projects a 2D dual conic into a 3D dual quadric and stores the result
+     * into provided dual quadric instance.
+     * The internal implementation of this method needs to compute a conic from
+     * provided dual conic, and also needs to compute the resulting dual quadric
+     * from an internal quadric. For that reason a CameraException might be
+     * raised if provided dual conic is degenerate or if internal estimated
+     * quadric is degenerate and cannot be converted into a dual quadric.
+     *
+     * @param dualConic 2D dual conic to be back-projected.
+     * @param result    Instance where data of back-projected 3D dual quadric will
+     *                  be stored.
+     * @throws CameraException thrown if there are geometric degeneracies.
+     */
+    public void backProject(final DualConic dualConic, final DualQuadric result) throws CameraException {
+        try {
+<span class="fc" id="L331">            dualConic.normalize();</span>
+<span class="fc" id="L332">            final var conic = dualConic.getConic();</span>
+<span class="fc" id="L333">            final var quadric = new Quadric();</span>
+<span class="fc" id="L334">            backProject(conic, quadric);</span>
+<span class="fc" id="L335">            quadric.dualQuadric(result);</span>
+<span class="nc" id="L336">        } catch (final GeometryException e) {</span>
+<span class="nc" id="L337">            throw new CameraException(e);</span>
+<span class="fc" id="L338">        }</span>
+<span class="fc" id="L339">    }</span>
+
+    /**
+     * Returns the type of this camera.
+     *
+     * @return Type of this camera.
+     */
+    public abstract CameraType getType();
+
+    /**
+     * Creates an instance of a camera using default type.
+     *
+     * @return A newly instantiated camera.
+     */
+    public static Camera create() {
+<span class="fc" id="L354">        return new PinholeCamera();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConicRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">ConicRobustEstimator.java</span></div><h1>ConicRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.Conic;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * This is an abstract class for algorithms to robustly find the best conic
+ * that fits in a collection of 2D points.
+ * Implementations of this class should be able to detect and discard outliers
+ * in order to find the best solution.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public abstract class ConicRobustEstimator {
+
+    /**
+     * Minimum number of 2D points required to estimate a Conic.
+     */
+    public static final int MINIMUM_SIZE = 5;
+
+    /**
+     * Default amount of progress variation before notifying a change in
+     * estimation progress. By default, this is set to 5%.
+     */
+    public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
+
+    /**
+     * Minimum allowed value for progress delta.
+     */
+    public static final float MIN_PROGRESS_DELTA = 0.0f;
+
+    /**
+     * Maximum allowed value for progress delta.
+     */
+    public static final float MAX_PROGRESS_DELTA = 1.0f;
+
+    /**
+     * Constant defining default confidence of the estimated result, which is
+     * 99%. This means that with a probability of 99% estimation will be
+     * accurate because chosen sub-samples will be inliers.
+     */
+    public static final double DEFAULT_CONFIDENCE = 0.99;
+
+    /**
+     * Default maximum allowed number of iterations.
+     */
+    public static final int DEFAULT_MAX_ITERATIONS = 5000;
+
+    /**
+     * Minimum allowed confidence value.
+     */
+    public static final double MIN_CONFIDENCE = 0.0;
+
+    /**
+     * Maximum allowed confidence value.
+     */
+    public static final double MAX_CONFIDENCE = 1.0;
+
+    /**
+     * Minimum allowed number of iterations.
+     */
+    public static final int MIN_ITERATIONS = 1;
+
+    /**
+     * Default robust estimator method when none is provided.
+     */
+<span class="fc" id="L87">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;</span>
+
+    /**
+     * Listener to be notified of events such as when estimation starts, ends
+     * or its progress significantly changes.
+     */
+    protected ConicRobustEstimatorListener listener;
+
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     */
+    protected volatile boolean locked;
+
+    /**
+     * Amount of progress variation before notifying a progress change during
+     * estimation.
+     */
+    protected float progressDelta;
+
+    /**
+     * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
+     * equivalent to 100%). The amount of confidence indicates the probability
+     * that the estimated result is correct. Usually this value will be close
+     * to 1.0, but not exactly 1.0.
+     */
+    protected double confidence;
+
+    /**
+     * Maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     */
+    protected int maxIterations;
+
+    /**
+     * List of points to be used to estimate a conic. Provided list must have
+     * a size greater or equal than MINIMUM_SIZE.
+     */
+    protected List&lt;Point2D&gt; points;
+
+    /**
+     * Matrix representation of a 2D point to be reused when computing
+     * residuals.
+     */
+    private Matrix testPoint;
+
+    /**
+     * Matrix representation of a conic to be reused when computing
+     * residuals.
+     */
+    private Matrix testC;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L143">    protected ConicRobustEstimator() {</span>
+<span class="fc" id="L144">        progressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L145">        confidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L146">        maxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L147">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+<span class="fc" id="L155">    protected ConicRobustEstimator(final ConicRobustEstimatorListener listener) {</span>
+<span class="fc" id="L156">        this.listener = listener;</span>
+<span class="fc" id="L157">        progressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L158">        confidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L159">        maxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L160">    }</span>
+
+    /**
+     * Constructor with points.
+     *
+     * @param points 2D points to estimate a conic.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+<span class="fc" id="L169">    protected ConicRobustEstimator(final List&lt;Point2D&gt; points) {</span>
+<span class="fc" id="L170">        progressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L171">        confidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L172">        maxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L173">        internalSetPoints(points);</span>
+<span class="fc" id="L174">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param points   2D points to estimate a conic.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    protected ConicRobustEstimator(final ConicRobustEstimatorListener listener,
+<span class="fc" id="L186">                                   final List&lt;Point2D&gt; points) {</span>
+<span class="fc" id="L187">        this.listener = listener;</span>
+<span class="fc" id="L188">        progressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L189">        confidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L190">        maxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L191">        internalSetPoints(points);</span>
+<span class="fc" id="L192">    }</span>
+
+
+    /**
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts, ends or its progress significantly changes.
+     *
+     * @return listener to be notified of events.
+     */
+    public ConicRobustEstimatorListener getListener() {
+<span class="fc" id="L202">        return listener;</span>
+    }
+
+    /**
+     * Sets listener to be notified of events such as when estimation starts,
+     * ends or its progress significantly changes.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if robust estimator is locked.
+     */
+    public void setListener(final ConicRobustEstimatorListener listener) throws LockedException {
+<span class="fc bfc" id="L213" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L214">            throw new LockedException();</span>
+        }
+<span class="fc" id="L216">        this.listener = listener;</span>
+<span class="fc" id="L217">    }</span>
+
+    /**
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L226" title="All 2 branches covered.">        return listener != null;</span>
+    }
+
+    /**
+     * Indicates if this instance is locked because estimation is being computed.
+     *
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L235">        return locked;</span>
+    }
+
+    /**
+     * Returns amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @return amount of progress variation before notifying a progress change
+     * during estimation.
+     */
+    public float getProgressDelta() {
+<span class="fc" id="L246">        return progressDelta;</span>
+    }
+
+    /**
+     * Sets amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @param progressDelta amount of progress variation before notifying a
+     *                      progress change during estimation.
+     * @throws IllegalArgumentException if progress delta is less than zero or
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setProgressDelta(final float progressDelta) throws LockedException {
+<span class="fc bfc" id="L261" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L262">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L264" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA || progressDelta &gt; MAX_PROGRESS_DELTA) {</span>
+<span class="fc" id="L265">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L267">        this.progressDelta = progressDelta;</span>
+<span class="fc" id="L268">    }</span>
+
+    /**
+     * Returns amount of confidence expressed as a value between 0.0 and 1.0
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @return amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+<span class="fc" id="L279">        return confidence;</span>
+    }
+
+    /**
+     * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
+     * is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimator
+     *                                  is being computed.
+     */
+    public void setConfidence(final double confidence) throws LockedException {
+<span class="fc bfc" id="L295" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L296">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L298" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L299">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L301">        this.confidence = confidence;</span>
+<span class="fc" id="L302">    }</span>
+
+    /**
+     * Returns maximum allowed number of iterations. If maximum allowed number
+     * of iterations is achieved without converging to a result when calling
+     * estimate(), a RobustEstimatorException will be raised.
+     *
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+<span class="fc" id="L312">        return maxIterations;</span>
+    }
+
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     *
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setMaxIterations(final int maxIterations) throws LockedException {
+<span class="fc bfc" id="L326" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L327">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L329" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L330">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L332">        this.maxIterations = maxIterations;</span>
+<span class="fc" id="L333">    }</span>
+
+    /**
+     * Returns list of points to be used to estimate a conic.
+     * Provided list must have a size greater or equal than MINIMUM_SIZE.
+     *
+     * @return list of points to be used to estimate a conic.
+     */
+    public List&lt;Point2D&gt; getPoints() {
+<span class="fc" id="L342">        return points;</span>
+    }
+
+    /**
+     * Sets list of points to be used to estimate a conic.
+     * Provided list must have a size greater or equal than MINIMUM_SIZE.
+     *
+     * @param points list of points to be used to estimate a conic.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
+     */
+    public void setPoints(final List&lt;Point2D&gt; points) throws LockedException {
+<span class="fc bfc" id="L356" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L357">            throw new LockedException();</span>
+        }
+<span class="fc" id="L359">        internalSetPoints(points);</span>
+<span class="fc" id="L360">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the conic estimation.
+     * This is true when a minimum if MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="fc bfc" id="L369" title="All 4 branches covered.">        return points != null &amp;&amp; points.size() &gt;= MINIMUM_SIZE;</span>
+    }
+
+    /**
+     * Returns quality scores corresponding to each point.
+     * The larger the score value the better the quality of the point measure.
+     * This implementation always returns null.
+     * Subclasses using quality scores must implement proper behaviour.
+     *
+     * @return quality scores corresponding to each point.
+     */
+    public double[] getQualityScores() {
+<span class="fc" id="L381">        return null;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each point.
+     * The larger the score value the better the quality of the matching.
+     * This implementation makes no action.
+     * Subclasses using quality scores must implement proper behaviour.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 samples).
+     */
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc" id="L398">    }</span>
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided robust estimator method.
+     *
+     * @param method method of a robust estimator algorithm to estimate the best
+     *               conic.
+     * @return an instance of a conic robust estimator.
+     */
+    public static ConicRobustEstimator create(final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L409" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L410">            case LMEDS -&gt; new LMedSConicRobustEstimator();</span>
+<span class="fc" id="L411">            case MSAC -&gt; new MSACConicRobustEstimator();</span>
+<span class="fc" id="L412">            case PROSAC -&gt; new PROSACConicRobustEstimator();</span>
+<span class="fc" id="L413">            case PROMEDS -&gt; new PROMedSConicRobustEstimator();</span>
+<span class="fc" id="L414">            default -&gt; new RANSACConicRobustEstimator();</span>
+        };
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided points and robust estimator method.
+     *
+     * @param points 2D points to estimate a conic.
+     * @param method method of a robust estimator algorithm to estimate the best
+     *               conic.
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have a
+     *                                  size greater or equal than MINIMUM_SIZE.
+     */
+    public static ConicRobustEstimator create(final List&lt;Point2D&gt; points, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L430" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L431">            case LMEDS -&gt; new LMedSConicRobustEstimator(points);</span>
+<span class="fc" id="L432">            case MSAC -&gt; new MSACConicRobustEstimator(points);</span>
+<span class="fc" id="L433">            case PROSAC -&gt; new PROSACConicRobustEstimator(points);</span>
+<span class="fc" id="L434">            case PROMEDS -&gt; new PROMedSConicRobustEstimator(points);</span>
+<span class="fc" id="L435">            default -&gt; new RANSACConicRobustEstimator(points);</span>
+        };
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided listener.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param method   method of a robust estimator algorithm to estimate the best
+     *                 conic.
+     * @return an instance of a conic robust estimator.
+     */
+    public static ConicRobustEstimator create(
+            final ConicRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L451" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L452">            case LMEDS -&gt; new LMedSConicRobustEstimator(listener);</span>
+<span class="fc" id="L453">            case MSAC -&gt; new MSACConicRobustEstimator(listener);</span>
+<span class="fc" id="L454">            case PROSAC -&gt; new PROSACConicRobustEstimator(listener);</span>
+<span class="fc" id="L455">            case PROMEDS -&gt; new PROMedSConicRobustEstimator(listener);</span>
+<span class="fc" id="L456">            default -&gt; new RANSACConicRobustEstimator(listener);</span>
+        };
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided listener and points.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points   2D points to estimate a conic.
+     * @param method   method of a robust estimator algorithm to estimate the best
+     *                 conic.
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have a
+     *                                  size greater or equal than MINIMUM_SIZE.
+     */
+    public static ConicRobustEstimator create(
+            final ConicRobustEstimatorListener listener, final List&lt;Point2D&gt; points,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L476" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L477">            case LMEDS -&gt; new LMedSConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L478">            case MSAC -&gt; new MSACConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L479">            case PROSAC -&gt; new PROSACConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L480">            case PROMEDS -&gt; new PROMedSConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L481">            default -&gt; new RANSACConicRobustEstimator(listener, points);</span>
+        };
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided robust estimator method.
+     *
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      conic.
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 points).
+     */
+    public static ConicRobustEstimator create(final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L497" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L498">            case LMEDS -&gt; new LMedSConicRobustEstimator();</span>
+<span class="fc" id="L499">            case MSAC -&gt; new MSACConicRobustEstimator();</span>
+<span class="fc" id="L500">            case PROSAC -&gt; new PROSACConicRobustEstimator(qualityScores);</span>
+<span class="fc" id="L501">            case PROMEDS -&gt; new PROMedSConicRobustEstimator(qualityScores);</span>
+<span class="fc" id="L502">            default -&gt; new RANSACConicRobustEstimator();</span>
+        };
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided points and robust estimator method.
+     *
+     * @param points        2D points to estimate a conic.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      conic.
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
+     */
+    public static ConicRobustEstimator create(
+            final List&lt;Point2D&gt; points, final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L521" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L522">            case LMEDS -&gt; new LMedSConicRobustEstimator(points);</span>
+<span class="fc" id="L523">            case MSAC -&gt; new MSACConicRobustEstimator(points);</span>
+<span class="fc" id="L524">            case PROSAC -&gt; new PROSACConicRobustEstimator(points, qualityScores);</span>
+<span class="fc" id="L525">            case PROMEDS -&gt; new PROMedSConicRobustEstimator(points, qualityScores);</span>
+<span class="fc" id="L526">            default -&gt; new RANSACConicRobustEstimator(points);</span>
+        };
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided listener.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      conic.
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 points).
+     */
+    public static ConicRobustEstimator create(
+            final ConicRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L546" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L547">            case LMEDS -&gt; new LMedSConicRobustEstimator(listener);</span>
+<span class="fc" id="L548">            case MSAC -&gt; new MSACConicRobustEstimator(listener);</span>
+<span class="fc" id="L549">            case PROSAC -&gt; new PROSACConicRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L550">            case PROMEDS -&gt; new PROMedSConicRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L551">            default -&gt; new RANSACConicRobustEstimator(listener);</span>
+        };
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided listener and points.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points        2D points to estimate a conic.
+     * @param qualityScores quality scores corresponding to each provided point.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      conic.
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or it their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
+     */
+    public static ConicRobustEstimator create(
+            final ConicRobustEstimatorListener listener, final List&lt;Point2D&gt; points, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L573" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L574">            case LMEDS -&gt; new LMedSConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L575">            case MSAC -&gt; new MSACConicRobustEstimator(listener, points);</span>
+<span class="fc" id="L576">            case PROSAC -&gt; new PROSACConicRobustEstimator(listener, points, qualityScores);</span>
+<span class="fc" id="L577">            case PROMEDS -&gt; new PROMedSConicRobustEstimator(listener, points, qualityScores);</span>
+<span class="fc" id="L578">            default -&gt; new RANSACConicRobustEstimator(listener, points);</span>
+        };
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * default robust estimator method.
+     *
+     * @return an instance of a conic robust estimator.
+     */
+    public static ConicRobustEstimator create() {
+<span class="fc" id="L589">        return create(DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided points and default robust estimator method.
+     *
+     * @param points 2D points to estimate a conic.
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have a
+     *                                  size greater or equal than MINIMUM_SIZE.
+     */
+    public static ConicRobustEstimator create(final List&lt;Point2D&gt; points) {
+<span class="fc" id="L602">        return create(points, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided listener and default robust estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @return an instance of a conic robust estimator.
+     */
+    public static ConicRobustEstimator create(final ConicRobustEstimatorListener listener) {
+<span class="fc" id="L614">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided listener and points and default robust estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points   2D points to estimate a conic.
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have a
+     *                                  size greater or equal than MINIMUM_SIZE.
+     */
+    public static ConicRobustEstimator create(final ConicRobustEstimatorListener listener, final List&lt;Point2D&gt; points) {
+<span class="fc" id="L629">        return create(listener, points, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * default robust estimator method.
+     *
+     * @param qualityScores quality scores corresponding to each provided point
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 points).
+     */
+    public static ConicRobustEstimator create(final double[] qualityScores) {
+<span class="fc" id="L642">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided points and default estimator method.
+     *
+     * @param points        2D points to estimate a conic.
+     * @param qualityScores quality scores corresponding to each provided point
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or if their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
+     */
+    public static ConicRobustEstimator create(final List&lt;Point2D&gt; points, final double[] qualityScores) {
+<span class="fc" id="L657">        return create(points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided listener and default estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each provided point
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 5 points).
+     */
+    public static ConicRobustEstimator create(
+            final ConicRobustEstimatorListener listener, final double[] qualityScores) {
+<span class="fc" id="L673">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a conic robust estimator based on 2D point samples and using
+     * provided listener and points and default estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param points        2D points to estimate a conic.
+     * @param qualityScores quality scores corresponding to each provided point
+     * @return an instance of a conic robust estimator.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  the same size as the list of provided quality scores, or if their size
+     *                                  is not greater or equal than MINIMUM_SIZE.
+     */
+    public static ConicRobustEstimator create(
+            final ConicRobustEstimatorListener listener, final List&lt;Point2D&gt; points, final double[] qualityScores) {
+<span class="fc" id="L691">        return create(listener, points, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Estimates a conic using a robust estimator and the best set of 2D points
+     * that fit into the locus of the estimated conic found using the robust
+     * estimator.
+     *
+     * @return a conic.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    public abstract Conic estimate() throws LockedException, NotReadyException, RobustEstimatorException;
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    public abstract RobustEstimatorMethod getMethod();
+
+    /**
+     * Internal method to set lists of points to be used to estimate a conic.
+     * This method does not check whether estimator is locked or not.
+     *
+     * @param points list of points to be used to estimate a conic.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    private void internalSetPoints(final List&lt;Point2D&gt; points) {
+<span class="fc bfc" id="L725" title="All 2 branches covered.">        if (points.size() &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L726">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L728">        this.points = points;</span>
+<span class="fc" id="L729">    }</span>
+
+    /**
+     * Computes the residual between a conic and a point.
+     *
+     * @param c     a conic.
+     * @param point a 2D point.
+     * @return residual.
+     */
+    protected double residual(final Conic c, final Point2D point) {
+<span class="fc" id="L739">        c.normalize();</span>
+        try {
+<span class="fc bfc" id="L741" title="All 2 branches covered.">            if (testC == null) {</span>
+<span class="fc" id="L742">                testC = c.asMatrix();</span>
+            } else {
+<span class="fc" id="L744">                c.asMatrix(testC);</span>
+            }
+
+<span class="fc bfc" id="L747" title="All 2 branches covered.">            if (testPoint == null) {</span>
+<span class="fc" id="L748">                testPoint = new Matrix(Point2D.POINT2D_HOMOGENEOUS_COORDINATES_LENGTH, 1);</span>
+            }
+<span class="fc" id="L750">            point.normalize();</span>
+<span class="fc" id="L751">            testPoint.setElementAt(0, 0, point.getHomX());</span>
+<span class="fc" id="L752">            testPoint.setElementAt(1, 0, point.getHomY());</span>
+<span class="fc" id="L753">            testPoint.setElementAt(2, 0, point.getHomW());</span>
+<span class="fc" id="L754">            final var locusMatrix = testPoint.transposeAndReturnNew();</span>
+<span class="fc" id="L755">            locusMatrix.multiply(testC);</span>
+<span class="fc" id="L756">            locusMatrix.multiply(testPoint);</span>
+<span class="fc" id="L757">            return Math.abs(locusMatrix.getElementAt(0, 0));</span>
+<span class="nc" id="L758">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L759">            return Double.MAX_VALUE;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

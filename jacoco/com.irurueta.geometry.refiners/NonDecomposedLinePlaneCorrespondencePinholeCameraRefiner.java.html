@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.refiners</a> &gt; <span class="el_source">NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner.java</span></div><h1>NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.refiners;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.Line2D;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Plane;
+import com.irurueta.geometry.estimators.LockedException;
+import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.GradientEstimator;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
+import com.irurueta.numerical.robust.InliersData;
+
+import java.util.BitSet;
+import java.util.List;
+
+/**
+ * A pinhole camera refiner using line/plane correspondences and the
+ * Levenberg-Marquardt algorithm to try to decrease overall error in LMSE terms
+ * among inlier samples by taking the pinhole camera matrix as a whole without
+ * decomposition.
+ * Typically, this refiner is used by a robust estimator, however it can also be
+ * useful in some other situations.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner extends
+        LinePlaneCorrespondencePinholeCameraRefiner {
+
+    /**
+     * Default value for the weight applied to errors related to suggested
+     * camera parameters during computation of projection residuals.
+     */
+    public static final double DEFAULT_SUGGESTION_ERROR_WEIGHT = 2.0;
+
+    /**
+     * Dimensions for refinement.
+     */
+    private static final int REFINE_DIMS = 12;
+
+    /**
+     * Suggestion error weight. This weight is applied to errors related to
+     * suggested camera parameters during computation of projection residuals.
+     */
+<span class="fc" id="L60">    private double suggestionErrorWeight = DEFAULT_SUGGESTION_ERROR_WEIGHT;</span>
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L65">    public NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner() {</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner(
+            final PinholeCamera initialEstimation, final boolean keepCovariance,
+            final BitSet inliers, final double[] residuals, final int numInliers,
+            final List&lt;Plane&gt; samples1, final List&lt;Line2D&gt; samples2, final double refinementStandardDeviation) {
+<span class="fc" id="L86">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,</span>
+                refinementStandardDeviation);
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner(
+            final PinholeCamera initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List&lt;Plane&gt; samples1, final List&lt;Line2D&gt; samples2,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L107">        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);</span>
+<span class="fc" id="L108">    }</span>
+
+    /**
+     * Gets suggestion error weight. This weight is applied to errors related to
+     * suggested camera parameters during computation of projection residuals.
+     *
+     * @return suggestion error weight.
+     */
+    public double getSuggestionErrorWeight() {
+<span class="fc" id="L117">        return suggestionErrorWeight;</span>
+    }
+
+    /**
+     * Sets suggestion error weight. This weight is applied to errors related to
+     * suggested camera parameters during computation of projection residuals.
+     *
+     * @param suggestionErrorWeight suggestion error weight.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestionErrorWeight(final double suggestionErrorWeight) throws LockedException {
+<span class="fc bfc" id="L128" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L129">            throw new LockedException();</span>
+        }
+<span class="fc" id="L131">        this.suggestionErrorWeight = suggestionErrorWeight;</span>
+<span class="fc" id="L132">    }</span>
+
+    /**
+     * Refines provided initial estimation.
+     * This method always sets a value into provided result instance regardless
+     * of the fact that error has actually improved in LMSE terms or not.
+     *
+     * @param result instance where refined estimation will be stored.
+     * @return true if result improves (decreases) in LMSE terms respect to
+     * initial estimation, false if no improvement has been achieved.
+     * @throws NotReadyException if not enough input data has been provided.
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     * @throws RefinerException  if refinement fails for some reason (e.g. unable
+     *                           to converge to a result).
+     */
+    @Override
+    public boolean refine(final PinholeCamera result) throws NotReadyException, LockedException, RefinerException {
+<span class="fc bfc" id="L150" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L151">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L154">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L157">        locked = true;</span>
+
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        if (listener != null) {</span>
+<span class="fc" id="L160">            listener.onRefineStart(this, initialEstimation);</span>
+        }
+
+        try {
+<span class="fc" id="L164">            initialEstimation.normalize();</span>
+
+            // output values to be fitted/optimized will contain residuals
+<span class="fc" id="L167">            final var y = new double[numInliers];</span>
+            // input values will contain line and plane to compute residuals
+<span class="fc" id="L169">            final var nDims = Line2D.LINE_NUMBER_PARAMS + Plane.PLANE_NUMBER_PARAMS;</span>
+<span class="fc" id="L170">            final var x = new Matrix(numInliers, nDims);</span>
+<span class="fc" id="L171">            final var nSamples = inliers.length();</span>
+<span class="fc" id="L172">            var pos = 0;</span>
+<span class="fc" id="L173">            final var initParams = new double[REFINE_DIMS];</span>
+<span class="fc" id="L174">            cameraToParameters(initialEstimation, initParams);</span>
+
+<span class="fc" id="L176">            final var initResidual = residualPowell(initialEstimation, initParams, suggestionErrorWeight);</span>
+
+<span class="fc bfc" id="L178" title="All 2 branches covered.">            final var suggestionResidual = hasSuggestions() ? suggestionResidual(initParams, suggestionErrorWeight) :</span>
+<span class="fc" id="L179">                    0.0;</span>
+<span class="fc bfc" id="L180" title="All 2 branches covered.">            for (var i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L181" title="All 2 branches covered.">                if (inliers.get(i)) {</span>
+                    // sample is inlier
+<span class="fc" id="L183">                    final var line = samples2.get(i);</span>
+<span class="fc" id="L184">                    final var plane = samples1.get(i);</span>
+<span class="fc" id="L185">                    line.normalize();</span>
+<span class="fc" id="L186">                    plane.normalize();</span>
+<span class="fc" id="L187">                    x.setElementAt(pos, 0, line.getA());</span>
+<span class="fc" id="L188">                    x.setElementAt(pos, 1, line.getB());</span>
+<span class="fc" id="L189">                    x.setElementAt(pos, 2, line.getC());</span>
+<span class="fc" id="L190">                    x.setElementAt(pos, 3, plane.getA());</span>
+<span class="fc" id="L191">                    x.setElementAt(pos, 4, plane.getB());</span>
+<span class="fc" id="L192">                    x.setElementAt(pos, 5, plane.getC());</span>
+<span class="fc" id="L193">                    x.setElementAt(pos, 6, plane.getD());</span>
+
+<span class="fc" id="L195">                    y[pos] = Math.pow(residuals[i], 2.0) + suggestionResidual;</span>
+<span class="fc" id="L196">                    pos++;</span>
+                }
+            }
+
+<span class="fc" id="L200">            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+
+<span class="fc" id="L202">                private final Line2D line = new Line2D();</span>
+
+<span class="fc" id="L204">                private final Plane plane = new Plane();</span>
+
+<span class="fc" id="L206">                private final PinholeCamera pinholeCamera = new PinholeCamera();</span>
+
+<span class="fc" id="L208">                private final GradientEstimator gradientEstimator = new GradientEstimator(params -&gt; {</span>
+<span class="fc" id="L209">                    parametersToCamera(params, pinholeCamera);</span>
+<span class="fc" id="L210">                    return residualLevenbergMarquardt(pinholeCamera, line, plane, params, suggestionErrorWeight);</span>
+                });
+
+                @Override
+                public int getNumberOfDimensions() {
+<span class="fc" id="L215">                    return nDims;</span>
+                }
+
+                @Override
+                public double[] createInitialParametersArray() {
+<span class="fc" id="L220">                    return initParams;</span>
+                }
+
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+<span class="fc" id="L226">                    line.setParameters(point[0], point[1], point[2]);</span>
+<span class="fc" id="L227">                    plane.setParameters(point[3], point[4], point[5], point[6]);</span>
+
+<span class="fc" id="L229">                    line.normalize();</span>
+<span class="fc" id="L230">                    plane.normalize();</span>
+
+<span class="fc" id="L232">                    parametersToCamera(params, pinholeCamera);</span>
+<span class="fc" id="L233">                    final var y = residualLevenbergMarquardt(pinholeCamera, line, plane, params, suggestionErrorWeight);</span>
+<span class="fc" id="L234">                    gradientEstimator.gradient(params, derivatives);</span>
+
+<span class="fc" id="L236">                    return y;</span>
+                }
+            };
+
+<span class="fc" id="L240">            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y, refinementStandardDeviation);</span>
+
+<span class="fc" id="L242">            fitter.fit();</span>
+
+<span class="fc" id="L244">            final var finalParams = fitter.getA();</span>
+
+<span class="fc" id="L246">            parametersToCamera(finalParams, result);</span>
+
+<span class="pc bpc" id="L248" title="1 of 2 branches missed.">            if (keepCovariance) {</span>
+<span class="fc" id="L249">                covariance = fitter.getCovar();</span>
+            }
+
+<span class="fc" id="L252">            final var finalResidual = residualPowell(result, finalParams, suggestionErrorWeight);</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">            final var errorDecreased = finalResidual &lt; initResidual;</span>
+
+<span class="fc bfc" id="L255" title="All 2 branches covered.">            if (listener != null) {</span>
+<span class="fc" id="L256">                listener.onRefineEnd(this, initialEstimation, result, errorDecreased);</span>
+            }
+
+<span class="fc" id="L259">            return errorDecreased;</span>
+
+<span class="fc" id="L261">        } catch (final Exception e) {</span>
+<span class="fc" id="L262">            throw new RefinerException(e);</span>
+        } finally {
+<span class="fc" id="L264">            locked = false;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.java</span></div><h1>PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.AffineTransformation3D;
+import com.irurueta.geometry.CoincidentPointsException;
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.PROMedSRobustEstimator;
+import com.irurueta.numerical.robust.PROMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best affine 3D transformation for provided collections of matched
+ * 3D points using PROSAC algorithm.
+ */
+public class PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator
+        extends PointCorrespondenceAffineTransformation3DRobustEstimator {
+
+
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1.0;
+
+    /**
+     * Minimum allowed stop threshold value.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    private double stopThreshold;
+
+    /**
+     * Quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     */
+    private double[] qualityScores;
+
+    /**
+     * Constructor.
+     */
+    public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator() {
+<span class="fc" id="L89">        super();</span>
+<span class="fc" id="L90">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L91">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an affine 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L109">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L110">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L111">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
+            final AffineTransformation3DRobustEstimatorListener listener) {
+<span class="fc" id="L121">        super(listener);</span>
+<span class="fc" id="L122">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L123">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * affine 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     stars, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L144">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L145">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(final double[] qualityScores) {
+<span class="fc" id="L157">        super();</span>
+<span class="fc" id="L158">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L159">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L160">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an affine 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points and array
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  MINIMUM_SIZE.
+     */
+    public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L181">        super(inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L183" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L184">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L187">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L188">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L189">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
+            final AffineTransformation3DRobustEstimatorListener listener, final double[] qualityScores) {
+<span class="fc" id="L203">        super(listener);</span>
+<span class="fc" id="L204">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L205">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L206">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * affine 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      stars, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 3D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator(
+            final AffineTransformation3DRobustEstimatorListener listener, final List&lt;Point3D&gt; inputPoints,
+            final List&lt;Point3D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L229">        super(listener, inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L232">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L235">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L236">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L237">    }</span>
+
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS
+     * algorithm iterating too many times in cases where samples have a very
+     * similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L260">        return stopThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * As in LMedS, the stop threshold can be used to prevent the PROMedS
+     * algorithm iterating too many times in cases where samples have a very
+     * similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L287" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L288">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L290" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L291">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L294">        this.stopThreshold = stopThreshold;</span>
+<span class="fc" id="L295">    }</span>
+
+    /**
+     * Returns quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @return quality scores corresponding to each pair of matched points.
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L305">        return qualityScores;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    @Override
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc bfc" id="L321" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L322">            throw new LockedException();</span>
+        }
+<span class="fc" id="L324">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L325">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the affine 2D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points and quality
+     * scores) are provided and a minimum of MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L337" title="1 of 6 branches missed.">        return super.isReady() &amp;&amp; qualityScores != null &amp;&amp; qualityScores.length == inputPoints.size();</span>
+    }
+
+    /**
+     * Estimates an affine 2D transformation using a robust estimator and
+     * the best set of matched 2D point correspondences found using the robust
+     * estimator.
+     *
+     * @return an affine 2D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    @Override
+    public AffineTransformation3D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L356" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L357">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L359" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L360">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L363">        final var innerEstimator = new PROMedSRobustEstimator&lt;&gt;(</span>
+<span class="fc" id="L364">                new PROMedSRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
+
+                    // point to be reused when computing residuals
+<span class="fc" id="L367">                    private final Point3D testPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+                    @Override
+                    public double getThreshold() {
+<span class="fc" id="L371">                        return stopThreshold;</span>
+                    }
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L376">                        return inputPoints.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L381">                        return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
+                    }
+
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List&lt;AffineTransformation3D&gt; solutions) {
+<span class="fc" id="L387">                        final var inputPoint1 = inputPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L388">                        final var inputPoint2 = inputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L389">                        final var inputPoint3 = inputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L390">                        final var inputPoint4 = inputPoints.get(samplesIndices[3]);</span>
+
+<span class="fc" id="L392">                        final var outputPoint1 = outputPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L393">                        final var outputPoint2 = outputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L394">                        final var outputPoint3 = outputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L395">                        final var outputPoint4 = outputPoints.get(samplesIndices[3]);</span>
+
+                        try {
+<span class="fc" id="L398">                            final var transformation = new AffineTransformation3D(inputPoint1, inputPoint2, inputPoint3,</span>
+                                    inputPoint4, outputPoint1, outputPoint2, outputPoint3, outputPoint4);
+<span class="fc" id="L400">                            solutions.add(transformation);</span>
+<span class="nc" id="L401">                        } catch (final CoincidentPointsException e) {</span>
+                            // if points are coincident, no solution is added
+<span class="fc" id="L403">                        }</span>
+<span class="fc" id="L404">                    }</span>
+
+                    @Override
+                    public double computeResidual(final AffineTransformation3D currentEstimation, final int i) {
+<span class="fc" id="L408">                        final var inputPoint = inputPoints.get(i);</span>
+<span class="fc" id="L409">                        final var outputPoint = outputPoints.get(i);</span>
+
+                        // transform input point and store result in mTestPoint
+<span class="fc" id="L412">                        currentEstimation.transform(inputPoint, testPoint);</span>
+
+<span class="fc" id="L414">                        return outputPoint.distanceTo(testPoint);</span>
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L419">                        return PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L424" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L425">                            listener.onEstimateStart(</span>
+                                    PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this);
+                        }
+<span class="fc" id="L428">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L432" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L433">                            listener.onEstimateEnd(</span>
+                                    PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this);
+                        }
+<span class="fc" id="L436">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;AffineTransformation3D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L441" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L442">                            listener.onEstimateNextIteration(</span>
+                                    PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this,
+                                    iteration);
+                        }
+<span class="fc" id="L446">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;AffineTransformation3D&gt; estimator, final float progress) {
+<span class="nc bnc" id="L451" title="All 2 branches missed.">                        if (listener != null) {</span>
+<span class="nc" id="L452">                            listener.onEstimateProgressChange(</span>
+                                    PROMedSPointCorrespondenceAffineTransformation3DRobustEstimator.this,
+                                    progress);
+                        }
+<span class="nc" id="L456">                    }</span>
+
+                    @Override
+                    public double[] getQualityScores() {
+<span class="fc" id="L460">                        return qualityScores;</span>
+                    }
+                });
+
+        try {
+<span class="fc" id="L465">            locked = true;</span>
+<span class="fc" id="L466">            inliersData = null;</span>
+<span class="fc" id="L467">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L468">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L469">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L470">            final var transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L471">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L472">            return attemptRefine(transformation);</span>
+<span class="nc" id="L473">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L474">            throw new LockedException(e);</span>
+<span class="nc" id="L475">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L476">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L478">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L489">        return RobustEstimatorMethod.PROMEDS;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of such
+     * threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L505">        final var inliersData = (PROMedSRobustEstimator.PROMedSInliersData) getInliersData();</span>
+
+        // avoid setting a threshold too strict
+<span class="fc" id="L508">        final var threshold = inliersData.getEstimatedThreshold();</span>
+<span class="fc" id="L509">        return Math.max(threshold, stopThreshold);</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * This method is used internally and does not check whether instance is
+     * locked or not.
+     *
+     * @param qualityScores quality scores to be set.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE.
+     */
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L522" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L523">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L526">        this.qualityScores = qualityScores;</span>
+<span class="fc" id="L527">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

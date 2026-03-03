@@ -1,0 +1,879 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Plane.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Plane.java</span></div><h1>Plane.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+/**
+ * Class defining a plane.
+ * Planes can be expressed using the following expression:
+ * A * x + B * y + C * z + D = 0
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class Plane implements Serializable {
+
+    /**
+     * Constant defining the size of the vector that contains plane parameters.
+     */
+    public static final int PLANE_NUMBER_PARAMS = 4;
+
+    /**
+     * Constant defining the distance threshold to determine whether a point
+     * lays inside (is locus) this plane or not.
+     */
+    public static final double DEFAULT_LOCUS_THRESHOLD = 1e-12;
+
+    /**
+     * Minimum allowed threshold.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Defines the threshold used when comparing two values.
+     */
+    public static final double DEFAULT_COMPARISON_THRESHOLD = 1e-10;
+
+    /**
+     * Machine precision.
+     */
+    private static final double PRECISION = 1e-12;
+
+    /**
+     * Constant defining error threshold, which is a small value close to
+     * machine precision.
+     */
+    private static final double DEFAULT_ERROR_THRESHOLD = 1e-12;
+
+    /**
+     * Constant defining the size of vector that define the direction of a plane.
+     */
+    private static final int INHOM_VECTOR_SIZE = 3;
+
+    /**
+     * Parameter A of a plane.
+     */
+    private double a;
+
+    /**
+     * Parameter B of a plane.
+     */
+    private double b;
+
+    /**
+     * Parameter C of a plane.
+     */
+    private double c;
+
+    /**
+     * Parameter D of a plane.
+     */
+    private double d;
+
+    /**
+     * Defines whether the plane is already normalized or not.
+     */
+    private boolean normalized;
+
+    /**
+     * Default constructor of this class.
+     */
+<span class="fc" id="L99">    public Plane() {</span>
+<span class="fc" id="L100">        a = b = c = d = 0.0;</span>
+<span class="fc" id="L101">        normalized = false;</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Constructor.
+     * This constructor accepts every parameter describing a plane in its
+     * homogeneous form:
+     * Ax + By + Cz + D = 0
+     *
+     * @param a Parameter A of this plane.
+     * @param b Parameter B of this plane.
+     * @param c Parameter C of this plane.
+     * @param d Parameter D of this plane.
+     */
+<span class="fc" id="L115">    public Plane(final double a, final double b, final double c, final double d) {</span>
+<span class="fc" id="L116">        setParameters(a, b, c, d);</span>
+<span class="fc" id="L117">    }</span>
+
+    /**
+     * Constructor.
+     * This constructor accepts an array containing all the parameters (a, b, c,
+     * d) describing a plane.
+     *
+     * @param array Array containing plane parameters.
+     * @throws IllegalArgumentException Raised if length of array is not 4.
+     */
+<span class="fc" id="L127">    public Plane(final double[] array) {</span>
+<span class="fc" id="L128">        setParameters(array);</span>
+<span class="fc" id="L129">    }</span>
+
+    /**
+     * Constructor.
+     * This constructor accepts three 3D points and computes the plane
+     * parameters so that the plane passes through provided points (they are
+     * locus).
+     *
+     * @param pointA First 3D point to compute the plane.
+     * @param pointB Second 3D point to compute the plane.
+     * @param pointC Third 3D point to compute the plane.
+     * @throws ColinearPointsException Raised if provided points lay in a line
+     *                                 preventing a single plane to be estimated. This happens in degenerate
+     *                                 configurations where points are co-linear and an infinite set of planes
+     *                                 pass through them.
+     */
+<span class="fc" id="L145">    public Plane(final Point3D pointA, final Point3D pointB, final Point3D pointC) throws ColinearPointsException {</span>
+<span class="fc" id="L146">        setParametersFromThreePoints(pointA, pointB, pointC);</span>
+<span class="fc" id="L147">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param point   Point laying inside the plane.
+     * @param vectorA First vector laying in the plane.
+     * @param vectorB Second vector laying in the plane.
+     * @throws IllegalArgumentException Raised if vectors length is not 3.
+     * @throws ParallelVectorsException Raised if provided vectors are parallel.
+     */
+<span class="fc" id="L158">    public Plane(final Point3D point, final double[] vectorA, final double[] vectorB) throws ParallelVectorsException {</span>
+<span class="fc" id="L159">        setParametersFrom1PointAnd2Vectors(point, vectorA, vectorB);</span>
+<span class="fc" id="L160">    }</span>
+
+
+    /**
+     * Constructor of a plane from one point and its director vector.
+     *
+     * @param point  Point laying inside the plane.
+     * @param vector Director vector.
+     * @throws IllegalArgumentException Raised if vector length is not 3.
+     */
+<span class="fc" id="L170">    public Plane(final Point3D point, final double[] vector) {</span>
+<span class="fc" id="L171">        setParametersFromPointAndDirectorVector(point, vector);</span>
+<span class="fc" id="L172">    }</span>
+
+    /**
+     * Returns parameter A of this plane.
+     *
+     * @return Parameter A of this plane.
+     */
+    public double getA() {
+<span class="fc" id="L180">        return a;</span>
+    }
+
+    /**
+     * Returns parameter B of this plane.
+     *
+     * @return Parameter B of this plane.
+     */
+    public double getB() {
+<span class="fc" id="L189">        return b;</span>
+    }
+
+    /**
+     * Returns parameter C of this plane.
+     *
+     * @return Parameter C of this plane.
+     */
+    public double getC() {
+<span class="fc" id="L198">        return c;</span>
+    }
+
+    /**
+     * Returns parameter D of this plane.
+     *
+     * @return Parameter D of this plane.
+     */
+    public double getD() {
+<span class="fc" id="L207">        return d;</span>
+    }
+
+    /**
+     * Sets parameters of this plane.
+     *
+     * @param a Parameter A of this plane.
+     * @param b Parameter B of this plane.
+     * @param c Parameter C of this plane.
+     * @param d Parameter D of this plane.
+     */
+    public final void setParameters(final double a, final double b, final double c, final double d) {
+<span class="fc" id="L219">        this.a = a;</span>
+<span class="fc" id="L220">        this.b = b;</span>
+<span class="fc" id="L221">        this.c = c;</span>
+<span class="fc" id="L222">        this.d = d;</span>
+<span class="fc" id="L223">        normalized = false;</span>
+<span class="fc" id="L224">    }</span>
+
+    /**
+     * Sets parameters of this plane.
+     *
+     * @param array Array containing parameters of this plane.
+     * @throws IllegalArgumentException Raised if provided array does not have length equal to 4.
+     */
+    public final void setParameters(final double[] array) {
+<span class="fc bfc" id="L233" title="All 2 branches covered.">        if (array.length != PLANE_NUMBER_PARAMS) {</span>
+<span class="fc" id="L234">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L237">        a = array[0];</span>
+<span class="fc" id="L238">        b = array[1];</span>
+<span class="fc" id="L239">        c = array[2];</span>
+<span class="fc" id="L240">        d = array[3];</span>
+<span class="fc" id="L241">        normalized = false;</span>
+<span class="fc" id="L242">    }</span>
+
+    /**
+     * Computes and sets plane parameters using provided 3D points.
+     * A plane can be defined from just 3 points.
+     *
+     * @param pointA 1st point.
+     * @param pointB 2nd point.
+     * @param pointC 3rd point.
+     * @throws ColinearPointsException if provided points are in a co-linear or degenerate configuration.
+     */
+    public final void setParametersFromThreePoints(final Point3D pointA, final Point3D pointB, final Point3D pointC)
+            throws ColinearPointsException {
+
+        // normalize points to increase accuracy
+<span class="fc" id="L257">        pointA.normalize();</span>
+<span class="fc" id="L258">        pointB.normalize();</span>
+<span class="fc" id="L259">        pointC.normalize();</span>
+
+        // we use 3 points to find one plane
+        try {
+            // set homogeneous coordinates of each point on each row of the matrix
+<span class="fc" id="L264">            final var m = new Matrix(3, PLANE_NUMBER_PARAMS);</span>
+
+<span class="fc" id="L266">            m.setElementAt(0, 0, pointA.getHomX());</span>
+<span class="fc" id="L267">            m.setElementAt(0, 1, pointA.getHomY());</span>
+<span class="fc" id="L268">            m.setElementAt(0, 2, pointA.getHomZ());</span>
+<span class="fc" id="L269">            m.setElementAt(0, 3, pointA.getHomW());</span>
+
+<span class="fc" id="L271">            m.setElementAt(1, 0, pointB.getHomX());</span>
+<span class="fc" id="L272">            m.setElementAt(1, 1, pointB.getHomY());</span>
+<span class="fc" id="L273">            m.setElementAt(1, 2, pointB.getHomZ());</span>
+<span class="fc" id="L274">            m.setElementAt(1, 3, pointB.getHomW());</span>
+
+<span class="fc" id="L276">            m.setElementAt(2, 0, pointC.getHomX());</span>
+<span class="fc" id="L277">            m.setElementAt(2, 1, pointC.getHomY());</span>
+<span class="fc" id="L278">            m.setElementAt(2, 2, pointC.getHomZ());</span>
+<span class="fc" id="L279">            m.setElementAt(2, 3, pointC.getHomW());</span>
+
+<span class="fc" id="L281">            final var decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L282">            decomposer.decompose();</span>
+
+<span class="fc bfc" id="L284" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 3) {</span>
+                // points where co-linear, and so the null-space of those 3 points
+                // has dimension greater than one (a pencil of planes instead
+                // of just one plane can be defined)
+<span class="fc" id="L288">                throw new ColinearPointsException();</span>
+            }
+
+            // V is a 4x4 orthonormal matrix
+<span class="fc" id="L292">            final var mV = decomposer.getV();</span>
+
+            // last column of V will contain the right null-space of m, which is
+            // the plane where provided points belong to.
+<span class="fc" id="L296">            a = mV.getElementAt(0, 3);</span>
+<span class="fc" id="L297">            b = mV.getElementAt(1, 3);</span>
+<span class="fc" id="L298">            c = mV.getElementAt(2, 3);</span>
+<span class="fc" id="L299">            d = mV.getElementAt(3, 3);</span>
+
+            // Because V is orthonormal, its columns have norm equal to 1 and
+            // there is no need to normalize this plane to increase accuracy
+<span class="fc" id="L303">            normalized = true;</span>
+
+<span class="nc" id="L305">        } catch (final AlgebraException e) {</span>
+            // should only fail if decomposition fails for numerical reasons
+<span class="nc" id="L307">            throw new ColinearPointsException(e);</span>
+<span class="fc" id="L308">        }</span>
+<span class="fc" id="L309">    }</span>
+
+    /**
+     * Determines if provided points are co-linear or have a degenerate
+     * configuration. If returned value is true, then such points cannot be used
+     * to estimate a plane.
+     *
+     * @param pointA 1st plane.
+     * @param pointB 2nd plane.
+     * @param pointC 3rd plane.
+     * @return true if provided points co-linear, false otherwise.
+     */
+    public static boolean areColinearPoints(final Point3D pointA, final Point3D pointB, final Point3D pointC) {
+        // normalize points to increase accuracy
+<span class="fc" id="L323">        pointA.normalize();</span>
+<span class="fc" id="L324">        pointB.normalize();</span>
+<span class="fc" id="L325">        pointC.normalize();</span>
+
+        // we use 3 points to find one plane
+        try {
+            // set homogeneous coordinates of each point on each row of the matrix
+<span class="fc" id="L330">            final var m = new Matrix(3, PLANE_NUMBER_PARAMS);</span>
+
+<span class="fc" id="L332">            m.setElementAt(0, 0, pointA.getHomX());</span>
+<span class="fc" id="L333">            m.setElementAt(0, 1, pointA.getHomY());</span>
+<span class="fc" id="L334">            m.setElementAt(0, 2, pointA.getHomZ());</span>
+<span class="fc" id="L335">            m.setElementAt(0, 3, pointA.getHomW());</span>
+
+<span class="fc" id="L337">            m.setElementAt(1, 0, pointB.getHomX());</span>
+<span class="fc" id="L338">            m.setElementAt(1, 1, pointB.getHomY());</span>
+<span class="fc" id="L339">            m.setElementAt(1, 2, pointB.getHomZ());</span>
+<span class="fc" id="L340">            m.setElementAt(1, 3, pointB.getHomW());</span>
+
+<span class="fc" id="L342">            m.setElementAt(2, 0, pointC.getHomX());</span>
+<span class="fc" id="L343">            m.setElementAt(2, 1, pointC.getHomY());</span>
+<span class="fc" id="L344">            m.setElementAt(2, 2, pointC.getHomZ());</span>
+<span class="fc" id="L345">            m.setElementAt(2, 3, pointC.getHomW());</span>
+
+<span class="fc" id="L347">            final var decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L348">            decomposer.decompose();</span>
+
+            // if points were co-linear, their null-space has dimension greater
+            // than one (a pencil of planes instead of just one plane can be
+            // defined)
+<span class="fc bfc" id="L353" title="All 2 branches covered.">            return (decomposer.getRank() &lt; 3);</span>
+<span class="nc" id="L354">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L355">            return true;</span>
+        }
+    }
+
+    /**
+     * Sets parameter A of this plane.
+     *
+     * @param a Parameter A.
+     */
+    public void setA(final double a) {
+<span class="fc" id="L365">        this.a = a;</span>
+<span class="fc" id="L366">        normalized = false;</span>
+<span class="fc" id="L367">    }</span>
+
+    /**
+     * Sets parameter B of this plane.
+     *
+     * @param b Parameter B.
+     */
+    public void setB(final double b) {
+<span class="fc" id="L375">        this.b = b;</span>
+<span class="fc" id="L376">        normalized = false;</span>
+<span class="fc" id="L377">    }</span>
+
+    /**
+     * Sets parameter C of this plane.
+     *
+     * @param c Parameter C.
+     */
+    public void setC(final double c) {
+<span class="fc" id="L385">        this.c = c;</span>
+<span class="fc" id="L386">        normalized = false;</span>
+<span class="fc" id="L387">    }</span>
+
+    /**
+     * Sets parameter D of this plane.
+     *
+     * @param d Parameter D.
+     */
+    public void setD(final double d) {
+<span class="fc" id="L395">        this.d = d;</span>
+<span class="fc" id="L396">        normalized = false;</span>
+<span class="fc" id="L397">    }</span>
+
+    /**
+     * Sets the parameters of a plane from one point and two vectors.
+     *
+     * @param point   Point laying inside the plane.
+     * @param vectorA First vector laying in the plane.
+     * @param vectorB Second vector laying in the plane.
+     * @throws IllegalArgumentException Raised if vectors length is not 3.
+     * @throws ParallelVectorsException Raised if provided vectors are parallel.
+     */
+    public final void setParametersFrom1PointAnd2Vectors(
+            final Point3D point, final double[] vectorA, final double[] vectorB) throws ParallelVectorsException {
+
+<span class="fc bfc" id="L411" title="All 4 branches covered.">        if (vectorA.length != INHOM_VECTOR_SIZE || vectorB.length != INHOM_VECTOR_SIZE) {</span>
+<span class="fc" id="L412">            throw new IllegalArgumentException();</span>
+        }
+
+        // normalize vectors to increase accuracy (we make a copy to avoid
+        // changing provided arrays)
+<span class="fc" id="L417">        var norm = com.irurueta.algebra.Utils.normF(vectorA);</span>
+<span class="fc" id="L418">        final var vA = ArrayUtils.multiplyByScalarAndReturnNew(vectorA, 1.0 / norm);</span>
+<span class="fc" id="L419">        norm = com.irurueta.algebra.Utils.normF(vectorB);</span>
+<span class="fc" id="L420">        final var vB = ArrayUtils.multiplyByScalarAndReturnNew(vectorB, 1.0 / norm);</span>
+
+        try {
+<span class="fc" id="L423">            final var cross = com.irurueta.algebra.Utils.crossProduct(vA, vB);</span>
+
+            // check if resulting vector from cross product is too small (vectors
+            // are almost parallel, and machine precision might worsen things)
+<span class="pc bpc" id="L427" title="1 of 4 branches missed.">            if (Math.abs(cross[0]) &lt; DEFAULT_ERROR_THRESHOLD &amp;&amp; Math.abs(cross[1]) &lt; DEFAULT_ERROR_THRESHOLD</span>
+<span class="pc bpc" id="L428" title="1 of 2 branches missed.">                    &amp;&amp; Math.abs(cross[2]) &lt; DEFAULT_ERROR_THRESHOLD) {</span>
+<span class="fc" id="L429">                throw new ParallelVectorsException();</span>
+            }
+
+            // the point and the two vectors will define a plane computing the
+            // cross product of the two vectors gives the values for (a,b,c),
+            // which it is its director vector, but d is still unknown.
+            // Given a point (xp, yp, zp, wp) and forcing this expression
+            // point'*plane = 0 results in
+            // a*xp + b*xy + c*xz + d*wp = 0
+            // and solving
+            // d = -(a*xp + b*xy + c*xz) / wp -&gt; the plane is fully defined
+<span class="fc" id="L440">            setParametersFromPointAndDirectorVector(point, cross);</span>
+<span class="nc" id="L441">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L442">            throw new ParallelVectorsException(e);</span>
+<span class="fc" id="L443">        }</span>
+<span class="fc" id="L444">    }</span>
+
+    /**
+     * Sets parameters of a plane from one point and its director vector.
+     *
+     * @param point  Point laying inside the plane.
+     * @param vector Director vector.
+     * @throws IllegalArgumentException Raised if vector length is not 3.
+     */
+    public final void setParametersFromPointAndDirectorVector(final Point3D point, final double[] vector) {
+
+<span class="fc bfc" id="L455" title="All 2 branches covered.">        if (vector.length != INHOM_VECTOR_SIZE) {</span>
+<span class="fc" id="L456">            throw new IllegalArgumentException();</span>
+        }
+
+        // normalize point to increase accuracy
+<span class="fc" id="L460">        point.normalize();</span>
+
+<span class="fc" id="L462">        a = vector[0];</span>
+<span class="fc" id="L463">        b = vector[1];</span>
+<span class="fc" id="L464">        c = vector[2];</span>
+
+<span class="fc" id="L466">        d = -(a * point.getHomX() + b * point.getHomY() + c * point.getHomZ()) / point.getHomW();</span>
+
+<span class="fc" id="L468">        normalized = false;</span>
+<span class="fc" id="L469">    }</span>
+
+    /**
+     * Check if provided point is locus (lays into) of the plane.
+     *
+     * @param point Point to be checked.
+     * @return True if point is locus of this plane, false otherwise.
+     */
+    public boolean isLocus(final Point3D point) {
+<span class="fc" id="L478">        return isLocus(point, DEFAULT_LOCUS_THRESHOLD);</span>
+    }
+
+    /**
+     * Check if provided point is locus (lays into) of the plane.
+     *
+     * @param point     Point to be checked.
+     * @param threshold Threshold (non-negative small value) to decide if a
+     *                  point is locus of this plane.
+     * @return True if point is locus of this plane, false otherwise.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    public boolean isLocus(final Point3D point, final double threshold) {
+<span class="fc bfc" id="L491" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L492">            throw new IllegalArgumentException();</span>
+        }
+
+        // make dot product of homogeneous coordinates with plane
+        // m = [x, y, z, w], P = [a, b, c, d], then
+        // x * a + y * b + z * c + w * d must be very small to be locus
+
+<span class="fc" id="L499">        point.normalize();</span>
+<span class="fc" id="L500">        normalize();</span>
+
+<span class="fc" id="L502">        final var dotProd = point.getHomX() * a + point.getHomY() * b + point.getHomZ() * c + point.getHomW() * d;</span>
+
+<span class="fc bfc" id="L504" title="All 2 branches covered.">        return Math.abs(dotProd) &lt; threshold;</span>
+    }
+
+    /**
+     * Distance between a plane and a 3D point. Returned distance equals to the
+     * Euclidean distance between this plane and provided point but having sign.
+     * Sign indicates whether point is at one side or the other of the plane.
+     *
+     * @param point Point whose distance to this line will be computed.
+     * @return Distance between this line and provided point.
+     */
+    public double signedDistance(final Point3D point) {
+<span class="fc" id="L516">        point.normalize();</span>
+<span class="fc" id="L517">        normalize();</span>
+
+        // numerator is the dot product of point and line
+<span class="fc" id="L520">        final var num = point.getHomX() * a + point.getHomY() * b + point.getHomZ() * c + point.getHomW() * d;</span>
+
+<span class="fc" id="L522">        final var den = Math.sqrt(a * a + b * b + c * c) * point.getHomW();</span>
+
+<span class="fc" id="L524">        return num / den;</span>
+    }
+
+    /**
+     * Returns the point belonging to this line closest to provided point, which
+     * will be located at signedDistance(Point2D) from this line.
+     * If provided point belong to this line, then the same point will be
+     * returned as a result.
+     *
+     * @param point Point to be checked.
+     * @return Closest point.
+     */
+    public Point3D getClosestPoint(final Point3D point) {
+<span class="fc" id="L537">        return getClosestPoint(point, DEFAULT_LOCUS_THRESHOLD);</span>
+    }
+
+    /**
+     * Returns the point belonging to this line closest to provided point, which
+     * will be located at signedDistance(Point2D) from this line.
+     * If provided point belong to this line, then the same point will be
+     * returned as a result.
+     *
+     * @param point     Point to be checked.
+     * @param threshold Threshold to determine whether point is locus of line or
+     *                  not.
+     * @return Closest point.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    public Point3D getClosestPoint(final Point3D point, final double threshold) {
+<span class="fc" id="L553">        final var result = Point3D.create();</span>
+<span class="fc" id="L554">        closestPoint(point, result, threshold);</span>
+<span class="fc" id="L555">        return result;</span>
+    }
+
+    /**
+     * Computes the point belonging to this plane closest to provided point,
+     * which will be located at signedDistance(Point3D) from this plane.
+     * If provided point belongs to this plane, then the same point will be
+     * returned as a result.
+     *
+     * @param point  Point to be checked.
+     * @param result Instance where the closest point will be stored.
+     */
+    public void closestPoint(final Point3D point, final Point3D result) {
+<span class="fc" id="L568">        closestPoint(point, result, DEFAULT_LOCUS_THRESHOLD);</span>
+<span class="fc" id="L569">    }</span>
+
+    /**
+     * Computes the point belonging to this plane closest to provided point,
+     * which will be located at signedDistance(Point3D) from this plane.
+     * If provided point belongs to this plane, then the same point will be
+     * returned as a result.
+     *
+     * @param point     Point to be checked.
+     * @param result    Instance where the closest point will be stored.
+     * @param threshold threshold to determine whether a point is locus of
+     *                  this plane.
+     * @throws IllegalArgumentException Raised if threshold is negative.
+     */
+    public void closestPoint(final Point3D point, final Point3D result, final double threshold) {
+<span class="fc bfc" id="L584" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L585">            throw new IllegalArgumentException();</span>
+        }
+
+        // normalize point to increase accuracy
+<span class="fc" id="L589">        point.normalize();</span>
+
+<span class="fc bfc" id="L591" title="All 2 branches covered.">        if (isLocus(point, threshold)) {</span>
+            // if point belongs to line, then it is returned as result
+<span class="fc" id="L593">            result.setCoordinates(point);</span>
+<span class="fc" id="L594">            return;</span>
+        }
+
+        // move point in director vector direction until it belongs to this plane
+        // (point.getInhomX() + mA * amount) * mA + (point.getInhomY() +
+        // mB * amount) * mB + (point.getInhomZ + mC * amount) * mC + mD = 0
+
+<span class="fc" id="L601">        final var amount = -(point.getHomX() * a + point.getHomY() * b + point.getHomZ() * c + point.getHomW() * d)</span>
+<span class="fc" id="L602">                / (point.getHomW() * (a * a + b * b + c * c));</span>
+<span class="fc" id="L603">        result.setHomogeneousCoordinates(point.getHomX() + a * amount * point.getHomW(),</span>
+<span class="fc" id="L604">                point.getHomY() + b * amount * point.getHomW(),</span>
+<span class="fc" id="L605">                point.getHomZ() + c * amount * point.getHomW(),</span>
+<span class="fc" id="L606">                point.getHomW());</span>
+<span class="fc" id="L607">        result.normalize();</span>
+<span class="fc" id="L608">    }</span>
+
+    /**
+     * Returns parameters of this plane as an array containing [a, b, c, d].
+     *
+     * @return Array containing all the parameters that describe this plane.
+     */
+    public double[] asArray() {
+<span class="fc" id="L616">        final var array = new double[PLANE_NUMBER_PARAMS];</span>
+<span class="fc" id="L617">        asArray(array);</span>
+<span class="fc" id="L618">        return array;</span>
+    }
+
+    /**
+     * Stores the parameters of this plane in provided array as [a, b, c, d].
+     *
+     * @param array Array where parameters of this plane will be stored.
+     * @throws IllegalArgumentException Raised if provided array doesn't have
+     *                                  length 4.
+     */
+    public void asArray(final double[] array) {
+<span class="fc bfc" id="L629" title="All 2 branches covered.">        if (array.length != PLANE_NUMBER_PARAMS) {</span>
+<span class="fc" id="L630">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L633">        array[0] = a;</span>
+<span class="fc" id="L634">        array[1] = b;</span>
+<span class="fc" id="L635">        array[2] = c;</span>
+<span class="fc" id="L636">        array[3] = d;</span>
+<span class="fc" id="L637">    }</span>
+
+    /**
+     * Normalizes the parameters of this line to increase the accuracy of some
+     * computations.
+     */
+    public void normalize() {
+<span class="fc bfc" id="L644" title="All 2 branches covered.">        if (!normalized) {</span>
+<span class="fc" id="L645">            final var norm = Math.sqrt(a * a + b * b + c * c + d * d);</span>
+
+<span class="fc bfc" id="L647" title="All 2 branches covered.">            if (norm &gt; PRECISION) {</span>
+<span class="fc" id="L648">                a /= norm;</span>
+<span class="fc" id="L649">                b /= norm;</span>
+<span class="fc" id="L650">                c /= norm;</span>
+<span class="fc" id="L651">                d /= norm;</span>
+
+<span class="fc" id="L653">                normalized = true;</span>
+            }
+        }
+<span class="fc" id="L656">    }</span>
+
+    /**
+     * Returns boolean indicating whether this plane has already been
+     * normalized.
+     *
+     * @return True if this plane is normalized, false otherwise.
+     */
+    public boolean isNormalized() {
+<span class="fc" id="L665">        return normalized;</span>
+    }
+
+    /**
+     * Returns director vector of this plane.
+     *
+     * @return Director vector of this plane.
+     */
+    public double[] getDirectorVector() {
+<span class="fc" id="L674">        final var out = new double[INHOM_VECTOR_SIZE];</span>
+<span class="fc" id="L675">        directorVector(out);</span>
+<span class="fc" id="L676">        return out;</span>
+    }
+
+    /**
+     * Computes director vector of this plane and stores the result in provided
+     * array.
+     *
+     * @param directorVector Array containing director vector.
+     * @throws IllegalArgumentException Raised if provided array does not have
+     *                                  length 3.
+     */
+    public void directorVector(final double[] directorVector) {
+<span class="pc bpc" id="L688" title="1 of 2 branches missed.">        if (directorVector.length != INHOM_VECTOR_SIZE) {</span>
+<span class="nc" id="L689">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L692">        directorVector[0] = a;</span>
+<span class="fc" id="L693">        directorVector[1] = b;</span>
+<span class="fc" id="L694">        directorVector[2] = c;</span>
+<span class="fc" id="L695">    }</span>
+
+    /**
+     * Computes and returns the intersection point between this plane and the
+     * other 2 provided planes.
+     *
+     * @param otherPlane1 other plane 1.
+     * @param otherPlane2 other plane 2.
+     * @return point where the three planes intersect.
+     * @throws NoIntersectionException if the three planes do not intersect in
+     *                                 a single point.
+     */
+    public Point3D getIntersection(final Plane otherPlane1, final Plane otherPlane2) throws NoIntersectionException {
+<span class="fc" id="L708">        final var result = Point3D.create();</span>
+<span class="fc" id="L709">        intersection(otherPlane1, otherPlane2, result);</span>
+<span class="fc" id="L710">        return result;</span>
+    }
+
+    /**
+     * Computes the intersection point between this plane and the other 2
+     * provided planes.
+     *
+     * @param otherPlane1 other plane 1.
+     * @param otherPlane2 other plane 2.
+     * @param result      point where the intersection will be stored.
+     * @throws NoIntersectionException if the three planes do not intersect in
+     *                                 a single point.
+     */
+    public void intersection(final Plane otherPlane1, final Plane otherPlane2, final Point3D result)
+            throws NoIntersectionException {
+
+        // normalize planes to increase accuracy
+<span class="fc" id="L727">        normalize();</span>
+<span class="fc" id="L728">        otherPlane1.normalize();</span>
+<span class="fc" id="L729">        otherPlane2.normalize();</span>
+
+        // set matrix where each row contains the parameters of the plane
+        try {
+<span class="fc" id="L733">            final var m = new Matrix(3, 4);</span>
+<span class="fc" id="L734">            m.setElementAt(0, 0, a);</span>
+<span class="fc" id="L735">            m.setElementAt(0, 1, b);</span>
+<span class="fc" id="L736">            m.setElementAt(0, 2, c);</span>
+<span class="fc" id="L737">            m.setElementAt(0, 3, d);</span>
+
+<span class="fc" id="L739">            m.setElementAt(1, 0, otherPlane1.getA());</span>
+<span class="fc" id="L740">            m.setElementAt(1, 1, otherPlane1.getB());</span>
+<span class="fc" id="L741">            m.setElementAt(1, 2, otherPlane1.getC());</span>
+<span class="fc" id="L742">            m.setElementAt(1, 3, otherPlane1.getD());</span>
+
+<span class="fc" id="L744">            m.setElementAt(2, 0, otherPlane2.getA());</span>
+<span class="fc" id="L745">            m.setElementAt(2, 1, otherPlane2.getB());</span>
+<span class="fc" id="L746">            m.setElementAt(2, 2, otherPlane2.getC());</span>
+<span class="fc" id="L747">            m.setElementAt(2, 3, otherPlane2.getD());</span>
+
+            // If planes are not parallel, then matrix has rank 3, and its right
+            // null-space is equal to their intersection.
+<span class="fc" id="L751">            final var decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L752">            decomposer.decompose();</span>
+
+            // planes are parallel
+<span class="fc bfc" id="L755" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 3) {</span>
+<span class="fc" id="L756">                throw new NoIntersectionException();</span>
+            }
+
+<span class="fc" id="L759">            final var v = decomposer.getV();</span>
+
+            // last column of V contains the right null-space of m, which is the
+            // intersection of lines expressed in homogeneous coordinates.
+            // because column is already normalized by SVD decomposition, point
+            // will also be normalized
+<span class="fc" id="L765">            result.setHomogeneousCoordinates(v.getElementAt(0, 3), v.getElementAt(1, 3),</span>
+<span class="fc" id="L766">                    v.getElementAt(2, 3), v.getElementAt(3, 3));</span>
+<span class="nc" id="L767">        } catch (final AlgebraException e) {</span>
+            // lines are numerically unstable
+<span class="nc" id="L769">            throw new NoIntersectionException(e);</span>
+<span class="fc" id="L770">        }</span>
+<span class="fc" id="L771">    }</span>
+
+    /**
+     * Computes the dot product between the parameters A, B, C, D of this plane
+     * and the ones of provided plane.
+     * This method normalizes both planes to compute dot product.
+     *
+     * @param plane plane to compute dot product with.
+     * @return dot product value.
+     */
+    public double dotProduct(final Plane plane) {
+<span class="fc" id="L782">        normalize();</span>
+<span class="fc" id="L783">        plane.normalize();</span>
+<span class="fc" id="L784">        return a * plane.a + b * plane.b + c * plane.c + d * plane.d;</span>
+    }
+
+    /**
+     * Checks if the plane described by this instance equals provided plane
+     * up to provided threshold.
+     *
+     * @param plane     plane to be compared to.
+     * @param threshold threshold grade of tolerance to determine whether the
+     *                  planes are equal or not. It is used because due to machine precision,
+     *                  the values might not be exactly equal (if not provided
+     *                  DEFAULT_COMPARISON_THRESHOLD is used).
+     * @return true if current plane and provided one are the same, false
+     * otherwise.
+     * @throws IllegalArgumentException if threshold is negative.
+     */
+    public boolean equals(final Plane plane, final double threshold) {
+
+<span class="fc bfc" id="L802" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L803">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L806">        normalize();</span>
+<span class="fc" id="L807">        plane.normalize();</span>
+
+<span class="fc bfc" id="L809" title="All 2 branches covered.">        return (1.0 - Math.abs(dotProduct(plane))) &lt;= threshold;</span>
+    }
+
+    /**
+     * Checks if the plane described by this instance equals provided plane
+     * up to default comparison threshold.
+     *
+     * @param plane plane to be compared to.
+     * @return true if current plane and provided one are the same, false
+     * otherwise.
+     */
+    public boolean equals(final Plane plane) {
+<span class="fc" id="L821">        return equals(plane, DEFAULT_COMPARISON_THRESHOLD);</span>
+    }
+
+    /**
+     * Checks if provided object equals current plane.
+     *
+     * @param obj object to compare.
+     * @return true if both objects are considered to be equal, false otherwise.
+     */
+    @Override
+    public boolean equals(final Object obj) {
+<span class="pc bpc" id="L832" title="1 of 2 branches missed.">        if (!(obj instanceof Plane plane)) {</span>
+<span class="nc" id="L833">            return false;</span>
+        }
+<span class="fc bfc" id="L835" title="All 2 branches covered.">        if (obj == this) {</span>
+<span class="fc" id="L836">            return true;</span>
+        }
+
+<span class="fc" id="L839">        return equals(plane);</span>
+    }
+
+    /**
+     * Returns hash code value. This is only defined to keep the compiler happy.
+     * This method must be overridden in subclasses of this class.
+     *
+     * @return Hash code.
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L850">        return Objects.hash(a, b, c, d);</span>
+    }
+
+    /**
+     * Creates a new instance of a plane located the canonical infinity.
+     * The canonical infinity corresponds to all 3D points located at infinity
+     * (i.e. M = (X,Y,Z,W = 0), hence P = (A = 0,B = 0,C = 0, W = 1))
+     *
+     * @return a new instance of a plane located at the canonical infinity.
+     */
+    public static Plane createCanonicalPlaneAtInfinity() {
+<span class="fc" id="L861">        final var p = new Plane();</span>
+<span class="fc" id="L862">        setAsCanonicalPlaneAtInfinity(p);</span>
+<span class="fc" id="L863">        return p;</span>
+    }
+
+    /**
+     * Sets provided plane into the canonical infinity.
+     * The canonical infinity corresponds to all 3D points located at infinity
+     * (i.e. M = (X,Y,Z,W = 0), hence P = (A = 0,B = 0,C = 0, W = 1))
+     *
+     * @param plane plane to be set at infinity.
+     */
+    public static void setAsCanonicalPlaneAtInfinity(final Plane plane) {
+<span class="fc" id="L874">        plane.a = plane.b = plane.c = 0.0;</span>
+<span class="fc" id="L875">        plane.d = 1.0;</span>
+<span class="fc" id="L876">        plane.normalized = true;</span>
+<span class="fc" id="L877">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
