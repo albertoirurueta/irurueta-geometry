@@ -25,7 +25,7 @@ Geometry structures and utilities
 
 | | |
 | --- | --- |
-| Language | Java 17 |
+| Language | Java 21 |
 | Build tool | Maven |
 | Current development version | `1.6.0-SNAPSHOT` |
 | Latest release | `1.5.0` |

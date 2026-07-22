@@ -7,6 +7,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Changed
+
+- Raised the Java compiler source/target and CI JDK version from 17 to 21.
+- Replaced the standalone `sonar-scanner` CLI step in the GitHub workflows with the `sonar-maven-plugin`
+  (`mvn sonar:sonar`), so SonarCloud analysis runs under the same JDK 21 toolchain as the rest of the build.
+  Sonar organization/project key/host settings moved from `sonar-project.properties` (removed) into
+  `pom.xml` properties.
+
 ## [1.5.0] - 2026-03-03
 
 ### Changed

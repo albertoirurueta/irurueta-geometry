@@ -33,4 +33,4 @@ include it if you depend on a `-SNAPSHOT` version.
 
 == Requirements
 
-* Java 17 or later.
+* Java 21 or later.
