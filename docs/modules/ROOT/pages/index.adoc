@@ -1,0 +1,67 @@
+= Irurueta Geometry
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+irurueta-geometry is a Java library of geometry structures and utilities built around **projective geometry**
+and **homogeneous coordinates**. Its central practical use case is *camera geometry*: representing and estimating
+a pinhole camera model from noisy point/line correspondences, robustly, and then refining the result through
+non-linear optimization.
+
+== Core concepts
+
+The library is organized into three areas:
+
+* `com.irurueta.geometry` -- core geometric primitives: 2D/3D points, lines, planes, conics/quadrics, rotations,
+  transformations, cameras, and basic solids (box, sphere, ellipsoid). Most entities come in explicit `2D`/`3D`
+  pairs, e.g. `Point2D`/`Point3D`, `Line2D`/`Line3D`, `Triangle2D`/`Triangle3D`.
+* `com.irurueta.geometry.estimators` -- non-robust and robust estimators that fit a geometric entity (a circle,
+  conic, transformation, or pinhole camera) from point/line correspondences. Robust estimators come in families
+  named after the robust algorithm used: `RANSAC`, `LMedS`, `MSAC`, `PROSAC`, `PROMedS`.
+* `com.irurueta.geometry.refiners` -- non-linear refinement of an entity after an initial robust estimate.
+
+Some of the classes a newcomer is most likely to start with:
+
+[cols="1,3",options="header"]
+|===
+|Class
+|Purpose
+
+|`Point2D` / `Point3D`
+|Points in 2D/3D space, represented in homogeneous or inhomogeneous coordinates.
+
+|`Line2D` / `Line3D`, `Plane`
+|Basic linear geometric loci.
+
+|`Conic` / `Quadric`
+|Second-degree curves/surfaces in projective space (and their duals `DualConic`/`DualQuadric`).
+
+|`Transformation2D` / `Transformation3D`
+|Geometric mappings of increasing generality: Euclidean ⊂ metric ⊂ affine ⊂ projective.
+
+|`PinholeCamera` / `PinholeCameraIntrinsicParameters`
+|The pinhole camera model and its intrinsic calibration parameters (focal length, aspect ratio, skewness,
+principal point).
+
+|`Quaternion` / `MatrixRotation3D` / `Rotation3D`
+|3D rotation representations.
+
+|`*RobustEstimator` classes
+|Robust fitting of cameras, transformations, or conics from noisy correspondences (e.g.
+`RANSACDLTPointCorrespondencePinholeCameraRobustEstimator`, `EPnPPointCorrespondencePinholeCameraEstimator`).
+|===
+
+== How estimation typically flows
+
+[mermaid]
+....
+flowchart LR
+    A[Noisy point/line\ncorrespondences] --> B[Robust estimator\nRANSAC / LMedS / MSAC / PROSAC / PROMedS]
+    B --> C[Initial geometric estimate\ne.g. PinholeCamera, Transformation]
+    C --> D[Refiner\nnon-linear optimization]
+    D --> E[Refined geometric entity]
+....
+
+== Next steps
+
+* xref:installation.adoc[] -- add irurueta-geometry as a dependency to your project.
+* xref:reference.adoc[] -- generated reports and external dashboards for this project.
