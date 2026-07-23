@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-07-23
+
+### Added
+
+- New Antora-based documentation site (`docs/`) covering the library's core geometric entities in depth --
+  transformations, rotations, points/lines/planes, conics/quadrics (including their duals), triangles/polygons,
+  the pinhole camera model, and boxes/KD-trees -- along with the robust estimator families, each grounded in the
+  actual source and cross-referenced against a shared bibliography.
+
 ### Changed
 
 - Raised the Java compiler source/target and CI JDK version from 17 to 21.
@@ -91,7 +100,8 @@ Initial release.
 - Comprehensive exception hierarchy for geometric error conditions (coincident/colinear/coplanar points,
   degenerate configurations, locking, normalization, etc.).
 
-[Unreleased]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.5.0...HEAD
+[Unreleased]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.6.0...HEAD
+[1.6.0]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.4.0...1.5.0
 [1.4.0]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.3.2...1.4.0
 [1.3.2]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.3.1...1.3.2
