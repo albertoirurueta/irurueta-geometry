@@ -1,0 +1,449 @@
+= Transformations
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+A **transformation** maps geometric entities (points, lines, planes, conics, quadrics, cameras) onto other
+entities of the same kind. `irurueta-geometry` organizes transformations into a **stratified hierarchy** of
+increasing generality -- Euclidean, metric, affine and projective -- each one a special case of the next. This
+page explains that hierarchy, what each family preserves, and how the library actually implements it in
+`com.irurueta.geometry.Transformation2D` / `Transformation3D` and their subclasses.
+
+== The hierarchy
+
+image::transformation-hierarchy.svg[Transformation hierarchy: Euclidean, Metric, Affine and Projective, applied to a reference square]
+
+[cols="1,2,1,3",options="header"]
+|===
+|Family |Adds on top of the previous family |DOF (2D / 3D) |Preserves / fixes at infinity
+
+|Euclidean (rigid)
+|rotation + translation
+|3 / 6
+|distances, angles, areas/volumes; trivially fixes latexmath:[\Pi_\infty], latexmath:[\Omega_\infty] and latexmath:[Q^*_\infty] *and* the absolute scale.
+
+|Metric (similarity)
+|+ uniform scale
+|4 / 7
+|angles, ratios of distances, shape; fixes the plane at infinity latexmath:[\Pi_\infty] *and* the absolute conic latexmath:[\Omega_\infty] / dual absolute quadric latexmath:[Q^*_\infty] (up to scale) -- but not the absolute scale itself.
+
+|Affine
+|+ independent axis scaling and skew (general linear map)
+|6 / 12
+|parallelism, ratios of lengths on parallel lines, ratios of areas/volumes; fixes the plane at infinity latexmath:[\Pi_\infty] *as a set* (not pointwise), but not latexmath:[\Omega_\infty]/latexmath:[Q^*_\infty].
+
+|Projective
+|+ a general homography, defined up to scale
+|8 / 15
+|incidence (collinearity/coplanarity), cross-ratio of 4 collinear points; fixes none of latexmath:[\Pi_\infty], latexmath:[\Omega_\infty] or latexmath:[Q^*_\infty] in general.
+|===
+
+The DOF and invariants above match the standard 2D hierarchy in
+xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] table 2.4 (p.44) and the 3D hierarchy in their
+table 3.2 (p.78), and are worked out from first principles in
+xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis] table 1.4 (p.42). The rest of this page is devoted to
+*why* those particular quantities -- the plane at infinity, the absolute conic and the dual absolute quadric --
+are exactly the ones that separate affine from metric from Euclidean.
+
+Each family is strictly more general than the previous one: every Euclidean transformation is also a metric
+transformation (with scale = 1), every metric transformation is also affine, and every affine transformation is
+also projective. `irurueta-geometry` exposes this with one-directional "upgrade" converters rather than a shared
+supertype:
+
+[mermaid]
+....
+classDiagram
+    class Transformation2D
+    class Transformation3D
+    class EuclideanTransformation2D
+    class MetricTransformation2D
+    class AffineTransformation2D
+    class ProjectiveTransformation2D
+    Transformation2D <|-- EuclideanTransformation2D
+    Transformation2D <|-- AffineTransformation2D
+    Transformation2D <|-- ProjectiveTransformation2D
+    EuclideanTransformation2D <|-- MetricTransformation2D
+    EuclideanTransformation2D ..> MetricTransformation2D : toMetric()
+    MetricTransformation2D ..> AffineTransformation2D : toAffine()
+    AffineTransformation2D ..> ProjectiveTransformation2D : toProjective()
+....
+
+The 3D classes (`Transformation3D`, `EuclideanTransformation3D`, `MetricTransformation3D`,
+`AffineTransformation3D`, `ProjectiveTransformation3D`) mirror this exactly. Two details worth noting:
+
+* `MetricTransformation2D`/`3D` **extends** `EuclideanTransformation2D`/`3D`, adding a single `scale` field --
+  metric/similarity really is "Euclidean plus scale" in the implementation, not an independent class.
+* `AffineTransformation2D`/`3D` and `ProjectiveTransformation2D`/`3D` extend `Transformation2D`/`3D` directly
+  (they do *not* extend `Metric*`/`Euclidean*`). They only expose one-way upgrade methods (`toAffine()`,
+  `toProjective()`); there is no built-in "downgrade" that tries to recover a simpler transformation from a more
+  general one.
+
+`ProjectiveTransformation2D`/`3D` makes the nesting explicit in its own javadoc: its internal matrix has an
+extra "projective parameters" row that is `[0, ..., 0, 1]` (up to scale) for every transformation that is really
+just affine, metric, or Euclidean in disguise.
+
+== Internal representation
+
+[cols="1,3",options="header"]
+|===
+|Class |Representation
+
+|`EuclideanTransformation2D`/`3D`
+|a `Rotation2D`/`Rotation3D` plus a translation vector; point maps to latexmath:[p' = R\,p + t].
+
+|`MetricTransformation2D`/`3D`
+|the same rotation/translation, plus a scalar `scale`; point maps to latexmath:[p' = s\,(R\,p) + t].
+
+|`AffineTransformation2D`/`3D`
+|a general (non-orthonormal) linear map matrix `A` (2&#215;2 / 3&#215;3) plus a translation; point maps to
+latexmath:[p' = A\,p + t]. Rotation and independent-scale/skew components are recovered on demand from `A` via
+RQ decomposition (`getRotation()`, `getParameters()` / `AffineParameters2D`/`3D`).
+
+|`ProjectiveTransformation2D`/`3D`
+|a single homogeneous matrix `T` (3&#215;3 / 4&#215;4), defined up to scale; a homogeneous point maps to
+latexmath:[p' = T\,p] directly, with no separate translation step.
+|===
+
+== How other geometric entities transform
+
+Because points, lines/planes and conics/quadrics play different roles in projective duality, they don't all
+transform the same way. Given a transformation matrix `T` (2D: 3&#215;3, 3D: 4&#215;4) and its application to a
+point `p' = T&#183;p`, the library implements:
+
+[cols="1,2",options="header"]
+|===
+|Entity |Transform rule
+
+|Point2D / Point3D
+|latexmath:[p' = T\,p] (direct forward map)
+
+|Line2D / Plane
+|latexmath:[l' = T^{-\mathsf T}\,l] (inverse-transpose -- lines/planes are covectors)
+
+|Conic / Quadric
+|latexmath:[C' = T^{-\mathsf T}\,C\,T^{-1}] (inverse-transpose on both sides)
+
+|DualConic / DualQuadric
+|latexmath:[C'^{-1} = T\,C^{-1}\,T^{\mathsf T}] (forward on both sides -- duals transform contragradiently to their primal)
+
+|PinholeCamera
+|camera matrix latexmath:[P' = P\,T^{-1}]
+
+|Polygon / Triangle
+|vertices transformed individually (each vertex is just a point)
+
+|Line3D
+|derived by transforming the two planes that define it
+|===
+
+The inverse-transpose rule for lines/planes/conics/quadrics is the standard projective-duality argument, and it
+appears as an inline comment repeated across every subclass's `transform(Conic, ...)` /
+`transform(Line2D, ...)` method, e.g.:
+
+[source]
+----
+// point' * conic * point = 0
+// point' * T' * transformedConic * T * point = 0
+// where: transformedPoint = T * point
+// Hence: transformedConic = T^-1' * conic * T^-1
+----
+
+All of these transform methods normalize the input, invert `T` once, and re-normalize before multiplying --
+this is a numerical-stability pattern repeated identically across the Euclidean/Metric/Affine/Projective
+implementations of every entity above.
+
+== Invariants: what fixes what
+
+The table above says that affine transformations preserve parallelism while metric transformations preserve
+angles. Both facts have a single, precise algebraic root: **each stratum is exactly the subgroup of the
+projective linear group that fixes one particular geometric object living at infinity**. Affine transformations
+are exactly the ones that fix the plane at infinity latexmath:[\Pi_\infty] as a set; metric (similarity)
+transformations are exactly the ones that, in addition, fix the absolute conic latexmath:[\Omega_\infty] (or,
+equivalently, the dual absolute quadric latexmath:[Q^*_\infty]); Euclidean transformations are metric
+transformations with the remaining scale freedom pinned to 1. This section works through why, following
+xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis] &#167;1.4 and
+xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] &#167;3.5-3.7.
+
+=== The plane at infinity fixes the affine stratum
+
+In any projective frame of latexmath:[\mathbb{P}^3], the points with homogeneous last coordinate
+latexmath:[W = 0] form a plane, the **plane at infinity** latexmath:[\Pi_\infty]. In a frame that is already
+affine (or metric, or Euclidean) it takes the canonical form
+
+[latexmath]
+++++
+\Pi_\infty = (0, 0, 0, 1)^{\mathsf T}
+++++
+
+(PHD eq. 1.118; HZ eq. 3.1-analogue for 3-space). This is exactly the constant returned by
+`Plane.createCanonicalPlaneAtInfinity()`. Under an arbitrary projective transformation, however,
+latexmath:[\Pi_\infty] moves like any other plane -- the library's own rule latexmath:[l' = T^{-\mathsf T} l]
+applies to it too, and in an arbitrary projective frame it can be *anywhere*: 3 vanishing points fix 3 independent
+directions, and the plane they span identifies where latexmath:[\Pi_\infty] actually sits in that frame (PHD
+fig. 1.9). This is exactly what `plane-at-infinity.svg` below illustrates: on the left, a cube seen through an
+uncalibrated homography, where 3 vanishing points latexmath:[M_X, M_Y, M_Z] mark 3 points of latexmath:[\Pi_\infty];
+on the right, the same cube after upgrading to the affine stratum, where those vanishing points have moved back
+out to infinity and the cube's edges are visibly parallel again.
+
+image::plane-at-infinity.svg[The plane at infinity identified by 3 vanishing points in a projective frame, and sent back to infinity by an affine upgrade]
+
+**Claim (PHD eq. 1.121-1.123; HZ Result 3.7): a projective transformation fixes latexmath:[\Pi_\infty] as a set
+if, and only if, it is an affinity.** Write a general affine transformation in the library's own block form
+(the exact shape produced by `AffineTransformation3D.toProjective()`, see below):
+
+[latexmath]
+++++
+T_A = \begin{bmatrix} A & t \\ \mathbf{0}^{\mathsf T} & 1 \end{bmatrix}, \qquad \det(A) \neq 0
+++++
+
+Applying the plane-transform rule directly to the canonical latexmath:[\Pi_\infty] (PHD eq. 1.121):
+
+[latexmath]
+++++
+T_A^{\mathsf T} \cdot \Pi_\infty =
+\begin{bmatrix} A^{\mathsf T} & \mathbf{0} \\ t^{\mathsf T} & 1 \end{bmatrix}
+\begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix}
+= \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix} = \Pi_\infty
+++++
+
+so latexmath:[\Pi_\infty] is a fixed point of latexmath:[T_A^{\mathsf T}], and hence (taking inverse-transposes,
+PHD eq. 1.123) also of the library's covector rule latexmath:[\Pi_\infty' = T_A^{-\mathsf T}\Pi_\infty = \Pi_\infty].
+Notice this is *set*-invariance, not pointwise invariance: individual points within latexmath:[\Pi_\infty] --
+i.e. individual directions/vanishing points -- are free to move around, as long as they stay on the plane. The
+converse (any projective `H` that fixes latexmath:[\Pi_\infty] as a set must have a last row proportional to
+latexmath:[(0,0,0,1)], i.e. must be affine) is HZ Result 3.7, proved the same way the 2D analogue (Result 2.17)
+is: fixing a hyperplane algebraically forces the homography's action on the complementary coordinate to vanish.
+
+This is also precisely how you *find* the affine upgrade once latexmath:[\Pi_\infty] has been identified in an
+arbitrary projective frame: any matrix of the form
+
+[latexmath]
+++++
+T_{PA} = \begin{bmatrix} I_{3\times3} & \mathbf{0}_3 \\ \pi_\infty^{\mathsf T} & 1 \end{bmatrix}
+++++
+
+(PHD eq. 1.125, with latexmath:[\pi_\infty] the first 3 coordinates of the identified latexmath:[\Pi_\infty],
+scaled so its last coordinate is 1 -- PHD eq. 1.126) sends that plane back to its canonical position, because its
+last row *is* latexmath:[\Pi_\infty^{\mathsf T}]. Any latexmath:[T_{PA}' = \begin{bmatrix} A & \mathbf{0} \\ \pi_\infty^{\mathsf T} & 1\end{bmatrix}] with non-singular latexmath:[A] works equally well (PHD eq. 1.127) --
+latexmath:[T_{PA}] is simply the simplest choice.
+
+=== The absolute conic and dual absolute quadric fix the metric stratum
+
+Fixing latexmath:[\Pi_\infty] buys parallelism but says nothing about angles: an affine map can still skew a
+square into an arbitrary parallelogram. To pin down angles, both HZ and PHD start from the elementary fact that
+two vectors are orthogonal iff their dot product vanishes, latexmath:[v_1^{\mathsf T} v_2 = 0] (PHD eq.
+1.143-1.144). Pushing that relation through an arbitrary homography latexmath:[m_i' = H m_i] gives
+(PHD eq. 1.145-1.148):
+
+[latexmath]
+++++
+m_1^{\mathsf T} m_2 = (H^{-1}m_1')^{\mathsf T}(H^{-1}m_2') = {m_1'}^{\mathsf T}\,\underbrace{H^{-\mathsf T}H^{-1}}_{=\,C'}\,m_2' = 0
+++++
+
+and latexmath:[C' = H^{-\mathsf T}H^{-1}] is symmetric, i.e. exactly the shape of a conic transformed by the
+library's own rule latexmath:[C' = T^{-\mathsf T}CT^{-1}] with latexmath:[C = I_{3\times3}] in the *metric*
+frame. Running the same argument in 3D with planes and their director vectors (PHD eq. 1.154-1.158) shows that
+the analogous *quadric* that certifies orthogonality of planes in a metric frame is degenerate --
+latexmath:[Q_M^* = \mathrm{diag}(1,1,1,0)] -- because the extra row/column that would encode a translation-like
+term must vanish for perpendicularity to be translation-independent.
+
+These two constants are, respectively, the **absolute conic** latexmath:[\Omega_\infty] and the **dual absolute
+quadric** latexmath:[Q^*_\infty]: the point conic that lies *on* latexmath:[\Pi_\infty] (formed by
+latexmath:[\Pi_\infty] intersecting the absolute quadric latexmath:[Q_\infty]), and the degenerate quadric whose
+tangent planes are exactly the planes tangent to latexmath:[\Omega_\infty] (PHD &#167;1.4.3.1, fig. 1.12). In a
+metric frame:
+
+[latexmath]
+++++
+\Omega_\infty = \Omega_\infty^{*} = I_{3\times3}, \qquad
+Q^*_\infty = \begin{bmatrix} I_{3\times3} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix} = \mathrm{diag}(1,1,1,0)
+++++
+
+(PHD eq. 1.160/1.162/1.169; HZ eq. 3.21/3.24 -- identical constants). Algebraically latexmath:[\Omega_\infty]
+is a conic of *purely imaginary* points, latexmath:[x^2+y^2+1=0] i.e. a "circle" of imaginary radius
+latexmath:[i=\sqrt{-1}] (PHD eq. 1.163, fig. 1.14); latexmath:[Q_\infty] is the limit of an ever-more-squashed
+sphere latexmath:[\mathrm{diag}(1,1,1,k)] as latexmath:[k\to\infty] (PHD eq. 1.168, fig. 1.15; HZ calls this a
+"rim quadric" -- picture an ellipsoid squashed to a pancake, with latexmath:[\Omega_\infty] as its rim). These
+are exactly the shapes `absolute-conic-quadric.svg` below depicts.
+
+image::absolute-conic-quadric.svg[The absolute conic Omega-infinity on the plane at infinity, and the dual absolute quadric Q-star-infinity meeting the plane at infinity in Omega-infinity]
+
+**Claim (PHD Proof 1.6, eq. 1.170-1.178; HZ Result 3.9/3.10): a projective transformation fixes
+latexmath:[\Omega_\infty] (equivalently latexmath:[Q^*_\infty], up to the overall scale any projective quantity
+is defined up to) if, and only if, it is a similarity.** Sufficiency is a direct computation: writing a
+similarity in the library's block form (matching `EuclideanTransformation3D.toMetric()`'s output shape) and
+applying the *dual*-quadric transform rule latexmath:[Q^{*\prime} = T\,Q^*\,T^{\mathsf T}] (the library's own
+forward-forward rule for duals) gives
+
+[latexmath]
+++++
+T = \begin{bmatrix} \sigma R & t \\ \mathbf{0}_3^{\mathsf T} & 1 \end{bmatrix}
+\;\Longrightarrow\;
+Q^{*\prime}_\infty = T\,Q^*_\infty\,T^{\mathsf T}
+= \sigma^2 \begin{bmatrix} R R^{\mathsf T} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix}
+= \sigma^2 \begin{bmatrix} I_{3\times3} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix} = \sigma^2\,Q^*_\infty
+++++
+
+using latexmath:[RR^{\mathsf T}=I_{3\times3}] for any rotation (PHD eq. 1.170-1.173) -- i.e.
+latexmath:[Q^*_\infty] is reproduced up to the scalar latexmath:[\sigma^2], which is exactly the "up to scale"
+sense in which any projective entity is defined. For necessity, take an *arbitrary* projective
+latexmath:[T = \begin{bmatrix} A & b \\ c^{\mathsf T} & d \end{bmatrix}] and demand
+latexmath:[T\,Q^*_\infty\,T^{\mathsf T} \propto Q^*_\infty]:
+
+[latexmath]
+++++
+T\,Q^*_\infty\,T^{\mathsf T} =
+\begin{bmatrix} A & b \\ c^{\mathsf T} & d \end{bmatrix}
+\begin{bmatrix} I_{3\times3} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix}
+\begin{bmatrix} A^{\mathsf T} & c \\ b^{\mathsf T} & d \end{bmatrix}
+= \begin{bmatrix} A A^{\mathsf T} & A c \\ c^{\mathsf T} A^{\mathsf T} & c^{\mathsf T} c \end{bmatrix}
+++++
+
+Matching this against latexmath:[\mathrm{diag}(1,1,1,0)] (up to the scalar latexmath:[\sigma^2] discussed above)
+forces
+
+[latexmath]
+++++
+A A^{\mathsf T} = \sigma^2 I_{3\times3}, \qquad A c = \mathbf{0}_3, \qquad c^{\mathsf T} c = 0 \;\Longrightarrow\; c = \mathbf{0}_3
+++++
+
+(PHD eq. 1.177). So latexmath:[c] -- the projective row that would otherwise move latexmath:[\Pi_\infty] -- must
+vanish, and latexmath:[A = \sigma R] must be a *scaled rotation* (the condition latexmath:[AA^{\mathsf T}=\sigma^2 I]
+is exactly "orthogonal up to a positive scalar"). That leaves precisely
+
+[latexmath]
+++++
+T = \begin{bmatrix} \sigma R & b \\ \mathbf{0}_3^{\mathsf T} & 1 \end{bmatrix}
+++++
+
+a similarity transformation (PHD eq. 1.178) -- and since latexmath:[\Omega^*_\infty] sits in the top-left
+latexmath:[3\times3] minor of latexmath:[Q^*_\infty] (PHD eq. 1.166), a transformation that fixes
+latexmath:[Q^*_\infty] fixes latexmath:[\Omega^*_\infty] (and hence latexmath:[\Omega_\infty = (\Omega^*_\infty)^{-1}]) too. HZ Result 3.10 gives the equivalent block-matrix proof for
+latexmath:[Q^*_\infty=\mathrm{diag}(1,1,1,0)] directly, and Result 3.9 proves the corresponding statement for
+latexmath:[\Omega_\infty] itself by first invoking Result 3.7 (any transformation fixing a conic *on*
+latexmath:[\Pi_\infty] must first fix latexmath:[\Pi_\infty], hence be affine) and then showing the affine part
+must be orthogonal up to scale.
+
+=== Upgrading between strata
+
+Because affine upgrade only needs latexmath:[\Pi_\infty] while metric upgrade needs latexmath:[\Omega_\infty]/
+latexmath:[Q^*_\infty] as well, the two upgrades compose. Combining latexmath:[T_{PA}] (eq. 1.125) with the
+affine&#8594;metric matrix latexmath:[T_{AM} = \begin{bmatrix} A^{-1} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 1\end{bmatrix}] that Cholesky-factors the recovered conic latexmath:[A A^{\mathsf T}] out of the affine-stratum
+dual quadric (PHD eq. 1.179-1.184) gives a single projective&#8594;metric matrix (PHD eq. 1.185-1.186):
+
+[latexmath]
+++++
+T_{PM} = T_{AM}\,T_{PA} = \begin{bmatrix} A^{-1} & \mathbf{0}_3 \\ \pi_\infty^{\mathsf T} & 1 \end{bmatrix}
+++++
+
+Inverting it (PHD eq. 1.189-1.192, via blockwise matrix inversion) and substituting into the dual-quadric
+transform rule shows that in *any* projective frame (PHD eq. 1.193-1.195):
+
+[latexmath]
+++++
+Q^{*\prime}_\infty = \begin{bmatrix} \omega^*_\infty & -\omega^*_\infty\,\pi_\infty \\ -\pi_\infty^{\mathsf T}\,\omega^*_\infty & \pi_\infty^{\mathsf T}\,\omega^*_\infty\,\pi_\infty \end{bmatrix}, \qquad \omega^*_\infty = A A^{\mathsf T}
+++++
+
+i.e. the dual absolute quadric in an arbitrary projective frame packages *both* the dual image of the absolute
+conic latexmath:[\omega^*_\infty] (the "DIAC" that reappears in camera calibration, see
+xref:pinhole-camera.adoc[]) *and* the direction latexmath:[\pi_\infty] of the plane at infinity into a single
+latexmath:[4\times4] symmetric matrix. This is why, in self-calibration literature, recovering
+latexmath:[Q^*_\infty] is treated as *the* way to upgrade a projective reconstruction straight to metric in one
+step, rather than recovering latexmath:[\Pi_\infty] and latexmath:[\Omega_\infty] separately.
+
+`irurueta-geometry` does **not** ship such a self-calibration/stratified-upgrade estimator -- there is no
+`toAffine()`/`toMetric()` on `ProjectiveTransformation2D`/`3D`, and no class under
+`com.irurueta.geometry.estimators` or `com.irurueta.geometry.refiners` computes latexmath:[\Pi_\infty] or
+latexmath:[Q^*_\infty] from image data. What the library *does* give you is exactly the algebraic building blocks
+above -- the canonical values of latexmath:[\Pi_\infty], latexmath:[\Omega_\infty] and latexmath:[Q^*_\infty],
+and the one-directional Euclidean&#8594;metric&#8594;affine&#8594;projective upgrade chain -- so that, given a
+`Plane`/`Conic`/`DualQuadric` identified by some other means (vanishing points, orthogonal-plane constraints,
+Kruppa's equations, etc.), an application can still build the matrices latexmath:[T_{PA}]/latexmath:[T_{PM}]
+above by hand.
+
+== From theory to code
+
+The canonical constants above are not just theory -- they are literally the values the library's factory
+methods return:
+
+[source,java]
+----
+// Pi_infinity = (0, 0, 0, 1)^T                          -- PHD eq. 1.118 / HZ Sec. 3.5
+Plane planeAtInfinity = Plane.createCanonicalPlaneAtInfinity();
+
+// Omega_infinity = I_3x3                                 -- PHD eq. 1.160 / HZ eq. 3.21
+Conic absoluteConic = Conic.createCanonicalAbsoluteConic();
+
+// Omega*_infinity = I_3x3 = (Omega_infinity)^-1           -- PHD eq. 1.162
+DualConic dualAbsoluteConic = DualConic.createCanonicalDualAbsoluteConic();
+
+// Q*_infinity = diag(1, 1, 1, 0)                          -- PHD eq. 1.169 / HZ eq. 3.24
+DualQuadric dualAbsoluteQuadric = DualQuadric.createCanonicalDualAbsoluteQuadric();
+----
+
+And the one-way upgrade chain (Euclidean &#8594; metric &#8594; affine &#8594; projective) walks the strata
+exactly in the direction the invariants above allow -- each step *adds* a degree of freedom (scale, then general
+linear skew, then the projective row) rather than removing one:
+
+[source,java]
+----
+Rotation3D rotation = new AxisRotation3D(0.0, 0.0, 1.0, Math.PI / 6.0);
+double[] translation = {1.0, 2.0, 3.0};
+EuclideanTransformation3D euclidean = new EuclideanTransformation3D(rotation, translation);
+
+// adds a uniform scale (MetricTransformation3D.DEFAULT_SCALE = 1.0 initially)
+MetricTransformation3D metric = euclidean.toMetric();
+
+// embeds scale * R as the general 3x3 linear part -- concretely "metric subset of affine"
+AffineTransformation3D affine = metric.toAffine();
+
+// appends the implicit last row [0 0 0 1] -- this IS T_A from PHD eq. 1.120 / HZ table 3.2,
+// the exact matrix shape whose invariance of Pi_infinity was proved above
+ProjectiveTransformation3D projective = affine.toProjective();
+----
+
+`AffineTransformation3D.toProjective()` (`AffineTransformation3D.java:1018-1020`) builds
+`new ProjectiveTransformation3D(a, translation)`, which is precisely the block form
+latexmath:[\begin{bmatrix} A & t \\ \mathbf{0}^{\mathsf T} & 1\end{bmatrix}] used throughout the proofs above --
+seeing that constructor call is seeing PHD eq. 1.120 typed out in Java. Similarly,
+`MetricTransformation3D.toAffine()` (`MetricTransformation3D.java:272-274`) builds
+`new AffineTransformation3D(scale, getRotation(), getTranslation())`, embedding latexmath:[\sigma R] as the
+linear part -- the exact matrix that appeared as latexmath:[A=\sigma R] in the necessity proof of
+&#167;Invariants above.
+
+== References
+
+The core `Transformation*` classes carry no external bibliographic citations in their javadoc -- the
+Euclidean/metric/affine/projective stratification is standard projective-geometry material, but it has precise,
+citable proofs in both sources used throughout this page (see the xref:reference.adoc#bibliography[full
+bibliography] for full citations):
+
+* xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman, _Multiple View Geometry in Computer Vision_, 2nd
+  ed.] &#167;2.4 (pp.37-44, table 2.4) for the 2D hierarchy of transformations and its invariants; &#167;3.4-3.7
+  (pp.77-84, table 3.2) for the 3D hierarchy, the plane at infinity latexmath:[\pi_\infty] (Result 3.7, worked
+  Example 3.8), the absolute conic latexmath:[\Omega_\infty] (Result 3.9), and the absolute dual quadric
+  latexmath:[Q^*_\infty] (Result 3.10, with a full matrix proof). Also &#167;3.2.1/&#167;3.2.3 (pp.66-74) for the
+  point/plane transform rule latexmath:[\pi' = H^{-\mathsf T}\pi] and the (dual) quadric transform rules
+  latexmath:[Q' = H^{-\mathsf T}QH^{-1}] / latexmath:[Q^{*\prime} = HQ^*H^{\mathsf T}] implemented by this
+  library's `transform(Plane, ...)` / `transform(Quadric, ...)` / `transform(DualQuadric, ...)` methods.
+* xref:reference.adoc#bib-phd-report[Irurueta, _Fixed Scene 3D Reconstruction for Mobile Applications_ (PhD
+  thesis)] &#167;1.4 "The stratification of 3D geometry" (pp.21-43) for the complete worked derivation used
+  above: &#167;1.4.1.1 the plane at infinity (p.23, eq. 1.118); &#167;1.4.2 the affine stratum and the proof
+  that latexmath:[T_A^{\mathsf T}\Pi_\infty=\Pi_\infty] (p.24, eq. 1.119-1.127); &#167;1.4.3 the metric stratum
+  (pp.25-37), including the orthogonality-from-first-principles derivation of latexmath:[\Omega_\infty=I] (eq.
+  1.143-1.169) and Proof 1.6 that similarities are exactly the transformations fixing latexmath:[Q^*_\infty]
+  (p.35-36, eq. 1.170-1.178); &#167;1.4.3.5 the projective/affine&#8594;metric upgrade matrices
+  latexmath:[T_{AM}]/latexmath:[T_{PM}] (pp.37-40, eq. 1.179-1.195); &#167;1.4.4-1.4.5 the Euclidean stratum and
+  the summary table 1.4 (pp.41-42). Also &#167;1.3.7 "Transforming quadrics and dual quadrics" (p.20, eq.
+  1.109-1.116) for the general point/plane/(dual) quadric transform rules this page's transform-rule table
+  implements.
+
+== Related pages
+
+* xref:points-lines-planes.adoc[] -- the point/line/plane entities being transformed, and the plane-at-infinity's
+  role among them.
+* xref:conics-quadrics.adoc[] -- conics, dual conics, quadrics and dual quadrics in detail, including the
+  absolute conic and dual absolute quadric introduced above.
+* xref:pinhole-camera.adoc[] -- how a transformation acts on a `PinholeCamera`, and how the dual absolute quadric
+  relates to camera self-calibration.
+* xref:rotations.adoc[] -- the `Rotation2D`/`Rotation3D` classes used internally by Euclidean and metric
+  transformations.

@@ -1,0 +1,266 @@
+= Point, Line and Plane Estimators
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`Point2D`/`Point3D`, `Line2D` and `Plane` are the three simplest estimator hierarchies in
+`com.irurueta.geometry.estimators`. Each one wraps a single closed-form linear-algebra construction -- the
+exact join/meet operations already derived on xref:points-lines-planes.adoc[] -- in the same family of five
+robust variants that xref:estimators.adoc[] explains once, generically, for all twelve hierarchies in the
+library. This page does not re-derive either piece: it connects the two. For the join/meet cross products, the
+signed point-to-line distance and the 4&#215;4-determinant plane construction, see
+xref:points-lines-planes.adoc[]; for why five robust variants exist at all and the RANSAC/LMedS/MSAC equations
+behind them, see xref:estimators.adoc[] (particularly xref:estimators.adoc#non-robust-vs-robust[],
+xref:estimators.adoc#ransac[], xref:estimators.adoc#lmeds[], xref:estimators.adoc#msac[] and
+xref:estimators.adoc#prosac-promeds[]).
+
+A structural quirk worth flagging up front: unlike `Line2D` and `Plane`, there is no non-robust
+`Point2DEstimator`/`Point3DEstimator` class at all -- `Point2DRobustEstimator`/`Point3DRobustEstimator` are
+abstract classes with *no* non-robust sibling, only the five robust wrappers. The minimal-sample closed form
+(line&#8745;line, or plane&#8745;plane&#8745;plane) is inlined directly inside each concrete
+`RANSACXxx`/`LMedSXxx`/... class instead of living in a standalone estimator, exactly as
+xref:estimators.adoc#non-robust-vs-robust[] describes for `PlaneEstimator` (which likewise does not exist as a
+public class).
+
+== Point2D and Point3D: the point that best fits a pencil of lines or planes
+
+`Point2DRobustEstimator` and `Point3DRobustEstimator` solve the dual problem to the other two hierarchies
+below: instead of fitting a line/plane through points, they fit a *point* through lines/planes.
+`Point2DRobustEstimator`'s own class javadoc reads, verbatim: *"This is an abstract class for algorithms to
+robustly find the best 3D point that intersects in a collection of 2D lines."*
+
+That "3D point" is a real, verified copy-paste typo in the source (`Point2DRobustEstimator.java:34-37`) --
+the class is unambiguously about `Point2D` (its `estimate()` returns `Point2D`, its `MINIMUM_SIZE` counts
+`Line2D` instances, and `Point3DRobustEstimator`'s own javadoc immediately below it correctly says "3D point"
+for the actual 3D case). It is mentioned here because it is genuinely in the shipped javadoc, not because it
+changes anything about how the class behaves.
+
+[cols="1,1,2",options="header"]
+|===
+|  |`Point2DRobustEstimator` |`Point3DRobustEstimator`
+
+|Fits
+|the best 2D point that intersects a collection of `Line2D` (`Point2DRobustEstimator.java:34-38`)
+|the best 3D point that intersects a collection of `Plane` (`Point3DRobustEstimator.java:34-38`)
+
+|`MINIMUM_SIZE`
+|2 lines
+|3 planes
+
+|Closed-form construction
+|`line1.getIntersection(line2)` -- line&#8745;line meet
+|`plane1.getIntersection(plane2, plane3)` -- plane&#8745;plane&#8745;plane meet
+
+|Concrete subclasses
+|`{RANSAC\|LMedS\|MSAC\|PROSAC\|PROMedS}Point2DRobustEstimator`
+|`{RANSAC\|LMedS\|MSAC\|PROSAC\|PROMedS}Point3DRobustEstimator`
+|===
+
+The closed-form step is a direct call into the meet operation xref:points-lines-planes.adoc[] already covers
+under xref:points-lines-planes.adoc#shared-operations[Shared operations: incidence, join, meet]:
+`RANSACPoint2DRobustEstimator`'s
+`estimatePreliminarSolutions` draws 2 lines from the minimal sample and calls
+`line1.getIntersection(line2)` (`RANSACPoint2DRobustEstimator.java:254-264`, with the actual intersection at
+line 259); `RANSACPoint3DRobustEstimator` does the analogous 3-plane version,
+`plane1.getIntersection(plane2, plane3)` (`RANSACPoint3DRobustEstimator.java:254-265`). Both are the same
+SVD null-space computation used for `Line2D.intersection`/`Plane.intersection` -- the numerical generalization
+of the cross-product meet `m = l1 &#215; l2`.
+
+The residual each robust wrapper scores a candidate point against is *not* a point-to-point distance -- it is
+the point's distance to each of the input lines/planes it was not built from, using exactly the signed distance
+formula already derived on xref:points-lines-planes.adoc[]. `Point2DRobustEstimator.residual(Point2D, Line2D)`
+(`Point2DRobustEstimator.java:866-871`) is:
+
+[source,java]
+----
+protected double residual(final Point2D p, final Line2D line) {
+    p.normalize();
+    line.normalize();
+    return Math.abs(line.signedDistance(p));
+}
+----
+
+i.e. latexmath:[|d(m, l)| = \left|\dfrac{m^T \cdot l}{\sqrt{l_1^2 + l_2^2}}\right|] -- the same
+`Line2D.signedDistance` formula xref:points-lines-planes.adoc[] derives from the PhD thesis's Proof 1.1.
+`Point3DRobustEstimator.residual(Point3D, Plane)` (`Point3DRobustEstimator.java:865-870`) is the 3D analogue,
+`Math.abs(plane.signedDistance(p))`, using `Plane.signedDistance(Point3D)` (`Plane.java:515-525`) -- the same
+"dot product of homogeneous coordinates, normalized by the coefficient norm" pattern one dimension up, applied
+to latexmath:[\Pi^T \cdot M = 0] instead of latexmath:[m^T \cdot l = 0]. So a candidate 2D point's total cost
+is effectively how far it sits, on average or under a threshold, from *every* sampled line, not just the two it
+was built from -- exactly the outlier-rejection role xref:estimators.adoc#non-robust-vs-robust[] describes.
+
+[source,java]
+----
+// find the 2D point best explained by a set of (possibly noisy) 2D lines
+final var estimator = new RANSACPoint2DRobustEstimator(lines);
+estimator.setThreshold(1.0); // 1 pixel, RANSACPoint2DRobustEstimator.DEFAULT_THRESHOLD
+final var bestPoint = estimator.estimate();
+
+// the 3D dual: best 3D point explained by a set of 3D planes
+final var estimator3D = new RANSACPoint3DRobustEstimator(planes);
+estimator3D.setThreshold(1.0); // 1 "voxel", RANSACPoint3DRobustEstimator.DEFAULT_THRESHOLD
+final var bestPoint3D = estimator3D.estimate();
+----
+
+== Line2D: the line that best fits a set of points
+
+`Line2DRobustEstimator`'s own javadoc is exactly the mirror image of the point case above -- and correctly
+worded, unlike `Point2DRobustEstimator`'s: *"This is an abstract class for algorithms to robustly find the
+best 2D line that passes through a collection of 2D points."*
+
+`MINIMUM_SIZE` is 2 (`Line2DRobustEstimator.java:36`). The closed-form step is the join operation
+xref:points-lines-planes.adoc[] derives as the point-line duality's cross product,
+latexmath:[l = m_1 \times m_2]: `RANSACLine2DRobustEstimator.estimatePreliminarSolutions`
+(`RANSACLine2DRobustEstimator.java:179-189`) draws two points from the minimal sample and constructs
+
+[source,java]
+----
+final var line = new Line2D(point1, point2, false);
+----
+
+(`RANSACLine2DRobustEstimator.java:184`). That three-argument constructor delegates to
+`setParametersFromPairOfPoints` (`Line2D.java:118-120` for the constructor, `Line2D.java:330` for the
+implementation), the same SVD null-space join xref:points-lines-planes.adoc[] describes under
+xref:points-lines-planes.adoc#shared-operations[Shared operations] -- the numerical,
+arbitrary-precision form of `l = m1 &#215; m2` that the third `noThrow` boolean argument guards against
+throwing a `CoincidentPointsException` when the two sampled points happen to coincide (the surrounding
+`try`/`catch` at `RANSACLine2DRobustEstimator.java:183-188` simply drops that sample and adds no candidate).
+
+The residual is the same signed point-to-line distance used above, just with the roles of point and line
+swapped: `Line2DRobustEstimator.residual(Line2D, Point2D)` (`Line2DRobustEstimator.java:722-727`) is
+
+[source,java]
+----
+protected double residual(final Line2D l, final Point2D point) {
+    l.normalize();
+    point.normalize();
+    return Math.abs(l.signedDistance(point));
+}
+----
+
+-- literally `Line2D.signedDistance(Point2D)` (`Line2D.java:460`), the exact formula
+xref:points-lines-planes.adoc[] derives via Proof 1.1 of the PhD thesis (projecting latexmath:[m - m'] onto the
+line's director vector). This is the cleanest instance of the pattern in this whole page: the non-robust
+algorithm (`l = m1 &#215; m2`) and the residual (`|m^T \cdot l| / \|(l_1,l_2)\|`) are both operations
+xref:points-lines-planes.adoc[] already fully derives -- `Line2DRobustEstimator` and its five concrete
+subclasses contribute nothing mathematically new, only the sampling/scoring loop from
+xref:estimators.adoc#shared-architecture[].
+
+[source,java]
+----
+// find the 2D line best explained by a noisy set of 2D points
+final var estimator = new RANSACLine2DRobustEstimator(points);
+estimator.setThreshold(1.0); // 1 pixel, RANSACLine2DRobustEstimator.DEFAULT_THRESHOLD
+final var bestLine = estimator.estimate();
+----
+
+== Plane: the plane that best fits a set of points
+
+`PlaneRobustEstimator`'s javadoc reads: *"This is an abstract class for algorithms to robustly find the best
+3D plane that passes through a collection of 3D points."*
+
+`MINIMUM_SIZE` is 3 (`PlaneRobustEstimator.java:36`). The closed form is the 3D join
+xref:points-lines-planes.adoc[] derives from the 4&#215;4-determinant/Laplace-expansion argument: any point
+coplanar with three others makes a 4&#215;4 coordinate matrix singular, and that matrix's null-space *is* the
+plane's homogeneous coefficients. `RANSACPlaneRobustEstimator.estimatePreliminarSolutions`
+(`RANSACPlaneRobustEstimator.java:179-190`) draws three points from the minimal sample and constructs
+
+[source,java]
+----
+final var plane = new Plane(point1, point2, point3);
+----
+
+(`RANSACPlaneRobustEstimator.java:185`), catching `ColinearPointsException` when the three sampled points
+happen to be collinear (no plane, so no candidate is added for that sample). This constructor is
+`Plane`'s "join" analogue to `Line2D.setParametersFromPairOfPoints` -- the same SVD null-space technique,
+one dimension up, that xref:points-lines-planes.adoc[] attributes to `Plane.setParametersFromThreePoints`
+under xref:points-lines-planes.adoc#shared-operations[Shared operations].
+
+The residual is the point-to-plane signed distance: `PlaneRobustEstimator.residual(Plane, Point3D)`
+(`PlaneRobustEstimator.java:722-727`) is
+
+[source,java]
+----
+protected double residual(final Plane plane, final Point3D point) {
+    plane.normalize();
+    point.normalize();
+    return Math.abs(plane.signedDistance(point));
+}
+----
+
+i.e. `Plane.signedDistance(Point3D)` (`Plane.java:515-525`), the 3D point-plane-duality analogue
+(latexmath:[\Pi^T \cdot M = 0]) of the 2D signed distance xref:points-lines-planes.adoc[] derives in full for
+the point-line case -- the library does not re-derive a separate proof for the plane case in the PhD thesis, but
+the formula (dot product of homogeneous coordinates over the coefficient vector's norm) is structurally
+identical.
+
+[source,java]
+----
+// find the 3D plane best explained by a noisy set of 3D points
+final var estimator = new RANSACPlaneRobustEstimator(points);
+estimator.setThreshold(1.0); // 1 "voxel", RANSACPlaneRobustEstimator.DEFAULT_THRESHOLD
+final var bestPlane = estimator.estimate();
+----
+
+== Shared configuration and what the five variants buy you here
+
+All four abstract classes above (`Point2DRobustEstimator`, `Point3DRobustEstimator`, `Line2DRobustEstimator`,
+`PlaneRobustEstimator`) expose exactly the shared properties xref:estimators.adoc#shared-architecture[]'s table
+describes generically -- `MINIMUM_SIZE`, `confidence` (`DEFAULT_CONFIDENCE = 0.99`), `maxIterations`
+(`DEFAULT_MAX_ITERATIONS = 5000`), `progressDelta` and a listener -- and none of them implement any sampling or
+scoring logic themselves: every concrete `RANSACXxx`/`LMedSXxx`/`MSACXxx`/`PROSACXxx`/`PROMedSXxx` class hands
+its `estimatePreliminarSolutions`/`computeResidual` pair straight to
+`com.irurueta.numerical.robust`'s generic `RANSACRobustEstimator<T>`, `LMedSRobustEstimator<T>`, etc., exactly
+as xref:estimators.adoc#shared-architecture[] describes for all twelve hierarchies. `Point2DRobustEstimator` and
+`Point3DRobustEstimator` additionally carry a `refineResult`/`refinementCoordinatesType`/`keepCovariance` trio
+(defaulting to Levenberg-Marquardt refinement over the final inlier set, homogeneous or inhomogeneous) that
+`Line2DRobustEstimator` and `PlaneRobustEstimator` do not expose -- the latter two return their robust result
+directly with no separate refinement step.
+
+What differs between the five variants is exactly what xref:estimators.adoc[] describes in the abstract, and
+it is worth making concrete for this specific line/point/plane fitting problem rather than repeating the
+formulas again:
+
+* **RANSAC/MSAC** need a `threshold` (`DEFAULT_THRESHOLD = 1.0` for every one of the ten concrete classes on
+  this page, documented as "1 pixel" for the 2D hierarchies and "1 voxel" for the 3D ones). Fitting a 2D line to
+  a real, noisy point cloud with, say, 1-pixel Gaussian localization error and a handful of gross mismatches,
+  a threshold around 1-2 pixels (xref:estimators.adoc#ransac[]'s latexmath:[t^2 = 3.84\sigma^2] for 1
+  degree of freedom) correctly separates inliers from outliers; setting it too tight starts rejecting genuine
+  inliers as noise pushes them just past the boundary, too loose lets outliers vote for a biased line.
+* **LMedS** needs no threshold at all -- useful exactly when that per-image-source pixel/voxel noise level is
+  unknown -- but only while under half the points are outliers; past that, the *median* residual is itself an
+  outlier's residual and `LMedSLine2DRobustEstimator`/`LMedSPlaneRobustEstimator` degrade, whereas
+  `RANSACLine2DRobustEstimator` with a well-chosen threshold keeps working.
+* **PROSAC/PROMedS** need a `double[] qualityScores`, one entry per line/point/plane (e.g.
+  `PROSACLine2DRobustEstimator(List<Point2D> points, double[] qualityScores)`), and simply try
+  high-quality-first minimal samples before falling back to RANSAC's/LMedS's own scoring -- for a line fit from
+  a feature tracker's point correspondences, feeding the tracker's own per-point confidence directly in as
+  `qualityScores` converges to the right line in far fewer of the `maxIterations` than uniform-random sampling
+  would need.
+
+The number of samples needed for a given confidence still follows xref:estimators.adoc#ransac[]'s eq. 4.18
+directly from `MINIMUM_SIZE`: at `s = 2` (`Line2D`, `Point2D`) a 99%-confidence RANSAC run needs far fewer trials
+for a given outlier ratio than the `s = 3` case (`Plane`, `Point3D`) or the larger-sample hierarchies on
+xref:conic-quadric-estimators.adoc[]/xref:pinhole-camera-estimators.adoc[] -- these three hierarchies are, sample
+efficiency-wise, the cheapest robust fits in the whole library.
+
+== References
+
+No new book or paper citation is introduced on this page. All of the mathematics is either already derived on
+xref:points-lines-planes.adoc[] (the join/meet cross products behind `line1.getIntersection(line2)`,
+`plane1.getIntersection(plane2, plane3)`, `new Line2D(point1, point2, false)`, `new Plane(point1, point2,
+point3)`, and the signed point-to-line distance behind every `residual()` method above, including its 3D
+point-to-plane analogue) or already derived on xref:estimators.adoc[] (the RANSAC/LMedS/MSAC/PROSAC/PROMedS
+scoring rules and sample-count formula, xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] chapter 4
+and xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis] &#167;2.5). Everything specific to this page --
+`MINIMUM_SIZE` values, the exact `estimatePreliminarSolutions`/`computeResidual` code, the `Point2DRobustEstimator`
+javadoc typo, `DEFAULT_THRESHOLD` values -- is drawn directly from the library's own source rather than from any
+of the three source PDFs.
+
+== Related pages
+
+* xref:estimators.adoc[] -- the general robust-estimation theory (non-robust vs. robust, RANSAC/LMedS/MSAC/
+  PROSAC/PROMedS equations, shared `com.irurueta.numerical.robust` architecture) this page builds on.
+* xref:points-lines-planes.adoc[] -- the point/line/plane entities themselves, their homogeneous
+  representations, and the join/meet/signed-distance math these estimators wrap.
+* xref:conic-quadric-estimators.adoc[], xref:transformation-estimators.adoc[], xref:pinhole-camera-estimators.adoc[]
+  -- the other three estimator hierarchy pages xref:estimators.adoc[] introduces.

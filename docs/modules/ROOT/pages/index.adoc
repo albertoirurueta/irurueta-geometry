@@ -61,6 +61,33 @@ flowchart LR
     D --> E[Refined geometric entity]
 ....
 
+== Geometric entities in depth
+
+* xref:transformations.adoc[] -- the Euclidean / metric / affine / projective hierarchy and how each family
+  transforms points, lines, planes, conics and quadrics.
+* xref:rotations.adoc[] -- 2D rotations and the three interchangeable 3D representations (matrix, axis-angle,
+  quaternion).
+* xref:points-lines-planes.adoc[] -- homogeneous vs. inhomogeneous points, `Line2D`/`Line3D`, `Plane`, and
+  point-line-plane duality.
+* xref:conics-quadrics.adoc[] -- conics/quadrics, their duals, and the `Circle`/`Ellipse`/`Sphere`/`Ellipsoid`
+  specializations.
+* xref:triangles-polygons.adoc[] -- `Triangle2D`/`3D`, `Polygon2D`/`3D`, and ear-clipping triangulation.
+* xref:pinhole-camera.adoc[] -- the pinhole camera model that ties 3D and 2D entities together.
+* xref:boxes-kdtrees.adoc[] -- `Box2D`/`3D` and the `KDTree` spatial index built on top of them.
+
+== Estimators in depth
+
+* xref:estimators.adoc[] -- why every entity gets a non-robust algorithm *and* a family of RANSAC / LMedS /
+  MSAC / PROSAC / PROMedS robust wrappers, and the shared `com.irurueta.numerical.robust` machinery underneath.
+* xref:point-line-plane-estimators.adoc[] -- fitting a `Point2D`/`Point3D`, `Line2D` or `Plane` to a noisy set
+  of lines/planes/points.
+* xref:conic-quadric-estimators.adoc[] -- fitting a `Circle`, `Sphere`, `Conic`/`DualConic` or
+  `Quadric`/`DualQuadric` to a noisy point/line/plane set.
+* xref:transformation-estimators.adoc[] -- fitting a Euclidean, metric, affine or projective transformation
+  from noisy point/line/plane correspondences.
+* xref:pinhole-camera-estimators.adoc[] -- estimating a `PinholeCamera` via DLT, EPnP, UPnP or weighted
+  correspondences, robustly or not.
+
 == Next steps
 
 * xref:installation.adoc[] -- add irurueta-geometry as a dependency to your project.

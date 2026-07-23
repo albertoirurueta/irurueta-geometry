@@ -1,3 +1,17 @@
 * xref:index.adoc[]
 * xref:installation.adoc[]
+* Geometric entities
+** xref:transformations.adoc[]
+** xref:rotations.adoc[]
+** xref:points-lines-planes.adoc[]
+** xref:conics-quadrics.adoc[]
+** xref:triangles-polygons.adoc[]
+** xref:pinhole-camera.adoc[]
+** xref:boxes-kdtrees.adoc[]
+* Estimators
+** xref:estimators.adoc[]
+** xref:point-line-plane-estimators.adoc[]
+** xref:conic-quadric-estimators.adoc[]
+** xref:transformation-estimators.adoc[]
+** xref:pinhole-camera-estimators.adoc[]
 * xref:reference.adoc[]

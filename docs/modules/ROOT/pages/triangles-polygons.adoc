@@ -1,0 +1,89 @@
+= Triangles and Polygons
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`Triangle2D`/`Triangle3D` and `Polygon2D`/`Polygon3D` are composite entities built directly from `Point2D`/
+`Point3D`. They live in the flat `com.irurueta.geometry` package (no dedicated subpackage).
+
+image::triangle-polygon.svg[Triangle centroid and concave-polygon ear-clipping triangulation]
+
+== Triangle2D / Triangle3D
+
+A triangle is just three vertices (`vertex1`, `vertex2`, `vertex3`). Both classes provide:
+
+[cols="1,3",options="header"]
+|===
+|Operation |Notes
+
+|`getArea()` / `getSignedArea()`
+|latexmath:[\text{area} = \tfrac12 \lvert (v_2-v_1) \times (v_3-v_1) \rvert]; the *signed* version's sign
+encodes winding order (`areVerticesClockwise()`).
+
+|`getPerimeter()`
+|Sum of the three edge lengths.
+
+|`getCenter()`
+|latexmath:[\text{centroid} = \dfrac{v_1+v_2+v_3}{3}]
+
+|`isInside(point)`
+|Splits the triangle into three sub-triangles (vertex, vertex, query point) and checks that their areas sum to
+the original triangle's area -- this is the library's barycentric-coordinate-equivalent point-in-triangle
+test; there is no separate barycentric-coordinates accessor.
+
+|`getShortestDistance(point)` / `getClosestPoint(point)`
+|Treats the triangle as three finite line segments (`Line2D`/`Line3D` per edge) and finds the closest point
+on the boundary.
+|===
+
+`Triangle3D` additionally requires the query point to lie in the triangle's own plane for `isInside`, and adds
+`toPlane()` (builds the infinite `Plane` through the 3 vertices) and `getOrientation()` (unit normal vector,
+via the cross product of two edge vectors, throwing `CoincidentPointsException` if the triangle is degenerate).
+A TODO comment in `Triangle2D` notes that the circumscribed/inscribed circle are not implemented.
+
+== Polygon2D / Polygon3D
+
+A polygon is an ordered list of vertices (the last implicitly connects back to the first), plus a lazily
+computed, cached triangulation. Key operations:
+
+* **Area** -- the shoelace formula in 2D; a 3D generalization (sum of cross products around a vertex fan from
+  the first vertex) that is exact for planar polygons and an average otherwise.
+* **`isInside(point)`** -- delegates to the cached triangulation and returns true if the point falls inside any
+  triangle. The javadoc is explicit about the caveat: this only works correctly for polygons **without holes or
+  crossing borders** (self-intersecting polygons are not handled).
+* **`getOrientation()`** (3D only) -- average normal vector from a vertex-fan cross-product sum; exact for
+  planar polygons, an approximation for non-planar ones.
+* There is **no dedicated `isConvex()`** method on either class -- convexity is only tested implicitly, and
+  locally, inside the triangulator (see below).
+
+== Triangulation: ear clipping ("Van Gogh" algorithm)
+
+`TriangulatorMethod` currently has a single supported value, `VAN_GOGH_TRIANGULATOR` (a `DELAUNAY_TRIANGULATOR`
+is listed as a TODO but not implemented). `VanGoghTriangulator2D`/`3D` implement the classic **ear-clipping**
+algorithm:
+
+. Repeatedly scan the (mutable) vertex list; at each vertex, form the candidate triangle with its two
+  neighbors.
+. A candidate is an **ear** if (a) no other vertex of the polygon lies inside it, and (b) it is locally convex
+  (`areVerticesClockwise()`).
+. If it is an ear, emit the triangle and remove ("clip") the middle vertex; otherwise move to the next vertex.
+. Stop when only 3 vertices remain -- they form the final triangle.
+
+This is exactly what the diagram above shows: the reflex vertex `v3` cannot be an ear (it's concave), so the
+algorithm clips one of the convex vertices (`v1`/`v2`/`v3` triangle) first, then continues on the remaining
+smaller polygon.
+
+== References
+
+No book, paper or external URL is cited anywhere in `Triangle2D`/`3D`, `Polygon2D`/`3D`,
+`Triangulator2D`/`3D`, or `VanGoghTriangulator2D`/`3D` -- only the informal algorithm name "Van Gogh or Ear
+Cutting algorithm" appears in the javadoc (with the source's own typos, "Trangulator"/"Vang Gogh", preserved
+for context). Ear-clipping triangulation is standard computational-geometry material; a commonly cited
+treatment (not referenced by the source, provided here for context) is
+xref:reference.adoc#bib-orourke[O'Rourke, _Computational Geometry in C_] -- see the
+xref:reference.adoc#bibliography[full bibliography] for the full citation.
+
+== Related pages
+
+* xref:points-lines-planes.adoc[] -- the `Point2D`/`Point3D` vertices triangles/polygons are built from.
+* xref:boxes-kdtrees.adoc[] -- `Box2D`/`Box3D`, used for spatial indexing of point sets rather than polygons.
+* xref:pinhole-camera.adoc[] -- projecting 3D triangles/polygons into the image.

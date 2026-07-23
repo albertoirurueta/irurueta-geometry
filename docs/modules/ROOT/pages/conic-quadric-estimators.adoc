@@ -1,0 +1,319 @@
+= Conic and Quadric Estimators
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`com.irurueta.geometry.estimators` has four robust-estimator hierarchies for the curved second-degree
+entities described in xref:conics-quadrics.adoc[]: `Circle`, `Sphere`, `Conic`/`DualConic` and
+`Quadric`/`DualQuadric`. Every one of them follows the general pattern laid out in xref:estimators.adoc[]:
+draw a **minimal sample**, build a candidate entity from it with a closed-form (non-iterative) construction,
+score the candidate against the rest of the data, and repeat -- with RANSAC, LMedS, MSAC, PROSAC and PROMedS
+differing only in the scoring rule (xref:estimators.adoc#ransac[], xref:estimators.adoc#lmeds[],
+xref:estimators.adoc#msac[], xref:estimators.adoc#prosac-promeds[]). None of these four entities has a
+standalone, public non-robust `XxxEstimator` class -- unlike some of the other hierarchies in
+xref:estimators.adoc[], the minimal-sample closed form is inlined directly inside each concrete robust
+subclass's `estimatePreliminarSolutions`, calling straight into a constructor already documented in
+xref:conics-quadrics.adoc[] (`new Circle(p1,p2,p3)`, `new Conic(p1..p5)`, etc.).
+
+What is genuinely specific to these four hierarchies -- and the actual subject of this page -- is **why** the
+minimal sample has the size it does, **how** the closed-form construction behind each one actually solves for
+the entity's parameters, and **what** residual formula each robust estimator uses to score a candidate against
+the rest of the data. All three turn out to split the six classes into two families with a sharp difference in
+kind, not just degree:
+
+[cols="1,2,2",options="header"]
+|===
+|Family |Circle / Sphere |Conic / DualConic / Quadric / DualQuadric
+
+|Minimal sample
+|3 / 4
+|5 / 5 / 9 / 9
+
+|Linear system solved
+|square, **inhomogeneous** (`A&#183;x=b`), direct solve
+|rectangular, **homogeneous** (`A&#183;x=0`), SVD null-space
+
+|Residual scored by the robust wrapper
+|**geometric** Euclidean distance to the boundary
+|**algebraic** residual latexmath:[\lvert m^{\mathsf T}Cm\rvert]
+|===
+
+image::minimal-sample-dof.svg[Minimal sample size equals the degrees of freedom left after restricting a conic to a circle or a quadric to a sphere]
+
+[#circle-sphere]
+== Circle and Sphere: a conic/quadric with its shape already fixed
+
+`CircleRobustEstimator`'s javadoc states it finds "the best circle that fits in a collection of 2D points";
+`SphereRobustEstimator` the analogous "the best sphere that fits in a collection of 3D points"
+(`CircleRobustEstimator.java:26-29`, `SphereRobustEstimator.java:26-29`). Both are, as
+xref:conics-quadrics.adoc[] notes, independent parametric classes rather than `Conic`/`Quadric` subclasses --
+but their *degrees of freedom* are still exactly a conic/quadric's degrees of freedom with the shape
+constrained: a circle is the conic latexmath:[ax^2+2bxy+cy^2+2dxw+2eyw+fw^2=0] with latexmath:[a=c],
+latexmath:[b=0] (`ConicType.CIRCLE_CONIC_TYPE`, see xref:conics-quadrics.adoc[]); a sphere is the quadric with
+latexmath:[a=b=c] and latexmath:[d=e=f=0].
+
+=== Why 3 points, why 4 points
+
+A general conic has 6 homogeneous coefficients, i.e. 5 degrees of freedom once the overall scale is divided
+out -- which is exactly why `ConicRobustEstimator.MINIMUM_SIZE` is 5 (next section). Fixing `a=c` and `b=0`
+removes 2 of those degrees of freedom *and* removes the scale ambiguity at the same time: once latexmath:[a=c]
+is forced non-zero, the whole equation can be divided by it, leaving the non-homogeneous circle equation
+latexmath:[x^2+y^2+2dx+2ey+f=0] with exactly 3 free real numbers latexmath:[(d,e,f)] (equivalently: center
+latexmath:[(-d,-e)] and radius latexmath:[\sqrt{d^2+e^2-f}]). That is why
+`CircleRobustEstimator.MINIMUM_SIZE = 3` (`CircleRobustEstimator.java:36`): 3 points, 3 unknowns, one equation
+per point. The identical argument one dimension up -- a quadric's 10 homogeneous coefficients (9 DOF) reduced
+by the 5 constraints latexmath:[a=b=c], latexmath:[d=e=f=0] to the 4 free reals latexmath:[(g,h,i,j)] in
+latexmath:[x^2+y^2+z^2+2gx+2hy+2iz+j=0] -- is why `SphereRobustEstimator.MINIMUM_SIZE = 4`
+(`SphereRobustEstimator.java:36`).
+
+=== The closed-form construction: a direct, non-homogeneous linear solve
+
+Because fixing the shape also removes the scale ambiguity, the minimal-sample system is not the homogeneous
+`A&#183;x=0` this library solves elsewhere via SVD null-space (xref:points-lines-planes.adoc[],
+xref:conics-quadrics.adoc[]) -- it is an ordinary square, **inhomogeneous** system `A&#183;x=b` with a unique
+solution. `Circle.setParametersFromPoints` (`Circle.java:176-249`) builds, for each of the 3 points, the row
+latexmath:[(2x_iw_i,\ 2y_iw_i,\ w_i^2)] of `A` and the entry latexmath:[b_i=-x_i^2-y_i^2] (each row normalized
+first to improve conditioning), then solves the 3&#215;3 system directly with `Utils.solve(m, b)` -- no SVD,
+because there is nothing left to disambiguate. `Sphere.setParametersFromPoints` (`Sphere.java:181-276`) does
+the identical thing one dimension up with a 4&#215;4 system. Both robust estimators simply call the
+three-argument/four-argument constructor on the minimal sample and catch the degenerate case:
+
+[source,java]
+----
+// RANSACCircleRobustEstimator.estimatePreliminarSolutions (RANSACCircleRobustEstimator.java:179-190)
+try {
+    final var circle = new Circle(point1, point2, point3); // solves A·x=b directly, x = (d,e,f)
+    solutions.add(circle);
+} catch (final ColinearPointsException e) {
+    // if points are collinear, A is singular: no solution is added
+}
+----
+
+`Sphere`'s constructor throws `CoplanarPointsException` in the equivalent degenerate case (4 coplanar points
+cannot pin down a unique sphere).
+
+=== The residual: true geometric distance, not an algebraic proxy
+
+Unlike the other four hierarchies below, `CircleRobustEstimator.residual`/`SphereRobustEstimator.residual`
+score a candidate with the actual Euclidean distance from the point to the circle/sphere *boundary*, via
+`Circle.getDistance`/`Sphere.getDistance` (`CircleRobustEstimator.java:728-732`,
+`SphereRobustEstimator.java:723-727`):
+
+[latexmath]
+++++
+d(\text{point}) = \bigl|\, \lVert \text{point} - \text{center} \rVert - \text{radius} \,\bigr|
+++++
+
+(`Circle.signedDistance`/`Sphere.signedDistance`, `Circle.java:369-371`). This is possible only because a
+circle/sphere's inhomogeneous, scale-free parameterization already carries real physical units (the same
+units as the input points) -- there is no matrix to normalize and no arbitrary scale to divide out first, so
+the natural residual is just the point-to-boundary distance. That is also why both robust estimators default
+their inlier `threshold` to `1.0` (`RANSACCircleRobustEstimator.DEFAULT_THRESHOLD`,
+`RANSACSphereRobustEstimator.DEFAULT_THRESHOLD`, both `1.0`): one unit of distance, matching a "typical
+resolution of 1 pixel/voxel" per their own javadoc. Contrast this with the algebraic residual and
+correspondingly tiny default thresholds used by `Conic`/`DualConic`/`Quadric`/`DualQuadric` below.
+
+[source,java]
+----
+var estimator = new RANSACCircleRobustEstimator(points);
+estimator.setThreshold(1.0); // same units as the points; default is already 1.0
+Circle circle = estimator.estimate();
+----
+
+Both hierarchies expose the same five concrete robust subclasses named after the pattern established in
+xref:estimators.adoc#shared-architecture[]: `RANSACCircleRobustEstimator`, `LMedSCircleRobustEstimator`,
+`MSACCircleRobustEstimator`, `PROSACCircleRobustEstimator`, `PROMedSCircleRobustEstimator` (and the `Sphere`
+equivalents), created through `CircleRobustEstimator.create(...)`/`SphereRobustEstimator.create(...)` factory
+overloads exactly like every other hierarchy in this package.
+
+[#conic-dualconic]
+== Conic and DualConic: the full 5-point/5-line problem
+
+`ConicRobustEstimator` finds "the best conic that fits in a collection of 2D points"; `DualConicRobustEstimator`
+the dual statement, "the best dual conic that fits in a collection of 2D lines" (`ConicRobustEstimator.java:27-
+29`, `DualConicRobustEstimator.java:27-29`) -- mirroring the point/tangent-line duality xref:conics-quadrics.adoc[]
+establishes for `Conic`/`DualConic` in general.
+
+=== Why 5 points (or 5 lines)
+
+A conic latexmath:[ax^2+2bxy+cy^2+2dxw+2eyw+fw^2=0] has 6 homogeneous coefficients, hence 5 degrees of freedom
+once scale is factored out -- which is exactly `ConicRobustEstimator.MINIMUM_SIZE = 5`
+(`ConicRobustEstimator.java:39`). This is also worked out explicitly in
+xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] &#167;2.2, "Five points define a conic" (pp.
+30-31): each point places one linear constraint latexmath:[(x_i^2,x_iy_i,y_i^2,x_i,y_i,1)\cdot(a,b,c,d,e,f)^{\mathsf T}=0]
+on the 6-vector of coefficients, so 5 points give a 5&#215;6 homogeneous system whose 1-dimensional null-space
+is the conic, "determined uniquely (up to scale) by five points in general position" -- HZ's own words. By the
+point/tangent-line duality of the previous section, a dual conic (an envelope of tangent lines) is likewise
+fixed by 5 lines, hence `DualConicRobustEstimator.MINIMUM_SIZE = 5` (`DualConicRobustEstimator.java:39`).
+
+=== The closed-form construction: a homogeneous linear system, solved by SVD null-space
+
+Unlike `Circle`/`Sphere`, a conic has no way to remove the scale ambiguity, so
+`Conic.setParametersFromPoints` (`Conic.java:313-409`) builds exactly the homogeneous 5&#215;6 system HZ
+describes -- for each point the row latexmath:[(x^2,\ 2xy,\ y^2,\ 2xw,\ 2yw,\ w^2)] (row-normalized for
+numerical accuracy) -- and finds its null-space via `SingularValueDecomposer`
+(`Conic.java:387-408`), the same general technique this library uses for every other homogeneous join/meet
+problem (xref:points-lines-planes.adoc[], xref:reference.adoc#bib-numerical-recipes[Numerical Recipes] &#167;2.6,
+"Singular Value Decomposition", pp. 65-67). If the decomposed rank is below 5, the 5 points are coincident or
+otherwise degenerate and `CoincidentPointsException` is thrown instead of a spurious solution
+(`Conic.java:390-391`). `DualConic.setParametersFromLines` (`DualConic.java:291-390`) is the line-dual mirror
+of the same 5&#215;6 SVD null-space computation. `RANSACConicRobustEstimator.estimatePreliminarSolutions`
+simply calls the 5-point constructor on the minimal sample:
+
+[source,java]
+----
+// RANSACConicRobustEstimator.estimatePreliminarSolutions (RANSACConicRobustEstimator.java:180-195)
+try {
+    final var conic = new Conic(point1, point2, point3, point4, point5); // SVD null-space of a 5x6 system
+    solutions.add(conic);
+} catch (final CoincidentPointsException e) {
+    // if points are coincident/degenerate, no solution is added
+}
+----
+
+`RANSACDualConicRobustEstimator` is the identical pattern with `new DualConic(line1..line5)` and
+`CoincidentLinesException`.
+
+=== The residual: algebraic, not geometric
+
+`ConicRobustEstimator.residual` (`ConicRobustEstimator.java:731-759`) and its dual counterpart
+`DualConicRobustEstimator.residual` (`DualConicRobustEstimator.java:730-758`) both score a candidate with the
+absolute value of the conic's own defining bilinear form -- an **algebraic** residual, not a true geometric
+distance to the curve:
+
+[latexmath]
+++++
+r(m) = \bigl|\, m^{\mathsf T} C\, m \,\bigr|, \qquad r(l) = \bigl|\, l^{\mathsf T} C^{*}\, l \,\bigr|
+++++
+
+computed by normalizing latexmath:[C]/latexmath:[C^{*}] and the point/line first, then literally multiplying
+the three matrices (`ConicRobustEstimator.java:748-757`). This is the same quantity `Conic.isLocus`/
+`DualConic.isLocus` threshold against (xref:conics-quadrics.adoc[]) -- residual zero means exactly "on the
+locus" -- but it is *not* in the same units as a Euclidean distance, and it scales non-linearly with how far a
+point actually is from the curve. That mismatch in scale is directly visible in the library's own defaults:
+`RANSACCircleRobustEstimator.DEFAULT_THRESHOLD` is `1.0`, while
+`RANSACConicRobustEstimator.DEFAULT_THRESHOLD` is `1e-6`
+(`RANSACConicRobustEstimator.java:45`) and `RANSACDualConicRobustEstimator.DEFAULT_THRESHOLD` is `1e-7`
+(`RANSACDualConicRobustEstimator.java:44`) -- three to seven orders of magnitude smaller, because
+latexmath:[m^{\mathsf T}Cm] is a genuinely different (and much smaller, for normalized inputs near the locus)
+quantity than a pixel distance.
+
+[source,java]
+----
+var estimator = new RANSACConicRobustEstimator(points);
+estimator.setThreshold(1e-6); // algebraic residual |m^T C m|, not a pixel distance
+Conic conic = estimator.estimate();
+----
+
+Both hierarchies again expose the standard five concrete subclasses -- `{RANSAC,LMedS,MSAC,PROSAC,
+PROMedS}ConicRobustEstimator` and the `DualConic` equivalents, 10 classes total -- built through
+`ConicRobustEstimator.create(...)`/`DualConicRobustEstimator.create(...)`.
+
+[#quadric-dualquadric]
+== Quadric and DualQuadric: the same argument, one dimension up
+
+`QuadricRobustEstimator` finds "the best quadric that fits in a collection of 3D points";
+`DualQuadricRobustEstimator` "the best dual quadric that fits in a collection of 3D planes"
+(`QuadricRobustEstimator.java:27-29`, `DualQuadricRobustEstimator.java:29-31`) -- the point/tangent-plane
+duality of xref:conics-quadrics.adoc[] one dimension up from `Conic`/`DualConic`.
+
+=== Why 9 points (or 9 planes)
+
+A quadric latexmath:[ax^2+by^2+cz^2+2dxy+2exz+2fyz+2gxw+2hyw+2izw+jw^2=0] has 10 homogeneous coefficients,
+hence 9 degrees of freedom once scale is factored out -- exactly `QuadricRobustEstimator.MINIMUM_SIZE = 9`
+(`QuadricRobustEstimator.java:36`) and, by the same point/tangent-plane duality argument as conics,
+`DualQuadricRobustEstimator.MINIMUM_SIZE = 9` (`DualQuadricRobustEstimator.java:38`). This is the direct 3D
+analogue of HZ's "five points define a conic" argument above, generalized to a 9&#215;10 homogeneous system --
+the source PDFs used for this documentation pass do not contain an explicit "nine points define a quadric"
+passage the way HZ spells out the conic case, but the linear-algebra argument (one constraint row per point,
+minimal sample size = degrees of freedom) is identical and is the one the code itself implements.
+
+=== The closed-form construction: the same SVD null-space pattern
+
+`Quadric.setParametersFromPoints` (`Quadric.java:317-506`) builds, for each of the 9 points, the row
+latexmath:[(x^2,\ y^2,\ z^2,\ 2xy,\ 2xz,\ 2yz,\ 2xw,\ 2yw,\ 2zw,\ w^2)] of a 9&#215;10 matrix (row-normalized),
+then takes its null-space via `SingularValueDecomposer`, exactly like `Conic` (`Quadric.java:478-502`),
+throwing `CoincidentPointsException` if the decomposed rank is below 9 (`Quadric.java:481-482`).
+`DualQuadric.setParametersFromPlanes` (`DualQuadric.java:325-513`) is the identical construction on plane
+coefficients instead of point coordinates. Both concrete RANSAC estimators are again thin wrappers around the
+9-argument constructor:
+
+[source,java]
+----
+// RANSACQuadricRobustEstimator.estimatePreliminarSolutions (RANSACQuadricRobustEstimator.java:182-199)
+try {
+    final var quadric = new Quadric(point1, point2, point3, point4, point5, point6, point7, point8, point9);
+    solutions.add(quadric); // SVD null-space of a 9x10 system
+} catch (final CoincidentPointsException e) {
+    // if points are coincident/degenerate, no solution is added
+}
+----
+
+`RANSACDualQuadricRobustEstimator` mirrors this with 9 `Plane` arguments and `CoincidentPlanesException`.
+
+=== The residual: algebraic again
+
+`QuadricRobustEstimator.residual` (`QuadricRobustEstimator.java:737-762`) and
+`DualQuadricRobustEstimator.residual` (`DualQuadricRobustEstimator.java:735-760`) score exactly the same kind
+of algebraic quantity as the conic case, one dimension up:
+
+[latexmath]
+++++
+r(M) = \bigl|\, M^{\mathsf T} Q\, M \,\bigr|, \qquad r(\Pi) = \bigl|\, \Pi^{\mathsf T} Q^{*}\, \Pi \,\bigr|
+++++
+
+and the same order-of-magnitude gap in default thresholds shows up again:
+`RANSACQuadricRobustEstimator.DEFAULT_THRESHOLD` is `1e-6` (`RANSACQuadricRobustEstimator.java:43`) and
+`RANSACDualQuadricRobustEstimator.DEFAULT_THRESHOLD` is `1e-7` (`RANSACDualQuadricRobustEstimator.java:44`) --
+both far smaller than the `1.0` used by the geometric-distance-based `Circle`/`Sphere` estimators, for exactly
+the same reason as the conic/dual-conic case above.
+
+[source,java]
+----
+var estimator = new RANSACQuadricRobustEstimator(points);
+estimator.setThreshold(1e-6); // algebraic residual |M^T Q M|
+Quadric quadric = estimator.estimate();
+----
+
+Again 10 concrete subclasses total: `{RANSAC,LMedS,MSAC,PROSAC,PROMedS}QuadricRobustEstimator` and the
+`DualQuadric` equivalents, built through `QuadricRobustEstimator.create(...)`/
+`DualQuadricRobustEstimator.create(...)`.
+
+== References
+
+Full citations are in the xref:reference.adoc#bibliography[bibliography]. In detail:
+
+* xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman, _Multiple View Geometry in Computer Vision_,
+  2nd ed.], &#167;2.2 "Five points define a conic" (pp. 30-31) -- the explicit 5&#215;6 homogeneous linear
+  system and null-space argument for why a conic needs exactly 5 points, which
+  `Conic.setParametersFromPoints` implements (with a differently-ordered but equivalent row layout). Not
+  previously cited for this specific construction elsewhere in this documentation set.
+* xref:reference.adoc#bib-numerical-recipes[Numerical Recipes], &#167;2.6 "Singular Value Decomposition" (pp.
+  65-67) -- the general null-space-via-SVD technique behind `Conic`/`DualConic`/`Quadric`/`DualQuadric`'s
+  minimal-sample solve; already cited for the same technique (applied to points/lines/planes) in
+  xref:points-lines-planes.adoc[] and (applied to camera matrices) in xref:pinhole-camera.adoc[].
+* Alberto Irurueta's PhD thesis, xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis], covers the *definitions* of conics,
+  dual conics, quadrics and dual quadrics in full (&#167;1.2.5-1.2.7, &#167;1.3.5-1.3.7 -- see
+  xref:conics-quadrics.adoc[]), but its table of contents and the chapters themselves stop at duality and
+  transformation; they do **not** contain a section on fitting a conic/quadric from a minimal point sample. No
+  page of the thesis is cited above for that reason -- stretching the existing conics-quadrics citation to
+  cover estimation-from-samples would misrepresent what the thesis actually contains.
+* No book, paper or web source is cited directly in `Circle`, `Sphere`, `Conic`, `DualConic`, `Quadric`,
+  `DualQuadric` or any of their robust-estimator subclasses for the minimal-sample or residual code itself; the
+  citations above are supplied as standard external context that matches the algorithms verified in the source
+  (see xref:estimators.adoc#shared-architecture[] for how every hierarchy in this package, including these
+  four, shares its RANSAC/LMedS/MSAC/PROSAC/PROMedS iteration loop with a single implementation in
+  `com.irurueta.numerical.robust`).
+
+== Related pages
+
+* xref:estimators.adoc[] -- the general robust-estimation theory (RANSAC/LMedS/MSAC/PROSAC/PROMedS,
+  non-robust-vs-robust, the shared `com.irurueta.numerical.robust` architecture) this page specializes.
+* xref:conics-quadrics.adoc[] -- the conic/dual-conic/quadric/dual-quadric math itself: the matrix
+  representation, tangent lines/planes, duality (latexmath:[C^{*}=C^{-1}]) and transformation rules that the
+  entities estimated here obey.
+* xref:point-line-plane-estimators.adoc[] -- the point/line/plane robust-estimator hierarchies, the simplest
+  instances of the same pattern.
+* xref:transformation-estimators.adoc[] -- robust estimation of the Euclidean/metric/affine/projective
+  transformations that conics and quadrics transform under.
+* xref:pinhole-camera-estimators.adoc[] -- robust camera estimation, including self-calibration via the
+  absolute conic/dual absolute quadric introduced in xref:conics-quadrics.adoc[].

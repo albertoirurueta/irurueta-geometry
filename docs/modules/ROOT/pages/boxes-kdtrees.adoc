@@ -1,0 +1,80 @@
+= Boxes and KD-Trees
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`Box2D`/`Box3D` are axis-aligned bounding boxes; `KDTree`/`KDTree2D`/`KDTree3D` use them as the node type of a
+k-d tree for efficient nearest-neighbor and range searches over a point set. Both live in the flat
+`com.irurueta.geometry` package -- there is no dedicated spatial-indexing subpackage.
+
+image::kdtree-boxes.svg[KDTree recursive axis-aligned box partitioning of a 2D point set]
+
+== Box
+
+The generic abstract `Box<P extends Point<P>>` stores just a low corner `lo` and a high corner `hi` (both of
+type `P`). Its one substantial piece of logic is point-to-box distance:
+
+* `getSqrDistance(point)` -- zero if the point is inside the box; otherwise the sum, per dimension, of the
+  squared excess beyond `lo`/`hi` on that axis (the standard axis-aligned-box point distance):
++
+[latexmath]
+++++
+d^2(p, B) = \sum_{i=1}^{n} \max\bigl(0,\ lo_i - p_i,\ p_i - hi_i\bigr)^2
+++++
+* `getDistance(point)` -- latexmath:[d(p, B) = \sqrt{d^2(p, B)}].
+
+`Box2D` and `Box3D` add dimension-specific constructors (a no-arg unit box centered at the origin, construction
+from two corner points, or `setBounds(...)` from raw coordinates); `Box2D` additionally converts to/from the
+library's `Rectangle` class.
+
+== KDTree
+
+`KDTree<P>` (abstract; `KDTree2D`/`KDTree3D` are thin dimension-specific subclasses) stores the whole tree as a
+**flat array of nodes** (`BoxNode<P>[] boxes`), each of which **is itself a `Box<P>`** --
+`KDTree.BoxNode` extends `Box<P>` directly, adding parent/child indices (`mom`, `dau1`, `dau2`) and the range
+of point indices (`ptLo`, `ptHi`) that fall inside that node.
+
+=== Construction
+
+. Start with one root `BoxNode` covering the whole space (`lo`/`hi` set to &#177;a large sentinel value) and
+  containing every point.
+. Maintain an explicit task stack of "(box, split dimension)" pairs still to be split -- the tree is built
+  iteratively, not recursively.
+. For each task, find the **median** point along the current split dimension using an in-place, quickselect-style
+  partition (`selecti`), then create two child boxes: one keeping the parent's `lo` but clamping `hi` at the
+  median coordinate, the other keeping the parent's `hi` but clamping `lo` at the same median value.
+. The split dimension **cycles round-robin** at each level (`(dim + 1) % numDimensions`); the split *position*
+  is always the median point's coordinate, not the geometric midpoint of the box -- this is the "median-of-points"
+  k-d tree variant, which keeps the tree balanced regardless of point distribution.
+. Recurse (via the task stack) until a box holds a small number of points (a handful), at which point it
+  becomes a leaf.
+
+=== Searching: branch-and-bound pruning
+
+`nearestPoint`/`nearestIndex` (1-NN), `nNearest` (k-NN, using a bounded max-heap), and `locateNear` (radius/range
+search) all follow the same pattern:
+
+. Descend directly to the leaf box most likely to contain the query point, using the split dimension/position
+  stored at each internal node.
+. Scan that leaf's points to get an initial candidate answer.
+. Walk the rest of the tree with an explicit task stack, and at each node call **`Box.getDistance(point)`** --
+  if that box-to-point distance cannot possibly improve on the current best answer, the entire subtree is
+  skipped without visiting any of its points.
+
+This is the standard k-d tree branch-and-bound search, and it is exactly why `Box` is reused as the tree node
+type: the same axis-aligned-box distance computation used for simple containment queries is also the pruning
+test for nearest-neighbor and range search.
+
+== References
+
+No book, paper, or URL is cited anywhere in `Box.java`, `Box2D.java`, `Box3D.java`, or `KDTree*.java`. That
+said, the internal structure and naming of `KDTree` (`mom`/`dau1`/`dau2`, `ptIndx`/`rPtIndx`,
+`taskmom`/`taskdim`, `selecti`, `siftDown`, the sentinel `BIG`) closely mirrors the well-known k-d tree
+implementation described in xref:reference.adoc#bib-numerical-recipes[Press et al., _Numerical Recipes: The Art
+of Scientific Computing_] -- see the xref:reference.adoc#bibliography[full bibliography] for the full citation.
+This attribution is an inference from the code's structure, not a citation present in the source.
+
+== Related pages
+
+* xref:points-lines-planes.adoc[] -- the `Point2D`/`Point3D` types indexed by a `KDTree`.
+* xref:triangles-polygons.adoc[] -- polygons/triangles are a different kind of composite entity, not indexed
+  by `KDTree` in this library.

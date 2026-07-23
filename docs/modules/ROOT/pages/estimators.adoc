@@ -1,0 +1,267 @@
+= Estimators
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Every geometric entity in `com.irurueta.geometry` that can be *fit* to noisy data -- a `Point2D`/`Point3D`,
+`Line2D`, `Plane`, `Circle`, `Sphere`, `Conic`/`DualConic`, `Quadric`/`DualQuadric`, a
+`Transformation2D`/`Transformation3D`, or a `PinholeCamera` -- has a counterpart in
+`com.irurueta.geometry.estimators`. This page explains the one idea that recurs across all twelve of those
+hierarchies: **every entity gets a single non-robust algorithm, plus a family of five interchangeable robust
+wrappers around it** -- and why that split exists at all, rather than just one "best" estimator per entity.
+
+image::robust-consensus.svg[RANSAC-style consensus set: a bad minimal sample versus a good one, and how RANSAC/MSAC/LMedS/PROSAC/PROMedS score a hypothesis]
+
+[#non-robust-vs-robust]
+== Why a non-robust algorithm is not enough
+
+A non-robust estimator solves a well-posed algebraic or least-squares problem: given exactly the minimal number
+of correspondences an entity needs (2 points for a line, 3 for a circle, 5 for a conic, 4 for a 2D homography,
+6 for a camera, ...), or *more* than that minimum, it produces the entity that fits them exactly, or in an
+LMSE (Least Mean Squared Error) sense if over-determined. This is exactly what a class like `PlaneEstimator`-if
+it existed as a public class-or the inlined closed-form constructors inside `RANSACPlaneRobustEstimator` do:
+latexmath:[\Pi = f(M_1, M_2, M_3)] for 3 points, no iteration, no notion of "this correspondence might be
+wrong".
+
+The problem is that real correspondences -- 2D/3D point matches from a feature detector, line matches from an
+edge detector -- are never 100% correct. A single badly-matched point dragged into an LMSE fit can move the
+whole result arbitrarily far from the truth, because a least-squares cost grows *quadratically* with a point's
+residual: one far-away outlier can dominate the sum of squared errors contributed by every other, correct,
+point. `irurueta-geometry`'s own family portrait of this problem is exactly xref:transformations.adoc[] /
+xref:conics-quadrics.adoc[] / xref:pinhole-camera.adoc[]'s entities: none of their non-robust fits have any
+built-in outlier rejection.
+
+Robust estimation solves a different, harder problem: **simultaneously** find the entity *and* the subset of
+correspondences that agree with it (the *inliers*), while implicitly discounting the rest (the *outliers*) --
+without knowing in advance which is which. `com.irurueta.geometry.estimators` solves this the same way for
+every one of its twelve hierarchies:
+
+. Repeatedly draw a **minimal sample** (the smallest number of correspondences the entity's non-robust
+  algorithm needs) and instantiate a candidate entity from it, exactly as the non-robust algorithm would.
+. Score that candidate against *all* the data using one of five interchangeable rules (RANSAC / LMedS / MSAC /
+  PROSAC / PROMedS, below).
+. Keep the best-scoring candidate and its consensus set (the correspondences it explains), then optionally
+  **re-estimate** the entity with the same non-robust LMSE algorithm using only that consensus set -- a cheap
+  way to fold "more data means a better fit" back in once the outliers have been identified.
+
+That is why every hierarchy in this library has the same shape: one small, exact/LMSE algorithm, wrapped by
+five classes that differ only in step 2's scoring rule. The next section works through each rule with the real
+equations behind it.
+
+[#ransac]
+== RANSAC
+
+RANSAC (RANdom SAmple Consensus) is Fischler and Bolles' original 1981 algorithm
+(xref:reference.adoc#bib-fischler-bolles[Fischler & Bolles, 1981]), and the one all the others are variations
+of. Quoting the algorithm as stated in xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] (chapter
+4, Algorithm 4.4, p.119):
+
+. Randomly select a minimal sample of latexmath:[s] data points and instantiate the model from it.
+. Determine the set latexmath:[S_i] of points within a distance threshold latexmath:[t] of the model -- the
+  *consensus set* / inliers.
+. If latexmath:[|S_i|] exceeds a threshold latexmath:[T], re-estimate the model from all of latexmath:[S_i] and
+  stop.
+. Otherwise repeat from step 1 with a new sample.
+. After latexmath:[N] trials, keep the largest consensus set found and re-estimate from it.
+
+Two constants make this concrete, and the library exposes both as configurable properties on every
+`XxxRobustEstimator`:
+
+* **The inlier threshold latexmath:[t]**. If measurement error is zero-mean Gaussian with standard deviation
+  latexmath:[\sigma], the squared residual follows a latexmath:[\chi^2_m] distribution with latexmath:[m]
+  degrees of freedom (latexmath:[m] = the codimension of the model -- 1 for a line, 2 for a homography/camera).
+  Choosing latexmath:[t^2 = F_m^{-1}(\alpha)\,\sigma^2] for confidence latexmath:[\alpha=0.95] gives, e.g.,
+  latexmath:[t^2 = 3.84\sigma^2] for a line/fundamental matrix and latexmath:[t^2 = 5.99\sigma^2] for a
+  homography/camera matrix (HZ table 4.2, p.119) -- this is the `threshold` property on
+  `RANSACLine2DRobustEstimator`, `RANSACDLTPointCorrespondencePinholeCameraRobustEstimator`, etc.
+* **The number of trials latexmath:[N]**. For sample size latexmath:[s], outlier proportion latexmath:[\epsilon]
+  and target confidence latexmath:[p] (usually 0.99) that *at least one* sample is outlier-free:
++
+[latexmath]
+++++
+N = \frac{\log(1-p)}{\log\bigl(1-(1-\epsilon)^s\bigr)}
+++++
++
+(HZ eq. 4.18, p.119). Since latexmath:[\epsilon] is rarely known up front, the library -- like HZ's own
+Algorithm 4.5 (p.121) -- computes it *adaptively*: after each sample it updates latexmath:[\epsilon] from the
+best consensus set found so far and shrinks the remaining latexmath:[N] accordingly, capping the total work at
+`maxIterations`. Alberto Irurueta's PhD thesis independently derives exactly the same formula for camera
+estimation (xref:reference.adoc#bib-phd-report[PHD], &#167;2.5.2, printed pp.75-77, its own "Algorithm 2.1"),
+including the same worst-case-then-adaptive-refinement strategy, which is a useful second, independent
+derivation of eq. 4.18 grounded specifically in this library's own camera-estimation use case.
+
+[#lmeds]
+== LMedS (Least Median of Squares)
+
+Instead of counting inliers under a fixed threshold, LMedS scores a candidate by the **median** of its squared
+residuals over the *whole* data set, and keeps the candidate with the smallest median
+(xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;4.7.3, p.120: *"Least Median of Squares (LMS)
+estimation... requires no setting of thresholds or a priori knowledge of the variance of the error"*):
+
+[latexmath]
+++++
+\hat{M} = \operatorname*{arg\,min}_{M} \ \operatorname{median}_i \, e_i^2(M)
+++++
+
+The number of samples latexmath:[N] is still drawn from the same eq. 4.18. The trade-off is symmetric to
+RANSAC's: no threshold to tune, but the median is only a meaningful "typical" residual while inliers are the
+majority -- LMedS breaks down once outliers exceed 50% of the data, exactly where thresholded RANSAC keeps
+working provided latexmath:[t] is chosen well.
+xref:reference.adoc#bib-numerical-recipes[Numerical Recipes] &#167;15.7 "Robust Estimation" (p.818) frames the
+same median-based idea for the simpler 1D case (`Fitmed`, a least-median/least-absolute-deviation line fit,
+p.823) as a general antidote to the sensitivity of ordinary least squares to a "long tail of outliers" -- the
+1D special case of exactly the geometric problem `LMedSLine2DRobustEstimator` and its eleven siblings solve.
+
+[#msac]
+== MSAC (and the robust-cost-function idea behind it)
+
+RANSAC's step-function score (an inlier contributes 0 cost, an outlier contributes a fixed cost, nothing in
+between) throws away information: two inliers at different distances from the model score identically. HZ
+proposes, without naming it, exactly the cost function that Torr and Zisserman later formalized as MSAC
+(M-estimator SAmple Consensus, xref:reference.adoc#bib-torr-zisserman-mlesac[Torr & Zisserman, 2000]) and the
+library implements as its `MSACXxxRobustEstimator` classes:
+
+[latexmath]
+++++
+C = \sum_i \rho(e_i), \qquad
+\rho(e) = \begin{cases} e^2 & e^2 < t^2 \\ t^2 & e^2 \geq t^2 \end{cases}
+++++
+
+(HZ eq. 4.19, p.120). Inliers still contribute their true squared residual (the maximum-likelihood cost under a
+Gaussian error model, xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;4.3), but outliers are capped at
+latexmath:[t^2] rather than contributing 0 -- so MSAC's winning hypothesis is the one minimizing total cost, not
+maximizing inlier count, letting a model with slightly fewer, tighter inliers beat one with more, looser ones.
+Threshold latexmath:[t] and sample count latexmath:[N] are computed exactly as in RANSAC.
+
+[#prosac-promeds]
+== PROSAC and PROMedS
+
+PROSAC (PROgressive SAmple Consensus, xref:reference.adoc#bib-chum-matas-prosac[Chum & Matas, 2005]) and this
+library's PROMedS keep RANSAC's/LMedS's scoring rules unchanged, but change *which* samples are drawn first: if
+each correspondence carries a **quality score** (e.g. a feature descriptor's match confidence), samples are
+drawn in decreasing quality order instead of uniformly at random, so a sample entirely made of high-quality
+matches -- and thus likely outlier-free -- is tried early rather than waiting for it to come up by chance. Every
+`PROSACXxxRobustEstimator`/`PROMedSXxxRobustEstimator` constructor accordingly takes an extra
+`double[] qualityScores` argument, one entry per correspondence (e.g.
+`PROSACDLTPointCorrespondencePinholeCameraRobustEstimator(double[] qualityScores)`); RANSAC, LMedS and MSAC take
+none. PROSAC postdates xref:reference.adoc#bib-hartley-zisserman[HZ]'s 2nd edition (2004) and neither it nor an
+equally-named PROMedS reference was found in any of the three source PDFs used for this documentation pass; the
+description above reflects the library's own javadoc and constructor signatures rather than a page citation.
+
+[#shared-architecture]
+== How the code shares one implementation across twelve hierarchies
+
+None of the five robust algorithms above is reimplemented per entity. `com.irurueta.geometry.estimators`
+delegates to a single, generic, entity-agnostic implementation in the sibling module
+`com.irurueta.numerical.robust`: abstract `RobustEstimator<T>` plus concrete, type-parameterized
+`RANSACRobustEstimator<T>`, `LMedSRobustEstimator<T>`, `MSACRobustEstimator<T>`, `PROSACRobustEstimator<T>`,
+`PROMedSRobustEstimator<T>`. Every `RANSACXxxRobustEstimator` in `com.irurueta.geometry.estimators` is a thin
+adapter: its `estimate()` builds an anonymous `RobustEstimatorListener<T>` whose
+`estimatePreliminarSolutions(int[] sampleIndices, List<T> solutions)` plugs in that entity's minimal-sample
+closed-form construction, and whose `computeResidual(T, int)` plugs in that entity's geometric distance formula
+-- then hands both to `new RANSACRobustEstimator<>(listener).estimate()` (see e.g.
+`RANSACConicRobustEstimator.java:165-249`). This is why adding a thirteenth entity to the library would not
+require reimplementing RANSAC: only the two entity-specific hooks change.
+
+[cols="1,3",options="header"]
+|===
+|Concept |Where it lives
+
+|`RobustEstimator<T>`, `RANSACRobustEstimator<T>`, ...
+|`com.irurueta.numerical.robust` (sibling module `irurueta-numerical`) -- the actual sampling/scoring/iteration
+loops, shared by all twelve hierarchies.
+
+|`XxxRobustEstimator` (abstract, per entity)
+|`com.irurueta.geometry.estimators` -- holds shared configuration (`confidence`, `maxIterations`,
+`progressDelta`, a listener) and the `estimate()` contract; no algorithm logic of its own.
+
+|`{RANSAC\|LMedS\|MSAC\|PROSAC\|PROMedS}XxxRobustEstimator` (concrete)
+|`com.irurueta.geometry.estimators` -- supplies only `estimatePreliminarSolutions` (minimal-sample closed form)
+and `computeResidual` (geometric distance) to the shared loop above.
+
+|`double[] qualityScores`
+|Constructor/setter argument on every PROSAC/PROMedS class only; validated by the shared
+`PROSACRobustEstimator`/`PROMedSRobustEstimator` to have one entry per correspondence.
+
+|LMSE re-estimation / non-linear refinement after robust estimation
+|`com.irurueta.geometry.refiners` (a separate package, out of scope for this page) -- e.g.
+`PointCorrespondenceAffineTransformation2DRefiner`, invoked when a robust estimator's `refineResult` flag is
+set.
+|===
+
+== The twelve hierarchies
+
+Every entity below follows exactly the pattern described above; the pages linked here work through each one's
+specific minimal-sample algorithm, distance/residual formula, and any book equations that match it.
+
+[cols="1,3,1",options="header"]
+|===
+|Entity |Non-robust algorithm |Robust variants
+
+|`Point2D` / `Point3D`
+|line&#8745;line / plane&#8745;plane&#8745;plane closed form
+|xref:point-line-plane-estimators.adoc[] (5&#215;2)
+
+|`Line2D`
+|2-point closed form
+|xref:point-line-plane-estimators.adoc[] (5)
+
+|`Plane`
+|3-point closed form
+|xref:point-line-plane-estimators.adoc[] (5)
+
+|`Circle`
+|3-point closed form
+|xref:conic-quadric-estimators.adoc[] (5)
+
+|`Sphere`
+|4-point closed form
+|xref:conic-quadric-estimators.adoc[] (5)
+
+|`Conic` / `DualConic`
+|5-point / 5-line closed form
+|xref:conic-quadric-estimators.adoc[] (5&#215;2)
+
+|`Quadric` / `DualQuadric`
+|9-point / 9-plane closed form
+|xref:conic-quadric-estimators.adoc[] (5&#215;2)
+
+|`EuclideanTransformation2D`/`3D`
+|Kabsch algorithm
+|xref:transformation-estimators.adoc[] (5&#215;2)
+
+|`MetricTransformation2D`/`3D`
+|similarity least-squares
+|xref:transformation-estimators.adoc[] (5&#215;2)
+
+|`AffineTransformation2D`/`3D`
+|3/4-point (or line/plane) closed form
+|xref:transformation-estimators.adoc[] (5&#215;4)
+
+|`ProjectiveTransformation2D`/`3D`
+|4/5-point (or line/plane) closed form
+|xref:transformation-estimators.adoc[] (5&#215;4)
+
+|`PinholeCamera`
+|DLT (point or line/plane), EPnP, UPnP, weighted
+|xref:pinhole-camera-estimators.adoc[] (5&#215;4, weighted has none)
+|===
+
+== References
+
+Full citations are in the xref:reference.adoc#bibliography[bibliography]. In summary:
+xref:reference.adoc#bib-fischler-bolles[Fischler & Bolles] for RANSAC itself;
+xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] chapter 4 (&#167;4.1-4.2 DLT algorithms and cost
+functions, &#167;4.7 robust estimation, Algorithms 4.1-4.6) for the RANSAC/MSAC equations and thresholds used
+above; xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis] &#167;2.5 for an independently-derived RANSAC
+camera-estimation algorithm using the same sample-count formula;
+xref:reference.adoc#bib-numerical-recipes[Numerical Recipes] &#167;15.7 for the 1D robust/median-fit analogue of
+LMedS; xref:reference.adoc#bib-torr-zisserman-mlesac[Torr & Zisserman] for the formal MSAC/MLESAC name; and
+xref:reference.adoc#bib-chum-matas-prosac[Chum & Matas] for PROSAC.
+
+== Related pages
+
+* xref:point-line-plane-estimators.adoc[], xref:conic-quadric-estimators.adoc[],
+  xref:transformation-estimators.adoc[], xref:pinhole-camera-estimators.adoc[] -- the four hierarchy pages this
+  page introduces.
+* xref:transformations.adoc[], xref:conics-quadrics.adoc[], xref:points-lines-planes.adoc[],
+  xref:pinhole-camera.adoc[] -- the geometric entities being estimated.

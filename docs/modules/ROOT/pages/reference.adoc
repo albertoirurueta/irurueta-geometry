@@ -40,3 +40,240 @@ These reports are generated during the build.
 |https://github.com/albertoirurueta/irurueta-geometry/blob/develop/CHANGELOG.md[Changelog]
 |Notable changes for each release, in Keep a Changelog format.
 |===
+
+[#bibliography]
+== Bibliography
+
+Bibliographic references discovered in the library's own javadoc, or supplied as standard external context
+where the javadoc cites none, while writing the geometric-entity pages (xref:transformations.adoc[],
+xref:rotations.adoc[], xref:points-lines-planes.adoc[], xref:conics-quadrics.adoc[],
+xref:triangles-polygons.adoc[], xref:pinhole-camera.adoc[] and xref:boxes-kdtrees.adoc[]) and the estimator
+pages (xref:estimators.adoc[], xref:point-line-plane-estimators.adoc[], xref:conic-quadric-estimators.adoc[],
+xref:transformation-estimators.adoc[] and xref:pinhole-camera-estimators.adoc[]). The three books
+below (Hartley & Zisserman, the author's own PhD thesis, and Numerical Recipes) were supplied directly by the
+repository owner and read chapter-by-chapter to ground the pages above in real equations, proofs and page
+citations, rather than restating the theory from memory.
+
+=== Books
+
+[[bib-hartley-zisserman]]
+* Richard Hartley and Andrew Zisserman, _Multiple View Geometry in Computer Vision_, 2nd edition, Cambridge
+  University Press, 2004. ISBN 9780521540513. https://www.cambridge.org/9780521540513[Publisher page]. +
+  Not cited directly anywhere in the library's javadoc; supplied as the primary formal reference for
+  projective geometry, the Euclidean/metric/affine/projective stratification, point-line-plane duality,
+  conics/quadrics and the pinhole camera model. Specific sections used:
++
+[cols="1,3",options="header"]
+|===
+|Used by |Chapter/section/page
+
+|xref:points-lines-planes.adoc[]
+|§3.2.1-3.2.2 (pp.66-70, point-plane duality latexmath:[\pi^{\mathsf T}X=0], lines self-dual in latexmath:[\mathbb{P}^3]); §3.5 Result 3.7 (p.80, latexmath:[\pi_\infty] fixed under a projective latexmath:[H] iff latexmath:[H] is an affinity); §3.6 eq. 3.21-3.23 &amp; Result 3.9 (pp.81-82, absolute conic).
+
+|xref:transformations.adoc[]
+|Table 2.4 (p.44, 2D hierarchy of transformations); Table 3.2 (p.78, 3D hierarchy); §3.5 Result 3.7 + Example 3.8 (p.80, eigenvector analysis of a rotation's fixed planes); §3.6 Result 3.9 (p.82, latexmath:[\Omega_\infty] fixed iff similarity); §3.7 Result 3.10 (pp.83-84, full matrix proof that latexmath:[Q^{*}_\infty] is fixed iff similarity).
+
+|xref:conics-quadrics.adoc[]
+|Chapter 2, p.31, Result 2.7 (tangent line latexmath:[l=Cx]) and the latexmath:[C^{*}=C^{-1}] derivation; pp.36-37, Results 2.13-2.14 (conic/dual-conic transform rules); p.64, exercise 2.8(viii) (latexmath:[[l]_\times C [l]_\times] as the rank-2 dual conic of a line's two intersection points with latexmath:[C]); chapter 3, §3.2.3-3.2.4 pp.73-74, eq. 3.15-3.17 (quadric duality/transform, second source alongside the PhD thesis); §§3.6-3.7 pp.81-83, Result 3.9 (second source for the absolute conic/dual absolute quadric).
+
+|xref:pinhole-camera.adoc[]
+|Chapter 6 "Camera Models" §6.1-6.2 (pp.153-165, table 6.1 p.158, Result 6.1 depth pp.162-163, latexmath:[P=K[R\vert-RC]] decomposition p.164); chapter 8 "More Single View Geometry" §8.3-8.8 (pp.201-225: quadric projection/cone of rays, importance of the camera centre, image of the absolute conic Result 8.17 pp.208-211, vanishing points/lines pp.212-220, affine measurements pp.220-222, calibration latexmath:[K] from a single view pp.222-225); Appendix 4 §A4.1.1 Algorithm A4.1 (p.579, RQ decomposition by Givens rotations) and §A4.1.2 (p.580, Householder/QR); Appendix 5 §A5.2 (p.590, pseudo-inverse) and Algorithm A5.4 (p.593).
+
+|xref:estimators.adoc[]
+|Chapter 4 "Estimation - 2D Projective Transformations", §4.7 "Robust estimation" (pp.117-122: Algorithm 4.4
+RANSAC p.119, eq. 4.18 sample-count formula p.119, table 4.2 inlier thresholds p.119, Algorithm 4.5 adaptive
+sample count p.121, eq. 4.19 robust cost function p.120, §4.7.3 Least Median of Squares p.120); Algorithm 4.6
+automatic homography estimation via RANSAC (p.123).
+
+|xref:conic-quadric-estimators.adoc[]
+|Chapter 2, &#167;2.2 "Five points define a conic" (pp.30-31) -- the 5&#215;6 homogeneous linear system and
+null-space argument for why a conic needs exactly 5 points, matched by `Conic.setParametersFromPoints`.
+
+|xref:transformation-estimators.adoc[]
+|&#167;4.1 "The Direct Linear Transformation (DLT) algorithm" (pp.88-92: constraint counting showing each point
+correspondence gives 2 equations, hence 4 points for a 2D homography's 8 DOF; Algorithm 4.1 basic DLT p.109,
+Algorithm 4.2 normalized DLT p.109); &#167;4.4 "Transformation invariance and normalization" (pp.104-108,
+isotropic centroid/average-distance normalization, contrasted with what the library's own `normalize()` calls
+actually do); &#167;4.3 and Algorithm 4.3 "The Gold Standard algorithm" (p.114, the linear-then-Levenberg-Marquardt
+two-stage refinement pattern); Appendix A5.3-A5.4 "Least-squares solution of homogeneous equations" (pp.592-593,
+the proof that the smallest right singular vector minimizes latexmath:[\lVert Ah \rVert] subject to
+latexmath:[\lVert h \rVert=1]).
+
+|xref:pinhole-camera-estimators.adoc[]
+|Chapter 7 "Computation of the Camera Matrix P" in full: &#167;7.1 "Basic equations" (pp.178-180, eq. 7.1-7.3,
+the 2&#215;12 camera design-matrix row layout, the "5&#189; points"/11-equations minimal count, and the
+line-correspondence extension via back-projection); &#167;7.2 "Geometric error" and Algorithm 7.1 "The Gold
+Standard algorithm" (pp.180-182, Table 7.1); &#167;7.3 "Restricted camera estimation" (pp.184-186, the
+assumptions motivating EPnP/UPnP); Appendix A5.1-A5.2 "The pseudo-inverse" and A5.2.1 (pp.589-591, the weighted
+normal equations behind the Weighted estimators).
+|===
+
+[[bib-phd-report]]
+* Alberto Irurueta, _Fixed Scene 3D Reconstruction for Mobile Applications_ (PhD thesis / internal research
+  report; the running header printed on every page instead reads "3D Face and Object Reconstruction for
+  Mobile Applications" -- same document, apparently a leftover draft header), Visual Engineering. Unpublished;
+  no ISBN/DOI. Authored by, and reproduced here with the permission of, the repository owner -- no copyright
+  restrictions apply. xref:attachment$irurueta-phd-thesis.pdf[Download the original PDF (99 MB)]. +
+  `Conic.java:478` carries an internal TODO citing "page 9 PHD report.pdf": `//TODO: intersection of Line2D
+  with Conic results in two points (page 9 PHD report.pdf)`. Printed page 9 (PDF page 21) is §1.2.6.1
+  "Line-conic intersections", Proof 1.2 (eq. 1.34-1.44): it proves that a line meeting a conic
+  at a fixed point latexmath:[m] yields a second point latexmath:[m''=m+\lambda m'] solving
+  latexmath:[S(m)+2\lambda S(m,m')+\lambda^2 S(m')=0]. The TODO cites the theoretical basis for a feature that
+  is still genuinely unimplemented, not existing code. Supplied directly by the repository owner as the
+  primary source for chapter 1 ("Projective Geometry") and chapter 2 ("Camera models"). Specific sections
+  used:
++
+[cols="1,3",options="header"]
+|===
+|Used by |Chapter/section/page (printed / PDF, offset +12)
+
+|xref:points-lines-planes.adoc[]
+|§1.2.1-1.2.2 (p.2/14, homogeneous&#8596;inhomogeneous conversion, points at infinity when latexmath:[w=0]); §1.2.3 eq. 1.5-1.9 (p.3/15-16, point-line duality latexmath:[m^{\mathsf T}l=0], join/meet as cross products, skew-symmetric matrix latexmath:[[m]_\times]); §1.2.4 eq. 1.10-1.23 + Proof 1.1 (pp.4-6/16-18, signed point-to-line distance); §1.3.3 eq. 1.68-1.73 (pp.13-14/25-26, plane via 4&#215;4 determinant/Laplace expansion); §1.3.4 eq. 1.74 (p.14/26, point-plane duality latexmath:[\Pi^{\mathsf T}M=0]); §1.4.1.1 eq. 1.118 + fig. 1.9 (pp.22-23/34-35, canonical latexmath:[\Pi_\infty=(0,0,0,1)^{\mathsf T}] via 3 vanishing points); §1.4.1.2 + fig. 1.10 (p.23/35, line at infinity latexmath:[l_\infty]); §1.4.2 eq. 1.119-1.127 (pp.24-25/36-37, proof that affine transforms fix latexmath:[\Pi_\infty]).
+
+|xref:transformations.adoc[]
+|§1.4.1.1 (p.23, canonical latexmath:[\Pi_\infty]); §1.4.2 (p.24, affine invariance proof + upgrade matrix latexmath:[T_{PA}]); §1.4.3.2-1.4.3.3 (pp.29-34, eq. 1.143-1.169, orthogonality-from-first-principles giving latexmath:[\Omega_\infty=I_3], latexmath:[Q^{*}_\infty=\mathrm{diag}(1,1,1,0)]); §1.4.3.4 "Proof 1.6" (pp.35-36, eq. 1.170-1.178, similarities are exactly the transforms fixing latexmath:[Q^{*}_\infty]); §1.4.3.5 (pp.37-40, eq. 1.179-1.195, upgrade matrices latexmath:[T_{AM}], latexmath:[T_{PM}], latexmath:[T_{PM}^{-1}]); §1.4.5 table 1.4 (pp.41-42, DOF/matrix/invariants summary); §1.3.7 (p.20, eq. 1.109-1.116, general point/plane/quadric/dual-quadric transform rules).
+
+|xref:conics-quadrics.adoc[]
+|§1.2.5 "Conics" eq. 1.24-1.27 + table 1.1 (pp.6-8/18-20); **§1.2.6.1 "Line-conic intersections" Proof 1.2, eq. 1.34-1.44 (pp.8-9/20-21) -- resolves the `Conic.java:478` TODO above**; §1.2.6.2 "Line-conic tangency" eq. 1.46-1.51 (pp.10-11/22-23, tangent line latexmath:[l=C\cdot m]); §1.2.6.3 "Relation between conic and dual conic" eq. 1.52-1.54 (p.11/23, latexmath:[C^{*}=C^{-1}]); §1.2.7 "Transforming conics and dual conics" eq. 1.55-1.63 + Proof 1.3 (pp.11-12/23-24); §1.3.5 "Quadrics" eq. 1.75-1.91 + tables 1.2-1.3 (pp.15-16/27-28); §1.3.6.1-1.3.7 eq. 1.92-1.116 (pp.17-21/29-33, plane-quadric intersection/tangency, latexmath:[Q^{*}=Q^{-1}], quadric transform rule); §1.4.3.1-1.4.3.3 eq. 1.137-1.169 (pp.28-34/40-46, canonical absolute-conic/dual-quadric factories).
+
+|xref:pinhole-camera.adoc[]
+|Chapter 2 "Camera models" in full, pp.43-89/56-100: §2.1-2.2 canonical camera (pp.44-50); §2.2.2-2.2.3 intrinsics/CCD pixel conversion (pp.47-52); §2.2.4 radial distortion (pp.52-54); §2.3.1.1-1.3 the three camera-center methods -- SVD, cofactors/determinants, closed-form (pp.55-58); §2.3.2-2.3.5 vanishing points, axis/principal planes, principal point/axis, camera sign (pp.59-63); §2.3.6 RQ-style decomposition into latexmath:[K] and latexmath:[R] (p.64); §2.4 depth and cheirality (pp.64-68); §2.5 DLT camera estimation (pp.68-74); §2.6 point triangulation (pp.77-81); §2.7 back-projection of points and lines (pp.82-83); §2.8 "Camera matrices, the geometry strata and their relation to conics and quadrics" (pp.83-85); §2.9 camera matrices and image homographies (pp.86-88).
+
+|xref:estimators.adoc[]
+|&#167;2.5.2 "Robust camera estimation using RANSAC" (printed pp.75-77) -- an independently-derived RANSAC
+sample-count formula (its own "Algorithm 2.1", eq. 2.125-2.132) matching Hartley &amp; Zisserman's eq. 4.18,
+worked out by the same author who wrote this library.
+
+|xref:pinhole-camera-estimators.adoc[]
+|&#167;2.5.1 "The DLT algorithm for camera estimation" (pp.68-71) and &#167;2.5.1.1 "LMSE solution" (pp.71-72) --
+the exact DLT-for-cameras construction `DLTPointCorrespondencePinholeCameraEstimator` implements; &#167;2.5.2
+(pp.75-77) reused for the RANSAC derivation above.
+|===
+
+[[bib-numerical-recipes]]
+* William H. Press, Saul A. Teukolsky, William T. Vetterling and Brian P. Flannery, _Numerical Recipes: The Art
+  of Scientific Computing_, 3rd edition, Cambridge University Press, 2007. +
+  Not cited in the source. Used for two distinct purposes:
++
+[cols="1,3",options="header"]
+|===
+|Used by |Chapter/section/page
+
+|xref:boxes-kdtrees.adoc[]
+|Chapter 21 "Computational Geometry", §21.2 "KD Trees and Nearest-Neighbor Finding" (printed p.1101, PDF
+p.1125). `KDTree`'s internal structure and naming (`mom`/`dau1`/`dau2`, `selecti`, `siftDown`, `BIG`) closely
+mirrors this section's classic k-d tree implementation -- an inference from the code's structure, not a
+citation present in the source.
+
+|xref:pinhole-camera.adoc[]
+|§2.6 "Singular Value Decomposition" (printed pp.65-67, PDF p.89) -- backs `Camera.backProject(Point2D,
+Point3D)`'s Moore-Penrose pseudo-inverse and `PinholeCamera.computeCameraCenterSVD()`; §2.10 "QR
+Decomposition" (printed pp.102-106, PDF p.126) -- the general algorithm family that Hartley &amp; Zisserman's
+Appendix 4 RQ decomposition (used by `RQDecomposer`) specializes.
+
+|xref:conic-quadric-estimators.adoc[], xref:transformation-estimators.adoc[], xref:pinhole-camera-estimators.adoc[]
+|§2.6 "Singular Value Decomposition" (printed pp.65-67, PDF p.89) -- reused citation for the same SVD
+null-space technique behind `Conic`/`Quadric`'s minimal-sample solve, the affine/projective transformation
+DLT-style solve, and the camera DLT solve, respectively.
+|===
+
+[[bib-orourke]]
+* Joseph O'Rourke, _Computational Geometry in C_, 2nd edition, Cambridge University Press, 1998 (chapter 1
+  covers polygon triangulation, including ear clipping). +
+  Not cited in the source; supplied as standard context for the ear-clipping ("Van Gogh") triangulation
+  algorithm. Used by: xref:triangles-polygons.adoc[].
+
+=== Papers
+
+[[bib-diebel]]
+* James Diebel, _Representing Attitude: Euler Angles, Unit Quaternions, and Rotation Vectors_, Stanford
+  University, 2006. Cited directly in `MatrixRotation3D` javadoc (mirrored there at
+  `staff.city.ac.uk/~sbbh653/publications/euler.pdf`); a current copy is available at
+  https://www.astro.rug.nl/software/kapteyn-beta/_downloads/attitude.pdf[astro.rug.nl]. Used by:
+  xref:rotations.adoc[].
+
+[[bib-sola-arxiv]]
+* Joan Sol&#224;, _Quaternion kinematics for the error-state Kalman filter_, arXiv:1711.02508, 2017.
+  https://arxiv.org/abs/1711.02508[arxiv.org/abs/1711.02508]. The formal, citable write-up of the MATLAB
+  `slamtb` functions referenced throughout the source (see <<bib-sola-slamtb>>). Used by: xref:rotations.adoc[].
+
+[[bib-shepperd]]
+* S. W. Shepperd, "Quaternion from Rotation Matrix", _Journal of Guidance and Control_, Vol. 1, No. 3, 1978,
+  pp. 223-224. Implemented by `Quaternion.matrixRotationToQuaternion` (branch selection by matrix trace). Used
+  by: xref:rotations.adoc[].
+
+[[bib-kabsch]]
+* Wolfgang Kabsch, "A solution for the best rotation to relate two sets of vectors", _Acta Crystallographica_,
+  Section A, 32(5), 1976, pp. 922-923. +
+  The optimal-rotation algorithm cited directly in `EuclideanTransformation2D/3DEstimator`'s javadoc (via
+  https://en.wikipedia.org/wiki/Kabsch_algorithm[Wikipedia's Kabsch algorithm article]) and implemented by
+  those two classes. Used by: xref:transformation-estimators.adoc[].
+
+[[bib-penate-sanchez-upnp]]
+* Adrian Penate-S&#225;nchez, Francesc Moreno-Noguer and Juan Andrade-Cetto, "Exhaustive Linearization for
+  Robust Camera Pose and Focal Length Estimation",
+  http://www.iri.upc.edu/files/scidoc/1404-Exhaustive-linearization-for-robust-camera-pose-and-focal-length-estimation.pdf[PDF
+  (iri.upc.edu)]. +
+  The UPnP (Uncalibrated Perspective-n-Point) paper, cited directly in
+  `UPnPPointCorrespondencePinholeCameraEstimator` javadoc together with the PDF link above. Used by:
+  xref:pinhole-camera-estimators.adoc[].
+
+[[bib-lepetit-epnp]]
+* Vincent Lepetit, Francesc Moreno-Noguer and Pascal Fua, "EPnP: An Accurate O(n) Solution to the PnP Problem",
+  _International Journal of Computer Vision_, 81(2), 2009, pp. 155-166.
+  https://www.tugraz.at/fileadmin/user_upload/Institute/ICG/Images/team_lepetit/publications/lepetit_ijcv08.pdf[PDF
+  (tugraz.at)]. Cited directly in `EPnPPointCorrespondencePinholeCameraEstimator` javadoc (the `estimators`
+  package). Used by: xref:pinhole-camera.adoc[], xref:pinhole-camera-estimators.adoc[].
+
+[[bib-fischler-bolles]]
+* Martin A. Fischler and Robert C. Bolles, "Random Sample Consensus: A Paradigm for Model Fitting with
+  Applications to Image Analysis and Automated Cartography", _Communications of the ACM_, 24(6), 1981,
+  pp. 381-395. +
+  The original RANSAC paper. Not cited directly in the library's javadoc, but every `RANSACXxxRobustEstimator`
+  class across all twelve estimator hierarchies in `com.irurueta.geometry.estimators` (and the generic
+  `com.irurueta.numerical.robust.RANSACRobustEstimator<T>` they delegate to) implements this algorithm. Also
+  cited by name inside xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] chapter 4 (Algorithm 4.4,
+  p.119), which is the more detailed source actually used for the equations on xref:estimators.adoc[]. Used by:
+  xref:estimators.adoc[].
+
+[[bib-torr-zisserman-mlesac]]
+* Philip H. S. Torr and Andrew Zisserman, "MLESAC: A New Robust Estimator with Application to Estimating Image
+  Geometry", _Computer Vision and Image Understanding_, 78(1), 2000, pp. 138-156. +
+  Formalizes the MSAC (M-estimator SAmple Consensus) robust cost function as an intermediate step towards
+  MLESAC. Not cited directly in the library's javadoc; supplied as the source for the name "MSAC" behind every
+  `MSACXxxRobustEstimator` class, whose scoring rule matches the un-named robust cost function already given in
+  xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] eq. 4.19 (p.120). Used by:
+  xref:estimators.adoc[].
+
+[[bib-chum-matas-prosac]]
+* Ondřej Chum and Jiří Matas, "Matching with PROSAC -- Progressive Sample Consensus", _Proceedings of the 2005
+  IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR)_, 2005, pp. 220-226. +
+  The PROSAC paper. Not cited directly in the library's javadoc; postdates
+  xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman]'s 2nd edition (2004) and is not covered by any
+  of the three source PDFs used for this documentation pass -- supplied as external context for every
+  `PROSACXxxRobustEstimator` class's quality-score-ordered sampling strategy. No equally-named published
+  reference was found for this library's `PROMedS` variant; it is documented as the library's own LMedS
+  analogue of the same ordering idea. Used by: xref:estimators.adoc[].
+
+=== Web resources and code
+
+[[bib-baker-euclideanspace]]
+* Martin Baker, axis-angle rotation reference code,
+  https://www.euclideanspace.com/maths/algebra/realNormedAlgebra/quaternions/code/sfrotation_java.htm[euclideanspace.com].
+  Cited directly in `AxisRotation3D` javadoc as the basis for its implementation. Used by: xref:rotations.adoc[].
+
+[[bib-sola-slamtb]]
+* Joan Sol&#224;, SLAM toolbox MATLAB functions (`au2q.m`, `qProd.m`, `e2R.m`, `q2au.m`, `R2q.m`, `w2omega.m`,
+  and others), https://github.com/joansola/slamtb[github.com/joansola/slamtb]. Cited dozens of times across
+  `Quaternion.java`, `MatrixRotation3D.java` and `RotationUtils.java`. See also <<bib-sola-arxiv>> for the
+  formal paper version of the same material. Used by: xref:rotations.adoc[].
+
+[[bib-wikipedia-ellipse]]
+* Wikipedia, "Ellipse", https://en.wikipedia.org/wiki/Ellipse[en.wikipedia.org/wiki/Ellipse]. Cited directly in
+  `Ellipse.java` javadoc as the source of its formulas. Used by: xref:conics-quadrics.adoc[].
+
+[[bib-thomsen-ellipsoid]]
+* Knud Thomsen's ellipsoid surface-area approximation (exponent p &#8776; 1.6075, first proposed 2004), used by
+  `Ellipsoid.getSurface()`. Not cited in the source; see e.g.
+  https://www.johndcook.com/blog/2021/03/24/surface-area-ellipsoid/[John D. Cook's write-up] for a derivation
+  and accuracy discussion (error margin below ~1.18%). Used by: xref:conics-quadrics.adoc[].
