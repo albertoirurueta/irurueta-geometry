@@ -1,0 +1,292 @@
+= Conics and Quadrics
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Conics are second-degree curves in the 2D projective plane; quadrics are their 3D analogue, second-degree
+surfaces. Both come with a **dual** representation (tangent lines / tangent planes instead of points) and both
+have familiar specializations -- circle/ellipse for conics, sphere/ellipsoid for quadrics.
+
+== Conics
+
+image::conic-sections.svg[Conic sections obtained by cutting a double cone with a plane, classified by the sign of b squared minus a c]
+
+`BaseConic` is an abstract 3&#215;3 symmetric-matrix base class for both `Conic` and `DualConic`. A conic is the
+locus latexmath:[ax^2 + 2bxy + cy^2 + 2dxw + 2eyw + fw^2 = 0]; its matrix form is:
+
+[cols="^,^,^"]
+|===
+|a |b |d
+
+|b |c |e
+
+|d |e |f
+|===
+
+`Conic.isLocus(point)` tests latexmath:[p^{\mathsf T} C\, p \approx 0]. `Conic.getConicType()` classifies the
+conic from the sign of latexmath:[b^2 - ac]:
+
+[cols="1,2",options="header"]
+|===
+|`ConicType` |Condition
+
+|`CIRCLE_CONIC_TYPE`
+|latexmath:[b^2-ac<0], and additionally latexmath:[a=c], latexmath:[b=0]
+
+|`ELLIPSE_CONIC_TYPE`
+|latexmath:[b^2-ac<0]
+
+|`PARABOLA_CONIC_TYPE`
+|latexmath:[b^2-ac=0]
+
+|`HYPERBOLA_CONIC_TYPE`
+|latexmath:[b^2-ac>0]
+
+|`RECTANGULAR_HYPERBOLA_CONIC_TYPE`
+|latexmath:[b^2-ac>0], and additionally latexmath:[a+c=0]
+|===
+
+This matrix form, its expansion into latexmath:[ax^2+bxy+cy^2+dx+ey+f=0], and the discriminant-based
+classification above are worked out from first principles in
+xref:reference.adoc#bib-phd-report[Irurueta's PhD report], &#167;1.2.5 "Conics" (eq. 1.24-1.27 and table 1.1,
+printed pp. 6-8 / PDF pp. 18-20).
+
+`Circle` and `Ellipse` are **independent, parametric classes** (center+radius; center+semi-axes+rotation) --
+they do not extend `Conic`. They convert via `toConic()` / `setFromConic(Conic)`, and `setFromConic` checks
+the conic type above (`Circle` requires `CIRCLE_CONIC_TYPE`; `Ellipse` accepts `ELLIPSE_CONIC_TYPE` or
+`CIRCLE_CONIC_TYPE`, since every circle is also an ellipse).
+
+== Quadrics
+
+image::quadrics.svg[Sphere and ellipsoid as specializations of the general quadric surface]
+
+`BaseQuadric` is the 3D analogue: a 4&#215;4 symmetric matrix with 10 parameters
+latexmath:[(a,b,c,d,e,f,g,h,i,j)], for the surface
+latexmath:[ax^2+by^2+cz^2+2dxy+2exz+2fyz+2gxw+2hyw+2izw+jw^2=0]. `Quadric`
+tests point incidence and exposes `getTangentPlaneAt(point)` (derived in
+<<tangent-lines-and-planes>>). The 4&#215;4 quadratic-form matrix, its 9-parameter expansion, and the
+non-degenerate/degenerate standard-form tables (ellipsoid/paraboloid/hyperboloid vs. cone/cylinder) are the
+direct 3D analogue of the conic case, worked out in xref:reference.adoc#bib-phd-report[the PhD report],
+&#167;1.3.5 "Quadrics" (eq. 1.75-1.91, tables 1.2-1.3, printed pp. 15-16 / PDF pp. 27-28).
+
+Unlike conics, **quadrics have no built-in type-classification enum** -- there is no `QuadricType` equivalent
+to `ConicType`, and no generic ellipsoid/hyperboloid/paraboloid classifier.
+
+`Sphere` (center + radius) and `Ellipsoid` (center + rotation + three independent semi-axes) are, again,
+independent parametric classes rather than `Quadric` subclasses:
+
+* `Sphere.setFromQuadric(Quadric)` requires `a==b==c`, `a&#8800;0`, `d=e=f=0`.
+* `Ellipsoid.toQuadric()` builds a canonical diagonal quadric then applies an `EuclideanTransformation3D` for
+  center and rotation; there is **no general `setFromQuadric`** for `Ellipsoid` -- only conversion from a
+  `Sphere`. Recovering an arbitrary ellipsoid's parameters from a general `Quadric` is not implemented.
+* `Ellipsoid.getSurface()` uses Knud Thomsen's well-known closed-form approximation (exponent latexmath:[p \approx 1.6075]), since the exact ellipsoid surface area has no elementary closed form.
+
+`Quadric.intersectWith(Plane)` computes the `Conic` obtained by slicing a quadric with a plane, by substituting
+the plane equation into the quadric equation -- the algebra is carried out step by step in inline comments in
+the source.
+
+== Duality: DualConic and DualQuadric
+
+image::conic-dual.svg[A conic as a locus of points versus its dual conic as an envelope of tangent lines]
+
+A `Conic`/`Quadric` is a **locus of points**: latexmath:[x^{\mathsf T} C\, x = 0]. Its dual, `DualConic`/
+`DualQuadric`, describes the *exact same shape* but as an **envelope of tangent lines** (2D) or
+**tangent planes** (3D) instead: latexmath:[l^{\mathsf T} C^{*}\, l = 0] for a tangent line `l`, where
+latexmath:[C^{*} = C^{-1}].
+
+[cols="1,2,2",options="header"]
+|===
+|Class |Represents |Locus test
+
+|`Conic`
+|points on the curve
+|`isLocus(Point2D)` -- latexmath:[x^{\mathsf T} C\, x \approx 0]
+
+|`DualConic`
+|lines tangent to the curve
+|`isLocus(Line2D)` -- is this `Line2D` tangent to the conic?
+
+|`Quadric`
+|points on the surface
+|`isLocus(Point3D)` -- latexmath:[x^{\mathsf T} Q\, x \approx 0]
+
+|`DualQuadric`
+|planes tangent to the surface
+|`isLocus(Plane)` -- is this `Plane` tangent to the quadric?
+|===
+
+Both pairs share the same base-class matrix representation (`BaseConic` for `Conic`/`DualConic`,
+`BaseQuadric` for `Quadric`/`DualQuadric`). The rest of this section derives, rather than just asserts, the
+three facts the library's API relies on: how the tangent line/plane at a locus point is computed, why the dual
+is the plain matrix inverse, and why the transform rule for conics/quadrics has that particular
+inverse-transpose form.
+
+[#tangent-lines-and-planes]
+=== Tangent lines and tangent planes
+
+Let latexmath:[m] be a locus point of conic latexmath:[C] (so latexmath:[S(m)=m^{\mathsf T}Cm=0]), and let a
+line latexmath:[l] through latexmath:[m] meet the conic again at a second point latexmath:[m']. Every point of
+the line can be written latexmath:[m'' = m + \lambda m']; substituting into latexmath:[S(m'')=0] and expanding
+with the bilinear form latexmath:[S(m,m')=m^{\mathsf T}Cm'] gives a quadratic in latexmath:[\lambda]:
+
+[latexmath]
+++++
+S(m) + 2\lambda\,S(m,m') + \lambda^2 S(m') = 0
+++++
+
+which always has (up to) two roots -- a line meets a conic in two points. This is exactly what the internal
+TODO at `Conic.java:478` cites (see <<references>> for the resolved citation); the full derivation is
+xref:reference.adoc#bib-phd-report[PHD], &#167;1.2.6.1 "Line-conic intersections", Proof 1.2, eq. 1.34-1.44
+(printed pp. 8-9 / PDF pp. 20-21).
+
+The two intersection points coincide -- the line is *tangent* -- exactly when that quadratic's discriminant
+vanishes. Fixing latexmath:[m] on the conic (latexmath:[S(m)=0]), the discriminant condition collapses to the
+linear equation latexmath:[S(m,m')=m^{\mathsf T}Cm'=0], which forces latexmath:[m'=m]. Writing this as
+latexmath:[l^{\mathsf T}m' = m^{\mathsf T}Cm' = 0] identifies the tangent line at latexmath:[m], up to scale,
+as:
+
+latexmath:[l = C\,m]
+
+(xref:reference.adoc#bib-phd-report[PHD], &#167;1.2.6.2 "Line-conic tangency", eq. 1.46-1.51, printed
+pp. 10-11 / PDF pp. 22-23; the identical result appears as Result 2.7 in
+xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman], chapter 2, p. 31). `Conic.getTangentLineAt`/
+`tangentLineAt` (`Conic.java:420-460`) implement precisely this product:
+
+[source,java]
+----
+Line2D tangent = conic.getTangentLineAt(point); // l = C·m
+----
+
+The same argument, one dimension up, uses three coplanar points instead of two collinear ones (PHD
+&#167;1.3.6.1 "Plane-quadric intersections", eq. 1.92-1.100, printed pp. 17-18 / PDF pp. 29-30 -- it is
+literally the same proof technique applied to a plane cutting a quadric instead of a line cutting a conic) and
+gives the tangent plane at a locus point latexmath:[M] as:
+
+latexmath:[\Pi = Q\,M]
+
+implemented by `Quadric.getTangentPlaneAt`/`tangentPlaneAt` (`Quadric.java:516-560`):
+
+[source,java]
+----
+Plane tangentPlane = quadric.getTangentPlaneAt(point); // Π = Q·M
+----
+
+=== The dual is the inverse: C&#42; = C&#8315;&#185; and Q&#42; = Q&#8315;&#185;
+
+Insert latexmath:[C^{-1}C=I] into the conic equation:
+
+[latexmath]
+++++
+m^{\mathsf T} C\, m = m^{\mathsf T} C\, C^{-1} C\, m = 0
+++++
+
+Since latexmath:[l=Cm] is the tangent line at latexmath:[m] (previous section), latexmath:[m^{\mathsf T}C = l^{\mathsf T}], so the expression above is latexmath:[l^{\mathsf T} C^{-1} l = 0] -- which is exactly the dual
+conic's own defining equation latexmath:[l^{\mathsf T}C^{*}l=0]. Matching the two forces, assuming latexmath:[C]
+is non-singular:
+
+latexmath:[C^{*} = C^{-1}]
+
+(xref:reference.adoc#bib-phd-report[PHD], &#167;1.2.6.3 "Relation between conic and dual conic", eq. 1.52-1.54,
+printed p. 11 / PDF p. 23; the same derivation from the tangent-line result is given in
+xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman], chapter 2, p. 31). `Conic.getDualConic`/
+`dualConic` (`Conic.java:236-269`) and the mirror `DualConic.getConic`/`conic` (`DualConic.java:246-277`)
+compute exactly this matrix inverse (symmetrizing the result against numerical round-off), throwing
+`DualConicNotAvailableException`/`ConicNotAvailableException` when the matrix is singular:
+
+[source,java]
+----
+DualConic dual = conic.getDualConic(); // C* = C⁻¹
+----
+
+The identical algebra, one dimension up, gives latexmath:[Q^{*}=Q^{-1}] for quadrics, implemented by
+`Quadric.getDualQuadric`/`dualQuadric` (`Quadric.java:262-299`) and `DualQuadric.getQuadric`/`quadric`
+(`DualQuadric.java:272-307`).
+
+=== Transforming conics, quadrics, and their duals
+
+Under a point homography latexmath:[m'=Hm], lines transform contragradiently, latexmath:[l'=H^{-\mathsf T}l].
+Substituting latexmath:[m=H^{-1}m'] into latexmath:[S(m)=0] and demanding that the transformed conic
+latexmath:[C'] reproduce the same locus in the new coordinates forces (up to scale):
+
+latexmath:[C' = H^{-\mathsf T}\,C\,H^{-1}]
+
+and the parallel argument on lines gives the dual rule latexmath:[C^{*\prime} = H\,C^{*}\,H^{\mathsf T}].
+Substituting the first rule into a plain inversion shows that transformation and duality commute:
+
+[latexmath]
+++++
+(C')^{*} = \left(H^{-\mathsf T}CH^{-1}\right)^{-1} = H\,C^{-1}\,H^{\mathsf T} = H\,C^{*}\,H^{\mathsf T} = (C^{*})'
+++++
+
+(xref:reference.adoc#bib-phd-report[PHD], &#167;1.2.7 "Transforming conics and dual conics", eq. 1.55-1.63 and
+Proof 1.3, printed pp. 11-12 / PDF pp. 23-24; the transform rules alone also appear as Results 2.13-2.14 in
+xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman], chapter 2, pp. 36-37). The identical algebra
+one dimension up gives latexmath:[Q'=T^{-\mathsf T}QT^{-1}], latexmath:[Q^{*\prime}=T\,Q^{*}\,T^{\mathsf T}],
+and the same duality-commutes identity for quadrics (PHD &#167;1.3.7, eq. 1.114-1.116, printed pp. 20-21 /
+PDF pp. 32-33). xref:transformations.adoc[] gives the general table of how every geometric entity in this
+library (points, lines, planes, conics, quadrics, cameras) transforms under each transformation class it
+implements -- this section only shows *why* the conic/quadric rule takes that particular inverse-transpose
+form.
+
+=== The absolute conic and the dual absolute quadric
+
+image::absolute-conic-quadric.svg[The absolute conic and dual absolute quadric on the plane at infinity]
+
+`Conic.createCanonicalAbsoluteConic()` / `DualConic.createCanonicalDualAbsoluteConic()` return the identity
+conic `(1,0,1,0,0,1)`, i.e. latexmath:[\Omega_\infty = \Omega_\infty^{*} = I_3]; and
+`DualQuadric.createCanonicalDualAbsoluteQuadric()` returns latexmath:[Q_\infty^{*} = \mathrm{diag}(1,1,1,0)].
+There is no `Quadric.createCanonicalAbsoluteQuadric()` -- the (non-dual) absolute quadric is never directly
+instantiated in the library, only its degenerate dual. These are exactly the canonical forms derived in
+xref:reference.adoc#bib-phd-report[PHD], &#167;1.4.3.1-1.4.3.3 (eq. 1.137-1.169, printed pp. 28-34 / PDF
+pp. 40-46): the absolute conic latexmath:[\Omega_\infty] is the point conic where the (non-dual) absolute
+quadric latexmath:[Q_\infty] meets the plane at infinity, and in the metric stratum both it and its dual reduce
+to the identity/latexmath:[\mathrm{diag}(1,1,1,0)] forms above precisely because that is the condition under
+which the conic-based orthogonality test latexmath:[m_1^{\mathsf T}\Omega_\infty m_2 = 0] matches the ordinary
+Euclidean dot product (the same construction is cross-referenced in
+xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman], chapter 3, &#167;&#167;3.6-3.7, pp. 81-83).
+*Which* transformation brings an arbitrary projective reconstruction's dual absolute quadric back to this
+canonical diagonal form -- the stratification story of upgrading a projective or affine reconstruction to the
+metric stratum -- is the subject of xref:transformations.adoc[]; this page only establishes what the canonical
+target looks like and why, since `Conic`/`DualQuadric` are the classes that hold it (also used in camera
+self-calibration, see xref:pinhole-camera.adoc[]).
+
+[#references]
+== References
+
+Full citations are in the xref:reference.adoc#bibliography[bibliography]; in detail:
+
+* The conic/dual-conic derivations above (tangent line, dual-is-inverse, transform rule) and the quadric/dual-
+  quadric derivations that mirror them one dimension up are drawn from Alberto Irurueta's PhD thesis (cover
+  title _Fixed Scene 3D Reconstruction for Mobile Applications_; the document's running header instead reads
+  "3D Face and Object Reconstruction for Mobile Applications" -- same document), xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis]:
+  &#167;1.2.5-1.2.7 (printed pp. 6-12 / PDF pp. 18-24) for conics and dual conics, &#167;1.3.5-1.3.7 (printed
+  pp. 15-21 / PDF pp. 27-33) for quadrics and dual quadrics, and &#167;1.4.3.1-1.4.3.3 (printed pp. 28-34 / PDF
+  pp. 40-46) for the absolute conic and dual absolute quadric in the metric stratum.
+* `Conic.java:478` carries the internal TODO comment `//TODO: intersection of Line2D with Conic results in two
+  points (page 9 PHD report.pdf)`, alongside two still-unimplemented sibling TODOs at `Conic.java:476-477`
+  (shortest distance to conic, closest point to conic) and an analogous unimplemented pair at
+  `Quadric.java:704-705` (shortest distance to quadric, closest point to quadric) -- none of these five carry
+  code today. "page 9 PHD report.pdf" refers to the same thesis cited above: printed page 9 (PDF page 21) is
+  &#167;1.2.6.1 "Line-conic intersections", Proof 1.2, which proves eq. 1.34-1.44 -- that a line meeting a conic
+  at a fixed point latexmath:[m] yields a second intersection point latexmath:[m''=m+\lambda m'] where
+  latexmath:[\lambda] solves latexmath:[S(m)+2\lambda S(m,m')+\lambda^2 S(m')=0] -- i.e. exactly "intersection
+  of Line2D with Conic results in two points". The TODO names the precise theoretical result (worked out by
+  the same author, on paper, before this codebase existed) that would justify adding a `Line2D`-`Conic`
+  intersection method; the method itself, like its two siblings, simply has not been written yet. See
+  xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis] for the full citation.
+* `Ellipse.java` cites its formulas directly from xref:reference.adoc#bib-wikipedia-ellipse[Wikipedia -- Ellipse].
+* The xref:reference.adoc#bib-thomsen-ellipsoid[Thomsen ellipsoid-surface-area approximation] used by
+  `Ellipsoid.getSurface()` is not cited in the source either.
+* No other book, author, or paper is cited directly in `Conic`, `DualConic`, `BaseConic`, `Quadric`,
+  `DualQuadric`, `BaseQuadric`, `Circle`, or `Sphere`. The tangent-line/tangent-plane, dual-inverse and
+  transform-rule formulas those classes implement are cross-checked above against a second, independent
+  source: xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman, _Multiple View Geometry in Computer
+  Vision_] -- chapter 2, pp. 30-37 for conics and dual conics (Results 2.7, 2.13, 2.14 and the exercise 2.8(viii)
+  construction latexmath:[[l\]_\times C\, [l\]_\times] on p. 64, the rank-2 dual conic for the pair of points
+  where a line meets a conic); chapter 3, &#167;3.2.3-3.2.4 and &#167;&#167;3.6-3.7, pp. 73-83, for quadrics,
+  dual quadrics, and the absolute conic/absolute dual quadric.
+
+== Related pages
+
+* xref:points-lines-planes.adoc[] -- points, lines and planes are the primitives conics/quadrics are built from.
+* xref:transformations.adoc[] -- how conics/quadrics transform under Euclidean/metric/affine/projective maps.
+* xref:pinhole-camera.adoc[] -- the absolute conic and camera self-calibration.

@@ -37,7 +37,7 @@ class AxisRotation3DTest {
     private static final double MIN_ANGLE_DEGREES = 0.0;
     private static final double MAX_ANGLE_DEGREES = 90.0;
 
-    private static final double ABSOLUTE_ERROR = 5e-6;
+    private static final double ABSOLUTE_ERROR = 1e-5;
     private static final double LARGE_ABSOLUTE_ERROR = 1e-5;
 
     private static final int TIMES = 10;

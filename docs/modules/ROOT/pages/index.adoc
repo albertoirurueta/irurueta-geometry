@@ -1,0 +1,94 @@
+= Irurueta Geometry
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+irurueta-geometry is a Java library of geometry structures and utilities built around **projective geometry**
+and **homogeneous coordinates**. Its central practical use case is *camera geometry*: representing and estimating
+a pinhole camera model from noisy point/line correspondences, robustly, and then refining the result through
+non-linear optimization.
+
+== Core concepts
+
+The library is organized into three areas:
+
+* `com.irurueta.geometry` -- core geometric primitives: 2D/3D points, lines, planes, conics/quadrics, rotations,
+  transformations, cameras, and basic solids (box, sphere, ellipsoid). Most entities come in explicit `2D`/`3D`
+  pairs, e.g. `Point2D`/`Point3D`, `Line2D`/`Line3D`, `Triangle2D`/`Triangle3D`.
+* `com.irurueta.geometry.estimators` -- non-robust and robust estimators that fit a geometric entity (a circle,
+  conic, transformation, or pinhole camera) from point/line correspondences. Robust estimators come in families
+  named after the robust algorithm used: `RANSAC`, `LMedS`, `MSAC`, `PROSAC`, `PROMedS`.
+* `com.irurueta.geometry.refiners` -- non-linear refinement of an entity after an initial robust estimate.
+
+Some of the classes a newcomer is most likely to start with:
+
+[cols="1,3",options="header"]
+|===
+|Class
+|Purpose
+
+|`Point2D` / `Point3D`
+|Points in 2D/3D space, represented in homogeneous or inhomogeneous coordinates.
+
+|`Line2D` / `Line3D`, `Plane`
+|Basic linear geometric loci.
+
+|`Conic` / `Quadric`
+|Second-degree curves/surfaces in projective space (and their duals `DualConic`/`DualQuadric`).
+
+|`Transformation2D` / `Transformation3D`
+|Geometric mappings of increasing generality: Euclidean ⊂ metric ⊂ affine ⊂ projective.
+
+|`PinholeCamera` / `PinholeCameraIntrinsicParameters`
+|The pinhole camera model and its intrinsic calibration parameters (focal length, aspect ratio, skewness,
+principal point).
+
+|`Quaternion` / `MatrixRotation3D` / `Rotation3D`
+|3D rotation representations.
+
+|`*RobustEstimator` classes
+|Robust fitting of cameras, transformations, or conics from noisy correspondences (e.g.
+`RANSACDLTPointCorrespondencePinholeCameraRobustEstimator`, `EPnPPointCorrespondencePinholeCameraEstimator`).
+|===
+
+== How estimation typically flows
+
+[mermaid]
+....
+flowchart LR
+    A[Noisy point/line\ncorrespondences] --> B[Robust estimator\nRANSAC / LMedS / MSAC / PROSAC / PROMedS]
+    B --> C[Initial geometric estimate\ne.g. PinholeCamera, Transformation]
+    C --> D[Refiner\nnon-linear optimization]
+    D --> E[Refined geometric entity]
+....
+
+== Geometric entities in depth
+
+* xref:transformations.adoc[] -- the Euclidean / metric / affine / projective hierarchy and how each family
+  transforms points, lines, planes, conics and quadrics.
+* xref:rotations.adoc[] -- 2D rotations and the three interchangeable 3D representations (matrix, axis-angle,
+  quaternion).
+* xref:points-lines-planes.adoc[] -- homogeneous vs. inhomogeneous points, `Line2D`/`Line3D`, `Plane`, and
+  point-line-plane duality.
+* xref:conics-quadrics.adoc[] -- conics/quadrics, their duals, and the `Circle`/`Ellipse`/`Sphere`/`Ellipsoid`
+  specializations.
+* xref:triangles-polygons.adoc[] -- `Triangle2D`/`3D`, `Polygon2D`/`3D`, and ear-clipping triangulation.
+* xref:pinhole-camera.adoc[] -- the pinhole camera model that ties 3D and 2D entities together.
+* xref:boxes-kdtrees.adoc[] -- `Box2D`/`3D` and the `KDTree` spatial index built on top of them.
+
+== Estimators in depth
+
+* xref:estimators.adoc[] -- why every entity gets a non-robust algorithm *and* a family of RANSAC / LMedS /
+  MSAC / PROSAC / PROMedS robust wrappers, and the shared `com.irurueta.numerical.robust` machinery underneath.
+* xref:point-line-plane-estimators.adoc[] -- fitting a `Point2D`/`Point3D`, `Line2D` or `Plane` to a noisy set
+  of lines/planes/points.
+* xref:conic-quadric-estimators.adoc[] -- fitting a `Circle`, `Sphere`, `Conic`/`DualConic` or
+  `Quadric`/`DualQuadric` to a noisy point/line/plane set.
+* xref:transformation-estimators.adoc[] -- fitting a Euclidean, metric, affine or projective transformation
+  from noisy point/line/plane correspondences.
+* xref:pinhole-camera-estimators.adoc[] -- estimating a `PinholeCamera` via DLT, EPnP, UPnP or weighted
+  correspondences, robustly or not.
+
+== Next steps
+
+* xref:installation.adoc[] -- add irurueta-geometry as a dependency to your project.
+* xref:reference.adoc[] -- generated reports and external dashboards for this project.

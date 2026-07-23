@@ -1,0 +1,97 @@
+= Rotations
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+Rotations are the orientation-only part of a rigid motion. `irurueta-geometry` provides a single 2D
+representation (`Rotation2D`, one angle) and three interchangeable 3D representations
+(`MatrixRotation3D`, `AxisRotation3D`, `Quaternion`), all implementing the abstract `Rotation3D`.
+
+== 2D rotations
+
+`Rotation2D` stores a single angle `theta` (radians) and can convert to/from a 2&#215;2 (inhomogeneous) or
+3&#215;3 (homogeneous) orthonormal matrix. Composing two rotations is simply adding angles; there is no
+axis/quaternion equivalent in 2D since the rotation axis (out of plane) is always the same.
+
+== 3D rotations: three representations of the same group
+
+image::rotation-axis-angle.svg[3D rotation represented as axis + angle, with the equivalent quaternion and Rodrigues-matrix formulas]
+
+[cols="1,2,2",options="header"]
+|===
+|Class |Internal representation |Notes
+
+|`MatrixRotation3D`
+|3&#215;3 orthonormal matrix, determinant +1
+|Direct matrix multiplication to rotate/compose; supports two Euler-angle parameterizations (`alpha/beta/gamma`
+and aerospace `roll/pitch/yaw`) plus an explicit `hasGimbalLock()` check.
+
+|`AxisRotation3D`
+|unit axis `(x,y,z)` + angle `theta` (Rodrigues form)
+|Matrix built from Rodrigues' rotation formula; explicitly handles the identity (&#952;=0) and 180&#176;
+singularities when recovering axis/angle from a matrix.
+
+|`Quaternion`
+|4 components `(a,b,c,d)` in basis `(1,i,j,k)`, unit norm for a valid rotation
+|`a` encodes the half-angle cosine, `(b,c,d)` the axis scaled by the half-angle sine; supports SLERP
+interpolation; conversion from a matrix uses Shepperd's method (branch selection by matrix trace to avoid
+dividing by a near-zero term).
+|===
+
+`Rotation3D.create()` defaults to `Rotation3DType.QUATERNION`. Every representation can convert to every other
+one (`toMatrixRotation()`, `toAxisRotation()`, `toQuaternion()`), and `combine`/`combineAndReturnNew` will
+convert its argument to the receiver's own representation first if the runtime types differ.
+
+=== Rodrigues' rotation formula and the quaternion form
+
+For a unit axis latexmath:[u] and angle latexmath:[\theta]:
+
+[latexmath]
+++++
+R = I + \sin\theta\,[u]_\times + (1-\cos\theta)\,[u]_\times^2 \qquad
+q = \left(\cos\tfrac{\theta}{2},\ \sin\tfrac{\theta}{2}\,u\right)
+++++
+
+where the latexmath:[[u\]_\times] notation above is the skew-symmetric cross-product matrix built from the
+axis latexmath:[u]. `AxisRotation3D` builds `R` directly from this formula; `Quaternion.setFromAxisAndRotation`
+builds `q` the same way.
+
+== Numerical subtleties the code explicitly guards against
+
+* **Gimbal lock** (`MatrixRotation3D.hasGimbalLock()`) -- when the pitch angle approaches &#177;90&#176;, roll
+  and yaw become coupled and the aerospace Euler decomposition is undefined; the library detects this via a
+  threshold on the matrix element that would otherwise blow up, and documents that the returned yaw is an
+  arbitrary (but consistent) 0.0 in that case.
+* **Sign ambiguity recovering an angle from a matrix** -- `MatrixRotation3D.getRotationAngle()` computes
+  `acos(...)`, which cannot distinguish `+theta` from `-theta`; the method tries both and keeps whichever
+  reproduces the original matrix with less numerical error.
+* **SLERP double-cover and degeneracy** -- `Quaternion.slerp` normalizes both inputs first, returns the first
+  quaternion unchanged when the two are (anti)parallel (to avoid dividing by `sin(theta0) &#8776; 0`), and
+  flips the sign of the second quaternion when the dot product is negative so the interpolation always takes
+  the shorter arc (since `q` and `-q` represent the same rotation).
+* **Small-angle rotation vectors** -- `Quaternion.rotationVectorToQuaternion` switches to a first/second-order
+  Taylor approximation below a small-norm threshold, avoiding the `sin(x)/x` division blowing up near zero.
+
+== References
+
+Unlike the transformation classes, the rotation classes are unusually well-annotated with external references
+in their javadoc. Full citations are collected in the xref:reference.adoc#bibliography[bibliography]; in
+summary:
+
+* `AxisRotation3D` is explicitly based on Martin Baker's axis-angle rotation code --
+  xref:reference.adoc#bib-baker-euclideanspace[euclideanspace.com].
+* The roll/pitch/yaw Euler-angle methods on `MatrixRotation3D` cite James Diebel's widely used technical note --
+  xref:reference.adoc#bib-diebel[_Representing Attitude: Euler Angles, Unit Quaternions, and Rotation
+  Vectors_].
+* `Quaternion`, `RotationUtils` and the Euler-angle conversions repeatedly cite MATLAB functions
+  (`au2q.m`, `qProd.m`, `e2R.m`, `q2au.m`, `R2q.m`, `w2omega.m`, ...) from
+  xref:reference.adoc#bib-sola-slamtb[Joan Sol&#224;'s SLAM toolbox]; the formal, citable write-up of the same
+  material is xref:reference.adoc#bib-sola-arxiv[Sol&#224;, _Quaternion kinematics for the error-state Kalman
+  filter_].
+* `Quaternion.matrixRotationToQuaternion` implements xref:reference.adoc#bib-shepperd[Shepperd's method] for
+  recovering a quaternion from a rotation matrix.
+
+== Related pages
+
+* xref:transformations.adoc[] -- Euclidean and metric transformations embed a `Rotation2D`/`Rotation3D`.
+* xref:pinhole-camera.adoc[] -- camera orientation is stored as a `Rotation3D` (`MatrixRotation3D` after RQ
+  decomposition of the camera matrix).

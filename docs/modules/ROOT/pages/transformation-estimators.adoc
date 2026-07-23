@@ -1,0 +1,381 @@
+= Transformation Estimators
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+`com.irurueta.geometry.estimators` has four robust-estimator hierarchies for the stratified transformation
+families described in xref:transformations.adoc[]: Euclidean, metric, affine and projective, each in 2D and
+3D. Every one follows the general pattern laid out in xref:estimators.adoc[]: draw a **minimal sample** of
+correspondences, build a candidate transformation from it, score the candidate against the rest of the data,
+and repeat -- with RANSAC, LMedS, MSAC, PROSAC and PROMedS differing only in the scoring rule
+(xref:estimators.adoc#ransac[], xref:estimators.adoc#lmeds[], xref:estimators.adoc#msac[],
+xref:estimators.adoc#prosac-promeds[]).
+
+What is genuinely specific to these four hierarchies is where they split into two architecturally different
+groups:
+
+[cols="1,2,2",options="header"]
+|===
+|Family |Euclidean &amp; Metric |Affine &amp; Projective
+
+|Non-robust algorithm
+|a real, standalone, reusable `XxxEstimator` class
+|none -- closed form is inlined per robust subclass
+
+|How the robust wrapper gets a hypothesis
+|**delegates**: constructs the non-robust estimator internally and calls `estimate()`
+|**duplicates**: rebuilds the same linear solve inline, once per robust subclass
+
+|Correspondence types
+|point only
+|point, *and* line (2D) / plane (3D)
+
+|Minimal sample size (2D / 3D)
+|3 / 4 (weak minimum 2 / 3)
+|3 / 4 (affine), 4 / 5 (projective) -- same count for the line/plane variant as the point one
+|===
+
+[#euclidean-metric]
+== Euclidean and metric: the robust wrapper reuses a real non-robust estimator
+
+`EuclideanTransformation2DEstimator` is the one non-robust algorithm on this page that is not just an inlined
+constructor call. Its javadoc states plainly: *"This estimator uses Kabsch algorithm on 2D. A minimum of 3
+non-coincident matched 2D input/output points is required for estimation. For some point configurations 2
+points are enough to find a valid solution. If more points are provided an LMSE (Least Mean Squared Error)
+solution will be found."* (`EuclideanTransformation2DEstimator.java:31-41`, citing
+https://en.wikipedia.org/wiki/Kabsch_algorithm[Wikipedia's Kabsch algorithm article]).
+`EuclideanTransformation3DEstimator` is the 3D analogue (minimum 4 points, weak minimum 3), citing the same
+Wikipedia article plus http://nghiaho.com/?page_id=671[nghiaho.com] (`EuclideanTransformation3DEstimator.java:31-43`).
+`MetricTransformation2DEstimator`/`3DEstimator` follow the identical shape (minimum 3/4 points, weak minimum
+2/3, LMSE when over-determined), with the 3D class explicitly citing a
+http://stackoverflow.com/questions/13432805/finding-translation-and-scale-on-two-sets-of-points-to-get-least-square-error-in[StackOverflow
+derivation] of least-squares scale/rotation/translation fitting (`MetricTransformation3DEstimator.java:36-39`).
+
+The **Kabsch algorithm** (xref:reference.adoc#bib-kabsch[Kabsch, 1976]) finds the rotation latexmath:[R]
+minimizing the sum of squared distances between one point set and a rotated/translated copy of another:
+
+[latexmath]
+++++
+(R, t) = \operatorname*{arg\,min}_{R,\,t} \sum_i \lVert q_i - (R\,p_i + t) \rVert^2, \qquad R^{\mathsf T}R = I,\ \det R = 1
+++++
+
+=== The Kabsch construction, step by step
+
+Kabsch's own closed-form solution -- not itself in any of the three source PDFs, since it is a 1976
+crystallography paper the library only cites via Wikipedia, but built entirely from the SVD machinery this
+library already relies on elsewhere (xref:reference.adoc#bib-numerical-recipes[Numerical Recipes] &#167;2.6) --
+proceeds in four steps that a reader of `EuclideanTransformation2D/3DEstimator.java` will recognize directly:
+
+. **Center both point sets** on their centroids: latexmath:[\bar p=\tfrac1n\sum_i p_i], latexmath:[\bar q=\tfrac1n\sum_i q_i], latexmath:[p_i'=p_i-\bar p], latexmath:[q_i'=q_i-\bar q]. The translation is recovered
+at the very end as latexmath:[t=\bar q-R\bar p] -- rotation and translation are decoupled by this centering,
+which is exactly why the *rotation* problem below never mentions latexmath:[t].
+. **Build the cross-covariance matrix** latexmath:[H=\sum_i p_i'\,q_i'^{\mathsf T}] (a 2&#215;2 matrix in 2D, 3&#215;3
+in 3D) -- the only place the actual coordinates enter the computation.
+. **Take the SVD** latexmath:[H=U\Sigma V^{\mathsf T}].
+. **Recover the optimal rotation** latexmath:[R=V\,U^{\mathsf T}], *unless* latexmath:[\det(VU^{\mathsf T})<0], in
+which case one singular value's sign is flipped first (`MetricTransformation2DEstimator.java:409-429`: `if
+(Utils.det(r) < 0.0) { ... }`, negating the last column of latexmath:[U] before recombining). This check is not
+optional bookkeeping: without it, a reflection (latexmath:[\det R=-1]) minimizes the same sum of squared
+distances just as well as a true rotation whenever the point configuration is close to planar/collinear, and
+the sign flip is precisely what keeps the result inside latexmath:[SO(n)] rather than the larger group
+latexmath:[O(n)] of all orthogonal matrices.
+
+`MetricTransformation2D/3DEstimator` solve the identical rotation problem, then recover a single extra unknown
+-- a uniform scale -- directly from the same SVD, with no further decomposition
+(`MetricTransformation2DEstimator.java:432-436`):
+
+[latexmath]
+++++
+s = \frac{\sum_i e_i\,\sigma_i}{\sum_i \lVert p_i' \rVert^2}, \qquad t = \bar q - s\,R\,\bar p
+++++
+
+where latexmath:[\sigma_i] are latexmath:[H]'s singular values and latexmath:[e_i=\pm1] carries the same
+reflection sign-fix as the rotation step (the denominator, `inCov` in the source, is the input point set's own
+variance around its centroid). `EuclideanTransformation2D/3DEstimator` is the latexmath:[s=1] special case,
+consistent with xref:transformations.adoc[]'s statement that Euclidean is metric with scale fixed at 1 -- which
+is why every transformation on that page's Euclidean/metric rows (rotation plus translation, optionally plus
+scale) reduces to the same handful of linear-algebra primitives regardless of dimension.
+
+Because this non-robust estimator is a real, independently useful class, the robust wrapper does not
+reimplement anything: it *forwards* the minimal-sample-size constants from the non-robust class --
+
+[source,java]
+----
+// EuclideanTransformation2DRobustEstimator.java:41,46
+public static final int MINIMUM_SIZE = EuclideanTransformation2DEstimator.MINIMUM_SIZE;         // 3
+public static final int WEAK_MINIMUM_SIZE = EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE; // 2
+----
+
+-- and every concrete `{RANSAC|LMedS|MSAC|PROSAC|PROMedS}EuclideanTransformation2DRobustEstimator` literally
+constructs a private `EuclideanTransformation2DEstimator` and delegates the minimal-sample hypothesis to it:
+
+[source,java]
+----
+// RANSACEuclideanTransformation2DRobustEstimator.java:338-374 (abridged)
+private final EuclideanTransformation2DEstimator nonRobustEstimator =
+        new EuclideanTransformation2DEstimator(isWeakMinimumSizeAllowed());
+...
+public void estimatePreliminarSolutions(final int[] samplesIndices, final List<EuclideanTransformation2D> solutions) {
+    nonRobustEstimator.setPoints(subsetInputPoints, subsetOutputPoints);
+    solutions.add(nonRobustEstimator.estimate());
+}
+----
+
+`MetricTransformation2D/3DRobustEstimator` follow the identical delegation pattern. This is the only place in
+`com.irurueta.geometry.estimators` where "compose, don't duplicate" holds across the non-robust/robust boundary
+-- contrast with affine and projective transformations below, and with the inlined constructions in
+xref:point-line-plane-estimators.adoc[] and xref:conic-quadric-estimators.adoc[]. Only the point-correspondence
+variant exists for Euclidean/metric transformations (no line/plane correspondence flavor). 20 concrete robust
+subclasses total (5 algorithms &#215; {Euclidean2D, Euclidean3D, Metric2D, Metric3D}).
+
+[#affine]
+== Affine transformations: the closed form is duplicated, not shared
+
+`AffineTransformation2DRobustEstimator` has **no** standalone non-robust sibling. Its javadoc: *"algorithms to
+robustly find the best affine 2D transformation for collections of matching 2D points, or 2D lines"*
+(`AffineTransformation2DRobustEstimator.java:26-30`), with `MINIMUM_SIZE = 3`
+(`AffineTransformation2DRobustEstimator.java:40`) and two intermediate abstracts,
+`PointCorrespondenceAffineTransformation2DRobustEstimator` and
+`LineCorrespondenceAffineTransformation2DRobustEstimator`. `AffineTransformation3DRobustEstimator` is the
+3D analogue (`MINIMUM_SIZE = 4`, `AffineTransformation3DRobustEstimator.java:40`), with
+`PointCorrespondenceAffineTransformation3DRobustEstimator` and
+`PlaneCorrespondenceAffineTransformation3DRobustEstimator` (a 3D affine map's codimension-1 analogue of a 2D
+line is a plane).
+
+=== Why 3 points in 2D, 4 in 3D
+
+A 2D affine map latexmath:[p'=Ap+t] has 6 unknowns (a 2&#215;2 matrix plus a 2-vector), and each point
+correspondence contributes 2 equations (its latexmath:[x'] and latexmath:[y']) -- hence 3 points exactly pin
+down the 6 unknowns, with no scale ambiguity to divide out (unlike the homogeneous projective case below,
+affine parameters are already inhomogeneous). The 3D case is the same argument with a 3&#215;3 matrix plus a
+3-vector (12 unknowns, 3 equations per point) -- 4 points. A line correspondence in 2D contributes exactly the
+same 2 independent constraints as a point correspondence (a `Line2D` has 2 degrees of freedom, dual to a
+`Point2D`'s), which is exactly why the code needs no separate, larger `MINIMUM_SIZE` for the line-correspondence
+variant -- `LineCorrespondenceAffineTransformation2DRobustEstimator` inherits `MINIMUM_SIZE = 3` unchanged from
+`AffineTransformation2DRobustEstimator` (verified: it does not redeclare the constant), and likewise
+`PlaneCorrespondenceAffineTransformation3DRobustEstimator` inherits `MINIMUM_SIZE = 4`.
+
+=== The closed form: inlined once per robust subclass
+
+Unlike Euclidean/metric, there is no shared `AffineTransformation2DEstimator` class to delegate to -- each of
+the 5 concrete `{RANSAC|LMedS|MSAC|PROSAC|PROMedS}PointCorrespondenceAffineTransformation2DRobustEstimator`
+classes independently calls the same 3-point constructor:
+
+[source,java]
+----
+// RANSACPointCorrespondenceAffineTransformation2DRobustEstimator.java:278-294 (abridged)
+public void estimatePreliminarSolutions(final int[] samplesIndices, final List<AffineTransformation2D> solutions) {
+    final var inputPoint1 = inputPoints.get(samplesIndices[0]);
+    final var inputPoint2 = inputPoints.get(samplesIndices[1]);
+    final var inputPoint3 = inputPoints.get(samplesIndices[2]);
+    final var outputPoint1 = outputPoints.get(samplesIndices[0]);
+    final var outputPoint2 = outputPoints.get(samplesIndices[1]);
+    final var outputPoint3 = outputPoints.get(samplesIndices[2]);
+    try {
+        final var transformation = new AffineTransformation2D(
+                inputPoint1, inputPoint2, inputPoint3, outputPoint1, outputPoint2, outputPoint3);
+        solutions.add(transformation);
+    } catch (final CoincidentPointsException e) {
+        // if points are coincident, no solution is added
+    }
+}
+
+@Override
+public double computeResidual(final AffineTransformation2D currentEstimation, final int i) {
+    currentEstimation.transform(inputPoints.get(i), testPoint);
+    return outputPoints.get(i).distanceTo(testPoint); // true geometric (Euclidean) distance
+}
+----
+
+The residual here is a genuine Euclidean distance between the transformed input point and the measured output
+point -- not an algebraic proxy like the conic/quadric residuals in xref:conic-quadric-estimators.adoc[] --
+because an affine transformation's output is already an ordinary inhomogeneous point, with no matrix
+normalization or scale ambiguity to complicate the comparison. The line-correspondence variant's residual
+combines the transformed line's angular and positional agreement with the target line rather than a single
+point distance (see `getResidual` in `RANSACLineCorrespondenceAffineTransformation2DRobustEstimator.java`).
+
+After a robust affine estimate is found, an optional LMSE polish over all detected inliers is available through
+a separate package: `attemptRefine` builds a `com.irurueta.geometry.refiners.PointCorrespondenceAffineTransformation2DRefiner`
+when the `refineResult` flag is set (`PointCorrespondenceAffineTransformation2DRobustEstimator.java:568-584`) --
+exactly the generic "LMSE re-estimation" step xref:estimators.adoc#shared-architecture[] describes, concretely
+instantiated for this hierarchy.
+
+20 concrete robust subclasses total (5 algorithms &#215; {Point2D, Line2D, Point3D, Plane3D}).
+
+[#projective]
+== Projective transformations (homographies): the same duplication pattern, grounded in the DLT algorithm
+
+`ProjectiveTransformation2DRobustEstimator` likewise has no non-robust sibling: *"algorithms to robustly find
+the best projective 2D transformation for collections of matching 2D points, or 2D lines"*
+(`ProjectiveTransformation2DRobustEstimator.java:26-30`), `MINIMUM_SIZE = 4`
+(`ProjectiveTransformation2DRobustEstimator.java:40`), with `PointCorrespondenceProjectiveTransformation2DRobustEstimator`
+and `LineCorrespondenceProjectiveTransformation2DRobustEstimator`. `ProjectiveTransformation3DRobustEstimator`
+is the 3D analogue, `MINIMUM_SIZE = 5` (`ProjectiveTransformation3DRobustEstimator.java:40`), with point and
+plane correspondence variants.
+
+=== Why 4 points in 2D, 5 in 3D -- the classic DLT count
+
+A 2D projective transformation (homography) latexmath:[H] has 9 homogeneous entries, hence 8 degrees of freedom
+once scale is divided out. Each point correspondence contributes only *2* independent equations, not 3, even
+though naively latexmath:[x_i^{\prime}\times Hx_i=0] looks like 3 equations -- xref:reference.adoc#bib-hartley-zisserman[Hartley
+& Zisserman] show that only 2 of the 3 rows are linearly independent (&#167;4.1, eq. 4.1-4.3, p.89): *"each
+point correspondence gives two equations in the entries of H"*. So 8 DOF over 2 equations per point gives
+exactly 4 points -- HZ's own words: *"it is necessary to specify four point correspondences in order to
+constrain H fully"* (p.88), and this is precisely `ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE = 4`.
+One dimension up, a 3D projective transformation has 15 DOF and each point correspondence still contributes
+only 3 independent equations (of the naive 4), giving latexmath:[15/3=5] points -- matching
+`ProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE = 5`. As with the affine case, a line correspondence in
+2D (or a plane correspondence in 3D) contributes the same equation count as a point, so the minimal sample size
+is unchanged across correspondence types.
+
+=== The closed form: the DLT algorithm, one minimal sample at a time
+
+HZ's Algorithm 4.1 (p.109) is the textbook version of exactly what
+`RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator`'s minimal-sample hook computes: stack the
+latexmath:[2\times9] constraint row from each of the 4 correspondences into an latexmath:[8\times9] matrix
+latexmath:[A], and take latexmath:[h] as the right singular vector of latexmath:[A] with the smallest singular
+value (the null-space of latexmath:[A] when the 4 points are in general position):
+
+[latexmath]
+++++
+A\,h = 0, \qquad h = \text{last column of } V \text{ in } A = U D V^{\mathsf T}
+++++
+
+[source,java]
+----
+// RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.estimatePreliminarSolutions (abridged)
+final var transformation = new ProjectiveTransformation2D(
+        inputPoint1, inputPoint2, inputPoint3, inputPoint4,
+        outputPoint1, outputPoint2, outputPoint3, outputPoint4); // solves A·h=0 via SVD internally
+solutions.add(transformation);
+----
+
+=== Why the smallest singular vector solves it
+
+HZ's own justification (Appendix A5.3-A5.4, pp.592-593) for "take the last column of latexmath:[V]" is a short,
+self-contained proof worth restating, since every homogeneous minimal-sample solve on this site
+(xref:point-line-plane-estimators.adoc[], xref:conic-quadric-estimators.adoc[], and this page) ultimately
+reduces to it. The problem is: find latexmath:[h] minimizing latexmath:[\lVert Ah \rVert] subject to
+latexmath:[\lVert h \rVert = 1]. Writing latexmath:[A=UDV^{\mathsf T}] and substituting
+latexmath:[y=V^{\mathsf T}h] (an orthogonal change of variables, so latexmath:[\lVert y \rVert = \lVert h \rVert]):
+
+[latexmath]
+++++
+\lVert Ah \rVert = \lVert UDV^{\mathsf T}h \rVert = \lVert Dy \rVert, \qquad \lVert y \rVert = 1
+++++
+
+Because latexmath:[D] is diagonal with entries in descending order, latexmath:[\lVert Dy \rVert] is minimized
+by putting all of latexmath:[y]'s unit "budget" on the coordinate multiplied by the *smallest* diagonal entry --
+i.e. latexmath:[y=(0,\dots,0,1)^{\mathsf T}] -- so latexmath:[h=Vy] is simply the last column of latexmath:[V]
+(HZ Algorithm A5.4, p.593). Equivalently, that last column is the eigenvector of latexmath:[A^{\mathsf T}A]
+with the smallest eigenvalue. This is the exact justification for every `new ProjectiveTransformation2D(p1..p4,
+q1..q4)`-style constructor's use of `SingularValueDecomposer` across this hierarchy, and for the identical
+pattern in `Conic`/`Quadric`/`DualConic`/`DualQuadric` (xref:conic-quadric-estimators.adoc[]).
+
+=== Normalizing the data before solving
+
+HZ's Algorithm 4.2 (p.109, motivated in &#167;4.4 "Transformation invariance and normalization", pp.104-108) does
+not hand the raw pixel coordinates to the SVD solve above -- it first applies a similarity transformation
+latexmath:[T] to the points so that their centroid sits at the origin and their *average* distance from it is
+latexmath:[\sqrt2] (so the "average" normalized point is latexmath:[(1,1,1)^{\mathsf T}]):
+
+[latexmath]
+++++
+\hat x_i = T\,x_i, \qquad T = \begin{bmatrix} s & 0 & -s\,\bar x \\ 0 & s & -s\,\bar y \\ 0 & 0 & 1 \end{bmatrix},
+\qquad s = \frac{\sqrt2}{\frac1n\sum_i \lVert x_i - \bar x \rVert}
+++++
+
+solves for latexmath:[\hat H] from the normalized points, then **denormalizes**
+latexmath:[H = T'^{-1}\,\hat H\,T] to recover the homography in the original coordinates (latexmath:[T] for the
+input points, latexmath:[T'] for the output points). HZ's own motivation (p.107-108) for this step: without
+normalization, raw image coordinates like latexmath:[(100,100,1)^{\mathsf T}] make the design matrix's entries
+span several orders of magnitude (products like latexmath:[xx'] land around latexmath:[10^4] while
+latexmath:[ww'] stays at latexmath:[1]), which inflates the equation system's condition number and, in the
+presence of noise, measurably worsens the SVD solution -- HZ states this in so many words: *"Data normalization
+is an essential step in the DLT algorithm. It must not be considered optional."*
+
+This is worth stating precisely rather than glossing over, because the library's own affine/projective robust
+estimators do **not** actually implement HZ's centroid-plus-average-distance scheme above. Two normalization
+mechanisms exist in this codebase, and neither is that one:
+
+* `Point2DNormalizer`/`Point3DNormalizer` (`com.irurueta.geometry.estimators`) *do* compute a per-axis,
+  bounding-box-based scale (`scaleX = 1.0 / width`, `scaleY = 1.0 / height`,
+  `Point2DNormalizer.java:299-300`) plus a centroid translation -- closer in spirit to HZ's goal than to its
+  exact prescription (anisotropic per-axis scale rather than one isotropic scale to a target average distance
+  of latexmath:[\sqrt2]) -- but a repository-wide search shows **no estimator class in this package actually
+  constructs one**; they exist as unused, self-contained utilities.
+* The `normalize()` calls this page's Kabsch-based estimators and `ProjectiveTransformation2D` itself expose
+  (and the ones xref:pinhole-camera-estimators.adoc[] describes on `DLTPointCorrespondencePinholeCameraEstimator`)
+  are a different, much narrower operation: `Point2D.normalize()`/`Point3D.normalize()`
+  (`HomogeneousPoint2D.java:512-521`) simply rescale one homogeneous coordinate vector
+  latexmath:[(x,y,w)\mapsto(x,y,w)/\sqrt{x^2+y^2+w^2}] to unit norm, independently per point -- a numerically
+  sensible step before stacking a point into a design matrix row, but not HZ's dataset-wide,
+  translate-then-isotropically-scale preconditioning transform latexmath:[T] above. Neither mechanism
+  denormalizes the result the way Algorithm 4.2 does, because neither one changes the coordinate frame the
+  answer is expressed in -- only the numerical scale of the intermediate computation.
+
+3D projective (plane/point correspondence) and the line-correspondence 2D variant follow the identical
+SVD-null-space pattern one dimension up or with lines/planes substituted for points. 20 concrete robust
+subclasses total (5 algorithms &#215; {Point2D, Line2D, Point3D, Plane3D}).
+
+[#gold-standard]
+== From a linear estimate to the Gold Standard: two-stage refinement
+
+Every closed-form solve on this page -- Kabsch, the affine linear system, the projective DLT -- minimizes an
+**algebraic** error (latexmath:[\lVert Ah \rVert] or an analogous quadratic form), not the true
+**geometric** error a user actually cares about (the pixel distance between a transformed input point and its
+matched output point). HZ calls the procedure that *does* minimize geometric error directly the **Gold
+Standard algorithm** (&#167;4.3, Algorithm 4.3, p.114): use the cheap linear DLT solution purely as a starting
+point, then run an iterative non-linear minimizer -- Levenberg-Marquardt -- on the true reprojection-error cost
+function:
+
+[latexmath]
+++++
+\hat H = \operatorname*{arg\,min}_{H} \sum_i d\bigl(x_i',\,Hx_i\bigr)^2
+++++
+
+This is exactly the two-stage pattern this library exposes across every hierarchy on this site
+(xref:estimators.adoc#shared-architecture[]): a robust estimator's `estimatePreliminarSolutions` plays the role
+of HZ's cheap linear DLT step (run many times, on many random minimal samples, since it must be fast); once the
+best consensus set is found, `attemptRefine` -- backed by a `com.irurueta.geometry.refiners.*Refiner` class,
+e.g. `PointCorrespondenceAffineTransformation2DRefiner` -- plays the role of HZ's Levenberg-Marquardt geometric
+polish, run only *once*, on only the inliers. The `computeResidual` methods quoted throughout this page already
+use true geometric distance for *scoring* candidates (so RANSAC picks the consensus set a geometric criterion
+would also pick), even though the candidates themselves come from an algebraic-error minimizer -- the optional
+refinement step is what additionally moves the final transformation itself towards the geometric-error optimum,
+not just towards the inlier set a geometric criterion would select.
+
+== References
+
+Full citations are in the xref:reference.adoc#bibliography[bibliography]. In detail:
+
+* xref:reference.adoc#bib-kabsch[Kabsch, 1976] -- the optimal-rotation algorithm
+  `EuclideanTransformation2D/3DEstimator` implement, cited directly in the library's own javadoc via Wikipedia.
+* xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman], &#167;4.1 "The Direct Linear Transformation
+  (DLT) algorithm" (pp. 88-92, Algorithm 4.1 p.109, Algorithm 4.2 p.109 with normalization) -- the exact
+  constraint-counting argument and SVD null-space solve `ProjectiveTransformation2D/3D`'s minimal-sample
+  constructors implement; &#167;4.4 "Transformation invariance and normalization" (pp.104-108) -- the isotropic
+  centroid/average-distance normalization Algorithm 4.2 prescribes (contrasted above with what this library
+  actually implements); &#167;4.3 "Statistical cost functions and Maximum Likelihood estimation" and Algorithm
+  4.3 "The Gold Standard algorithm" (p.114) -- the two-stage linear-then-Levenberg-Marquardt refinement pattern;
+  Appendix A5.3-A5.4 "Least-squares solution of homogeneous equations" (pp.592-593) -- the proof that the
+  smallest right singular vector minimizes latexmath:[\lVert Ah \rVert] subject to latexmath:[\lVert h \rVert=1].
+* xref:reference.adoc#bib-numerical-recipes[Numerical Recipes], &#167;2.6 "Singular Value Decomposition" (pp.
+  65-67) -- reused citation for the SVD null-space technique behind the affine/projective closed forms.
+* `MetricTransformation3DEstimator` cites a
+  http://stackoverflow.com/questions/13432805/finding-translation-and-scale-on-two-sets-of-points-to-get-least-square-error-in[StackOverflow
+  answer] directly in its javadoc for the least-squares scale/rotation/translation derivation; not independently
+  verified against any of the three source PDFs, reported here only because the library's own source cites it.
+* No book, paper or web source is cited directly in `AffineTransformation2D/3D`, `ProjectiveTransformation2D/3D`
+  or any of their robust-estimator subclasses for the minimal-sample construction itself; the HZ citation above
+  is supplied as external context that matches the verified algorithm, not a citation present in the source.
+
+== Related pages
+
+* xref:estimators.adoc[] -- the general robust-estimation theory (RANSAC/LMedS/MSAC/PROSAC/PROMedS,
+  non-robust-vs-robust, the shared `com.irurueta.numerical.robust` architecture) this page specializes.
+* xref:transformations.adoc[] -- the Euclidean/metric/affine/projective math itself: internal representations,
+  transform rules, invariants and the plane-at-infinity/absolute-conic proofs behind the stratification.
+* xref:point-line-plane-estimators.adoc[], xref:conic-quadric-estimators.adoc[] -- the simpler estimator
+  hierarchies these transformations act on.
+* xref:pinhole-camera-estimators.adoc[] -- robust camera estimation, which reuses the same DLT/SVD
+  null-space pattern used here for 2D/3D homographies.
