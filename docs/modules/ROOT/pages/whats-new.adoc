@@ -1,0 +1,13 @@
+= What's New
+
+NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+== 1.6.0 (2026-07-23)
+
+* 📚 New Antora-based documentation site covering the library's core geometric entities in depth --
+  transformations, rotations, points/lines/planes, conics/quadrics (including their duals), triangles/polygons,
+  the pinhole camera model, and boxes/KD-trees -- along with the robust estimator families, each grounded in the
+  actual source and cross-referenced against a shared bibliography.
+* ♻️ Raised the Java compiler source/target and CI JDK version from 17 to 21.
+* ♻️ Replaced the standalone `sonar-scanner` CLI step in the GitHub workflows with the `sonar-maven-plugin`
+  (`mvn sonar:sonar`), so SonarCloud analysis runs under the same JDK 21 toolchain as the rest of the build.
