@@ -585,6 +585,50 @@ xref:transformations.adoc[] for the stratification of 3D transformations.
   PnP Problem" -- cited directly in `EPnPPointCorrespondencePinholeCameraEstimator` javadoc (the `estimators`
   package), used internally by some pinhole camera estimators.
 
+[#key-classes]
+== Key classes
+
+The classes exercised by the code examples above, with links to their source and Javadoc:
+
+[cols="1,3",options="header"]
+|===
+|Class |Links
+
+|`PinholeCamera`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/PinholeCamera.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/PinholeCamera.html[Javadoc]
+
+|`PinholeCameraIntrinsicParameters`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/PinholeCameraIntrinsicParameters.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/PinholeCameraIntrinsicParameters.html[Javadoc]
+
+|`CameraException`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/CameraException.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/CameraException.html[Javadoc]
+
+|`Point3D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Point3D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Point3D.html[Javadoc]
+
+|`Conic`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Conic.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Conic.html[Javadoc]
+
+|`Quadric`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Quadric.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Quadric.html[Javadoc]
+
+|`DualConic`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/DualConic.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/DualConic.html[Javadoc]
+
+|`DualQuadric`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/DualQuadric.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/DualQuadric.html[Javadoc]
+|===
+
+NOTE: The examples also use `com.irurueta.algebra.RQDecomposer`, `SingularValueDecomposer`, `Matrix` and `Utils`, from the sibling https://github.com/albertoirurueta/irurueta-algebra[irurueta-algebra] library, not this repository.
+
 == Related pages
 
 * xref:transformations.adoc[] -- how a `Transformation3D` acts on a `PinholeCamera` (latexmath:[P' = P\,T^{-1}]),

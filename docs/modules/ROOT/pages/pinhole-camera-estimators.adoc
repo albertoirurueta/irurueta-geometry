@@ -314,6 +314,36 @@ Full citations are in the xref:reference.adoc#bibliography[bibliography]. In det
   null-space technique behind the DLT camera solve (already cited on xref:pinhole-camera.adoc[] and
   xref:transformation-estimators.adoc[] for the same technique).
 
+[#key-classes]
+== Key classes
+
+The classes exercised by the code examples above, with links to their source and Javadoc:
+
+[cols="1,3",options="header"]
+|===
+|Class |Links
+
+|`PinholeCamera`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/PinholeCamera.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/PinholeCamera.html[Javadoc]
+
+|`DLTPointCorrespondencePinholeCameraEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/DLTPointCorrespondencePinholeCameraEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/DLTPointCorrespondencePinholeCameraEstimator.html[Javadoc]
+
+|`RANSACDLTPointCorrespondencePinholeCameraRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACDLTPointCorrespondencePinholeCameraRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACDLTPointCorrespondencePinholeCameraRobustEstimator.html[Javadoc]
+
+|`PROSACDLTPointCorrespondencePinholeCameraRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/PROSACDLTPointCorrespondencePinholeCameraRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/PROSACDLTPointCorrespondencePinholeCameraRobustEstimator.html[Javadoc]
+
+|`RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACEPnPPointCorrespondencePinholeCameraRobustEstimator.html[Javadoc]
+|===
+
 == Related pages
 
 * xref:estimators.adoc[] -- the general robust-estimation theory (RANSAC/LMedS/MSAC/PROSAC/PROMedS,
