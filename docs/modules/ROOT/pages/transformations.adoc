@@ -437,6 +437,56 @@ bibliography] for full citations):
   1.109-1.116) for the general point/plane/(dual) quadric transform rules this page's transform-rule table
   implements.
 
+[#key-classes]
+== Key classes
+
+The classes exercised by the code examples above, with links to their source and Javadoc:
+
+[cols="1,3",options="header"]
+|===
+|Class |Links
+
+|`Plane`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Plane.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Plane.html[Javadoc]
+
+|`Conic`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Conic.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Conic.html[Javadoc]
+
+|`DualConic`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/DualConic.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/DualConic.html[Javadoc]
+
+|`DualQuadric`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/DualQuadric.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/DualQuadric.html[Javadoc]
+
+|`Rotation3D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Rotation3D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Rotation3D.html[Javadoc]
+
+|`AxisRotation3D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/AxisRotation3D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/AxisRotation3D.html[Javadoc]
+
+|`EuclideanTransformation3D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/EuclideanTransformation3D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/EuclideanTransformation3D.html[Javadoc]
+
+|`MetricTransformation3D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/MetricTransformation3D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/MetricTransformation3D.html[Javadoc]
+
+|`AffineTransformation3D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/AffineTransformation3D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/AffineTransformation3D.html[Javadoc]
+
+|`ProjectiveTransformation3D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/ProjectiveTransformation3D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/ProjectiveTransformation3D.html[Javadoc]
+|===
+
 == Related pages
 
 * xref:points-lines-planes.adoc[] -- the point/line/plane entities being transformed, and the plane-at-infinity's

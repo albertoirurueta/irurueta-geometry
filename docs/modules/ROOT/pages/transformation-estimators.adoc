@@ -369,6 +369,44 @@ Full citations are in the xref:reference.adoc#bibliography[bibliography]. In det
   or any of their robust-estimator subclasses for the minimal-sample construction itself; the HZ citation above
   is supplied as external context that matches the verified algorithm, not a citation present in the source.
 
+[#key-classes]
+== Key classes
+
+The classes exercised by the code examples above, with links to their source and Javadoc:
+
+[cols="1,3",options="header"]
+|===
+|Class |Links
+
+|`EuclideanTransformation2DEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/EuclideanTransformation2DEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/EuclideanTransformation2DEstimator.html[Javadoc]
+
+|`EuclideanTransformation2DRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/EuclideanTransformation2DRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/EuclideanTransformation2DRobustEstimator.html[Javadoc]
+
+|`RANSACEuclideanTransformation2DRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACEuclideanTransformation2DRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACEuclideanTransformation2DRobustEstimator.html[Javadoc]
+
+|`AffineTransformation2D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/AffineTransformation2D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/AffineTransformation2D.html[Javadoc]
+
+|`RANSACPointCorrespondenceAffineTransformation2DRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACPointCorrespondenceAffineTransformation2DRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACPointCorrespondenceAffineTransformation2DRobustEstimator.html[Javadoc]
+
+|`ProjectiveTransformation2D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/ProjectiveTransformation2D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/ProjectiveTransformation2D.html[Javadoc]
+
+|`RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.html[Javadoc]
+|===
+
 == Related pages
 
 * xref:estimators.adoc[] -- the general robust-estimation theory (RANSAC/LMedS/MSAC/PROSAC/PROMedS,

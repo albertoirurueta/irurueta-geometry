@@ -305,6 +305,30 @@ and point/plane duality concretely through `DualConic`/`DualQuadric`.
   its null-space/range interpretation, the general numerical technique behind every join/meet computation on
   this page.
 
+[#key-classes]
+== Key classes
+
+The classes exercised by the code examples above, with links to their source and Javadoc:
+
+[cols="1,3",options="header"]
+|===
+|Class |Links
+
+|`Plane`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Plane.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Plane.html[Javadoc]
+
+|`Line2D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Line2D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Line2D.html[Javadoc]
+
+|`HomogeneousPoint2D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/HomogeneousPoint2D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/HomogeneousPoint2D.html[Javadoc]
+|===
+
+NOTE: The examples also use `com.irurueta.algebra.Matrix`, from the sibling https://github.com/albertoirurueta/irurueta-algebra[irurueta-algebra] library, not this repository.
+
 == Related pages
 
 * xref:transformations.adoc[] -- the full projective/affine/metric/Euclidean stratification, the

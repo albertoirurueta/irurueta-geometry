@@ -285,6 +285,36 @@ Full citations are in the xref:reference.adoc#bibliography[bibliography]; in det
   where a line meets a conic); chapter 3, &#167;3.2.3-3.2.4 and &#167;&#167;3.6-3.7, pp. 73-83, for quadrics,
   dual quadrics, and the absolute conic/absolute dual quadric.
 
+[#key-classes]
+== Key classes
+
+The classes exercised by the code examples above, with links to their source and Javadoc:
+
+[cols="1,3",options="header"]
+|===
+|Class |Links
+
+|`Conic`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Conic.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Conic.html[Javadoc]
+
+|`DualConic`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/DualConic.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/DualConic.html[Javadoc]
+
+|`Quadric`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Quadric.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Quadric.html[Javadoc]
+
+|`Line2D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Line2D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Line2D.html[Javadoc]
+
+|`Plane`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Plane.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Plane.html[Javadoc]
+|===
+
 == Related pages
 
 * xref:points-lines-planes.adoc[] -- points, lines and planes are the primitives conics/quadrics are built from.

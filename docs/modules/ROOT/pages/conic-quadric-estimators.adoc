@@ -304,6 +304,40 @@ Full citations are in the xref:reference.adoc#bibliography[bibliography]. In det
   four, shares its RANSAC/LMedS/MSAC/PROSAC/PROMedS iteration loop with a single implementation in
   `com.irurueta.numerical.robust`).
 
+[#key-classes]
+== Key classes
+
+The classes exercised by the code examples above, with links to their source and Javadoc:
+
+[cols="1,3",options="header"]
+|===
+|Class |Links
+
+|`Circle`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Circle.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Circle.html[Javadoc]
+
+|`RANSACCircleRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACCircleRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACCircleRobustEstimator.html[Javadoc]
+
+|`Conic`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Conic.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Conic.html[Javadoc]
+
+|`RANSACConicRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACConicRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACConicRobustEstimator.html[Javadoc]
+
+|`Quadric`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Quadric.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Quadric.html[Javadoc]
+
+|`RANSACQuadricRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACQuadricRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACQuadricRobustEstimator.html[Javadoc]
+|===
+
 == Related pages
 
 * xref:estimators.adoc[] -- the general robust-estimation theory (RANSAC/LMedS/MSAC/PROSAC/PROMedS,
