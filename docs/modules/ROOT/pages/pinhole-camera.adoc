@@ -14,7 +14,8 @@ image::pinhole-camera.svg[Pinhole camera model: 3D point X projects through came
 == From pinhole to matrix: why a camera is a P3 &#8594; P2 map
 
 A pinhole camera has no lens: light passes through a single small aperture and forms an inverted image on a
-photographic plate behind it (xref:reference.adoc#bib-phd-report[PHD] &#167;2.1, fig. 2.1). Equivalently, and more
+photographic plate behind it (xref:reference.adoc#bib-phd-report[PHD]
+xref:attachment$irurueta-phd-thesis.pdf#page=56[&#167;2.1, fig. 2.1]). Equivalently, and more
 conveniently, one can place a virtual _retinal plane_ in front of the projection center and reason with the
 (non-inverted) image formed there. Ignoring lens effects -- most notably radial distortion, which bends straight
 lines near the image border and is *not* modeled by `PinholeCamera` at all (see the aside below) -- this projection
@@ -23,7 +24,7 @@ geometry is the natural language for it.
 
 Put the camera center at the origin, pointing down the Z axis, with the retinal plane at latexmath:[Z=1]. A 3D
 point latexmath:[(X,Y,Z)] projects to latexmath:[(x,y) = (X/Z,\,Y/Z)] (xref:reference.adoc#bib-phd-report[PHD]
-eq. 2.1). In homogeneous coordinates this inhomogeneous division disappears and the mapping becomes linear:
+xref:attachment$irurueta-phd-thesis.pdf#page=57[eq. 2.1]). In homogeneous coordinates this inhomogeneous division disappears and the mapping becomes linear:
 
 [latexmath]
 ++++
@@ -33,13 +34,15 @@ eq. 2.1). In homogeneous coordinates this inhomogeneous division disappears and 
 ++++
 
 which is exactly the *canonical camera* latexmath:[P=[\,I_{3\times3}\mid \mathbf{0}\,]]
-(xref:reference.adoc#bib-phd-report[PHD] eq. 2.2-2.3; xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;6.1,
+(xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=58[eq. 2.2-2.3];
+xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;6.1,
 "the basic pinhole model"). Every other camera in this library -- however it was constructed or estimated -- is
 this same linear idea generalized with a focal length, a principal-point offset, a pixel/skew correction, and an
 arbitrary position and orientation in the world. That generalization is what the rest of this page unpacks.
 
 TIP: Real cameras also exhibit radial distortion (barrel or pincushion, following Brown's model -- see
-xref:reference.adoc#bib-phd-report[PHD] &#167;2.2.4). `PinholeCamera` intentionally does not model it: it is a purely
+xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=64[&#167;2.2.4]).
+`PinholeCamera` intentionally does not model it: it is a purely
 linear projective camera, so any distortion correction has to happen upstream, on the 2D image coordinates,
 before they are handed to this class.
 
@@ -60,7 +63,8 @@ P = K\,R\,[\,I_{3\times3} \mid -C\,] = K\,[\,R \mid -R\,C\,]
 Writing latexmath:[P=[\,M_P \mid \mathbf{p}_4\,]] with latexmath:[M_P=K R] the top-left 3&#215;3 block, a camera is
 called *finite* when latexmath:[\det(M_P)\neq0] -- this is the case the rest of this page mostly addresses -- and a
 *camera at infinity* otherwise, whose center lies on the plane at infinity (xref:reference.adoc#bib-phd-report[PHD]
-&#167;2.3; xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;6.2.1/6.3).
+xref:attachment$irurueta-phd-thesis.pdf#page=66[&#167;2.3]; xref:reference.adoc#bib-hartley-zisserman[HZ]
+&#167;6.2.1/6.3).
 
 The factorization above is recovered **lazily**, on demand, via `decompose()`:
 
@@ -117,15 +121,18 @@ and `isCameraCenterAvailable()` report whether a cached value already exists wit
 |===
 
 This matrix is built up in exactly three steps, each adding one real-world effect
-(xref:reference.adoc#bib-phd-report[PHD] &#167;2.2.2):
+(xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=59[&#167;2.2.2]):
 
-. **Focal length** (&#167;2.2.2.1) -- for a retinal plane at distance latexmath:[f] from the center instead of
+. **Focal length** (xref:attachment$irurueta-phd-thesis.pdf#page=59[&#167;2.2.2.1]) -- for a retinal plane at
+  distance latexmath:[f] from the center instead of
   latexmath:[f=1], the canonical mapping latexmath:[(X,Y,Z)\mapsto(X/Z,Y/Z)] becomes
   latexmath:[(X,Y,Z)\mapsto(fX/Z,\,fY/Z)], i.e. `K = diag(f, f, 1)`.
-. **Principal point offset** (&#167;2.2.2.2) -- the retinal plane's own coordinate origin rarely coincides exactly
+. **Principal point offset** (xref:attachment$irurueta-phd-thesis.pdf#page=60[&#167;2.2.2.2]) -- the retinal
+  plane's own coordinate origin rarely coincides exactly
   with where the optical axis pierces it, so an offset latexmath:[(p_x,p_y)] is added:
   latexmath:[(X,Y,Z)\mapsto(fX/Z+p_x,\,fY/Z+p_y)], giving `K` its off-diagonal `px`/`py` column.
-. **CCD pixels and skew** (&#167;2.2.2.3) -- because image coordinates are measured in pixels, not the physical
+. **CCD pixels and skew** (xref:attachment$irurueta-phd-thesis.pdf#page=61[&#167;2.2.2.3]) -- because image
+  coordinates are measured in pixels, not the physical
   units of the focal length, world-to-pixel conversion multiplies by the number of pixels per unit length in each
   direction, latexmath:[(m_x,m_y)], giving separate horizontal/vertical focal lengths
   latexmath:[\alpha_x=f\,m_x], latexmath:[\alpha_y=f\,m_y] (`fx`/`fy`), and a possible skew term
@@ -164,7 +171,8 @@ public static PinholeCameraIntrinsicParameters create(
 
 `1 / pixelWidth` and `1 / pixelHeight` are precisely latexmath:[m_x] and latexmath:[m_y] above, so
 `focalLength / pixelWidth` latexmath:[= f\cdot m_x = \alpha_x] -- this is
-xref:reference.adoc#bib-phd-report[PHD] eq. 2.16 read directly off a datasheet's focal length and sensor size.
+xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=61[eq. 2.16] read directly
+off a datasheet's focal length and sensor size.
 Skew and principal-point offset are assumed zero here, which is the common case for real CCD/CMOS sensors.
 `getInverseInternalMatrix()` computes latexmath:[K^{-1}] with a hand-derived closed form from `fx`, `fy`, `s`
 and the principal point, rather than a generic matrix inversion, purely for efficiency: `K` is triangular and
@@ -178,7 +186,8 @@ one, latexmath:[A = R\,Q] (note the unfortunate name clash -- the "R" in "RQ" is
 matrix, which happens to be the "Q" here). RQ decomposition is not unique up to sign/scale, so the extra
 constraints that `K`'s diagonal be positive and `R` be a proper rotation (latexmath:[\det R=1], not just orthogonal)
 pin down a unique answer, up to the camera matrix's own overall scale ambiguity
-(xref:reference.adoc#bib-phd-report[PHD] &#167;2.3.6, eq. 2.74-2.78).
+(xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=76[&#167;2.3.6, eq.
+2.74-2.78]).
 
 `com.irurueta.algebra.RQDecomposer` (in the sibling module `irurueta-algebra`) implements this with Givens
 rotations, following xref:reference.adoc#bib-hartley-zisserman[HZ]'s Algorithm A4.1: three successive rotations
@@ -209,7 +218,8 @@ final var q = decomposer.getQ();
 The rest of the method (not reproduced in full) multiplies `r` and `q` by a suitable
 latexmath:[\operatorname{diag}(\pm1,\pm1,\lambda)] so that `r`'s diagonal ends up strictly positive and `q` ends up
 a proper rotation -- exactly the sign-fixing recipe of
-xref:reference.adoc#bib-phd-report[PHD] eq. 2.76-2.78 -- before wrapping the results as
+xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=76[eq. 2.76-2.78] -- before
+wrapping the results as
 `PinholeCameraIntrinsicParameters` and `MatrixRotation3D`.
 
 == The camera center: three methods, one geometric fact
@@ -218,7 +228,8 @@ The camera center `C` is the unique 4-vector (up to scale) with latexmath:[P\cdo
 null-space of `P`. Geometrically, any 3D line through `C` and another point `M` is a ray of light: every point on it
 projects to the *same* image point (the projection of `M`), so the "extra" degree of freedom along the ray must
 vanish when multiplied by `P`, which is exactly latexmath:[P\cdot C=\mathbf 0]
-(xref:reference.adoc#bib-phd-report[PHD] &#167;2.3.1, Proof 2.1; xref:reference.adoc#bib-hartley-zisserman[HZ]
+(xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=66[&#167;2.3.1],
+xref:attachment$irurueta-phd-thesis.pdf#page=67[Proof 2.1]; xref:reference.adoc#bib-hartley-zisserman[HZ]
 &#167;6.2.1, "camera centre"). Because `P` is rank 3 with 4 columns, this null-space is always exactly
 one-dimensional -- the camera always has a well-defined center, even when it lies at infinity (an "affine" or
 degenerate camera, latexmath:[\det(M_P)=0]).
@@ -231,7 +242,8 @@ image::camera-decomposition.svg[Camera decomposition: RQ-decomposing P's top-lef
 **`computeCameraCenterSVD()` (the default used by `decompose()`).** Any null-space is most robustly found via
 singular value decomposition: writing `P`'s SVD as latexmath:[P=U\,S\,V^{\mathsf T}], the column of `V`
 corresponding to `P`'s zero singular value is exactly the null-space vector
-(xref:reference.adoc#bib-phd-report[PHD] &#167;2.3.1.1; xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;6.2.4,
+(xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=67[&#167;2.3.1.1];
+xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;6.2.4,
 "Finding the camera centre", citing its own Appendix &#167;A4.4 for SVD; general SVD algorithm in
 xref:reference.adoc#bib-numerical-recipes[Numerical Recipes] &#167;2.6, pp.&#160;65-67). It remains correct even
 when the true center is at infinity (rank-deficient `Mp`) since the SVD makes no finiteness assumption -- at the
@@ -269,7 +281,8 @@ X=\det[p_2,p_3,p_4],\quad Y=-\det[p_1,p_3,p_4],\quad Z=\det[p_1,p_2,p_4],\quad W
 This follows from the fact that the camera center lies on all three of the camera's row-planes (see below), so
 appending any other plane through it to a 3&#215;4 stack yields a rank-deficient, zero-determinant matrix; expanding
 that determinant by Laplace's formula reproduces exactly this cofactor expression
-(xref:reference.adoc#bib-phd-report[PHD] &#167;2.3.1.2, Proof 2.2). It is cheaper than SVD (four 3&#215;3
+(xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=69[&#167;2.3.1.2, Proof
+2.2]). It is cheaper than SVD (four 3&#215;3
 determinants via `Utils.det`, instead of a full decomposition of the whole 3&#215;4 matrix) and, like the SVD
 method, remains valid even at infinity. The real method repeats the same four lines (build a 3&#215;3 minor by
 copying three of the four columns, take its determinant) once per coordinate, with alternating sign
@@ -296,7 +309,8 @@ public void computeCameraCenterDet(final Point3D result) throws CameraException 
 
 **`computeCameraCenterFiniteCamera()`.** If the camera is known to be finite (latexmath:[M_P] invertible), the
 center follows directly from latexmath:[\mathbf p_4=-M_P\,C \Rightarrow C=-M_P^{-1}\,\mathbf p_4]
-(xref:reference.adoc#bib-phd-report[PHD] &#167;2.3.1.3, eq. 2.45-2.46; xref:reference.adoc#bib-hartley-zisserman[HZ]
+(xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=70[&#167;2.3.1.3, eq.
+2.45-2.46]; xref:reference.adoc#bib-hartley-zisserman[HZ]
 &#167;6.2.4, closed form latexmath:[C=-M^{-1}\mathbf p_4]). This is the cheapest of the three (one 3&#215;3 matrix
 inverse instead of a determinant per column or a full SVD) but the *only* one of the three that requires a
 non-degenerate, finite camera -- it will fail or be numerically unstable if `Mp` is singular or ill-conditioned:
@@ -334,26 +348,30 @@ Several classic projective-camera facts fall directly out of `P`'s own columns a
   columns 1-3 of `P`. Since the world X/Y/Z axis directions are the points at infinity
   latexmath:[(1,0,0,0)^{\mathsf T}], latexmath:[(0,1,0,0)^{\mathsf T}], latexmath:[(0,0,1,0)^{\mathsf T}], their
   images latexmath:[P\cdot(1,0,0,0)^{\mathsf T}=\mathbf p_1] and so on are exactly those columns
-  (xref:reference.adoc#bib-phd-report[PHD] &#167;2.3.2, eq. 2.47-2.48).
+  (xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=71[&#167;2.3.2, eq.
+  2.47-2.48]).
 * **Image of the world origin** -- `getImageOfWorldOrigin()`/`imageOfWorldOrigin(Point2D)` return column 4 of `P`,
-  the image of latexmath:[(0,0,0,1)^{\mathsf T}] (xref:reference.adoc#bib-phd-report[PHD] eq. 2.49).
+  the image of latexmath:[(0,0,0,1)^{\mathsf T}] (xref:reference.adoc#bib-phd-report[PHD]
+  xref:attachment$irurueta-phd-thesis.pdf#page=71[eq. 2.49]).
 * **Axis and principal planes** -- `getVerticalAxisPlane()`/`getHorizontalAxisPlane()`/`getPrincipalPlane()` read
   off rows 1/2/3 of `P` as 3D plane coefficients. Each row, read as a plane equation, is satisfied by every point
   that projects onto one particular image line (the vertical or horizontal image axis) or onto the line at infinity
   (the principal plane, parallel to the retinal plane); the camera center lies on all three, since
-  latexmath:[P\cdot C=\mathbf 0] holds row by row (xref:reference.adoc#bib-phd-report[PHD] &#167;2.3.3, eq.
-  2.51-2.59; xref:reference.adoc#bib-hartley-zisserman[HZ] Table 6.1, p.&#160;158). The principal plane's
+  latexmath:[P\cdot C=\mathbf 0] holds row by row (xref:reference.adoc#bib-phd-report[PHD]
+  xref:attachment$irurueta-phd-thesis.pdf#page=71[&#167;2.3.3, eq.
+  2.51-2.59]; xref:reference.adoc#bib-hartley-zisserman[HZ] Table 6.1, p.&#160;158). The principal plane's
   director vector always points where the camera looks, and the camera center is its locus.
 * **Principal point** -- `getPrincipalPoint()`/`principalPoint(Point2D)` compute
   latexmath:[\mathbf m_P = M_P\cdot \mathbf m_3^{\mathsf T}], the projection of the point at infinity perpendicular
   to the principal plane, where latexmath:[\mathbf m_3^{\mathsf T}] is the principal plane's own first three
-  coefficients (xref:reference.adoc#bib-phd-report[PHD] &#167;2.3.4, eq. 2.60-2.63;
+  coefficients (xref:reference.adoc#bib-phd-report[PHD]
+  xref:attachment$irurueta-phd-thesis.pdf#page=74[&#167;2.3.4, eq. 2.60-2.63];
   xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;6.2.1, latexmath:[\mathbf x_0=M\mathbf m^3]).
 * **Principal axis vector** -- `getPrincipalAxisArray()`/`principalAxisArray(double[])` return the first three
   elements of `P`'s last row (the principal plane's director vector), scaled by
   latexmath:[\det(M_P)] and re-normalized so that it always points towards the front of the camera regardless of
   the matrix's own homogeneous scale -- see camera sign below (xref:reference.adoc#bib-phd-report[PHD]
-  &#167;2.3.5, eq. 2.66-2.72).
+  xref:attachment$irurueta-phd-thesis.pdf#page=74[&#167;2.3.5, eq. 2.66-2.72]).
 
 == Cheirality, camera sign and depth
 
@@ -365,7 +383,8 @@ than "behind" the lens. Resolving that ambiguity is what *camera sign* and *chei
 scaling `P` by any latexmath:[k] scales latexmath:[\det(M_P)] by latexmath:[k^3] and the third row of `Mp` by `k`,
 so the vector latexmath:[v=\det(M_P)\cdot\mathbf m_3] is invariant to latexmath:[k^4>0] regardless of the sign of
 `k` -- it always points toward the front of the camera
-(xref:reference.adoc#bib-phd-report[PHD] &#167;2.3.5, eq. 2.65-2.72;
+(xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=74[&#167;2.3.5, eq.
+2.65-2.72];
 xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;6.2.1, principal axis vector). `fixCameraSign()` multiplies the
 whole matrix by that sign once, and `isCameraSignFixed()` reports whether that has already happened (any setter
 resets the flag).
@@ -378,7 +397,8 @@ axis:
 \mathrm{depth}(M,P) = \operatorname{sign}(\det M_P)\cdot\frac{(M-C)^{\mathsf T}\mathbf m_3}{\lVert \mathbf m_3\rVert}
 ++++
 
-(xref:reference.adoc#bib-phd-report[PHD] &#167;2.4.1, eq. 2.79-2.82; xref:reference.adoc#bib-hartley-zisserman[HZ]
+(xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=76[&#167;2.4.1, eq.
+2.79-2.82]; xref:reference.adoc#bib-hartley-zisserman[HZ]
 Result 6.1, eq. 6.15). In code this is exactly the dot product of `(point - cameraCenter)` with the already
 sign-fixed, unit-length `principalAxisArray()`:
 
@@ -402,7 +422,8 @@ public double getDepth(final Point3D point) throws CameraException {
 camera -- without computing an actual distance. It reduces to the sign of the last homogeneous coordinate of the
 projected point times the last homogeneous coordinate of the 3D point,
 latexmath:[\operatorname{sign}(\mathrm{depth})=\operatorname{sign}(w)\cdot\operatorname{sign}(W)]
-(xref:reference.adoc#bib-phd-report[PHD] &#167;2.4.2, eq. 2.83-2.96), corrected by the camera sign whenever it has
+(xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=78[&#167;2.4.2, eq.
+2.83-2.96]), corrected by the camera sign whenever it has
 not already been fixed:
 
 [source,java]
@@ -436,18 +457,20 @@ project/back-project operations use different formulas depending on what is bein
 
 |`Point3D`
 |`Point2D`
-|latexmath:[x' = P\,X] (direct forward map, xref:reference.adoc#bib-phd-report[PHD] eq. 2.3)
+|latexmath:[x' = P\,X] (direct forward map, xref:reference.adoc#bib-phd-report[PHD]
+xref:attachment$irurueta-phd-thesis.pdf#page=58[eq. 2.3])
 
 |`Line2D`
 |`Plane`
 |latexmath:[\Pi = P^{\mathsf T}\,l] (transpose, not inverse -- back-projecting an image line gives the 3D plane
-through the camera center and that line; xref:reference.adoc#bib-phd-report[PHD] &#167;2.7, eq. 2.152)
+through the camera center and that line; xref:reference.adoc#bib-phd-report[PHD]
+xref:attachment$irurueta-phd-thesis.pdf#page=95[&#167;2.7, eq. 2.152])
 
 |`Point2D`
 |`Point3D` (ray)
 |latexmath:[X = P^{+}\,x] using the Moore-Penrose pseudo-inverse latexmath:[P^{+}]; explicitly non-unique -- any
 point on the same ray of light is an equally valid answer, and any solution is a linear combination of this one
-and the camera center (xref:reference.adoc#bib-phd-report[PHD] &#167;2.7, eq. 2.146-2.150;
+and the camera center (xref:reference.adoc#bib-phd-report[PHD] xref:attachment$irurueta-phd-thesis.pdf#page=94[&#167;2.7, eq. 2.146-2.150];
 xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;6.2.2, eq. 6.13)
 
 |`Conic`
@@ -457,7 +480,7 @@ xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;6.2.2, eq. 6.13)
 |`DualQuadric`
 |`DualConic`
 |latexmath:[C^{*} = P\,Q^{*}\,P^{\mathsf T}] (forward projection of the dual; xref:reference.adoc#bib-phd-report[PHD]
-&#167;2.8, eq. 2.157; xref:reference.adoc#bib-hartley-zisserman[HZ] Result 8.9, eq. 8.5)
+xref:attachment$irurueta-phd-thesis.pdf#page=96[&#167;2.8, eq. 2.157]; xref:reference.adoc#bib-hartley-zisserman[HZ] Result 8.9, eq. 8.5)
 |===
 
 === Deriving `Q = Pᵗ·C·P`, and how duality composes
@@ -492,7 +515,8 @@ itself always lies on this cone: latexmath:[C_{\text{cam}}^{\mathsf T}QC_{\text{
 T}C(P\,C_{\text{cam}})=\mathbf 0^{\mathsf T}C\,\mathbf 0=0], as expected of a cone whose vertex is the camera center
 (xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;8.3, fig. 8.4, "the cone of rays"). The dual analogue --
 forward-projecting a dual quadric latexmath:[Q^{*}] into a dual conic latexmath:[C^{*}=PQ^{*}P^{\mathsf T}] -- is
-HZ's Result 8.9 and PHD's eq. 2.155-2.157, obtained the mirror way: a plane tangent to latexmath:[Q^{*}] back-projects
+HZ's Result 8.9 and PHD's xref:attachment$irurueta-phd-thesis.pdf#page=96[eq. 2.155-2.157], obtained the mirror
+way: a plane tangent to latexmath:[Q^{*}] back-projects
 from a line tangent to latexmath:[C^{*}], via the same latexmath:[\Pi=P^{\mathsf T}l] used for plain lines/planes
 above.
 
@@ -520,13 +544,15 @@ and `Camera.backProject(DualConic)` is the exact mirror route (dual conic &#8594
 A camera's images are unaffected by which projective/affine/metric stratum the world points and the camera are
 expressed in, as long as both are transformed consistently: if latexmath:[M'=TM], then
 latexmath:[m=PM=(PT^{-1})(TM)=P'M'], i.e. any 3D transformation latexmath:[T] induces
-latexmath:[P'=PT^{-1}] on the camera (xref:reference.adoc#bib-phd-report[PHD] &#167;2.8, eq. 2.153-2.154; see
+latexmath:[P'=PT^{-1}] on the camera (xref:reference.adoc#bib-phd-report[PHD]
+xref:attachment$irurueta-phd-thesis.pdf#page=95[&#167;2.8, eq. 2.153-2.154]; see
 xref:transformations.adoc[] for how `Transformation3D` acts on a `PinholeCamera`). Composing this with the
 dual-quadric projection formula above and specializing latexmath:[Q^{*}] to the *dual absolute quadric*
 latexmath:[Q_{\infty}^{*}] gives the *dual image of the absolute conic* (DIAC),
 latexmath:[\omega_{\infty}^{*}\sim P\,Q_{\infty}^{*}\,P^{\mathsf T}], which in the metric stratum reduces to
 latexmath:[\omega_{\infty}^{*}\sim K\,K^{\mathsf T}] -- i.e. `K` is recoverable from latexmath:[\omega_{\infty}^{*}]
-by Cholesky factorization (xref:reference.adoc#bib-phd-report[PHD] &#167;2.8, eq. 2.158-2.160;
+by Cholesky factorization (xref:reference.adoc#bib-phd-report[PHD]
+xref:attachment$irurueta-phd-thesis.pdf#page=96[&#167;2.8, eq. 2.158-2.160];
 xref:reference.adoc#bib-hartley-zisserman[HZ] &#167;8.5, Result 8.17, latexmath:[\omega=(KK^{\mathsf T})^{-1}]). This
 is the theoretical basis for camera *self-calibration* and for recovering the metric stratum from a purely
 projective reconstruction.
@@ -554,13 +580,20 @@ xref:transformations.adoc[] for the stratification of 3D transformations.
 == References
 
 * Alberto Irurueta, _Fixed Scene 3D Reconstruction for Mobile Applications_, PhD thesis, chapter 2, "Camera
-  models" -- the pinhole and canonical camera (&#167;2.1-2.2, pp.&#160;44-50), intrinsic/extrinsic parameters and
-  CCD pixel conversion (&#167;2.2.2-2.2.3, pp.&#160;47-52), radial distortion aside (&#167;2.2.4, pp.&#160;52-54),
-  camera decomposition and the three camera-center methods (&#167;2.3.1.1-2.3.1.3, pp.&#160;55-58), vanishing
-  points/axis planes/principal point/principal axis and camera sign (&#167;2.3.2-2.3.5, pp.&#160;59-63), RQ
-  decomposition for K and R (&#167;2.3.6, p.&#160;64), depth and cheirality (&#167;2.4, pp.&#160;64-68),
-  back-projection of points and lines (&#167;2.7, pp.&#160;82-83), and camera matrices, the geometry strata and
-  their relation to conics/quadrics and the DIAC (&#167;2.8, pp.&#160;83-85). See
+  models" -- the pinhole and canonical camera
+  (xref:attachment$irurueta-phd-thesis.pdf#page=56[&#167;2.1-2.2, pp.&#160;44-50]), intrinsic/extrinsic parameters
+  and CCD pixel conversion (xref:attachment$irurueta-phd-thesis.pdf#page=59[&#167;2.2.2-2.2.3, pp.&#160;47-52]),
+  radial distortion aside (xref:attachment$irurueta-phd-thesis.pdf#page=64[&#167;2.2.4, pp.&#160;52-54]),
+  camera decomposition and the three camera-center methods
+  (xref:attachment$irurueta-phd-thesis.pdf#page=67[&#167;2.3.1.1-2.3.1.3, pp.&#160;55-58]), vanishing
+  points/axis planes/principal point/principal axis and camera sign
+  (xref:attachment$irurueta-phd-thesis.pdf#page=71[&#167;2.3.2-2.3.5, pp.&#160;59-63]), RQ
+  decomposition for K and R (xref:attachment$irurueta-phd-thesis.pdf#page=76[&#167;2.3.6, p.&#160;64]), depth and
+  cheirality (xref:attachment$irurueta-phd-thesis.pdf#page=76[&#167;2.4, pp.&#160;64-68]),
+  back-projection of points and lines (xref:attachment$irurueta-phd-thesis.pdf#page=94[&#167;2.7, pp.&#160;82-83]),
+  and camera matrices, the geometry strata and
+  their relation to conics/quadrics and the DIAC
+  (xref:attachment$irurueta-phd-thesis.pdf#page=95[&#167;2.8, pp.&#160;83-85]). See
   xref:reference.adoc#bib-phd-report[the bibliography entry] for the full citation.
 * xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman], _Multiple View Geometry in Computer Vision_,
   2nd edition -- chapter 6, "Camera Models": the projective/finite camera hierarchy, camera anatomy, centre,

@@ -80,7 +80,8 @@ protected double residual(final Point2D p, final Line2D line) {
 ----
 
 i.e. latexmath:[|d(m, l)| = \left|\dfrac{m^T \cdot l}{\sqrt{l_1^2 + l_2^2}}\right|] -- the same
-`Line2D.signedDistance` formula xref:points-lines-planes.adoc[] derives from the PhD thesis's Proof 1.1.
+`Line2D.signedDistance` formula xref:points-lines-planes.adoc[] derives from the PhD thesis's
+xref:attachment$irurueta-phd-thesis.pdf#page=17[Proof 1.1].
 `Point3DRobustEstimator.residual(Point3D, Plane)` (`Point3DRobustEstimator.java:865-870`) is the 3D analogue,
 `Math.abs(plane.signedDistance(p))`, using `Plane.signedDistance(Point3D)` (`Plane.java:515-525`) -- the same
 "dot product of homogeneous coordinates, normalized by the coefficient norm" pattern one dimension up, applied
@@ -138,7 +139,9 @@ protected double residual(final Line2D l, final Point2D point) {
 ----
 
 -- literally `Line2D.signedDistance(Point2D)` (`Line2D.java:460`), the exact formula
-xref:points-lines-planes.adoc[] derives via Proof 1.1 of the PhD thesis (projecting latexmath:[m - m'] onto the
+xref:points-lines-planes.adoc[] derives via
+xref:attachment$irurueta-phd-thesis.pdf#page=17[Proof 1.1] of the PhD thesis (projecting latexmath:[m - m'] onto
+the
 line's director vector). This is the cleanest instance of the pattern in this whole page: the non-robust
 algorithm (`l = m1 &#215; m2`) and the residual (`|m^T \cdot l| / \|(l_1,l_2)\|`) are both operations
 xref:points-lines-planes.adoc[] already fully derives -- `Line2DRobustEstimator` and its five concrete
@@ -251,7 +254,8 @@ xref:points-lines-planes.adoc[] (the join/meet cross products behind `line1.getI
 point3)`, and the signed point-to-line distance behind every `residual()` method above, including its 3D
 point-to-plane analogue) or already derived on xref:estimators.adoc[] (the RANSAC/LMedS/MSAC/PROSAC/PROMedS
 scoring rules and sample-count formula, xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] chapter 4
-and xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis] &#167;2.5). Everything specific to this page --
+and xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis]
+xref:attachment$irurueta-phd-thesis.pdf#page=80[&#167;2.5]). Everything specific to this page --
 `MINIMUM_SIZE` values, the exact `estimatePreliminarSolutions`/`computeResidual` code, the `Point2DRobustEstimator`
 javadoc typo, `DEFAULT_THRESHOLD` values -- is drawn directly from the library's own source rather than from any
 of the three source PDFs.

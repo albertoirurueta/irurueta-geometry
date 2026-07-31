@@ -105,8 +105,10 @@ xref:conics-quadrics.adoc[] treat point/plane duality one dimension down, and it
 `MIN_NUMBER_OF_EQUATIONS = 11` unchanged (`DLTLinePlaneCorrespondencePinholeCameraEstimator.java:36`).
 
 Alberto Irurueta's PhD thesis independently derives the point-correspondence construction above, in
-&#167;2.5.1 "The DLT algorithm for camera estimation" (printed pp.68-71) and its LMSE extension for
-over-determined systems in &#167;2.5.1.1 (pp.71-72) -- both pre-date and match the code exactly, since the same
+xref:attachment$irurueta-phd-thesis.pdf#page=80[&#167;2.5.1 "The DLT algorithm for camera estimation" (printed
+pp.68-71)] and its LMSE extension for
+over-determined systems in xref:attachment$irurueta-phd-thesis.pdf#page=83[&#167;2.5.1.1 (pp.71-72)] -- both
+pre-date and match the code exactly, since the same
 author wrote the thesis chapter and the estimator class.
 
 === What "normalize" actually means here
@@ -204,13 +206,15 @@ does have a robust wrapper, and it biases *sampling order*, not the linear syste
 [#robust-camera]
 == Robust camera estimation: RANSAC, independently re-derived
 
-Section &#167;2.5.2 "Robust camera estimation using RANSAC" of Alberto Irurueta's PhD thesis (printed pp.75-77)
+Section xref:attachment$irurueta-phd-thesis.pdf#page=87[&#167;2.5.2 "Robust camera estimation using RANSAC"] of
+Alberto Irurueta's PhD thesis (printed pp.75-77)
 works out the RANSAC iteration-count formula from first principles, independently of -- but arriving at the
 same result as -- xref:estimators.adoc#ransac[HZ's eq. 4.18]. Using latexmath:[p_i] for the probability a single
 correspondence is an inlier and latexmath:[s=6] for the minimal sample size, the probability that *all* points
 in one random sample are inliers is latexmath:[p_i^{s}], so the probability of finding at least one outlier-free
 sample within latexmath:[M] trials is latexmath:[1-(1-p_i^{s})^M]; setting this to a desired confidence
-latexmath:[c] and solving for latexmath:[M] gives (PHD eq. 2.130-2.132):
+latexmath:[c] and solving for latexmath:[M] gives (PHD
+xref:attachment$irurueta-phd-thesis.pdf#page=87[eq. 2.130-2.132]):
 
 [latexmath]
 ++++
@@ -240,7 +244,8 @@ public double computeResidual(final PinholeCamera currentEstimation, final int i
 ----
 
 The PhD thesis additionally folds in cheirality (xref:pinhole-camera.adoc[]) directly into the inlier test --
-its own Algorithm 2.1 classifies a correspondence as an inlier only if its reprojection error is below threshold
+its own xref:attachment$irurueta-phd-thesis.pdf#page=88[Algorithm 2.1] classifies a correspondence as an inlier
+only if its reprojection error is below threshold
 *and* the world point is in front of the camera. The library's `computeResidual` above does not itself check
 cheirality (it is a pure distance), but `PinholeCamera.getCheirality`/`getDepth` are available separately for a
 caller who wants that same combined test (xref:pinhole-camera.adoc[]).
@@ -292,10 +297,13 @@ pair has no robust counterpart, as explained above.
 
 Full citations are in the xref:reference.adoc#bibliography[bibliography]. In detail:
 
-* Alberto Irurueta's PhD thesis, xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis], &#167;2.5.1 "The DLT algorithm for camera
-  estimation" (printed pp.68-71) and &#167;2.5.1.1 "LMSE solution" (pp.71-72) -- the exact DLT-for-cameras
-  construction `DLTPointCorrespondencePinholeCameraEstimator` implements; &#167;2.5.2 "Robust camera estimation
-  using RANSAC" (pp.75-77, eq. 2.125-2.132, its own "Algorithm 2.1") -- an independently-derived RANSAC
+* Alberto Irurueta's PhD thesis, xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis],
+  xref:attachment$irurueta-phd-thesis.pdf#page=80[&#167;2.5.1 "The DLT algorithm for camera
+  estimation" (printed pp.68-71)] and xref:attachment$irurueta-phd-thesis.pdf#page=83[&#167;2.5.1.1 "LMSE
+  solution" (pp.71-72)] -- the exact DLT-for-cameras
+  construction `DLTPointCorrespondencePinholeCameraEstimator` implements;
+  xref:attachment$irurueta-phd-thesis.pdf#page=87[&#167;2.5.2 "Robust camera estimation
+  using RANSAC" (pp.75-77, eq. 2.125-2.132, its own "Algorithm 2.1")] -- an independently-derived RANSAC
   iteration-count formula matching xref:reference.adoc#bib-hartley-zisserman[HZ]'s eq. 4.18, used above.
 * xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman], chapter 7 "Computation of the Camera Matrix P"
   in full: &#167;7.1 "Basic equations" (pp.178-180, eq. 7.1-7.3, the exact 2&#215;12 design-matrix row layout and
