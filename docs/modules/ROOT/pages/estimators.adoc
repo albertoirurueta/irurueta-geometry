@@ -85,7 +85,8 @@ N = \frac{\log(1-p)}{\log\bigl(1-(1-\epsilon)^s\bigr)}
 Algorithm 4.5 (p.121) -- computes it *adaptively*: after each sample it updates latexmath:[\epsilon] from the
 best consensus set found so far and shrinks the remaining latexmath:[N] accordingly, capping the total work at
 `maxIterations`. Alberto Irurueta's PhD thesis independently derives exactly the same formula for camera
-estimation (xref:reference.adoc#bib-phd-report[PHD], &#167;2.5.2, printed pp.75-77, its own "Algorithm 2.1"),
+estimation (xref:reference.adoc#bib-phd-report[PHD], xref:attachment$irurueta-phd-thesis.pdf#page=87[&#167;2.5.2, printed
+pp.75-77, its own "Algorithm 2.1"]),
 including the same worst-case-then-adaptive-refinement strategy, which is a useful second, independent
 derivation of eq. 4.18 grounded specifically in this library's own camera-estimation use case.
 
@@ -252,7 +253,8 @@ Full citations are in the xref:reference.adoc#bibliography[bibliography]. In sum
 xref:reference.adoc#bib-fischler-bolles[Fischler & Bolles] for RANSAC itself;
 xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] chapter 4 (&#167;4.1-4.2 DLT algorithms and cost
 functions, &#167;4.7 robust estimation, Algorithms 4.1-4.6) for the RANSAC/MSAC equations and thresholds used
-above; xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis] &#167;2.5 for an independently-derived RANSAC
+above; xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis]
+xref:attachment$irurueta-phd-thesis.pdf#page=80[&#167;2.5] for an independently-derived RANSAC
 camera-estimation algorithm using the same sample-count formula;
 xref:reference.adoc#bib-numerical-recipes[Numerical Recipes] &#167;15.7 for the 1D robust/median-fit analogue of
 LMedS; xref:reference.adoc#bib-torr-zisserman-mlesac[Torr & Zisserman] for the formal MSAC/MLESAC name; and
