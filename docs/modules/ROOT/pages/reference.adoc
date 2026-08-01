@@ -23,6 +23,9 @@ These reports are generated during the build.
 |https://sonarcloud.io/project/overview?id=albertoirurueta_irurueta-geometry[SonarCloud]
 |Project quality dashboard with issue analysis, code quality information, and coverage metrics.
 
+|https://albertoirurueta.github.io/irurueta-geometry/mvn-site[Maven Site]
+|Aggregation of project reports.
+
 |https://github.com/albertoirurueta/irurueta-geometry[GitHub repository]
 |Source code repository for the project.
 |===
