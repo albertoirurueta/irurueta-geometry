@@ -11,7 +11,7 @@ have familiar specializations -- circle/ellipse for conics, sphere/ellipsoid for
 image::conic-sections.svg[Conic sections obtained by cutting a double cone with a plane, classified by the sign of b squared minus a c]
 
 `BaseConic` is an abstract 3&#215;3 symmetric-matrix base class for both `Conic` and `DualConic`. A conic is the
-locus latexmath:[ax^2 + 2bxy + cy^2 + 2dxw + 2eyw + fw^2 = 0]; its matrix form is:
+locus stem:[ax^2 + 2bxy + cy^2 + 2dxw + 2eyw + fw^2 = 0]; its matrix form is:
 
 [cols="^,^,^"]
 |===
@@ -22,30 +22,30 @@ locus latexmath:[ax^2 + 2bxy + cy^2 + 2dxw + 2eyw + fw^2 = 0]; its matrix form i
 |d |e |f
 |===
 
-`Conic.isLocus(point)` tests latexmath:[p^{\mathsf T} C\, p \approx 0]. `Conic.getConicType()` classifies the
-conic from the sign of latexmath:[b^2 - ac]:
+`Conic.isLocus(point)` tests stem:[\mathbf{p}^{\mathsf T} \mathbf{C}\, \mathbf{p} \approx 0]. `Conic.getConicType()` classifies the
+conic from the sign of stem:[b^2 - ac]:
 
 [cols="1,2",options="header"]
 |===
 |`ConicType` |Condition
 
 |`CIRCLE_CONIC_TYPE`
-|latexmath:[b^2-ac<0], and additionally latexmath:[a=c], latexmath:[b=0]
+|stem:[b^2-ac<0], and additionally stem:[a=c], stem:[b=0]
 
 |`ELLIPSE_CONIC_TYPE`
-|latexmath:[b^2-ac<0]
+|stem:[b^2-ac<0]
 
 |`PARABOLA_CONIC_TYPE`
-|latexmath:[b^2-ac=0]
+|stem:[b^2-ac=0]
 
 |`HYPERBOLA_CONIC_TYPE`
-|latexmath:[b^2-ac>0]
+|stem:[b^2-ac>0]
 
 |`RECTANGULAR_HYPERBOLA_CONIC_TYPE`
-|latexmath:[b^2-ac>0], and additionally latexmath:[a+c=0]
+|stem:[b^2-ac>0], and additionally stem:[a+c=0]
 |===
 
-This matrix form, its expansion into latexmath:[ax^2+bxy+cy^2+dx+ey+f=0], and the discriminant-based
+This matrix form, its expansion into stem:[ax^2+bxy+cy^2+dx+ey+f=0], and the discriminant-based
 classification above are worked out from first principles in
 xref:reference.adoc#bib-phd-report[Irurueta's PhD report], &#167;1.2.5 "Conics" (eq. 1.24-1.27 and table 1.1,
 printed pp. 6-8 / xref:attachment$irurueta-phd-thesis.pdf#page=18[PDF pp. 18-20]).
@@ -60,8 +60,8 @@ the conic type above (`Circle` requires `CIRCLE_CONIC_TYPE`; `Ellipse` accepts `
 image::quadrics.svg[Sphere and ellipsoid as specializations of the general quadric surface]
 
 `BaseQuadric` is the 3D analogue: a 4&#215;4 symmetric matrix with 10 parameters
-latexmath:[(a,b,c,d,e,f,g,h,i,j)], for the surface
-latexmath:[ax^2+by^2+cz^2+2dxy+2exz+2fyz+2gxw+2hyw+2izw+jw^2=0]. `Quadric`
+stem:[(a,b,c,d,e,f,g,h,i,j)], for the surface
+stem:[ax^2+by^2+cz^2+2dxy+2exz+2fyz+2gxw+2hyw+2izw+jw^2=0]. `Quadric`
 tests point incidence and exposes `getTangentPlaneAt(point)` (derived in
 <<tangent-lines-and-planes>>). The 4&#215;4 quadratic-form matrix, its 9-parameter expansion, and the
 non-degenerate/degenerate standard-form tables (ellipsoid/paraboloid/hyperboloid vs. cone/cylinder) are the
@@ -79,7 +79,7 @@ independent parametric classes rather than `Quadric` subclasses:
 * `Ellipsoid.toQuadric()` builds a canonical diagonal quadric then applies an `EuclideanTransformation3D` for
   center and rotation; there is **no general `setFromQuadric`** for `Ellipsoid` -- only conversion from a
   `Sphere`. Recovering an arbitrary ellipsoid's parameters from a general `Quadric` is not implemented.
-* `Ellipsoid.getSurface()` uses Knud Thomsen's well-known closed-form approximation (exponent latexmath:[p \approx 1.6075]), since the exact ellipsoid surface area has no elementary closed form.
+* `Ellipsoid.getSurface()` uses Knud Thomsen's well-known closed-form approximation (exponent stem:[p \approx 1.6075]), since the exact ellipsoid surface area has no elementary closed form.
 
 `Quadric.intersectWith(Plane)` computes the `Conic` obtained by slicing a quadric with a plane, by substituting
 the plane equation into the quadric equation -- the algebra is carried out step by step in inline comments in
@@ -89,10 +89,10 @@ the source.
 
 image::conic-dual.svg[A conic as a locus of points versus its dual conic as an envelope of tangent lines]
 
-A `Conic`/`Quadric` is a **locus of points**: latexmath:[x^{\mathsf T} C\, x = 0]. Its dual, `DualConic`/
+A `Conic`/`Quadric` is a **locus of points**: stem:[\mathbf{x}^{\mathsf T} \mathbf{C}\, \mathbf{x} = 0]. Its dual, `DualConic`/
 `DualQuadric`, describes the *exact same shape* but as an **envelope of tangent lines** (2D) or
-**tangent planes** (3D) instead: latexmath:[l^{\mathsf T} C^{*}\, l = 0] for a tangent line `l`, where
-latexmath:[C^{*} = C^{-1}].
+**tangent planes** (3D) instead: stem:[\mathbf{l}^{\mathsf T} \mathbf{C}^{*}\, \mathbf{l} = 0] for a tangent line `l`, where
+stem:[\mathbf{C}^{*} = \mathbf{C}^{-1}].
 
 [cols="1,2,2",options="header"]
 |===
@@ -100,7 +100,7 @@ latexmath:[C^{*} = C^{-1}].
 
 |`Conic`
 |points on the curve
-|`isLocus(Point2D)` -- latexmath:[x^{\mathsf T} C\, x \approx 0]
+|`isLocus(Point2D)` -- stem:[\mathbf{x}^{\mathsf T} \mathbf{C}\, \mathbf{x} \approx 0]
 
 |`DualConic`
 |lines tangent to the curve
@@ -108,7 +108,7 @@ latexmath:[C^{*} = C^{-1}].
 
 |`Quadric`
 |points on the surface
-|`isLocus(Point3D)` -- latexmath:[x^{\mathsf T} Q\, x \approx 0]
+|`isLocus(Point3D)` -- stem:[\mathbf{x}^{\mathsf T} \mathbf{Q}\, \mathbf{x} \approx 0]
 
 |`DualQuadric`
 |planes tangent to the surface
@@ -124,14 +124,14 @@ inverse-transpose form.
 [#tangent-lines-and-planes]
 === Tangent lines and tangent planes
 
-Let latexmath:[m] be a locus point of conic latexmath:[C] (so latexmath:[S(m)=m^{\mathsf T}Cm=0]), and let a
-line latexmath:[l] through latexmath:[m] meet the conic again at a second point latexmath:[m']. Every point of
-the line can be written latexmath:[m'' = m + \lambda m']; substituting into latexmath:[S(m'')=0] and expanding
-with the bilinear form latexmath:[S(m,m')=m^{\mathsf T}Cm'] gives a quadratic in latexmath:[\lambda]:
+Let stem:[\mathbf{m}] be a locus point of conic stem:[\mathbf{C}] (so stem:[S(\mathbf{m})=\mathbf{m}^{\mathsf T}\mathbf{C}\mathbf{m}=0]), and let a
+line stem:[\mathbf{l}] through stem:[\mathbf{m}] meet the conic again at a second point stem:[\mathbf{m}']. Every point of
+the line can be written stem:[\mathbf{m}'' = \mathbf{m} + \lambda \mathbf{m}']; substituting into stem:[S(\mathbf{m}'')=0] and expanding
+with the bilinear form stem:[S(\mathbf{m},\mathbf{m}')=\mathbf{m}^{\mathsf T}\mathbf{C}\mathbf{m}'] gives a quadratic in stem:[\lambda]:
 
-[latexmath]
+[stem]
 ++++
-S(m) + 2\lambda\,S(m,m') + \lambda^2 S(m') = 0
+S(\mathbf{m}) + 2\lambda\,S(\mathbf{m},\mathbf{m}') + \lambda^2 S(\mathbf{m}') = 0
 ++++
 
 which always has (up to) two roots -- a line meets a conic in two points. This is exactly what the internal
@@ -140,12 +140,12 @@ xref:reference.adoc#bib-phd-report[PHD], &#167;1.2.6.1 "Line-conic intersections
 (printed pp. 8-9 / xref:attachment$irurueta-phd-thesis.pdf#page=20[PDF pp. 20-21]).
 
 The two intersection points coincide -- the line is *tangent* -- exactly when that quadratic's discriminant
-vanishes. Fixing latexmath:[m] on the conic (latexmath:[S(m)=0]), the discriminant condition collapses to the
-linear equation latexmath:[S(m,m')=m^{\mathsf T}Cm'=0], which forces latexmath:[m'=m]. Writing this as
-latexmath:[l^{\mathsf T}m' = m^{\mathsf T}Cm' = 0] identifies the tangent line at latexmath:[m], up to scale,
+vanishes. Fixing stem:[\mathbf{m}] on the conic (stem:[S(\mathbf{m})=0]), the discriminant condition collapses to the
+linear equation stem:[S(\mathbf{m},\mathbf{m}')=\mathbf{m}^{\mathsf T}\mathbf{C}\mathbf{m}'=0], which forces stem:[\mathbf{m}'=\mathbf{m}]. Writing this as
+stem:[\mathbf{l}^{\mathsf T}\mathbf{m}' = \mathbf{m}^{\mathsf T}\mathbf{C}\mathbf{m}' = 0] identifies the tangent line at stem:[\mathbf{m}], up to scale,
 as:
 
-latexmath:[l = C\,m]
+stem:[\mathbf{l} = \mathbf{C}\,\mathbf{m}]
 
 (xref:reference.adoc#bib-phd-report[PHD], &#167;1.2.6.2 "Line-conic tangency", eq. 1.46-1.51, printed
 pp. 10-11 / xref:attachment$irurueta-phd-thesis.pdf#page=22[PDF pp. 22-23]; the identical result appears as
@@ -162,9 +162,9 @@ The same argument, one dimension up, uses three coplanar points instead of two c
 &#167;1.3.6.1 "Plane-quadric intersections", eq. 1.92-1.100, printed pp. 17-18 /
 xref:attachment$irurueta-phd-thesis.pdf#page=29[PDF pp. 29-30] -- it is
 literally the same proof technique applied to a plane cutting a quadric instead of a line cutting a conic) and
-gives the tangent plane at a locus point latexmath:[M] as:
+gives the tangent plane at a locus point stem:[\mathbf{M}] as:
 
-latexmath:[\Pi = Q\,M]
+stem:[\boldsymbol{\Pi} = \mathbf{Q}\,\mathbf{M}]
 
 implemented by `Quadric.getTangentPlaneAt`/`tangentPlaneAt` (`Quadric.java:516-560`):
 
@@ -175,18 +175,18 @@ Plane tangentPlane = quadric.getTangentPlaneAt(point); // Π = Q·M
 
 === The dual is the inverse: C&#42; = C&#8315;&#185; and Q&#42; = Q&#8315;&#185;
 
-Insert latexmath:[C^{-1}C=I] into the conic equation:
+Insert stem:[\mathbf{C}^{-1}\mathbf{C}=\mathbf{I}] into the conic equation:
 
-[latexmath]
+[stem]
 ++++
-m^{\mathsf T} C\, m = m^{\mathsf T} C\, C^{-1} C\, m = 0
+\mathbf{m}^{\mathsf T} \mathbf{C}\, \mathbf{m} = \mathbf{m}^{\mathsf T} \mathbf{C}\, \mathbf{C}^{-1} \mathbf{C}\, \mathbf{m} = 0
 ++++
 
-Since latexmath:[l=Cm] is the tangent line at latexmath:[m] (previous section), latexmath:[m^{\mathsf T}C = l^{\mathsf T}], so the expression above is latexmath:[l^{\mathsf T} C^{-1} l = 0] -- which is exactly the dual
-conic's own defining equation latexmath:[l^{\mathsf T}C^{*}l=0]. Matching the two forces, assuming latexmath:[C]
+Since stem:[\mathbf{l}=\mathbf{C}\mathbf{m}] is the tangent line at stem:[\mathbf{m}] (previous section), stem:[\mathbf{m}^{\mathsf T}\mathbf{C} = \mathbf{l}^{\mathsf T}], so the expression above is stem:[\mathbf{l}^{\mathsf T} \mathbf{C}^{-1} \mathbf{l} = 0] -- which is exactly the dual
+conic's own defining equation stem:[\mathbf{l}^{\mathsf T}\mathbf{C}^{*}\mathbf{l}=0]. Matching the two forces, assuming stem:[\mathbf{C}]
 is non-singular:
 
-latexmath:[C^{*} = C^{-1}]
+stem:[\mathbf{C}^{*} = \mathbf{C}^{-1}]
 
 (xref:reference.adoc#bib-phd-report[PHD], &#167;1.2.6.3 "Relation between conic and dual conic", eq. 1.52-1.54,
 printed p. 11 / xref:attachment$irurueta-phd-thesis.pdf#page=23[PDF p. 23]; the same derivation from the
@@ -201,31 +201,31 @@ compute exactly this matrix inverse (symmetrizing the result against numerical r
 DualConic dual = conic.getDualConic(); // C* = C⁻¹
 ----
 
-The identical algebra, one dimension up, gives latexmath:[Q^{*}=Q^{-1}] for quadrics, implemented by
+The identical algebra, one dimension up, gives stem:[\mathbf{Q}^{*}=\mathbf{Q}^{-1}] for quadrics, implemented by
 `Quadric.getDualQuadric`/`dualQuadric` (`Quadric.java:262-299`) and `DualQuadric.getQuadric`/`quadric`
 (`DualQuadric.java:272-307`).
 
 === Transforming conics, quadrics, and their duals
 
-Under a point homography latexmath:[m'=Hm], lines transform contragradiently, latexmath:[l'=H^{-\mathsf T}l].
-Substituting latexmath:[m=H^{-1}m'] into latexmath:[S(m)=0] and demanding that the transformed conic
-latexmath:[C'] reproduce the same locus in the new coordinates forces (up to scale):
+Under a point homography stem:[\mathbf{m}'=\mathbf{H}\mathbf{m}], lines transform contragradiently, stem:[\mathbf{l}'=\mathbf{H}^{-\mathsf T}\mathbf{l}].
+Substituting stem:[\mathbf{m}=\mathbf{H}^{-1}\mathbf{m}'] into stem:[S(\mathbf{m})=0] and demanding that the transformed conic
+stem:[\mathbf{C}'] reproduce the same locus in the new coordinates forces (up to scale):
 
-latexmath:[C' = H^{-\mathsf T}\,C\,H^{-1}]
+stem:[\mathbf{C}' = \mathbf{H}^{-\mathsf T}\,\mathbf{C}\,\mathbf{H}^{-1}]
 
-and the parallel argument on lines gives the dual rule latexmath:[C^{*\prime} = H\,C^{*}\,H^{\mathsf T}].
+and the parallel argument on lines gives the dual rule stem:[\mathbf{C}^{*\prime} = \mathbf{H}\,\mathbf{C}^{*}\,\mathbf{H}^{\mathsf T}].
 Substituting the first rule into a plain inversion shows that transformation and duality commute:
 
-[latexmath]
+[stem]
 ++++
-(C')^{*} = \left(H^{-\mathsf T}CH^{-1}\right)^{-1} = H\,C^{-1}\,H^{\mathsf T} = H\,C^{*}\,H^{\mathsf T} = (C^{*})'
+(\mathbf{C}')^{*} = \left(\mathbf{H}^{-\mathsf T}\mathbf{C}\mathbf{H}^{-1}\right)^{-1} = \mathbf{H}\,\mathbf{C}^{-1}\,\mathbf{H}^{\mathsf T} = \mathbf{H}\,\mathbf{C}^{*}\,\mathbf{H}^{\mathsf T} = (\mathbf{C}^{*})'
 ++++
 
 (xref:reference.adoc#bib-phd-report[PHD], &#167;1.2.7 "Transforming conics and dual conics", eq. 1.55-1.63 and
 Proof 1.3, printed pp. 11-12 / xref:attachment$irurueta-phd-thesis.pdf#page=23[PDF pp. 23-24]; the transform
 rules alone also appear as Results 2.13-2.14 in
 xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman], chapter 2, pp. 36-37). The identical algebra
-one dimension up gives latexmath:[Q'=T^{-\mathsf T}QT^{-1}], latexmath:[Q^{*\prime}=T\,Q^{*}\,T^{\mathsf T}],
+one dimension up gives stem:[\mathbf{Q}'=\mathbf{T}^{-\mathsf T}\mathbf{Q}\mathbf{T}^{-1}], stem:[\mathbf{Q}^{*\prime}=\mathbf{T}\,\mathbf{Q}^{*}\,\mathbf{T}^{\mathsf T}],
 and the same duality-commutes identity for quadrics (PHD &#167;1.3.7, eq. 1.114-1.116, printed pp. 20-21 /
 xref:attachment$irurueta-phd-thesis.pdf#page=32[PDF pp. 32-33]). xref:transformations.adoc[] gives the general
 table of how every geometric entity in this
@@ -238,15 +238,15 @@ form.
 image::absolute-conic-quadric.svg[The absolute conic and dual absolute quadric on the plane at infinity]
 
 `Conic.createCanonicalAbsoluteConic()` / `DualConic.createCanonicalDualAbsoluteConic()` return the identity
-conic `(1,0,1,0,0,1)`, i.e. latexmath:[\Omega_\infty = \Omega_\infty^{*} = I_3]; and
-`DualQuadric.createCanonicalDualAbsoluteQuadric()` returns latexmath:[Q_\infty^{*} = \mathrm{diag}(1,1,1,0)].
+conic `(1,0,1,0,0,1)`, i.e. stem:[\boldsymbol{\Omega}_\infty = \boldsymbol{\Omega}_\infty^{*} = \mathbf{I}_3]; and
+`DualQuadric.createCanonicalDualAbsoluteQuadric()` returns stem:[\mathbf{Q}_\infty^{*} = \mathrm{diag}(1,1,1,0)].
 There is no `Quadric.createCanonicalAbsoluteQuadric()` -- the (non-dual) absolute quadric is never directly
 instantiated in the library, only its degenerate dual. These are exactly the canonical forms derived in
 xref:reference.adoc#bib-phd-report[PHD], &#167;1.4.3.1-1.4.3.3 (eq. 1.137-1.169, printed pp. 28-34 /
-xref:attachment$irurueta-phd-thesis.pdf#page=40[PDF pp. 40-46]): the absolute conic latexmath:[\Omega_\infty] is the point conic where the (non-dual) absolute
-quadric latexmath:[Q_\infty] meets the plane at infinity, and in the metric stratum both it and its dual reduce
-to the identity/latexmath:[\mathrm{diag}(1,1,1,0)] forms above precisely because that is the condition under
-which the conic-based orthogonality test latexmath:[m_1^{\mathsf T}\Omega_\infty m_2 = 0] matches the ordinary
+xref:attachment$irurueta-phd-thesis.pdf#page=40[PDF pp. 40-46]): the absolute conic stem:[\boldsymbol{\Omega}_\infty] is the point conic where the (non-dual) absolute
+quadric stem:[\mathbf{Q}_\infty] meets the plane at infinity, and in the metric stratum both it and its dual reduce
+to the identity/stem:[\mathrm{diag}(1,1,1,0)] forms above precisely because that is the condition under
+which the conic-based orthogonality test stem:[\mathbf{m}_1^{\mathsf T}\boldsymbol{\Omega}_\infty \mathbf{m}_2 = 0] matches the ordinary
 Euclidean dot product (the same construction is cross-referenced in
 xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman], chapter 3, &#167;&#167;3.6-3.7, pp. 81-83).
 *Which* transformation brings an arbitrary projective reconstruction's dual absolute quadric back to this
@@ -277,8 +277,8 @@ Full citations are in the xref:reference.adoc#bibliography[bibliography]; in det
   code today. "page 9 PHD report.pdf" refers to the same thesis cited above: printed page 9
   (xref:attachment$irurueta-phd-thesis.pdf#page=21[PDF page 21]) is
   &#167;1.2.6.1 "Line-conic intersections", Proof 1.2, which proves eq. 1.34-1.44 -- that a line meeting a conic
-  at a fixed point latexmath:[m] yields a second intersection point latexmath:[m''=m+\lambda m'] where
-  latexmath:[\lambda] solves latexmath:[S(m)+2\lambda S(m,m')+\lambda^2 S(m')=0] -- i.e. exactly "intersection
+  at a fixed point stem:[\mathbf{m}] yields a second intersection point stem:[\mathbf{m}''= \mathbf{m} + \lambda \mathbf{m}'] where
+  stem:[\lambda] solves stem:[S(\mathbf{m})+2\lambda S(\mathbf{m},\mathbf{m}')+\lambda^2 S(\mathbf{m}')=0] -- i.e. exactly "intersection
   of Line2D with Conic results in two points". The TODO names the precise theoretical result (worked out by
   the same author, on paper, before this codebase existed) that would justify adding a `Line2D`-`Conic`
   intersection method; the method itself, like its two siblings, simply has not been written yet. See
@@ -291,7 +291,7 @@ Full citations are in the xref:reference.adoc#bibliography[bibliography]; in det
   transform-rule formulas those classes implement are cross-checked above against a second, independent
   source: xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman, _Multiple View Geometry in Computer
   Vision_] -- chapter 2, pp. 30-37 for conics and dual conics (Results 2.7, 2.13, 2.14 and the exercise 2.8(viii)
-  construction latexmath:[[l\]_\times C\, [l\]_\times] on p. 64, the rank-2 dual conic for the pair of points
+  construction stem:[[\mathbf{l}\]_\times \mathbf{C}\, [l\]_\times] on p. 64, the rank-2 dual conic for the pair of points
   where a line meets a conic); chapter 3, &#167;3.2.3-3.2.4 and &#167;&#167;3.6-3.7, pp. 73-83, for quadrics,
   dual quadrics, and the absolute conic/absolute dual quadric.
 

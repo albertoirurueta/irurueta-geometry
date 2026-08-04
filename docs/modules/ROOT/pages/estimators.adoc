@@ -19,7 +19,7 @@ of correspondences an entity needs (2 points for a line, 3 for a circle, 5 for a
 6 for a camera, ...), or *more* than that minimum, it produces the entity that fits them exactly, or in an
 LMSE (Least Mean Squared Error) sense if over-determined. This is exactly what a class like `PlaneEstimator`-if
 it existed as a public class-or the inlined closed-form constructors inside `RANSACPlaneRobustEstimator` do:
-latexmath:[\Pi = f(M_1, M_2, M_3)] for 3 points, no iteration, no notion of "this correspondence might be
+stem:[\boldsymbol{\Pi} = f(\mathbf{M}_1, \mathbf{M}_2, \mathbf{M}_3)] for 3 points, no iteration, no notion of "this correspondence might be
 wrong".
 
 The problem is that real correspondences -- 2D/3D point matches from a feature detector, line matches from an
@@ -55,35 +55,35 @@ RANSAC (RANdom SAmple Consensus) is Fischler and Bolles' original 1981 algorithm
 of. Quoting the algorithm as stated in xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] (chapter
 4, Algorithm 4.4, p.119):
 
-. Randomly select a minimal sample of latexmath:[s] data points and instantiate the model from it.
-. Determine the set latexmath:[S_i] of points within a distance threshold latexmath:[t] of the model -- the
+. Randomly select a minimal sample of stem:[s] data points and instantiate the model from it.
+. Determine the set stem:[S_i] of points within a distance threshold stem:[t] of the model -- the
   *consensus set* / inliers.
-. If latexmath:[|S_i|] exceeds a threshold latexmath:[T], re-estimate the model from all of latexmath:[S_i] and
+. If stem:[|S_i|] exceeds a threshold stem:[T], re-estimate the model from all of stem:[S_i] and
   stop.
 . Otherwise repeat from step 1 with a new sample.
-. After latexmath:[N] trials, keep the largest consensus set found and re-estimate from it.
+. After stem:[N] trials, keep the largest consensus set found and re-estimate from it.
 
 Two constants make this concrete, and the library exposes both as configurable properties on every
 `XxxRobustEstimator`:
 
-* **The inlier threshold latexmath:[t]**. If measurement error is zero-mean Gaussian with standard deviation
-  latexmath:[\sigma], the squared residual follows a latexmath:[\chi^2_m] distribution with latexmath:[m]
-  degrees of freedom (latexmath:[m] = the codimension of the model -- 1 for a line, 2 for a homography/camera).
-  Choosing latexmath:[t^2 = F_m^{-1}(\alpha)\,\sigma^2] for confidence latexmath:[\alpha=0.95] gives, e.g.,
-  latexmath:[t^2 = 3.84\sigma^2] for a line/fundamental matrix and latexmath:[t^2 = 5.99\sigma^2] for a
+* **The inlier threshold stem:[t]**. If measurement error is zero-mean Gaussian with standard deviation
+  stem:[\sigma], the squared residual follows a stem:[\chi^2_m] distribution with stem:[m]
+  degrees of freedom (stem:[m] = the codimension of the model -- 1 for a line, 2 for a homography/camera).
+  Choosing stem:[t^2 = F_m^{-1}(\alpha)\,\sigma^2] for confidence stem:[\alpha=0.95] gives, e.g.,
+  stem:[t^2 = 3.84\sigma^2] for a line/fundamental matrix and stem:[t^2 = 5.99\sigma^2] for a
   homography/camera matrix (HZ table 4.2, p.119) -- this is the `threshold` property on
   `RANSACLine2DRobustEstimator`, `RANSACDLTPointCorrespondencePinholeCameraRobustEstimator`, etc.
-* **The number of trials latexmath:[N]**. For sample size latexmath:[s], outlier proportion latexmath:[\epsilon]
-  and target confidence latexmath:[p] (usually 0.99) that *at least one* sample is outlier-free:
+* **The number of trials stem:[N]**. For sample size stem:[s], outlier proportion stem:[\epsilon]
+  and target confidence stem:[p] (usually 0.99) that *at least one* sample is outlier-free:
 +
-[latexmath]
+[stem]
 ++++
 N = \frac{\log(1-p)}{\log\bigl(1-(1-\epsilon)^s\bigr)}
 ++++
 +
-(HZ eq. 4.18, p.119). Since latexmath:[\epsilon] is rarely known up front, the library -- like HZ's own
-Algorithm 4.5 (p.121) -- computes it *adaptively*: after each sample it updates latexmath:[\epsilon] from the
-best consensus set found so far and shrinks the remaining latexmath:[N] accordingly, capping the total work at
+(HZ eq. 4.18, p.119). Since stem:[\epsilon] is rarely known up front, the library -- like HZ's own
+Algorithm 4.5 (p.121) -- computes it *adaptively*: after each sample it updates stem:[\epsilon] from the
+best consensus set found so far and shrinks the remaining stem:[N] accordingly, capping the total work at
 `maxIterations`. Alberto Irurueta's PhD thesis independently derives exactly the same formula for camera
 estimation (xref:reference.adoc#bib-phd-report[PHD], xref:attachment$irurueta-phd-thesis.pdf#page=87[&#167;2.5.2, printed
 pp.75-77, its own "Algorithm 2.1"]),
@@ -103,10 +103,10 @@ estimation... requires no setting of thresholds or a priori knowledge of the var
 \hat{M} = \operatorname*{arg\,min}_{M} \ \operatorname{median}_i \, e_i^2(M)
 ++++
 
-The number of samples latexmath:[N] is still drawn from the same eq. 4.18. The trade-off is symmetric to
+The number of samples stem:[N] is still drawn from the same eq. 4.18. The trade-off is symmetric to
 RANSAC's: no threshold to tune, but the median is only a meaningful "typical" residual while inliers are the
 majority -- LMedS breaks down once outliers exceed 50% of the data, exactly where thresholded RANSAC keeps
-working provided latexmath:[t] is chosen well.
+working provided stem:[t] is chosen well.
 xref:reference.adoc#bib-numerical-recipes[Numerical Recipes] &#167;15.7 "Robust Estimation" (p.818) frames the
 same median-based idea for the simpler 1D case (`Fitmed`, a least-median/least-absolute-deviation line fit,
 p.823) as a general antidote to the sensitivity of ordinary least squares to a "long tail of outliers" -- the
@@ -121,7 +121,7 @@ proposes, without naming it, exactly the cost function that Torr and Zisserman l
 (M-estimator SAmple Consensus, xref:reference.adoc#bib-torr-zisserman-mlesac[Torr & Zisserman, 2000]) and the
 library implements as its `MSACXxxRobustEstimator` classes:
 
-[latexmath]
+[stem]
 ++++
 C = \sum_i \rho(e_i), \qquad
 \rho(e) = \begin{cases} e^2 & e^2 < t^2 \\ t^2 & e^2 \geq t^2 \end{cases}

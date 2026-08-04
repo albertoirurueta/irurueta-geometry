@@ -44,26 +44,26 @@ inhomogeneous equivalent). Two homogeneous points are considered equal if they a
 including sign** -- `(x,y,w)` and `(-x,-y,-w)` represent the same point. This is exactly the homogeneous point
 of xref:reference.adoc#bib-phd-report[Irurueta's thesis], §1.2.1-1.2.2 (printed pp. 2,
 xref:attachment$irurueta-phd-thesis.pdf#page=14[PDF pp. 14]): a point
-`m = (x, y, w)` converts to inhomogeneous coordinates as latexmath:[(x/w,\ y/w)], and because `m` is only
-defined up to a non-zero scale latexmath:[\alpha], `w` can always be normalized to 1 -- except when `w = 0`,
+`m = (x, y, w)` converts to inhomogeneous coordinates as stem:[(x/w,\ y/w)], and because `m` is only
+defined up to a non-zero scale stem:[\alpha], `w` can always be normalized to 1 -- except when `w = 0`,
 which is precisely the case of a point at infinity.
 
 == Lines and the 2D point-line duality
 
-`Line2D` stores homogeneous coefficients `(a, b, c)` for latexmath:[ax + by + c = 0], with convenience
+`Line2D` stores homogeneous coefficients `(a, b, c)` for stem:[ax + by + c = 0], with convenience
 accessors for slope, y-intercept and angle.
 
 === The projective line and its duality with points
 
-A line through a fixed point latexmath:[(x_0, y_0)] with slope latexmath:[k] can be written
-latexmath:[y = k(x - x_0) + y_0], which rearranges into homogeneous form as
-latexmath:[k \cdot x - y + (y_0 - k \cdot x_0) = 0]. Writing the point as
-latexmath:[m = (x, y, 1)^T] and the line as latexmath:[l = (k, -1, y_0 - k \cdot x_0)^T], this is exactly the
+A line through a fixed point stem:[(x_0, y_0)] with slope latexmath:[k] can be written
+stem:[y = k(x - x_0) + y_0], which rearranges into homogeneous form as
+stem:[k \cdot x - y + (y_0 - k \cdot x_0) = 0]. Writing the point as
+stem:[\mathbf{m} = (x, y, 1)^T] and the line as stem:[\mathbf{l} = (k, -1, y_0 - k \cdot x_0)^T], this is exactly the
 incidence relation
 
-[latexmath]
+[stem]
 ++++
-m^T \cdot l = 0
+\mathbf{m}^T \cdot \mathbf{l} = 0
 ++++
 
 Both `m` and `l` are 3-component homogeneous vectors, but they play structurally opposite roles: a fixed `l`
@@ -75,14 +75,14 @@ xref:attachment$irurueta-phd-thesis.pdf#page=15[PDF p. 15]).
 Duality also gives the join/meet operations their concrete cross-product form. The line through two points
 `m1`, `m2`, and dually, the point where two lines `l1`, `l2` intersect, are:
 
-[latexmath]
+[stem]
 ++++
-l = m_1 \times m_2, \qquad m = l_1 \times l_2
+\mathbf{l} = \mathbf{m}_1 \times \mathbf{m}_2, \qquad \mathbf{m} = \mathbf{l}_1 \times \mathbf{l}_2
 ++++
 
-where latexmath:[\times] is the standard 3-vector cross product, equivalently written as
-latexmath:[m_1 \times m_2 = [m_1\]_\times \cdot m_2] using the skew-symmetric matrix
-latexmath:[[m\]_\times] of a vector latexmath:[m = (m_1, m_2, m_3)^T]
+where stem:[\times] is the standard 3-vector cross product, equivalently written as
+stem:[\mathbf{m}_1 \times \mathbf{m}_2 = [\mathbf{m}_1\]_\times \cdot \mathbf{m}_2] using the skew-symmetric matrix
+stem:[[\mathbf{m}\]_\times] of a vector stem:[\mathbf{m} = (m_1, m_2, m_3)^T]
 (xref:reference.adoc#bib-phd-report[PHD], §1.2.3, eq. 1.8-1.9, printed pp. 3,
 xref:attachment$irurueta-phd-thesis.pdf#page=15[PDF pp. 15-16]). This is the
 "projective generalization of a cross product" that `Line2D.setParametersFromPairOfPoints` and
@@ -94,15 +94,15 @@ Because `mT·l` vanishes exactly for points on the line, it is *proportional* to
 (signed) Euclidean distance between an arbitrary point and the line -- a fact the library exposes directly as
 `Line2D.signedDistance(Point2D)` (`Line2D.java:460`):
 
-[latexmath]
+[stem]
 ++++
-d(m, l) = \frac{m^T \cdot l}{\sqrt{l_1^2 + l_2^2}}
+d(\mathbf{m}, \mathbf{l}) = \frac{\mathbf{m}^T \cdot \mathbf{l}}{\sqrt{l_1^2 + l_2^2}}
 ++++
 
-where latexmath:[l = (l_1, l_2, l_3)^T]. The sign indicates which side of the line the point lies on, according
-to the line's own orientation. The full derivation (project latexmath:[m - m'] onto the line's director vector
-latexmath:[n_L = (l_1, l_2)^T], then eliminate the unknown point latexmath:[m'] on the line via
-latexmath:[l^T \cdot m' = 0]) is given as Proof 1.1 in xref:reference.adoc#bib-phd-report[PHD], §1.2.4, eq.
+where stem:[\mathbf{l} = (l_1, l_2, l_3)^T]. The sign indicates which side of the line the point lies on, according
+to the line's own orientation. The full derivation (project stem:[\mathbf{m} - \mathbf{m}'] onto the line's director vector
+stem:[\mathbf{n}_L = (l_1, l_2)^T], then eliminate the unknown point stem:[\mathbf{m}'] on the line via
+stem:[\mathbf{l}^T \cdot \mathbf{m}' = 0]) is given as Proof 1.1 in xref:reference.adoc#bib-phd-report[PHD], §1.2.4, eq.
 1.10-1.23, printed pp. 4-6, xref:attachment$irurueta-phd-thesis.pdf#page=16[PDF pp. 16-18] -- the same "dot
 product with the line coefficients" pattern used
 throughout this page for incidence testing.
@@ -120,29 +120,29 @@ alternatives HZ also surveys for the same object.
 
 == Planes and the 3D point-plane duality
 
-`Plane` stores homogeneous coefficients `(a, b, c, d)` for latexmath:[ax + by + cz + d = 0]. Construction
+`Plane` stores homogeneous coefficients `(a, b, c, d)` for stem:[ax + by + cz + d = 0]. Construction
 options mirror the point/line "join" pattern: from three points (SVD null-space of the 3&#215;4 coordinate
 matrix), from a point plus two in-plane vectors (cross product), or from a point plus a normal vector.
 
 The plane equation itself follows from the same linear-dependency argument as the 2D line: any point `M`
 coplanar with three points `M1`, `M2`, `M3` is a linear combination of them, so the 4&#215;4 matrix
 `[M, M1, M2, M3]` is singular. Expanding its determinant by Laplace's formula along the column of `M` yields
-latexmath:[A \cdot x + B \cdot y + C \cdot z + D = 0], i.e. the plane's homogeneous coefficients are exactly the
+stem:[A \cdot x + B \cdot y + C \cdot z + D = 0], i.e. the plane's homogeneous coefficients are exactly the
 signed 3&#215;3 minors of the other three points' coordinates
 (xref:reference.adoc#bib-phd-report[PHD], §1.3.3, eq. 1.68-1.73, printed pp. 13-14,
 xref:attachment$irurueta-phd-thesis.pdf#page=25[PDF pp. 25-26]). By analogy
 with the 2D case, the point-plane incidence relation
 
-[latexmath]
+[stem]
 ++++
-\Pi^T \cdot M = 0
+\boldsymbol{\Pi}^T \cdot \mathbf{M} = 0
 ++++
 
 is the 3D point-plane duality (xref:reference.adoc#bib-phd-report[PHD], §1.3.4, eq. 1.74, printed p. 14,
-xref:attachment$irurueta-phd-thesis.pdf#page=26[PDF p. 26]): a fixed plane latexmath:[\Pi] describes the points lying on it, a fixed point `M` describes the pencil
+xref:attachment$irurueta-phd-thesis.pdf#page=26[PDF p. 26]): a fixed plane stem:[\boldsymbol{\Pi}] describes the points lying on it, a fixed point `M` describes the pencil
 of planes through it. xref:reference.adoc#bib-hartley-zisserman[HZ], §3.2.1 (pp. 66-67) develops the same
-relation as latexmath:[\pi^T X = 0] and adds the fact that, unlike 2D where points and lines are the only dual
-pair, **lines in latexmath:[\mathbb{P}^3] are self-dual**: a line is equally well defined as the join of two
+relation as stem:[\boldsymbol{\pi}^T \mathbf{X} = 0] and adds the fact that, unlike 2D where points and lines are the only dual
+pair, **lines in stem:[\mathbb{P}^3] are self-dual**: a line is equally well defined as the join of two
 points or the intersection of two planes, which is precisely why `Line3D` above is represented as two `Plane`
 instances rather than needing a distinct dual type.
 
@@ -156,12 +156,12 @@ all points at infinity. The rest of this page is about that plane and its 2D cou
 image::plane-at-infinity.svg[Projective vs. affine view of a cube, showing three vanishing points forming the plane at infinity and the line at infinity]
 
 A homogeneous 3D point `(X, Y, Z, W)` is a point at infinity exactly when `W = 0`; the locus of all such points
-is the **plane at infinity**, latexmath:[\Pi_\infty]. Applying the point-plane duality above, its canonical
+is the **plane at infinity**, stem:[\boldsymbol{\Pi}_\infty]. Applying the point-plane duality above, its canonical
 homogeneous coordinates are
 
-[latexmath]
+[stem]
 ++++
-\Pi_\infty = (0, 0, 0, 1)^T
+\boldsymbol{\Pi}_\infty = (0, 0, 0, 1)^T
 ++++
 
 (xref:reference.adoc#bib-phd-report[PHD], §1.4.1.1, eq. 1.118, printed p. 23,
@@ -170,30 +170,30 @@ xref:reference.adoc#bib-hartley-zisserman[HZ], §3.5, p. 80). This canonical for
 in the **affine stratum and above** -- it is exactly the row `(0,0,0,1)` that a 4&#215;4 projective
 transformation `H` leaves fixed if and only if `H` is an affinity
 (xref:reference.adoc#bib-hartley-zisserman[HZ], Result 3.7, §3.5, p. 80). Under a general projective
-transformation, latexmath:[\Pi_\infty] moves to wherever the transformation's last row sends it, so in an
+transformation, stem:[\boldsymbol{\Pi}_\infty] moves to wherever the transformation's last row sends it, so in an
 arbitrary projective frame "the plane at infinity can be anywhere"
 (xref:reference.adoc#bib-phd-report[PHD], §1.4.1.1, printed p. 23,
 xref:attachment$irurueta-phd-thesis.pdf#page=35[PDF p. 35]). The consequence for
 reconstruction pipelines is that upgrading a projective reconstruction to an affine one is exactly the problem
-of *identifying* which plane, in the frame at hand, is playing the role of latexmath:[\Pi_\infty] -- and only
+of *identifying* which plane, in the frame at hand, is playing the role of stem:[\boldsymbol{\Pi}_\infty] -- and only
 then re-expressing coordinates so it takes on its canonical form. xref:transformations.adoc[] covers that
 upgrade path (and the fuller affine/metric/Euclidean stratification) in detail; this page is only concerned
 with what the plane at infinity *is* and how to recognize it.
 
-In practice, latexmath:[\Pi_\infty] is identified from the image using **vanishing points**: because parallel
+In practice, stem:[\boldsymbol{\Pi}_\infty] is identified from the image using **vanishing points**: because parallel
 lines only meet at infinity, any three vanishing points corresponding to three independent directions in the
-scene determine three points on latexmath:[\Pi_\infty], and hence the plane itself
+scene determine three points on stem:[\boldsymbol{\Pi}_\infty], and hence the plane itself
 (xref:reference.adoc#bib-phd-report[PHD], fig. 1.9, §1.4.1.1, printed p. 22-23,
 xref:attachment$irurueta-phd-thesis.pdf#page=34[PDF pp. 34-35]). The
 `plane-at-infinity.svg` diagram above shows this: in the arbitrary projective view (left) three vanishing
-points latexmath:[M_X, M_Y, M_Z] mark where each family of parallel edges of the cube converges, and together
-they span latexmath:[\Pi_\infty]; in the affine view (right) those same edges have become parallel and their
+points stem:[M_X, M_Y, M_Z] mark where each family of parallel edges of the cube converges, and together
+they span stem:[\boldsymbol{\Pi}_\infty]; in the affine view (right) those same edges have become parallel and their
 vanishing points have receded to infinity.
 
-The **line at infinity**, latexmath:[l_\infty] -- informally, the horizon -- is the 2D analogue: it is the
-intersection of latexmath:[\Pi_\infty] with any given scene plane, or equivalently the set of vanishing points
+The **line at infinity**, stem:[\mathbf{l}_\infty] -- informally, the horizon -- is the 2D analogue: it is the
+intersection of stem:[\boldsymbol{\Pi}_\infty] with any given scene plane, or equivalently the set of vanishing points
 of all directions lying in that plane. Because any two parallel planes intersect only on
-latexmath:[\Pi_\infty], their common line lies on latexmath:[\Pi_\infty] and is the line at infinity of either
+stem:[\boldsymbol{\Pi}_\infty], their common line lies on stem:[\boldsymbol{\Pi}_\infty] and is the line at infinity of either
 plane's own orientation -- it depends only on the *orientation* of the plane, not on its position
 (xref:reference.adoc#bib-phd-report[PHD], §1.4.1.2, fig. 1.10, printed p. 23,
 xref:attachment$irurueta-phd-thesis.pdf#page=35[PDF p. 35]). This is the
@@ -263,7 +263,7 @@ The same three linear-algebra patterns recur across points/lines/planes:
 |**Incidence** (`isLocus`)
 |dot product of a point's homogeneous coordinates with the line/plane coefficients, compared to a threshold
 (e.g. `x&#183;a + y&#183;b + w&#183;c &#8776; 0` for a 2D point on a line) -- the numerical form of
-latexmath:[m^T \cdot l = 0] / latexmath:[\Pi^T \cdot M = 0] above.
+stem:[\mathbf{m}^T \cdot \mathbf{l} = 0] / stem:[\boldsymbol{\Pi}^T \cdot \mathbf{M} = 0] above.
 
 |**Join** (points &#8594; line/plane)
 |`Line2D.setParametersFromPairOfPoints` and `Plane.setParametersFromThreePoints` stack the points' homogeneous
@@ -282,7 +282,7 @@ rank-deficient matrix built from 2 points (2D join) or 3 points (3D join) that n
 the sought line or plane, up to scale. This is the general numerical technique behind the closed-form cross
 product, described in xref:reference.adoc#bib-numerical-recipes[Numerical Recipes], §2.6, "Singular Value
 Decomposition" and §2.6.1, "Range, Nullspace, and All That" (pp. 65, 67), and, for the exact same construction
-applied to points/planes/lines in latexmath:[\mathbb{P}^3], in xref:reference.adoc#bib-hartley-zisserman[HZ],
+applied to points/planes/lines in stem:[\mathbb{P}^3], in xref:reference.adoc#bib-hartley-zisserman[HZ],
 §3.2.1 (eq. 3.3-3.5, pp. 66-68).
 
 Join and meet being the same numerical operation (a null-space computation) applied to different inputs is the
@@ -297,7 +297,7 @@ and point/plane duality concretely through `DualConic`/`DualQuadric`.
   (PhD thesis) -- §1.2.1-1.2.2 (printed p. 2, xref:attachment$irurueta-phd-thesis.pdf#page=14[PDF p. 14]) for
   homogeneous vs. inhomogeneous 2D coordinates; §1.2.3, eq.
   1.5-1.9 (printed p. 3, xref:attachment$irurueta-phd-thesis.pdf#page=15[PDF p. 15]) for the point-line duality
-  latexmath:[m^T l = 0] and the cross-product join/meet;
+  stem:[\mathbf{m}^T \mathbf{l} = 0] and the cross-product join/meet;
   §1.2.4, eq. 1.10-1.23 and Proof 1.1 (printed pp. 4-6, xref:attachment$irurueta-phd-thesis.pdf#page=16[PDF pp.
   16-18]) for the signed point-to-line distance underlying
   `Line2D.signedDistance`; §1.3.3, eq. 1.68-1.73 (printed pp. 13-14,
@@ -311,8 +311,8 @@ and point/plane duality concretely through `DualConic`/`DualQuadric`.
   xref:attachment$irurueta-phd-thesis.pdf#page=36[PDF pp. 36-37])
   for why the plane at infinity is fixed by affine transformations.
 * xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman, _Multiple View Geometry in Computer Vision_,
-  2nd ed.] -- chapter 2 for the analogous 2D point-line duality and join/meet in latexmath:[\mathbb{P}^2];
-  §3.2.1-3.2.2 (pp. 66-70) for point-plane duality, the self-duality of lines in latexmath:[\mathbb{P}^3], and
+  2nd ed.] -- chapter 2 for the analogous 2D point-line duality and join/meet in stem:[\mathbb{P}^2];
+  §3.2.1-3.2.2 (pp. 66-70) for point-plane duality, the self-duality of lines in stem:[\mathbb{P}^3], and
   the null-space/span line representation `Line3D` mirrors; §3.5, Result 3.7 (p. 80) for the plane at infinity
   and its invariance under exactly the affine group; §3.6, eq. 3.21-3.23 and Result 3.9 (pp. 81-82) for the
   absolute conic that lies on the plane at infinity (see xref:conics-quadrics.adoc[] and

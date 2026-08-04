@@ -19,22 +19,22 @@ image::transformation-hierarchy.svg[Transformation hierarchy: Euclidean, Metric,
 |Euclidean (rigid)
 |rotation + translation
 |3 / 6
-|distances, angles, areas/volumes; trivially fixes latexmath:[\Pi_\infty], latexmath:[\Omega_\infty] and latexmath:[Q^*_\infty] *and* the absolute scale.
+|distances, angles, areas/volumes; trivially fixes stem:[\boldsymbol{\Pi}_\infty], stem:[\boldsymbol{\Omega}_\infty] and stem:[\mathbf{Q}^*_\infty] *and* the absolute scale.
 
 |Metric (similarity)
 |+ uniform scale
 |4 / 7
-|angles, ratios of distances, shape; fixes the plane at infinity latexmath:[\Pi_\infty] *and* the absolute conic latexmath:[\Omega_\infty] / dual absolute quadric latexmath:[Q^*_\infty] (up to scale) -- but not the absolute scale itself.
+|angles, ratios of distances, shape; fixes the plane at infinity stem:[\boldsymbol{\Pi}_\infty] *and* the absolute conic stem:[\boldsymbol{\Omega}_\infty] / dual absolute quadric stem:[\mathbf{Q}^*_\infty] (up to scale) -- but not the absolute scale itself.
 
 |Affine
 |+ independent axis scaling and skew (general linear map)
 |6 / 12
-|parallelism, ratios of lengths on parallel lines, ratios of areas/volumes; fixes the plane at infinity latexmath:[\Pi_\infty] *as a set* (not pointwise), but not latexmath:[\Omega_\infty]/latexmath:[Q^*_\infty].
+|parallelism, ratios of lengths on parallel lines, ratios of areas/volumes; fixes the plane at infinity stem:[\boldsymbol{\Pi}_\infty] *as a set* (not pointwise), but not stem:[\boldsymbol{\Omega}_\infty]/stem:[\mathbf{Q}^*_\infty].
 
 |Projective
 |+ a general homography, defined up to scale
 |8 / 15
-|incidence (collinearity/coplanarity), cross-ratio of 4 collinear points; fixes none of latexmath:[\Pi_\infty], latexmath:[\Omega_\infty] or latexmath:[Q^*_\infty] in general.
+|incidence (collinearity/coplanarity), cross-ratio of 4 collinear points; fixes none of stem:[\boldsymbol{\Pi}_\infty], stem:[\boldsymbol{\Omega}_\infty] or stem:[\mathbf{Q}^*_\infty] in general.
 |===
 
 The DOF and invariants above match the standard 2D hierarchy in
@@ -89,19 +89,19 @@ just affine, metric, or Euclidean in disguise.
 |Class |Representation
 
 |`EuclideanTransformation2D`/`3D`
-|a `Rotation2D`/`Rotation3D` plus a translation vector; point maps to latexmath:[p' = R\,p + t].
+|a `Rotation2D`/`Rotation3D` plus a translation vector; point maps to stem:[\mathbf{p}' = \mathbf{R}\,\mathbf{p} + \mathbf{t}].
 
 |`MetricTransformation2D`/`3D`
-|the same rotation/translation, plus a scalar `scale`; point maps to latexmath:[p' = s\,(R\,p) + t].
+|the same rotation/translation, plus a scalar `scale`; point maps to stem:[\mathbf{p}' = s\,(\mathbf{R}\,\mathbf{p}) + \mathbf{t}].
 
 |`AffineTransformation2D`/`3D`
 |a general (non-orthonormal) linear map matrix `A` (2&#215;2 / 3&#215;3) plus a translation; point maps to
-latexmath:[p' = A\,p + t]. Rotation and independent-scale/skew components are recovered on demand from `A` via
+stem:[\mathbf{p}' = \mathbf{A}\,\mathbf{p} + \mathbf{t}]. Rotation and independent-scale/skew components are recovered on demand from `A` via
 RQ decomposition (`getRotation()`, `getParameters()` / `AffineParameters2D`/`3D`).
 
 |`ProjectiveTransformation2D`/`3D`
 |a single homogeneous matrix `T` (3&#215;3 / 4&#215;4), defined up to scale; a homogeneous point maps to
-latexmath:[p' = T\,p] directly, with no separate translation step.
+stem:[\mathbf{p}' = \mathbf{T}\,\mathbf{p}] directly, with no separate translation step.
 |===
 
 == How other geometric entities transform
@@ -115,19 +115,19 @@ point `p' = T&#183;p`, the library implements:
 |Entity |Transform rule
 
 |Point2D / Point3D
-|latexmath:[p' = T\,p] (direct forward map)
+|stem:[\mathbf{p}' = \mathbf{T}\,\mathbf{p}] (direct forward map)
 
 |Line2D / Plane
-|latexmath:[l' = T^{-\mathsf T}\,l] (inverse-transpose -- lines/planes are covectors)
+|stem:[\mathbf{l}' = \mathbf{T}^{-\mathsf T}\,\mathbf{l}] (inverse-transpose -- lines/planes are covectors)
 
 |Conic / Quadric
-|latexmath:[C' = T^{-\mathsf T}\,C\,T^{-1}] (inverse-transpose on both sides)
+|stem:[\mathbf{C}' = \mathbf{T}^{-\mathsf T}\,\mathbf{C}\,\mathbf{T}^{-1}] (inverse-transpose on both sides)
 
 |DualConic / DualQuadric
-|latexmath:[C'^{-1} = T\,C^{-1}\,T^{\mathsf T}] (forward on both sides -- duals transform contragradiently to their primal)
+|stem:[\mathbf{C}'^{-1} = \mathbf{T}\,\mathbf{C}^{-1}\,\mathbf{T}^{\mathsf T}] (forward on both sides -- duals transform contragradiently to their primal)
 
 |PinholeCamera
-|camera matrix latexmath:[P' = P\,T^{-1}]
+|camera matrix stem:[\mathbf{P}' = \mathbf{P}\,\mathbf{T}^{-1}]
 
 |Polygon / Triangle
 |vertices transformed individually (each vertex is just a point)
@@ -157,9 +157,9 @@ implementations of every entity above.
 The table above says that affine transformations preserve parallelism while metric transformations preserve
 angles. Both facts have a single, precise algebraic root: **each stratum is exactly the subgroup of the
 projective linear group that fixes one particular geometric object living at infinity**. Affine transformations
-are exactly the ones that fix the plane at infinity latexmath:[\Pi_\infty] as a set; metric (similarity)
-transformations are exactly the ones that, in addition, fix the absolute conic latexmath:[\Omega_\infty] (or,
-equivalently, the dual absolute quadric latexmath:[Q^*_\infty]); Euclidean transformations are metric
+are exactly the ones that fix the plane at infinity stem:[\boldsymbol{\Pi}_\infty] as a set; metric (similarity)
+transformations are exactly the ones that, in addition, fix the absolute conic stem:[\boldsymbol{\Omega}_\infty] (or,
+equivalently, the dual absolute quadric stem:[\mathbf{Q}^*_\infty]); Euclidean transformations are metric
 transformations with the remaining scale freedom pinned to 1. This section works through why, following
 xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis]
 xref:attachment$irurueta-phd-thesis.pdf#page=33[&#167;1.4] and
@@ -167,117 +167,117 @@ xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] &#167;3.5-3.7.
 
 === The plane at infinity fixes the affine stratum
 
-In any projective frame of latexmath:[\mathbb{P}^3], the points with homogeneous last coordinate
-latexmath:[W = 0] form a plane, the **plane at infinity** latexmath:[\Pi_\infty]. In a frame that is already
+In any projective frame of stem:[\mathbb{P}^3], the points with homogeneous last coordinate
+stem:[W = 0] form a plane, the **plane at infinity** stem:[\boldsymbol{\Pi}_\infty]. In a frame that is already
 affine (or metric, or Euclidean) it takes the canonical form
 
-[latexmath]
+[stem]
 ++++
-\Pi_\infty = (0, 0, 0, 1)^{\mathsf T}
+\boldsymbol{\Pi}_\infty = (0, 0, 0, 1)^{\mathsf T}
 ++++
 
 (xref:attachment$irurueta-phd-thesis.pdf#page=35[PHD eq. 1.118]; HZ eq. 3.1-analogue for 3-space). This is
 exactly the constant returned by
 `Plane.createCanonicalPlaneAtInfinity()`. Under an arbitrary projective transformation, however,
-latexmath:[\Pi_\infty] moves like any other plane -- the library's own rule latexmath:[l' = T^{-\mathsf T} l]
+stem:[\boldsymbol{\Pi}_\infty] moves like any other plane -- the library's own rule stem:[\mathbf{l}' = \mathbf{T}^{-\mathsf T} \mathbf{l}]
 applies to it too, and in an arbitrary projective frame it can be *anywhere*: 3 vanishing points fix 3 independent
-directions, and the plane they span identifies where latexmath:[\Pi_\infty] actually sits in that frame
+directions, and the plane they span identifies where stem:[\boldsymbol{\Pi}_\infty] actually sits in that frame
 (xref:attachment$irurueta-phd-thesis.pdf#page=34[PHD fig. 1.9]). This is exactly what `plane-at-infinity.svg` below illustrates: on the left, a cube seen through an
-uncalibrated homography, where 3 vanishing points latexmath:[M_X, M_Y, M_Z] mark 3 points of latexmath:[\Pi_\infty];
+uncalibrated homography, where 3 vanishing points stem:[\mathbf{M}_X, \mathbf{M}_Y, \mathbf{M}_Z] mark 3 points of stem:[\boldsymbol{\Pi}_\infty];
 on the right, the same cube after upgrading to the affine stratum, where those vanishing points have moved back
 out to infinity and the cube's edges are visibly parallel again.
 
 image::plane-at-infinity.svg[The plane at infinity identified by 3 vanishing points in a projective frame, and sent back to infinity by an affine upgrade]
 
 **Claim (xref:attachment$irurueta-phd-thesis.pdf#page=36[PHD eq. 1.121-1.123]; HZ Result 3.7): a projective
-transformation fixes latexmath:[\Pi_\infty] as a set
+transformation fixes stem:[\boldsymbol{\Pi}_\infty] as a set
 if, and only if, it is an affinity.** Write a general affine transformation in the library's own block form
 (the exact shape produced by `AffineTransformation3D.toProjective()`, see below):
 
-[latexmath]
+[stem]
 ++++
-T_A = \begin{bmatrix} A & t \\ \mathbf{0}^{\mathsf T} & 1 \end{bmatrix}, \qquad \det(A) \neq 0
+\mathbf{T}_A = \begin{bmatrix} \mathbf{A} & \mathbf{t} \\ \mathbf{0}^{\mathsf T} & 1 \end{bmatrix}, \qquad \det(\mathbf{A}) \neq 0
 ++++
 
-Applying the plane-transform rule directly to the canonical latexmath:[\Pi_\infty]
+Applying the plane-transform rule directly to the canonical stem:[\boldsymbol{\Pi}_\infty]
 (xref:attachment$irurueta-phd-thesis.pdf#page=36[PHD eq. 1.121]):
 
-[latexmath]
+[stem]
 ++++
-T_A^{\mathsf T} \cdot \Pi_\infty =
-\begin{bmatrix} A^{\mathsf T} & \mathbf{0} \\ t^{\mathsf T} & 1 \end{bmatrix}
+\mathbf{T}_A^{\mathsf T} \cdot \boldsymbol{\Pi}_\infty =
+\begin{bmatrix} \mathbf{A}^{\mathsf T} & \mathbf{0} \\ \mathbf{t}^{\mathsf T} & 1 \end{bmatrix}
 \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix}
-= \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix} = \Pi_\infty
+= \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \end{bmatrix} = \boldsymbol{\Pi}_\infty
 ++++
 
-so latexmath:[\Pi_\infty] is a fixed point of latexmath:[T_A^{\mathsf T}], and hence (taking inverse-transposes,
-xref:attachment$irurueta-phd-thesis.pdf#page=36[PHD eq. 1.123]) also of the library's covector rule latexmath:[\Pi_\infty' = T_A^{-\mathsf T}\Pi_\infty = \Pi_\infty].
-Notice this is *set*-invariance, not pointwise invariance: individual points within latexmath:[\Pi_\infty] --
+so stem:[\boldsymbol{\Pi}_\infty] is a fixed point of stem:[\mathbf{T}_A^{\mathsf T}], and hence (taking inverse-transposes,
+xref:attachment$irurueta-phd-thesis.pdf#page=36[PHD eq. 1.123]) also of the library's covector rule stem:[\boldsymbol{\Pi}_\infty' = \mathbf{T}_A^{-\mathsf T}\boldsymbol{\Pi}_\infty = \boldsymbol{\Pi}_\infty].
+Notice this is *set*-invariance, not pointwise invariance: individual points within stem:[\boldsymbol{\Pi}_\infty] --
 i.e. individual directions/vanishing points -- are free to move around, as long as they stay on the plane. The
-converse (any projective `H` that fixes latexmath:[\Pi_\infty] as a set must have a last row proportional to
-latexmath:[(0,0,0,1)], i.e. must be affine) is HZ Result 3.7, proved the same way the 2D analogue (Result 2.17)
+converse (any projective `H` that fixes stem:[\boldsymbol{\Pi}_\infty] as a set must have a last row proportional to
+stem:[(0,0,0,1)], i.e. must be affine) is HZ Result 3.7, proved the same way the 2D analogue (Result 2.17)
 is: fixing a hyperplane algebraically forces the homography's action on the complementary coordinate to vanish.
 
-This is also precisely how you *find* the affine upgrade once latexmath:[\Pi_\infty] has been identified in an
+This is also precisely how you *find* the affine upgrade once stem:[\boldsymbol{\Pi}_\infty] has been identified in an
 arbitrary projective frame: any matrix of the form
 
-[latexmath]
+[stem]
 ++++
-T_{PA} = \begin{bmatrix} I_{3\times3} & \mathbf{0}_3 \\ \pi_\infty^{\mathsf T} & 1 \end{bmatrix}
+\mathbf{T}_{PA} = \begin{bmatrix} \mathbf{I}_{3\times3} & \mathbf{0}_3 \\ \boldsymbol{\pi}_\infty^{\mathsf T} & 1 \end{bmatrix}
 ++++
 
-(xref:attachment$irurueta-phd-thesis.pdf#page=37[PHD eq. 1.125], with latexmath:[\pi_\infty] the first 3
-coordinates of the identified latexmath:[\Pi_\infty],
+(xref:attachment$irurueta-phd-thesis.pdf#page=37[PHD eq. 1.125], with stem:[\boldsymbol{\pi}_\infty] the first 3
+coordinates of the identified stem:[\boldsymbol{\Pi}_\infty],
 scaled so its last coordinate is 1 -- xref:attachment$irurueta-phd-thesis.pdf#page=37[PHD eq. 1.126]) sends that
 plane back to its canonical position, because its
-last row *is* latexmath:[\Pi_\infty^{\mathsf T}]. Any latexmath:[T_{PA}' = \begin{bmatrix} A & \mathbf{0} \\ \pi_\infty^{\mathsf T} & 1\end{bmatrix}] with non-singular latexmath:[A] works equally well
+last row *is* stem:[\boldsymbol{\Pi}_\infty^{\mathsf T}]. Any stem:[\mathbf{T}_{PA}' = \begin{bmatrix} \mathbf{A} & \mathbf{0} \\ \boldsymbol{\pi}_\infty^{\mathsf T} & 1\end{bmatrix}] with non-singular stem:[\mathbf{A}] works equally well
 (xref:attachment$irurueta-phd-thesis.pdf#page=37[PHD eq. 1.127]) --
-latexmath:[T_{PA}] is simply the simplest choice.
+stem:[\mathbf{T}_{PA}] is simply the simplest choice.
 
 === The absolute conic and dual absolute quadric fix the metric stratum
 
-Fixing latexmath:[\Pi_\infty] buys parallelism but says nothing about angles: an affine map can still skew a
+Fixing stem:[\boldsymbol{\Pi}_\infty] buys parallelism but says nothing about angles: an affine map can still skew a
 square into an arbitrary parallelogram. To pin down angles, both HZ and PHD start from the elementary fact that
-two vectors are orthogonal iff their dot product vanishes, latexmath:[v_1^{\mathsf T} v_2 = 0]
+two vectors are orthogonal iff their dot product vanishes, stem:[\mathbf{v}_1^{\mathsf T} \mathbf{v_2} = 0]
 (xref:attachment$irurueta-phd-thesis.pdf#page=41[PHD eq.
-1.143-1.144]). Pushing that relation through an arbitrary homography latexmath:[m_i' = H m_i] gives
+1.143-1.144]). Pushing that relation through an arbitrary homography stem:[\mathbf{m}_i' = \mathbf{H} \mathbf{m}_i] gives
 (xref:attachment$irurueta-phd-thesis.pdf#page=42[PHD eq. 1.145-1.148]):
 
-[latexmath]
+[stem]
 ++++
-m_1^{\mathsf T} m_2 = (H^{-1}m_1')^{\mathsf T}(H^{-1}m_2') = {m_1'}^{\mathsf T}\,\underbrace{H^{-\mathsf T}H^{-1}}_{=\,C'}\,m_2' = 0
+\mathbf{m}_1^{\mathsf T} \mathbf{m}_2 = (\mathbf{H}^{-1}\mathbf{m}_1')^{\mathsf T}(\mathbf{H}^{-1}\mathbf{m}_2') = {\mathbf{m}_1'}^{\mathsf T}\,\underbrace{\mathbf{H}^{-\mathsf T}\mathbf{H}^{-1}}_{=\,\mathbf{C}'}\,\mathbf{m}_2' = 0
 ++++
 
-and latexmath:[C' = H^{-\mathsf T}H^{-1}] is symmetric, i.e. exactly the shape of a conic transformed by the
-library's own rule latexmath:[C' = T^{-\mathsf T}CT^{-1}] with latexmath:[C = I_{3\times3}] in the *metric*
+and stem:[\mathbf{C}' = \mathbf{H}^{-\mathsf T}\mathbf{H}^{-1}] is symmetric, i.e. exactly the shape of a conic transformed by the
+library's own rule stem:[\mathbf{C}' = \mathbf{T}^{-\mathsf T}\mathbf{C}\mathbf{T}^{-1}] with stem:[\mathbf{C} = \mathbf{I}_{3\times3}] in the *metric*
 frame. Running the same argument in 3D with planes and their director vectors
 (xref:attachment$irurueta-phd-thesis.pdf#page=43[PHD eq. 1.154-1.158]) shows that
 the analogous *quadric* that certifies orthogonality of planes in a metric frame is degenerate --
-latexmath:[Q_M^* = \mathrm{diag}(1,1,1,0)] -- because the extra row/column that would encode a translation-like
+stem:[\mathbf{Q}_M^* = \mathrm{diag}(1,1,1,0)] -- because the extra row/column that would encode a translation-like
 term must vanish for perpendicularity to be translation-independent.
 
-These two constants are, respectively, the **absolute conic** latexmath:[\Omega_\infty] and the **dual absolute
-quadric** latexmath:[Q^*_\infty]: the point conic that lies *on* latexmath:[\Pi_\infty] (formed by
-latexmath:[\Pi_\infty] intersecting the absolute quadric latexmath:[Q_\infty]), and the degenerate quadric whose
-tangent planes are exactly the planes tangent to latexmath:[\Omega_\infty]
+These two constants are, respectively, the **absolute conic** stem:[\boldsymbol{\Omega}_\infty] and the **dual absolute
+quadric** stem:[\mathbf{Q}^*_\infty]: the point conic that lies *on* stem:[\boldsymbol{\Pi}_\infty] (formed by
+stem:[\boldsymbol{\Pi}_\infty] intersecting the absolute quadric stem:[\mathbf{Q}_\infty]), and the degenerate quadric whose
+tangent planes are exactly the planes tangent to stem:[\boldsymbol{\Omega}_\infty]
 (xref:attachment$irurueta-phd-thesis.pdf#page=40[PHD &#167;1.4.3.1, fig. 1.12]). In a
 metric frame:
 
-[latexmath]
+[stem]
 ++++
-\Omega_\infty = \Omega_\infty^{*} = I_{3\times3}, \qquad
-Q^*_\infty = \begin{bmatrix} I_{3\times3} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix} = \mathrm{diag}(1,1,1,0)
+\boldsymbol{\Omega}_\infty = \boldsymbol{\Omega}_\infty^{*} = \mathbf{I}_{3\times3}, \qquad
+\mathbf{Q}^*_\infty = \begin{bmatrix} \mathbf{I}_{3\times3} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix} = \mathrm{diag}(1,1,1,0)
 ++++
 
 (xref:attachment$irurueta-phd-thesis.pdf#page=45[PHD eq. 1.160/1.162/1.169]; HZ eq. 3.21/3.24 -- identical
-constants). Algebraically latexmath:[\Omega_\infty]
-is a conic of *purely imaginary* points, latexmath:[x^2+y^2+1=0] i.e. a "circle" of imaginary radius
-latexmath:[i=\sqrt{-1}] (PHD xref:attachment$irurueta-phd-thesis.pdf#page=45[eq. 1.163],
-xref:attachment$irurueta-phd-thesis.pdf#page=44[fig. 1.14]); latexmath:[Q_\infty] is the limit of an
+constants). Algebraically stem:[\boldsymbol{\Omega}_\infty]
+is a conic of *purely imaginary* points, stem:[x^2+y^2+1=0] i.e. a "circle" of imaginary radius
+stem:[i=\sqrt{-1}] (PHD xref:attachment$irurueta-phd-thesis.pdf#page=45[eq. 1.163],
+xref:attachment$irurueta-phd-thesis.pdf#page=44[fig. 1.14]); stem:[\mathbf{Q}_\infty] is the limit of an
 ever-more-squashed
-sphere latexmath:[\mathrm{diag}(1,1,1,k)] as latexmath:[k\to\infty]
+sphere stem:[\mathrm{diag}(1,1,1,k)] as stem:[k\to\infty]
 (xref:attachment$irurueta-phd-thesis.pdf#page=46[PHD eq. 1.168, fig. 1.15]; HZ calls this a
-"rim quadric" -- picture an ellipsoid squashed to a pancake, with latexmath:[\Omega_\infty] as its rim). These
+"rim quadric" -- picture an ellipsoid squashed to a pancake, with stem:[\boldsymbol{\Omega}_\infty] as its rim). These
 are exactly the shapes `absolute-conic-quadric.svg` below depicts.
 
 image::absolute-conic-quadric.svg[The absolute conic Omega-infinity on the plane at infinity, and the dual absolute quadric Q-star-infinity meeting the plane at infinity in Omega-infinity]
@@ -285,76 +285,76 @@ image::absolute-conic-quadric.svg[The absolute conic Omega-infinity on the plane
 **Claim (PHD xref:attachment$irurueta-phd-thesis.pdf#page=48[Proof 1.6],
 xref:attachment$irurueta-phd-thesis.pdf#page=47[eq. 1.170-1.178]; HZ Result 3.9/3.10): a projective transformation
 fixes
-latexmath:[\Omega_\infty] (equivalently latexmath:[Q^*_\infty], up to the overall scale any projective quantity
+stem:[\boldsymbol{\Omega}_\infty] (equivalently stem:[\mathbf{Q}^*_\infty], up to the overall scale any projective quantity
 is defined up to) if, and only if, it is a similarity.** Sufficiency is a direct computation: writing a
 similarity in the library's block form (matching `EuclideanTransformation3D.toMetric()`'s output shape) and
-applying the *dual*-quadric transform rule latexmath:[Q^{*\prime} = T\,Q^*\,T^{\mathsf T}] (the library's own
+applying the *dual*-quadric transform rule stem:[\mathbf{Q}^{*\prime} = \mathbf{T}\,\mathbf{Q}^*\,\mathbf{T}^{\mathsf T}] (the library's own
 forward-forward rule for duals) gives
 
-[latexmath]
+[stem]
 ++++
-T = \begin{bmatrix} \sigma R & t \\ \mathbf{0}_3^{\mathsf T} & 1 \end{bmatrix}
+\mathbf{T} = \begin{bmatrix} \sigma \mathbf{R} & \mathbf{t} \\ \mathbf{0}_3^{\mathsf T} & 1 \end{bmatrix}
 \;\Longrightarrow\;
-Q^{*\prime}_\infty = T\,Q^*_\infty\,T^{\mathsf T}
-= \sigma^2 \begin{bmatrix} R R^{\mathsf T} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix}
-= \sigma^2 \begin{bmatrix} I_{3\times3} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix} = \sigma^2\,Q^*_\infty
+\mathbf{Q}^{*\prime}_\infty = \mathbf{T}\,\mathbf{Q}^*_\infty\,\mathbf{T}^{\mathsf T}
+= \sigma^2 \begin{bmatrix} \mathbf{R} \mathbf{R}^{\mathsf T} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix}
+= \sigma^2 \begin{bmatrix} \mathbf{I}_{3\times3} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix} = \sigma^2\,\mathbf{Q}^*_\infty
 ++++
 
-using latexmath:[RR^{\mathsf T}=I_{3\times3}] for any rotation
+using stem:[\mathbf{R}\mathbf{R}^{\mathsf T}=I_{3\times3}] for any rotation
 (xref:attachment$irurueta-phd-thesis.pdf#page=47[PHD eq. 1.170-1.173]) -- i.e.
-latexmath:[Q^*_\infty] is reproduced up to the scalar latexmath:[\sigma^2], which is exactly the "up to scale"
+stem:[\mathbf{Q}^*_\infty] is reproduced up to the scalar stem:[\sigma^2], which is exactly the "up to scale"
 sense in which any projective entity is defined. For necessity, take an *arbitrary* projective
-latexmath:[T = \begin{bmatrix} A & b \\ c^{\mathsf T} & d \end{bmatrix}] and demand
-latexmath:[T\,Q^*_\infty\,T^{\mathsf T} \propto Q^*_\infty]:
+stem:[\mathbf{T} = \begin{bmatrix} \mathbf{A} & \mathbf{b} \\ \mathbf{c}^{\mathsf T} & d \end{bmatrix}] and demand
+stem:[\mathbf{T}\,\mathbf{Q}^*_\infty\,\mathbf{T}^{\mathsf T} \propto \mathbf{Q}^*_\infty]:
 
-[latexmath]
+[stem]
 ++++
-T\,Q^*_\infty\,T^{\mathsf T} =
-\begin{bmatrix} A & b \\ c^{\mathsf T} & d \end{bmatrix}
-\begin{bmatrix} I_{3\times3} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix}
-\begin{bmatrix} A^{\mathsf T} & c \\ b^{\mathsf T} & d \end{bmatrix}
-= \begin{bmatrix} A A^{\mathsf T} & A c \\ c^{\mathsf T} A^{\mathsf T} & c^{\mathsf T} c \end{bmatrix}
+\mathbf{T}\,\mathbf{Q}^*_\infty\,\mathbf{T}^{\mathsf T} =
+\begin{bmatrix} \mathbf{A} & \mathbf{b} \\ \mathbf{c}^{\mathsf T} & d \end{bmatrix}
+\begin{bmatrix} \mathbf{I}_{3\times3} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 0 \end{bmatrix}
+\begin{bmatrix} \mathbf{A}^{\mathsf T} & \mathbf{c} \\ \mathbf{b}^{\mathsf T} & d \end{bmatrix}
+= \begin{bmatrix} \mathbf{A} \mathbf{A}^{\mathsf T} & \mathbf{A} \mathbf{c} \\ \mathbf{c}^{\mathsf T} \mathbf{A}^{\mathsf T} & \mathbf{c}^{\mathsf T} \mathbf{c} \end{bmatrix}
 ++++
 
 Matching this against latexmath:[\mathrm{diag}(1,1,1,0)] (up to the scalar latexmath:[\sigma^2] discussed above)
 forces
 
-[latexmath]
+[stem]
 ++++
-A A^{\mathsf T} = \sigma^2 I_{3\times3}, \qquad A c = \mathbf{0}_3, \qquad c^{\mathsf T} c = 0 \;\Longrightarrow\; c = \mathbf{0}_3
+\mathbf{A} \mathbf{A}^{\mathsf T} = \sigma^2 \mathbf{I}_{3\times3}, \qquad \mathbf{A} \mathbf{c} = \mathbf{0}_3, \qquad c^{\mathsf T} c = 0 \;\Longrightarrow\; c = \mathbf{0}_3
 ++++
 
-(xref:attachment$irurueta-phd-thesis.pdf#page=49[PHD eq. 1.177]). So latexmath:[c] -- the projective row that
-would otherwise move latexmath:[\Pi_\infty] -- must
-vanish, and latexmath:[A = \sigma R] must be a *scaled rotation* (the condition latexmath:[AA^{\mathsf T}=\sigma^2 I]
+(xref:attachment$irurueta-phd-thesis.pdf#page=49[PHD eq. 1.177]). So stem:[\mathbf{c}] -- the projective row that
+would otherwise move stem:[\boldsymbol{\Pi}_\infty] -- must
+vanish, and stem:[\mathbf{A} = \sigma \mathbf{R}] must be a *scaled rotation* (the condition stem:[\mathbf{A}\mathbf{A}^{\mathsf T}=\sigma^2 \mathbf{I}]
 is exactly "orthogonal up to a positive scalar"). That leaves precisely
 
-[latexmath]
+[stem]
 ++++
-T = \begin{bmatrix} \sigma R & b \\ \mathbf{0}_3^{\mathsf T} & 1 \end{bmatrix}
+\mathbf{T} = \begin{bmatrix} \sigma \mathbf{R} & \mathbf{b} \\ \mathbf{0}_3^{\mathsf T} & 1 \end{bmatrix}
 ++++
 
 a similarity transformation (xref:attachment$irurueta-phd-thesis.pdf#page=49[PHD eq. 1.178]) -- and since
-latexmath:[\Omega^*_\infty] sits in the top-left
-latexmath:[3\times3] minor of latexmath:[Q^*_\infty] (xref:attachment$irurueta-phd-thesis.pdf#page=46[PHD eq.
+stem:[\boldsymbol{\Omega}^*_\infty] sits in the top-left
+stem:[3\times3] minor of stem:[\mathbf{Q}^*_\infty] (xref:attachment$irurueta-phd-thesis.pdf#page=46[PHD eq.
 1.166]), a transformation that fixes
-latexmath:[Q^*_\infty] fixes latexmath:[\Omega^*_\infty] (and hence latexmath:[\Omega_\infty = (\Omega^*_\infty)^{-1}]) too. HZ Result 3.10 gives the equivalent block-matrix proof for
-latexmath:[Q^*_\infty=\mathrm{diag}(1,1,1,0)] directly, and Result 3.9 proves the corresponding statement for
-latexmath:[\Omega_\infty] itself by first invoking Result 3.7 (any transformation fixing a conic *on*
-latexmath:[\Pi_\infty] must first fix latexmath:[\Pi_\infty], hence be affine) and then showing the affine part
+stem:[\mathbf{Q}^*_\infty] fixes stem:[\boldsymbol{\Omega}^*_\infty] (and hence stem:[\boldsymbol{\Omega}_\infty = (\Omega^*_\infty)^{-1}]) too. HZ Result 3.10 gives the equivalent block-matrix proof for
+stem:[\mathbf{Q}^*_\infty=\mathrm{diag}(1,1,1,0)] directly, and Result 3.9 proves the corresponding statement for
+stem:[\boldsymbol{\Omega}_\infty] itself by first invoking Result 3.7 (any transformation fixing a conic *on*
+stem:[\boldsymbol{\Pi}_\infty] must first fix stem:[\boldsymbol{\Pi}_\infty], hence be affine) and then showing the affine part
 must be orthogonal up to scale.
 
 === Upgrading between strata
 
-Because affine upgrade only needs latexmath:[\Pi_\infty] while metric upgrade needs latexmath:[\Omega_\infty]/
-latexmath:[Q^*_\infty] as well, the two upgrades compose. Combining latexmath:[T_{PA}] (eq. 1.125) with the
-affine&#8594;metric matrix latexmath:[T_{AM} = \begin{bmatrix} A^{-1} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 1\end{bmatrix}] that Cholesky-factors the recovered conic latexmath:[A A^{\mathsf T}] out of the affine-stratum
+Because affine upgrade only needs stem:[\boldsymbol{\Pi}_\infty] while metric upgrade needs stem:[\boldsymbol{\Omega}_\infty]/
+stem:[\mathbf{Q}^*_\infty] as well, the two upgrades compose. Combining stem:[\mathbf{T}_{PA}] (eq. 1.125) with the
+affine&#8594;metric matrix stem:[\mathbf{T}_{AM} = \begin{bmatrix} \mathbf{A}^{-1} & \mathbf{0}_3 \\ \mathbf{0}_3^{\mathsf T} & 1\end{bmatrix}] that Cholesky-factors the recovered conic stem:[\mathbf{A} \mathbf{A}^{\mathsf T}] out of the affine-stratum
 dual quadric (xref:attachment$irurueta-phd-thesis.pdf#page=49[PHD eq. 1.179-1.184]) gives a single
 projective&#8594;metric matrix (xref:attachment$irurueta-phd-thesis.pdf#page=51[PHD eq. 1.185-1.186]):
 
-[latexmath]
+[stem]
 ++++
-T_{PM} = T_{AM}\,T_{PA} = \begin{bmatrix} A^{-1} & \mathbf{0}_3 \\ \pi_\infty^{\mathsf T} & 1 \end{bmatrix}
+\mathbf{T}_{PM} = \mathbf{T}_{AM}\,\mathbf{T}_{PA} = \begin{bmatrix} \mathbf{A}^{-1} & \mathbf{0}_3 \\ \boldsymbol{\pi}_\infty^{\mathsf T} & 1 \end{bmatrix}
 ++++
 
 Inverting it (xref:attachment$irurueta-phd-thesis.pdf#page=51[PHD eq. 1.189-1.192], via blockwise matrix
@@ -362,26 +362,26 @@ inversion) and substituting into the dual-quadric
 transform rule shows that in *any* projective frame
 (xref:attachment$irurueta-phd-thesis.pdf#page=52[PHD eq. 1.193-1.195]):
 
-[latexmath]
+[stem]
 ++++
-Q^{*\prime}_\infty = \begin{bmatrix} \omega^*_\infty & -\omega^*_\infty\,\pi_\infty \\ -\pi_\infty^{\mathsf T}\,\omega^*_\infty & \pi_\infty^{\mathsf T}\,\omega^*_\infty\,\pi_\infty \end{bmatrix}, \qquad \omega^*_\infty = A A^{\mathsf T}
+\mathbf{Q}^{*\prime}_\infty = \begin{bmatrix} \boldsymbol{\omega}^*_\infty & -\boldsymbol{\omega}^*_\infty\,\boldsymbol{\pi}_\infty \\ -\boldsymbol{\pi}_\infty^{\mathsf T}\,\boldsymbol{\omega}^*_\infty & \boldsymbol{\pi}_\infty^{\mathsf T}\,\boldsymbol{\omega}^*_\infty\,\boldsymbol{\pi}_\infty \end{bmatrix}, \qquad \boldsymbol{\omega}^*_\infty = \mathbf{A} \mathbf{A}^{\mathsf T}
 ++++
 
 i.e. the dual absolute quadric in an arbitrary projective frame packages *both* the dual image of the absolute
-conic latexmath:[\omega^*_\infty] (the "DIAC" that reappears in camera calibration, see
-xref:pinhole-camera.adoc[]) *and* the direction latexmath:[\pi_\infty] of the plane at infinity into a single
-latexmath:[4\times4] symmetric matrix. This is why, in self-calibration literature, recovering
-latexmath:[Q^*_\infty] is treated as *the* way to upgrade a projective reconstruction straight to metric in one
-step, rather than recovering latexmath:[\Pi_\infty] and latexmath:[\Omega_\infty] separately.
+conic stem:[\boldsymbol{\omega}^*_\infty] (the "DIAC" that reappears in camera calibration, see
+xref:pinhole-camera.adoc[]) *and* the direction stem:[\boldsymbol{\pi}_\infty] of the plane at infinity into a single
+stem:[4\times4] symmetric matrix. This is why, in self-calibration literature, recovering
+stem:[\mathbf{Q}^*_\infty] is treated as *the* way to upgrade a projective reconstruction straight to metric in one
+step, rather than recovering stem:[\boldsymbol{\Pi}_\infty] and stem:[\boldsymbol{\Omega}_\infty] separately.
 
 `irurueta-geometry` does **not** ship such a self-calibration/stratified-upgrade estimator -- there is no
 `toAffine()`/`toMetric()` on `ProjectiveTransformation2D`/`3D`, and no class under
-`com.irurueta.geometry.estimators` or `com.irurueta.geometry.refiners` computes latexmath:[\Pi_\infty] or
-latexmath:[Q^*_\infty] from image data. What the library *does* give you is exactly the algebraic building blocks
-above -- the canonical values of latexmath:[\Pi_\infty], latexmath:[\Omega_\infty] and latexmath:[Q^*_\infty],
+`com.irurueta.geometry.estimators` or `com.irurueta.geometry.refiners` computes stem:[\boldsymbol{\Pi}_\infty] or
+stem:[\mathbf{Q}^*_\infty] from image data. What the library *does* give you is exactly the algebraic building blocks
+above -- the canonical values of stem:[\boldsymbol{\Pi}_\infty], stem:[\boldsymbol{\Omega}_\infty] and stem:[\mathbf{Q}^*_\infty],
 and the one-directional Euclidean&#8594;metric&#8594;affine&#8594;projective upgrade chain -- so that, given a
 `Plane`/`Conic`/`DualQuadric` identified by some other means (vanishing points, orthogonal-plane constraints,
-Kruppa's equations, etc.), an application can still build the matrices latexmath:[T_{PA}]/latexmath:[T_{PM}]
+Kruppa's equations, etc.), an application can still build the matrices stem:[\mathbf{T}_{PA}]/stem:[\mathbf{T}_{PM}]
 above by hand.
 
 == From theory to code
@@ -427,12 +427,12 @@ ProjectiveTransformation3D projective = affine.toProjective();
 
 `AffineTransformation3D.toProjective()` (`AffineTransformation3D.java:1018-1020`) builds
 `new ProjectiveTransformation3D(a, translation)`, which is precisely the block form
-latexmath:[\begin{bmatrix} A & t \\ \mathbf{0}^{\mathsf T} & 1\end{bmatrix}] used throughout the proofs above --
+stem:[\begin{bmatrix} \mathbf{A} & \mathbf{t} \\ \mathbf{0}^{\mathsf T} & 1\end{bmatrix}] used throughout the proofs above --
 seeing that constructor call is seeing
 xref:attachment$irurueta-phd-thesis.pdf#page=36[PHD eq. 1.120] typed out in Java. Similarly,
 `MetricTransformation3D.toAffine()` (`MetricTransformation3D.java:272-274`) builds
-`new AffineTransformation3D(scale, getRotation(), getTranslation())`, embedding latexmath:[\sigma R] as the
-linear part -- the exact matrix that appeared as latexmath:[A=\sigma R] in the necessity proof of
+`new AffineTransformation3D(scale, getRotation(), getTranslation())`, embedding stem:[\sigma \mathbf{R}] as the
+linear part -- the exact matrix that appeared as stem:[\mathbf{A}=\sigma \mathbf{R}] in the necessity proof of
 &#167;Invariants above.
 
 == References
@@ -444,11 +444,11 @@ bibliography] for full citations):
 
 * xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman, _Multiple View Geometry in Computer Vision_, 2nd
   ed.] &#167;2.4 (pp.37-44, table 2.4) for the 2D hierarchy of transformations and its invariants; &#167;3.4-3.7
-  (pp.77-84, table 3.2) for the 3D hierarchy, the plane at infinity latexmath:[\pi_\infty] (Result 3.7, worked
-  Example 3.8), the absolute conic latexmath:[\Omega_\infty] (Result 3.9), and the absolute dual quadric
-  latexmath:[Q^*_\infty] (Result 3.10, with a full matrix proof). Also &#167;3.2.1/&#167;3.2.3 (pp.66-74) for the
-  point/plane transform rule latexmath:[\pi' = H^{-\mathsf T}\pi] and the (dual) quadric transform rules
-  latexmath:[Q' = H^{-\mathsf T}QH^{-1}] / latexmath:[Q^{*\prime} = HQ^*H^{\mathsf T}] implemented by this
+  (pp.77-84, table 3.2) for the 3D hierarchy, the plane at infinity stem:[\boldsymbol{\pi}_\infty] (Result 3.7, worked
+  Example 3.8), the absolute conic stem:[\boldsymbol{\Omega}_\infty] (Result 3.9), and the absolute dual quadric
+  stem:[\mathbf{Q}^*_\infty] (Result 3.10, with a full matrix proof). Also &#167;3.2.1/&#167;3.2.3 (pp.66-74) for the
+  point/plane transform rule stem:[\boldsymbol{\pi}' = \mathbf{H}^{-\mathsf T}\boldsymbol{\pi}] and the (dual) quadric transform rules
+  stem:[\mathbf{Q}' = \mathbf{H}^{-\mathsf T}\mathbf{Q}\mathbf{H}^{-1}] / stem:[\mathbf{Q}^{*\prime} = \mathbf{H}\mathbf{Q}^*\mathbf{H}^{\mathsf T}] implemented by this
   library's `transform(Plane, ...)` / `transform(Quadric, ...)` / `transform(DualQuadric, ...)` methods.
 * xref:reference.adoc#bib-phd-report[Irurueta, _Fixed Scene 3D Reconstruction for Mobile Applications_ (PhD
   thesis)] xref:attachment$irurueta-phd-thesis.pdf#page=33[&#167;1.4 "The stratification of 3D geometry"
@@ -457,10 +457,10 @@ bibliography] for full citations):
   xref:attachment$irurueta-phd-thesis.pdf#page=36[&#167;1.4.2 the affine stratum and the proof
   that latexmath:[T_A^{\mathsf T}\Pi_\infty=\Pi_\infty] (p.24, eq. 1.119-1.127)];
   xref:attachment$irurueta-phd-thesis.pdf#page=37[&#167;1.4.3 the metric stratum
-  (pp.25-37)], including the orthogonality-from-first-principles derivation of latexmath:[\Omega_\infty=I]
+  (pp.25-37)], including the orthogonality-from-first-principles derivation of stem:[\boldsymbol{\Omega}_\infty=\mathbf{I}]
   (xref:attachment$irurueta-phd-thesis.pdf#page=41[eq.
   1.143-1.169]) and xref:attachment$irurueta-phd-thesis.pdf#page=48[Proof 1.6] that similarities are exactly the
-  transformations fixing latexmath:[Q^*_\infty]
+  transformations fixing stem:[\mathbf{Q}^*_\infty]
   (p.35-36, eq. 1.170-1.178); xref:attachment$irurueta-phd-thesis.pdf#page=49[&#167;1.4.3.5 the
   projective/affine&#8594;metric upgrade matrices
   latexmath:[T_{AM}]/latexmath:[T_{PM}] (pp.37-40, eq. 1.179-1.195)];

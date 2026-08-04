@@ -47,22 +47,22 @@ image::minimal-sample-dof.svg[Minimal sample size equals the degrees of freedom 
 (`CircleRobustEstimator.java:26-29`, `SphereRobustEstimator.java:26-29`). Both are, as
 xref:conics-quadrics.adoc[] notes, independent parametric classes rather than `Conic`/`Quadric` subclasses --
 but their *degrees of freedom* are still exactly a conic/quadric's degrees of freedom with the shape
-constrained: a circle is the conic latexmath:[ax^2+2bxy+cy^2+2dxw+2eyw+fw^2=0] with latexmath:[a=c],
-latexmath:[b=0] (`ConicType.CIRCLE_CONIC_TYPE`, see xref:conics-quadrics.adoc[]); a sphere is the quadric with
-latexmath:[a=b=c] and latexmath:[d=e=f=0].
+constrained: a circle is the conic stem:[ax^2+2bxy+cy^2+2dxw+2eyw+fw^2=0] with latexmath:[a=c],
+stem:[b=0] (`ConicType.CIRCLE_CONIC_TYPE`, see xref:conics-quadrics.adoc[]); a sphere is the quadric with
+stem:[a=b=c] and stem:[d=e=f=0].
 
 === Why 3 points, why 4 points
 
 A general conic has 6 homogeneous coefficients, i.e. 5 degrees of freedom once the overall scale is divided
 out -- which is exactly why `ConicRobustEstimator.MINIMUM_SIZE` is 5 (next section). Fixing `a=c` and `b=0`
-removes 2 of those degrees of freedom *and* removes the scale ambiguity at the same time: once latexmath:[a=c]
+removes 2 of those degrees of freedom *and* removes the scale ambiguity at the same time: once stem:[a=c]
 is forced non-zero, the whole equation can be divided by it, leaving the non-homogeneous circle equation
-latexmath:[x^2+y^2+2dx+2ey+f=0] with exactly 3 free real numbers latexmath:[(d,e,f)] (equivalently: center
-latexmath:[(-d,-e)] and radius latexmath:[\sqrt{d^2+e^2-f}]). That is why
+stem:[x^2+y^2+2dx+2ey+f=0] with exactly 3 free real numbers stem:[(d,e,f)] (equivalently: center
+stem:[(-d,-e)] and radius stem:[\sqrt{d^2+e^2-f}]). That is why
 `CircleRobustEstimator.MINIMUM_SIZE = 3` (`CircleRobustEstimator.java:36`): 3 points, 3 unknowns, one equation
 per point. The identical argument one dimension up -- a quadric's 10 homogeneous coefficients (9 DOF) reduced
-by the 5 constraints latexmath:[a=b=c], latexmath:[d=e=f=0] to the 4 free reals latexmath:[(g,h,i,j)] in
-latexmath:[x^2+y^2+z^2+2gx+2hy+2iz+j=0] -- is why `SphereRobustEstimator.MINIMUM_SIZE = 4`
+by the 5 constraints stem:[a=b=c], stem:[d=e=f=0] to the 4 free reals stem:[(g,h,i,j)] in
+stem:[x^2+y^2+z^2+2gx+2hy+2iz+j=0] -- is why `SphereRobustEstimator.MINIMUM_SIZE = 4`
 (`SphereRobustEstimator.java:36`).
 
 === The closed-form construction: a direct, non-homogeneous linear solve
@@ -71,7 +71,7 @@ Because fixing the shape also removes the scale ambiguity, the minimal-sample sy
 `A&#183;x=0` this library solves elsewhere via SVD null-space (xref:points-lines-planes.adoc[],
 xref:conics-quadrics.adoc[]) -- it is an ordinary square, **inhomogeneous** system `A&#183;x=b` with a unique
 solution. `Circle.setParametersFromPoints` (`Circle.java:176-249`) builds, for each of the 3 points, the row
-latexmath:[(2x_iw_i,\ 2y_iw_i,\ w_i^2)] of `A` and the entry latexmath:[b_i=-x_i^2-y_i^2] (each row normalized
+stem:[(2x_iw_i,\ 2y_iw_i,\ w_i^2)] of `A` and the entry stem:[b_i=-x_i^2-y_i^2] (each row normalized
 first to improve conditioning), then solves the 3&#215;3 system directly with `Utils.solve(m, b)` -- no SVD,
 because there is nothing left to disambiguate. `Sphere.setParametersFromPoints` (`Sphere.java:181-276`) does
 the identical thing one dimension up with a 4&#215;4 system. Both robust estimators simply call the
@@ -98,9 +98,9 @@ score a candidate with the actual Euclidean distance from the point to the circl
 `Circle.getDistance`/`Sphere.getDistance` (`CircleRobustEstimator.java:728-732`,
 `SphereRobustEstimator.java:723-727`):
 
-[latexmath]
+[stem]
 ++++
-d(\text{point}) = \bigl|\, \lVert \text{point} - \text{center} \rVert - \text{radius} \,\bigr|
+d(\textbf{point}) = \bigl|\, \lVert \textbf{point} - \textbf{center} \rVert - \text{radius} \,\bigr|
 ++++
 
 (`Circle.signedDistance`/`Sphere.signedDistance`, `Circle.java:369-371`). This is possible only because a
@@ -135,11 +135,11 @@ establishes for `Conic`/`DualConic` in general.
 
 === Why 5 points (or 5 lines)
 
-A conic latexmath:[ax^2+2bxy+cy^2+2dxw+2eyw+fw^2=0] has 6 homogeneous coefficients, hence 5 degrees of freedom
+A conic stem:[ax^2+2bxy+cy^2+2dxw+2eyw+fw^2=0] has 6 homogeneous coefficients, hence 5 degrees of freedom
 once scale is factored out -- which is exactly `ConicRobustEstimator.MINIMUM_SIZE = 5`
 (`ConicRobustEstimator.java:39`). This is also worked out explicitly in
 xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] &#167;2.2, "Five points define a conic" (pp.
-30-31): each point places one linear constraint latexmath:[(x_i^2,x_iy_i,y_i^2,x_i,y_i,1)\cdot(a,b,c,d,e,f)^{\mathsf T}=0]
+30-31): each point places one linear constraint stem:[(x_i^2,x_iy_i,y_i^2,x_i,y_i,1)\cdot(a,b,c,d,e,f)^{\mathsf T}=0]
 on the 6-vector of coefficients, so 5 points give a 5&#215;6 homogeneous system whose 1-dimensional null-space
 is the conic, "determined uniquely (up to scale) by five points in general position" -- HZ's own words. By the
 point/tangent-line duality of the previous section, a dual conic (an envelope of tangent lines) is likewise
@@ -149,7 +149,7 @@ fixed by 5 lines, hence `DualConicRobustEstimator.MINIMUM_SIZE = 5` (`DualConicR
 
 Unlike `Circle`/`Sphere`, a conic has no way to remove the scale ambiguity, so
 `Conic.setParametersFromPoints` (`Conic.java:313-409`) builds exactly the homogeneous 5&#215;6 system HZ
-describes -- for each point the row latexmath:[(x^2,\ 2xy,\ y^2,\ 2xw,\ 2yw,\ w^2)] (row-normalized for
+describes -- for each point the row stem:[(x^2,\ 2xy,\ y^2,\ 2xw,\ 2yw,\ w^2)] (row-normalized for
 numerical accuracy) -- and finds its null-space via `SingularValueDecomposer`
 (`Conic.java:387-408`), the same general technique this library uses for every other homogeneous join/meet
 problem (xref:points-lines-planes.adoc[], xref:reference.adoc#bib-numerical-recipes[Numerical Recipes] &#167;2.6,
@@ -180,12 +180,12 @@ try {
 absolute value of the conic's own defining bilinear form -- an **algebraic** residual, not a true geometric
 distance to the curve:
 
-[latexmath]
+[stem]
 ++++
-r(m) = \bigl|\, m^{\mathsf T} C\, m \,\bigr|, \qquad r(l) = \bigl|\, l^{\mathsf T} C^{*}\, l \,\bigr|
+r(\mathbf{m}) = \bigl|\, \mathbf{m}^{\mathsf T} \mathbf{C}\, \mathbf{m} \,\bigr|, \qquad r(\mathbf{l}) = \bigl|\, \mathbf{l}^{\mathsf T} \mathbf{C}^{*}\, \mathbf{l} \,\bigr|
 ++++
 
-computed by normalizing latexmath:[C]/latexmath:[C^{*}] and the point/line first, then literally multiplying
+computed by normalizing stem:[\mathbf{C}]/latexmath:[\mathbf{C}^{*}] and the point/line first, then literally multiplying
 the three matrices (`ConicRobustEstimator.java:748-757`). This is the same quantity `Conic.isLocus`/
 `DualConic.isLocus` threshold against (xref:conics-quadrics.adoc[]) -- residual zero means exactly "on the
 locus" -- but it is *not* in the same units as a Euclidean distance, and it scales non-linearly with how far a
@@ -194,7 +194,7 @@ point actually is from the curve. That mismatch in scale is directly visible in 
 `RANSACConicRobustEstimator.DEFAULT_THRESHOLD` is `1e-6`
 (`RANSACConicRobustEstimator.java:45`) and `RANSACDualConicRobustEstimator.DEFAULT_THRESHOLD` is `1e-7`
 (`RANSACDualConicRobustEstimator.java:44`) -- three to seven orders of magnitude smaller, because
-latexmath:[m^{\mathsf T}Cm] is a genuinely different (and much smaller, for normalized inputs near the locus)
+stem:[\mathbf{m}^{\mathsf T}\mathbf{C}\mathbf{m}] is a genuinely different (and much smaller, for normalized inputs near the locus)
 quantity than a pixel distance.
 
 [source,java]
@@ -218,7 +218,7 @@ duality of xref:conics-quadrics.adoc[] one dimension up from `Conic`/`DualConic`
 
 === Why 9 points (or 9 planes)
 
-A quadric latexmath:[ax^2+by^2+cz^2+2dxy+2exz+2fyz+2gxw+2hyw+2izw+jw^2=0] has 10 homogeneous coefficients,
+A quadric stem:[ax^2+by^2+cz^2+2dxy+2exz+2fyz+2gxw+2hyw+2izw+jw^2=0] has 10 homogeneous coefficients,
 hence 9 degrees of freedom once scale is factored out -- exactly `QuadricRobustEstimator.MINIMUM_SIZE = 9`
 (`QuadricRobustEstimator.java:36`) and, by the same point/tangent-plane duality argument as conics,
 `DualQuadricRobustEstimator.MINIMUM_SIZE = 9` (`DualQuadricRobustEstimator.java:38`). This is the direct 3D
@@ -230,7 +230,7 @@ minimal sample size = degrees of freedom) is identical and is the one the code i
 === The closed-form construction: the same SVD null-space pattern
 
 `Quadric.setParametersFromPoints` (`Quadric.java:317-506`) builds, for each of the 9 points, the row
-latexmath:[(x^2,\ y^2,\ z^2,\ 2xy,\ 2xz,\ 2yz,\ 2xw,\ 2yw,\ 2zw,\ w^2)] of a 9&#215;10 matrix (row-normalized),
+stem:[(x^2,\ y^2,\ z^2,\ 2xy,\ 2xz,\ 2yz,\ 2xw,\ 2yw,\ 2zw,\ w^2)] of a 9&#215;10 matrix (row-normalized),
 then takes its null-space via `SingularValueDecomposer`, exactly like `Conic` (`Quadric.java:478-502`),
 throwing `CoincidentPointsException` if the decomposed rank is below 9 (`Quadric.java:481-482`).
 `DualQuadric.setParametersFromPlanes` (`DualQuadric.java:325-513`) is the identical construction on plane
@@ -256,9 +256,9 @@ try {
 `DualQuadricRobustEstimator.residual` (`DualQuadricRobustEstimator.java:735-760`) score exactly the same kind
 of algebraic quantity as the conic case, one dimension up:
 
-[latexmath]
+[stem]
 ++++
-r(M) = \bigl|\, M^{\mathsf T} Q\, M \,\bigr|, \qquad r(\Pi) = \bigl|\, \Pi^{\mathsf T} Q^{*}\, \Pi \,\bigr|
+r(\mathbf{M}) = \bigl|\, \mathbf{M}^{\mathsf T} \mathbf{Q}\, \mathbf{M} \,\bigr|, \qquad r(\boldsymbol{\Pi}) = \bigl|\, \boldsymbol{\Pi}^{\mathsf T} \mathbf{Q}^{*}\, \boldsymbol{\Pi} \,\bigr|
 ++++
 
 and the same order-of-magnitude gap in default thresholds shows up again:
@@ -344,7 +344,7 @@ https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/iruruet
 * xref:estimators.adoc[] -- the general robust-estimation theory (RANSAC/LMedS/MSAC/PROSAC/PROMedS,
   non-robust-vs-robust, the shared `com.irurueta.numerical.robust` architecture) this page specializes.
 * xref:conics-quadrics.adoc[] -- the conic/dual-conic/quadric/dual-quadric math itself: the matrix
-  representation, tangent lines/planes, duality (latexmath:[C^{*}=C^{-1}]) and transformation rules that the
+  representation, tangent lines/planes, duality (stem:[\mathbf{C}^{*}=\mathbf{C}^{-1}]) and transformation rules that the
   entities estimated here obey.
 * xref:point-line-plane-estimators.adoc[] -- the point/line/plane robust-estimator hierarchies, the simplest
   instances of the same pattern.

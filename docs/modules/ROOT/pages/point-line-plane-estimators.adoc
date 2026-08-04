@@ -79,13 +79,13 @@ protected double residual(final Point2D p, final Line2D line) {
 }
 ----
 
-i.e. latexmath:[|d(m, l)| = \left|\dfrac{m^T \cdot l}{\sqrt{l_1^2 + l_2^2}}\right|] -- the same
+i.e. stem:[|d(\mathbf{m}, \mathbf{l})| = \left|\dfrac{\mathbf{m}^T \cdot \mathbf{l}}{\sqrt{l_1^2 + l_2^2}}\right|] -- the same
 `Line2D.signedDistance` formula xref:points-lines-planes.adoc[] derives from the PhD thesis's
 xref:attachment$irurueta-phd-thesis.pdf#page=17[Proof 1.1].
 `Point3DRobustEstimator.residual(Point3D, Plane)` (`Point3DRobustEstimator.java:865-870`) is the 3D analogue,
 `Math.abs(plane.signedDistance(p))`, using `Plane.signedDistance(Point3D)` (`Plane.java:515-525`) -- the same
 "dot product of homogeneous coordinates, normalized by the coefficient norm" pattern one dimension up, applied
-to latexmath:[\Pi^T \cdot M = 0] instead of latexmath:[m^T \cdot l = 0]. So a candidate 2D point's total cost
+to stem:[\boldsymbol{\Pi}^T \cdot \mathbf{M} = 0] instead of stem:[\mathbf{m}^T \cdot \mathbf{l} = 0]. So a candidate 2D point's total cost
 is effectively how far it sits, on average or under a threshold, from *every* sampled line, not just the two it
 was built from -- exactly the outlier-rejection role xref:estimators.adoc#non-robust-vs-robust[] describes.
 
@@ -110,7 +110,7 @@ best 2D line that passes through a collection of 2D points."*
 
 `MINIMUM_SIZE` is 2 (`Line2DRobustEstimator.java:36`). The closed-form step is the join operation
 xref:points-lines-planes.adoc[] derives as the point-line duality's cross product,
-latexmath:[l = m_1 \times m_2]: `RANSACLine2DRobustEstimator.estimatePreliminarSolutions`
+stem:[\mathbf{l} = \mathbf{m}_1 \times \mathbf{m}_2]: `RANSACLine2DRobustEstimator.estimatePreliminarSolutions`
 (`RANSACLine2DRobustEstimator.java:179-189`) draws two points from the minimal sample and constructs
 
 [source,java]
@@ -140,10 +140,10 @@ protected double residual(final Line2D l, final Point2D point) {
 
 -- literally `Line2D.signedDistance(Point2D)` (`Line2D.java:460`), the exact formula
 xref:points-lines-planes.adoc[] derives via
-xref:attachment$irurueta-phd-thesis.pdf#page=17[Proof 1.1] of the PhD thesis (projecting latexmath:[m - m'] onto
+xref:attachment$irurueta-phd-thesis.pdf#page=17[Proof 1.1] of the PhD thesis (projecting stem:[\mathbf{m} - \mathbf{m}'] onto
 the
 line's director vector). This is the cleanest instance of the pattern in this whole page: the non-robust
-algorithm (`l = m1 &#215; m2`) and the residual (`|m^T \cdot l| / \|(l_1,l_2)\|`) are both operations
+algorithm (`l = m1 &#215; m2`) and the residual stem:[(`|\mathbf{m}^T \cdot \mathbf{l}| / \|(l_1,l_2)\|`)] are both operations
 xref:points-lines-planes.adoc[] already fully derives -- `Line2DRobustEstimator` and its five concrete
 subclasses contribute nothing mathematically new, only the sampling/scoring loop from
 xref:estimators.adoc#shared-architecture[].
@@ -191,7 +191,7 @@ protected double residual(final Plane plane, final Point3D point) {
 ----
 
 i.e. `Plane.signedDistance(Point3D)` (`Plane.java:515-525`), the 3D point-plane-duality analogue
-(latexmath:[\Pi^T \cdot M = 0]) of the 2D signed distance xref:points-lines-planes.adoc[] derives in full for
+(stem:[\boldsymbol{\Pi}^T \cdot \mathbf{M} = 0]) of the 2D signed distance xref:points-lines-planes.adoc[] derives in full for
 the point-line case -- the library does not re-derive a separate proof for the plane case in the PhD thesis, but
 the formula (dot product of homogeneous coordinates over the coefficient vector's norm) is structurally
 identical.
@@ -226,7 +226,7 @@ formulas again:
 * **RANSAC/MSAC** need a `threshold` (`DEFAULT_THRESHOLD = 1.0` for every one of the ten concrete classes on
   this page, documented as "1 pixel" for the 2D hierarchies and "1 voxel" for the 3D ones). Fitting a 2D line to
   a real, noisy point cloud with, say, 1-pixel Gaussian localization error and a handful of gross mismatches,
-  a threshold around 1-2 pixels (xref:estimators.adoc#ransac[]'s latexmath:[t^2 = 3.84\sigma^2] for 1
+  a threshold around 1-2 pixels (xref:estimators.adoc#ransac[]'s stem:[t^2 = 3.84\sigma^2] for 1
   degree of freedom) correctly separates inliers from outliers; setting it too tight starts rejecting genuine
   inliers as noise pushes them just past the boundary, too loose lets outliers vote for a biased line.
 * **LMedS** needs no threshold at all -- useful exactly when that per-image-source pixel/voxel noise level is
