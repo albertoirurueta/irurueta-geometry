@@ -45,14 +45,14 @@ convert its argument to the receiver's own representation first if the runtime t
 
 For a unit axis latexmath:[u] and angle latexmath:[\theta]:
 
-[latexmath]
+[stem]
 ++++
-R = I + \sin\theta\,[u]_\times + (1-\cos\theta)\,[u]_\times^2 \qquad
-q = \left(\cos\tfrac{\theta}{2},\ \sin\tfrac{\theta}{2}\,u\right)
+\mathbf{R} = \mathbf{I} + \sin\theta\,[\mathbf{u}]_\times + (1-\cos\theta)\,[\mathbf{u}]_\times^2 \qquad
+\mathbf{q} = \left(\cos\tfrac{\theta}{2},\ \sin\tfrac{\theta}{2}\,\mathbf{u}\right)
 ++++
 
-where the latexmath:[[u\]_\times] notation above is the skew-symmetric cross-product matrix built from the
-axis latexmath:[u]. `AxisRotation3D` builds `R` directly from this formula; `Quaternion.setFromAxisAndRotation`
+where the stem:[[\mathbf{u}\]_\times] notation above is the skew-symmetric cross-product matrix built from the
+axis stem:[\mathbf{u}]. `AxisRotation3D` builds `R` directly from this formula; `Quaternion.setFromAxisAndRotation`
 builds `q` the same way.
 
 == Numerical subtleties the code explicitly guards against

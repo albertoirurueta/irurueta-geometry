@@ -16,14 +16,14 @@ A triangle is just three vertices (`vertex1`, `vertex2`, `vertex3`). Both classe
 |Operation |Notes
 
 |`getArea()` / `getSignedArea()`
-|latexmath:[\text{area} = \tfrac12 \lvert (v_2-v_1) \times (v_3-v_1) \rvert]; the *signed* version's sign
+|stem:[\text{area} = \tfrac12 \lvert (\mathbf{v}_2-\mathbf{v}_1) \times (\mathbf{v}_3-\mathbf{v}_1) \rvert]; the *signed* version's sign
 encodes winding order (`areVerticesClockwise()`).
 
 |`getPerimeter()`
 |Sum of the three edge lengths.
 
 |`getCenter()`
-|latexmath:[\text{centroid} = \dfrac{v_1+v_2+v_3}{3}]
+|stem:[\textbf{centroid} = \dfrac{\mathbf{v}_1+\mathbf{v}_2+\mathbf{v}_3}{3}]
 
 |`isInside(point)`
 |Splits the triangle into three sub-triangles (vertex, vertex, query point) and checks that their areas sum to

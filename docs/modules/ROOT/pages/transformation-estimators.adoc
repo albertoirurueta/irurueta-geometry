@@ -53,9 +53,9 @@ derivation] of least-squares scale/rotation/translation fitting (`MetricTransfor
 The **Kabsch algorithm** (xref:reference.adoc#bib-kabsch[Kabsch, 1976]) finds the rotation latexmath:[R]
 minimizing the sum of squared distances between one point set and a rotated/translated copy of another:
 
-[latexmath]
+[stem]
 ++++
-(R, t) = \operatorname*{arg\,min}_{R,\,t} \sum_i \lVert q_i - (R\,p_i + t) \rVert^2, \qquad R^{\mathsf T}R = I,\ \det R = 1
+(\mathbf{R}, \mathbf{t}) = \operatorname*{arg\,min}_{\mathbf{R},\,\mathbf{t}} \sum_i \lVert \mathbf{q}_i - (\mathbf{R}\,\mathbf{p}_i + \mathbf{t}) \rVert^2, \qquad \mathbf{R}^{\mathsf T}\mathbf{R} = \mathbf{I},\ \det \mathbf{R} = 1
 ++++
 
 === The Kabsch construction, step by step
@@ -65,32 +65,32 @@ crystallography paper the library only cites via Wikipedia, but built entirely f
 library already relies on elsewhere (xref:reference.adoc#bib-numerical-recipes[Numerical Recipes] &#167;2.6) --
 proceeds in four steps that a reader of `EuclideanTransformation2D/3DEstimator.java` will recognize directly:
 
-. **Center both point sets** on their centroids: latexmath:[\bar p=\tfrac1n\sum_i p_i], latexmath:[\bar q=\tfrac1n\sum_i q_i], latexmath:[p_i'=p_i-\bar p], latexmath:[q_i'=q_i-\bar q]. The translation is recovered
-at the very end as latexmath:[t=\bar q-R\bar p] -- rotation and translation are decoupled by this centering,
-which is exactly why the *rotation* problem below never mentions latexmath:[t].
-. **Build the cross-covariance matrix** latexmath:[H=\sum_i p_i'\,q_i'^{\mathsf T}] (a 2&#215;2 matrix in 2D, 3&#215;3
+. **Center both point sets** on their centroids: stem:[\mathbf{\bar p}=\tfrac1n\sum_i \mathbf{p}_i], stem:[\mathbf{\bar q}=\tfrac1n\sum_i \mathbf{q}_i], stem:[\mathbf{p}_i'=\mathbf{p}_i-\mathbf{\bar p}], stem:[\mathbf{q}_i'=\mathbf{q}_i-\mathbf{\bar q}]. The translation is recovered
+at the very end as stem:[\mathbf{t}=\mathbf{\bar q}-\mathbf{R}\mathbf{\bar p}] -- rotation and translation are decoupled by this centering,
+which is exactly why the *rotation* problem below never mentions stem:[\mathbf{t}].
+. **Build the cross-covariance matrix** stem:[\mathbf{H}=\sum_i \mathbf{p}_i'\,\mathbf{q}_i'^{\mathsf T}] (a 2&#215;2 matrix in 2D, 3&#215;3
 in 3D) -- the only place the actual coordinates enter the computation.
-. **Take the SVD** latexmath:[H=U\Sigma V^{\mathsf T}].
-. **Recover the optimal rotation** latexmath:[R=V\,U^{\mathsf T}], *unless* latexmath:[\det(VU^{\mathsf T})<0], in
+. **Take the SVD** stem:[\mathbf{H}=\mathbf{U}\boldsymbol{\Sigma} \mathbf{V}^{\mathsf T}].
+. **Recover the optimal rotation** stem:[\mathbf{R}=\mathbf{V}\,\mathbf{U}^{\mathsf T}], *unless* stem:[\det(\mathbf{V}\mathbf{U}^{\mathsf T})<0], in
 which case one singular value's sign is flipped first (`MetricTransformation2DEstimator.java:409-429`: `if
-(Utils.det(r) < 0.0) { ... }`, negating the last column of latexmath:[U] before recombining). This check is not
-optional bookkeeping: without it, a reflection (latexmath:[\det R=-1]) minimizes the same sum of squared
+(Utils.det(r) < 0.0) { ... }`, negating the last column of stem:[\mathbf{U}] before recombining). This check is not
+optional bookkeeping: without it, a reflection (stem:[\det \mathbf{R}=-1]) minimizes the same sum of squared
 distances just as well as a true rotation whenever the point configuration is close to planar/collinear, and
-the sign flip is precisely what keeps the result inside latexmath:[SO(n)] rather than the larger group
-latexmath:[O(n)] of all orthogonal matrices.
+the sign flip is precisely what keeps the result inside stem:[SO(n)] rather than the larger group
+stem:[O(n)] of all orthogonal matrices.
 
 `MetricTransformation2D/3DEstimator` solve the identical rotation problem, then recover a single extra unknown
 -- a uniform scale -- directly from the same SVD, with no further decomposition
 (`MetricTransformation2DEstimator.java:432-436`):
 
-[latexmath]
+[stem]
 ++++
-s = \frac{\sum_i e_i\,\sigma_i}{\sum_i \lVert p_i' \rVert^2}, \qquad t = \bar q - s\,R\,\bar p
+s = \frac{\sum_i \mathbf{e}_i\,\boldsymbol{\sigma}_i}{\sum_i \lVert \mathbf{p}_i' \rVert^2}, \qquad t = \mathbf{\bar q} - s\,\mathbf{R}\,\mathbf{\bar p}
 ++++
 
-where latexmath:[\sigma_i] are latexmath:[H]'s singular values and latexmath:[e_i=\pm1] carries the same
+where stem:[\sigma_i] are stem:[\mathbf{H}]'s singular values and stem:[\mathbf{e}_i=\pm1] carries the same
 reflection sign-fix as the rotation step (the denominator, `inCov` in the source, is the input point set's own
-variance around its centroid). `EuclideanTransformation2D/3DEstimator` is the latexmath:[s=1] special case,
+variance around its centroid). `EuclideanTransformation2D/3DEstimator` is the stem:[s=1] special case,
 consistent with xref:transformations.adoc[]'s statement that Euclidean is metric with scale fixed at 1 -- which
 is why every transformation on that page's Euclidean/metric rows (rotation plus translation, optionally plus
 scale) reduces to the same handful of linear-algebra primitives regardless of dimension.
@@ -143,8 +143,8 @@ line is a plane).
 
 === Why 3 points in 2D, 4 in 3D
 
-A 2D affine map latexmath:[p'=Ap+t] has 6 unknowns (a 2&#215;2 matrix plus a 2-vector), and each point
-correspondence contributes 2 equations (its latexmath:[x'] and latexmath:[y']) -- hence 3 points exactly pin
+A 2D affine map stem:[\mathbf{p}'=\mathbf{A}\mathbf{p}+\mathbf{t}] has 6 unknowns (a 2&#215;2 matrix plus a 2-vector), and each point
+correspondence contributes 2 equations (its stem:[\mathbf{x}'] and stem:[\mathbf{y}']) -- hence 3 points exactly pin
 down the 6 unknowns, with no scale ambiguity to divide out (unlike the homogeneous projective case below,
 affine parameters are already inhomogeneous). The 3D case is the same argument with a 3&#215;3 matrix plus a
 3-vector (12 unknowns, 3 equations per point) -- 4 points. A line correspondence in 2D contributes exactly the
@@ -216,13 +216,13 @@ plane correspondence variants.
 
 A 2D projective transformation (homography) latexmath:[H] has 9 homogeneous entries, hence 8 degrees of freedom
 once scale is divided out. Each point correspondence contributes only *2* independent equations, not 3, even
-though naively latexmath:[x_i^{\prime}\times Hx_i=0] looks like 3 equations -- xref:reference.adoc#bib-hartley-zisserman[Hartley
+though naively stem:[\mathbf{x}_i^{\prime}\times \mathbf{H}\mathbf{x}_i=0] looks like 3 equations -- xref:reference.adoc#bib-hartley-zisserman[Hartley
 & Zisserman] show that only 2 of the 3 rows are linearly independent (&#167;4.1, eq. 4.1-4.3, p.89): *"each
 point correspondence gives two equations in the entries of H"*. So 8 DOF over 2 equations per point gives
 exactly 4 points -- HZ's own words: *"it is necessary to specify four point correspondences in order to
 constrain H fully"* (p.88), and this is precisely `ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE = 4`.
 One dimension up, a 3D projective transformation has 15 DOF and each point correspondence still contributes
-only 3 independent equations (of the naive 4), giving latexmath:[15/3=5] points -- matching
+only 3 independent equations (of the naive 4), giving stem:[15/3=5] points -- matching
 `ProjectiveTransformation3DRobustEstimator.MINIMUM_SIZE = 5`. As with the affine case, a line correspondence in
 2D (or a plane correspondence in 3D) contributes the same equation count as a point, so the minimal sample size
 is unchanged across correspondence types.
@@ -231,13 +231,13 @@ is unchanged across correspondence types.
 
 HZ's Algorithm 4.1 (p.109) is the textbook version of exactly what
 `RANSACPointCorrespondenceProjectiveTransformation2DRobustEstimator`'s minimal-sample hook computes: stack the
-latexmath:[2\times9] constraint row from each of the 4 correspondences into an latexmath:[8\times9] matrix
-latexmath:[A], and take latexmath:[h] as the right singular vector of latexmath:[A] with the smallest singular
-value (the null-space of latexmath:[A] when the 4 points are in general position):
+stem:[2\times9] constraint row from each of the 4 correspondences into an stem:[8\times9] matrix
+stem:[\mathbf{A}], and take stem:[\mathbf{h}] as the right singular vector of stem:[\mathbf{A}] with the smallest singular
+value (the null-space of stem:[\mathbf{A}] when the 4 points are in general position):
 
-[latexmath]
+[stem]
 ++++
-A\,h = 0, \qquad h = \text{last column of } V \text{ in } A = U D V^{\mathsf T}
+\mathbf{A}\,\mathbf{h} = 0, \qquad \mathbf{h} = \text{last column of } \mathbf{V} \text{ in } \mathbf{A} = \mathbf{U} \mathbf{D} \mathbf{V}^{\mathsf T}
 ++++
 
 [source,java]
@@ -251,22 +251,22 @@ solutions.add(transformation);
 
 === Why the smallest singular vector solves it
 
-HZ's own justification (Appendix A5.3-A5.4, pp.592-593) for "take the last column of latexmath:[V]" is a short,
+HZ's own justification (Appendix A5.3-A5.4, pp.592-593) for "take the last column of stem:[\mathbf{V}]" is a short,
 self-contained proof worth restating, since every homogeneous minimal-sample solve on this site
 (xref:point-line-plane-estimators.adoc[], xref:conic-quadric-estimators.adoc[], and this page) ultimately
-reduces to it. The problem is: find latexmath:[h] minimizing latexmath:[\lVert Ah \rVert] subject to
-latexmath:[\lVert h \rVert = 1]. Writing latexmath:[A=UDV^{\mathsf T}] and substituting
-latexmath:[y=V^{\mathsf T}h] (an orthogonal change of variables, so latexmath:[\lVert y \rVert = \lVert h \rVert]):
+reduces to it. The problem is: find stem:[\mathbf{h}] minimizing stem:[\lVert \mathbf{A}\mathbf{h} \rVert] subject to
+stem:[\lVert \mathbf{h} \rVert = 1]. Writing stem:[\mathbf{A}=\mathbf{U}\mathbf{D}\mathbf{V}^{\mathsf T}] and substituting
+stem:[\mathbf{y}=\mathbf{V}^{\mathsf T}\mathbf{h}] (an orthogonal change of variables, so stem:[\lVert \mathbf{y} \rVert = \lVert \mathbf{h} \rVert]):
 
-[latexmath]
+[stem]
 ++++
-\lVert Ah \rVert = \lVert UDV^{\mathsf T}h \rVert = \lVert Dy \rVert, \qquad \lVert y \rVert = 1
+\lVert \mathbf{A}\mathbf{h} \rVert = \lVert \mathbf{U}\mathbf{D}\mathbf{V}^{\mathsf T}\mathbf{h} \rVert = \lVert \mathbf{D}\mathbf{y} \rVert, \qquad \lVert \mathbf{y} \rVert = 1
 ++++
 
-Because latexmath:[D] is diagonal with entries in descending order, latexmath:[\lVert Dy \rVert] is minimized
-by putting all of latexmath:[y]'s unit "budget" on the coordinate multiplied by the *smallest* diagonal entry --
-i.e. latexmath:[y=(0,\dots,0,1)^{\mathsf T}] -- so latexmath:[h=Vy] is simply the last column of latexmath:[V]
-(HZ Algorithm A5.4, p.593). Equivalently, that last column is the eigenvector of latexmath:[A^{\mathsf T}A]
+Because stem:[\mathbf{D}] is diagonal with entries in descending order, stem:[\lVert \mathbf{D}\mathbf{y} \rVert] is minimized
+by putting all of stem:[\mathbf{y}]'s unit "budget" on the coordinate multiplied by the *smallest* diagonal entry --
+i.e. stem:[\mathbf{y}=(0,\dots,0,1)^{\mathsf T}] -- so stem:[\mathbf{h}=\mathbf{V}\mathbf{y}] is simply the last column of stem:[\mathbf{V}]
+(HZ Algorithm A5.4, p.593). Equivalently, that last column is the eigenvector of stem:[\mathbf{A}^{\mathsf T}\mathbf{A}]
 with the smallest eigenvalue. This is the exact justification for every `new ProjectiveTransformation2D(p1..p4,
 q1..q4)`-style constructor's use of `SingularValueDecomposer` across this hierarchy, and for the identical
 pattern in `Conic`/`Quadric`/`DualConic`/`DualQuadric` (xref:conic-quadric-estimators.adoc[]).
@@ -275,21 +275,21 @@ pattern in `Conic`/`Quadric`/`DualConic`/`DualQuadric` (xref:conic-quadric-estim
 
 HZ's Algorithm 4.2 (p.109, motivated in &#167;4.4 "Transformation invariance and normalization", pp.104-108) does
 not hand the raw pixel coordinates to the SVD solve above -- it first applies a similarity transformation
-latexmath:[T] to the points so that their centroid sits at the origin and their *average* distance from it is
-latexmath:[\sqrt2] (so the "average" normalized point is latexmath:[(1,1,1)^{\mathsf T}]):
+stem:[\mathbf{T}] to the points so that their centroid sits at the origin and their *average* distance from it is
+stem:[\sqrt2] (so the "average" normalized point is stem:[(1,1,1)^{\mathsf T}]):
 
-[latexmath]
+[stem]
 ++++
-\hat x_i = T\,x_i, \qquad T = \begin{bmatrix} s & 0 & -s\,\bar x \\ 0 & s & -s\,\bar y \\ 0 & 0 & 1 \end{bmatrix},
-\qquad s = \frac{\sqrt2}{\frac1n\sum_i \lVert x_i - \bar x \rVert}
+\mathbf{\hat x}_i = \mathbf{T}\,\mathbf{x}_i, \qquad \mathbf{T} = \begin{bmatrix} s & 0 & -s\,\bar x \\ 0 & s & -s\,\bar y \\ 0 & 0 & 1 \end{bmatrix},
+\qquad s = \frac{\sqrt2}{\frac1n\sum_i \lVert \mathbf{x}_i - \mathbf{\bar x} \rVert}
 ++++
 
-solves for latexmath:[\hat H] from the normalized points, then **denormalizes**
-latexmath:[H = T'^{-1}\,\hat H\,T] to recover the homography in the original coordinates (latexmath:[T] for the
-input points, latexmath:[T'] for the output points). HZ's own motivation (p.107-108) for this step: without
-normalization, raw image coordinates like latexmath:[(100,100,1)^{\mathsf T}] make the design matrix's entries
-span several orders of magnitude (products like latexmath:[xx'] land around latexmath:[10^4] while
-latexmath:[ww'] stays at latexmath:[1]), which inflates the equation system's condition number and, in the
+solves for stem:[\mathbf{\hat H}] from the normalized points, then **denormalizes**
+stem:[\mathbf{H} = \mathbf{T}'^{-1}\,\mathbf{\hat H}\,\mathbf{T}] to recover the homography in the original coordinates (stem:[\mathbf{T}] for the
+input points, stem:[\mathbf{T}'] for the output points). HZ's own motivation (p.107-108) for this step: without
+normalization, raw image coordinates like stem:[(100,100,1)^{\mathsf T}] make the design matrix's entries
+span several orders of magnitude (products like stem:[xx'] land around stem:[10^4] while
+stem:[ww'] stays at stem:[1]), which inflates the equation system's condition number and, in the
 presence of noise, measurably worsens the SVD solution -- HZ states this in so many words: *"Data normalization
 is an essential step in the DLT algorithm. It must not be considered optional."*
 
@@ -301,15 +301,15 @@ mechanisms exist in this codebase, and neither is that one:
   bounding-box-based scale (`scaleX = 1.0 / width`, `scaleY = 1.0 / height`,
   `Point2DNormalizer.java:299-300`) plus a centroid translation -- closer in spirit to HZ's goal than to its
   exact prescription (anisotropic per-axis scale rather than one isotropic scale to a target average distance
-  of latexmath:[\sqrt2]) -- but a repository-wide search shows **no estimator class in this package actually
+  of stem:[\sqrt2]) -- but a repository-wide search shows **no estimator class in this package actually
   constructs one**; they exist as unused, self-contained utilities.
 * The `normalize()` calls this page's Kabsch-based estimators and `ProjectiveTransformation2D` itself expose
   (and the ones xref:pinhole-camera-estimators.adoc[] describes on `DLTPointCorrespondencePinholeCameraEstimator`)
   are a different, much narrower operation: `Point2D.normalize()`/`Point3D.normalize()`
   (`HomogeneousPoint2D.java:512-521`) simply rescale one homogeneous coordinate vector
-  latexmath:[(x,y,w)\mapsto(x,y,w)/\sqrt{x^2+y^2+w^2}] to unit norm, independently per point -- a numerically
+  stem:[(x,y,w)\mapsto(x,y,w)/\sqrt{x^2+y^2+w^2}] to unit norm, independently per point -- a numerically
   sensible step before stacking a point into a design matrix row, but not HZ's dataset-wide,
-  translate-then-isotropically-scale preconditioning transform latexmath:[T] above. Neither mechanism
+  translate-then-isotropically-scale preconditioning transform stem:[\mathbf{T}] above. Neither mechanism
   denormalizes the result the way Algorithm 4.2 does, because neither one changes the coordinate frame the
   answer is expressed in -- only the numerical scale of the intermediate computation.
 
@@ -321,16 +321,16 @@ subclasses total (5 algorithms &#215; {Point2D, Line2D, Point3D, Plane3D}).
 == From a linear estimate to the Gold Standard: two-stage refinement
 
 Every closed-form solve on this page -- Kabsch, the affine linear system, the projective DLT -- minimizes an
-**algebraic** error (latexmath:[\lVert Ah \rVert] or an analogous quadratic form), not the true
+**algebraic** error (stem:[\lVert \mathbf{A}\mathbf{h} \rVert] or an analogous quadratic form), not the true
 **geometric** error a user actually cares about (the pixel distance between a transformed input point and its
 matched output point). HZ calls the procedure that *does* minimize geometric error directly the **Gold
 Standard algorithm** (&#167;4.3, Algorithm 4.3, p.114): use the cheap linear DLT solution purely as a starting
 point, then run an iterative non-linear minimizer -- Levenberg-Marquardt -- on the true reprojection-error cost
 function:
 
-[latexmath]
+[stem]
 ++++
-\hat H = \operatorname*{arg\,min}_{H} \sum_i d\bigl(x_i',\,Hx_i\bigr)^2
+\mathbf{\hat H} = \operatorname*{arg\,min}_{H} \sum_i d\bigl(\mathbf{x}_i',\,\mathbf{H}\mathbf{x}_i\bigr)^2
 ++++
 
 This is exactly the two-stage pattern this library exposes across every hierarchy on this site
@@ -358,7 +358,7 @@ Full citations are in the xref:reference.adoc#bibliography[bibliography]. In det
   actually implements); &#167;4.3 "Statistical cost functions and Maximum Likelihood estimation" and Algorithm
   4.3 "The Gold Standard algorithm" (p.114) -- the two-stage linear-then-Levenberg-Marquardt refinement pattern;
   Appendix A5.3-A5.4 "Least-squares solution of homogeneous equations" (pp.592-593) -- the proof that the
-  smallest right singular vector minimizes latexmath:[\lVert Ah \rVert] subject to latexmath:[\lVert h \rVert=1].
+  smallest right singular vector minimizes stem:[\lVert \mathbf{A}\mathbf{h} \rVert] subject to stem:[\lVert \mathbf{h} \rVert=1].
 * xref:reference.adoc#bib-numerical-recipes[Numerical Recipes], &#167;2.6 "Singular Value Decomposition" (pp.
   65-67) -- reused citation for the SVD null-space technique behind the affine/projective closed forms.
 * `MetricTransformation3DEstimator` cites a

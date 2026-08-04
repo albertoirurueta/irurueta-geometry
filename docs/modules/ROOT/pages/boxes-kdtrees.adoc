@@ -16,11 +16,11 @@ type `P`). Its one substantial piece of logic is point-to-box distance:
 * `getSqrDistance(point)` -- zero if the point is inside the box; otherwise the sum, per dimension, of the
   squared excess beyond `lo`/`hi` on that axis (the standard axis-aligned-box point distance):
 +
-[latexmath]
+[stem]
 ++++
-d^2(p, B) = \sum_{i=1}^{n} \max\bigl(0,\ lo_i - p_i,\ p_i - hi_i\bigr)^2
+d^2(\mathbf{p}, B) = \sum_{i=1}^{n} \max\bigl(0,\ \mathbf{lo}_i - \mathbf{p}_i,\ \mathbf{p}_i - \mathbf{hi}_i\bigr)^2
 ++++
-* `getDistance(point)` -- latexmath:[d(p, B) = \sqrt{d^2(p, B)}].
+* `getDistance(point)` -- stem:[d(\mathbf{p}, B) = \sqrt{d^2(\mathbf{p}, B)}].
 
 `Box2D` and `Box3D` add dimension-specific constructors (a no-arg unit box centered at the origin, construction
 from two corner points, or `setBounds(...)` from raw coordinates); `Box2D` additionally converts to/from the

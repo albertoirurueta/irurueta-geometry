@@ -44,22 +44,22 @@ xref:pinhole-camera.adoc[] and is not repeated here.
 
 `DLTPointCorrespondencePinholeCameraEstimator`'s algorithm is the camera-matrix analogue of
 xref:transformation-estimators.adoc#projective[the 2D homography DLT] described on the transformation-estimators
-page, and HZ presents it that way too: chapter 7 opens by remarking that estimating latexmath:[P] "is evident"
+page, and HZ presents it that way too: chapter 7 opens by remarking that estimating stem:[\mathbf{P}] "is evident"
 to be the same problem as chapter 4's homography estimation, "the only difference [being] the dimension of the
-problem" (&#167;7.1, p.178). Concretely, each 3D&#8596;2D point correspondence latexmath:[X_i \leftrightarrow
-x_i] gives the relation latexmath:[x_i\times PX_i=0] (HZ eq. 7.1), of which only 2 of the 3 rows are
+problem" (&#167;7.1, p.178). Concretely, each 3D&#8596;2D point correspondence stem:[\mathbf{X}_i \leftrightarrow
+\mathbf{x}_i] gives the relation stem:[\mathbf{x}_i\times \mathbf{P}\mathbf{X}_i=0] (HZ eq. 7.1), of which only 2 of the 3 rows are
 independent, exactly as in the homography case (HZ eq. 7.2, p.179):
 
-[latexmath]
+[stem]
 ++++
-\begin{bmatrix} \mathbf 0^{\mathsf T} & -w_i X_i^{\mathsf T} & y_i X_i^{\mathsf T} \\
-w_i X_i^{\mathsf T} & \mathbf 0^{\mathsf T} & -x_i X_i^{\mathsf T} \end{bmatrix}
-\begin{bmatrix} P^{1} \\ P^{2} \\ P^{3} \end{bmatrix} = \mathbf 0
+\begin{bmatrix} \mathbf 0^{\mathsf T} & -w_i \mathbf{X}_i^{\mathsf T} & y_i \mathbf{X}_i^{\mathsf T} \\
+w_i \mathbf{X}_i^{\mathsf T} & \mathbf 0^{\mathsf T} & -x_i \mathbf{X}_i^{\mathsf T} \end{bmatrix}
+\begin{bmatrix} \mathbf{P}^{1} \\ \mathbf{P}^{2} \\ \mathbf{P}^{3} \end{bmatrix} = \mathbf 0
 ++++
 
-where latexmath:[P^{1,2,3}] are the rows of latexmath:[P] stacked into a 12-vector latexmath:[p]. Stacking this
-latexmath:[2\times12] block for every correspondence gives the design matrix latexmath:[A] whose null-space
-(smallest right singular vector, xref:transformation-estimators.adoc#projective[proof]) is latexmath:[p]:
+where stem:[\mathbf{P}^{1,2,3}] are the rows of stem:[\mathbf{P}] stacked into a 12-vector stem:[\mathbf{p}]. Stacking this
+stem:[2\times12] block for every correspondence gives the design matrix stem:[\mathbf{A}] whose null-space
+(smallest right singular vector, xref:transformation-estimators.adoc#projective[proof]) is stem:[\mathbf{p}]:
 
 [source,java]
 ----
@@ -78,10 +78,10 @@ decomposer.decompose();
 
 === The "5&#189; points" minimal count, exactly matched
 
-HZ counts the minimal sample precisely: latexmath:[P] has 12 entries but only 11 degrees of freedom once scale
+HZ counts the minimal sample precisely: stem:[\mathbf{P}] has 12 entries but only 11 degrees of freedom once scale
 is factored out, and since each point gives 2 equations, *"at a minimum 5&#189; such correspondences are
-required"* (&#167;7.1, p.179) -- five full point correspondences plus a sixth point's latexmath:[x] (or
-latexmath:[y]) coordinate alone, for exactly 11 equations. The library's own
+required"* (&#167;7.1, p.179) -- five full point correspondences plus a sixth point's stem:[x] (or
+stem:[y]) coordinate alone, for exactly 11 equations. The library's own
 `DLTPointCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_EQUATIONS = 11`
 (`DLTPointCorrespondencePinholeCameraEstimator.java:36`) implements this exactly: when LMSE is disabled, the
 design-matrix loop `break`s the instant 11 rows have been filled (`counter >= MIN_NUMBER_OF_EQUATIONS`, same
@@ -89,17 +89,17 @@ file, verified in source), i.e. it uses all of the 6th correspondence's 2 equati
 available to replace it, functionally reaching HZ's "11 independent equations" bound with a same-or-simpler
 "6 whole points" rule instead of "5 points plus one coordinate" bookkeeping.
 `PointCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES = 6`
-(`PointCorrespondencePinholeCameraEstimator.java:46`) is exactly this rounded-up count, latexmath:[\lceil 11/2\rceil=6], and every robust wrapper on this page reuses it unchanged.
+(`PointCorrespondencePinholeCameraEstimator.java:46`) is exactly this rounded-up count, stem:[\lceil 11/2\rceil=6], and every robust wrapper on this page reuses it unchanged.
 
 === Line and plane correspondences: back-projection reused as a constraint
 
 `DLTLinePlaneCorrespondencePinholeCameraEstimator` extends the same linear system to 2D line
 &#8596; 3D plane correspondences using exactly the back-projection identity xref:pinhole-camera.adoc[] already
-establishes, latexmath:[\Pi = P^{\mathsf T} l] (the plane through the camera centre and an image line). HZ
+establishes, stem:[\boldsymbol{\Pi} = \mathbf{P}^{\mathsf T} \mathbf{l}] (the plane through the camera centre and an image line). HZ
 derives the same extension explicitly (&#167;7.1 "Line correspondences", p.180, eq. 7.3): if a 3D line is given
-by two points latexmath:[X_0, X_1] on it, then each must lie on the back-projected plane, so
-latexmath:[l^{\mathsf T}PX_j=0] for latexmath:[j=0,1] -- *two* linear equations in the entries of latexmath:[P]
-per line/plane correspondence, added into the same design matrix latexmath:[A] alongside any point
+by two points stem:[\mathbf{X}_0, \mathbf{X}_1] on it, then each must lie on the back-projected plane, so
+stem:[\mathbf{l}^{\mathsf T}\mathbf{P}\mathbf{X}_j=0] for stem:[j=0,1] -- *two* linear equations in the entries of stem:[\mathbf{P}]
+per line/plane correspondence, added into the same design matrix stem:[\mathbf{A}] alongside any point
 correspondences. This is the exact camera-estimation analogue of how xref:points-lines-planes.adoc[] and
 xref:conics-quadrics.adoc[] treat point/plane duality one dimension down, and it reuses
 `MIN_NUMBER_OF_EQUATIONS = 11` unchanged (`DLTLinePlaneCorrespondencePinholeCameraEstimator.java:36`).
@@ -117,11 +117,11 @@ The estimator calls `point2D.normalize(); point3D.normalize();` before building 
 (`DLTPointCorrespondencePinholeCameraEstimator.java:191-193`). It is worth being precise about what this does
 and does not do, since HZ's own chapter 7 (&#167;"Data normalization", p.180) prescribes something more
 elaborate: translate the image points so their centroid is at the origin and their *RMS* distance from it is
-latexmath:[\sqrt2] (as in the 2D case, xref:transformation-estimators.adoc#projective[detailed there]), and
+stem:[\sqrt2] (as in the 2D case, xref:transformation-estimators.adoc#projective[detailed there]), and
 separately translate/scale the 3D points so their centroid is at the origin with RMS distance
-latexmath:[\sqrt3] -- then **denormalize** latexmath:[P] afterwards. The library's `Point2D.normalize()`/
+stem:[\sqrt3] -- then **denormalize** stem:[\mathbf{P}] afterwards. The library's `Point2D.normalize()`/
 `Point3D.normalize()` calls here do something much narrower: each rescales *one point's own* homogeneous
-coordinate vector to unit norm, latexmath:[(x,y,w)\mapsto(x,y,w)/\lVert(x,y,w)\rVert], independently of every
+coordinate vector to unit norm, stem:[(x,y,w)\mapsto(x,y,w)/\lVert(x,y,w)\rVert], independently of every
 other point -- a per-row numerical courtesy before it enters the design matrix, not HZ's dataset-wide
 centroid-and-RMS-distance preconditioning transform (xref:transformation-estimators.adoc#projective[the same
 gap already noted for the 2D homography estimators]). Neither this class nor
@@ -130,7 +130,7 @@ gap already noted for the 2D homography estimators]). Neither this class nor
 [#epnp-upnp]
 == EPnP and UPnP: restricted camera estimation, calibrated vs. uncalibrated
 
-DLT solves for the *whole* camera matrix latexmath:[P] with no assumption about its internal structure -- 11
+DLT solves for the *whole* camera matrix stem:[\mathbf{P}] with no assumption about its internal structure -- 11
 free parameters, no more, no less. HZ frames exactly the opposite case, where extra knowledge about the camera
 is available, as **restricted camera estimation** (&#167;7.3, p.184): *"If additional constraints apply to the
 matrix P, such as that the pixels are square, then a restricted camera matrix subject to these constraints may
@@ -139,15 +139,15 @@ remaining algorithms: *"(i) The skew s is zero. (ii) The pixels are square. (iii
 known. (iv) The complete camera calibration matrix K is known"* -- and HZ adds, of the most restrictive case,
 that *"the internal parameters can be computed directly, without necessitating estimating P"* (&#167;7.1,
 p.178, cross-referencing what was then chapter 8). EPnP and UPnP are exactly this idea, made concrete for
-`PinholeCamera`'s factorization latexmath:[P=K[R\mid{-}RC]] (xref:pinhole-camera.adoc[]):
+`PinholeCamera`'s factorization stem:[\mathbf{P}=\mathbf{K}[\mathbf{R}\mid{-}\mathbf{R}\mathbf{C}]] (xref:pinhole-camera.adoc[]):
 
 image::restricted-camera-estimation.svg[Restricted camera estimation spectrum: DLT solves all 11 DOF of P, EPnP assumes K is fully known and solves only pose, UPnP assumes K is only partly known and additionally solves for focal length]
 
-* **`EPnPPointCorrespondencePinholeCameraEstimator`** requires the intrinsic parameters latexmath:[K] to be
-  supplied in advance and solves only for pose (latexmath:[R], latexmath:[C]) -- *"an implementation following
+* **`EPnPPointCorrespondencePinholeCameraEstimator`** requires the intrinsic parameters stem:[\mathbf{K}] to be
+  supplied in advance and solves only for pose (stem:[\mathbf{R}], stem:[\mathbf{C}]) -- *"an implementation following
   the one proposed by Vincent Lepetit... on 'EPnP: An Accurate O(n) Solution to the PnP Problem'"*, already
   cited on this site as xref:reference.adoc#bib-lepetit-epnp[Lepetit, Moreno-Noguer &amp; Fua].
-* **`UPnPPointCorrespondencePinholeCameraEstimator`** does not require latexmath:[K] at all -- it additionally
+* **`UPnPPointCorrespondencePinholeCameraEstimator`** does not require stem:[\mathbf{K}] at all -- it additionally
   solves for the focal length (assuming a unitary aspect ratio, zero skew, and a known/assumed principal point):
   *"This class is an implementation following the one proposed by Adrian Penate-S&#225;nchez et al. on
   'Exhaustive Linearization for Robust Camera Pose and Focal Length Estimation'"*
@@ -178,20 +178,20 @@ per-sample `double[] weights` (larger weight, more influence on the fit) before 
 rather than using all of them (`WeightedPointCorrespondencePinholeCameraEstimator.java:25,38-64`).
 
 This is precisely HZ's **weighted least-squares** normal-equation problem (Appendix A5.2.1, p.591): instead of
-minimizing the plain algebraic error latexmath:[\lVert Ap \rVert] equally over every row, weighting minimizes
-it in a norm defined by a positive-definite matrix latexmath:[C] (in the simplest, and this library's, case a
+minimizing the plain algebraic error stem:[\lVert \mathbf{A}\mathbf{p} \rVert] equally over every row, weighting minimizes
+it in a norm defined by a positive-definite matrix stem:[\mathbf{C}] (in the simplest, and this library's, case a
 diagonal matrix of per-correspondence weights):
 
-[latexmath]
+[stem]
 ++++
-\lVert Ap - b \rVert_C^2 = (Ap-b)^{\mathsf T}C(Ap-b), \qquad (A^{\mathsf T}CA)\,p = A^{\mathsf T}Cb
+\lVert \mathbf{A}\mathbf{p} - \mathbf{b} \rVert_C^2 = (\mathbf{A}\mathbf{p}-\mathbf{b})^{\mathsf T}\mathbf{C}(\mathbf{A}\mathbf{p}-\mathbf{b}), \qquad (\mathbf{A}^{\mathsf T}\mathbf{C}\mathbf{A})\,\mathbf{p} = \mathbf{A}^{\mathsf T}\mathbf{C}\mathbf{b}
 ++++
 
-so a row's weight enters the problem exactly as a diagonal entry of latexmath:[C], scaling that row's
+so a row's weight enters the problem exactly as a diagonal entry of stem:[\mathbf{C}], scaling that row's
 contribution to the normal equations before they are solved -- concretely, in this library, by directly
 multiplying each correspondence's two design-matrix rows by (a monotonic function of) its weight before the SVD
-step, rather than forming latexmath:[A^{\mathsf T}CA] explicitly. HZ's own Result A5.1 (p.591) is the special
-case latexmath:[C=I] (equal weights) reducing to the ordinary pseudo-inverse latexmath:[p=A^{+}b], the same
+step, rather than forming stem:[\mathbf{A}^{\mathsf T}\mathbf{C}\mathbf{A}] explicitly. HZ's own Result A5.1 (p.591) is the special
+case stem:[\mathbf{C}=\mathbf{I}] (equal weights) reducing to the ordinary pseudo-inverse stem:[\mathbf{p}=\mathbf{A}^{+}\mathbf{b}], the same
 pseudo-inverse already cited on xref:pinhole-camera.adoc[] for `Camera.backProject(Point2D, Point3D)`.
 
 **Neither of these two algorithms has a robust wrapper** -- there is no `RANSACWeightedPointCorrespondence...`
@@ -209,20 +209,20 @@ does have a robust wrapper, and it biases *sampling order*, not the linear syste
 Section xref:attachment$irurueta-phd-thesis.pdf#page=87[&#167;2.5.2 "Robust camera estimation using RANSAC"] of
 Alberto Irurueta's PhD thesis (printed pp.75-77)
 works out the RANSAC iteration-count formula from first principles, independently of -- but arriving at the
-same result as -- xref:estimators.adoc#ransac[HZ's eq. 4.18]. Using latexmath:[p_i] for the probability a single
-correspondence is an inlier and latexmath:[s=6] for the minimal sample size, the probability that *all* points
-in one random sample are inliers is latexmath:[p_i^{s}], so the probability of finding at least one outlier-free
-sample within latexmath:[M] trials is latexmath:[1-(1-p_i^{s})^M]; setting this to a desired confidence
-latexmath:[c] and solving for latexmath:[M] gives (PHD
+same result as -- xref:estimators.adoc#ransac[HZ's eq. 4.18]. Using stem:[p_i] for the probability a single
+correspondence is an inlier and stem:[s=6] for the minimal sample size, the probability that *all* points
+in one random sample are inliers is stem:[p_i^{s}], so the probability of finding at least one outlier-free
+sample within stem:[M] trials is stem:[1-(1-p_i^{s})^M]; setting this to a desired confidence
+stem:[c] and solving for stem:[M] gives (PHD
 xref:attachment$irurueta-phd-thesis.pdf#page=87[eq. 2.130-2.132]):
 
-[latexmath]
+[stem]
 ++++
 M \geq \frac{\log(1-c)}{\log\bigl(1-p_i^{s}\bigr)}
 ++++
 
-which is exactly xref:estimators.adoc#ransac[eq. 4.18] with latexmath:[p_i = 1-\epsilon] and
-latexmath:[N \leftrightarrow M] -- the same formula, derived independently by the same author who wrote this
+which is exactly xref:estimators.adoc#ransac[eq. 4.18] with stem:[p_i = 1-\epsilon] and
+stem:[N \leftrightarrow M] -- the same formula, derived independently by the same author who wrote this
 library's `RANSACDLTPointCorrespondencePinholeCameraRobustEstimator`. The thesis also notes explicitly (its own
 words) that *"although the DLT algorithm can be used with as many s points as we want (with a minimum of
 s=6)... in order to obtain the smallest possible number of iterations M... we will always choose the smallest
@@ -255,15 +255,15 @@ caller who wants that same combined test (xref:pinhole-camera.adoc[]).
 
 There is a subtlety worth making explicit, because it explains why `computeResidual` above and the DLT solve
 that produced the candidate are not minimizing the same quantity. HZ's DLT (both the 2D homography version and
-this chapter's camera version) minimizes the **algebraic** error latexmath:[\lVert Ap \rVert] subject to
-latexmath:[\lVert p \rVert=1]; the residual every robust wrapper on this page scores candidates with is the
-true **geometric** (reprojection) error latexmath:[d(x_i, PX_i)]. HZ calls the procedure that minimizes
+this chapter's camera version) minimizes the **algebraic** error stem:[\lVert \mathbf{A}\mathbf{p} \rVert] subject to
+stem:[\lVert \mathbf{p} \rVert=1]; the residual every robust wrapper on this page scores candidates with is the
+true **geometric** (reprojection) error stem:[d(\mathbf{x}_i, \mathbf{P}\mathbf{X}_i)]. HZ calls the procedure that minimizes
 geometric error directly, rather than as an afterthought, the **Gold Standard algorithm** (&#167;7.2, Algorithm
 7.1, p.181): use the DLT solution purely as a starting point, then run Levenberg-Marquardt on
 
-[latexmath]
+[stem]
 ++++
-\hat P = \operatorname*{arg\,min}_{P} \sum_i d(x_i,\,PX_i)^2
+\mathbf{\hat P} = \operatorname*{arg\,min}_{\mathbf{P}} \sum_i d(\mathbf{x}_i,\,\mathbf{P}\mathbf{X}_i)^2
 ++++
 
 HZ's own worked example (Table 7.1, p.182, calibrating against a 197-point checkerboard target) found the
