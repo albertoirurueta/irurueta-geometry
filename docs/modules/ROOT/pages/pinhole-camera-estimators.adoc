@@ -1,4 +1,6 @@
 = Pinhole Camera Estimators
+:description: Camera estimation algorithms in irurueta-geometry: DLT, EPnP, UPnP and weighted point/line-plane correspondence estimators, and their RANSAC/LMedS/MSAC/PROSAC/PROMedS robust variants.
+:keywords: DLT camera estimation, EPnP, UPnP, PinholeCamera estimator, RANSAC, camera pose estimation, PnP problem
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

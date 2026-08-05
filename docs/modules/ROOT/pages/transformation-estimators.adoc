@@ -1,4 +1,6 @@
 = Transformation Estimators
+:description: Robust estimation of Euclidean, metric, affine and projective transformations from point, line or plane correspondences using the Kabsch algorithm and DLT, with RANSAC/LMedS/MSAC/PROSAC/PROMedS variants.
+:keywords: EuclideanTransformation estimator, AffineTransformation estimator, ProjectiveTransformation estimator, Kabsch algorithm, DLT, homography estimation, RANSAC
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

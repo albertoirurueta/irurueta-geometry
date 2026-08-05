@@ -1,4 +1,6 @@
 = Conics and Quadrics
+:description: Conic/Quadric second-degree curves and surfaces, their DualConic/DualQuadric envelopes, Circle/Ellipse/Sphere/Ellipsoid specializations, tangent lines/planes, and the absolute conic/dual absolute quadric.
+:keywords: Conic, Quadric, DualConic, DualQuadric, Circle, Ellipse, Sphere, Ellipsoid, tangent line, absolute conic, dual absolute quadric, projective geometry
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

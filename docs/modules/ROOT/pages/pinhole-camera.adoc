@@ -1,4 +1,6 @@
 = Pinhole Camera
+:description: The PinholeCamera 3x4 projective matrix model: intrinsic parameters, RQ decomposition, camera center computation, cheirality, and projection/back-projection of points, lines, conics and quadrics.
+:keywords: PinholeCamera, camera model, intrinsic parameters, camera calibration, RQ decomposition, cheirality, projection, back-projection, absolute conic
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

@@ -1,4 +1,6 @@
 = What's New
+:description: Release notes for irurueta-geometry, including the new Antora documentation site and Java 21 upgrade in version 1.6.0.
+:keywords: irurueta-geometry changelog, release notes, what's new, version 1.6.0
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 
