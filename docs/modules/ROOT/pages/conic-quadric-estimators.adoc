@@ -1,4 +1,6 @@
 = Conic and Quadric Estimators
+:description: Robust RANSAC/LMedS/MSAC/PROSAC/PROMedS estimators for fitting a Circle, Sphere, Conic/DualConic or Quadric/DualQuadric to noisy points, lines or planes, including minimal sample sizes and residual formulas.
+:keywords: Circle estimator, Sphere estimator, Conic estimator, Quadric estimator, RANSAC, LMedS, MSAC, PROSAC, PROMedS, robust estimation
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

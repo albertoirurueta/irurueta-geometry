@@ -1,4 +1,6 @@
 = Point, Line and Plane Estimators
+:description: Robust RANSAC/LMedS/MSAC/PROSAC/PROMedS estimators for fitting a Point2D/Point3D, Line2D or Plane to noisy lines, planes or points, and how they reuse the join/meet math and signed-distance residuals.
+:keywords: Point2D estimator, Point3D estimator, Line2D estimator, Plane estimator, RANSAC, robust estimation, join meet
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

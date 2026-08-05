@@ -1,4 +1,6 @@
 = Triangles and Polygons
+:description: Triangle2D/Triangle3D and Polygon2D/Polygon3D composite entities: area, perimeter, centroid, point-in-triangle/polygon tests, and ear-clipping (Van Gogh) triangulation.
+:keywords: Triangle2D, Polygon2D, ear clipping triangulation, point in polygon, computational geometry, Van Gogh triangulator
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

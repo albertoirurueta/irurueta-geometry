@@ -1,4 +1,6 @@
 = Estimators
+:description: How irurueta-geometry pairs every geometric entity with a non-robust algorithm and RANSAC/LMedS/MSAC/PROSAC/PROMedS robust wrappers, with the equations behind each scoring rule and the shared architecture.
+:keywords: robust estimation, RANSAC, LMedS, MSAC, PROSAC, PROMedS, outlier rejection, non-robust estimator, consensus set
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

@@ -1,4 +1,6 @@
 = Transformations
+:description: The Euclidean, metric, affine and projective transformation hierarchy in irurueta-geometry: degrees of freedom, invariants, the plane at infinity, absolute conic, and how each entity transforms.
+:keywords: Euclidean transformation, affine transformation, projective transformation, metric transformation, plane at infinity, absolute conic, transformation hierarchy
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

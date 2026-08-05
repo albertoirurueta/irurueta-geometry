@@ -1,4 +1,6 @@
 = Boxes and KD-Trees
+:description: Box2D/Box3D axis-aligned bounding boxes and the KDTree/KDTree2D/KDTree3D spatial index for efficient nearest-neighbor and range searches, including construction and branch-and-bound search.
+:keywords: KDTree, KD-tree, Box2D, Box3D, nearest neighbor search, spatial index, branch and bound, range search, bounding box
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

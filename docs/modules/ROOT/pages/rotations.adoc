@@ -1,4 +1,6 @@
 = Rotations
+:description: 2D and 3D rotation representations in irurueta-geometry: MatrixRotation3D, AxisRotation3D and Quaternion, Rodrigues' formula, Euler angles, gimbal lock and SLERP interpolation.
+:keywords: Rotation3D, Quaternion, AxisRotation3D, MatrixRotation3D, Rodrigues formula, Euler angles, gimbal lock, SLERP, rotation matrix
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 
