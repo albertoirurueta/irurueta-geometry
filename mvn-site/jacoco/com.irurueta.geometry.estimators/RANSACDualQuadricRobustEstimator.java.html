@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RANSACDualQuadricRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">RANSACDualQuadricRobustEstimator.java</span></div><h1>RANSACDualQuadricRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoincidentPlanesException;
+import com.irurueta.geometry.DualQuadric;
+import com.irurueta.geometry.Plane;
+import com.irurueta.numerical.robust.RANSACRobustEstimator;
+import com.irurueta.numerical.robust.RANSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best dual quadric for provided collection of 3D planes using RANSAC
+ * algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class RANSACDualQuadricRobustEstimator extends DualQuadricRobustEstimator {
+    /**
+     * Constant defining default threshold to determine whether planes are
+     * inliers or not.
+     * Threshold is defined by the equation abs(trans(P) * dQ * P) &amp;lt; t, where
+     * trans is the transposition, P is a plane, dQ is a dual quadric and t is a
+     * threshold.
+     * This equation determines the planes P belonging to the locus of a dual
+     * quadric dQ up to a certain threshold.
+     */
+    public static final double DEFAULT_THRESHOLD = 1e-7;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to determine whether planes are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of algebraic error a possible
+     * solution has on a given line.
+     */
+    private double threshold;
+
+    /**
+     * Constructor.
+     */
+    public RANSACDualQuadricRobustEstimator() {
+<span class="fc" id="L64">        super();</span>
+<span class="fc" id="L65">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Constructor with points.
+     *
+     * @param planes 3D planes to estimate a dual quadric.
+     * @throws IllegalArgumentException if provided list of planes don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public RANSACDualQuadricRobustEstimator(final List&lt;Plane&gt; planes) {
+<span class="fc" id="L76">        super(planes);</span>
+<span class="fc" id="L77">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L78">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public RANSACDualQuadricRobustEstimator(final DualQuadricRobustEstimatorListener listener) {
+<span class="fc" id="L87">        super(listener);</span>
+<span class="fc" id="L88">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L89">    }</span>
+
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   3D planes to estimate a dual quadric.
+     * @throws IllegalArgumentException if provided list of planes don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public RANSACDualQuadricRobustEstimator(
+            final DualQuadricRobustEstimatorListener listener, final List&lt;Plane&gt; planes) {
+<span class="fc" id="L103">        super(listener, planes);</span>
+<span class="fc" id="L104">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L105">    }</span>
+
+    /**
+     * Returns threshold to determine whether planes are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error a possible solution has on a
+     * given plane.
+     *
+     * @return threshold to determine whether planes are inliers or not when
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L117">        return threshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether planes are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of algebraic error a possible
+     * solution has on a given plane.
+     *
+     * @param threshold threshold to be set.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L133" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L134">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L136" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L137">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L139">        this.threshold = threshold;</span>
+<span class="fc" id="L140">    }</span>
+
+
+    /**
+     * Estimates a dual quadric using a robust estimator and the best set of 3D
+     * planes that fit into the locus of the estimated dual quadric found using
+     * the robust estimator.
+     *
+     * @return a dual quadric.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public DualQuadric estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L158" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L159">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L161" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L162">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L165">        final var innerEstimator = new RANSACRobustEstimator&lt;&gt;(new RANSACRobustEstimatorListener&lt;DualQuadric&gt;() {</span>
+
+            @Override
+            public double getThreshold() {
+<span class="fc" id="L169">                return threshold;</span>
+            }
+
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L174">                return planes.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L179">                return DualQuadricRobustEstimator.MINIMUM_SIZE;</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List&lt;DualQuadric&gt; solutions) {
+<span class="fc" id="L184">                final var plane1 = planes.get(samplesIndices[0]);</span>
+<span class="fc" id="L185">                final var plane2 = planes.get(samplesIndices[1]);</span>
+<span class="fc" id="L186">                final var plane3 = planes.get(samplesIndices[2]);</span>
+<span class="fc" id="L187">                final var plane4 = planes.get(samplesIndices[3]);</span>
+<span class="fc" id="L188">                final var plane5 = planes.get(samplesIndices[4]);</span>
+<span class="fc" id="L189">                final var plane6 = planes.get(samplesIndices[5]);</span>
+<span class="fc" id="L190">                final var plane7 = planes.get(samplesIndices[6]);</span>
+<span class="fc" id="L191">                final var plane8 = planes.get(samplesIndices[7]);</span>
+<span class="fc" id="L192">                final var plane9 = planes.get(samplesIndices[8]);</span>
+
+                try {
+<span class="fc" id="L195">                    final var dualQuadric = new DualQuadric(plane1, plane2, plane3, plane4, plane5, plane6, plane7,</span>
+                            plane8, plane9);
+<span class="fc" id="L197">                    solutions.add(dualQuadric);</span>
+<span class="fc" id="L198">                } catch (final CoincidentPlanesException e) {</span>
+                    // if points are coincident, no solution is added
+<span class="fc" id="L200">                }</span>
+<span class="fc" id="L201">            }</span>
+
+            @Override
+            public double computeResidual(final DualQuadric currentEstimation, final int i) {
+<span class="fc" id="L205">                return residual(currentEstimation, planes.get(i));</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L210">                return RANSACDualQuadricRobustEstimator.this.isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(final RobustEstimator&lt;DualQuadric&gt; estimator) {
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L216">                    listener.onEstimateStart(RANSACDualQuadricRobustEstimator.this);</span>
+                }
+<span class="fc" id="L218">            }</span>
+
+            @Override
+            public void onEstimateEnd(final RobustEstimator&lt;DualQuadric&gt; estimator) {
+<span class="pc bpc" id="L222" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L223">                    listener.onEstimateEnd(RANSACDualQuadricRobustEstimator.this);</span>
+                }
+<span class="fc" id="L225">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator&lt;DualQuadric&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L229" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L230">                    listener.onEstimateNextIteration(RANSACDualQuadricRobustEstimator.this, iteration);</span>
+                }
+<span class="fc" id="L232">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator&lt;DualQuadric&gt; estimator, final float progress) {
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L237">                    listener.onEstimateProgressChange(RANSACDualQuadricRobustEstimator.this, progress);</span>
+                }
+<span class="fc" id="L239">            }</span>
+        });
+
+        try {
+<span class="fc" id="L243">            locked = true;</span>
+<span class="fc" id="L244">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L245">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L246">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L247">            return innerEstimator.estimate();</span>
+<span class="nc" id="L248">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L249">            throw new LockedException(e);</span>
+<span class="nc" id="L250">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L251">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L253">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L264">        return RobustEstimatorMethod.RANSAC;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

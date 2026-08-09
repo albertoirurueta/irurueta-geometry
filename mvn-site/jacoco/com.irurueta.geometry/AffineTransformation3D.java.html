@@ -1,0 +1,1705 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AffineTransformation3D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">AffineTransformation3D.java</span></div><h1>AffineTransformation3D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.RQDecomposer;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.Utils;
+import com.irurueta.algebra.WrongSizeException;
+
+import java.io.Serializable;
+import java.util.Arrays;
+
+/**
+ * This class performs affine transformations on 3D space.
+ * Affine transformations include transformations related to rotations,
+ * translations, independently scaling horizontal or vertical coordinates
+ * or skewing the coordinates axis.
+ * This class is not intended to be used on points located at infinity or
+ * at very large coordinates, since numerical instabilities may occur. For
+ * those cases use a ProjectiveTransformation3D instead.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class AffineTransformation3D extends Transformation3D implements Serializable {
+
+    /**
+     * Constant indicating number of coordinates required in translation arrays.
+     */
+    public static final int NUM_TRANSLATION_COORDS = 3;
+
+
+    /**
+     * Constant defining number of inhomogeneous coordinates in 3D space.
+     */
+    public static final int INHOM_COORDS = 3;
+
+    /**
+     * Constant defining number of homogeneous coordinates in 3D space.
+     */
+    public static final int HOM_COORDS = 4;
+
+    /**
+     * Linear mapping.
+     */
+    private Matrix a;
+
+    /**
+     * 2D translation to be performed on geometric objects.
+     * Translation is specified using inhomogeneous coordinates.
+     */
+    private double[] translation;
+
+    /**
+     * Empty constructor.
+     * Creates transformation that has no effect.
+     */
+    public AffineTransformation3D() {
+<span class="fc" id="L73">        super();</span>
+        try {
+<span class="fc" id="L75">            a = Matrix.identity(INHOM_COORDS, INHOM_COORDS);</span>
+<span class="nc" id="L76">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L78">        }</span>
+<span class="fc" id="L79">        translation = new double[NUM_TRANSLATION_COORDS];</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * Creates transformation with provided rotation.
+     *
+     * @param a linear mapping.
+     * @throws NullPointerException     raised if provided rotation is null.
+     * @throws IllegalArgumentException raised if provided matrix does not have
+     *                                  size 3x3.
+     */
+<span class="fc" id="L90">    public AffineTransformation3D(final Matrix a) {</span>
+<span class="fc" id="L91">        setA(a);</span>
+<span class="fc" id="L92">        translation = new double[NUM_TRANSLATION_COORDS];</span>
+<span class="fc" id="L93">    }</span>
+
+    /**
+     * Creates transformation with provided scale value.
+     *
+     * @param scale scale value. Values between 0.0 and 1.0 reduce objects,
+     *              values greater than 1.0 enlarge objects and negative values reverse
+     *              objects.
+     */
+<span class="fc" id="L102">    public AffineTransformation3D(final double scale) {</span>
+<span class="fc" id="L103">        final var diag = new double[INHOM_COORDS];</span>
+<span class="fc" id="L104">        Arrays.fill(diag, scale);</span>
+<span class="fc" id="L105">        a = Matrix.diagonal(diag);</span>
+<span class="fc" id="L106">        translation = new double[NUM_TRANSLATION_COORDS];</span>
+<span class="fc" id="L107">    }</span>
+
+    /**
+     * Creates transformation with provided rotation.
+     *
+     * @param rotation a 3D rotation.
+     * @throws NullPointerException raised if provided rotation is null.
+     */
+<span class="fc" id="L115">    public AffineTransformation3D(final Rotation3D rotation) {</span>
+<span class="fc" id="L116">        a = rotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L117">        translation = new double[NUM_TRANSLATION_COORDS];</span>
+<span class="fc" id="L118">    }</span>
+
+    /**
+     * Creates transformation with provided scale and rotation.
+     *
+     * @param scale    scale value. Values between 0.0 and 1.0 reduce objects,
+     *                 values greater than 1.0 enlarge objects and negative values reverse
+     *                 objects.
+     * @param rotation a 3D rotation.
+     * @throws NullPointerException raised if provided rotation is null.
+     */
+<span class="fc" id="L129">    public AffineTransformation3D(final double scale, final Rotation3D rotation) {</span>
+<span class="fc" id="L130">        final var diag = new double[INHOM_COORDS];</span>
+<span class="fc" id="L131">        Arrays.fill(diag, scale);</span>
+<span class="fc" id="L132">        a = Matrix.diagonal(diag);</span>
+        try {
+<span class="fc" id="L134">            a.multiply(rotation.asInhomogeneousMatrix());</span>
+<span class="nc" id="L135">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L137">        }</span>
+<span class="fc" id="L138">        translation = new double[NUM_TRANSLATION_COORDS];</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * Creates transformation with provided affine parameters and rotation.
+     *
+     * @param params   Affine parameters including horizontal scaling, vertical
+     *                 scaling and skewness.
+     * @param rotation a 3D rotation.
+     * @throws NullPointerException raised if provided parameters are null or
+     *                              if provided rotation is null.
+     */
+<span class="fc" id="L150">    public AffineTransformation3D(final AffineParameters3D params, final Rotation3D rotation) {</span>
+<span class="fc" id="L151">        a = params.asMatrix();</span>
+        try {
+<span class="fc" id="L153">            a.multiply(rotation.asInhomogeneousMatrix());</span>
+<span class="nc" id="L154">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L156">        }</span>
+<span class="fc" id="L157">        translation = new double[NUM_TRANSLATION_COORDS];</span>
+<span class="fc" id="L158">    }</span>
+
+    /**
+     * Creates transformation with provided 3D translation.
+     *
+     * @param translation array indicating 3D translation using inhomogeneous
+     *                    coordinates.
+     * @throws NullPointerException     raised if provided array is null.
+     * @throws IllegalArgumentException raised if length of array is not equal
+     *                                  to NUM_TRANSLATION_COORDS.
+     */
+<span class="fc" id="L169">    public AffineTransformation3D(final double[] translation) {</span>
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L171">            throw new IllegalArgumentException();</span>
+        }
+
+        try {
+<span class="fc" id="L175">            a = Matrix.identity(INHOM_COORDS, INHOM_COORDS);</span>
+<span class="nc" id="L176">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L178">        }</span>
+<span class="fc" id="L179">        this.translation = translation;</span>
+<span class="fc" id="L180">    }</span>
+
+    /**
+     * Creates transformation with provided rotation, translation and scale
+     * value.
+     *
+     * @param a           linear mapping.
+     * @param translation array indicating 3D translation using inhomogeneous
+     *                    coordinates.
+     * @throws NullPointerException     raised if provided array is null or if
+     *                                  linear mapping is null.
+     * @throws IllegalArgumentException Raised if length of array is not equal
+     *                                  to NUM_TRANSLATION_COORDS.
+     */
+<span class="fc" id="L194">    public AffineTransformation3D(final Matrix a, final double[] translation) {</span>
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L196">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L198">        this.translation = translation;</span>
+
+<span class="fc" id="L200">        setA(a);</span>
+<span class="fc" id="L201">    }</span>
+
+    /**
+     * Creates transformation with provided scale and translation.
+     *
+     * @param scale       Scale value. Values between 0.0 and 1.0 reduce objects,
+     *                    values greater than 1.0 enlarge objects and negative values reverse
+     *                    objects.
+     * @param translation Array indicating 3D translation using inhomogeneous
+     *                    coordinates.
+     * @throws NullPointerException     raised if provided translation is null.
+     * @throws IllegalArgumentException Raised if provided translation does not
+     *                                  have length 3.
+     */
+<span class="fc" id="L215">    public AffineTransformation3D(final double scale, final double[] translation) {</span>
+<span class="fc bfc" id="L216" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L217">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L220">        final var diag = new double[INHOM_COORDS];</span>
+<span class="fc" id="L221">        Arrays.fill(diag, scale);</span>
+<span class="fc" id="L222">        a = Matrix.diagonal(diag);</span>
+
+<span class="fc" id="L224">        this.translation = translation;</span>
+<span class="fc" id="L225">    }</span>
+
+    /**
+     * Creates transformation with provided rotation and translation.
+     *
+     * @param rotation    a 3D rotation.
+     * @param translation array indicating 3D translation using inhomogeneous
+     *                    coordinates.
+     * @throws NullPointerException     raised if provided rotation or translation
+     *                                  is null.
+     * @throws IllegalArgumentException raised if provided translation does not
+     *                                  have length 3.
+     */
+<span class="fc" id="L238">    public AffineTransformation3D(final Rotation3D rotation, final double[] translation) {</span>
+<span class="fc bfc" id="L239" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L240">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L243">        a = rotation.asInhomogeneousMatrix();</span>
+<span class="fc" id="L244">        this.translation = translation;</span>
+<span class="fc" id="L245">    }</span>
+
+    /**
+     * Creates transformation with provided scale, rotation and translation.
+     *
+     * @param scale       Scale value. Values between 0.0 and 1.0 reduce objects,
+     *                    values greater than 1.0 enlarge objects and negative values reverse
+     *                    objects.
+     * @param rotation    a 3D rotation.
+     * @param translation array indicating 3D translation using inhomogeneous
+     *                    coordinates.
+     * @throws NullPointerException     raised if provided rotation or translation
+     *                                  is null.
+     * @throws IllegalArgumentException raised if provided translation does not
+     *                                  have length 3.
+     */
+<span class="fc" id="L261">    public AffineTransformation3D(final double scale, final Rotation3D rotation, final double[] translation) {</span>
+<span class="fc bfc" id="L262" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L263">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L266">        final var diag = new double[INHOM_COORDS];</span>
+<span class="fc" id="L267">        Arrays.fill(diag, scale);</span>
+<span class="fc" id="L268">        a = Matrix.diagonal(diag);</span>
+        try {
+<span class="fc" id="L270">            a.multiply(rotation.asInhomogeneousMatrix());</span>
+<span class="nc" id="L271">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L273">        }</span>
+
+<span class="fc" id="L275">        this.translation = translation;</span>
+<span class="fc" id="L276">    }</span>
+
+    /**
+     * Creates transformation with provided parameters, rotation and
+     * translation.
+     *
+     * @param params      affine parameters including horizontal scaling, vertical
+     *                    scaling and skewness.
+     * @param rotation    a 3D rotation.
+     * @param translation array indicating 3D translation using inhomogeneous
+     *                    coordinates.
+     * @throws NullPointerException     raised if provided parameters, rotation or
+     *                                  translation is null.
+     * @throws IllegalArgumentException raised if provided translation does not
+     *                                  have length 3.
+     */
+    public AffineTransformation3D(final AffineParameters3D params, final Rotation3D rotation,
+<span class="fc" id="L293">                                  final double[] translation) {</span>
+<span class="fc bfc" id="L294" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L295">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L298">        a = params.asMatrix();</span>
+        try {
+<span class="fc" id="L300">            a.multiply(rotation.asInhomogeneousMatrix());</span>
+<span class="nc" id="L301">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L303">        }</span>
+<span class="fc" id="L304">        this.translation = translation;</span>
+<span class="fc" id="L305">    }</span>
+
+    /**
+     * Creates transformation by estimating its internal values using provided 4
+     * corresponding original and transformed points.
+     *
+     * @param inputPoint1  1st input point.
+     * @param inputPoint2  2nd input point.
+     * @param inputPoint3  3rd input point.
+     * @param inputPoint4  4th input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input
+     *                     point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     *                     point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     *                     point.
+     * @param outputPoint4 4th transformed point corresponding to 4th input
+     *                     point.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public AffineTransformation3D(
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2, final Point3D outputPoint3,
+<span class="fc" id="L330">            final Point3D outputPoint4) throws CoincidentPointsException {</span>
+        try {
+<span class="fc" id="L332">            a = new Matrix(INHOM_COORDS, INHOM_COORDS);</span>
+<span class="nc" id="L333">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L335">        }</span>
+<span class="fc" id="L336">        translation = new double[NUM_TRANSLATION_COORDS];</span>
+<span class="fc" id="L337">        setTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, inputPoint4, outputPoint1, outputPoint2,</span>
+                outputPoint3, outputPoint4);
+<span class="fc" id="L339">    }</span>
+
+    /**
+     * Creates transformation by estimating its internal values using provided 4
+     * corresponding original and transformed planes.
+     *
+     * @param inputPlane1  1st input plane.
+     * @param inputPlane2  2nd input plane.
+     * @param inputPlane3  3rd input plane.
+     * @param inputPlane4  4th input plane.
+     * @param outputPlane1 1st transformed plane corresponding to 1st input
+     *                     plane.
+     * @param outputPlane2 2nd transformed plane corresponding to 2nd input
+     *                     plane.
+     * @param outputPlane3 3rd transformed plane corresponding to 3rd input
+     *                     plane.
+     * @param outputPlane4 4th transformed plane corresponding to 4th input
+     *                     plane.
+     * @throws CoincidentPlanesException raised if transformation cannot be
+     *                                   estimated for some reason (plane configuration degeneracy, duplicate
+     *                                   planes or numerical instabilities).
+     */
+    public AffineTransformation3D(
+            final Plane inputPlane1, final Plane inputPlane2, final Plane inputPlane3, final Plane inputPlane4,
+            final Plane outputPlane1, final Plane outputPlane2, final Plane outputPlane3, final Plane outputPlane4)
+<span class="fc" id="L364">            throws CoincidentPlanesException {</span>
+<span class="fc" id="L365">        setTransformationFromPlanes(inputPlane1, inputPlane2, inputPlane3, inputPlane4, outputPlane1, outputPlane2,</span>
+                outputPlane3, outputPlane4);
+<span class="fc" id="L367">    }</span>
+
+    /**
+     * Creates transformation by estimating internal parameters using provided 2
+     * corresponding original and transformed lines.
+     *
+     * @param inputLine1  1st input line.
+     * @param inputLine2  2nd input line.
+     * @param outputLine1 1st transformed line corresponding to 1st input line.
+     * @param outputLine2 2nd transformed line corresponding to 2nd input line.
+     * @throws CoincidentLinesException raised if transformation cannot be
+     *                                  estimated for some reason (line configuration degeneracy, duplicate lines
+     *                                  or numerical instabilities).
+     */
+    public AffineTransformation3D(
+            final Line3D inputLine1, final Line3D inputLine2, final Line3D outputLine1, final Line3D outputLine2)
+<span class="fc" id="L383">            throws CoincidentLinesException {</span>
+<span class="fc" id="L384">        setTransformationFromLines(inputLine1, inputLine2, outputLine1, outputLine2);</span>
+<span class="fc" id="L385">    }</span>
+
+    /**
+     * Returns linear mapping matrix to perform affine transformation.
+     * Point transformation is computed as a * x + t, where x is a point and t
+     * is the amount of translation.
+     *
+     * @return linear mapping matrix.
+     */
+    public Matrix getA() {
+<span class="fc" id="L395">        return a;</span>
+    }
+
+    /**
+     * Sets linear mapping matrix to perform affine transformation.
+     *
+     * @param a linear mapping matrix.
+     * @throws NullPointerException     raised if provided matrix is null.
+     * @throws IllegalArgumentException raised if provided matrix does not have
+     *                                  size 3x3.
+     */
+    public final void setA(final Matrix a) {
+<span class="fc bfc" id="L407" title="All 2 branches covered.">        if (a == null) {</span>
+<span class="fc" id="L408">            throw new NullPointerException();</span>
+        }
+<span class="pc bpc" id="L410" title="1 of 4 branches missed.">        if (a.getRows() != INHOM_COORDS || a.getColumns() != INHOM_COORDS) {</span>
+<span class="fc" id="L411">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L414">        this.a = a;</span>
+<span class="fc" id="L415">    }</span>
+
+    /**
+     * Returns 3D rotation assigned to this transformation.
+     * Note: if this rotation instance is modified, its changes won't be
+     * reflected on this instance until rotation is set again.
+     *
+     * @return 3D rotation.
+     * @throws AlgebraException if for some reason rotation cannot
+     *                          be estimated (usually because of numerical instability).
+     */
+    public Rotation3D getRotation() throws AlgebraException {
+        // Use QR decomposition to retrieve rotation
+<span class="fc" id="L428">        final var decomposer = new RQDecomposer(a);</span>
+        try {
+<span class="fc" id="L430">            decomposer.decompose();</span>
+<span class="fc" id="L431">            return new MatrixRotation3D(decomposer.getQ());</span>
+<span class="nc" id="L432">        } catch (final InvalidRotationMatrixException ignore) {</span>
+<span class="nc" id="L433">            return null;</span>
+        }
+    }
+
+    /**
+     * Sets 3D rotation for this transformation.
+     *
+     * @param rotation a 3D rotation.
+     * @throws NullPointerException raised if provided rotation is null.
+     * @throws AlgebraException     raised if for numerical reasons rotation cannot
+     *                              be set (usually because of numerical instability in parameters of this
+     *                              transformation).
+     */
+    public void setRotation(final Rotation3D rotation) throws AlgebraException {
+<span class="fc" id="L447">        final var rotMatrix = rotation.asInhomogeneousMatrix();</span>
+
+        // Use QR decomposition to retrieve parameters matrix
+<span class="fc" id="L450">        final var decomposer = new RQDecomposer(a);</span>
+<span class="fc" id="L451">        decomposer.decompose();</span>
+        // retrieves params matrix
+<span class="fc" id="L453">        final var localA = decomposer.getR();</span>
+<span class="fc" id="L454">        localA.multiply(rotMatrix);</span>
+<span class="fc" id="L455">        this.a = localA;</span>
+<span class="fc" id="L456">    }</span>
+
+    /**
+     * Adds provided rotation to current rotation assigned to this
+     * transformation.
+     *
+     * @param rotation 3D rotation to be added.
+     * @throws AlgebraException raised if for numerical reasons rotation cannot
+     *                          be set (usually because of numerical instability in parameters of this
+     *                          transformation).
+     */
+    public void addRotation(final Rotation3D rotation) throws AlgebraException {
+<span class="fc" id="L468">        final var localRotation = getRotation();</span>
+<span class="fc" id="L469">        localRotation.combine(rotation);</span>
+<span class="fc" id="L470">        setRotation(localRotation);</span>
+<span class="fc" id="L471">    }</span>
+
+    /**
+     * Sets scale of this transformation.
+     *
+     * @param scale scale value to be set. a value between 0.0 and 1.0 indicates
+     *              that objects will be reduced, a value greater than 1.0 indicates that
+     *              objects will be enlarged, and a negative value indicates that objects
+     *              will be reversed.
+     * @throws AlgebraException raised if for numerical reasons scale cannot
+     *                          be set (usually because of numerical instability in parameters of this
+     *                          transformation).
+     */
+    public void setScale(final double scale) throws AlgebraException {
+<span class="fc" id="L485">        final var decomposer = new RQDecomposer(a);</span>
+<span class="fc" id="L486">        decomposer.decompose();</span>
+        // params
+<span class="fc" id="L488">        final var localA = decomposer.getR();</span>
+<span class="fc" id="L489">        localA.setElementAt(0, 0, scale);</span>
+<span class="fc" id="L490">        localA.setElementAt(1, 1, scale);</span>
+        // multiply by rotation
+<span class="fc" id="L492">        localA.multiply(decomposer.getQ());</span>
+<span class="fc" id="L493">        this.a = localA;</span>
+<span class="fc" id="L494">    }</span>
+
+    /**
+     * Gets affine parameters of this instance.
+     * Affine parameters contain horizontal scale, vertical scale and skewness
+     * of axes.
+     *
+     * @return affine parameters.
+     * @throws AlgebraException raised if for numerical reasons affine
+     *                          parameters cannot be retrieved (usually because of numerical instability
+     *                          in matrix a).
+     */
+    public AffineParameters3D getParameters() throws AlgebraException {
+<span class="fc" id="L507">        final var parameters = new AffineParameters3D();</span>
+<span class="fc" id="L508">        getParameters(parameters);</span>
+<span class="fc" id="L509">        return parameters;</span>
+    }
+
+    /**
+     * Computes affine parameters of this instance and stores the result in
+     * provided instance.
+     * Affine parameters contain horizontal scale, vertical scale and skewness
+     * of axes.
+     *
+     * @param result instance where affine parameters will be stored.
+     * @throws AlgebraException raised if for numerical reasons affine
+     *                          parameters cannot be retrieved (usually because of numerical instability
+     *                          in matrix a).
+     */
+    public void getParameters(final AffineParameters3D result) throws AlgebraException {
+<span class="fc" id="L524">        final var decomposer = new RQDecomposer(a);</span>
+<span class="fc" id="L525">        decomposer.decompose();</span>
+<span class="fc" id="L526">        final var params = decomposer.getR();</span>
+<span class="fc" id="L527">        result.fromMatrix(params);</span>
+<span class="fc" id="L528">    }</span>
+
+    /**
+     * Sets affine parameters of this instance.
+     * Affine parameters contain horizontal scale, vertical scale and skewness
+     * of axes.
+     *
+     * @param parameters affine parameters to be set.
+     * @throws AlgebraException raised if for numerical reasons affine
+     *                          parameters cannot be set (usually because of numerical instability in
+     *                          current matrix a).
+     */
+    public void setParameters(final AffineParameters3D parameters) throws AlgebraException {
+<span class="fc" id="L541">        final var decomposer = new RQDecomposer(a);</span>
+<span class="fc" id="L542">        decomposer.decompose();</span>
+<span class="fc" id="L543">        final var params = parameters.asMatrix();</span>
+<span class="fc" id="L544">        final var rotation = decomposer.getQ();</span>
+
+<span class="fc" id="L546">        params.multiply(rotation);</span>
+<span class="fc" id="L547">        a = params;</span>
+<span class="fc" id="L548">    }</span>
+
+    /**
+     * Returns 3D translation assigned to this transformation as an array
+     * expressed in inhomogeneous coordinates.
+     *
+     * @return 3D translation array.
+     */
+    public double[] getTranslation() {
+<span class="fc" id="L557">        return translation;</span>
+    }
+
+    /**
+     * Sets 3D translation assigned to this transformation as an array expressed
+     * in inhomogeneous coordinates.
+     *
+     * @param translation 3D translation array.
+     * @throws IllegalArgumentException Raised if provided array does not have
+     *                                  length equal to NUM_TRANSLATION_COORDS.
+     */
+    public void setTranslation(final double[] translation) {
+<span class="fc bfc" id="L569" title="All 2 branches covered.">        if (translation.length != NUM_TRANSLATION_COORDS) {</span>
+<span class="fc" id="L570">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L573">        this.translation = translation;</span>
+<span class="fc" id="L574">    }</span>
+
+    /**
+     * Adds provided translation to current translation on this transformation.
+     * Provided translation must be expressed as an array of inhomogeneous
+     * coordinates.
+     *
+     * @param translation 3D translation array.
+     * @throws IllegalArgumentException Raised if provided array does not have
+     *                                  length equal to NUM_TRANSLATION_COORDS.
+     */
+    public void addTranslation(final double[] translation) {
+<span class="fc" id="L586">        ArrayUtils.sum(this.translation, translation, this.translation);</span>
+<span class="fc" id="L587">    }</span>
+
+    /**
+     * Returns current x coordinate translation assigned to this transformation.
+     *
+     * @return X coordinate translation.
+     */
+    public double getTranslationX() {
+<span class="fc" id="L595">        return translation[0];</span>
+    }
+
+    /**
+     * Sets x coordinate translation to be made by this transformation.
+     *
+     * @param translationX X coordinate translation to be set.
+     */
+    public void setTranslationX(final double translationX) {
+<span class="fc" id="L604">        translation[0] = translationX;</span>
+<span class="fc" id="L605">    }</span>
+
+    /**
+     * Returns current y coordinate translation assigned to this transformation.
+     *
+     * @return Y coordinate translation.
+     */
+    public double getTranslationY() {
+<span class="fc" id="L613">        return translation[1];</span>
+    }
+
+    /**
+     * Sets y coordinate translation to be made by this transformation.
+     *
+     * @param translationY Y coordinate translation to be set.
+     */
+    public void setTranslationY(final double translationY) {
+<span class="fc" id="L622">        translation[1] = translationY;</span>
+<span class="fc" id="L623">    }</span>
+
+    /**
+     * Returns current z coordinate translation assigned to this transformation.
+     *
+     * @return Z coordinate translation.
+     */
+    public double getTranslationZ() {
+<span class="fc" id="L631">        return translation[2];</span>
+    }
+
+    /**
+     * Sets z coordinate translation to be made by this transformation.
+     *
+     * @param translationZ z coordinate translation to be set.
+     */
+    public void setTranslationZ(final double translationZ) {
+<span class="fc" id="L640">        translation[2] = translationZ;</span>
+<span class="fc" id="L641">    }</span>
+
+    /**
+     * Sets x, y, z coordinates of translation to be made by this
+     * transformation.
+     *
+     * @param translationX translation x coordinate to be set.
+     * @param translationY translation y coordinate to be set.
+     * @param translationZ translation z coordinate to be set.
+     */
+    public void setTranslation(final double translationX, final double translationY, final double translationZ) {
+<span class="fc" id="L652">        translation[0] = translationX;</span>
+<span class="fc" id="L653">        translation[1] = translationY;</span>
+<span class="fc" id="L654">        translation[2] = translationZ;</span>
+<span class="fc" id="L655">    }</span>
+
+    /**
+     * Sets x, y, z coordinates of translation to be made by this
+     * transformation.
+     *
+     * @param translation translation to be set.
+     */
+    public void setTranslation(final Point3D translation) {
+<span class="fc" id="L664">        setTranslation(translation.getInhomX(), translation.getInhomY(), translation.getInhomZ());</span>
+<span class="fc" id="L665">    }</span>
+
+    /**
+     * Gets x, y, z coordinates of translation to be made by this transformation
+     * as a new point.
+     *
+     * @return a new point containing translation coordinates.
+     */
+    public Point3D getTranslationPoint() {
+<span class="fc" id="L674">        final var out = Point3D.create();</span>
+<span class="fc" id="L675">        getTranslationPoint(out);</span>
+<span class="fc" id="L676">        return out;</span>
+    }
+
+    /**
+     * Gets x, y, z coordinates of translation to be made by this transformation
+     * and stores them into provided point.
+     *
+     * @param out point where translation coordinates will be stored.
+     */
+    public void getTranslationPoint(final Point3D out) {
+<span class="fc" id="L686">        out.setInhomogeneousCoordinates(translation[0], translation[1], translation[2]);</span>
+<span class="fc" id="L687">    }</span>
+
+    /**
+     * Adds provided x coordinate to current translation assigned to this
+     * transformation.
+     *
+     * @param translationX X coordinate to be added to current translation.
+     */
+    public void addTranslationX(final double translationX) {
+<span class="fc" id="L696">        translation[0] += translationX;</span>
+<span class="fc" id="L697">    }</span>
+
+    /**
+     * Adds provided y coordinate to current translation assigned to this
+     * transformation.
+     *
+     * @param translationY Y coordinate to be added to current translation.
+     */
+    public void addTranslationY(final double translationY) {
+<span class="fc" id="L706">        translation[1] += translationY;</span>
+<span class="fc" id="L707">    }</span>
+
+    /**
+     * Adds provided z coordinate to current translation assigned to this
+     * transformation.
+     *
+     * @param translationZ Z coordinate to be added to current translation.
+     */
+    public void addTranslationZ(final double translationZ) {
+<span class="fc" id="L716">        translation[2] += translationZ;</span>
+<span class="fc" id="L717">    }</span>
+
+    /**
+     * Adds provided coordinates to current translation assigned to this
+     * transformation.
+     *
+     * @param translationX x coordinate to be added to current translation.
+     * @param translationY y coordinate to be added to current translation.
+     * @param translationZ z coordinate to be added to current translation.
+     */
+    public void addTranslation(final double translationX, final double translationY, final double translationZ) {
+<span class="fc" id="L728">        translation[0] += translationX;</span>
+<span class="fc" id="L729">        translation[1] += translationY;</span>
+<span class="fc" id="L730">        translation[2] += translationZ;</span>
+<span class="fc" id="L731">    }</span>
+
+    /**
+     * Adds provided coordinates to current translation assigned to this
+     * transformation.
+     *
+     * @param translation x, y, z coordinates to be added to current
+     *                    translation.
+     */
+    public void addTranslation(final Point3D translation) {
+<span class="fc" id="L741">        addTranslation(translation.getInhomX(), translation.getInhomY(), translation.getInhomZ());</span>
+<span class="fc" id="L742">    }</span>
+
+    /**
+     * Represents this transformation as a 4x4 matrix.
+     * a point can be transformed as T * p, where T is the transformation matrix
+     * and p is a point expressed as an homogeneous vector.
+     *
+     * @return This transformation in matrix form.
+     */
+    @Override
+    public Matrix asMatrix() {
+<span class="fc" id="L753">        Matrix m = null;</span>
+        try {
+<span class="fc" id="L755">            m = new Matrix(HOM_COORDS, HOM_COORDS);</span>
+<span class="fc" id="L756">            asMatrix(m);</span>
+<span class="nc" id="L757">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L759">        }</span>
+<span class="fc" id="L760">        return m;</span>
+    }
+
+    /**
+     * Represents this transformation as a 4x4 matrix and stores the result in
+     * provided instance.
+     *
+     * @param m instance where transformation matrix will be stored.
+     * @throws IllegalArgumentException raised if provided instance is not a 4x4
+     *                                  matrix.
+     */
+    @Override
+    public void asMatrix(final Matrix m) {
+<span class="pc bpc" id="L773" title="1 of 4 branches missed.">        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {</span>
+<span class="fc" id="L774">            throw new IllegalArgumentException();</span>
+        }
+
+        // set rotation
+<span class="fc" id="L778">        m.setSubmatrix(0, 0, 2, 2, a);</span>
+
+        // set translation
+<span class="fc" id="L781">        m.setSubmatrix(0, 3, 2, 3, translation);</span>
+
+        // set last element
+<span class="fc" id="L784">        m.setElementAt(3, 0, 0.0);</span>
+<span class="fc" id="L785">        m.setElementAt(3, 1, 0.0);</span>
+<span class="fc" id="L786">        m.setElementAt(3, 2, 0.0);</span>
+<span class="fc" id="L787">        m.setElementAt(3, 3, 1.0);</span>
+<span class="fc" id="L788">    }</span>
+
+    /**
+     * Transforms input point using this transformation and stores the result in
+     * provided output points.
+     *
+     * @param inputPoint  point to be transformed.
+     * @param outputPoint instance where transformed point data will be stored.
+     */
+    @Override
+    public void transform(final Point3D inputPoint, final Point3D outputPoint) {
+        try {
+<span class="fc" id="L800">            final var coords = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];</span>
+<span class="fc" id="L801">            coords[0] = inputPoint.getInhomX();</span>
+<span class="fc" id="L802">            coords[1] = inputPoint.getInhomY();</span>
+<span class="fc" id="L803">            coords[2] = inputPoint.getInhomZ();</span>
+
+<span class="fc" id="L805">            final var p = a.multiplyAndReturnNew(Matrix.newFromArray(coords, true));</span>
+
+<span class="fc" id="L807">            outputPoint.setInhomogeneousCoordinates(p.getElementAtIndex(0) + translation[0],</span>
+<span class="fc" id="L808">                    p.getElementAtIndex(1) + translation[1], p.getElementAtIndex(2) + translation[2]);</span>
+<span class="nc" id="L809">        } catch (final WrongSizeException ignore) {</span>
+            // this exception will never be raised
+<span class="fc" id="L811">        }</span>
+<span class="fc" id="L812">    }</span>
+
+    /**
+     * Transforms a quadric using this transformation and stores the result into
+     * provided output quadric.
+     *
+     * @param inputQuadric  quadric to be transformed.
+     * @param outputQuadric instance where data of transformed quadric will be
+     *                      stored.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     *                                     the resulting output conic matrix is not considered to be symmetric.
+     * @throws AlgebraException            raised if transform cannot be computed because of
+     *                                     numerical instabilities.
+     */
+    @Override
+    public void transform(final Quadric inputQuadric, final Quadric outputQuadric) throws NonSymmetricMatrixException,
+            AlgebraException {
+        // point' * quadric * point = 0
+        // point' * T' * transformedQuadric * T * point = 0
+        // where:
+        // - transformedPoint = T * point
+
+        // Hence:
+        // transformedQuadric = T^-1' * quadric * T^-1
+
+<span class="fc" id="L837">        inputQuadric.normalize();</span>
+
+<span class="fc" id="L839">        final var q = inputQuadric.asMatrix();</span>
+<span class="fc" id="L840">        final var invT = inverseAndReturnNew().asMatrix();</span>
+        // normalize transformation matrix invT to increase accuracy
+<span class="fc" id="L842">        var norm = Utils.normF(invT);</span>
+<span class="fc" id="L843">        invT.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L845">        final var m = invT.transposeAndReturnNew();</span>
+        try {
+<span class="fc" id="L847">            m.multiply(q);</span>
+<span class="fc" id="L848">            m.multiply(invT);</span>
+<span class="nc" id="L849">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L851">        }</span>
+
+        // normalize resulting m matrix to increase accuracy so that it can be
+        // considered symmetric
+<span class="fc" id="L855">        norm = Utils.normF(m);</span>
+<span class="fc" id="L856">        m.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L858">        outputQuadric.setParameters(m);</span>
+<span class="fc" id="L859">    }</span>
+
+    /**
+     * Transforms a dual quadric using this transformation and stores the result
+     * into provided output dual quadric.
+     *
+     * @param inputDualQuadric  dual quadric to be transformed.
+     * @param outputDualQuadric instance where data of transformed dual quadric
+     *                          will be stored.
+     * @throws NonSymmetricMatrixException raised if due to numerical precision
+     *                                     the resulting output dual conic matrix is not considered to be symmetric.
+     */
+    @Override
+    public void transform(final DualQuadric inputDualQuadric, final DualQuadric outputDualQuadric)
+            throws NonSymmetricMatrixException {
+        // plane' * dualQuadric * plane = 0
+        // plane' * T^-1 * T * dualQuadric * T' * T^-1'*plane
+
+        // Hence:
+        // transformed plane: T^-1'*plane
+        // transformed dual quadric: T * dualQuadric * T'
+
+<span class="fc" id="L881">        inputDualQuadric.normalize();</span>
+
+<span class="fc" id="L883">        final var dualQ = inputDualQuadric.asMatrix();</span>
+<span class="fc" id="L884">        final var t = asMatrix();</span>
+        // normalize transformation matrix T to increase accuracy
+<span class="fc" id="L886">        var norm = Utils.normF(t);</span>
+<span class="fc" id="L887">        t.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L889">        final var transT = t.transposeAndReturnNew();</span>
+        try {
+<span class="fc" id="L891">            t.multiply(dualQ);</span>
+<span class="fc" id="L892">            t.multiply(transT);</span>
+<span class="nc" id="L893">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L895">        }</span>
+
+        // normalize resulting m matrix to increase accuracy so that it can be
+        // considered symmetric
+<span class="fc" id="L899">        norm = Utils.normF(t);</span>
+<span class="fc" id="L900">        t.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L902">        outputDualQuadric.setParameters(t);</span>
+<span class="fc" id="L903">    }</span>
+
+    /**
+     * Transforms provided input plane using this transformation and stores the
+     * result into provided output plane instance.
+     *
+     * @param inputPlane  plane to be transformed.
+     * @param outputPlane instance where data of transformed plane will be
+     *                    stored.
+     * @throws AlgebraException raised if transformAndReturnNew cannot be
+     *                          computed because of numerical instabilities.
+     */
+    @Override
+    public void transform(final Plane inputPlane, final Plane outputPlane) throws AlgebraException {
+        // plane' * point = 0 --&gt; plane' * T^-1 * T * point
+        // (plane' * T^-1)*(T*point) = (T^-1'*plane)'*(T*point)
+        // where:
+        // - transformedPlane = T^-1'*plane
+        // - transformedPoint = T*point
+
+<span class="fc" id="L923">        inputPlane.normalize();</span>
+
+<span class="fc" id="L925">        final var invT = inverseAndReturnNew().asMatrix();</span>
+<span class="fc" id="L926">        final var p = Matrix.newFromArray(inputPlane.asArray());</span>
+
+        // normalize transformation matrix T to increase accuracy
+<span class="fc" id="L929">        final var norm = Utils.normF(invT);</span>
+<span class="fc" id="L930">        invT.multiplyByScalar(1.0 / norm);</span>
+
+<span class="fc" id="L932">        invT.transpose();</span>
+<span class="fc" id="L933">        invT.multiply(p);</span>
+
+<span class="fc" id="L935">        outputPlane.setParameters(invT.toArray());</span>
+<span class="fc" id="L936">    }</span>
+
+    /**
+     * Transforms a camera using this transformation and stores the result into
+     * provided output camera.
+     *
+     * @param inputCamera  camera to be transformed.
+     * @param outputCamera instance where data of transformed camera will be
+     *                     stored.
+     * @throws AlgebraException raised if transform cannot be computed because
+     *                          of numerical instabilities.
+     */
+    @Override
+    public void transform(final PinholeCamera inputCamera, final PinholeCamera outputCamera) throws AlgebraException {
+
+<span class="fc" id="L951">        inputCamera.normalize();</span>
+
+<span class="fc" id="L953">        final var invT = inverseAndReturnNew().asMatrix();</span>
+<span class="fc" id="L954">        final var c = inputCamera.getInternalMatrix();</span>
+<span class="fc" id="L955">        c.multiply(invT);</span>
+<span class="fc" id="L956">        outputCamera.setInternalMatrix(c);</span>
+<span class="fc" id="L957">    }</span>
+
+    /**
+     * Inverses this transformation.
+     *
+     * @throws AlgebraException if inverse transform cannot be computed because
+     *                          of numerical instabilities.
+     */
+    public void inverse() throws AlgebraException {
+<span class="fc" id="L966">        inverse(this);</span>
+<span class="fc" id="L967">    }</span>
+
+    /**
+     * Computes the inverse of this transformation and returns the result as a
+     * new transformation instance.
+     *
+     * @return inverse transformation.
+     * @throws AlgebraException if inverse transform cannot be computed because
+     *                          of numerical instabilities.
+     */
+    public Transformation3D inverseAndReturnNew() throws AlgebraException {
+<span class="fc" id="L978">        final var result = new AffineTransformation3D();</span>
+<span class="fc" id="L979">        inverse(result);</span>
+<span class="fc" id="L980">        return result;</span>
+    }
+
+    /**
+     * Computes the inverse of this transformation and stores the result in
+     * provided instance.
+     *
+     * @param result instance where inverse transformation will be stored.
+     * @throws AlgebraException if inverse transform cannot be computed because
+     *                          of numerical instabilities.
+     */
+    public void inverse(final AffineTransformation3D result) throws AlgebraException {
+
+        // x' = a * x + t --&gt;
+        // a^-1 * x' = a^-1 * a * x + a^-1 * t = x + a^-1 * t --&gt;
+        // x = a^-1 * x' - a^-1 * t
+
+        try {
+            // reverse rotation
+<span class="fc" id="L999">            final var invA = Utils.inverse(a);</span>
+<span class="fc" id="L1000">            result.a = invA;</span>
+
+            // reverse translation
+<span class="fc" id="L1003">            final var t = Matrix.newFromArray(translation, true);</span>
+<span class="fc" id="L1004">            t.multiplyByScalar(-1.0);</span>
+
+<span class="fc" id="L1006">            final var resultT = invA.multiplyAndReturnNew(t);</span>
+<span class="fc" id="L1007">            result.translation = resultT.toArray();</span>
+<span class="nc" id="L1008">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L1010">        }</span>
+<span class="fc" id="L1011">    }</span>
+
+    /**
+     * Converts this transformation into a metric transformation.
+     *
+     * @return This transformation converted into a projective transformation.
+     */
+    public ProjectiveTransformation3D toProjective() {
+<span class="fc" id="L1019">        return new ProjectiveTransformation3D(a, translation);</span>
+    }
+
+    /**
+     * Combines this transformation with provided transformation.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided transformation.
+     *
+     * @param transformation Transformation to be combined with.
+     */
+    public void combine(final AffineTransformation3D transformation) {
+<span class="fc" id="L1030">        combine(transformation, this);</span>
+<span class="fc" id="L1031">    }</span>
+
+    /**
+     * Combines this transformation with provided transformation and returns
+     * the result as a new transformation instance.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided transformation.
+     *
+     * @param transformation Transformation to be combined with.
+     * @return a new transformation resulting of the combination with this
+     * transformation and provided transformation.
+     */
+    public AffineTransformation3D combineAndReturnNew(final AffineTransformation3D transformation) {
+
+<span class="fc" id="L1045">        final var result = new AffineTransformation3D();</span>
+<span class="fc" id="L1046">        combine(transformation, result);</span>
+<span class="fc" id="L1047">        return result;</span>
+    }
+
+    /**
+     * Combines this transformation with provided input transformation and
+     * stores the result into provided output transformation.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided input transformation.
+     *
+     * @param inputTransformation  transformation to be combined with.
+     * @param outputTransformation transformation where result will be stored.
+     */
+    private void combine(final AffineTransformation3D inputTransformation,
+                         final AffineTransformation3D outputTransformation) {
+        // combination in matrix representation is:
+        // [A1 t1] * [A2 t2] = [A1*A2 + t1*0T  A1*t2 + t1*1] = [A1*A2 A1*t2 + t1]
+        // [0T 1 ]   [0T 1 ]   [0T*A2 + 1*0T   0T*t2 + 1*1 ]   [0T    1         ]
+
+        try {
+            // we do translation first, because this.rotation might change later
+<span class="fc" id="L1067">            final var a1 = new Matrix(this.a);</span>
+<span class="fc" id="L1068">            final var t2 = Matrix.newFromArray(inputTransformation.translation, true);</span>
+            // this is R1 * t2
+<span class="fc" id="L1070">            a1.multiply(t2);</span>
+
+<span class="fc" id="L1072">            ArrayUtils.sum(a1.toArray(), this.translation, outputTransformation.translation);</span>
+
+<span class="fc" id="L1074">            outputTransformation.a = this.a.multiplyAndReturnNew(inputTransformation.a);</span>
+
+<span class="nc" id="L1076">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L1078">        }</span>
+<span class="fc" id="L1079">    }</span>
+
+    /**
+     * Estimates this transformation internal parameters by using 4
+     * corresponding original and transformed points.
+     *
+     * @param inputPoint1  1st input point.
+     * @param inputPoint2  2nd input point.
+     * @param inputPoint3  3rd input point.
+     * @param inputPoint4  4th input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input
+     *                     point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     *                     point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     *                     point.
+     * @param outputPoint4 4th transformed point corresponding to 4th input
+     *                     point.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public final void setTransformationFromPoints(
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2, final Point3D outputPoint3,
+            final Point3D outputPoint4) throws CoincidentPointsException {
+
+        // normalize points to increase accuracy
+<span class="fc" id="L1107">        inputPoint1.normalize();</span>
+<span class="fc" id="L1108">        inputPoint2.normalize();</span>
+<span class="fc" id="L1109">        inputPoint3.normalize();</span>
+<span class="fc" id="L1110">        inputPoint4.normalize();</span>
+
+<span class="fc" id="L1112">        outputPoint1.normalize();</span>
+<span class="fc" id="L1113">        outputPoint2.normalize();</span>
+<span class="fc" id="L1114">        outputPoint3.normalize();</span>
+<span class="fc" id="L1115">        outputPoint4.normalize();</span>
+
+        // matrix of homogeneous linear system of equations.
+        // There are 13 unknowns and 12 equations (3 for each pair of
+        // corresponding points)
+<span class="fc" id="L1120">        Matrix m = null;</span>
+        try {
+            // build matrix initialized to zero
+<span class="fc" id="L1123">            m = new Matrix(12, 13);</span>
+
+            // 1st pair of points
+<span class="fc" id="L1126">            var iX = inputPoint1.getHomX();</span>
+<span class="fc" id="L1127">            var iY = inputPoint1.getHomY();</span>
+<span class="fc" id="L1128">            var iZ = inputPoint1.getHomZ();</span>
+<span class="fc" id="L1129">            var iW = inputPoint1.getHomW();</span>
+
+<span class="fc" id="L1131">            var oX = outputPoint1.getHomX();</span>
+<span class="fc" id="L1132">            var oY = outputPoint1.getHomY();</span>
+<span class="fc" id="L1133">            var oZ = outputPoint1.getHomZ();</span>
+<span class="fc" id="L1134">            var oW = outputPoint1.getHomW();</span>
+
+<span class="fc" id="L1136">            var oWiX = oW * iX;</span>
+<span class="fc" id="L1137">            var oWiY = oW * iY;</span>
+<span class="fc" id="L1138">            var oWiZ = oW * iZ;</span>
+<span class="fc" id="L1139">            var oWiW = oW * iW;</span>
+
+<span class="fc" id="L1141">            var oXiW = oX * iW;</span>
+<span class="fc" id="L1142">            var oYiW = oY * iW;</span>
+<span class="fc" id="L1143">            var oZiW = oZ * iW;</span>
+
+<span class="fc" id="L1145">            var tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;</span>
+<span class="fc" id="L1146">            var norm = Math.sqrt(tmp + oXiW * oXiW);</span>
+
+<span class="fc" id="L1148">            m.setElementAt(0, 0, oWiX / norm);</span>
+<span class="fc" id="L1149">            m.setElementAt(0, 1, oWiY / norm);</span>
+<span class="fc" id="L1150">            m.setElementAt(0, 2, oWiZ / norm);</span>
+<span class="fc" id="L1151">            m.setElementAt(0, 9, oWiW / norm);</span>
+<span class="fc" id="L1152">            m.setElementAt(0, 12, -oXiW / norm);</span>
+
+<span class="fc" id="L1154">            norm = Math.sqrt(tmp + oYiW * oYiW);</span>
+
+<span class="fc" id="L1156">            m.setElementAt(1, 3, oWiX / norm);</span>
+<span class="fc" id="L1157">            m.setElementAt(1, 4, oWiY / norm);</span>
+<span class="fc" id="L1158">            m.setElementAt(1, 5, oWiZ / norm);</span>
+<span class="fc" id="L1159">            m.setElementAt(1, 10, oWiW / norm);</span>
+<span class="fc" id="L1160">            m.setElementAt(1, 12, -oYiW / norm);</span>
+
+<span class="fc" id="L1162">            norm = Math.sqrt(tmp + oZiW * oZiW);</span>
+
+<span class="fc" id="L1164">            m.setElementAt(2, 6, oWiX / norm);</span>
+<span class="fc" id="L1165">            m.setElementAt(2, 7, oWiY / norm);</span>
+<span class="fc" id="L1166">            m.setElementAt(2, 8, oWiZ / norm);</span>
+<span class="fc" id="L1167">            m.setElementAt(2, 11, oWiW / norm);</span>
+<span class="fc" id="L1168">            m.setElementAt(2, 12, -oZiW / norm);</span>
+
+            // 2nd pair of points
+<span class="fc" id="L1171">            iX = inputPoint2.getHomX();</span>
+<span class="fc" id="L1172">            iY = inputPoint2.getHomY();</span>
+<span class="fc" id="L1173">            iZ = inputPoint2.getHomZ();</span>
+<span class="fc" id="L1174">            iW = inputPoint2.getHomW();</span>
+
+<span class="fc" id="L1176">            oX = outputPoint2.getHomX();</span>
+<span class="fc" id="L1177">            oY = outputPoint2.getHomY();</span>
+<span class="fc" id="L1178">            oZ = outputPoint2.getHomZ();</span>
+<span class="fc" id="L1179">            oW = outputPoint2.getHomW();</span>
+
+<span class="fc" id="L1181">            oWiX = oW * iX;</span>
+<span class="fc" id="L1182">            oWiY = oW * iY;</span>
+<span class="fc" id="L1183">            oWiZ = oW * iZ;</span>
+<span class="fc" id="L1184">            oWiW = oW * iW;</span>
+
+<span class="fc" id="L1186">            oXiW = oX * iW;</span>
+<span class="fc" id="L1187">            oYiW = oY * iW;</span>
+<span class="fc" id="L1188">            oZiW = oZ * iW;</span>
+
+<span class="fc" id="L1190">            tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;</span>
+<span class="fc" id="L1191">            norm = Math.sqrt(tmp + oXiW * oXiW);</span>
+
+<span class="fc" id="L1193">            m.setElementAt(3, 0, oWiX / norm);</span>
+<span class="fc" id="L1194">            m.setElementAt(3, 1, oWiY / norm);</span>
+<span class="fc" id="L1195">            m.setElementAt(3, 2, oWiZ / norm);</span>
+<span class="fc" id="L1196">            m.setElementAt(3, 9, oWiW / norm);</span>
+<span class="fc" id="L1197">            m.setElementAt(3, 12, -oXiW / norm);</span>
+
+<span class="fc" id="L1199">            norm = Math.sqrt(tmp + oYiW * oYiW);</span>
+
+<span class="fc" id="L1201">            m.setElementAt(4, 3, oWiX / norm);</span>
+<span class="fc" id="L1202">            m.setElementAt(4, 4, oWiY / norm);</span>
+<span class="fc" id="L1203">            m.setElementAt(4, 5, oWiZ / norm);</span>
+<span class="fc" id="L1204">            m.setElementAt(4, 10, oWiW / norm);</span>
+<span class="fc" id="L1205">            m.setElementAt(4, 12, -oYiW / norm);</span>
+
+<span class="fc" id="L1207">            norm = Math.sqrt(tmp + oZiW * oZiW);</span>
+
+<span class="fc" id="L1209">            m.setElementAt(5, 6, oWiX / norm);</span>
+<span class="fc" id="L1210">            m.setElementAt(5, 7, oWiY / norm);</span>
+<span class="fc" id="L1211">            m.setElementAt(5, 8, oWiZ / norm);</span>
+<span class="fc" id="L1212">            m.setElementAt(5, 11, oWiW / norm);</span>
+<span class="fc" id="L1213">            m.setElementAt(5, 12, -oZiW / norm);</span>
+
+            // 3rd pair of points
+<span class="fc" id="L1216">            iX = inputPoint3.getHomX();</span>
+<span class="fc" id="L1217">            iY = inputPoint3.getHomY();</span>
+<span class="fc" id="L1218">            iZ = inputPoint3.getHomZ();</span>
+<span class="fc" id="L1219">            iW = inputPoint3.getHomW();</span>
+
+<span class="fc" id="L1221">            oX = outputPoint3.getHomX();</span>
+<span class="fc" id="L1222">            oY = outputPoint3.getHomY();</span>
+<span class="fc" id="L1223">            oZ = outputPoint3.getHomZ();</span>
+<span class="fc" id="L1224">            oW = outputPoint3.getHomW();</span>
+
+<span class="fc" id="L1226">            oWiX = oW * iX;</span>
+<span class="fc" id="L1227">            oWiY = oW * iY;</span>
+<span class="fc" id="L1228">            oWiZ = oW * iZ;</span>
+<span class="fc" id="L1229">            oWiW = oW * iW;</span>
+
+<span class="fc" id="L1231">            oXiW = oX * iW;</span>
+<span class="fc" id="L1232">            oYiW = oY * iW;</span>
+<span class="fc" id="L1233">            oZiW = oZ * iW;</span>
+
+<span class="fc" id="L1235">            tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;</span>
+<span class="fc" id="L1236">            norm = Math.sqrt(tmp + oXiW * oXiW);</span>
+
+<span class="fc" id="L1238">            m.setElementAt(6, 0, oWiX / norm);</span>
+<span class="fc" id="L1239">            m.setElementAt(6, 1, oWiY / norm);</span>
+<span class="fc" id="L1240">            m.setElementAt(6, 2, oWiZ / norm);</span>
+<span class="fc" id="L1241">            m.setElementAt(6, 9, oWiW / norm);</span>
+<span class="fc" id="L1242">            m.setElementAt(6, 12, -oXiW / norm);</span>
+
+<span class="fc" id="L1244">            norm = Math.sqrt(tmp + oYiW * oYiW);</span>
+
+<span class="fc" id="L1246">            m.setElementAt(7, 3, oWiX / norm);</span>
+<span class="fc" id="L1247">            m.setElementAt(7, 4, oWiY / norm);</span>
+<span class="fc" id="L1248">            m.setElementAt(7, 5, oWiZ / norm);</span>
+<span class="fc" id="L1249">            m.setElementAt(7, 10, oWiW / norm);</span>
+<span class="fc" id="L1250">            m.setElementAt(7, 12, -oYiW / norm);</span>
+
+<span class="fc" id="L1252">            norm = Math.sqrt(tmp + oZiW * oZiW);</span>
+
+<span class="fc" id="L1254">            m.setElementAt(8, 6, oWiX / norm);</span>
+<span class="fc" id="L1255">            m.setElementAt(8, 7, oWiY / norm);</span>
+<span class="fc" id="L1256">            m.setElementAt(8, 8, oWiZ / norm);</span>
+<span class="fc" id="L1257">            m.setElementAt(8, 11, oWiW / norm);</span>
+<span class="fc" id="L1258">            m.setElementAt(8, 12, -oZiW / norm);</span>
+
+            // 4th pair of points
+<span class="fc" id="L1261">            iX = inputPoint4.getHomX();</span>
+<span class="fc" id="L1262">            iY = inputPoint4.getHomY();</span>
+<span class="fc" id="L1263">            iZ = inputPoint4.getHomZ();</span>
+<span class="fc" id="L1264">            iW = inputPoint4.getHomW();</span>
+
+<span class="fc" id="L1266">            oX = outputPoint4.getHomX();</span>
+<span class="fc" id="L1267">            oY = outputPoint4.getHomY();</span>
+<span class="fc" id="L1268">            oZ = outputPoint4.getHomZ();</span>
+<span class="fc" id="L1269">            oW = outputPoint4.getHomW();</span>
+
+<span class="fc" id="L1271">            oWiX = oW * iX;</span>
+<span class="fc" id="L1272">            oWiY = oW * iY;</span>
+<span class="fc" id="L1273">            oWiZ = oW * iZ;</span>
+<span class="fc" id="L1274">            oWiW = oW * iW;</span>
+
+<span class="fc" id="L1276">            oXiW = oX * iW;</span>
+<span class="fc" id="L1277">            oYiW = oY * iW;</span>
+<span class="fc" id="L1278">            oZiW = oZ * iW;</span>
+
+<span class="fc" id="L1280">            tmp = oWiX * oWiX + oWiY * oWiY + oWiZ * oWiZ + oWiW * oWiW;</span>
+<span class="fc" id="L1281">            norm = Math.sqrt(tmp + oXiW * oXiW);</span>
+
+<span class="fc" id="L1283">            m.setElementAt(9, 0, oWiX / norm);</span>
+<span class="fc" id="L1284">            m.setElementAt(9, 1, oWiY / norm);</span>
+<span class="fc" id="L1285">            m.setElementAt(9, 2, oWiZ / norm);</span>
+<span class="fc" id="L1286">            m.setElementAt(9, 9, oWiW / norm);</span>
+<span class="fc" id="L1287">            m.setElementAt(9, 12, -oXiW / norm);</span>
+
+<span class="fc" id="L1289">            norm = Math.sqrt(tmp + oYiW * oYiW);</span>
+
+<span class="fc" id="L1291">            m.setElementAt(10, 3, oWiX / norm);</span>
+<span class="fc" id="L1292">            m.setElementAt(10, 4, oWiY / norm);</span>
+<span class="fc" id="L1293">            m.setElementAt(10, 5, oWiZ / norm);</span>
+<span class="fc" id="L1294">            m.setElementAt(10, 10, oWiW / norm);</span>
+<span class="fc" id="L1295">            m.setElementAt(10, 12, -oYiW / norm);</span>
+
+<span class="fc" id="L1297">            norm = Math.sqrt(tmp + oZiW * oZiW);</span>
+
+<span class="fc" id="L1299">            m.setElementAt(11, 6, oWiX / norm);</span>
+<span class="fc" id="L1300">            m.setElementAt(11, 7, oWiY / norm);</span>
+<span class="fc" id="L1301">            m.setElementAt(11, 8, oWiZ / norm);</span>
+<span class="fc" id="L1302">            m.setElementAt(11, 11, oWiW / norm);</span>
+<span class="fc" id="L1303">            m.setElementAt(11, 12, -oZiW / norm);</span>
+<span class="nc" id="L1304">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L1306">        }</span>
+
+        // use SVD to decompose matrix m
+        Matrix v;
+        try {
+<span class="fc" id="L1311">            final var decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L1312">            decomposer.decompose();</span>
+
+            // ensure that matrix m has enough rank and there is a unique
+            // solution (up to scale)
+<span class="fc bfc" id="L1316" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 12) {</span>
+<span class="fc" id="L1317">                throw new CoincidentPointsException();</span>
+            }
+            //V is 13x13
+<span class="fc" id="L1320">            v = decomposer.getV();</span>
+
+            // last column of V will contain parameters of transformation
+<span class="fc" id="L1323">            final var value = v.getElementAt(12, 12);</span>
+<span class="fc" id="L1324">            a.setElementAt(0, 0, v.getElementAt(0, 12) / value);</span>
+<span class="fc" id="L1325">            a.setElementAt(0, 1, v.getElementAt(1, 12) / value);</span>
+<span class="fc" id="L1326">            a.setElementAt(0, 2, v.getElementAt(2, 12) / value);</span>
+<span class="fc" id="L1327">            a.setElementAt(1, 0, v.getElementAt(3, 12) / value);</span>
+<span class="fc" id="L1328">            a.setElementAt(1, 1, v.getElementAt(4, 12) / value);</span>
+<span class="fc" id="L1329">            a.setElementAt(1, 2, v.getElementAt(5, 12) / value);</span>
+<span class="fc" id="L1330">            a.setElementAt(2, 0, v.getElementAt(6, 12) / value);</span>
+<span class="fc" id="L1331">            a.setElementAt(2, 1, v.getElementAt(7, 12) / value);</span>
+<span class="fc" id="L1332">            a.setElementAt(2, 2, v.getElementAt(8, 12) / value);</span>
+
+<span class="fc" id="L1334">            translation[0] = v.getElementAt(9, 12) / value;</span>
+<span class="fc" id="L1335">            translation[1] = v.getElementAt(10, 12) / value;</span>
+<span class="fc" id="L1336">            translation[2] = v.getElementAt(11, 12) / value;</span>
+
+<span class="nc" id="L1338">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L1339">            throw new CoincidentPointsException(e);</span>
+<span class="fc" id="L1340">        }</span>
+<span class="fc" id="L1341">    }</span>
+
+    /**
+     * Estimates this transformation internal parameters by using 4
+     * corresponding original and transformed planes.
+     *
+     * @param inputPlane1  1st input plane.
+     * @param inputPlane2  2nd input plane.
+     * @param inputPlane3  3rd input plane.
+     * @param inputPlane4  4th input plane.
+     * @param outputPlane1 1st transformed plane corresponding to 1st input
+     *                     plane.
+     * @param outputPlane2 2nd transformed plane corresponding to 2nd input
+     *                     plane.
+     * @param outputPlane3 3rd transformed plane corresponding to 3rd input
+     *                     plane.
+     * @param outputPlane4 4th transformed plane corresponding to 4th input
+     *                     plane.
+     * @throws CoincidentPlanesException raised if transformation cannot be
+     *                                   estimated for some reason (plane configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public final void setTransformationFromPlanes(
+            final Plane inputPlane1, final Plane inputPlane2, final Plane inputPlane3, final Plane inputPlane4,
+            final Plane outputPlane1, final Plane outputPlane2, final Plane outputPlane3, final Plane outputPlane4)
+            throws CoincidentPlanesException {
+
+        // normalize points to increase accuracy
+<span class="fc" id="L1369">        inputPlane1.normalize();</span>
+<span class="fc" id="L1370">        inputPlane2.normalize();</span>
+<span class="fc" id="L1371">        inputPlane3.normalize();</span>
+<span class="fc" id="L1372">        inputPlane4.normalize();</span>
+
+<span class="fc" id="L1374">        outputPlane1.normalize();</span>
+<span class="fc" id="L1375">        outputPlane2.normalize();</span>
+<span class="fc" id="L1376">        outputPlane3.normalize();</span>
+<span class="fc" id="L1377">        outputPlane4.normalize();</span>
+
+        // matrix of homogeneous linear system of equations.
+        // There are 13 unknowns and 12 equations (3 for each pair of
+        // corresponding points)
+<span class="fc" id="L1382">        Matrix m = null;</span>
+        try {
+            // build matrix initialized to zero
+<span class="fc" id="L1385">            m = new Matrix(12, 13);</span>
+
+            // 1st pair of planes
+<span class="fc" id="L1388">            var iA = inputPlane1.getA();</span>
+<span class="fc" id="L1389">            var iB = inputPlane1.getB();</span>
+<span class="fc" id="L1390">            var iC = inputPlane1.getC();</span>
+<span class="fc" id="L1391">            var iD = inputPlane1.getD();</span>
+
+<span class="fc" id="L1393">            var oA = outputPlane1.getA();</span>
+<span class="fc" id="L1394">            var oB = outputPlane1.getB();</span>
+<span class="fc" id="L1395">            var oC = outputPlane1.getC();</span>
+<span class="fc" id="L1396">            var oD = outputPlane1.getD();</span>
+
+<span class="fc" id="L1398">            var oDiA = oD * iA;</span>
+<span class="fc" id="L1399">            var oDiB = oD * iB;</span>
+<span class="fc" id="L1400">            var oDiC = oD * iC;</span>
+
+<span class="fc" id="L1402">            var oAiA = oA * iA;</span>
+<span class="fc" id="L1403">            var oAiB = oA * iB;</span>
+<span class="fc" id="L1404">            var oAiC = oA * iC;</span>
+<span class="fc" id="L1405">            var oAiD = oA * iD;</span>
+
+<span class="fc" id="L1407">            var oBiA = oB * iA;</span>
+<span class="fc" id="L1408">            var oBiB = oB * iB;</span>
+<span class="fc" id="L1409">            var oBiC = oB * iC;</span>
+<span class="fc" id="L1410">            var oBiD = oB * iD;</span>
+
+<span class="fc" id="L1412">            var oCiA = oC * iA;</span>
+<span class="fc" id="L1413">            var oCiB = oC * iB;</span>
+<span class="fc" id="L1414">            var oCiC = oC * iC;</span>
+<span class="fc" id="L1415">            var oCiD = oC * iD;</span>
+
+<span class="fc" id="L1417">            var tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;</span>
+<span class="fc" id="L1418">            var norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);</span>
+
+<span class="fc" id="L1420">            m.setElementAt(0, 0, oDiA / norm);</span>
+<span class="fc" id="L1421">            m.setElementAt(0, 1, oDiB / norm);</span>
+<span class="fc" id="L1422">            m.setElementAt(0, 2, oDiC / norm);</span>
+<span class="fc" id="L1423">            m.setElementAt(0, 9, -oAiA / norm);</span>
+<span class="fc" id="L1424">            m.setElementAt(0, 10, -oAiB / norm);</span>
+<span class="fc" id="L1425">            m.setElementAt(0, 11, -oAiC / norm);</span>
+<span class="fc" id="L1426">            m.setElementAt(0, 12, -oAiD / norm);</span>
+
+<span class="fc" id="L1428">            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);</span>
+
+<span class="fc" id="L1430">            m.setElementAt(1, 3, oDiA / norm);</span>
+<span class="fc" id="L1431">            m.setElementAt(1, 4, oDiB / norm);</span>
+<span class="fc" id="L1432">            m.setElementAt(1, 5, oDiC / norm);</span>
+<span class="fc" id="L1433">            m.setElementAt(1, 9, -oBiA / norm);</span>
+<span class="fc" id="L1434">            m.setElementAt(1, 10, -oBiB / norm);</span>
+<span class="fc" id="L1435">            m.setElementAt(1, 11, -oBiC / norm);</span>
+<span class="fc" id="L1436">            m.setElementAt(1, 12, -oBiD / norm);</span>
+
+<span class="fc" id="L1438">            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);</span>
+
+<span class="fc" id="L1440">            m.setElementAt(2, 6, oDiA / norm);</span>
+<span class="fc" id="L1441">            m.setElementAt(2, 7, oDiB / norm);</span>
+<span class="fc" id="L1442">            m.setElementAt(2, 8, oDiC / norm);</span>
+<span class="fc" id="L1443">            m.setElementAt(2, 9, -oCiA / norm);</span>
+<span class="fc" id="L1444">            m.setElementAt(2, 10, -oCiB / norm);</span>
+<span class="fc" id="L1445">            m.setElementAt(2, 11, -oCiC / norm);</span>
+<span class="fc" id="L1446">            m.setElementAt(2, 12, -oCiD / norm);</span>
+
+            // 2nd pair of planes
+<span class="fc" id="L1449">            iA = inputPlane2.getA();</span>
+<span class="fc" id="L1450">            iB = inputPlane2.getB();</span>
+<span class="fc" id="L1451">            iC = inputPlane2.getC();</span>
+<span class="fc" id="L1452">            iD = inputPlane2.getD();</span>
+
+<span class="fc" id="L1454">            oA = outputPlane2.getA();</span>
+<span class="fc" id="L1455">            oB = outputPlane2.getB();</span>
+<span class="fc" id="L1456">            oC = outputPlane2.getC();</span>
+<span class="fc" id="L1457">            oD = outputPlane2.getD();</span>
+
+<span class="fc" id="L1459">            oDiA = oD * iA;</span>
+<span class="fc" id="L1460">            oDiB = oD * iB;</span>
+<span class="fc" id="L1461">            oDiC = oD * iC;</span>
+
+<span class="fc" id="L1463">            oAiA = oA * iA;</span>
+<span class="fc" id="L1464">            oAiB = oA * iB;</span>
+<span class="fc" id="L1465">            oAiC = oA * iC;</span>
+<span class="fc" id="L1466">            oAiD = oA * iD;</span>
+
+<span class="fc" id="L1468">            oBiA = oB * iA;</span>
+<span class="fc" id="L1469">            oBiB = oB * iB;</span>
+<span class="fc" id="L1470">            oBiC = oB * iC;</span>
+<span class="fc" id="L1471">            oBiD = oB * iD;</span>
+
+<span class="fc" id="L1473">            oCiA = oC * iA;</span>
+<span class="fc" id="L1474">            oCiB = oC * iB;</span>
+<span class="fc" id="L1475">            oCiC = oC * iC;</span>
+<span class="fc" id="L1476">            oCiD = oC * iD;</span>
+
+<span class="fc" id="L1478">            tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;</span>
+<span class="fc" id="L1479">            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);</span>
+
+<span class="fc" id="L1481">            m.setElementAt(3, 0, oDiA / norm);</span>
+<span class="fc" id="L1482">            m.setElementAt(3, 1, oDiB / norm);</span>
+<span class="fc" id="L1483">            m.setElementAt(3, 2, oDiC / norm);</span>
+<span class="fc" id="L1484">            m.setElementAt(3, 9, -oAiA / norm);</span>
+<span class="fc" id="L1485">            m.setElementAt(3, 10, -oAiB / norm);</span>
+<span class="fc" id="L1486">            m.setElementAt(3, 11, -oAiC / norm);</span>
+<span class="fc" id="L1487">            m.setElementAt(3, 12, -oAiD / norm);</span>
+
+<span class="fc" id="L1489">            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);</span>
+
+<span class="fc" id="L1491">            m.setElementAt(4, 3, oDiA / norm);</span>
+<span class="fc" id="L1492">            m.setElementAt(4, 4, oDiB / norm);</span>
+<span class="fc" id="L1493">            m.setElementAt(4, 5, oDiC / norm);</span>
+<span class="fc" id="L1494">            m.setElementAt(4, 9, -oBiA / norm);</span>
+<span class="fc" id="L1495">            m.setElementAt(4, 10, -oBiB / norm);</span>
+<span class="fc" id="L1496">            m.setElementAt(4, 11, -oBiC / norm);</span>
+<span class="fc" id="L1497">            m.setElementAt(4, 12, -oBiD / norm);</span>
+
+<span class="fc" id="L1499">            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);</span>
+
+<span class="fc" id="L1501">            m.setElementAt(5, 6, oDiA / norm);</span>
+<span class="fc" id="L1502">            m.setElementAt(5, 7, oDiB / norm);</span>
+<span class="fc" id="L1503">            m.setElementAt(5, 8, oDiC / norm);</span>
+<span class="fc" id="L1504">            m.setElementAt(5, 9, -oCiA / norm);</span>
+<span class="fc" id="L1505">            m.setElementAt(5, 10, -oCiB / norm);</span>
+<span class="fc" id="L1506">            m.setElementAt(5, 11, -oCiC / norm);</span>
+<span class="fc" id="L1507">            m.setElementAt(5, 12, -oCiD / norm);</span>
+
+            // 3rd pair of planes
+<span class="fc" id="L1510">            iA = inputPlane3.getA();</span>
+<span class="fc" id="L1511">            iB = inputPlane3.getB();</span>
+<span class="fc" id="L1512">            iC = inputPlane3.getC();</span>
+<span class="fc" id="L1513">            iD = inputPlane3.getD();</span>
+
+<span class="fc" id="L1515">            oA = outputPlane3.getA();</span>
+<span class="fc" id="L1516">            oB = outputPlane3.getB();</span>
+<span class="fc" id="L1517">            oC = outputPlane3.getC();</span>
+<span class="fc" id="L1518">            oD = outputPlane3.getD();</span>
+
+<span class="fc" id="L1520">            oDiA = oD * iA;</span>
+<span class="fc" id="L1521">            oDiB = oD * iB;</span>
+<span class="fc" id="L1522">            oDiC = oD * iC;</span>
+
+<span class="fc" id="L1524">            oAiA = oA * iA;</span>
+<span class="fc" id="L1525">            oAiB = oA * iB;</span>
+<span class="fc" id="L1526">            oAiC = oA * iC;</span>
+<span class="fc" id="L1527">            oAiD = oA * iD;</span>
+
+<span class="fc" id="L1529">            oBiA = oB * iA;</span>
+<span class="fc" id="L1530">            oBiB = oB * iB;</span>
+<span class="fc" id="L1531">            oBiC = oB * iC;</span>
+<span class="fc" id="L1532">            oBiD = oB * iD;</span>
+
+<span class="fc" id="L1534">            oCiA = oC * iA;</span>
+<span class="fc" id="L1535">            oCiB = oC * iB;</span>
+<span class="fc" id="L1536">            oCiC = oC * iC;</span>
+<span class="fc" id="L1537">            oCiD = oC * iD;</span>
+
+<span class="fc" id="L1539">            tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;</span>
+<span class="fc" id="L1540">            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);</span>
+
+<span class="fc" id="L1542">            m.setElementAt(6, 0, oDiA / norm);</span>
+<span class="fc" id="L1543">            m.setElementAt(6, 1, oDiB / norm);</span>
+<span class="fc" id="L1544">            m.setElementAt(6, 2, oDiC / norm);</span>
+<span class="fc" id="L1545">            m.setElementAt(6, 9, -oAiA / norm);</span>
+<span class="fc" id="L1546">            m.setElementAt(6, 10, -oAiB / norm);</span>
+<span class="fc" id="L1547">            m.setElementAt(6, 11, -oAiC / norm);</span>
+<span class="fc" id="L1548">            m.setElementAt(6, 12, -oAiD / norm);</span>
+
+<span class="fc" id="L1550">            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);</span>
+
+<span class="fc" id="L1552">            m.setElementAt(7, 3, oDiA / norm);</span>
+<span class="fc" id="L1553">            m.setElementAt(7, 4, oDiB / norm);</span>
+<span class="fc" id="L1554">            m.setElementAt(7, 5, oDiC / norm);</span>
+<span class="fc" id="L1555">            m.setElementAt(7, 9, -oBiA / norm);</span>
+<span class="fc" id="L1556">            m.setElementAt(7, 10, -oBiB / norm);</span>
+<span class="fc" id="L1557">            m.setElementAt(7, 11, -oBiC / norm);</span>
+<span class="fc" id="L1558">            m.setElementAt(7, 12, -oBiD / norm);</span>
+
+<span class="fc" id="L1560">            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);</span>
+
+<span class="fc" id="L1562">            m.setElementAt(8, 6, oDiA / norm);</span>
+<span class="fc" id="L1563">            m.setElementAt(8, 7, oDiB / norm);</span>
+<span class="fc" id="L1564">            m.setElementAt(8, 8, oDiC / norm);</span>
+<span class="fc" id="L1565">            m.setElementAt(8, 9, -oCiA / norm);</span>
+<span class="fc" id="L1566">            m.setElementAt(8, 10, -oCiB / norm);</span>
+<span class="fc" id="L1567">            m.setElementAt(8, 11, -oCiC / norm);</span>
+<span class="fc" id="L1568">            m.setElementAt(8, 12, -oCiD / norm);</span>
+
+            // 4th pair of planes
+<span class="fc" id="L1571">            iA = inputPlane4.getA();</span>
+<span class="fc" id="L1572">            iB = inputPlane4.getB();</span>
+<span class="fc" id="L1573">            iC = inputPlane4.getC();</span>
+<span class="fc" id="L1574">            iD = inputPlane4.getD();</span>
+
+<span class="fc" id="L1576">            oA = outputPlane4.getA();</span>
+<span class="fc" id="L1577">            oB = outputPlane4.getB();</span>
+<span class="fc" id="L1578">            oC = outputPlane4.getC();</span>
+<span class="fc" id="L1579">            oD = outputPlane4.getD();</span>
+
+<span class="fc" id="L1581">            oDiA = oD * iA;</span>
+<span class="fc" id="L1582">            oDiB = oD * iB;</span>
+<span class="fc" id="L1583">            oDiC = oD * iC;</span>
+
+<span class="fc" id="L1585">            oAiA = oA * iA;</span>
+<span class="fc" id="L1586">            oAiB = oA * iB;</span>
+<span class="fc" id="L1587">            oAiC = oA * iC;</span>
+<span class="fc" id="L1588">            oAiD = oA * iD;</span>
+
+<span class="fc" id="L1590">            oBiA = oB * iA;</span>
+<span class="fc" id="L1591">            oBiB = oB * iB;</span>
+<span class="fc" id="L1592">            oBiC = oB * iC;</span>
+<span class="fc" id="L1593">            oBiD = oB * iD;</span>
+
+<span class="fc" id="L1595">            oCiA = oC * iA;</span>
+<span class="fc" id="L1596">            oCiB = oC * iB;</span>
+<span class="fc" id="L1597">            oCiC = oC * iC;</span>
+<span class="fc" id="L1598">            oCiD = oC * iD;</span>
+
+<span class="fc" id="L1600">            tmp = oDiA * oDiA + oDiB * oDiB + oDiC * oDiC;</span>
+<span class="fc" id="L1601">            norm = Math.sqrt(tmp + oAiA * oAiA + oAiB * oAiB + oAiC * oAiC + oAiD * oAiD);</span>
+
+<span class="fc" id="L1603">            m.setElementAt(9, 0, oDiA / norm);</span>
+<span class="fc" id="L1604">            m.setElementAt(9, 1, oDiB / norm);</span>
+<span class="fc" id="L1605">            m.setElementAt(9, 2, oDiC / norm);</span>
+<span class="fc" id="L1606">            m.setElementAt(9, 9, -oAiA / norm);</span>
+<span class="fc" id="L1607">            m.setElementAt(9, 10, -oAiB / norm);</span>
+<span class="fc" id="L1608">            m.setElementAt(9, 11, -oAiC / norm);</span>
+<span class="fc" id="L1609">            m.setElementAt(9, 12, -oAiD / norm);</span>
+
+<span class="fc" id="L1611">            norm = Math.sqrt(tmp + oBiA * oBiA + oBiB * oBiB + oBiC * oBiC + oBiD * oBiD);</span>
+
+<span class="fc" id="L1613">            m.setElementAt(10, 3, oDiA / norm);</span>
+<span class="fc" id="L1614">            m.setElementAt(10, 4, oDiB / norm);</span>
+<span class="fc" id="L1615">            m.setElementAt(10, 5, oDiC / norm);</span>
+<span class="fc" id="L1616">            m.setElementAt(10, 9, -oBiA / norm);</span>
+<span class="fc" id="L1617">            m.setElementAt(10, 10, -oBiB / norm);</span>
+<span class="fc" id="L1618">            m.setElementAt(10, 11, -oBiC / norm);</span>
+<span class="fc" id="L1619">            m.setElementAt(10, 12, -oBiD / norm);</span>
+
+<span class="fc" id="L1621">            norm = Math.sqrt(tmp + oCiA * oCiA + oCiB * oCiB + oCiC * oCiC + oCiD * oCiD);</span>
+
+<span class="fc" id="L1623">            m.setElementAt(11, 6, oDiA / norm);</span>
+<span class="fc" id="L1624">            m.setElementAt(11, 7, oDiB / norm);</span>
+<span class="fc" id="L1625">            m.setElementAt(11, 8, oDiC / norm);</span>
+<span class="fc" id="L1626">            m.setElementAt(11, 9, -oCiA / norm);</span>
+<span class="fc" id="L1627">            m.setElementAt(11, 10, -oCiB / norm);</span>
+<span class="fc" id="L1628">            m.setElementAt(11, 11, -oCiC / norm);</span>
+<span class="fc" id="L1629">            m.setElementAt(11, 12, -oCiD / norm);</span>
+<span class="nc" id="L1630">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L1632">        }</span>
+
+        // use SVD to decompose matrix m
+        Matrix v;
+        try {
+<span class="fc" id="L1637">            final var decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L1638">            decomposer.decompose();</span>
+
+            // ensure that matrix m has enough rank and there is a unique
+            // solution (up to scale)
+<span class="fc bfc" id="L1642" title="All 2 branches covered.">            if (decomposer.getRank() &lt; 12) {</span>
+<span class="fc" id="L1643">                throw new CoincidentPlanesException();</span>
+            }
+            // V is 13x13
+<span class="fc" id="L1646">            v = decomposer.getV();</span>
+
+            // last column of V will contain parameters of transformation
+<span class="fc" id="L1649">            final var value = v.getElementAt(12, 12);</span>
+
+<span class="fc" id="L1651">            final var invTransA = new Matrix(AffineParameters3D.INHOM_COORDS, AffineParameters3D.INHOM_COORDS);</span>
+            // copy former 9 elements of 13th column of V into &quot;a&quot; in row order
+<span class="fc" id="L1653">            invTransA.setSubmatrix(0, 0, 2, 2,</span>
+<span class="fc" id="L1654">                    v.getSubmatrixAsArray(0, 12, 8, 12),</span>
+                    false);
+            // normalize by scale value
+<span class="fc" id="L1657">            invTransA.multiplyByScalar(1.0 / value);</span>
+
+            // initially &quot;a contains the inverse of its transpose, so to obtain &quot;a&quot;, we need
+            // to transpose it and invert it
+<span class="fc" id="L1661">            invTransA.transpose();</span>
+<span class="fc" id="L1662">            final var a1 = Utils.inverse(invTransA);</span>
+
+<span class="fc" id="L1664">            final var invt = new Matrix(1, 3);</span>
+<span class="fc" id="L1665">            invt.setSubmatrix(0, 0, 0, 2,</span>
+<span class="fc" id="L1666">                    v.getSubmatrixAsArray(9, 12, 11, 12),</span>
+                    false);
+            // normalize by scale value (we need to change sign as well)
+<span class="fc" id="L1669">            invt.multiplyByScalar(-1.0 / value);</span>
+<span class="fc" id="L1670">            invt.transpose();</span>
+
+<span class="fc" id="L1672">            final var t = a1.multiplyAndReturnNew(invt);</span>
+
+<span class="fc" id="L1674">            this.a = a1;</span>
+<span class="fc" id="L1675">            this.translation = t.getBuffer();</span>
+<span class="nc" id="L1676">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L1677">            throw new CoincidentPlanesException(e);</span>
+<span class="fc" id="L1678">        }</span>
+<span class="fc" id="L1679">    }</span>
+
+    /**
+     * Estimates this transformation internal parameters by using provided 2
+     * corresponding original and transformed lines.
+     *
+     * @param inputLine1  1st input line.
+     * @param inputLine2  2nd input line.
+     * @param outputLine1 1st transformed line corresponding to 1st input line.
+     * @param outputLine2 2nd transformed line corresponding to 2nd input line.
+     * @throws CoincidentLinesException Raised if transformation cannot be
+     *                                  estimated for some reason (line configuration degeneracy, duplicate lines
+     *                                  or numerical instabilities).
+     */
+    public final void setTransformationFromLines(
+            final Line3D inputLine1, final Line3D inputLine2, final Line3D outputLine1, final Line3D outputLine2)
+            throws CoincidentLinesException {
+        try {
+<span class="fc" id="L1697">            setTransformationFromPlanes(inputLine1.getPlane1(), inputLine1.getPlane2(), inputLine2.getPlane1(),</span>
+<span class="fc" id="L1698">                    inputLine2.getPlane2(), outputLine1.getPlane1(), outputLine1.getPlane2(), outputLine2.getPlane1(),</span>
+<span class="fc" id="L1699">                    outputLine2.getPlane2());</span>
+<span class="fc" id="L1700">        } catch (final CoincidentPlanesException e) {</span>
+<span class="fc" id="L1701">            throw new CoincidentLinesException(e);</span>
+<span class="fc" id="L1702">        }</span>
+<span class="fc" id="L1703">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

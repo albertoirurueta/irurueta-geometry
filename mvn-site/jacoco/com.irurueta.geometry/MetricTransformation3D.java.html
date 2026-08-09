@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MetricTransformation3D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">MetricTransformation3D.java</span></div><h1>MetricTransformation3D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
+import com.irurueta.geometry.estimators.LockedException;
+import com.irurueta.geometry.estimators.MetricTransformation3DEstimator;
+import com.irurueta.geometry.estimators.NotReadyException;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+/**
+ * This class performs metric transformations on 3D space.
+ * Metric transformations include transformations related to rotations,
+ * translations and scale.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class MetricTransformation3D extends EuclideanTransformation3D implements Serializable {
+
+    /**
+     * Default scale factor, which leaves objects with the same scale.
+     */
+    public static final double DEFAULT_SCALE = 1.0;
+
+    /**
+     * Scale factor. Negative values mean that objects get reversed. Values
+     * greater than 1.0 means that objects get enlarged and values between 0.0
+     * and 1.0 means that objects get reduced.
+     */
+    private double scale;
+
+    /**
+     * Empty constructor.
+     * Creates transformation that has no effect.
+     */
+    public MetricTransformation3D() {
+<span class="fc" id="L53">        super();</span>
+<span class="fc" id="L54">        scale = DEFAULT_SCALE;</span>
+<span class="fc" id="L55">    }</span>
+
+    /**
+     * Creates transformation with provided rotation.
+     *
+     * @param rotation a 3D rotation.
+     * @throws NullPointerException raised if provided rotation is null.
+     */
+    public MetricTransformation3D(final Rotation3D rotation) {
+<span class="fc" id="L64">        super(rotation);</span>
+<span class="fc" id="L65">        scale = DEFAULT_SCALE;</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Creates transformation with provided 3D translation.
+     *
+     * @param translation array indicating 3D translation using inhomogeneous
+     *                    coordinates.
+     * @throws NullPointerException     raised if provided array is null.
+     * @throws IllegalArgumentException raised if length of array is not equal
+     *                                  to NUM_TRANSLATION_COORDS.
+     */
+    public MetricTransformation3D(final double[] translation) {
+<span class="fc" id="L78">        super(translation);</span>
+<span class="fc" id="L79">        scale = DEFAULT_SCALE;</span>
+<span class="fc" id="L80">    }</span>
+
+    /**
+     * Creates transformation with provided scale value.
+     *
+     * @param scale Scale value. Values between 0.0 and 1.0 reduce objects,
+     *              values greater than 1.0 enlarge objects and negative values reverse
+     *              objects.
+     */
+    public MetricTransformation3D(final double scale) {
+<span class="fc" id="L90">        super();</span>
+<span class="fc" id="L91">        this.scale = scale;</span>
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Creates transformation with provided rotation, translation and scale
+     * value.
+     *
+     * @param rotation    a 3D rotation.
+     * @param translation array indicating 3D translation using inhomogeneous
+     *                    coordinates.
+     * @param scale       scale value. Values between 0.0 and 1.0 reduce objects,
+     *                    values greater than 1.0 enlarge objects and negative values reverse
+     *                    objects.
+     * @throws NullPointerException     raised if provided array is null or if
+     *                                  rotation is null.
+     * @throws IllegalArgumentException raised if length of array is not equal
+     *                                  to NUM_TRANSLATION_COORDS.
+     */
+    public MetricTransformation3D(final Rotation3D rotation, final double[] translation, final double scale) {
+<span class="fc" id="L110">        super(rotation, translation);</span>
+<span class="fc" id="L111">        this.scale = scale;</span>
+<span class="fc" id="L112">    }</span>
+
+    /**
+     * Creates transformation by estimating its internal values using provided 4
+     * corresponding original and transformed points.
+     *
+     * @param inputPoint1  1st input point.
+     * @param inputPoint2  2nd input point.
+     * @param inputPoint3  3rd input point.
+     * @param inputPoint4  4th input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input
+     *                     point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     *                     point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     *                     point.
+     * @param outputPoint4 4th transformed point corresponding to 4th input
+     *                     point.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public MetricTransformation3D(
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2, final Point3D outputPoint3,
+<span class="fc" id="L137">            final Point3D outputPoint4) throws CoincidentPointsException {</span>
+<span class="fc" id="L138">        internalSetMetricTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, inputPoint4, outputPoint1,</span>
+                outputPoint2, outputPoint3, outputPoint4);
+<span class="fc" id="L140">    }</span>
+
+    /**
+     * Returns scale of this transformation.
+     * A value between 0.0 and 1.0 indicates that objects will be reduced,
+     * a value greater than 1.0 indicates that objects will be enlarged, and a
+     * negative value indicates that objects will be reversed.
+     *
+     * @return scale.
+     */
+    public double getScale() {
+<span class="fc" id="L151">        return scale;</span>
+    }
+
+    /**
+     * Sets scale of this transformation.
+     *
+     * @param scale Scale value to be set. A value between 0.0 and 1.0 indicates
+     *              that objects will be reduced, a value greater than 1.0 indicates that
+     *              objects will be enlarged, and a negative value indicates that objects
+     *              will be reversed.
+     */
+    public void setScale(final double scale) {
+<span class="fc" id="L163">        this.scale = scale;</span>
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * Represents this transformation as a 4x4 matrix and stores the result in
+     * provided instance.
+     *
+     * @param m instance where transformation matrix will be stored.
+     * @throws IllegalArgumentException Raised if provided instance is not a 4x4
+     *                                  matrix.
+     */
+    @Override
+    public void asMatrix(final Matrix m) {
+<span class="pc bpc" id="L176" title="1 of 4 branches missed.">        if (m.getRows() != HOM_COORDS || m.getColumns() != HOM_COORDS) {</span>
+<span class="fc" id="L177">            throw new IllegalArgumentException();</span>
+        }
+
+        // set rotation
+<span class="fc" id="L181">        final var rot = getRotation().asInhomogeneousMatrix();</span>
+<span class="fc" id="L182">        rot.multiplyByScalar(scale);</span>
+
+<span class="fc" id="L184">        m.setSubmatrix(0, 0, Rotation3D.INHOM_COORDS - 1,</span>
+                Rotation3D.INHOM_COORDS - 1, rot);
+
+<span class="fc" id="L187">        final var translation = getTranslation();</span>
+
+        // set translation
+<span class="fc" id="L190">        m.setSubmatrix(0, HOM_COORDS - 1, translation.length - 1,</span>
+                HOM_COORDS - 1, translation);
+
+        // set last element
+<span class="fc" id="L194">        m.setElementAt(HOM_COORDS - 1, HOM_COORDS - 1, 1.0);</span>
+<span class="fc" id="L195">    }</span>
+
+    /**
+     * Transforms input point using this transformation and stores the result in
+     * provided output points.
+     *
+     * @param inputPoint  point to be transformed.
+     * @param outputPoint instance where transformed point data will be stored.
+     */
+    @Override
+    public void transform(final Point3D inputPoint, final Point3D outputPoint) {
+<span class="fc" id="L206">        inputPoint.normalize();</span>
+<span class="fc" id="L207">        getRotation().rotate(inputPoint, outputPoint);</span>
+
+<span class="fc" id="L209">        final var translation = getTranslation();</span>
+
+<span class="fc" id="L211">        outputPoint.setInhomogeneousCoordinates(scale * outputPoint.getInhomX() + translation[0],</span>
+<span class="fc" id="L212">                scale * outputPoint.getInhomY() + translation[1],</span>
+<span class="fc" id="L213">                scale * outputPoint.getInhomZ() + translation[2]);</span>
+<span class="fc" id="L214">    }</span>
+
+    /**
+     * Inverses this transformation.
+     */
+    @Override
+    public void inverse() {
+<span class="fc" id="L221">        inverse(this);</span>
+<span class="fc" id="L222">    }</span>
+
+    /**
+     * Computes the inverse of this transformation and returns the result as a
+     * new transformation instance.
+     *
+     * @return inverse transformation.
+     */
+    @Override
+    public Transformation3D inverseAndReturnNew() {
+<span class="fc" id="L232">        final var result = new MetricTransformation3D();</span>
+<span class="fc" id="L233">        inverse(result);</span>
+<span class="fc" id="L234">        return result;</span>
+    }
+
+    /**
+     * Computes the inverse of this transformation and stores the result in
+     * provided instance.
+     *
+     * @param result instance where inverse transformation will be stored.
+     */
+    protected void inverse(final MetricTransformation3D result) {
+        // Transformation is as follows: x' = s*R* x + t
+        // Then inverse transformation is: (1/s)*R* x' = (1/s) * R' * s * R * x +
+        // (1/s) * R'*t = x + (1/s) * R'*t
+        // --&gt; x = (1/s) * R'*x' - (1/s) * R'*t
+<span class="fc" id="L248">        super.inverse(result);</span>
+<span class="fc" id="L249">        final var translation = result.getTranslation();</span>
+<span class="fc" id="L250">        final var invScale = 1.0 / scale;</span>
+<span class="fc" id="L251">        ArrayUtils.multiplyByScalar(translation, invScale, translation);</span>
+<span class="fc" id="L252">        result.scale = invScale;</span>
+<span class="fc" id="L253">    }</span>
+
+    /**
+     * Converts this transformation into a metric transformation.
+     * Because this method is inherited, and this instance is already metric,
+     * this method just returns a copy of this transformation.
+     *
+     * @return this transformation converted into a metric transformation.
+     */
+    @Override
+    public MetricTransformation3D toMetric() {
+<span class="fc" id="L264">        return new MetricTransformation3D(getRotation(), getTranslation(), scale);</span>
+    }
+
+    /**
+     * Converts this transformation into an affine transformation.
+     *
+     * @return this transformation converted into an affine transformation.
+     */
+    public AffineTransformation3D toAffine() {
+<span class="fc" id="L273">        return new AffineTransformation3D(scale, getRotation(), getTranslation());</span>
+    }
+
+    /**
+     * Combines this transformation with provided transformation.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided transformation.
+     *
+     * @param transformation transformation to be combined with.
+     */
+    @Override
+    public void combine(final EuclideanTransformation3D transformation) {
+<span class="fc" id="L285">        combine(transformation.toMetric(), this);</span>
+<span class="fc" id="L286">    }</span>
+
+    /**
+     * Combines this transformation with provided transformation and returns
+     * the result as a new transformation instance.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided transformation.
+     *
+     * @param transformation transformation to be combined with.
+     * @return A new transformation resulting of the combination with this
+     * transformation and provided transformation.
+     */
+    @Override
+    public MetricTransformation3D combineAndReturnNew(final EuclideanTransformation3D transformation) {
+<span class="fc" id="L300">        final var result = new MetricTransformation3D();</span>
+<span class="fc" id="L301">        combine(transformation.toMetric(), result);</span>
+<span class="fc" id="L302">        return result;</span>
+    }
+
+    /**
+     * Combines this transformation with provided transformation.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided transformation.
+     *
+     * @param transformation transformation to be combined with.
+     */
+    public void combine(final MetricTransformation3D transformation) {
+<span class="fc" id="L313">        combine(transformation, this);</span>
+<span class="fc" id="L314">    }</span>
+
+    /**
+     * Combines this transformation with provided transformation and returns
+     * the result as a new transformation instance.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided transformation.
+     *
+     * @param transformation transformation to be combined with.
+     * @return a new transformation resulting of the combination with this
+     * transformation and provided transformation.
+     */
+    public MetricTransformation3D combineAndReturnNew(final MetricTransformation3D transformation) {
+
+<span class="fc" id="L328">        final var result = new MetricTransformation3D();</span>
+<span class="fc" id="L329">        combine(transformation, result);</span>
+<span class="fc" id="L330">        return result;</span>
+    }
+
+    /**
+     * Estimates this transformation internal parameters by using 4
+     * corresponding original and transformed points.
+     *
+     * @param inputPoint1  1st input point.
+     * @param inputPoint2  2nd input point.
+     * @param inputPoint3  3rd input point.
+     * @param inputPoint4  4th input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input
+     *                     point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     *                     point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     *                     point.
+     * @param outputPoint4 4th transformed point corresponding to 4th input
+     *                     point.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    @Override
+    public void setTransformationFromPoints(
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2, final Point3D outputPoint3,
+            final Point3D outputPoint4) throws CoincidentPointsException {
+<span class="fc" id="L358">        internalSetMetricTransformationFromPoints(inputPoint1, inputPoint2, inputPoint3, inputPoint4, outputPoint1,</span>
+                outputPoint2, outputPoint3, outputPoint4);
+<span class="fc" id="L360">    }</span>
+
+    /**
+     * Combines this transformation with provided input transformation and
+     * stores the result into provided output transformation.
+     * The combination is equivalent to multiplying the matrix of this
+     * transformation with the matrix of provided input transformation.
+     *
+     * @param inputTransformation  transformation to be combined with.
+     * @param outputTransformation transformation where result will be stored.
+     */
+    private void combine(final MetricTransformation3D inputTransformation,
+                         final MetricTransformation3D outputTransformation) {
+        // combination in matrix representation is:
+        // [s1*R1 t1] * [s2*R2 t2] = [s1*s2*R1*R2 + t1*0T  s1*R1*t2 + t1*1] = [s1*s2*R1*R2  s1*R1*t2 + t1]
+        // [0T   1 ]    [0T    1 ]   [0T*s2*R2 + 1*0T      0T*t2 + 1*1    ]   [0T           1            ]
+
+        try {
+            // we do translation first, because this.rotation might change later
+<span class="fc" id="L379">            final var r1 = getRotation().asInhomogeneousMatrix();</span>
+<span class="fc" id="L380">            final var t2 = Matrix.newFromArray(inputTransformation.getTranslation(), true);</span>
+            // this is R1 * t2
+<span class="fc" id="L382">            r1.multiply(t2);</span>
+<span class="fc" id="L383">            r1.multiplyByScalar(this.scale);</span>
+
+<span class="fc" id="L385">            ArrayUtils.sum(r1.toArray(), this.getTranslation(), outputTransformation.getTranslation());</span>
+
+<span class="fc" id="L387">            outputTransformation.setRotation(this.getRotation().combineAndReturnNew(inputTransformation.getRotation()));</span>
+
+<span class="fc" id="L389">            outputTransformation.scale = this.scale * inputTransformation.scale;</span>
+
+<span class="nc" id="L391">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L393">        }</span>
+<span class="fc" id="L394">    }</span>
+
+    /**
+     * Estimates this transformation internal parameters by using 4
+     * corresponding original and transformed points.
+     *
+     * @param inputPoint1  1st input point.
+     * @param inputPoint2  2nd input point.
+     * @param inputPoint3  3rd input point.
+     * @param inputPoint4  4th input point.
+     * @param outputPoint1 1st transformed point corresponding to 1st input
+     *                     point.
+     * @param outputPoint2 2nd transformed point corresponding to 2nd input
+     *                     point.
+     * @param outputPoint3 3rd transformed point corresponding to 3rd input
+     *                     point.
+     * @param outputPoint4 4th transformed point corresponding to 4th input
+     *                     point.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    private void internalSetMetricTransformationFromPoints(
+            final Point3D inputPoint1, final Point3D inputPoint2, final Point3D inputPoint3, final Point3D inputPoint4,
+            final Point3D outputPoint1, final Point3D outputPoint2, final Point3D outputPoint3,
+            final Point3D outputPoint4) throws CoincidentPointsException {
+<span class="fc" id="L420">        final var inputPoints = new ArrayList&lt;Point3D&gt;();</span>
+<span class="fc" id="L421">        inputPoints.add(inputPoint1);</span>
+<span class="fc" id="L422">        inputPoints.add(inputPoint2);</span>
+<span class="fc" id="L423">        inputPoints.add(inputPoint3);</span>
+<span class="fc" id="L424">        inputPoints.add(inputPoint4);</span>
+
+<span class="fc" id="L426">        final var outputPoints = new ArrayList&lt;Point3D&gt;();</span>
+<span class="fc" id="L427">        outputPoints.add(outputPoint1);</span>
+<span class="fc" id="L428">        outputPoints.add(outputPoint2);</span>
+<span class="fc" id="L429">        outputPoints.add(outputPoint3);</span>
+<span class="fc" id="L430">        outputPoints.add(outputPoint4);</span>
+
+<span class="fc" id="L432">        final var estimator = new MetricTransformation3DEstimator(inputPoints, outputPoints);</span>
+
+        try {
+<span class="fc" id="L435">            estimator.estimate(this);</span>
+<span class="nc" id="L436">        } catch (final LockedException | NotReadyException ignore) {</span>
+            // never thrown
+<span class="fc" id="L438">        }</span>
+<span class="fc" id="L439">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

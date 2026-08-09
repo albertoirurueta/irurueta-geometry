@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RotationUtils.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">RotationUtils.java</span></div><h1>RotationUtils.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.WrongSizeException;
+
+/**
+ * Utility methods related to rotations.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class RotationUtils {
+
+    /**
+     * Number of components of angular rates (angular speed).
+     */
+    public static final int N_ANGULAR_RATES = 3;
+
+    /**
+     * Size of skew symmetric matrix omega.
+     */
+    public static final int SKEW_MATRIX_SIZE = 4;
+
+    /**
+     * Constructor.
+     */
+    private RotationUtils() {
+    }
+
+    /**
+     * Skew symmetric matrix omega from angular rates vector w.
+     *
+     * @param w1     angular rate from x-axis.
+     * @param w2     angular rate from y-axis.
+     * @param w3     angular rate from z-axis.
+     * @param result instance where result will be stored.
+     * @throws IllegalArgumentException if provided matrix is not 4x4.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;w2omega.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void w2omega(final double w1, final double w2, final double w3, final Matrix result) {
+<span class="pc bpc" id="L54" title="1 of 4 branches missed.">        if (result.getRows() != SKEW_MATRIX_SIZE || result.getColumns() != SKEW_MATRIX_SIZE) {</span>
+<span class="fc" id="L55">            throw new IllegalArgumentException(&quot;result must be 4x4&quot;);</span>
+        }
+
+<span class="fc" id="L58">        result.setElementAt(0, 0, 0.0);</span>
+<span class="fc" id="L59">        result.setElementAt(1, 0, w1);</span>
+<span class="fc" id="L60">        result.setElementAt(2, 0, w2);</span>
+<span class="fc" id="L61">        result.setElementAt(3, 0, w3);</span>
+
+<span class="fc" id="L63">        result.setElementAt(0, 1, -w1);</span>
+<span class="fc" id="L64">        result.setElementAt(1, 1, 0.0);</span>
+<span class="fc" id="L65">        result.setElementAt(2, 1, -w3);</span>
+<span class="fc" id="L66">        result.setElementAt(3, 1, w2);</span>
+
+<span class="fc" id="L68">        result.setElementAt(0, 2, -w2);</span>
+<span class="fc" id="L69">        result.setElementAt(1, 2, w3);</span>
+<span class="fc" id="L70">        result.setElementAt(2, 2, 0.0);</span>
+<span class="fc" id="L71">        result.setElementAt(3, 2, -w1);</span>
+
+<span class="fc" id="L73">        result.setElementAt(0, 3, -w3);</span>
+<span class="fc" id="L74">        result.setElementAt(1, 3, -w2);</span>
+<span class="fc" id="L75">        result.setElementAt(2, 3, w1);</span>
+<span class="fc" id="L76">        result.setElementAt(3, 3, 0.0);</span>
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * Skew symmetric matrix omega from angular rates vector w.
+     *
+     * @param w      array containing angular rates. Must have length 3.
+     * @param result instance where result will be stored.
+     * @throws IllegalArgumentException if provided matrix is not 4x4 or array w
+     *                                  does not have length 3.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;w2omega.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void w2omega(final double[] w, final Matrix result) {
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (w.length != N_ANGULAR_RATES) {</span>
+<span class="fc" id="L90">            throw new IllegalArgumentException(&quot;w must have length 3&quot;);</span>
+        }
+<span class="fc" id="L92">        w2omega(w[0], w[1], w[2], result);</span>
+<span class="fc" id="L93">    }</span>
+
+    /**
+     * Skew symmetric matrix omega from angular rates vector w.
+     *
+     * @param w1 angular rate from x-axis.
+     * @param w2 angular rate from y-axis.
+     * @param w3 angular rate from z-axis.
+     * @return a new skew symmetric matrix omega.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;w2omega.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static Matrix w2omega(final double w1, final double w2, final double w3) {
+<span class="fc" id="L105">        Matrix result = null;</span>
+        try {
+<span class="fc" id="L107">            result = new Matrix(SKEW_MATRIX_SIZE, SKEW_MATRIX_SIZE);</span>
+<span class="fc" id="L108">            w2omega(w1, w2, w3, result);</span>
+<span class="nc" id="L109">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L111">        }</span>
+
+<span class="fc" id="L113">        return result;</span>
+    }
+
+    /**
+     * Skew symmetric matrix omega from angular rates vector w.
+     *
+     * @param w array containing angular rates. Must have length 3.
+     * @return a new skew symmetric matrix omega.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;w2omega.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static Matrix w2omega(final double[] w) {
+<span class="fc bfc" id="L124" title="All 2 branches covered.">        if (w.length != N_ANGULAR_RATES) {</span>
+<span class="fc" id="L125">            throw new IllegalArgumentException(&quot;w must have length 3&quot;);</span>
+        }
+<span class="fc" id="L127">        return w2omega(w[0], w[1], w[2]);</span>
+    }
+
+    /**
+     * Converts provided quaternion into Pi matrix.
+     * Given a quaternion q = [a b c d]', and the angular rates vector
+     * w = [p q r]' and omega = w2omega(w) a skew symmetric matrix, then the PI
+     * matrix is the Jacobian respect to w, expressed as: PI = omega(w)*q.
+     *
+     * @param quaternion a quaternion.
+     * @param result     matrix where resulting pi matrix is stored.
+     * @throws IllegalArgumentException if provided result matrix is not 4x3.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;q2Pi.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void quaternionToPiMatrix(final Quaternion quaternion, final Matrix result) {
+<span class="pc bpc" id="L142" title="2 of 4 branches missed.">        if (result.getRows() != Quaternion.N_PARAMS || result.getColumns() != Quaternion.N_ANGLES) {</span>
+<span class="nc" id="L143">            throw new IllegalArgumentException(&quot;result matrix must be 4x3&quot;);</span>
+        }
+
+<span class="fc" id="L146">        final var a = quaternion.getA();</span>
+<span class="fc" id="L147">        final var b = quaternion.getB();</span>
+<span class="fc" id="L148">        final var c = quaternion.getC();</span>
+<span class="fc" id="L149">        final var d = quaternion.getD();</span>
+
+<span class="fc" id="L151">        result.setElementAt(0, 0, -b);</span>
+<span class="fc" id="L152">        result.setElementAt(1, 0, a);</span>
+<span class="fc" id="L153">        result.setElementAt(2, 0, d);</span>
+<span class="fc" id="L154">        result.setElementAt(3, 0, -c);</span>
+
+<span class="fc" id="L156">        result.setElementAt(0, 1, -c);</span>
+<span class="fc" id="L157">        result.setElementAt(1, 1, -d);</span>
+<span class="fc" id="L158">        result.setElementAt(2, 1, a);</span>
+<span class="fc" id="L159">        result.setElementAt(3, 1, b);</span>
+
+<span class="fc" id="L161">        result.setElementAt(0, 2, -d);</span>
+<span class="fc" id="L162">        result.setElementAt(1, 2, c);</span>
+<span class="fc" id="L163">        result.setElementAt(2, 2, -b);</span>
+<span class="fc" id="L164">        result.setElementAt(3, 2, a);</span>
+<span class="fc" id="L165">    }</span>
+
+    /**
+     * Converts provided quaternion into Pi matrix.
+     * Given a quaternion q = [a b c d]', and the angular rates vector
+     * w = [p q r]' and omega = w2omega(w) a skew symmetric matrix, then the PI
+     * matrix is the Jacobian respect to w, expressed as: PI = omega(w)*q.
+     *
+     * @param quaternion a quaternion.
+     * @return pi matrix.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;q2Pi.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static Matrix quaternionToPiMatrix(final Quaternion quaternion) {
+<span class="fc" id="L178">        Matrix m = null;</span>
+        try {
+<span class="fc" id="L180">            m = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);</span>
+<span class="fc" id="L181">            quaternionToPiMatrix(quaternion, m);</span>
+<span class="nc" id="L182">        } catch (final WrongSizeException ignore) {</span>
+            // never thrown
+<span class="fc" id="L184">        }</span>
+<span class="fc" id="L185">        return m;</span>
+    }
+
+    /**
+     * Converts provided quaternion into conjugated Pi matrix.
+     * Given a quaternion q = [a b c d]', then the conjugated Pi matrix is the
+     * Pi matrix of the conjugated quaternion [a -b -c -d]'.
+     *
+     * @param quaternion a quaternion.
+     * @param result     matrix where resulting conjugated pi matrix is stored.
+     * @throws IllegalArgumentException if provided result matrix is not 4x3.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;pi2pc.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void quaternionToConjugatedPiMatrix(final Quaternion quaternion, final Matrix result) {
+<span class="fc" id="L199">        quaternionToPiMatrix(quaternion.conjugateAndReturnNew(), result);</span>
+<span class="fc" id="L200">    }</span>
+
+    /**
+     * Converts provided quaternion into conjugated Pi matrix.
+     * Given a quaternion q = [a b c d]', then the conjugated Pi matrix is the
+     * Pi matrix of the conjugated quaternion [a -b -c -d]'.
+     *
+     * @param quaternion a quaternion.
+     * @return a matrix containing the conjugated pi matrix.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;pi2pc.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static Matrix quaternionToConjugatedPiMatrix(final Quaternion quaternion) {
+<span class="fc" id="L212">        Matrix m = null;</span>
+        try {
+<span class="fc" id="L214">            m = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);</span>
+<span class="fc" id="L215">            quaternionToConjugatedPiMatrix(quaternion, m);</span>
+<span class="nc" id="L216">        } catch (final WrongSizeException ignore) {</span>
+            // never thrown
+<span class="fc" id="L218">        }</span>
+<span class="fc" id="L219">        return m;</span>
+    }
+
+    /**
+     * Computes conjugated pi matrix from pi matrix.
+     *
+     * @param pi     pi matrix used as input.
+     * @param result instance where conjugated pi matrix is stored.
+     * @throws IllegalArgumentException if provided matrices are not 4x3.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;pi2pc.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void piMatrixToConjugatedPiMatrix(final Matrix pi, final Matrix result) {
+<span class="pc bpc" id="L231" title="2 of 4 branches missed.">        if (pi.getRows() != Quaternion.N_PARAMS || pi.getColumns() != Quaternion.N_ANGLES) {</span>
+<span class="nc" id="L232">            throw new IllegalArgumentException(&quot;pi must be 4x3&quot;);</span>
+        }
+<span class="pc bpc" id="L234" title="2 of 4 branches missed.">        if (result.getRows() != Quaternion.N_PARAMS || result.getColumns() != Quaternion.N_ANGLES) {</span>
+<span class="nc" id="L235">            throw new IllegalArgumentException(&quot;result must be 4x3&quot;);</span>
+        }
+
+<span class="fc" id="L238">        result.copyFrom(pi);</span>
+
+<span class="fc" id="L240">        result.setElementAtIndex(0, -pi.getElementAtIndex(0));</span>
+<span class="fc" id="L241">        result.setElementAtIndex(2, -pi.getElementAtIndex(2));</span>
+<span class="fc" id="L242">        result.setElementAtIndex(3, -pi.getElementAtIndex(3));</span>
+<span class="fc" id="L243">        result.setElementAtIndex(4, -pi.getElementAtIndex(4));</span>
+<span class="fc" id="L244">        result.setElementAtIndex(5, -pi.getElementAtIndex(5));</span>
+<span class="fc" id="L245">        result.setElementAtIndex(7, -pi.getElementAtIndex(7));</span>
+<span class="fc" id="L246">        result.setElementAtIndex(8, -pi.getElementAtIndex(8));</span>
+<span class="fc" id="L247">        result.setElementAtIndex(9, -pi.getElementAtIndex(9));</span>
+<span class="fc" id="L248">        result.setElementAtIndex(10, -pi.getElementAtIndex(10));</span>
+<span class="fc" id="L249">    }</span>
+
+    /**
+     * Computes conjugated pi matrix from pi matrix.
+     *
+     * @param pi pi matrix used as input.
+     * @return conjugated pi matrix.
+     * @throws IllegalArgumentException if provided input matrix is not 4x3.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;pi2pc.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static Matrix piMatrixToConjugatedPiMatrix(final Matrix pi) {
+<span class="fc" id="L260">        Matrix m = null;</span>
+        try {
+<span class="fc" id="L262">            m = new Matrix(Quaternion.N_PARAMS, Quaternion.N_ANGLES);</span>
+<span class="fc" id="L263">            piMatrixToConjugatedPiMatrix(pi, m);</span>
+<span class="nc" id="L264">        } catch (final WrongSizeException ignore) {</span>
+            // never thrown
+<span class="fc" id="L266">        }</span>
+<span class="fc" id="L267">        return m;</span>
+    }
+
+    /**
+     * Rotates a point by using the rotation matrix obtained from a quaternion.
+     *
+     * @param q         quaternion containing rotation information.
+     * @param point     array containing inhomogeneous 3D coordinates of a point to
+     *                  be rotated.
+     * @param result    array containing result of rotation.
+     * @param jacobianQ jacobian wrt of quaternion. Must be 3x4.
+     * @param jacobianP jacobian wrt of point. Must be 3x3.
+     * @throws IllegalArgumentException if provided arrays of points or result
+     *                                  don't have length 3, or if jacobian of quaternions is not 3x4 (if
+     *                                  provided), or if jacobian of point is not 3x3 (if provided).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void rotationMatrixTimesVector(
+            final Quaternion q, final double[] point, final double[] result, final Matrix jacobianQ,
+            final Matrix jacobianP) {
+<span class="pc bpc" id="L287" title="1 of 2 branches missed.">        if (point.length != Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="nc" id="L288">            throw new IllegalArgumentException(&quot;point must have length 3&quot;);</span>
+        }
+<span class="pc bpc" id="L290" title="1 of 2 branches missed.">        if (result.length != Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="nc" id="L291">            throw new IllegalArgumentException(&quot;result must have length 3&quot;);</span>
+        }
+<span class="fc bfc" id="L293" title="All 4 branches covered.">        if (jacobianQ != null &amp;&amp; (jacobianQ.getRows() != Quaternion.N_ANGLES</span>
+<span class="pc bpc" id="L294" title="1 of 2 branches missed.">                || jacobianQ.getColumns() != Quaternion.N_PARAMS)) {</span>
+<span class="fc" id="L295">            throw new IllegalArgumentException(&quot;jacobian wrt of quaternion must be 3x4&quot;);</span>
+        }
+<span class="fc bfc" id="L297" title="All 4 branches covered.">        if (jacobianP != null &amp;&amp; (jacobianP.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS</span>
+<span class="pc bpc" id="L298" title="1 of 2 branches missed.">                || jacobianP.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS)) {</span>
+<span class="fc" id="L299">            throw new IllegalArgumentException(&quot;jacobian wrt of point must be 3x3&quot;);</span>
+        }
+
+        try {
+<span class="fc" id="L303">            final var r = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,</span>
+                    MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
+<span class="fc" id="L305">            q.toMatrixRotation(r);</span>
+
+<span class="fc bfc" id="L307" title="All 2 branches covered.">            if (jacobianP != null) {</span>
+<span class="fc" id="L308">                jacobianP.copyFrom(r);</span>
+            }
+            // multiply rotation matrix by point
+<span class="fc" id="L311">            final var p = Matrix.newFromArray(point, true);</span>
+<span class="fc" id="L312">            r.multiply(p);</span>
+
+            // copy to result
+<span class="fc" id="L315">            r.getSubmatrixAsArray(0, 0, r.getRows() - 1,</span>
+<span class="fc" id="L316">                    r.getColumns() - 1, result);</span>
+
+<span class="fc bfc" id="L318" title="All 2 branches covered.">            if (jacobianQ != null) {</span>
+<span class="fc" id="L319">                final var a = q.getA();</span>
+<span class="fc" id="L320">                final var b = q.getB();</span>
+<span class="fc" id="L321">                final var c = q.getC();</span>
+<span class="fc" id="L322">                final var d = q.getD();</span>
+
+<span class="fc" id="L324">                final var x = point[0];</span>
+<span class="fc" id="L325">                final var y = point[1];</span>
+<span class="fc" id="L326">                final var z = point[2];</span>
+
+<span class="fc" id="L328">                final var axdycz = 2.0 * (a * x - d * y + c * z);</span>
+<span class="fc" id="L329">                final var bxcydz = 2.0 * (b * x + c * y + d * z);</span>
+<span class="fc" id="L330">                final var cxbyaz = 2.0 * (c * x - b * y - a * z);</span>
+<span class="fc" id="L331">                final var dxaybz = 2.0 * (d * x + a * y - b * z);</span>
+
+<span class="fc" id="L333">                jacobianQ.setElementAt(0, 0, axdycz);</span>
+<span class="fc" id="L334">                jacobianQ.setElementAt(1, 0, dxaybz);</span>
+<span class="fc" id="L335">                jacobianQ.setElementAt(2, 0, -cxbyaz);</span>
+
+<span class="fc" id="L337">                jacobianQ.setElementAt(0, 1, bxcydz);</span>
+<span class="fc" id="L338">                jacobianQ.setElementAt(1, 1, cxbyaz);</span>
+<span class="fc" id="L339">                jacobianQ.setElementAt(2, 1, dxaybz);</span>
+
+<span class="fc" id="L341">                jacobianQ.setElementAt(0, 2, -cxbyaz);</span>
+<span class="fc" id="L342">                jacobianQ.setElementAt(1, 2, bxcydz);</span>
+<span class="fc" id="L343">                jacobianQ.setElementAt(2, 2, -axdycz);</span>
+
+<span class="fc" id="L345">                jacobianQ.setElementAt(0, 3, -dxaybz);</span>
+<span class="fc" id="L346">                jacobianQ.setElementAt(1, 3, axdycz);</span>
+<span class="fc" id="L347">                jacobianQ.setElementAt(2, 3, bxcydz);</span>
+            }
+<span class="nc" id="L349">        } catch (final WrongSizeException ignore) {</span>
+            // never thrown
+<span class="fc" id="L351">        }</span>
+<span class="fc" id="L352">    }</span>
+
+    /**
+     * Rotates a point by using the rotation matrix obtained from a quaternion.
+     *
+     * @param q         quaternion containing rotation information.
+     * @param point     array containing inhomogeneous 3D coordinates of a point to
+     *                  be rotated.
+     * @param jacobianQ jacobian wrt of quaternion. Must be 3x4.
+     * @param jacobianP jacobian wrt of point. Must be 3x3.
+     * @return array containing result of rotation as 3D inhomogeneous
+     * coordinates.
+     * @throws IllegalArgumentException if provided point array doesn't have
+     *                                  length 3, or if jacobian of quaternions is not 3x4 (if provided), or if
+     *                                  jacobian of point is not 3x3 (if provided).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static double[] rotationMatrixTimesVector(
+            final Quaternion q, final double[] point, final Matrix jacobianQ, final Matrix jacobianP) {
+<span class="fc" id="L371">        final var result = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];</span>
+<span class="fc" id="L372">        rotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);</span>
+<span class="fc" id="L373">        return result;</span>
+    }
+
+    /**
+     * Rotates a point by using the rotation matrix obtained from a quaternion.
+     *
+     * @param q      quaternion containing rotation information.
+     * @param point  array containing inhomogeneous 3D coordinates of a point to
+     *               be rotated.
+     * @param result array containing result of rotation.
+     * @throws IllegalArgumentException if provided arrays of points or result
+     *                                  don't have length 3.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void rotationMatrixTimesVector(final Quaternion q, final double[] point, final double[] result) {
+<span class="fc" id="L388">        rotationMatrixTimesVector(q, point, result, null, null);</span>
+<span class="fc" id="L389">    }</span>
+
+    /**
+     * Rotates a point by using the rotation matrix obtained from a quaternion.
+     *
+     * @param q     quaternion containing rotation information.
+     * @param point array containing inhomogeneous 3D coordinates of a point to
+     *              be rotated.
+     * @return array containing result of rotation as 3D inhomogeneous
+     * coordinates.
+     * @throws IllegalArgumentException if provided point array doesn't have
+     *                                  length 3.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static double[] rotationMatrixTimesVector(final Quaternion q, final double[] point) {
+<span class="fc" id="L404">        return rotationMatrixTimesVector(q, point, null, null);</span>
+    }
+
+    /**
+     * Rotates a 3D point by using the rotation matrix obtained from a
+     * quaternion.
+     *
+     * @param q         quaternion containing rotation information.
+     * @param point     3D point to be rotated.
+     * @param result    result of rotation.
+     * @param jacobianQ jacobian wrt of quaternion. Must be 3x4.
+     * @param jacobianP jacobian wrt of point. Must be 3x3.
+     * @throws IllegalArgumentException if jacobian of quaternions is not 3x4
+     *                                  (if provided), or if jacobian of point is not 3x3 (if provided).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void rotationMatrixTimesVector(
+            final Quaternion q, final Point3D point, final Point3D result, final Matrix jacobianQ,
+            final Matrix jacobianP) {
+<span class="fc" id="L423">        final var coords = new double[]{point.getInhomX(), point.getInhomY(), point.getInhomZ()};</span>
+<span class="fc" id="L424">        final var rp = rotationMatrixTimesVector(q, coords, jacobianQ, jacobianP);</span>
+<span class="fc" id="L425">        result.setInhomogeneousCoordinates(rp[0], rp[1], rp[2]);</span>
+<span class="fc" id="L426">    }</span>
+
+    /**
+     * Rotates a 3D point by using the rotation matrix obtained from a
+     * quaternion.
+     *
+     * @param q         quaternion containing rotation information.
+     * @param point     3D point to be rotated.
+     * @param jacobianQ jacobian wrt of quaternion. Must be 3x4.
+     * @param jacobianP jacobian wrt of point. Must be 3x3.
+     * @return result of rotation.
+     * @throws IllegalArgumentException if jacobian of quaternions is not 3x4.
+     *                                  (if provided), of if jacobian of point is not 3x3 (if provided).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static Point3D rotationMatrixTimesVector(
+            final Quaternion q, final Point3D point, final Matrix jacobianQ, final Matrix jacobianP) {
+<span class="fc" id="L443">        final var result = Point3D.create();</span>
+<span class="fc" id="L444">        rotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);</span>
+<span class="fc" id="L445">        return result;</span>
+    }
+
+    /**
+     * Rotates a 3D point by using the rotation matrix obtained from a
+     * quaternion.
+     *
+     * @param q      quaternion containing rotation information.
+     * @param point  3D point to be rotated.
+     * @param result result of rotation.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void rotationMatrixTimesVector(final Quaternion q, final Point3D point, final Point3D result) {
+<span class="fc" id="L458">        rotationMatrixTimesVector(q, point, result, null, null);</span>
+<span class="fc" id="L459">    }</span>
+
+    /**
+     * Rotates a 3D point by using the rotation matrix obtained from a
+     * quaternion.
+     *
+     * @param q     quaternion containing rotation information.
+     * @param point 3D point to be rotated.
+     * @return result of rotation.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static Point3D rotationMatrixTimesVector(final Quaternion q, final Point3D point) {
+<span class="fc" id="L471">        return rotationMatrixTimesVector(q, point, null, null);</span>
+    }
+
+    /**
+     * Rotates a point by the inverse rotation obtained from a quaternion.
+     *
+     * @param q         quaternion containing rotation information.
+     * @param point     array containing inhomogeneous 3D coordinates of a point to
+     *                  be rotated.
+     * @param result    array containing result of rotation.
+     * @param jacobianQ jacobian wrt of quaternion. Must be 3x4.
+     * @param jacobianP jacobian wrt of point. Must be 3x3.
+     * @throws IllegalArgumentException if provided arrays of points or result
+     *                                  don't have length 3, or if jacobian of quaternions is not 3x4 (if
+     *                                  provided), or if jacobian of point is not 3x3 (if provided).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rtp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void transposedRotationMatrixTimesVector(
+            final Quaternion q, final double[] point, final double[] result, final Matrix jacobianQ,
+            final Matrix jacobianP) {
+<span class="pc bpc" id="L491" title="1 of 2 branches missed.">        if (point.length != Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="nc" id="L492">            throw new IllegalArgumentException(&quot;point must have length 3&quot;);</span>
+        }
+<span class="pc bpc" id="L494" title="1 of 2 branches missed.">        if (result.length != Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH) {</span>
+<span class="nc" id="L495">            throw new IllegalArgumentException(&quot;result must have length 3&quot;);</span>
+        }
+<span class="fc bfc" id="L497" title="All 4 branches covered.">        if (jacobianQ != null &amp;&amp; (jacobianQ.getRows() != Quaternion.N_ANGLES</span>
+<span class="pc bpc" id="L498" title="1 of 2 branches missed.">                || jacobianQ.getColumns() != Quaternion.N_PARAMS)) {</span>
+<span class="fc" id="L499">            throw new IllegalArgumentException(&quot;jacobian wrt of quaternion must be 3x4&quot;);</span>
+        }
+<span class="fc bfc" id="L501" title="All 4 branches covered.">        if (jacobianP != null &amp;&amp; (jacobianP.getRows() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS</span>
+<span class="pc bpc" id="L502" title="1 of 2 branches missed.">                || jacobianP.getColumns() != MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS)) {</span>
+<span class="fc" id="L503">            throw new IllegalArgumentException(&quot;jacobian wrt of point must be 3x3&quot;);</span>
+        }
+
+        try {
+<span class="fc" id="L507">            final var rt = new Matrix(MatrixRotation3D.ROTATION3D_INHOM_MATRIX_ROWS,</span>
+                    MatrixRotation3D.ROTATION3D_INHOM_MATRIX_COLS);
+<span class="fc" id="L509">            q.toMatrixRotation(rt);</span>
+            // transpose rotation
+            // the transpose of rotation is its inverse
+<span class="fc" id="L512">            rt.transpose();</span>
+
+<span class="fc bfc" id="L514" title="All 2 branches covered.">            if (jacobianP != null) {</span>
+<span class="fc" id="L515">                jacobianP.copyFrom(rt);</span>
+            }
+            // multiply rotation matrix by point
+<span class="fc" id="L518">            final var p = Matrix.newFromArray(point, true);</span>
+<span class="fc" id="L519">            rt.multiply(p);</span>
+
+            // copy to result
+<span class="fc" id="L522">            rt.getSubmatrixAsArray(0, 0, rt.getRows() - 1,</span>
+<span class="fc" id="L523">                    rt.getColumns() - 1, result);</span>
+
+<span class="fc bfc" id="L525" title="All 2 branches covered.">            if (jacobianQ != null) {</span>
+<span class="fc" id="L526">                final var a = q.getA();</span>
+<span class="fc" id="L527">                final var b = q.getB();</span>
+<span class="fc" id="L528">                final var c = q.getC();</span>
+<span class="fc" id="L529">                final var d = q.getD();</span>
+
+<span class="fc" id="L531">                final var x = p.getElementAtIndex(0);</span>
+<span class="fc" id="L532">                final var y = p.getElementAtIndex(1);</span>
+<span class="fc" id="L533">                final var z = p.getElementAtIndex(2);</span>
+
+<span class="fc" id="L535">                final var axdycz = 2.0 * (a * x + d * y - c * z);</span>
+<span class="fc" id="L536">                final var bxcydz = 2.0 * (b * x + c * y + d * z);</span>
+<span class="fc" id="L537">                final var cxbyaz = 2.0 * (c * x - b * y + a * z);</span>
+<span class="fc" id="L538">                final var dxaybz = 2.0 * (d * x - a * y - b * z);</span>
+
+<span class="fc" id="L540">                jacobianQ.setElementAt(0, 0, axdycz);</span>
+<span class="fc" id="L541">                jacobianQ.setElementAt(1, 0, -dxaybz);</span>
+<span class="fc" id="L542">                jacobianQ.setElementAt(2, 0, cxbyaz);</span>
+
+<span class="fc" id="L544">                jacobianQ.setElementAt(0, 1, bxcydz);</span>
+<span class="fc" id="L545">                jacobianQ.setElementAt(1, 1, cxbyaz);</span>
+<span class="fc" id="L546">                jacobianQ.setElementAt(2, 1, dxaybz);</span>
+
+<span class="fc" id="L548">                jacobianQ.setElementAt(0, 2, -cxbyaz);</span>
+<span class="fc" id="L549">                jacobianQ.setElementAt(1, 2, bxcydz);</span>
+<span class="fc" id="L550">                jacobianQ.setElementAt(2, 2, axdycz);</span>
+
+<span class="fc" id="L552">                jacobianQ.setElementAt(0, 3, -dxaybz);</span>
+<span class="fc" id="L553">                jacobianQ.setElementAt(1, 3, -axdycz);</span>
+<span class="fc" id="L554">                jacobianQ.setElementAt(2, 3, bxcydz);</span>
+            }
+<span class="nc" id="L556">        } catch (final WrongSizeException ignore) {</span>
+            // never thrown
+<span class="fc" id="L558">        }</span>
+<span class="fc" id="L559">    }</span>
+
+    /**
+     * Rotates a point by the inverse rotation obtained from a quaternion.
+     *
+     * @param q         quaternion containing rotation information.
+     * @param point     array containing inhomogeneous 3D coordinates of a point to
+     *                  be rotated.
+     * @param jacobianQ jacobian wrt of quaternion. Must be 3x4.
+     * @param jacobianP jacobian wrt of point. Must be 3x3.
+     * @return result of rotation.
+     * @throws IllegalArgumentException if provided arrays of points doesn't
+     *                                  have length 3, or if jacobian of quaternions is not 3x4 (if provided), or
+     *                                  if jacobian of point is not 3x3 (if provided).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rtp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static double[] transposedRotationMatrixTimesVector(
+            final Quaternion q, final double[] point, final Matrix jacobianQ, final Matrix jacobianP) {
+<span class="fc" id="L577">        final var result = new double[Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH];</span>
+<span class="fc" id="L578">        transposedRotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);</span>
+<span class="fc" id="L579">        return result;</span>
+    }
+
+    /**
+     * Rotates a point by the inverse rotation obtained from a quaternion.
+     *
+     * @param q      quaternion containing rotation information.
+     * @param point  array containing inhomogeneous 3D coordinates of a point to
+     *               be rotated.
+     * @param result result of rotation.
+     * @throws IllegalArgumentException if provided arrays of points doesn't
+     *                                  have length 3.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rtp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void transposedRotationMatrixTimesVector(
+            final Quaternion q, final double[] point, final double[] result) {
+<span class="fc" id="L595">        transposedRotationMatrixTimesVector(q, point, result, null, null);</span>
+<span class="fc" id="L596">    }</span>
+
+    /**
+     * Rotates a point by the inverse rotation obtained from a quaternion.
+     *
+     * @param q     quaternion containing rotation information.
+     * @param point array containing inhomogeneous 3D coordinates of a point to
+     *              be rotated.
+     * @return array containing result of rotation as 3D inhomogeneous
+     * coordinates.
+     * @throws IllegalArgumentException if provided point array doesn't have
+     *                                  length 3.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rtp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static double[] transposedRotationMatrixTimesVector(final Quaternion q, final double[] point) {
+<span class="fc" id="L611">        return transposedRotationMatrixTimesVector(q, point, null, null);</span>
+    }
+
+    /**
+     * Rotates a 3D point by the inverse rotation obtained from a quaternion.
+     *
+     * @param q         quaternion containing rotation information.
+     * @param point     array containing inhomogeneous 3D coordinates of a point to
+     *                  be rotated.
+     * @param result    result of rotation.
+     * @param jacobianQ jacobian wrt of quaternion. Must be 3x4.
+     * @param jacobianP jacobian wrt of point. Must be 3x3.
+     * @throws IllegalArgumentException if jacobian of quaternions is not 3x4
+     *                                  (if provided), or if jacobian of point is not 3x3 (if provided).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rtp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void transposedRotationMatrixTimesVector(
+            final Quaternion q, final Point3D point, final Point3D result, final Matrix jacobianQ,
+            final Matrix jacobianP) {
+<span class="fc" id="L630">        final var coords = new double[]{point.getInhomX(), point.getInhomY(), point.getInhomZ()};</span>
+<span class="fc" id="L631">        final var rp = transposedRotationMatrixTimesVector(q, coords, jacobianQ, jacobianP);</span>
+<span class="fc" id="L632">        result.setInhomogeneousCoordinates(rp[0], rp[1], rp[2]);</span>
+<span class="fc" id="L633">    }</span>
+
+    /**
+     * Rotates a 3D point by the inverse rotation obtained from a quaternion.
+     *
+     * @param q         quaternion containing rotation information.
+     * @param point     array containing inhomogeneous 3D coordinates of a point to
+     *                  be rotated.
+     * @param jacobianQ jacobian wrt of quaternion. Must be 3x4.
+     * @param jacobianP jacobian wrt of point. Must be 3x3.
+     * @return result of rotation.
+     * @throws IllegalArgumentException if jacobian of quaternions is not 3x4
+     *                                  (if provided), or if jacobian of point is not 3x3 (if provided).
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rtp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static Point3D transposedRotationMatrixTimesVector(
+            final Quaternion q, final Point3D point, final Matrix jacobianQ, final Matrix jacobianP) {
+<span class="fc" id="L650">        final var result = Point3D.create();</span>
+<span class="fc" id="L651">        transposedRotationMatrixTimesVector(q, point, result, jacobianQ, jacobianP);</span>
+<span class="fc" id="L652">        return result;</span>
+    }
+
+    /**
+     * Rotates a 3D point by the inverse rotation obtained from a quaternion.
+     *
+     * @param q      quaternion containing rotation information.
+     * @param point  3D point to be rotated.
+     * @param result result of rotation.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rtp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void transposedRotationMatrixTimesVector(
+            final Quaternion q, final Point3D point, final Point3D result) {
+<span class="fc" id="L665">        transposedRotationMatrixTimesVector(q, point, result, null, null);</span>
+<span class="fc" id="L666">    }</span>
+
+    /**
+     * Rotates a 3D point by the inverse rotation obtained from a quaternion.
+     *
+     * @param q     quaternion containing rotation information.
+     * @param point 3D point to be rotated.
+     * @return result of rotation.
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;Rtp.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static Point3D transposedRotationMatrixTimesVector(final Quaternion q, final Point3D point) {
+<span class="fc" id="L677">        return transposedRotationMatrixTimesVector(q, point, null, null);</span>
+    }
+
+    /**
+     * Rotation to convert camera body to camera sensor.
+     *
+     * @param result instance where resulting rotation will be stored.
+     */
+    public static void cameraBodyToCameraSensorRotation(final MatrixRotation3D result) {
+<span class="fc" id="L686">        Quaternion.eulerToMatrixRotation(-Math.PI / 2.0, 0, -Math.PI / 2.0, result);</span>
+<span class="fc" id="L687">    }</span>
+
+    /**
+     * Rotation to convert camera body to camera sensor.
+     *
+     * @return a new instance containing rotation.
+     */
+    public static MatrixRotation3D cameraBodyToCameraSensorRotation() {
+<span class="fc" id="L695">        final var result = new MatrixRotation3D();</span>
+<span class="fc" id="L696">        cameraBodyToCameraSensorRotation(result);</span>
+<span class="fc" id="L697">        return result;</span>
+    }
+
+    /**
+     * Transform quaternion Gaussian to Euler Gaussian.
+     * The Gaussian quaternion is provided as N(q, Q) where q is the quaternion
+     * mean and Q is the quaternion covariance, and returns an Euler angles
+     * Gaussian as N(e,E) where e is the Euler angles mean and E is the Euler
+     * angles covariance.
+     *
+     * @param q                    mean quaternion to be transformed.
+     * @param quaternionCovariance quaternion covariance to be transformed.
+     * @param angles               obtained mean Euler angles.
+     * @param anglesCovariance     obtained Euler covariance.
+     * @throws IllegalArgumentException if provided quaternion covariance is
+     *                                  not 4x4
+     * @see &lt;a href=&quot;https://github.com/joansola/slamtb&quot;&gt;q2eG.m at https://github.com/joansola/slamtb&lt;/a&gt;
+     */
+    public static void quaternionToEulerGaussian(
+            final Quaternion q, final Matrix quaternionCovariance, final double[] angles,
+            final Matrix anglesCovariance) {
+<span class="pc bpc" id="L718" title="1 of 2 branches missed.">        if (quaternionCovariance.getRows() != Quaternion.N_PARAMS</span>
+<span class="pc bpc" id="L719" title="1 of 2 branches missed.">                || quaternionCovariance.getColumns() != Quaternion.N_PARAMS) {</span>
+<span class="nc" id="L720">            throw new IllegalArgumentException(&quot;quaternion covariance must be 4x4&quot;);</span>
+        }
+
+        try {
+<span class="fc" id="L724">            final var eq = new Matrix(Quaternion.N_ANGLES, Quaternion.N_PARAMS);</span>
+<span class="fc" id="L725">            q.toEulerAngles(angles, eq);</span>
+
+            // jacobian = eq * Q * eq', where is provided covariance
+<span class="fc" id="L728">            anglesCovariance.copyFrom(eq);</span>
+<span class="fc" id="L729">            anglesCovariance.multiply(quaternionCovariance);</span>
+<span class="fc" id="L730">            anglesCovariance.multiply(eq.transposeAndReturnNew());</span>
+<span class="nc" id="L731">        } catch (final WrongSizeException ignore) {</span>
+            // never thrown
+<span class="fc" id="L733">        }</span>
+<span class="fc" id="L734">    }</span>
+
+    /**
+     * Obtains the skew symmetric matrix from angular rates vector.
+     *
+     * @param angularRates a vector containing the 3 components (x,y,z) of
+     *                     angular rates (rad/s).
+     * @param result       a skew symmetric matrix.
+     * @throws IllegalArgumentException if provided array of angular rates does
+     *                                  not have length 3 or if provided result matrix is not 4x4.
+     */
+    public static void angularRatesToSkew(final double[] angularRates, final Matrix result) {
+<span class="fc bfc" id="L746" title="All 2 branches covered.">        if (angularRates.length != Quaternion.N_ANGLES) {</span>
+<span class="fc" id="L747">            throw new IllegalArgumentException(&quot;angular rates must have length 3&quot;);</span>
+        }
+<span class="pc bpc" id="L749" title="1 of 4 branches missed.">        if (result.getRows() != Quaternion.N_PARAMS || result.getColumns() != Quaternion.N_PARAMS) {</span>
+<span class="fc" id="L750">            throw new IllegalArgumentException(&quot;result matrix must be 4x4&quot;);</span>
+        }
+
+<span class="fc" id="L753">        result.setElementAt(0, 0, 0.0);</span>
+<span class="fc" id="L754">        result.setElementAt(1, 0, angularRates[0]);</span>
+<span class="fc" id="L755">        result.setElementAt(2, 0, angularRates[1]);</span>
+<span class="fc" id="L756">        result.setElementAt(3, 0, angularRates[2]);</span>
+
+<span class="fc" id="L758">        result.setElementAt(0, 1, -angularRates[0]);</span>
+<span class="fc" id="L759">        result.setElementAt(1, 1, 0.0);</span>
+<span class="fc" id="L760">        result.setElementAt(2, 1, -angularRates[2]);</span>
+<span class="fc" id="L761">        result.setElementAt(3, 1, angularRates[1]);</span>
+
+<span class="fc" id="L763">        result.setElementAt(0, 2, -angularRates[1]);</span>
+<span class="fc" id="L764">        result.setElementAt(1, 2, angularRates[2]);</span>
+<span class="fc" id="L765">        result.setElementAt(2, 2, 0.0);</span>
+<span class="fc" id="L766">        result.setElementAt(3, 2, -angularRates[0]);</span>
+
+<span class="fc" id="L768">        result.setElementAt(0, 3, -angularRates[2]);</span>
+<span class="fc" id="L769">        result.setElementAt(1, 3, -angularRates[1]);</span>
+<span class="fc" id="L770">        result.setElementAt(2, 3, angularRates[0]);</span>
+<span class="fc" id="L771">        result.setElementAt(3, 3, 0.0);</span>
+<span class="fc" id="L772">    }</span>
+
+    /**
+     * Obtains the skew symmetric matrix from angular rates vector.
+     *
+     * @param angularRates a vector containing the 3 components (x,y,z) of
+     *                     angular rates (rad/s).
+     * @return a new instance containing the skew symmetric matrix
+     * @throws IllegalArgumentException if provided array of angular rates does
+     *                                  not have length 3.
+     */
+    public static Matrix angularRatesToSkew(final double[] angularRates) {
+<span class="fc" id="L784">        Matrix result = null;</span>
+        try {
+<span class="fc" id="L786">            result = new Matrix(Quaternion.N_PARAMS, Quaternion.N_PARAMS);</span>
+<span class="fc" id="L787">            angularRatesToSkew(angularRates, result);</span>
+<span class="nc" id="L788">        } catch (final WrongSizeException ignore) {</span>
+            // never thrown
+<span class="fc" id="L790">        }</span>
+<span class="fc" id="L791">        return result;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

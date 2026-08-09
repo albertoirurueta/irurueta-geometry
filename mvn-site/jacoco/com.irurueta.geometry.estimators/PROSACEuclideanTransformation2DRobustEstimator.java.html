@@ -1,0 +1,749 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROSACEuclideanTransformation2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PROSACEuclideanTransformation2DRobustEstimator.java</span></div><h1>PROSACEuclideanTransformation2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.EuclideanTransformation2D;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.numerical.robust.PROSACRobustEstimator;
+import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best Euclidean 2D transformation for provided collections of
+ * matched 2D points using PROSAC algorithm.
+ */
+public class PROSACEuclideanTransformation2DRobustEstimator extends EuclideanTransformation2DRobustEstimator {
+
+    /**
+     * Constant defining default threshold to determine whether points are
+     * inliers or not.
+     * By default, 1.0 is considered a good value for cases where measures are
+     * done on pixels, since typically the minimum resolution is 1 pixel.
+     */
+    public static final double DEFAULT_THRESHOLD = 1.0;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Indicates that by default inliers will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_INLIERS = false;
+
+    /**
+     * Indicates that by default residuals will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_RESIDUALS = false;
+
+    /**
+     * Threshold to determine whether points are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance) a possible
+     * solution has on a matched pair of points.
+     */
+    private double threshold;
+
+    /**
+     * Quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     */
+    private double[] qualityScores;
+
+    /**
+     * Indicates whether inliers must be computed and kept.
+     */
+    private boolean computeAndKeepInliers;
+
+    /**
+     * Indicates whether residuals must be computed and kept.
+     */
+    private boolean computeAndKeepResiduals;
+
+    /**
+     * Constructor.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator() {
+<span class="fc" id="L88">        super();</span>
+<span class="fc" id="L89">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L90">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L91">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L92">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L110">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L111">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L112">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L113">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L124">        super(listener);</span>
+<span class="fc" id="L125">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L126">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L127">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     stars, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L149">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L150">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L151">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L152">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L153">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(final double[] qualityScores) {
+<span class="fc" id="L164">        super();</span>
+<span class="fc" id="L165">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L166">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L167">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L168">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L169">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      Euclidean 2D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      Euclidean 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points and array
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  MINIMUM_SIZE.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L190">        super(inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L192" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L193">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L196">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L197">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L198">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L199">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L200">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
+<span class="fc" id="L214">        super(listener);</span>
+<span class="fc" id="L215">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L216">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L217">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L218">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L219">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      stars, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 2D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L242">        super(listener, inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L244" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L245">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L248">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L249">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L250">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L251">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L252">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L260">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L261">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L262">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L263">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L264">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L283">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L284">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L285">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L286">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L287">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L298">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L299">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L300">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L301">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L302">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               stars, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L324">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L325">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L326">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L327">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L328">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L341">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L342">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L343">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L344">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L345">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L346">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points and array
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  MINIMUM_SIZE.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L369">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+
+<span class="fc bfc" id="L371" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L372">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L375">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L376">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L377">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L378">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L379">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener,
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L395">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L396">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L397">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L398">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L399">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L400">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               stars, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               affine 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               affine 2D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACEuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L424">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+
+<span class="fc bfc" id="L426" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L427">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L430">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L431">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L432">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L433">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L434">    }</span>
+
+    /**
+     * Returns threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @return threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L446">        return threshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @param threshold threshold to determine whether points are inliers or not
+     *                  when testing possible estimation solutions.
+     * @throws IllegalArgumentException if provided values is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L463" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L464">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L466" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L467">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L469">        this.threshold = threshold;</span>
+<span class="fc" id="L470">    }</span>
+
+    /**
+     * Returns quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @return quality scores corresponding to each pair of matched points.
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L480">        return qualityScores;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    @Override
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc bfc" id="L496" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L497">            throw new LockedException();</span>
+        }
+<span class="fc" id="L499">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L500">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the Euclidean 2D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points and quality
+     * scores) are provided and a minimum of MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L512" title="1 of 6 branches missed.">        return super.isReady() &amp;&amp; qualityScores != null &amp;&amp; qualityScores.length == inputPoints.size();</span>
+    }
+
+    /**
+     * Indicates whether inliers must be computed and kept.
+     *
+     * @return true if inliers must be computed and kept, false if inliers
+     * only need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepInliersEnabled() {
+<span class="fc" id="L522">        return computeAndKeepInliers;</span>
+    }
+
+    /**
+     * Specifies whether inliers must be computed and kept.
+     *
+     * @param computeAndKeepInliers true if inliers must be computed and kept,
+     *                              false if inliers only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
+<span class="pc bpc" id="L533" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L534">            throw new LockedException();</span>
+        }
+<span class="fc" id="L536">        this.computeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L537">    }</span>
+
+    /**
+     * Indicates whether residuals must be computed and kept.
+     *
+     * @return true if residuals must be computed and kept, false if residuals
+     * only need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepResidualsEnabled() {
+<span class="fc" id="L546">        return computeAndKeepResiduals;</span>
+    }
+
+    /**
+     * Specifies whether residuals must be computed and kept.
+     *
+     * @param computeAndKeepResiduals true if residuals must be computed and
+     *                                kept, false if residuals only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
+<span class="pc bpc" id="L557" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L558">            throw new LockedException();</span>
+        }
+<span class="fc" id="L560">        this.computeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L561">    }</span>
+
+    /**
+     * Estimates an Euclidean 2D transformation using a robust estimator and
+     * the best set of matched 2D point correspondences found using the robust
+     * estimator.
+     *
+     * @return an Euclidean 2D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    @Override
+    public EuclideanTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L579" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L580">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L582" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L583">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L586">        final var innerEstimator = new PROSACRobustEstimator&lt;&gt;(</span>
+<span class="fc" id="L587">                new PROSACRobustEstimatorListener&lt;EuclideanTransformation2D&gt;() {</span>
+
+                    // point to be reused when computing residuals
+<span class="fc" id="L590">                    private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+<span class="fc" id="L592">                    private final EuclideanTransformation2DEstimator nonRobustEstimator =</span>
+<span class="fc" id="L593">                            new EuclideanTransformation2DEstimator(isWeakMinimumSizeAllowed());</span>
+
+<span class="fc" id="L595">                    private final List&lt;Point2D&gt; subsetInputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L596">                    private final List&lt;Point2D&gt; subsetOutputPoints = new ArrayList&lt;&gt;();</span>
+
+                    @Override
+                    public double getThreshold() {
+<span class="fc" id="L600">                        return threshold;</span>
+                    }
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L605">                        return inputPoints.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L610">                        return nonRobustEstimator.getMinimumPoints();</span>
+                    }
+
+                    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List&lt;EuclideanTransformation2D&gt; solutions) {
+<span class="fc" id="L617">                        subsetInputPoints.clear();</span>
+<span class="fc" id="L618">                        subsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L619" title="All 2 branches covered.">                        for (final var samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L620">                            subsetInputPoints.add(inputPoints.get(samplesIndex));</span>
+<span class="fc" id="L621">                            subsetOutputPoints.add(outputPoints.get(samplesIndex));</span>
+                        }
+
+                        try {
+<span class="fc" id="L625">                            nonRobustEstimator.setPoints(subsetInputPoints, subsetOutputPoints);</span>
+<span class="fc" id="L626">                            solutions.add(nonRobustEstimator.estimate());</span>
+<span class="nc" id="L627">                        } catch (final Exception e) {</span>
+                            // if points are coincident, no solution is added
+<span class="fc" id="L629">                        }</span>
+<span class="fc" id="L630">                    }</span>
+
+                    @Override
+                    public double computeResidual(final EuclideanTransformation2D currentEstimation, final int i) {
+<span class="fc" id="L634">                        final var inputPoint = inputPoints.get(i);</span>
+<span class="fc" id="L635">                        final var outputPoint = outputPoints.get(i);</span>
+
+                        // transform input point and store result in mTestPoint
+<span class="fc" id="L638">                        currentEstimation.transform(inputPoint, testPoint);</span>
+
+<span class="fc" id="L640">                        return outputPoint.distanceTo(testPoint);</span>
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L645">                        return PROSACEuclideanTransformation2DRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L650" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L651">                            listener.onEstimateStart(PROSACEuclideanTransformation2DRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L653">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L657" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L658">                            listener.onEstimateEnd(PROSACEuclideanTransformation2DRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L660">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L665" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L666">                            listener.onEstimateNextIteration(</span>
+                                    PROSACEuclideanTransformation2DRobustEstimator.this, iteration);
+                        }
+<span class="fc" id="L669">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;EuclideanTransformation2D&gt; estimator, final float progress) {
+<span class="pc bpc" id="L674" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L675">                            listener.onEstimateProgressChange(</span>
+                                    PROSACEuclideanTransformation2DRobustEstimator.this, progress);
+                        }
+<span class="fc" id="L678">                    }</span>
+
+                    @Override
+                    public double[] getQualityScores() {
+<span class="fc" id="L682">                        return qualityScores;</span>
+                    }
+                });
+
+        try {
+<span class="fc" id="L687">            locked = true;</span>
+<span class="fc" id="L688">            inliersData = null;</span>
+<span class="pc bpc" id="L689" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(computeAndKeepInliers || refineResult);</span>
+<span class="pc bpc" id="L690" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(computeAndKeepResiduals || refineResult);</span>
+<span class="fc" id="L691">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L692">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L693">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L694">            final var transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L695">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L696">            return attemptRefine(transformation);</span>
+<span class="nc" id="L697">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L698">            throw new LockedException(e);</span>
+<span class="nc" id="L699">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L700">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L702">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L713">        return RobustEstimatorMethod.PROSAC;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L729">        return threshold;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * This method is used internally and does not check whether instance is
+     * locked or not.
+     *
+     * @param qualityScores quality scores to be set.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE.
+     */
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L742" title="All 2 branches covered.">        if (qualityScores.length &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L743">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L746">        this.qualityScores = qualityScores;</span>
+<span class="fc" id="L747">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

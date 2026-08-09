@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LMedSConicRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">LMedSConicRobustEstimator.java</span></div><h1>LMedSConicRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoincidentPointsException;
+import com.irurueta.geometry.Conic;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.numerical.robust.LMedSRobustEstimator;
+import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best conic for provided collection of 2D points using LMedS
+ * algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class LMedSConicRobustEstimator extends ConicRobustEstimator {
+
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1e-9;
+
+    /**
+     * Minimum allowed stop threshold value.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    private double stopThreshold;
+
+    /**
+     * Constructor.
+     */
+    public LMedSConicRobustEstimator() {
+<span class="fc" id="L81">        super();</span>
+<span class="fc" id="L82">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L83">    }</span>
+
+    /**
+     * Constructor with points.
+     *
+     * @param points 2D points to estimate a conic.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public LMedSConicRobustEstimator(final List&lt;Point2D&gt; points) {
+<span class="fc" id="L93">        super(points);</span>
+<span class="fc" id="L94">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L95">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public LMedSConicRobustEstimator(final ConicRobustEstimatorListener listener) {
+<span class="fc" id="L104">        super(listener);</span>
+<span class="fc" id="L105">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L106">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points   2D points to estimate a conic.
+     * @throws IllegalArgumentException if provided list of points don't have a
+     *                                  size greater or equal than MINIMUM_SIZE.
+     */
+    public LMedSConicRobustEstimator(final ConicRobustEstimatorListener listener, final List&lt;Point2D&gt; points) {
+<span class="fc" id="L118">        super(listener, points);</span>
+<span class="fc" id="L119">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L120">    }</span>
+
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L142">        return stopThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L168" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L169">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L171" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L172">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L175">        this.stopThreshold = stopThreshold;</span>
+<span class="fc" id="L176">    }</span>
+
+    /**
+     * Estimates a conic using a robust estimator and the best set of 2D points
+     * that fit into the locus of the estimated conic found using the robust
+     * estimator.
+     *
+     * @return a conic.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public Conic estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L194">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L197">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L200">        final var innerEstimator = new LMedSRobustEstimator&lt;&gt;(new LMedSRobustEstimatorListener&lt;Conic&gt;() {</span>
+
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L204">                return points.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L209">                return ConicRobustEstimator.MINIMUM_SIZE;</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List&lt;Conic&gt; solutions) {
+<span class="fc" id="L214">                final var point1 = points.get(samplesIndices[0]);</span>
+<span class="fc" id="L215">                final var point2 = points.get(samplesIndices[1]);</span>
+<span class="fc" id="L216">                final var point3 = points.get(samplesIndices[2]);</span>
+<span class="fc" id="L217">                final var point4 = points.get(samplesIndices[3]);</span>
+<span class="fc" id="L218">                final var point5 = points.get(samplesIndices[4]);</span>
+
+                try {
+<span class="fc" id="L221">                    final var conic = new Conic(point1, point2, point3, point4, point5);</span>
+<span class="fc" id="L222">                    solutions.add(conic);</span>
+<span class="nc" id="L223">                } catch (final CoincidentPointsException e) {</span>
+                    // if points are coincident, no solution is added
+<span class="fc" id="L225">                }</span>
+<span class="fc" id="L226">            }</span>
+
+            @Override
+            public double computeResidual(final Conic currentEstimation, final int i) {
+<span class="fc" id="L230">                return residual(currentEstimation, points.get(i));</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L235">                return LMedSConicRobustEstimator.this.isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(final RobustEstimator&lt;Conic&gt; estimator) {
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L241">                    listener.onEstimateStart(LMedSConicRobustEstimator.this);</span>
+                }
+<span class="fc" id="L243">            }</span>
+
+            @Override
+            public void onEstimateEnd(final RobustEstimator&lt;Conic&gt; estimator) {
+<span class="pc bpc" id="L247" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L248">                    listener.onEstimateEnd(LMedSConicRobustEstimator.this);</span>
+                }
+<span class="fc" id="L250">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator&lt;Conic&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L255">                    listener.onEstimateNextIteration(LMedSConicRobustEstimator.this, iteration);</span>
+                }
+<span class="fc" id="L257">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator&lt;Conic&gt; estimator, final float progress) {
+<span class="pc bpc" id="L261" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L262">                    listener.onEstimateProgressChange(LMedSConicRobustEstimator.this, progress);</span>
+                }
+<span class="fc" id="L264">            }</span>
+        });
+
+        try {
+<span class="fc" id="L268">            locked = true;</span>
+<span class="fc" id="L269">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L270">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L271">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L272">            innerEstimator.setStopThreshold(stopThreshold);</span>
+<span class="fc" id="L273">            return innerEstimator.estimate();</span>
+<span class="nc" id="L274">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L275">            throw new LockedException(e);</span>
+<span class="nc" id="L276">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L277">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L279">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L290">        return RobustEstimatorMethod.LMEDS;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.java</span></div><h1>MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoincidentPointsException;
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.ProjectiveTransformation2D;
+import com.irurueta.numerical.robust.MSACRobustEstimator;
+import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best projective 2D transformation for provided collections of matched
+ * 2D points using MSAC algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
+        extends PointCorrespondenceProjectiveTransformation2DRobustEstimator {
+
+    /**
+     * Constant defining default threshold to determine whether points are
+     * inliers or not.
+     * By default, 1.0 is considered a good value for cases where measures are
+     * done on pixels, since typically the minimum resolution is 1 pixel.
+     */
+    public static final double DEFAULT_THRESHOLD = 1.0;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to determine whether points are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance) a possible
+     * solution has on a matched pair of points.
+     */
+    private double threshold;
+
+    /**
+     * Constructor.
+     */
+    public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator() {
+<span class="fc" id="L64">        super();</span>
+<span class="fc" id="L65">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L66">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a projective 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     projective 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     projective 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L84">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L85">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+            final ProjectiveTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L96">        super(listener);</span>
+<span class="fc" id="L97">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * projective 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     stars, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     projective 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     projective 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+            final ProjectiveTransformation2DRobustEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L119">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L120">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Returns threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @return threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L133">        return threshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @param threshold threshold to determine whether points are inliers or not.
+     * @throws IllegalArgumentException if provided values is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L150">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L153">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L155">        this.threshold = threshold;</span>
+<span class="fc" id="L156">    }</span>
+
+    /**
+     * Estimates a projective 2D transformation using a robust estimator and
+     * the best set of matched 2D point correspondences found using the robust
+     * estimator.
+     *
+     * @return a projective 2D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public ProjectiveTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L174">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L177">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L180">        final var innerEstimator = new MSACRobustEstimator&lt;&gt;(</span>
+<span class="fc" id="L181">                new MSACRobustEstimatorListener&lt;ProjectiveTransformation2D&gt;() {</span>
+
+                    // point to be reused when computing residuals
+<span class="fc" id="L184">                    private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+                    @Override
+                    public double getThreshold() {
+<span class="fc" id="L188">                        return threshold;</span>
+                    }
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L193">                        return inputPoints.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L198">                        return ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE;</span>
+                    }
+
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List&lt;ProjectiveTransformation2D&gt; solutions) {
+<span class="fc" id="L204">                        final var inputPoint1 = inputPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L205">                        final var inputPoint2 = inputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L206">                        final var inputPoint3 = inputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L207">                        final var inputPoint4 = inputPoints.get(samplesIndices[3]);</span>
+
+<span class="fc" id="L209">                        final var outputPoint1 = outputPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L210">                        final var outputPoint2 = outputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L211">                        final var outputPoint3 = outputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L212">                        final var outputPoint4 = outputPoints.get(samplesIndices[3]);</span>
+
+                        try {
+<span class="fc" id="L215">                            final var transformation = new ProjectiveTransformation2D(inputPoint1, inputPoint2,</span>
+                                    inputPoint3, inputPoint4, outputPoint1, outputPoint2, outputPoint3, outputPoint4);
+<span class="fc" id="L217">                            solutions.add(transformation);</span>
+<span class="nc" id="L218">                        } catch (final CoincidentPointsException e) {</span>
+                            // if points are coincident, no solution is added
+<span class="fc" id="L220">                        }</span>
+<span class="fc" id="L221">                    }</span>
+
+                    @Override
+                    public double computeResidual(final ProjectiveTransformation2D currentEstimation, final int i) {
+<span class="fc" id="L225">                        final var inputPoint = inputPoints.get(i);</span>
+<span class="fc" id="L226">                        final var outputPoint = outputPoints.get(i);</span>
+
+                        // transform input point and store result in mTestPoint
+<span class="fc" id="L229">                        currentEstimation.transform(inputPoint, testPoint);</span>
+
+<span class="fc" id="L231">                        return outputPoint.distanceTo(testPoint);</span>
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L236">                        return MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L241" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L242">                            listener.onEstimateStart(</span>
+                                    MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
+                        }
+<span class="fc" id="L245">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L249" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L250">                            listener.onEstimateEnd(</span>
+                                    MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
+                        }
+<span class="fc" id="L253">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L258" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L259">                            listener.onEstimateNextIteration(</span>
+                                    MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this,
+                                    iteration);
+                        }
+<span class="fc" id="L263">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator, final float progress) {
+<span class="pc bpc" id="L268" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L269">                            listener.onEstimateProgressChange(</span>
+                                    MSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this,
+                                    progress);
+                        }
+<span class="fc" id="L273">                    }</span>
+                });
+
+        try {
+<span class="fc" id="L277">            locked = true;</span>
+<span class="fc" id="L278">            inliersData = null;</span>
+<span class="fc" id="L279">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L280">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L281">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L282">            final var transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L283">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L284">            return attemptRefine(transformation);</span>
+<span class="nc" id="L285">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L286">            throw new LockedException(e);</span>
+<span class="nc" id="L287">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L288">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L290">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L301">        return RobustEstimatorMethod.MSAC;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L317">        return threshold;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
