@@ -1,4 +1,6 @@
 = Irurueta Geometry
+:description: Java library for projective geometry and camera geometry: points, lines, planes, conics, quadrics, transformations, pinhole cameras, and robust RANSAC/LMedS/MSAC/PROSAC/PROMedS estimators.
+:keywords: projective geometry, homogeneous coordinates, pinhole camera, Java geometry library, robust estimators, RANSAC, computer vision, 3D reconstruction
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 

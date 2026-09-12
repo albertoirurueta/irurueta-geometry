@@ -1,4 +1,6 @@
 = Point, Line and Plane Estimators
+:description: Robust RANSAC/LMedS/MSAC/PROSAC/PROMedS estimators for fitting a Point2D/Point3D, Line2D or Plane to noisy lines, planes or points, and how they reuse the join/meet math and signed-distance residuals.
+:keywords: Point2D estimator, Point3D estimator, Line2D estimator, Plane estimator, RANSAC, robust estimation, join meet
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 
@@ -79,12 +81,13 @@ protected double residual(final Point2D p, final Line2D line) {
 }
 ----
 
-i.e. latexmath:[|d(m, l)| = \left|\dfrac{m^T \cdot l}{\sqrt{l_1^2 + l_2^2}}\right|] -- the same
-`Line2D.signedDistance` formula xref:points-lines-planes.adoc[] derives from the PhD thesis's Proof 1.1.
+i.e. stem:[|d(\mathbf{m}, \mathbf{l})| = \left|\dfrac{\mathbf{m}^T \cdot \mathbf{l}}{\sqrt{l_1^2 + l_2^2}}\right|] -- the same
+`Line2D.signedDistance` formula xref:points-lines-planes.adoc[] derives from the PhD thesis's
+xref:attachment$irurueta-phd-thesis.pdf#page=17[Proof 1.1].
 `Point3DRobustEstimator.residual(Point3D, Plane)` (`Point3DRobustEstimator.java:865-870`) is the 3D analogue,
 `Math.abs(plane.signedDistance(p))`, using `Plane.signedDistance(Point3D)` (`Plane.java:515-525`) -- the same
 "dot product of homogeneous coordinates, normalized by the coefficient norm" pattern one dimension up, applied
-to latexmath:[\Pi^T \cdot M = 0] instead of latexmath:[m^T \cdot l = 0]. So a candidate 2D point's total cost
+to stem:[\boldsymbol{\Pi}^T \cdot \mathbf{M} = 0] instead of stem:[\mathbf{m}^T \cdot \mathbf{l} = 0]. So a candidate 2D point's total cost
 is effectively how far it sits, on average or under a threshold, from *every* sampled line, not just the two it
 was built from -- exactly the outlier-rejection role xref:estimators.adoc#non-robust-vs-robust[] describes.
 
@@ -109,7 +112,7 @@ best 2D line that passes through a collection of 2D points."*
 
 `MINIMUM_SIZE` is 2 (`Line2DRobustEstimator.java:36`). The closed-form step is the join operation
 xref:points-lines-planes.adoc[] derives as the point-line duality's cross product,
-latexmath:[l = m_1 \times m_2]: `RANSACLine2DRobustEstimator.estimatePreliminarSolutions`
+stem:[\mathbf{l} = \mathbf{m}_1 \times \mathbf{m}_2]: `RANSACLine2DRobustEstimator.estimatePreliminarSolutions`
 (`RANSACLine2DRobustEstimator.java:179-189`) draws two points from the minimal sample and constructs
 
 [source,java]
@@ -138,9 +141,11 @@ protected double residual(final Line2D l, final Point2D point) {
 ----
 
 -- literally `Line2D.signedDistance(Point2D)` (`Line2D.java:460`), the exact formula
-xref:points-lines-planes.adoc[] derives via Proof 1.1 of the PhD thesis (projecting latexmath:[m - m'] onto the
+xref:points-lines-planes.adoc[] derives via
+xref:attachment$irurueta-phd-thesis.pdf#page=17[Proof 1.1] of the PhD thesis (projecting stem:[\mathbf{m} - \mathbf{m}'] onto
+the
 line's director vector). This is the cleanest instance of the pattern in this whole page: the non-robust
-algorithm (`l = m1 &#215; m2`) and the residual (`|m^T \cdot l| / \|(l_1,l_2)\|`) are both operations
+algorithm (`l = m1 &#215; m2`) and the residual stem:[(`|\mathbf{m}^T \cdot \mathbf{l}| / \|(l_1,l_2)\|`)] are both operations
 xref:points-lines-planes.adoc[] already fully derives -- `Line2DRobustEstimator` and its five concrete
 subclasses contribute nothing mathematically new, only the sampling/scoring loop from
 xref:estimators.adoc#shared-architecture[].
@@ -188,7 +193,7 @@ protected double residual(final Plane plane, final Point3D point) {
 ----
 
 i.e. `Plane.signedDistance(Point3D)` (`Plane.java:515-525`), the 3D point-plane-duality analogue
-(latexmath:[\Pi^T \cdot M = 0]) of the 2D signed distance xref:points-lines-planes.adoc[] derives in full for
+(stem:[\boldsymbol{\Pi}^T \cdot \mathbf{M} = 0]) of the 2D signed distance xref:points-lines-planes.adoc[] derives in full for
 the point-line case -- the library does not re-derive a separate proof for the plane case in the PhD thesis, but
 the formula (dot product of homogeneous coordinates over the coefficient vector's norm) is structurally
 identical.
@@ -223,7 +228,7 @@ formulas again:
 * **RANSAC/MSAC** need a `threshold` (`DEFAULT_THRESHOLD = 1.0` for every one of the ten concrete classes on
   this page, documented as "1 pixel" for the 2D hierarchies and "1 voxel" for the 3D ones). Fitting a 2D line to
   a real, noisy point cloud with, say, 1-pixel Gaussian localization error and a handful of gross mismatches,
-  a threshold around 1-2 pixels (xref:estimators.adoc#ransac[]'s latexmath:[t^2 = 3.84\sigma^2] for 1
+  a threshold around 1-2 pixels (xref:estimators.adoc#ransac[]'s stem:[t^2 = 3.84\sigma^2] for 1
   degree of freedom) correctly separates inliers from outliers; setting it too tight starts rejecting genuine
   inliers as noise pushes them just past the boundary, too loose lets outliers vote for a biased line.
 * **LMedS** needs no threshold at all -- useful exactly when that per-image-source pixel/voxel noise level is
@@ -251,10 +256,61 @@ xref:points-lines-planes.adoc[] (the join/meet cross products behind `line1.getI
 point3)`, and the signed point-to-line distance behind every `residual()` method above, including its 3D
 point-to-plane analogue) or already derived on xref:estimators.adoc[] (the RANSAC/LMedS/MSAC/PROSAC/PROMedS
 scoring rules and sample-count formula, xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman] chapter 4
-and xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis] &#167;2.5). Everything specific to this page --
+and xref:reference.adoc#bib-phd-report[Irurueta's PhD thesis]
+xref:attachment$irurueta-phd-thesis.pdf#page=80[&#167;2.5]). Everything specific to this page --
 `MINIMUM_SIZE` values, the exact `estimatePreliminarSolutions`/`computeResidual` code, the `Point2DRobustEstimator`
 javadoc typo, `DEFAULT_THRESHOLD` values -- is drawn directly from the library's own source rather than from any
 of the three source PDFs.
+
+[#key-classes]
+== Key classes
+
+The classes exercised by the code examples above, with links to their source and Javadoc:
+
+[cols="1,3",options="header"]
+|===
+|Class |Links
+
+|`Point2DRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/Point2DRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/Point2DRobustEstimator.html[Javadoc]
+
+|`RANSACPoint2DRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACPoint2DRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACPoint2DRobustEstimator.html[Javadoc]
+
+|`Point3DRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/Point3DRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/Point3DRobustEstimator.html[Javadoc]
+
+|`RANSACPoint3DRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACPoint3DRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACPoint3DRobustEstimator.html[Javadoc]
+
+|`Line2DRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/Line2DRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/Line2DRobustEstimator.html[Javadoc]
+
+|`RANSACLine2DRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACLine2DRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACLine2DRobustEstimator.html[Javadoc]
+
+|`PlaneRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/PlaneRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/PlaneRobustEstimator.html[Javadoc]
+
+|`RANSACPlaneRobustEstimator`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/estimators/RANSACPlaneRobustEstimator.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/estimators/RANSACPlaneRobustEstimator.html[Javadoc]
+
+|`Line2D`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Line2D.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Line2D.html[Javadoc]
+
+|`Plane`
+|https://github.com/albertoirurueta/irurueta-geometry/blob/master/src/main/java/com/irurueta/geometry/Plane.java[Source] +
+https://albertoirurueta.github.io/irurueta-geometry/mvn-site/apidocs/com/irurueta/geometry/Plane.html[Javadoc]
+|===
 
 == Related pages
 

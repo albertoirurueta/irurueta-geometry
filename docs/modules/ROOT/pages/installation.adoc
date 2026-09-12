@@ -1,4 +1,6 @@
 = Installation
+:description: How to add irurueta-geometry as a Maven dependency, including the latest release and snapshot versions, and the Java version requirements.
+:keywords: irurueta-geometry installation, Maven dependency, Maven Central, Java library setup, snapshot repository
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
 
