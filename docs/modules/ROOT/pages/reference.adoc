@@ -158,7 +158,8 @@ the exact DLT-for-cameras construction `DLTPointCorrespondencePinholeCameraEstim
 
 [[bib-numerical-recipes]]
 * William H. Press, Saul A. Teukolsky, William T. Vetterling and Brian P. Flannery, _Numerical Recipes: The Art
-  of Scientific Computing_, 3rd edition, Cambridge University Press, 2007. +
+  of Scientific Computing_, 3rd edition, Cambridge University Press, 2007.
+  https://numerical.recipes[numerical.recipes]. +
   Not cited in the source. Used for two distinct purposes:
 +
 [cols="1,3",options="header"]
@@ -186,6 +187,7 @@ DLT-style solve, and the camera DLT solve, respectively.
 [[bib-orourke]]
 * Joseph O'Rourke, _Computational Geometry in C_, 2nd edition, Cambridge University Press, 1998 (chapter 1
   covers polygon triangulation, including ear clipping). +
+  http://www.science.smith.edu/~jorourke/books/compgeom.html[Author's book page]. +
   Not cited in the source; supplied as standard context for the ear-clipping ("Van Gogh") triangulation
   algorithm. Used by: xref:triangles-polygons.adoc[].
 
@@ -205,7 +207,9 @@ DLT-style solve, and the camera DLT solve, respectively.
 
 [[bib-shepperd]]
 * S. W. Shepperd, "Quaternion from Rotation Matrix", _Journal of Guidance and Control_, Vol. 1, No. 3, 1978,
-  pp. 223-224. Implemented by `Quaternion.matrixRotationToQuaternion` (branch selection by matrix trace). Used
+  pp. 223-224. +
+  https://arc.aiaa.org/doi/10.2514/3.55767b[AIAA ARC (DOI)]. +
+  Implemented by `Quaternion.matrixRotationToQuaternion` (branch selection by matrix trace). Used
   by: xref:rotations.adoc[].
 
 [[bib-kabsch]]
@@ -235,6 +239,7 @@ DLT-style solve, and the camera DLT solve, respectively.
 * Martin A. Fischler and Robert C. Bolles, "Random Sample Consensus: A Paradigm for Model Fitting with
   Applications to Image Analysis and Automated Cartography", _Communications of the ACM_, 24(6), 1981,
   pp. 381-395. +
+  https://doi.org/10.1145/358669.358692[ACM Digital Library (DOI)]. +
   The original RANSAC paper. Not cited directly in the library's javadoc, but every `RANSACXxxRobustEstimator`
   class across all twelve estimator hierarchies in `com.irurueta.geometry.estimators` (and the generic
   `com.irurueta.numerical.robust.RANSACRobustEstimator<T>` they delegate to) implements this algorithm. Also
@@ -245,6 +250,7 @@ DLT-style solve, and the camera DLT solve, respectively.
 [[bib-torr-zisserman-mlesac]]
 * Philip H. S. Torr and Andrew Zisserman, "MLESAC: A New Robust Estimator with Application to Estimating Image
   Geometry", _Computer Vision and Image Understanding_, 78(1), 2000, pp. 138-156. +
+  https://www.robots.ox.ac.uk/~vgg/publications/2000/Torr00/torr00.pdf[PDF (robots.ox.ac.uk)]. +
   Formalizes the MSAC (M-estimator SAmple Consensus) robust cost function as an intermediate step towards
   MLESAC. Not cited directly in the library's javadoc; supplied as the source for the name "MSAC" behind every
   `MSACXxxRobustEstimator` class, whose scoring rule matches the un-named robust cost function already given in
@@ -254,6 +260,7 @@ DLT-style solve, and the camera DLT solve, respectively.
 [[bib-chum-matas-prosac]]
 * Ondřej Chum and Jiří Matas, "Matching with PROSAC -- Progressive Sample Consensus", _Proceedings of the 2005
   IEEE Computer Society Conference on Computer Vision and Pattern Recognition (CVPR)_, 2005, pp. 220-226. +
+  https://cmp.felk.cvut.cz/~matas/papers/chum-prosac-cvpr05.pdf[PDF (cmp.felk.cvut.cz)]. +
   The PROSAC paper. Not cited directly in the library's javadoc; postdates
   xref:reference.adoc#bib-hartley-zisserman[Hartley & Zisserman]'s 2nd edition (2004) and is not covered by any
   of the three source PDFs used for this documentation pass -- supplied as external context for every
