@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.irurueta.geometry"},{"l":"com.irurueta.geometry.estimators"},{"l":"com.irurueta.geometry.refiners"}];updateSearchResults();

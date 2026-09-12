@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.java</span></div><h1>MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.MSACRobustEstimator;
+import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best pinhole camera for provided collections of matched 2D/3D
+ * points using MSAC + UPnP algorithms.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class MSACUPnPPointCorrespondencePinholeCameraRobustEstimator extends
+        UPnPPointCorrespondencePinholeCameraRobustEstimator {
+
+    /**
+     * Constant defining default threshold to determine whether points are
+     * inliers or not.
+     * By default, 1.0 is considered a good value for cases where measures are
+     * done on pixels, since typically the minimum resolution is 1 pixel.
+     */
+    public static final double DEFAULT_THRESHOLD = 1.0;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to determine whether points are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance) a possible
+     * solution has on a matched pair of points.
+     */
+    private double threshold;
+
+    /**
+     * Constructor.
+     */
+    public MSACUPnPPointCorrespondencePinholeCameraRobustEstimator() {
+<span class="fc" id="L65">        super();</span>
+<span class="fc" id="L66">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L67">    }</span>
+
+    /**
+     * Constructor with listener.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
+            final PinholeCameraRobustEstimatorListener listener) {
+<span class="fc" id="L77">        super(listener);</span>
+<span class="fc" id="L78">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a pinhole camera.
+     * Points in the lists located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
+     *
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to
+     *                 estimate a pinhole camera.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size (6
+     *                                  correspondences).
+     */
+    public MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L96">        super(points3D, points2D);</span>
+<span class="fc" id="L97">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L98">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * pinhole camera.
+     * Points in the lists located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MIN_NUMBER_OF_POINT_CORRESPONDENCES (6 points).
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points3D list of 3D points used to estimate a pinhole camera.
+     * @param points2D list of corresponding projected 2D points used to
+     *                 estimate a pinhole camera.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than required minimum size (6
+     *                                  correspondences).
+     */
+    public MSACUPnPPointCorrespondencePinholeCameraRobustEstimator(
+            final PinholeCameraRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D) {
+<span class="fc" id="L119">        super(listener, points3D, points2D);</span>
+<span class="fc" id="L120">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L121">    }</span>
+
+    /**
+     * Returns threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on projected 2D points.
+     *
+     * @return threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L133">        return threshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on projected 2D points.
+     *
+     * @param threshold threshold to be set.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L149" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L150">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L152" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L153">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L155">        this.threshold = threshold;</span>
+<span class="fc" id="L156">    }</span>
+
+    /**
+     * Estimates a pinhole camera using a robust estimator and
+     * the best set of matched 2D/3D point correspondences or 2D line/3D plane
+     * correspondences found using the robust estimator.
+     *
+     * @return a pinhole camera.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public PinholeCamera estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L173" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L174">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L177">            throw new NotReadyException();</span>
+        }
+
+        // pinhole camera estimator using UPnP (Uncalibrated Perspective-n-Point) algorithm
+<span class="fc" id="L181">        final var nonRobustEstimator = new UPnPPointCorrespondencePinholeCameraEstimator();</span>
+
+<span class="fc" id="L183">        nonRobustEstimator.setPlanarConfigurationAllowed(planarConfigurationAllowed);</span>
+<span class="fc" id="L184">        nonRobustEstimator.setNullspaceDimension2Allowed(nullspaceDimension2Allowed);</span>
+<span class="fc" id="L185">        nonRobustEstimator.setPlanarThreshold(planarThreshold);</span>
+<span class="fc" id="L186">        nonRobustEstimator.setSkewness(skewness);</span>
+<span class="fc" id="L187">        nonRobustEstimator.setHorizontalPrincipalPoint(horizontalPrincipalPoint);</span>
+<span class="fc" id="L188">        nonRobustEstimator.setVerticalPrincipalPoint(verticalPrincipalPoint);</span>
+
+        // suggestions
+<span class="fc" id="L191">        nonRobustEstimator.setSuggestSkewnessValueEnabled(isSuggestSkewnessValueEnabled());</span>
+<span class="fc" id="L192">        nonRobustEstimator.setSuggestedSkewnessValue(getSuggestedSkewnessValue());</span>
+<span class="fc" id="L193">        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(isSuggestHorizontalFocalLengthEnabled());</span>
+<span class="fc" id="L194">        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(getSuggestedHorizontalFocalLengthValue());</span>
+<span class="fc" id="L195">        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(isSuggestVerticalFocalLengthEnabled());</span>
+<span class="fc" id="L196">        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(getSuggestedVerticalFocalLengthValue());</span>
+<span class="fc" id="L197">        nonRobustEstimator.setSuggestAspectRatioEnabled(isSuggestAspectRatioEnabled());</span>
+<span class="fc" id="L198">        nonRobustEstimator.setSuggestedAspectRatioValue(getSuggestedAspectRatioValue());</span>
+<span class="fc" id="L199">        nonRobustEstimator.setSuggestPrincipalPointEnabled(isSuggestPrincipalPointEnabled());</span>
+<span class="fc" id="L200">        nonRobustEstimator.setSuggestedPrincipalPointValue(getSuggestedPrincipalPointValue());</span>
+<span class="fc" id="L201">        nonRobustEstimator.setSuggestRotationEnabled(isSuggestRotationEnabled());</span>
+<span class="fc" id="L202">        nonRobustEstimator.setSuggestedRotationValue(getSuggestedRotationValue());</span>
+<span class="fc" id="L203">        nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());</span>
+<span class="fc" id="L204">        nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());</span>
+
+<span class="fc" id="L206">        final var innerEstimator = new MSACRobustEstimator&lt;&gt;(new MSACRobustEstimatorListener&lt;PinholeCamera&gt;() {</span>
+
+            // point to be reused when computing residuals
+<span class="fc" id="L209">            private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+            // 3D points for a subset of samples
+<span class="fc" id="L212">            private final List&lt;Point3D&gt; subset3D = new ArrayList&lt;&gt;();</span>
+
+            // 2D points for a subset of samples
+<span class="fc" id="L215">            private final List&lt;Point2D&gt; subset2D = new ArrayList&lt;&gt;();</span>
+
+            @Override
+            public double getThreshold() {
+<span class="fc" id="L219">                return threshold;</span>
+            }
+
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L224">                return points3D.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L229">                return PointCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_POINT_CORRESPONDENCES;</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List&lt;PinholeCamera&gt; solutions) {
+<span class="fc" id="L234">                subset3D.clear();</span>
+<span class="fc" id="L235">                subset3D.add(points3D.get(samplesIndices[0]));</span>
+<span class="fc" id="L236">                subset3D.add(points3D.get(samplesIndices[1]));</span>
+<span class="fc" id="L237">                subset3D.add(points3D.get(samplesIndices[2]));</span>
+<span class="fc" id="L238">                subset3D.add(points3D.get(samplesIndices[3]));</span>
+<span class="fc" id="L239">                subset3D.add(points3D.get(samplesIndices[4]));</span>
+<span class="fc" id="L240">                subset3D.add(points3D.get(samplesIndices[5]));</span>
+
+<span class="fc" id="L242">                subset2D.clear();</span>
+<span class="fc" id="L243">                subset2D.add(points2D.get(samplesIndices[0]));</span>
+<span class="fc" id="L244">                subset2D.add(points2D.get(samplesIndices[1]));</span>
+<span class="fc" id="L245">                subset2D.add(points2D.get(samplesIndices[2]));</span>
+<span class="fc" id="L246">                subset2D.add(points2D.get(samplesIndices[3]));</span>
+<span class="fc" id="L247">                subset2D.add(points2D.get(samplesIndices[4]));</span>
+<span class="fc" id="L248">                subset2D.add(points2D.get(samplesIndices[5]));</span>
+
+                try {
+<span class="fc" id="L251">                    nonRobustEstimator.setLists(subset3D, subset2D);</span>
+
+<span class="fc" id="L253">                    final var cam = nonRobustEstimator.estimate();</span>
+<span class="fc" id="L254">                    solutions.add(cam);</span>
+<span class="nc" id="L255">                } catch (final Exception e) {</span>
+                    // if points configuration is degenerate, no solution is
+                    // added
+<span class="fc" id="L258">                }</span>
+<span class="fc" id="L259">            }</span>
+
+            @Override
+            public double computeResidual(final PinholeCamera currentEstimation, final int i) {
+                // pick i-th points
+<span class="fc" id="L264">                final var point3D = points3D.get(i);</span>
+<span class="fc" id="L265">                final var point2D = points2D.get(i);</span>
+
+                // project point3D into test point
+<span class="fc" id="L268">                currentEstimation.project(point3D, testPoint);</span>
+
+                // compare test point and 2D point
+<span class="fc" id="L271">                return testPoint.distanceTo(point2D);</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L276">                return MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.this.isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(final RobustEstimator&lt;PinholeCamera&gt; estimator) {
+<span class="pc bpc" id="L281" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L282">                    listener.onEstimateStart(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.this);</span>
+                }
+<span class="fc" id="L284">            }</span>
+
+            @Override
+            public void onEstimateEnd(final RobustEstimator&lt;PinholeCamera&gt; estimator) {
+<span class="pc bpc" id="L288" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L289">                    listener.onEstimateEnd(MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.this);</span>
+                }
+<span class="fc" id="L291">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator&lt;PinholeCamera&gt; estimator, int iteration) {
+<span class="pc bpc" id="L295" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L296">                    listener.onEstimateNextIteration(</span>
+                            MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.this, iteration);
+                }
+<span class="fc" id="L299">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator&lt;PinholeCamera&gt; estimator, float progress) {
+<span class="pc bpc" id="L303" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L304">                    listener.onEstimateProgressChange(</span>
+                            MSACUPnPPointCorrespondencePinholeCameraRobustEstimator.this, progress);
+                }
+<span class="fc" id="L307">            }</span>
+        });
+
+        try {
+<span class="fc" id="L311">            locked = true;</span>
+<span class="fc" id="L312">            inliersData = null;</span>
+<span class="fc" id="L313">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L314">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L315">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L316">            final var result = innerEstimator.estimate();</span>
+<span class="fc" id="L317">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L318">            return attemptRefine(result, nonRobustEstimator.getMaxSuggestionWeight());</span>
+<span class="nc" id="L319">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L320">            throw new LockedException(e);</span>
+<span class="nc" id="L321">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L322">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L324">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L335">        return RobustEstimatorMethod.MSAC;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L351">        return threshold;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

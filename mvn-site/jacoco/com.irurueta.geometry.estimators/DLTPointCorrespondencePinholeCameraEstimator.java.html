@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DLTPointCorrespondencePinholeCameraEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">DLTPointCorrespondencePinholeCameraEstimator.java</span></div><h1>DLTPointCorrespondencePinholeCameraEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.Point3D;
+
+import java.util.List;
+
+/**
+ * This class implements an algorithm to estimate pinhole cameras using the DLT
+ * algorithm and point correspondences.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class DLTPointCorrespondencePinholeCameraEstimator extends PointCorrespondencePinholeCameraEstimator {
+
+    /**
+     * Minimum number of required equations to estimate a pinhole camera.
+     */
+    public static final int MIN_NUMBER_OF_EQUATIONS = 11;
+
+    /**
+     * Indicates if by default an LMSE (Least Mean Square Error) solution is
+     * allowed if more correspondences than the minimum are provided.
+     */
+    public static final boolean DEFAULT_ALLOW_LMSE_SOLUTION = false;
+
+    /**
+     * Indicates if an LMSE (Least Mean Square Error) solution is allowed if
+     * more correspondences than the minimum are provided. If false, the
+     * exceeding correspondences will be ignored and only the 6 first
+     * correspondences will be used.
+     */
+    private boolean allowLMSESolution;
+
+    /**
+     * Constructor.
+     */
+    public DLTPointCorrespondencePinholeCameraEstimator() {
+<span class="fc" id="L56">        super();</span>
+<span class="fc" id="L57">        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L58">    }</span>
+
+    /**
+     * Constructor with listener.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or estimation progress changes.
+     */
+    public DLTPointCorrespondencePinholeCameraEstimator(final PinholeCameraEstimatorListener listener) {
+<span class="fc" id="L67">        super(listener);</span>
+<span class="fc" id="L68">        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points.
+     */
+    public DLTPointCorrespondencePinholeCameraEstimator(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D) throws WrongListSizesException {
+<span class="fc" id="L82">        super(points3D, points2D);</span>
+<span class="fc" id="L83">        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param points3D list of corresponding 3D points.
+     * @param points2D list of corresponding 2D points.
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or estimation progress changes.
+     * @throws IllegalArgumentException if any of the lists are null.
+     * @throws WrongListSizesException  if provided lists of points don't have
+     *                                  the same size and enough points.
+     */
+    public DLTPointCorrespondencePinholeCameraEstimator(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D, final PinholeCameraEstimatorListener listener)
+            throws WrongListSizesException {
+<span class="fc" id="L100">        super(points3D, points2D, listener);</span>
+<span class="fc" id="L101">        allowLMSESolution = DEFAULT_ALLOW_LMSE_SOLUTION;</span>
+<span class="fc" id="L102">    }</span>
+
+    /**
+     * Indicates if an LMSE (Least Mean Square Error) solution is allowed if
+     * more correspondences than the minimum are provided. If false, the
+     * exceeding correspondences will be ignored and only the 6 first
+     * correspondences will be used.
+     *
+     * @return true if LMSE solution is allowed, false otherwise.
+     */
+    public boolean isLMSESolutionAllowed() {
+<span class="fc" id="L113">        return allowLMSESolution;</span>
+    }
+
+    /**
+     * Specifies if an LMSE (Least Mean Square Error) solution is allowed if
+     * more correspondences than the minimum are provided. If false, the
+     * exceeding correspondences will be ignored and only the 6 first
+     * correspondences will be used.
+     *
+     * @param allowed true if LMSE solution is allowed, false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setLMSESolutionAllowed(final boolean allowed) throws LockedException {
+<span class="fc bfc" id="L126" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L127">            throw new LockedException();</span>
+        }
+<span class="fc" id="L129">        allowLMSESolution = allowed;</span>
+<span class="fc" id="L130">    }</span>
+
+    /**
+     * Indicates if this estimator is ready to start the estimation.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L139" title="1 of 4 branches missed.">        return areListsAvailable() &amp;&amp; areValidLists(points3D, points2D);</span>
+    }
+
+    /**
+     * Internal method that actually computes the normalized pinhole camera
+     * internal matrix.
+     * Returned matrix must have norm equal to one and might be estimated using
+     * any convenient algorithm (i.e. DLT or weighted DLT).
+     *
+     * @param points3D list of 3D points. Points might or might not be
+     *                 normalized.
+     * @param points2D list of 2D points. Points might or might not be
+     *                 normalized.
+     * @return matrix of estimated pinhole camera.
+     * @throws PinholeCameraEstimatorException if estimation fails for some
+     *                                         reason (i.e. numerical instability or geometric degeneracy).
+     */
+    @Override
+    protected Matrix internalEstimate(
+            final List&lt;Point3D&gt; points3D, final List&lt;Point2D&gt; points2D) throws PinholeCameraEstimatorException {
+
+        try {
+<span class="fc" id="L161">            final var nPoints = points2D.size();</span>
+
+            final Matrix a;
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">            if (isLMSESolutionAllowed()) {</span>
+                // initialize new matrix to zero when LMSE is enabled
+<span class="nc" id="L166">                a = new Matrix(2 * nPoints, 12);</span>
+            } else {
+                //When LMSE is disabled, initialize new matrix to zero only with
+                //11 equations
+<span class="fc" id="L170">                a = new Matrix(MIN_NUMBER_OF_EQUATIONS, 12);</span>
+            }
+
+<span class="fc" id="L173">            final var iterator2D = points2D.iterator();</span>
+<span class="fc" id="L174">            final var iterator3D = points3D.iterator();</span>
+
+            Point2D point2D;
+            Point3D point3D;
+<span class="fc" id="L178">            var counter = 0;</span>
+            double homImageX;
+            double homImageY;
+            double homImageW;
+            double homWorldX;
+            double homWorldY;
+            double homWorldZ;
+            double homWorldW;
+            double rowNorm;
+<span class="pc bpc" id="L187" title="2 of 4 branches missed.">            while (iterator2D.hasNext() &amp;&amp; iterator3D.hasNext()) {</span>
+<span class="fc" id="L188">                point2D = iterator2D.next();</span>
+<span class="fc" id="L189">                point3D = iterator3D.next();</span>
+
+                // normalize points to increase accuracy
+<span class="fc" id="L192">                point2D.normalize();</span>
+<span class="fc" id="L193">                point3D.normalize();</span>
+
+<span class="fc" id="L195">                homImageX = point2D.getHomX();</span>
+<span class="fc" id="L196">                homImageY = point2D.getHomY();</span>
+<span class="fc" id="L197">                homImageW = point2D.getHomW();</span>
+
+<span class="fc" id="L199">                homWorldX = point3D.getHomX();</span>
+<span class="fc" id="L200">                homWorldY = point3D.getHomY();</span>
+<span class="fc" id="L201">                homWorldZ = point3D.getHomZ();</span>
+<span class="fc" id="L202">                homWorldW = point3D.getHomW();</span>
+
+                // first row (even)
+<span class="fc" id="L205">                a.setElementAt(counter, 0, homImageW * homWorldX);</span>
+<span class="fc" id="L206">                a.setElementAt(counter, 1, homImageW * homWorldY);</span>
+<span class="fc" id="L207">                a.setElementAt(counter, 2, homImageW * homWorldZ);</span>
+<span class="fc" id="L208">                a.setElementAt(counter, 3, homImageW * homWorldW);</span>
+
+                // columns 4, 5, 6, 7 are left with zero values
+
+<span class="fc" id="L212">                a.setElementAt(counter, 8, -homImageX * homWorldX);</span>
+<span class="fc" id="L213">                a.setElementAt(counter, 9, -homImageX * homWorldY);</span>
+<span class="fc" id="L214">                a.setElementAt(counter, 10, -homImageX * homWorldZ);</span>
+<span class="fc" id="L215">                a.setElementAt(counter, 11, -homImageX * homWorldW);</span>
+
+                // normalize row
+<span class="fc" id="L218">                rowNorm = Math.sqrt(Math.pow(a.getElementAt(counter, 0), 2.0)</span>
+<span class="fc" id="L219">                        + Math.pow(a.getElementAt(counter, 1), 2.0)</span>
+<span class="fc" id="L220">                        + Math.pow(a.getElementAt(counter, 2), 2.0)</span>
+<span class="fc" id="L221">                        + Math.pow(a.getElementAt(counter, 3), 2.0)</span>
+<span class="fc" id="L222">                        + Math.pow(a.getElementAt(counter, 8), 2.0)</span>
+<span class="fc" id="L223">                        + Math.pow(a.getElementAt(counter, 9), 2.0)</span>
+<span class="fc" id="L224">                        + Math.pow(a.getElementAt(counter, 10), 2.0)</span>
+<span class="fc" id="L225">                        + Math.pow(a.getElementAt(counter, 11), 2.0));</span>
+
+<span class="fc" id="L227">                a.setElementAt(counter, 0, a.getElementAt(counter, 0) / rowNorm);</span>
+<span class="fc" id="L228">                a.setElementAt(counter, 1, a.getElementAt(counter, 1) / rowNorm);</span>
+<span class="fc" id="L229">                a.setElementAt(counter, 2, a.getElementAt(counter, 2) / rowNorm);</span>
+<span class="fc" id="L230">                a.setElementAt(counter, 3, a.getElementAt(counter, 3) / rowNorm);</span>
+<span class="fc" id="L231">                a.setElementAt(counter, 8, a.getElementAt(counter, 8) / rowNorm);</span>
+<span class="fc" id="L232">                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / rowNorm);</span>
+<span class="fc" id="L233">                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / rowNorm);</span>
+<span class="fc" id="L234">                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / rowNorm);</span>
+<span class="fc" id="L235">                counter++;</span>
+
+                // in case we want an exact solution (up to scale) when LMSE is
+                // disabled, we stop after 11 equations
+<span class="pc bpc" id="L239" title="1 of 4 branches missed.">                if (!isLMSESolutionAllowed() &amp;&amp; (counter &gt;= MIN_NUMBER_OF_EQUATIONS)) {</span>
+<span class="fc" id="L240">                    break;</span>
+                }
+
+                // second row (odd)
+
+                // columns 0, 1, 2, 3 are left with zero values
+
+<span class="fc" id="L247">                a.setElementAt(counter, 4, homImageW * homWorldX);</span>
+<span class="fc" id="L248">                a.setElementAt(counter, 5, homImageW * homWorldY);</span>
+<span class="fc" id="L249">                a.setElementAt(counter, 6, homImageW * homWorldZ);</span>
+<span class="fc" id="L250">                a.setElementAt(counter, 7, homImageW * homWorldW);</span>
+
+<span class="fc" id="L252">                a.setElementAt(counter, 8, -homImageY * homWorldX);</span>
+<span class="fc" id="L253">                a.setElementAt(counter, 9, -homImageY * homWorldY);</span>
+<span class="fc" id="L254">                a.setElementAt(counter, 10, -homImageY * homWorldZ);</span>
+<span class="fc" id="L255">                a.setElementAt(counter, 11, -homImageY * homWorldW);</span>
+
+                // normalize row
+<span class="fc" id="L258">                rowNorm = Math.sqrt(Math.pow(a.getElementAt(counter, 4), 2.0)</span>
+<span class="fc" id="L259">                        + Math.pow(a.getElementAt(counter, 5), 2.0)</span>
+<span class="fc" id="L260">                        + Math.pow(a.getElementAt(counter, 6), 2.0)</span>
+<span class="fc" id="L261">                        + Math.pow(a.getElementAt(counter, 7), 2.0)</span>
+<span class="fc" id="L262">                        + Math.pow(a.getElementAt(counter, 8), 2.0)</span>
+<span class="fc" id="L263">                        + Math.pow(a.getElementAt(counter, 9), 2.0)</span>
+<span class="fc" id="L264">                        + Math.pow(a.getElementAt(counter, 10), 2.0)</span>
+<span class="fc" id="L265">                        + Math.pow(a.getElementAt(counter, 11), 2.0));</span>
+
+<span class="fc" id="L267">                a.setElementAt(counter, 4, a.getElementAt(counter, 4) / rowNorm);</span>
+<span class="fc" id="L268">                a.setElementAt(counter, 5, a.getElementAt(counter, 5) / rowNorm);</span>
+<span class="fc" id="L269">                a.setElementAt(counter, 6, a.getElementAt(counter, 6) / rowNorm);</span>
+<span class="fc" id="L270">                a.setElementAt(counter, 7, a.getElementAt(counter, 7) / rowNorm);</span>
+<span class="fc" id="L271">                a.setElementAt(counter, 8, a.getElementAt(counter, 8) / rowNorm);</span>
+<span class="fc" id="L272">                a.setElementAt(counter, 9, a.getElementAt(counter, 9) / rowNorm);</span>
+<span class="fc" id="L273">                a.setElementAt(counter, 10, a.getElementAt(counter, 10) / rowNorm);</span>
+<span class="fc" id="L274">                a.setElementAt(counter, 11, a.getElementAt(counter, 11) / rowNorm);</span>
+<span class="fc" id="L275">                counter++;</span>
+            }
+
+<span class="fc" id="L278">            final var decomposer = new SingularValueDecomposer(a);</span>
+<span class="fc" id="L279">            decomposer.decompose();</span>
+
+<span class="fc bfc" id="L281" title="All 2 branches covered.">            if (decomposer.getNullity() &gt; 1) {</span>
+                // point configuration is degenerate and exists a linear
+                // combination of possible pinhole cameras (i.e. solution is not
+                // unique up to scale)
+<span class="fc" id="L285">                throw new PinholeCameraEstimatorException();</span>
+            }
+
+<span class="fc" id="L288">            final var v = decomposer.getV();</span>
+
+            // use last column of V as pinhole camera vector
+
+            // the last column of V contains pinhole camera matrix ordered by
+            // rows as: P11, P12, P13, P14, P21, P22, P23, P24, P31, P32, P33,
+            // P34, hence we reorder p
+<span class="fc" id="L295">            final var pinholeCameraMatrix = new Matrix(</span>
+                    PinholeCamera.PINHOLE_CAMERA_MATRIX_ROWS, PinholeCamera.PINHOLE_CAMERA_MATRIX_COLS);
+
+<span class="fc" id="L298">            pinholeCameraMatrix.setElementAt(0, 0, v.getElementAt(0, 11));</span>
+<span class="fc" id="L299">            pinholeCameraMatrix.setElementAt(0, 1, v.getElementAt(1, 11));</span>
+<span class="fc" id="L300">            pinholeCameraMatrix.setElementAt(0, 2, v.getElementAt(2, 11));</span>
+<span class="fc" id="L301">            pinholeCameraMatrix.setElementAt(0, 3, v.getElementAt(3, 11));</span>
+
+<span class="fc" id="L303">            pinholeCameraMatrix.setElementAt(1, 0, v.getElementAt(4, 11));</span>
+<span class="fc" id="L304">            pinholeCameraMatrix.setElementAt(1, 1, v.getElementAt(5, 11));</span>
+<span class="fc" id="L305">            pinholeCameraMatrix.setElementAt(1, 2, v.getElementAt(6, 11));</span>
+<span class="fc" id="L306">            pinholeCameraMatrix.setElementAt(1, 3, v.getElementAt(7, 11));</span>
+
+<span class="fc" id="L308">            pinholeCameraMatrix.setElementAt(2, 0, v.getElementAt(8, 11));</span>
+<span class="fc" id="L309">            pinholeCameraMatrix.setElementAt(2, 1, v.getElementAt(9, 11));</span>
+<span class="fc" id="L310">            pinholeCameraMatrix.setElementAt(2, 2, v.getElementAt(10, 11));</span>
+<span class="fc" id="L311">            pinholeCameraMatrix.setElementAt(2, 3, v.getElementAt(11, 11));</span>
+
+            // because pinholeCameraMatrix has been obtained as the last column
+            // of V, then its Frobenius norm will be 1 because SVD already
+            // returns normalized singular vector
+
+<span class="fc" id="L317">            return pinholeCameraMatrix;</span>
+
+<span class="fc" id="L319">        } catch (final PinholeCameraEstimatorException e) {</span>
+<span class="fc" id="L320">            throw e;</span>
+<span class="nc" id="L321">        } catch (final Exception e) {</span>
+<span class="nc" id="L322">            throw new PinholeCameraEstimatorException(e);</span>
+        }
+    }
+
+    /**
+     * Returns type of pinhole camera estimator.
+     *
+     * @return type of pinhole camera estimator.
+     */
+    @Override
+    public PinholeCameraEstimatorType getType() {
+<span class="fc" id="L333">        return PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PointCorrespondencePinholeCameraRefiner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.refiners</a> &gt; <span class="el_source">PointCorrespondencePinholeCameraRefiner.java</span></div><h1>PointCorrespondencePinholeCameraRefiner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.refiners;
+
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.InliersData;
+
+import java.util.BitSet;
+import java.util.List;
+
+/**
+ * Base class for a pinhole camera refiner using point correspondences.
+ * Implementations of this class refine a pinhole camera by taking into account
+ * an initial estimation, inlier point matches and their residuals.
+ * This class can be used to find a solution that minimizes error of inliers in
+ * LMSE terms.
+ * Typically, a refiner is used by a robust estimator, however it can also be
+ * useful in some other situations.
+ */
+public abstract class PointCorrespondencePinholeCameraRefiner extends PinholeCameraRefiner&lt;Point3D, Point2D&gt; {
+
+    /**
+     * Point to be reused when computing residuals.
+     */
+<span class="fc" id="L41">    private final Point2D residualTestPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L46">    protected PointCorrespondencePinholeCameraRefiner() {</span>
+<span class="fc" id="L47">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    protected PointCorrespondencePinholeCameraRefiner(
+            final PinholeCamera initialEstimation, final boolean keepCovariance,
+            final BitSet inliers, final double[] residuals, final int numInliers, final List&lt;Point3D&gt; samples1,
+            final List&lt;Point2D&gt; samples2, final double refinementStandardDeviation) {
+<span class="fc" id="L67">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,</span>
+                refinementStandardDeviation);
+<span class="fc" id="L69">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    protected PointCorrespondencePinholeCameraRefiner(
+            final PinholeCamera initialEstimation, final boolean keepCovariance, final InliersData inliersData,
+            final List&lt;Point3D&gt; samples1, final List&lt;Point2D&gt; samples2, final double refinementStandardDeviation) {
+<span class="fc" id="L87">        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Total residual to be used during Powell refinement.
+     * Powell's refinement uses Powell algorithm to minimize a cost function
+     * consisting on the sum of squared projection residuals plus the
+     * suggestion residual for any suggested terms.
+     *
+     * @param pinholeCamera camera to be checked.
+     * @param params        camera parameters. In the following order:
+     *                      skewness, horizontal focal length, vertical focal length,
+     *                      horizontal principal point, vertical principal point, quaternion A,
+     *                      quaternion B, quaternion C, quaternion D, center x, center y, center z.
+     * @param weight        weight for suggestion residual.
+     * @return total residual during Powell refinement.
+     */
+    protected double residualPowell(final PinholeCamera pinholeCamera, final double[] params, final double weight) {
+<span class="fc" id="L105">        return projectionResidual(pinholeCamera) + suggestionResidual(params, weight);</span>
+    }
+
+    /**
+     * Computes total point projection residual for provided camera.
+     * This method computes the sum of the squared residuals for all inlier
+     * projected points.
+     *
+     * @param pinholeCamera camera to compute residual for.
+     * @return total projection residual.
+     */
+    private double projectionResidual(final PinholeCamera pinholeCamera) {
+<span class="fc" id="L117">        pinholeCamera.normalize();</span>
+
+        // project inlier 3D points into test point
+<span class="fc" id="L120">        final var nSamples = inliers.length();</span>
+<span class="fc" id="L121">        final var projectedPoint2D = Point2D.create();</span>
+<span class="fc" id="L122">        var residual = 0.0;</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (var i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">            if (inliers.get(i)) {</span>
+<span class="fc" id="L125">                final var point3D = samples1.get(i);</span>
+<span class="fc" id="L126">                final var point2D = samples2.get(i);</span>
+
+<span class="fc" id="L128">                point3D.normalize();</span>
+<span class="fc" id="L129">                point2D.normalize();</span>
+
+<span class="fc" id="L131">                pinholeCamera.project(point3D, projectedPoint2D);</span>
+
+<span class="fc" id="L133">                projectedPoint2D.normalize();</span>
+
+<span class="fc" id="L135">                residual += Math.pow(projectedPoint2D.distanceTo(point2D), 2.0);</span>
+            }
+        }
+
+<span class="fc" id="L139">        return residual;</span>
+    }
+
+    /**
+     * Computes total residual to be used during Levenberg/Marquardt covariance
+     * estimation.
+     *
+     * @param pinholeCamera camera to estimate covariance for.
+     * @param point3D       3D point to be projected with provided pinhole camera.
+     * @param point2D       2D point to be compared with projected point.
+     * @param params        camera parameters. In the following order:
+     *                      skewness, horizontal focal length, vertical focal length,
+     *                      horizontal principal point, vertical principal point, quaternion A,
+     *                      quaternion B, quaternion C, quaternion D, center x, center y, center z.
+     * @param weight        weight for suggestion residual.
+     * @return total residual.
+     */
+    protected double residualLevenbergMarquardt(
+            final PinholeCamera pinholeCamera, final Point3D point3D, final Point2D point2D, final double[] params,
+            final double weight) {
+<span class="fc" id="L159">        var residual = singleProjectionResidual(pinholeCamera, point3D, point2D);</span>
+<span class="fc bfc" id="L160" title="All 2 branches covered.">        if (hasSuggestions()) {</span>
+<span class="fc" id="L161">            residual += suggestionResidual(params, weight);</span>
+        }
+<span class="fc" id="L163">        return residual;</span>
+    }
+
+    /**
+     * Projection residual/error for a single point using provided camera.
+     *
+     * @param pinholeCamera camera to be checked.
+     * @param point3D       point to be projected.
+     * @param point2D       point to check against.
+     * @return distance between projected point and 2D point.
+     */
+    private double singleProjectionResidual(
+            final PinholeCamera pinholeCamera, final Point3D point3D, final Point2D point2D) {
+        // project point3D into test point
+<span class="fc" id="L177">        pinholeCamera.project(point3D, residualTestPoint);</span>
+
+        // compare test point and 2D point
+<span class="fc" id="L180">        return residualTestPoint.distanceTo(point2D);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

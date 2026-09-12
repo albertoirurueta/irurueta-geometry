@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.java</span></div><h1>PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoincidentPointsException;
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.ProjectiveTransformation2D;
+import com.irurueta.numerical.robust.PROSACRobustEstimator;
+import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best projective 2D transformation for provided collections of
+ * matched 2D points using PROSAC algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator
+        extends PointCorrespondenceProjectiveTransformation2DRobustEstimator {
+
+    /**
+     * Constant defining default threshold to determine whether points are
+     * inliers or not.
+     * By default, 1.0 is considered a good value for cases where measures are
+     * done on pixels, since typically the minimum resolution is 1 pixel.
+     */
+    public static final double DEFAULT_THRESHOLD = 1.0;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Indicates that by default inliers will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_INLIERS = false;
+
+    /**
+     * Indicates that by default residuals will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_RESIDUALS = false;
+
+    /**
+     * Threshold to determine whether points are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance) a possible
+     * solution has on a matched pair of points.
+     */
+    private double threshold;
+
+    /**
+     * Quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     */
+    private double[] qualityScores;
+
+    /**
+     * Indicates whether inliers must be computed and kept.
+     */
+    private boolean computeAndKeepInliers;
+
+    /**
+     * Indicates whether residuals must be computed and kept.
+     */
+    private boolean computeAndKeepResiduals;
+
+    /**
+     * Constructor.
+     */
+    public PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator() {
+<span class="fc" id="L90">        super();</span>
+<span class="fc" id="L91">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L92">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L93">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L94">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a projective 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     projective 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     projective 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L112">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L113">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L114">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L115">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L116">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+            final ProjectiveTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L126">        super(listener);</span>
+<span class="fc" id="L127">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L128">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L129">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L130">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * projective 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     stars, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     projective 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     projective 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L151">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L152">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L153">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L154">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L155">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(final double[] qualityScores) {
+<span class="fc" id="L166">        super();</span>
+<span class="fc" id="L167">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L168">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L169">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L170">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L171">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a projective 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints   list of input points to be used to estimate a
+     *                      projective 2D transformation.
+     * @param outputPoints  list of output points to be used to estimate a
+     *                      projective 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points and array
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  MINIMUM_SIZE.
+     */
+    public PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L192">        super(inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L194" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L195">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L198">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L199">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L200">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L201">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L202">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+            final ProjectiveTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
+<span class="fc" id="L216">        super(listener);</span>
+<span class="fc" id="L217">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L218">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L219">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L220">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L221">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * projective 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate a
+     *                      projective 2D transformation.
+     * @param outputPoints  list of output points to be used to estimate a
+     *                      projective 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator(
+            final ProjectiveTransformation2DRobustEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L244">        super(listener, inputPoints, outputPoints);</span>
+
+<span class="fc bfc" id="L246" title="All 2 branches covered.">        if (qualityScores.length != inputPoints.size()) {</span>
+<span class="fc" id="L247">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L250">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L251">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L252">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L253">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L254">    }</span>
+
+    /**
+     * Returns threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @return threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L266">        return threshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @param threshold threshold to determine whether points are inliers or not.
+     * @throws IllegalArgumentException if provided values is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L283">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L285" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L286">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L288">        this.threshold = threshold;</span>
+<span class="fc" id="L289">    }</span>
+
+    /**
+     * Returns quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @return quality scores corresponding to each pair of matched points.
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L299">        return qualityScores;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    @Override
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc bfc" id="L315" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L316">            throw new LockedException();</span>
+        }
+<span class="fc" id="L318">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L319">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the projective 2D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points and quality
+     * scores) are provided and a minimum of MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L331" title="1 of 6 branches missed.">        return super.isReady() &amp;&amp; qualityScores != null &amp;&amp; qualityScores.length == inputPoints.size();</span>
+    }
+
+    /**
+     * Indicates whether inliers must be computed and kept.
+     *
+     * @return true if inliers must be computed and kept, false if inliers
+     * only need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepInliersEnabled() {
+<span class="fc" id="L341">        return computeAndKeepInliers;</span>
+    }
+
+    /**
+     * Specifies whether inliers must be computed and kept.
+     *
+     * @param computeAndKeepInliers true if inliers must be computed and kept,
+     *                              false if inliers only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
+<span class="pc bpc" id="L352" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L353">            throw new LockedException();</span>
+        }
+<span class="fc" id="L355">        this.computeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L356">    }</span>
+
+    /**
+     * Indicates whether residuals must be computed and kept.
+     *
+     * @return true if residuals must be computed and kept, false if residuals
+     * only need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepResidualsEnabled() {
+<span class="fc" id="L365">        return computeAndKeepResiduals;</span>
+    }
+
+    /**
+     * Specifies whether residuals must be computed and kept.
+     *
+     * @param computeAndKeepResiduals true if residuals must be computed and
+     *                                kept, false if residuals only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
+<span class="pc bpc" id="L376" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L377">            throw new LockedException();</span>
+        }
+<span class="fc" id="L379">        this.computeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L380">    }</span>
+
+    /**
+     * Estimates a projective 2D transformation using a robust estimator and
+     * the best set of matched 2D point correspondences found using the robust
+     * estimator.
+     *
+     * @return a projective 2D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public ProjectiveTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L397" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L398">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L400" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L401">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L404">        final var innerEstimator = new PROSACRobustEstimator&lt;&gt;(</span>
+<span class="fc" id="L405">                new PROSACRobustEstimatorListener&lt;ProjectiveTransformation2D&gt;() {</span>
+
+                    // point to be reused when computing residuals
+<span class="fc" id="L408">                    private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+                    @Override
+                    public double getThreshold() {
+<span class="fc" id="L412">                        return threshold;</span>
+                    }
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L417">                        return inputPoints.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L422">                        return ProjectiveTransformation2DRobustEstimator.MINIMUM_SIZE;</span>
+                    }
+
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List&lt;ProjectiveTransformation2D&gt; solutions) {
+<span class="fc" id="L428">                        final var inputPoint1 = inputPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L429">                        final var inputPoint2 = inputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L430">                        final var inputPoint3 = inputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L431">                        final var inputPoint4 = inputPoints.get(samplesIndices[3]);</span>
+
+<span class="fc" id="L433">                        final var outputPoint1 = outputPoints.get(samplesIndices[0]);</span>
+<span class="fc" id="L434">                        final var outputPoint2 = outputPoints.get(samplesIndices[1]);</span>
+<span class="fc" id="L435">                        final var outputPoint3 = outputPoints.get(samplesIndices[2]);</span>
+<span class="fc" id="L436">                        final var outputPoint4 = outputPoints.get(samplesIndices[3]);</span>
+
+                        try {
+<span class="fc" id="L439">                            final var transformation = new ProjectiveTransformation2D(inputPoint1, inputPoint2,</span>
+                                    inputPoint3, inputPoint4, outputPoint1, outputPoint2, outputPoint3, outputPoint4);
+<span class="fc" id="L441">                            solutions.add(transformation);</span>
+<span class="nc" id="L442">                        } catch (final CoincidentPointsException e) {</span>
+                            // if points are coincident, no solution is added
+<span class="fc" id="L444">                        }</span>
+<span class="fc" id="L445">                    }</span>
+
+                    @Override
+                    public double computeResidual(final ProjectiveTransformation2D currentEstimation, final int i) {
+<span class="fc" id="L449">                        final var inputPoint = inputPoints.get(i);</span>
+<span class="fc" id="L450">                        final var outputPoint = outputPoints.get(i);</span>
+
+                        // transform input point and store result in mTestPoint
+<span class="fc" id="L453">                        currentEstimation.transform(inputPoint, testPoint);</span>
+
+<span class="fc" id="L455">                        return outputPoint.distanceTo(testPoint);</span>
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L460">                        return PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L465" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L466">                            listener.onEstimateStart(</span>
+                                    PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
+                        }
+<span class="fc" id="L469">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L473" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L474">                            listener.onEstimateEnd(</span>
+                                    PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this);
+                        }
+<span class="fc" id="L477">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L482" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L483">                            listener.onEstimateNextIteration(</span>
+                                    PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this,
+                                    iteration);
+                        }
+<span class="fc" id="L487">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;ProjectiveTransformation2D&gt; estimator, final float progress) {
+<span class="nc bnc" id="L492" title="All 2 branches missed.">                        if (listener != null) {</span>
+<span class="nc" id="L493">                            listener.onEstimateProgressChange(</span>
+                                    PROSACPointCorrespondenceProjectiveTransformation2DRobustEstimator.this,
+                                    progress);
+                        }
+<span class="nc" id="L497">                    }</span>
+
+                    @Override
+                    public double[] getQualityScores() {
+<span class="fc" id="L501">                        return qualityScores;</span>
+                    }
+                });
+
+        try {
+<span class="fc" id="L506">            locked = true;</span>
+<span class="fc" id="L507">            inliersData = null;</span>
+<span class="pc bpc" id="L508" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(computeAndKeepInliers || refineResult);</span>
+<span class="pc bpc" id="L509" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(computeAndKeepResiduals || refineResult);</span>
+<span class="fc" id="L510">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L511">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L512">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L513">            final var transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L514">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L515">            return attemptRefine(transformation);</span>
+<span class="nc" id="L516">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L517">            throw new LockedException(e);</span>
+<span class="nc" id="L518">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L519">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L521">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L532">        return RobustEstimatorMethod.PROSAC;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L548">        return threshold;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * This method is used internally and does not check whether instance is
+     * locked or not.
+     *
+     * @param qualityScores quality scores to be set.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE.
+     */
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L561" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L562">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L565">        this.qualityScores = qualityScores;</span>
+<span class="fc" id="L566">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

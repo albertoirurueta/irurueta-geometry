@@ -1,0 +1,1310 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Ellipse.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Ellipse.java</span></div><h1>Ellipse.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+
+import java.io.Serializable;
+
+/**
+ * This class defines an ellipse.
+ * This class uses formulas as defined at:
+ * &lt;a href=&quot;https://en.wikipedia.org/wiki/Ellipse&quot;&gt;https://en.wikipedia.org/wiki/Ellipse&lt;/a&gt;
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class Ellipse implements Serializable {
+
+    /**
+     * Constant defining default threshold value used when none is provided.
+     */
+    public static final double DEFAULT_THRESHOLD = 1e-9;
+
+    /**
+     * Constant defining minimum allowed threshold.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Center of ellipse.
+     */
+    private Point2D center;
+
+    /**
+     * Semi-major axis length (a).
+     */
+    private double semiMajorAxis;
+
+    /**
+     * Semi-minor axis length (b).
+     */
+    private double semiMinorAxis;
+
+    /**
+     * Rotation angle.
+     */
+    private double rotationAngle;
+
+    /**
+     * Empty constructor.
+     * Creates an ellipse equal to a circle located at space origin (0,0) with
+     * radius 1.0.
+     */
+<span class="fc" id="L67">    public Ellipse() {</span>
+<span class="fc" id="L68">        center = Point2D.create();</span>
+<span class="fc" id="L69">        semiMajorAxis = semiMinorAxis = 1.0;</span>
+<span class="fc" id="L70">        rotationAngle = 0.0;</span>
+<span class="fc" id="L71">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param center        center of ellipse.
+     * @param semiMajorAxis semi-major axis length.
+     * @param semiMinorAxis semi-minor axis length.
+     * @param rotationAngle rotation angle expressed in radians.
+     */
+    public Ellipse(final Point2D center, final double semiMajorAxis, final double semiMinorAxis,
+<span class="fc" id="L82">                   final double rotationAngle) {</span>
+<span class="fc" id="L83">        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, rotationAngle);</span>
+<span class="fc" id="L84">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param center        center of ellipse.
+     * @param semiMajorAxis semi-major axis length.
+     * @param semiMinorAxis semi-minor axis length.
+     * @param rotation      2D rotation.
+     */
+    public Ellipse(final Point2D center, final double semiMajorAxis, final double semiMinorAxis,
+<span class="fc" id="L95">                   final Rotation2D rotation) {</span>
+<span class="fc" id="L96">        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, rotation);</span>
+<span class="fc" id="L97">    }</span>
+
+    /**
+     * Constructor from 2 points, ellipse center and rotation.
+     *
+     * @param point1 1st point.
+     * @param point2 2nd point.
+     * @param center center of ellipse.
+     * @param theta  rotation angle expressed in radians.
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
+     *                                 configuration.
+     */
+    public Ellipse(final Point2D point1, final Point2D point2, final Point2D center, final double theta)
+<span class="fc" id="L110">            throws ColinearPointsException {</span>
+<span class="fc" id="L111">        setParametersFromPointsCenterAndRotation(point1, point2, center, theta);</span>
+<span class="fc" id="L112">    }</span>
+
+    /**
+     * Constructor from 5 points.
+     *
+     * @param point1 1st point.
+     * @param point2 2nd point.
+     * @param point3 3rd point.
+     * @param point4 4th point.
+     * @param point5 5th point.
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
+     *                                 configuration.
+     */
+    public Ellipse(final Point2D point1, final Point2D point2, final Point2D point3, final Point2D point4,
+<span class="fc" id="L126">                   final Point2D point5) throws ColinearPointsException {</span>
+<span class="fc" id="L127">        setParametersFromPoints(point1, point2, point3, point4, point5);</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Constructor from 5 points.
+     *
+     * @param point1    1st point.
+     * @param point2    2nd point.
+     * @param point3    3rd point.
+     * @param point4    4th point.
+     * @param point5    5th point.
+     * @param threshold threshold to determine whether points form an ellipse.
+     *                  This is usually a very small value
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
+     *                                 configuration.
+     */
+    public Ellipse(final Point2D point1, final Point2D point2, final Point2D point3, final Point2D point4,
+<span class="fc" id="L144">                   final Point2D point5, double threshold) throws ColinearPointsException {</span>
+<span class="fc" id="L145">        setParametersFromPoints(point1, point2, point3, point4, point5, threshold);</span>
+<span class="fc" id="L146">    }</span>
+
+    /**
+     * Constructor setting parameters of canonical equation of an ellipse, which
+     * is:
+     * a*x^2 + b*x*y + c*y^2 + d*x + e*y + f = 0
+     *
+     * @param a a parameter.
+     * @param b b parameter.
+     * @param c c parameter.
+     * @param d d parameter.
+     * @param e e parameter.
+     * @param f f parameter.
+     * @throws IllegalArgumentException if parameters do not follow
+     *                                  b^2 - 4*a*c &amp;lt; 0.0
+     */
+<span class="fc" id="L162">    public Ellipse(final double a, final double b, final double c, final double d, final double e, final double f) {</span>
+<span class="fc" id="L163">        setParameters(a, b, c, d, e, f);</span>
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * Constructor setting parameters of canonical equation of an ellipse, which
+     * is:
+     * a*x^2 + b*x*y + c*y^2 + d*x + e*y + f = 0
+     *
+     * @param a         a parameter.
+     * @param b         b parameter.
+     * @param c         c parameter.
+     * @param d         d parameter.
+     * @param e         e parameter.
+     * @param f         f parameter.
+     * @param threshold threshold to determine whether parameters are valid due
+     *                  to machine precision.
+     * @throws IllegalArgumentException if parameters do not follow
+     *                                  b^2 - 4*A*c &amp;lt; threshold
+     */
+    public Ellipse(final double a, final double b, final double c, final double d, final double e, final double f,
+<span class="fc" id="L183">                   final double threshold) {</span>
+<span class="fc" id="L184">        setParameters(a, b, c, d, e, f, threshold);</span>
+<span class="fc" id="L185">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param conic conic to build ellipse from.
+     * @throws IllegalArgumentException if provided conic is not an ellipse.
+     */
+<span class="fc" id="L193">    public Ellipse(final Conic conic) {</span>
+<span class="fc" id="L194">        setFromConic(conic);</span>
+<span class="fc" id="L195">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param circle a circle to set parameters from.
+     */
+<span class="fc" id="L202">    public Ellipse(final Circle circle) {</span>
+<span class="fc" id="L203">        setFromCircle(circle);</span>
+<span class="fc" id="L204">    }</span>
+
+
+    /**
+     * Returns center of ellipse.
+     *
+     * @return center of ellipse.
+     */
+    public Point2D getCenter() {
+<span class="fc" id="L213">        return center;</span>
+    }
+
+    /**
+     * Sets center of ellipse.
+     *
+     * @param center center of ellipse.
+     * @throws NullPointerException raised if provided center is null.
+     */
+    public void setCenter(final Point2D center) {
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        if (center == null) {</span>
+<span class="nc" id="L224">            throw new NullPointerException();</span>
+        }
+<span class="fc" id="L226">        this.center = center;</span>
+<span class="fc" id="L227">    }</span>
+
+    /**
+     * Gets semi-major axis length.
+     *
+     * @return semi-major axis length.
+     */
+    public double getSemiMajorAxis() {
+<span class="fc" id="L235">        return semiMajorAxis;</span>
+    }
+
+    /**
+     * Sets semi-major axis length.
+     *
+     * @param semiMajorAxis semi-major axis length.
+     */
+    public void setSemiMajorAxis(final double semiMajorAxis) {
+<span class="fc" id="L244">        this.semiMajorAxis = semiMajorAxis;</span>
+<span class="fc" id="L245">    }</span>
+
+    /**
+     * Gets semi-minor axis length.
+     *
+     * @return semi-minor axis length.
+     */
+    public double getSemiMinorAxis() {
+<span class="fc" id="L253">        return semiMinorAxis;</span>
+    }
+
+    /**
+     * Sets semi-minor axis length.
+     *
+     * @param semiMinorAxis semi-minor axis length.
+     */
+    public void setSemiMinorAxis(final double semiMinorAxis) {
+<span class="fc" id="L262">        this.semiMinorAxis = semiMinorAxis;</span>
+<span class="fc" id="L263">    }</span>
+
+    /**
+     * Gets rotation angle expressed in radians.
+     *
+     * @return rotation angle expressed in radians.
+     */
+    public double getRotationAngle() {
+<span class="fc" id="L271">        return rotationAngle;</span>
+    }
+
+    /**
+     * Sets rotation angle expressed in radians.
+     *
+     * @param rotationAngle rotation angle expressed in radians.
+     */
+    public void setRotationAngle(final double rotationAngle) {
+<span class="fc" id="L280">        this.rotationAngle = rotationAngle;</span>
+<span class="fc" id="L281">    }</span>
+
+    /**
+     * Gets 2D rotation.
+     *
+     * @return 2D rotation.
+     */
+    public Rotation2D getRotation() {
+<span class="fc" id="L289">        return new Rotation2D(rotationAngle);</span>
+    }
+
+    /**
+     * Sets 2D rotation.
+     *
+     * @param rotation 2D rotation to be set.
+     */
+    public void setRotation(final Rotation2D rotation) {
+<span class="fc" id="L298">        rotationAngle = rotation.getTheta();</span>
+<span class="fc" id="L299">    }</span>
+
+    /**
+     * Gets parameter A of canonical ellipse equation:
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @return parameter A.
+     */
+    public double getA() {
+<span class="fc" id="L308">        final var sint = Math.sin(rotationAngle);</span>
+<span class="fc" id="L309">        final var cost = Math.cos(rotationAngle);</span>
+
+<span class="fc" id="L311">        final var a = semiMajorAxis;</span>
+<span class="fc" id="L312">        final var b = semiMinorAxis;</span>
+
+<span class="fc" id="L314">        final var sint2 = sint * sint;</span>
+<span class="fc" id="L315">        final var cost2 = cost * cost;</span>
+
+<span class="fc" id="L317">        final var a2 = a * a;</span>
+<span class="fc" id="L318">        final var b2 = b * b;</span>
+
+<span class="fc" id="L320">        return a2 * sint2 + b2 * cost2;</span>
+    }
+
+    /**
+     * Sets parameter A of canonical ellipse equation.
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @param a parameter A to be set.
+     */
+    public void setA(final double a) {
+<span class="fc" id="L330">        setParameters(a, getB(), getC(), getD(), getE(), getF());</span>
+<span class="fc" id="L331">    }</span>
+
+    /**
+     * Gets parameter B of canonical ellipse equation:
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @return parameter B.
+     */
+    public double getB() {
+<span class="fc" id="L340">        final var sint = Math.sin(rotationAngle);</span>
+<span class="fc" id="L341">        final var cost = Math.cos(rotationAngle);</span>
+<span class="fc" id="L342">        final var a = semiMajorAxis;</span>
+<span class="fc" id="L343">        final var b = semiMinorAxis;</span>
+<span class="fc" id="L344">        final var a2 = a * a;</span>
+<span class="fc" id="L345">        final var b2 = b * b;</span>
+
+<span class="fc" id="L347">        return 2.0 * (b2 - a2) * sint * cost;</span>
+    }
+
+    /**
+     * Sets parameter B of canonical ellipse equation:
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @param b parameter B to be set.
+     */
+    public void setB(final double b) {
+<span class="fc" id="L357">        setParameters(getA(), b, getC(), getD(), getE(), getF());</span>
+<span class="fc" id="L358">    }</span>
+
+    /**
+     * Gets parameter C of canonical ellipse equation:
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @return parameter C.
+     */
+    public double getC() {
+<span class="fc" id="L367">        final var sint = Math.sin(rotationAngle);</span>
+<span class="fc" id="L368">        final var cost = Math.cos(rotationAngle);</span>
+
+<span class="fc" id="L370">        final var a = semiMajorAxis;</span>
+<span class="fc" id="L371">        final var b = semiMinorAxis;</span>
+
+<span class="fc" id="L373">        final var sint2 = sint * sint;</span>
+<span class="fc" id="L374">        final var cost2 = cost * cost;</span>
+
+<span class="fc" id="L376">        final var a2 = a * a;</span>
+<span class="fc" id="L377">        final var b2 = b * b;</span>
+
+<span class="fc" id="L379">        return a2 * cost2 + b2 * sint2;</span>
+    }
+
+    /**
+     * Sets parameter C of canonical ellipse equation:
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @param c parameter C to be set.
+     */
+    public void setC(final double c) {
+<span class="fc" id="L389">        setParameters(getA(), getB(), c, getD(), getE(), getF());</span>
+<span class="fc" id="L390">    }</span>
+
+    /**
+     * Gets parameter D of canonical ellipse equation:
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @return parameter D.
+     */
+    public double getD() {
+<span class="fc" id="L399">        final var xc = center.getInhomX();</span>
+<span class="fc" id="L400">        final var yc = center.getInhomY();</span>
+
+<span class="fc" id="L402">        return -2.0 * getA() * xc - getB() * yc;</span>
+    }
+
+    /**
+     * Sets parameter D of canonical ellipse equation:
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @param d parameter D to be set.
+     */
+    public void setD(final double d) {
+<span class="fc" id="L412">        setParameters(getA(), getB(), getC(), d, getE(), getF());</span>
+<span class="fc" id="L413">    }</span>
+
+    /**
+     * Gets parameter E of canonical ellipse equation:
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @return parameter E.
+     */
+    public double getE() {
+<span class="fc" id="L422">        final var xc = center.getInhomX();</span>
+<span class="fc" id="L423">        final var yc = center.getInhomY();</span>
+
+<span class="fc" id="L425">        return -getB() * xc - 2.0 * getC() * yc;</span>
+    }
+
+    /**
+     * Sets parameter E of canonical ellipse equation:
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @param e parameter E to be set.
+     */
+    public void setE(final double e) {
+<span class="fc" id="L435">        setParameters(getA(), getB(), getC(), getD(), e, getF());</span>
+<span class="fc" id="L436">    }</span>
+
+    /**
+     * Gets parameter F of canonical ellipse equation:
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @return parameter F.
+     */
+    public double getF() {
+<span class="fc" id="L445">        final var xc = center.getInhomX();</span>
+<span class="fc" id="L446">        final var yc = center.getInhomY();</span>
+
+<span class="fc" id="L448">        final var a = semiMajorAxis;</span>
+<span class="fc" id="L449">        final var b = semiMinorAxis;</span>
+
+<span class="fc" id="L451">        final var xc2 = xc * xc;</span>
+<span class="fc" id="L452">        final var yc2 = yc * yc;</span>
+
+<span class="fc" id="L454">        final var a2 = a * a;</span>
+<span class="fc" id="L455">        final var b2 = b * b;</span>
+
+<span class="fc" id="L457">        return getA() * xc2 + getB() * xc * yc + getC() * yc2 - a2 * b2;</span>
+    }
+
+    /**
+     * Sets parameter F of canonical ellipse equation.
+     * A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+     *
+     * @param f parameter F to be set.
+     */
+    public void setF(final double f) {
+<span class="fc" id="L467">        setParameters(getA(), getB(), getC(), getD(), getE(), f);</span>
+<span class="fc" id="L468">    }</span>
+
+    /**
+     * Sets ellipse parameters.
+     *
+     * @param center        center of ellipse.
+     * @param semiMajorAxis semi-major axis length.
+     * @param semiMinorAxis semi-minor axis length.
+     * @param rotationAngle rotation angle expressed in radians.
+     */
+    public final void setCenterAxesAndRotation(
+            final Point2D center, final double semiMajorAxis, final double semiMinorAxis, final double rotationAngle) {
+<span class="fc" id="L480">        this.center = center;</span>
+<span class="fc" id="L481">        this.semiMajorAxis = Math.max(semiMajorAxis, semiMinorAxis);</span>
+<span class="fc" id="L482">        this.semiMinorAxis = Math.min(semiMinorAxis, semiMajorAxis);</span>
+<span class="fc" id="L483">        this.rotationAngle = rotationAngle;</span>
+<span class="fc" id="L484">    }</span>
+
+    /**
+     * Sets ellipse parameters.
+     *
+     * @param center        center of ellipse.
+     * @param semiMajorAxis semi-major axis length.
+     * @param semiMinorAxis semi-minor axis length.
+     * @param rotation      2D rotation.
+     */
+    public final void setCenterAxesAndRotation(
+            final Point2D center, final double semiMajorAxis, final double semiMinorAxis, final Rotation2D rotation) {
+<span class="fc" id="L496">        setCenterAxesAndRotation(center, semiMajorAxis, semiMinorAxis, rotation.getTheta());</span>
+<span class="fc" id="L497">    }</span>
+
+    /**
+     * Sets parameters from 2 points, ellipse center and rotation.
+     *
+     * @param point1 1st point.
+     * @param point2 2nd point.
+     * @param center center of ellipse.
+     * @param theta  rotation angle expressed in radians.
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
+     *                                 configuration.
+     */
+    public final void setParametersFromPointsCenterAndRotation(
+            final Point2D point1, final Point2D point2, final Point2D center, final double theta)
+            throws ColinearPointsException {
+        // unknowns: semi-major axis (a) and semi-minor axis (b)
+
+        // equation of an ellipse follows:
+        // A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+
+        // where
+        // sint = sin(theta)
+        // cost = cos(theta)
+
+        // A = a^2*sint^2 + b^2*cost^2
+        // B = 2*(b^2 - a^2)*sint*cost
+        // C = a^2*cost^2 + b^2*sint^2
+        // D = -2*A*xc - B*yc = -2*(a^2*sint^2 + b^2*cost^2)*xc - 2*(b^2 - a^2)*sint*cost*yc
+        // E = -B*xc - 2*C*yc = -2*(b^2 - a^2)*sint*cost*xc - 2*(a^2*cost^2 + b^2*sint^2)*yc
+        // F = A*xc^2 + B*xc*yc + C*yc^2 - a^2*b^2 = (a^2*sint^2 + b^2*cost^2)*xc^2 + 2*(b^2 - a^2)*sint*cost*xc*yc + (a^2*cost^2 + b^2*sint^2)*yc^2 - a^2*b^2
+
+        // (a^2*sint^2 + b^2*cost^2)*x^2 +
+        // 2*(b^2 - a^2)*sint*cost*x*y +
+        // (a^2*cost^2 + b^2*sint^2)*y^2 +
+        // (-2*(a^2*sint^2 + b^2*cost^2)*xc - 2*(b^2 - a^2)*sint*cost*yc)*x +
+        // (-2*(b^2 - a^2)*sint*cost*xc - 2*(a^2*cost^2 + b^2*sint^2)*yc)*y +
+        // (a^2*sint^2 + b^2*cost^2)*xc^2 + 2*(b^2 - a^2)*sint*cost*xc*yc + (a^2*cost^2 + b^2*sint^2)*yc^2 - a^2*b^2 = 0
+
+        // a^2*sint^2*x^2 + b^2*cost^2*x^2 +
+        // 2*b^2*sint*cost*x*y - 2*a^2*sint*cost*x*y +
+        // a^2*cost^2*y^2 + b^2*sint^2*y^2 +
+        // -2*a^2*sint^2*xc*x -2*b^2*cost^2*xc*x - 2*b^2*sint*cost*yc*x + 2*a^2*sint*cost*yc*x +
+        // -2*b^2*sint*cost*xc*y + 2*a^2*sint*cost*xc*y -2*a^2*cost^2*yc*y -2*b^2*sint^2*yc*y +
+        // a^2*sint^2*xc^2 + b^2*cost^2*xc^2 + 2*b^2*sint*cost*xc*yc -2*a^2*sint*cost*xc*yc + a^2*cost^2*yc^2 + b^2*sint^2*yc^2 - a^2*b^2 = 0
+
+        // Divide by b^2
+
+        // (a^2/b^2)*sint^2*x^2 + cost^2*x^2 +
+        // 2*sint*cost*x*y - (a^2/b^2)*2*sint*cost*x*y +
+        // (a^2/b^2)*cost^2*y^2 + sint^2*y^2 +
+        // -(a^2/b^2)*2*sint^2*xc*x - 2*cost^2*xc*x - 2*sint*cost*yc*x + (a^2/b^2)*2*sint*cost*yc*x +
+        // -2*sint*cost*xc*y + (a^2/b^2)*2*sint*cost*xc*y - (a^2/b^2)*2*cost^2*yc*y - 2*sint^2*yc*y +
+        // (a^2/b^2)*sint^2*xc^2 + cost^2*xc^2 + 2*sint*cost*xc*yc - (a^2/b^2)*2*sint*cost*xc*yc + (a^2/b^2)*cost^2*yc^2 + sint^2*yc^2 - a^2 = 0
+
+        // (a^2/b^2)*(sint^2*x^2 - 2*sint*cost*x*y + cost^2*y^2 - 2*sint^2*xc*x + 2*sint*cost*yc*x + 2*sint*cost*xc*y - 2*cost^2*yc*y + sint^2*xc^2 - 2*sint*cost*xc*yc + cost^2*yc^2)
+        // - a^2
+        // = - cost^2*x^2 - 2*sint*cost*x*y - sint^2*y^2 + 2*cost^2*xc*x + 2*sint*cost*yc*x + 2*sint*cost*xc*y + 2*sint^2*yc*y - cost^2*xc^2 - 2*sint*cost*xc*yc - sint^2*yc^2
+
+        // Unknowns are:
+        // a^2/b^2 and a^2
+
+        try {
+<span class="fc" id="L559">            final var sint = Math.sin(theta);</span>
+<span class="fc" id="L560">            final var cost = Math.cos(theta);</span>
+
+<span class="fc" id="L562">            final var sint2 = sint * sint;</span>
+<span class="fc" id="L563">            final var cost2 = cost * cost;</span>
+<span class="fc" id="L564">            final var sintcost = sint * cost;</span>
+
+<span class="fc" id="L566">            final var xc = center.getInhomX();</span>
+<span class="fc" id="L567">            final var yc = center.getInhomY();</span>
+<span class="fc" id="L568">            final var xc2 = xc * xc;</span>
+<span class="fc" id="L569">            final var yc2 = yc * yc;</span>
+
+<span class="fc" id="L571">            final var m = new Matrix(2, 2);</span>
+<span class="fc" id="L572">            final var b = new double[2];</span>
+
+<span class="fc" id="L574">            final var x = new double[]{</span>
+<span class="fc" id="L575">                    point1.getInhomX(),</span>
+<span class="fc" id="L576">                    point2.getInhomX(),</span>
+            };
+
+<span class="fc" id="L579">            final var y = new double[]{</span>
+<span class="fc" id="L580">                    point1.getInhomY(),</span>
+<span class="fc" id="L581">                    point2.getInhomY(),</span>
+            };
+
+            double x2;
+            double y2;
+            double rowNorm;
+<span class="fc bfc" id="L587" title="All 2 branches covered.">            for (var i = 0; i &lt; 2; i++) {</span>
+<span class="fc" id="L588">                x2 = x[i] * x[i];</span>
+<span class="fc" id="L589">                y2 = y[i] * y[i];</span>
+
+<span class="fc" id="L591">                final var tmp = 2.0 * sintcost * x[i] * y[i];</span>
+
+<span class="fc" id="L593">                m.setElementAt(i, 0, sint2 * x2 - tmp + cost2 * y2 - 2.0 * sint2 * xc * x[i]</span>
+                        + 2.0 * sintcost * yc * x[i] + 2.0 * sintcost * xc * y[i] - 2.0 * cost2 * yc * y[i]
+                        + sint2 * xc2 - 2.0 * sintcost * xc * yc + cost2 * yc2);
+<span class="fc" id="L596">                m.setElementAt(i, 1, -1.0);</span>
+
+<span class="fc" id="L598">                b[i] = -cost2 * x2 - tmp - sint2 * y2 + 2.0 * cost2 * xc * x[i] + 2.0 * sintcost * yc * x[i]</span>
+                        + 2.0 * sintcost * xc * y[i] + 2.0 * sint2 * yc * y[i] - cost2 * xc2 - 2.0 * sintcost * xc * yc
+                        - sint2 * yc2;
+
+                // normalize row to increase accuracy
+<span class="fc" id="L603">                rowNorm = 0.0;</span>
+<span class="fc bfc" id="L604" title="All 2 branches covered.">                for (var j = 0; j &lt; 2; j++) {</span>
+<span class="fc" id="L605">                    rowNorm += Math.pow(m.getElementAt(i, j), 2.0);</span>
+                }
+<span class="fc" id="L607">                rowNorm = Math.sqrt(rowNorm);</span>
+
+<span class="fc bfc" id="L609" title="All 2 branches covered.">                for (var j = 0; j &lt; 2; j++) {</span>
+<span class="fc" id="L610">                    m.setElementAt(i, j, m.getElementAt(i, j) / rowNorm);</span>
+                }
+
+<span class="fc" id="L613">                b[i] /= rowNorm;</span>
+            }
+
+<span class="fc" id="L616">            final var params = com.irurueta.algebra.Utils.solve(m, b);</span>
+
+            // params[1] = a^2
+<span class="fc" id="L619">            final var sMajorAxis = Math.sqrt(Math.abs(params[1]));</span>
+
+            // params[0] = a^2/b^2 --&gt; b^2 = a^2/params[0] = params[1]/params[0]
+<span class="fc" id="L622">            final var sMinorAxis = Math.sqrt(Math.abs(params[1] / params[0]));</span>
+
+<span class="fc" id="L624">            setCenterAxesAndRotation(center, sMajorAxis, sMinorAxis, theta);</span>
+<span class="nc" id="L625">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L626">            throw new ColinearPointsException(e);</span>
+<span class="fc" id="L627">        }</span>
+<span class="fc" id="L628">    }</span>
+
+    /**
+     * Sets parameters from 5 points.
+     *
+     * @param point1 1st point.
+     * @param point2 2nd point.
+     * @param point3 3rd point.
+     * @param point4 4th point.
+     * @param point5 5th point.
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
+     *                                 configuration.
+     */
+    public final void setParametersFromPoints(
+            final Point2D point1, final Point2D point2, final Point2D point3, final Point2D point4,
+            final Point2D point5) throws ColinearPointsException {
+<span class="fc" id="L644">        setParametersFromPoints(point1, point2, point3, point4, point5, 0.0);</span>
+<span class="fc" id="L645">    }</span>
+
+    /**
+     * Sets parameters from 5 points.
+     *
+     * @param point1    1st point.
+     * @param point2    2nd point.
+     * @param point3    3rd point.
+     * @param point4    4th point.
+     * @param point5    5th point.
+     * @param threshold threshold to determine whether points form an ellipse.
+     *                  This is usually a very small value
+     * @throws ColinearPointsException if points are in a co-linear or degenerate
+     *                                 configuration.
+     */
+    public final void setParametersFromPoints(
+            final Point2D point1, final Point2D point2, final Point2D point3, final Point2D point4,
+            final Point2D point5, final double threshold) throws ColinearPointsException {
+        // normalize points to increase accuracy
+<span class="fc" id="L664">        point1.normalize();</span>
+<span class="fc" id="L665">        point2.normalize();</span>
+<span class="fc" id="L666">        point3.normalize();</span>
+<span class="fc" id="L667">        point4.normalize();</span>
+<span class="fc" id="L668">        point5.normalize();</span>
+
+        try {
+            // each point belonging to a conic follows equation:
+            // p' * C * p = 0 ==&gt;
+            // x^2 + y^2 + w^2 + 2*x*y + 2*x*w + 2*y*w = 0
+<span class="fc" id="L674">            final var m = new Matrix(5, 6);</span>
+<span class="fc" id="L675">            var x = point1.getHomX();</span>
+<span class="fc" id="L676">            var y = point1.getHomY();</span>
+<span class="fc" id="L677">            var w = point1.getHomW();</span>
+<span class="fc" id="L678">            m.setElementAt(0, 0, x * x);</span>
+<span class="fc" id="L679">            m.setElementAt(0, 1, 2.0 * x * y);</span>
+<span class="fc" id="L680">            m.setElementAt(0, 2, y * y);</span>
+<span class="fc" id="L681">            m.setElementAt(0, 3, 2.0 * x * w);</span>
+<span class="fc" id="L682">            m.setElementAt(0, 4, 2.0 * y * w);</span>
+<span class="fc" id="L683">            m.setElementAt(0, 5, w * w);</span>
+<span class="fc" id="L684">            x = point2.getHomX();</span>
+<span class="fc" id="L685">            y = point2.getHomY();</span>
+<span class="fc" id="L686">            w = point2.getHomW();</span>
+<span class="fc" id="L687">            m.setElementAt(1, 0, x * x);</span>
+<span class="fc" id="L688">            m.setElementAt(1, 1, 2.0 * x * y);</span>
+<span class="fc" id="L689">            m.setElementAt(1, 2, y * y);</span>
+<span class="fc" id="L690">            m.setElementAt(1, 3, 2.0 * x * w);</span>
+<span class="fc" id="L691">            m.setElementAt(1, 4, 2.0 * y * w);</span>
+<span class="fc" id="L692">            m.setElementAt(1, 5, w * w);</span>
+<span class="fc" id="L693">            x = point3.getHomX();</span>
+<span class="fc" id="L694">            y = point3.getHomY();</span>
+<span class="fc" id="L695">            w = point3.getHomW();</span>
+<span class="fc" id="L696">            m.setElementAt(2, 0, x * x);</span>
+<span class="fc" id="L697">            m.setElementAt(2, 1, 2.0 * x * y);</span>
+<span class="fc" id="L698">            m.setElementAt(2, 2, y * y);</span>
+<span class="fc" id="L699">            m.setElementAt(2, 3, 2.0 * x * w);</span>
+<span class="fc" id="L700">            m.setElementAt(2, 4, 2.0 * y * w);</span>
+<span class="fc" id="L701">            m.setElementAt(2, 5, w * w);</span>
+<span class="fc" id="L702">            x = point4.getHomX();</span>
+<span class="fc" id="L703">            y = point4.getHomY();</span>
+<span class="fc" id="L704">            w = point4.getHomW();</span>
+<span class="fc" id="L705">            m.setElementAt(3, 0, x * x);</span>
+<span class="fc" id="L706">            m.setElementAt(3, 1, 2.0 * x * y);</span>
+<span class="fc" id="L707">            m.setElementAt(3, 2, y * y);</span>
+<span class="fc" id="L708">            m.setElementAt(3, 3, 2.0 * x * w);</span>
+<span class="fc" id="L709">            m.setElementAt(3, 4, 2.0 * y * w);</span>
+<span class="fc" id="L710">            m.setElementAt(3, 5, w * w);</span>
+<span class="fc" id="L711">            x = point5.getHomX();</span>
+<span class="fc" id="L712">            y = point5.getHomY();</span>
+<span class="fc" id="L713">            w = point5.getHomW();</span>
+<span class="fc" id="L714">            m.setElementAt(4, 0, x * x);</span>
+<span class="fc" id="L715">            m.setElementAt(4, 1, 2.0 * x * y);</span>
+<span class="fc" id="L716">            m.setElementAt(4, 2, y * y);</span>
+<span class="fc" id="L717">            m.setElementAt(4, 3, 2.0 * x * w);</span>
+<span class="fc" id="L718">            m.setElementAt(4, 4, 2.0 * y * w);</span>
+<span class="fc" id="L719">            m.setElementAt(4, 5, w * w);</span>
+
+            // normalize each row to increase accuracy
+<span class="fc" id="L722">            final var row = new double[6];</span>
+            double rowNorm;
+
+<span class="fc bfc" id="L725" title="All 2 branches covered.">            for (var j = 0; j &lt; 5; j++) {</span>
+<span class="fc" id="L726">                m.getSubmatrixAsArray(j, 0, j, 5, row);</span>
+<span class="fc" id="L727">                rowNorm = com.irurueta.algebra.Utils.normF(row);</span>
+<span class="fc bfc" id="L728" title="All 2 branches covered.">                for (var i = 0; i &lt; 6; i++) {</span>
+<span class="fc" id="L729">                    m.setElementAt(j, i, m.getElementAt(j, i) / rowNorm);</span>
+                }
+            }
+
+<span class="fc" id="L733">            final var decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L734">            decomposer.decompose();</span>
+
+<span class="pc bpc" id="L736" title="1 of 2 branches missed.">            if (decomposer.getRank() &lt; 5) {</span>
+<span class="nc" id="L737">                throw new ColinearPointsException();</span>
+            }
+
+            // the right null-space of m contains the parameters a, b, c, d, e ,f
+            // of the conic
+<span class="fc" id="L742">            final var v = decomposer.getV();</span>
+
+<span class="fc" id="L744">            final var aPrime = v.getElementAt(0, 5);</span>
+<span class="fc" id="L745">            final var bPrime = v.getElementAt(1, 5);</span>
+<span class="fc" id="L746">            final var cPrime = v.getElementAt(2, 5);</span>
+<span class="fc" id="L747">            final var dPrime = v.getElementAt(3, 5);</span>
+<span class="fc" id="L748">            final var ePrime = v.getElementAt(4, 5);</span>
+<span class="fc" id="L749">            final var fPrime = v.getElementAt(5, 5);</span>
+
+            // an ellipse follows the generic conic equation
+            // A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+
+            // Or in matrix form
+            // [A    B/2 D/2 ]   [A' B'  D']
+            // [B/2  C   E/2 ] = [B' C'  E']
+            // [D/2  E/2 F   ]   [D' E'  F']
+
+<span class="fc" id="L759">            final var b = 2.0 * bPrime;</span>
+<span class="fc" id="L760">            final var d = 2.0 * dPrime;</span>
+<span class="fc" id="L761">            final var e = 2.0 * ePrime;</span>
+
+<span class="fc" id="L763">            setParameters(aPrime, b, cPrime, d, e, fPrime, threshold);</span>
+<span class="nc" id="L764">        } catch (final AlgebraException | IllegalArgumentException ex) {</span>
+<span class="nc" id="L765">            throw new ColinearPointsException(ex);</span>
+<span class="fc" id="L766">        }</span>
+<span class="fc" id="L767">    }</span>
+
+    /**
+     * Sets parameters of canonical equation of an ellipse, which is:
+     * a*x^2 + b*x*y + c*y^2 + d*x + e*y + f = 0
+     *
+     * @param a a parameter.
+     * @param b b parameter.
+     * @param c c parameter.
+     * @param d d parameter.
+     * @param e e parameter.
+     * @param f f parameter.
+     * @throws IllegalArgumentException if parameters do not follow
+     *                                  b^2 - 4*a*c &amp;lt; 0.0.
+     */
+    public final void setParameters(
+            final double a, final double b, final double c, final double d, final double e, final double f) {
+<span class="fc" id="L784">        setParameters(a, b, c, d, e, f, 0.0);</span>
+<span class="fc" id="L785">    }</span>
+
+    /**
+     * Sets parameters of canonical equation of an ellipse, which is:
+     * a*x^2 + b*x*y + c*y^2 + d*x + e*y + f = 0
+     *
+     * @param a         a parameter.
+     * @param b         b parameter.
+     * @param c         c parameter.
+     * @param d         d parameter.
+     * @param e         e parameter.
+     * @param f         f parameter.
+     * @param threshold threshold to determine whether parameters are valid due
+     *                  to machine precision.
+     * @throws IllegalArgumentException if parameters do not follow
+     *                                  b^2 - 4*A*c &amp;lt; threshold.
+     */
+    public final void setParameters(
+            final double a, final double b, final double c, final double d, final double e, final double f,
+            final double threshold) {
+<span class="fc" id="L805">        final var discriminant = b * b - 4.0 * a * c;</span>
+<span class="pc bpc" id="L806" title="1 of 2 branches missed.">        if (discriminant &gt;= threshold) {</span>
+            // not an ellipse
+<span class="nc" id="L808">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L811">        final var tmp1 = a * e * e + c * d * d - b * d * e + discriminant * f;</span>
+<span class="fc" id="L812">        final var tmp2 = Math.sqrt((a - c) * (a - c) + b * b);</span>
+<span class="fc" id="L813">        final var sMajorAxis = -Math.sqrt(2.0 * tmp1 * (a + c + tmp2)) / discriminant;</span>
+
+<span class="fc" id="L815">        final var sMinorAxis = -Math.sqrt(2.0 * tmp1 * (a + c - tmp2)) / discriminant;</span>
+
+<span class="fc" id="L817">        final var xc = (2.0 * c * d - b * e) / discriminant;</span>
+<span class="fc" id="L818">        final var yc = (2.0 * a * e - b * d) / discriminant;</span>
+<span class="fc" id="L819">        final var centerPoint = new InhomogeneousPoint2D(xc, yc);</span>
+
+        double alpha;
+<span class="fc bfc" id="L822" title="All 4 branches covered.">        if (Math.abs(b) &lt;= threshold &amp;&amp; a &lt; c) {</span>
+<span class="fc" id="L823">            alpha = 0.0;</span>
+        } else {
+<span class="fc" id="L825">            alpha = Math.atan2(c - a - tmp2, b);</span>
+        }
+
+<span class="fc" id="L828">        setCenterAxesAndRotation(centerPoint, sMajorAxis, sMinorAxis, alpha);</span>
+<span class="fc" id="L829">    }</span>
+
+    /**
+     * Gets focus distance of ellipse.
+     * Focus determines the distance respect to the center of the ellipse
+     * where the two focus points are located.
+     * The sum of the distances from any point P = P(x,y) on the ellipse to
+     * those two foci is constant and equal to the major axis length.
+     *
+     * @return focus distance.
+     */
+    public double getFocus() {
+<span class="fc" id="L841">        return Math.sqrt(Math.pow(semiMajorAxis, 2.0) - Math.pow(semiMinorAxis, 2.0));</span>
+    }
+
+    /**
+     * Gets semi major axis x,y coordinates.
+     *
+     * @param coords array where x, y coordinates of semi major axis will be
+     *               stored.
+     */
+    public void getSemiMajorAxisCoordinates(final double[] coords) {
+<span class="fc" id="L851">        coords[0] = semiMajorAxis * Math.cos(rotationAngle);</span>
+<span class="fc" id="L852">        coords[1] = semiMajorAxis * Math.sin(rotationAngle);</span>
+<span class="fc" id="L853">    }</span>
+
+    /**
+     * Gets semi major axis x,y coordinates.
+     *
+     * @return array containing x, y coordinates of semi major axis.
+     */
+    public double[] getSemiMajorAxisCoordinates() {
+<span class="fc" id="L861">        final var coords = new double[Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];</span>
+<span class="fc" id="L862">        getSemiMajorAxisCoordinates(coords);</span>
+<span class="fc" id="L863">        return coords;</span>
+    }
+
+    /**
+     * Sets semi major axis coordinates.
+     * This method updates rotation angle and semi major axis length.
+     *
+     * @param coords coordinates of semi major axis.
+     */
+    public void setSemiMajorAxisCoordinates(final double[] coords) {
+<span class="fc" id="L873">        rotationAngle = Math.atan2(coords[1], coords[0]);</span>
+<span class="fc" id="L874">        semiMajorAxis = com.irurueta.algebra.Utils.normF(coords);</span>
+<span class="fc" id="L875">    }</span>
+
+    /**
+     * Gets semi minor axis x,y coordinates.
+     *
+     * @param coords array where x, y coordinates of semi minor axis will be
+     *               stored.
+     */
+    public void getSemiMinorAxisCoordinates(final double[] coords) {
+<span class="fc" id="L884">        coords[0] = -semiMinorAxis * Math.sin(rotationAngle);</span>
+<span class="fc" id="L885">        coords[1] = semiMinorAxis * Math.cos(rotationAngle);</span>
+<span class="fc" id="L886">    }</span>
+
+    /**
+     * Gets semi minor axis x,y coordinates.
+     *
+     * @return array containing x,y coordinates of semi minor axis.
+     */
+    public double[] getSemiMinorAxisCoordinates() {
+<span class="fc" id="L894">        final var coords = new double[Point2D.POINT2D_INHOMOGENEOUS_COORDINATES_LENGTH];</span>
+<span class="fc" id="L895">        getSemiMinorAxisCoordinates(coords);</span>
+<span class="fc" id="L896">        return coords;</span>
+    }
+
+    /**
+     * Sets semi minor axis coordinates.
+     * This method updates rotation angle and semi minor axis length.
+     *
+     * @param coords coordinates of semi minor axis.
+     */
+    public void setSemiMinorAxisCoordinates(final double[] coords) {
+<span class="fc" id="L906">        rotationAngle = Math.atan2(-coords[0], coords[1]);</span>
+<span class="fc" id="L907">        semiMinorAxis = com.irurueta.algebra.Utils.normF(coords);</span>
+<span class="fc" id="L908">    }</span>
+
+    /**
+     * Gets 1st focus point.
+     * The sum of the distances from any point P = P(x,y) on the ellipse to
+     * this focus is constant and equal to the major axis length.
+     *
+     * @param focusPoint1 1st focus point.
+     */
+    public void getFocusPoint1(final Point2D focusPoint1) {
+<span class="fc" id="L918">        final var focus = getFocus();</span>
+
+<span class="fc" id="L920">        focusPoint1.setInhomogeneousCoordinates(center.getInhomX() - focus * Math.cos(rotationAngle),</span>
+<span class="fc" id="L921">                center.getInhomY() - focus * Math.sin(rotationAngle));</span>
+<span class="fc" id="L922">    }</span>
+
+    /**
+     * Gets 1st focus point.
+     * The sum of the distances from any point P = P(x,y) on the ellipse to
+     * this focus is constant and equal to the major axis length.
+     *
+     * @return 1st focus point.
+     */
+    public Point2D getFocusPoint1() {
+<span class="fc" id="L932">        final var result = Point2D.create();</span>
+<span class="fc" id="L933">        getFocusPoint1(result);</span>
+<span class="fc" id="L934">        return result;</span>
+    }
+
+    /**
+     * Gets 2nd focus point.
+     * The sum of the distances from any point P = P(x,y) on the ellipse to
+     * this focus is constant and equal to the major axis length.
+     *
+     * @param focusPoint2 2nd focus point.
+     */
+    public void getFocusPoint2(final Point2D focusPoint2) {
+<span class="fc" id="L945">        final var focus = getFocus();</span>
+
+<span class="fc" id="L947">        focusPoint2.setInhomogeneousCoordinates(center.getInhomX() + focus * Math.cos(rotationAngle),</span>
+<span class="fc" id="L948">                center.getInhomY() + focus * Math.sin(rotationAngle));</span>
+<span class="fc" id="L949">    }</span>
+
+    /**
+     * Gets 2nd focus point.
+     * The sum of the distances from any point P = P(x,y) on the ellipse to
+     * this focus is constant and equal to the major axis length.
+     *
+     * @return 2nd focus point.
+     */
+    public Point2D getFocusPoint2() {
+<span class="fc" id="L959">        final var result = Point2D.create();</span>
+<span class="fc" id="L960">        getFocusPoint2(result);</span>
+<span class="fc" id="L961">        return result;</span>
+    }
+
+    /**
+     * Sets focus points.
+     *
+     * @param focusPoint1       1st focus point.
+     * @param focusPoint2       2nd focus point.
+     * @param keepSemiMinorAxis true indicates that semi-minor axis is kept,
+     *                          false indicates that semi-major axis is kept instead.
+     */
+    public void setFocusPoints(final Point2D focusPoint1, final Point2D focusPoint2, final boolean keepSemiMinorAxis) {
+<span class="fc" id="L973">        final var c = new InhomogeneousPoint2D((focusPoint1.getInhomX() + focusPoint2.getInhomX()) / 2.0,</span>
+<span class="fc" id="L974">                (focusPoint1.getInhomY() + focusPoint2.getInhomY()) / 2.0);</span>
+<span class="fc" id="L975">        final var alpha = Math.atan2(focusPoint2.getInhomY() - focusPoint1.getInhomY(),</span>
+<span class="fc" id="L976">                focusPoint2.getInhomX() - focusPoint1.getInhomX());</span>
+
+<span class="fc" id="L978">        final var f = focusPoint1.distanceTo(c);</span>
+<span class="fc" id="L979">        final var f2 = f * f;</span>
+        final double a2;
+        final double b2;
+<span class="fc bfc" id="L982" title="All 2 branches covered.">        if (keepSemiMinorAxis) {</span>
+<span class="fc" id="L983">            b2 = semiMinorAxis * semiMinorAxis;</span>
+<span class="fc" id="L984">            a2 = f2 + b2;</span>
+        } else {
+<span class="fc" id="L986">            a2 = semiMajorAxis * semiMajorAxis;</span>
+<span class="fc" id="L987">            b2 = a2 - f2;</span>
+        }
+
+<span class="fc" id="L990">        final var sMajorAxis = Math.sqrt(a2);</span>
+<span class="fc" id="L991">        final var sMinorAxis = Math.sqrt(b2);</span>
+
+<span class="fc" id="L993">        setCenterAxesAndRotation(c, sMajorAxis, sMinorAxis, alpha);</span>
+<span class="fc" id="L994">    }</span>
+
+    /**
+     * Gets eccentricity of ellipsis.
+     *
+     * @return eccentricity of ellipsis.
+     */
+    public double getEccentricity() {
+<span class="fc" id="L1002">        return getFocus() / semiMajorAxis;</span>
+    }
+
+    /**
+     * Returns area of this ellipse.
+     *
+     * @return area of this ellipse.
+     */
+    public double getArea() {
+<span class="fc" id="L1011">        return Math.PI * semiMajorAxis * semiMinorAxis;</span>
+    }
+
+    /**
+     * Returns perimeter of this ellipse.
+     *
+     * @return Perimeter of this ellipse.
+     */
+    public double getPerimeter() {
+<span class="fc" id="L1020">        final var a = semiMajorAxis;</span>
+<span class="fc" id="L1021">        final var b = semiMinorAxis;</span>
+
+<span class="fc" id="L1023">        return Math.PI * (3.0 * (a + b) - Math.sqrt((3.0 * a + b) * (a + 3.0 * b)));</span>
+    }
+
+    /**
+     * Gets curvature of ellipse at provided point.
+     *
+     * @param point point to be checked.
+     * @return curvature of ellipse.
+     */
+    public double getCurvature(final Point2D point) {
+<span class="fc" id="L1033">        final var a = semiMajorAxis;</span>
+<span class="fc" id="L1034">        final var b = semiMinorAxis;</span>
+
+<span class="fc" id="L1036">        final var a2 = a * a;</span>
+<span class="fc" id="L1037">        final var b2 = b * b;</span>
+
+<span class="fc" id="L1039">        final var a4 = a2 * a2;</span>
+<span class="fc" id="L1040">        final var b4 = b2 * b2;</span>
+
+<span class="fc" id="L1042">        final var x = point.getInhomX() - center.getInhomX();</span>
+<span class="fc" id="L1043">        final var y = point.getInhomY() - center.getInhomY();</span>
+
+<span class="fc" id="L1045">        final var x2 = x * x;</span>
+<span class="fc" id="L1046">        final var y2 = y * y;</span>
+
+<span class="fc" id="L1048">        return Math.pow(x2 / a4 + y2 / b4, -3.0 / 2.0) / (a2 * b2);</span>
+    }
+
+    /**
+     * Converts this circle into a conic.
+     * Conics are a more general representation of circles.
+     *
+     * @return A conic representing this circle
+     */
+    public Conic toConic() {
+<span class="fc" id="L1058">        center.normalize();</span>
+        // use inhomogeneous center coordinates
+<span class="fc" id="L1060">        final var xc = center.getInhomX();</span>
+<span class="fc" id="L1061">        final var yc = center.getInhomY();</span>
+
+<span class="fc" id="L1063">        final var sint = Math.sin(rotationAngle);</span>
+<span class="fc" id="L1064">        final var cost = Math.cos(rotationAngle);</span>
+
+<span class="fc" id="L1066">        final var a = semiMajorAxis;</span>
+<span class="fc" id="L1067">        final var b = semiMinorAxis;</span>
+
+<span class="fc" id="L1069">        final var xc2 = xc * xc;</span>
+<span class="fc" id="L1070">        final var yc2 = yc * yc;</span>
+
+<span class="fc" id="L1072">        final var sint2 = sint * sint;</span>
+<span class="fc" id="L1073">        final var cost2 = cost * cost;</span>
+
+<span class="fc" id="L1075">        final var a2 = a * a;</span>
+<span class="fc" id="L1076">        final var b2 = b * b;</span>
+
+<span class="fc" id="L1078">        final var aParam = a2 * sint2 + b2 * cost2;</span>
+<span class="fc" id="L1079">        final var bParam = 2.0 * (b2 - a2) * sint * cost;</span>
+<span class="fc" id="L1080">        final var cParam = a2 * cost2 + b2 * sint2;</span>
+<span class="fc" id="L1081">        final var dParam = -2.0 * aParam * xc - bParam * yc;</span>
+<span class="fc" id="L1082">        final var eParam = -bParam * xc - 2.0 * cParam * yc;</span>
+<span class="fc" id="L1083">        final var fParam = aParam * xc2 + bParam * xc * yc + cParam * yc2 - a2 * b2;</span>
+
+<span class="fc" id="L1085">        final var bConic = bParam / 2.0;</span>
+<span class="fc" id="L1086">        final var dConic = dParam / 2.0;</span>
+<span class="fc" id="L1087">        final var eConic = eParam / 2.0;</span>
+
+<span class="fc" id="L1089">        return new Conic(aParam, bConic, cParam, dConic, eConic, fParam);</span>
+    }
+
+    /**
+     * Set parameters of this circle from a valid conic corresponding to a
+     * circle.
+     *
+     * @param conic conic to set parameters from.
+     * @throws IllegalArgumentException if provided conic is not an ellipse.
+     */
+    public final void setFromConic(final Conic conic) {
+<span class="fc bfc" id="L1100" title="All 2 branches covered.">        if (conic.getConicType() != ConicType.ELLIPSE_CONIC_TYPE</span>
+<span class="fc bfc" id="L1101" title="All 2 branches covered.">                &amp;&amp; conic.getConicType() != ConicType.CIRCLE_CONIC_TYPE) {</span>
+<span class="fc" id="L1102">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L1105">        conic.normalize();</span>
+
+<span class="fc" id="L1107">        final var aConic = conic.getA();</span>
+<span class="fc" id="L1108">        final var bConic = conic.getB();</span>
+<span class="fc" id="L1109">        final var cConic = conic.getC();</span>
+<span class="fc" id="L1110">        final var dConic = conic.getD();</span>
+<span class="fc" id="L1111">        final var eConic = conic.getE();</span>
+<span class="fc" id="L1112">        final var fConic = conic.getF();</span>
+
+        // an ellipse follows the generic conic equation
+        // A*x^2 + B*x*y + C*y^2 + D*x + E*y + F = 0
+
+        // Or in matrix form
+        // [A    B/2 D/2 ]   [A' B'  D']
+        // [B/2  C   E/2 ] = [B' C'  E']
+        // [D/2  E/2 F   ]   [D' E'  F']
+
+<span class="fc" id="L1122">        final var b = 2.0 * bConic;</span>
+<span class="fc" id="L1123">        final var d = 2.0 * dConic;</span>
+<span class="fc" id="L1124">        final var e = 2.0 * eConic;</span>
+
+<span class="fc" id="L1126">        setParameters(aConic, b, cConic, d, e, fConic);</span>
+<span class="fc" id="L1127">    }</span>
+
+    /**
+     * Sets parameters of this ellipse from a circle.
+     *
+     * @param circle a circle to set parameters from.
+     */
+    public final void setFromCircle(final Circle circle) {
+<span class="fc" id="L1135">        center = circle.getCenter();</span>
+<span class="fc" id="L1136">        semiMajorAxis = semiMinorAxis = circle.getRadius();</span>
+<span class="fc" id="L1137">        rotationAngle = 0.0;</span>
+<span class="fc" id="L1138">    }</span>
+
+    /**
+     * Determines if provided point is inside this ellipse or not up to a
+     * certain threshold.
+     * If provided threshold is positive, the ellipse behaves as if it was a
+     * larger ellipse increased by threshold amount, if provided threshold is
+     * negative, the ellipse behaves as if it was a smaller ellipse decreased by
+     * threshold amount in radius.
+     *
+     * @param point     Point to be checked.
+     * @param threshold Threshold to determine if point is inside or not.
+     * @return True if point is considered to be inside this circle, false
+     * otherwise.
+     */
+    public boolean isInside(final Point2D point, final double threshold) {
+<span class="fc" id="L1154">        center.normalize();</span>
+        // use inhomogeneous center coordinates
+<span class="fc" id="L1156">        final var xc = center.getInhomX();</span>
+<span class="fc" id="L1157">        final var yc = center.getInhomY();</span>
+
+<span class="fc" id="L1159">        final var sint = Math.sin(rotationAngle);</span>
+<span class="fc" id="L1160">        final var cost = Math.cos(rotationAngle);</span>
+
+<span class="fc" id="L1162">        final var a = semiMajorAxis;</span>
+<span class="fc" id="L1163">        final var b = semiMinorAxis;</span>
+
+<span class="fc" id="L1165">        final var xc2 = xc * xc;</span>
+<span class="fc" id="L1166">        final var yc2 = yc * yc;</span>
+
+<span class="fc" id="L1168">        final var sint2 = sint * sint;</span>
+<span class="fc" id="L1169">        final var cost2 = cost * cost;</span>
+
+<span class="fc" id="L1171">        final var a2 = a * a;</span>
+<span class="fc" id="L1172">        final var b2 = b * b;</span>
+
+<span class="fc" id="L1174">        final var aParam = a2 * sint2 + b2 * cost2;</span>
+<span class="fc" id="L1175">        final var bParam = 2.0 * (b2 - a2) * sint * cost;</span>
+<span class="fc" id="L1176">        final var cParam = a2 * cost2 + b2 * sint2;</span>
+<span class="fc" id="L1177">        final var dParam = -2.0 * aParam * xc - bParam * yc;</span>
+<span class="fc" id="L1178">        final var eParam = -bParam * xc - 2.0 * cParam * yc;</span>
+<span class="fc" id="L1179">        final var fParam = aParam * xc2 + bParam * xc * yc + cParam * yc2 - a2 * b2;</span>
+
+<span class="fc" id="L1181">        final var x = point.getInhomX();</span>
+<span class="fc" id="L1182">        final var y = point.getInhomY();</span>
+
+<span class="fc bfc" id="L1184" title="All 2 branches covered.">        return aParam * x * x + bParam * x * y + cParam * y * y + dParam * x + eParam * y + fParam &lt;= threshold;</span>
+    }
+
+    /**
+     * Determines if provided point is inside this circle or not.
+     *
+     * @param point Point to be checked.
+     * @return True if point is considered to be inside this circle, false
+     * otherwise.
+     */
+    public boolean isInside(final Point2D point) {
+<span class="fc" id="L1195">        return isInside(point, 0.0);</span>
+    }
+
+    /**
+     * Determines whether provided point lies at ellipse boundary or not up to
+     * a certain threshold.
+     *
+     * @param point     Point to be checked.
+     * @param threshold A small threshold to determine whether point lies at
+     *                  ellipse boundary.
+     * @return True if point lies at ellipse boundary, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is
+     *                                  negative.
+     */
+    public boolean isLocus(final Point2D point, final double threshold) {
+<span class="fc bfc" id="L1210" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L1211">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L1214">        center.normalize();</span>
+        // use inhomogeneous center coordinates
+<span class="fc" id="L1216">        final var xc = center.getInhomX();</span>
+<span class="fc" id="L1217">        final var yc = center.getInhomY();</span>
+
+<span class="fc" id="L1219">        final var sint = Math.sin(rotationAngle);</span>
+<span class="fc" id="L1220">        final var cost = Math.cos(rotationAngle);</span>
+
+<span class="fc" id="L1222">        final var a = semiMajorAxis;</span>
+<span class="fc" id="L1223">        final var b = semiMinorAxis;</span>
+
+<span class="fc" id="L1225">        final var xc2 = xc * xc;</span>
+<span class="fc" id="L1226">        final var yc2 = yc * yc;</span>
+
+<span class="fc" id="L1228">        final var sint2 = sint * sint;</span>
+<span class="fc" id="L1229">        final var cost2 = cost * cost;</span>
+
+<span class="fc" id="L1231">        final var a2 = a * a;</span>
+<span class="fc" id="L1232">        final var b2 = b * b;</span>
+
+<span class="fc" id="L1234">        final var aParam = a2 * sint2 + b2 * cost2;</span>
+<span class="fc" id="L1235">        final var bParam = 2.0 * (b2 - a2) * sint * cost;</span>
+<span class="fc" id="L1236">        final var cParam = a2 * cost2 + b2 * sint2;</span>
+<span class="fc" id="L1237">        final var dParam = -2.0 * aParam * xc - bParam * yc;</span>
+<span class="fc" id="L1238">        final var eParam = -bParam * xc - 2.0 * cParam * yc;</span>
+<span class="fc" id="L1239">        final var fParam = aParam * xc2 + bParam * xc * yc + cParam * yc2 - a2 * b2;</span>
+
+<span class="fc" id="L1241">        final var x = point.getInhomX();</span>
+<span class="fc" id="L1242">        final var y = point.getInhomY();</span>
+
+<span class="fc bfc" id="L1244" title="All 2 branches covered.">        return Math.abs(aParam * x * x + bParam * x * y + cParam * y * y + dParam * x + eParam * y + fParam) &lt;= threshold;</span>
+    }
+
+    /**
+     * Determines whether provided point lies at ellipse boundary or not.
+     *
+     * @param point Point to be checked.
+     * @return True if point lies at ellipse boundary, false otherwise.
+     */
+    public boolean isLocus(final Point2D point) {
+<span class="fc" id="L1254">        return isLocus(point, DEFAULT_THRESHOLD);</span>
+    }
+
+    /**
+     * Returns a line tangent to this ellipse at provided point. Provided point
+     * must be locus of this ellipse, otherwise a NotLocusException will be
+     * thrown.
+     *
+     * @param point a locus point of this ellipse.
+     * @return a 2D line tangent to this ellipse at provided point.
+     * @throws NotLocusException if provided point is not locus of this ellipse
+     *                           up to DEFAULT_THRESHOLD.
+     */
+    public Line2D getTangentLineAt(final Point2D point) throws NotLocusException {
+<span class="nc" id="L1268">        return getTangentLineAt(point, DEFAULT_THRESHOLD);</span>
+    }
+
+    /**
+     * Returns a line tangent to this ellipse at provided point. Provided point
+     * must be locus of this ellipse, otherwise a NotLocusException will be
+     * thrown.
+     *
+     * @param point     a locus point of this circle.
+     * @param threshold threshold to determine if provided point is locus.
+     * @return a 2D line tangent to this circle at provided point.
+     * @throws NotLocusException        if provided point is not locus of this circle
+     *                                  up to provided threshold.
+     * @throws IllegalArgumentException if provided threshold is negative.
+     */
+    public Line2D getTangentLineAt(final Point2D point, final double threshold) throws NotLocusException {
+<span class="fc" id="L1284">        final var line = new Line2D();</span>
+<span class="fc" id="L1285">        tangentLineAt(point, line, threshold);</span>
+<span class="fc" id="L1286">        return line;</span>
+    }
+
+    /**
+     * Computes a line tangent to this circle at provided point. Provided point
+     * must be locus of this circle, otherwise a NotLocusException will be
+     * thrown.
+     *
+     * @param point     a locus point of this circle.
+     * @param line      instance of a 2D line where result will be stored.
+     * @param threshold threshold to determine if provided point is locus.
+     * @throws NotLocusException        if provided point is not locus of this circle
+     *                                  up to provided threshold.
+     * @throws IllegalArgumentException if provided threshold is negative.
+     */
+    public void tangentLineAt(final Point2D point, final Line2D line, final double threshold) throws NotLocusException {
+<span class="fc bfc" id="L1302" title="All 2 branches covered.">        if (!isLocus(point, threshold)) {</span>
+<span class="fc" id="L1303">            throw new NotLocusException();</span>
+        }
+
+<span class="fc" id="L1306">        final var c = toConic();</span>
+<span class="fc" id="L1307">        c.tangentLineAt(point, line, threshold);</span>
+<span class="fc" id="L1308">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
