@@ -63,7 +63,7 @@ citations, rather than restating the theory from memory.
 
 [[bib-hartley-zisserman]]
 * Richard Hartley and Andrew Zisserman, _Multiple View Geometry in Computer Vision_, 2nd edition, Cambridge
-  University Press, 2004. ISBN 9780521540513. https://www.cambridge.org/9780521540513[Publisher page]. +
+  University Press, 2004. ISBN 9780521540513. https://www.robots.ox.ac.uk/~vgg/hzbook/[Author's book page]. +
   Not cited directly anywhere in the library's javadoc; supplied as the primary formal reference for
   projective geometry, the Euclidean/metric/affine/projective stratification, point-line-plane duality,
   conics/quadrics and the pinhole camera model. Specific sections used:
