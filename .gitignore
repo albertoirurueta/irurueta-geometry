@@ -33,3 +33,6 @@ src/main/resources/com/irurueta/geometry/build-info.properties
 
 # Antora docs build output
 /docs/build/
+
+# Antora docs toolchain
+/docs/node_modules/
