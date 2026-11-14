@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LinePlaneCorrespondencePinholeCameraRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">LinePlaneCorrespondencePinholeCameraRobustEstimator.java</span></div><h1>LinePlaneCorrespondencePinholeCameraRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.Line2D;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Plane;
+import com.irurueta.geometry.refiners.DecomposedLinePlaneCorrespondencePinholeCameraRefiner;
+import com.irurueta.geometry.refiners.NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * This is an abstract class for algorithms to robustly find the best pinhole
+ * camera for collections of matched lines and planes.
+ * Implementations of this class should be able to detect and discard outliers
+ * in order to find the best solution.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public abstract class LinePlaneCorrespondencePinholeCameraRobustEstimator extends PinholeCameraRobustEstimator {
+
+    /**
+     * Minimum number of required line/plane correspondences to estimate a
+     * camera.
+     */
+    public static final int MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES = 4;
+
+    /**
+     * Default robust estimator method when none is provided.
+     */
+<span class="fc" id="L45">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;</span>
+
+    /**
+     * List of matched planes.
+     */
+    protected List&lt;Plane&gt; planes;
+
+    /**
+     * List of matched lines.
+     */
+    protected List&lt;Line2D&gt; lines;
+
+    /**
+     * Plane to be reused when computing residuals.
+     */
+<span class="fc" id="L60">    private final Plane residualTestPlane = new Plane();</span>
+
+    /**
+     * Constructor.
+     */
+    protected LinePlaneCorrespondencePinholeCameraRobustEstimator() {
+<span class="fc" id="L66">        super();</span>
+<span class="fc" id="L67">    }</span>
+
+    /**
+     * Constructor with lists of matched planes and 2D lines to estimate a
+     * pinhole camera.
+     * Points and lines in the lists located at the same position are considered
+     * to be matched. Hence, both lists must have the same size, and their size
+     * must be greater or equal than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES
+     * (4 matches).
+     *
+     * @param planes list of planes used to estimate a pinhole camera.
+     * @param lines  list of corresponding projected 2D lines used to estimate
+     *               a pinhole camera.
+     * @throws IllegalArgumentException if provided lists don't have the same
+     *                                  size or their size is smaller than required minimum size (4 matches).
+     */
+    protected LinePlaneCorrespondencePinholeCameraRobustEstimator(final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L84">        super();</span>
+<span class="fc" id="L85">        internalSetLinesAndPlanes(planes, lines);</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Constructor with listener.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    protected LinePlaneCorrespondencePinholeCameraRobustEstimator(final PinholeCameraRobustEstimatorListener listener) {
+<span class="fc" id="L95">        super(listener);</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Constructor with listener and lists of matched planes and 2D lines to
+     * estimate a pinhole camera.
+     * Points and lines in the lists located at the same position are considered
+     * to be matched. Hence, both lists must have the same size, and their size
+     * must be greater or equal than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES
+     * (4 matches).
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   list of planes used to estimate a pinhole camera.
+     * @param lines    list of corresponding projected 2D lines used to estimate
+     *                 a pinhole camera.
+     * @throws IllegalArgumentException if provided lists don't have the same
+     *                                  size or their size is smaller than required minimum size (4 matches).
+     */
+    protected LinePlaneCorrespondencePinholeCameraRobustEstimator(
+            final PinholeCameraRobustEstimatorListener listener, final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L116">        super(listener);</span>
+<span class="fc" id="L117">        internalSetLinesAndPlanes(planes, lines);</span>
+<span class="fc" id="L118">    }</span>
+
+    /**
+     * Returns list of 3D planes to be used to estimate a pinhole camera.
+     * Each plane in the list of 3D planes must be matched with a corresponding
+     * 2D line resulting from the projection of the 3D plane through the camera
+     * to be estimated. Matched lines and planes must be located on the same
+     * position in the lists, hence, both lists must have the same size, and
+     * their size must be greater or equal than
+     * MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES.
+     *
+     * @return list of 3D planes to be used to estimate a pinhole camera.
+     */
+    public List&lt;Plane&gt; getPlanes() {
+<span class="fc" id="L132">        return planes;</span>
+    }
+
+    /**
+     * Returns list of 2D lines to be used to estimate a pinhole camera.
+     * Each line in the list is the result of the projection of a matched.
+     *
+     * @return list of 2D lines to be used to estimate a pinhole camera.
+     */
+    public List&lt;Line2D&gt; getLines() {
+<span class="fc" id="L142">        return lines;</span>
+    }
+
+    /**
+     * Sets list of matched 3D planes and 2D lines to be used to estimate a
+     * pinhole camera.
+     * Each plane in the list of 3D planes must be matched with a corresponding
+     * 2D line resulting from the projection of the 3D plane through the camera
+     * to be estimated. Matched lines and planes must be located on the same
+     * position in the lists, hence, both lists must have the same size, and
+     * their size must be greater or equal than
+     * MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES.
+     *
+     * @param planes 3D planes to be used to estimate a pinhole camera.
+     * @param lines  list of corresponding projected 2D lines used to estimate
+     *               a pinhole camera.
+     * @throws IllegalArgumentException if provided lists don't have the same
+     *                                  size or their size is smaller than required minimum size (4 matches).
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
+     */
+    public final void setLinesAndPlanes(final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines) throws LockedException {
+<span class="fc bfc" id="L164" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L165">            throw new LockedException();</span>
+        }
+<span class="fc" id="L167">        internalSetLinesAndPlanes(planes, lines);</span>
+<span class="fc" id="L168">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the pinhole camera estimation.
+     * This is true when input data (i.e. lists of matched planes and lines) are
+     * provided as a minimum of MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES are
+     * available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="pc bpc" id="L179" title="2 of 6 branches missed.">        return planes != null &amp;&amp; lines != null &amp;&amp; planes.size() == lines.size()</span>
+<span class="pc bpc" id="L180" title="1 of 2 branches missed.">                &amp;&amp; planes.size() &gt;= MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;</span>
+    }
+
+    /**
+     * Returns quality scores corresponding to each pair of matched samples
+     * (plane and line).
+     * The larger the score value the better the quality of the matching.
+     * This implementation always returns null.
+     * Subclasses using quality scores must implement proper behaviour.
+     *
+     * @return quality scores corresponding to each pair of matched points.
+     */
+    public double[] getQualityScores() {
+<span class="fc" id="L193">        return null;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     * This implementation makes no action.
+     * Subclasses using quality scores must implement proper behaviour.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES (i.e. 4 samples).
+     */
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="nc" id="L210">    }</span>
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided robust estimator method.
+     *
+     * @param method method of a robust estimator algorithm to estimate the best
+     *               pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(final RobustEstimatorMethod method) {
+<span class="fc" id="L221">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(method);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided planes and lines and provided robust
+     * estimator method.
+     *
+     * @param planes list of 3D planes to estimate a pinhole camera.
+     * @param lines  list of corresponding projected 2D lines used to estimate
+     *               a pinhole camera.
+     * @param method method of a robust estimator algorithm to estimate the best
+     *               pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes and lines
+     *                                  don't have the same size or their size is smaller than required minimum
+     *                                  size (4 correspondences).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines, final RobustEstimatorMethod method) {
+<span class="fc" id="L241">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines, method);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided listener and robust estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param method   method of a robust estimator algorithm to estimate the best
+     *                 pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final PinholeCameraRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+<span class="fc" id="L256">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, method);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided listener, planes and lines, and robust
+     * estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   list of 3D planes to estimate a pinhole camera.
+     * @param lines    list of corresponding projected 2D lines used to estimate
+     *                 a pinhole camera.
+     * @param method   method of a robust estimator algorithm to estimate the best
+     *                 pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes and lines
+     *                                  don't have the same size or their size is smaller than required minimum
+     *                                  size (4 correspondences).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final PinholeCameraRobustEstimatorListener listener, final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L279">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines, method);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided quality scores and robust estimator
+     * method.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      planes/lines.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than required minimum size (4 samples).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc" id="L297">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(qualityScores, method);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided planes and lines, quality scores and
+     * provided robust estimator method.
+     *
+     * @param planes        list of 3D planes to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate
+     *                      a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      planes/lines.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes and lines or
+     *                                  quality scores don't have the same size or their size is smaller than
+     *                                  required minimum size (4 correspondences).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L320">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(planes, lines, qualityScores, method);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided listener, quality scores and robust
+     * estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      planes/lines.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores don't have
+     *                                  the required minimum size (4 samples).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final PinholeCameraRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L341">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, qualityScores, method);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided listener, planes and lines, and robust
+     * estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param planes        list of 3D planes to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate
+     *                      a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      planes/lines.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes and lines or
+     *                                  quality scores don't have the same size or their size is smaller than
+     *                                  required minimum size (4 correspondences).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final PinholeCameraRobustEstimatorListener listener, final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines,
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc" id="L366">        return DLTLinePlaneCorrespondencePinholeCameraRobustEstimator.create(listener, planes, lines, qualityScores,</span>
+                method);
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using default robust estimator method.
+     *
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create() {
+<span class="fc" id="L377">        return create(DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided planes and lines and default robust
+     * estimator method.
+     *
+     * @param planes list of 3D planes to estimate a pinhole camera.
+     * @param lines  list of corresponding projected 2D lines used to estimate
+     *               a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes and lines
+     *                                  don't have the same size or their size is smaller than required minimum
+     *                                  size (4 correspondences).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L395">        return create(planes, lines, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided listener and default estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @return an instance of a pinhole camera robust estimator.
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final PinholeCameraRobustEstimatorListener listener) {
+<span class="fc" id="L408">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided listener, planes and lines, and
+     * default robust estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   list of 3D planes to estimate a pinhole camera.
+     * @param lines    list of corresponding projected 2D lines used to estimate
+     *                 a pinhole camera.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes and lines
+     *                                  don't have the same size or their size is smaller than required minimum
+     *                                  size (4 correspondences).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final PinholeCameraRobustEstimatorListener listener, final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L428">        return create(listener, planes, lines, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided quality scores and default robust
+     * estimator method.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      planes/lines.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than required minimum size (4 samples).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(final double[] qualityScores) {
+<span class="fc" id="L443">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided planes and lines, quality scores and
+     * default robust estimator method.
+     *
+     * @param planes        list of 3D planes to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate
+     *                      a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      planes/lines.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes and lines or
+     *                                  quality scores don't have the same size or their size is smaller than
+     *                                  required minimum size (4 correspondences).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines, final double[] qualityScores) {
+<span class="fc" id="L463">        return create(planes, lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided listener, quality scores and default
+     * robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      planes/lines.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided quality scores don't have
+     *                                  the required minimum size (4 samples).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final PinholeCameraRobustEstimatorListener listener, final double[] qualityScores) {
+<span class="fc" id="L481">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates a pinhole camera robust estimator based on plane/line
+     * correspondences and using provided listener, planes and lines, and
+     * default robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param planes        list of 3D planes to estimate a pinhole camera.
+     * @param lines         list of corresponding projected 2D lines used to estimate
+     *                      a pinhole camera.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      planes/lines.
+     * @return an instance of a pinhole camera robust estimator.
+     * @throws IllegalArgumentException if provided lists of planes and lines or
+     *                                  quality scores don't have the same size or their size is smaller than
+     *                                  required minimum size (4 correspondences).
+     */
+    public static LinePlaneCorrespondencePinholeCameraRobustEstimator create(
+            final PinholeCameraRobustEstimatorListener listener, final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines,
+            final double[] qualityScores) {
+<span class="fc" id="L504">        return create(listener, planes, lines, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Attempt sto refine provided camera.
+     *
+     * @param pinholeCamera camera to be refined.
+     * @param weight        weight for suggestion residual.
+     * @return refined camera of provided camera if anything fails.
+     */
+    protected PinholeCamera attemptRefine(final PinholeCamera pinholeCamera, final double weight) {
+<span class="fc bfc" id="L515" title="All 2 branches covered.">        if (useFastRefinement) {</span>
+<span class="fc" id="L516">            return attemptFastRefine(pinholeCamera, weight);</span>
+        } else {
+<span class="fc" id="L518">            return attemptSlowRefine(pinholeCamera, weight);</span>
+        }
+    }
+
+    /**
+     * Back-projection residual/error for a single line using provided camera.
+     *
+     * @param pinholeCamera camera ot be checked.
+     * @param line          line to be back-projected.
+     * @param plane         plane to check against.
+     * @return dot product distance between back-projected line and plane.
+     */
+    protected double singleBackprojectionResidual(
+            final PinholeCamera pinholeCamera, final Line2D line, final Plane plane) {
+        // back-project line into test plane
+<span class="fc" id="L533">        pinholeCamera.backProject(line, residualTestPlane);</span>
+<span class="fc" id="L534">        residualTestPlane.normalize();</span>
+
+<span class="fc" id="L536">        final var dotProduct = Math.abs(plane.getA() * residualTestPlane.getA()</span>
+<span class="fc" id="L537">                + plane.getB() * residualTestPlane.getB() + plane.getC() * residualTestPlane.getC()</span>
+<span class="fc" id="L538">                + plane.getD() * residualTestPlane.getD());</span>
+<span class="fc" id="L539">        return 1.0 - dotProduct;</span>
+    }
+
+    /**
+     * Internal method to set lists of planes and lines to be used to estimate a
+     * pinhole camera.
+     * This method does not check whether estimator is locked or not.
+     *
+     * @param planes list of 3D planes used to estimate a pinhole camera.
+     * @param lines  list of corresponding projected 2D lines used to estimate
+     *               a pinhole camera.
+     * @throws IllegalArgumentException if provided lists of planes/lines don't
+     *                                  have the same size or their size is smaller than required minimum size
+     *                                  (4 samples).
+     */
+    private void internalSetLinesAndPlanes(final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines) {
+<span class="fc bfc" id="L555" title="All 2 branches covered.">        if (planes.size() &lt; MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES) {</span>
+<span class="fc" id="L556">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L558" title="All 2 branches covered.">        if (lines.size() != planes.size()) {</span>
+<span class="fc" id="L559">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L561">        this.planes = planes;</span>
+<span class="fc" id="L562">        this.lines = lines;</span>
+<span class="fc" id="L563">    }</span>
+
+    /**
+     * Attempts to refine provided camera using a slow but more accurate and
+     * stable algorithm by first doing a Powell optimization and then obtaining
+     * covariance using Levenberg/Marquardt if needed.
+     *
+     * @param pinholeCamera camera to be refined.
+     * @param weight        weight for suggestion residual.
+     * @return refined camera or provided camera if anything fails.
+     */
+    private PinholeCamera attemptSlowRefine(final PinholeCamera pinholeCamera, final double weight) {
+<span class="fc" id="L575">        final var inliersData = getInliersData();</span>
+<span class="pc bpc" id="L576" title="2 of 6 branches missed.">        if ((refineResult || keepCovariance) &amp;&amp; inliersData != null) {</span>
+<span class="fc" id="L577">            final var refiner = new DecomposedLinePlaneCorrespondencePinholeCameraRefiner(pinholeCamera,</span>
+<span class="fc" id="L578">                    keepCovariance, inliersData, planes, lines, getRefinementStandardDeviation());</span>
+            try {
+<span class="pc bpc" id="L580" title="1 of 2 branches missed.">                if (refineResult) {</span>
+<span class="fc" id="L581">                    refiner.setMinSuggestionWeight(weight);</span>
+<span class="fc" id="L582">                    refiner.setMaxSuggestionWeight(weight);</span>
+
+<span class="fc" id="L584">                    refiner.setSuggestSkewnessValueEnabled(suggestSkewnessValueEnabled);</span>
+<span class="fc" id="L585">                    refiner.setSuggestedSkewnessValue(suggestedSkewnessValue);</span>
+<span class="fc" id="L586">                    refiner.setSuggestHorizontalFocalLengthEnabled(suggestHorizontalFocalLengthEnabled);</span>
+<span class="fc" id="L587">                    refiner.setSuggestedHorizontalFocalLengthValue(suggestedHorizontalFocalLengthValue);</span>
+<span class="fc" id="L588">                    refiner.setSuggestVerticalFocalLengthEnabled(suggestVerticalFocalLengthEnabled);</span>
+<span class="fc" id="L589">                    refiner.setSuggestedVerticalFocalLengthValue(suggestedVerticalFocalLengthValue);</span>
+<span class="fc" id="L590">                    refiner.setSuggestAspectRatioEnabled(suggestAspectRatioEnabled);</span>
+<span class="fc" id="L591">                    refiner.setSuggestedAspectRatioValue(suggestedAspectRatioValue);</span>
+<span class="fc" id="L592">                    refiner.setSuggestPrincipalPointEnabled(suggestPrincipalPointEnabled);</span>
+<span class="fc" id="L593">                    refiner.setSuggestedPrincipalPointValue(suggestedPrincipalPointValue);</span>
+<span class="fc" id="L594">                    refiner.setSuggestRotationEnabled(suggestRotationEnabled);</span>
+<span class="fc" id="L595">                    refiner.setSuggestedRotationValue(suggestedRotationValue);</span>
+<span class="fc" id="L596">                    refiner.setSuggestCenterEnabled(suggestCenterEnabled);</span>
+<span class="fc" id="L597">                    refiner.setSuggestedCenterValue(suggestedCenterValue);</span>
+                }
+
+<span class="fc" id="L600">                final var result = new PinholeCamera();</span>
+<span class="fc" id="L601">                final var improved = refiner.refine(result);</span>
+
+<span class="pc bpc" id="L603" title="1 of 2 branches missed.">                if (keepCovariance) {</span>
+                    // keep covariance
+<span class="fc" id="L605">                    covariance = refiner.getCovariance();</span>
+                }
+
+<span class="fc bfc" id="L608" title="All 2 branches covered.">                return improved ? result : pinholeCamera;</span>
+
+<span class="nc" id="L610">            } catch (final Exception e) {</span>
+<span class="nc" id="L611">                return pinholeCamera;</span>
+            }
+        } else {
+<span class="fc" id="L614">            covariance = null;</span>
+<span class="fc" id="L615">            return pinholeCamera;</span>
+        }
+    }
+
+    /**
+     * Attempts to refine provided camera using a fast algorithm based on
+     * Levenberg/Marquardt.
+     *
+     * @param pinholeCamera camera to be refined.
+     * @param weight        weight for suggestion residual.
+     * @return refined camera or provided camera if anything fails.
+     */
+    private PinholeCamera attemptFastRefine(final PinholeCamera pinholeCamera, final double weight) {
+<span class="fc" id="L628">        final var inliersData = getInliersData();</span>
+<span class="pc bpc" id="L629" title="2 of 4 branches missed.">        if (refineResult &amp;&amp; inliersData != null) {</span>
+<span class="fc" id="L630">            final var refiner = new NonDecomposedLinePlaneCorrespondencePinholeCameraRefiner(pinholeCamera,</span>
+<span class="fc" id="L631">                    keepCovariance, inliersData, planes, lines, getRefinementStandardDeviation());</span>
+
+            try {
+<span class="fc" id="L634">                refiner.setSuggestionErrorWeight(weight);</span>
+
+<span class="fc" id="L636">                refiner.setSuggestSkewnessValueEnabled(suggestSkewnessValueEnabled);</span>
+<span class="fc" id="L637">                refiner.setSuggestedSkewnessValue(suggestedSkewnessValue);</span>
+<span class="fc" id="L638">                refiner.setSuggestHorizontalFocalLengthEnabled(suggestHorizontalFocalLengthEnabled);</span>
+<span class="fc" id="L639">                refiner.setSuggestedHorizontalFocalLengthValue(suggestedHorizontalFocalLengthValue);</span>
+<span class="fc" id="L640">                refiner.setSuggestVerticalFocalLengthEnabled(suggestVerticalFocalLengthEnabled);</span>
+<span class="fc" id="L641">                refiner.setSuggestedVerticalFocalLengthValue(suggestedVerticalFocalLengthValue);</span>
+<span class="fc" id="L642">                refiner.setSuggestAspectRatioEnabled(suggestAspectRatioEnabled);</span>
+<span class="fc" id="L643">                refiner.setSuggestedAspectRatioValue(suggestedAspectRatioValue);</span>
+<span class="fc" id="L644">                refiner.setSuggestPrincipalPointEnabled(suggestPrincipalPointEnabled);</span>
+<span class="fc" id="L645">                refiner.setSuggestedPrincipalPointValue(suggestedPrincipalPointValue);</span>
+<span class="fc" id="L646">                refiner.setSuggestRotationEnabled(suggestRotationEnabled);</span>
+<span class="fc" id="L647">                refiner.setSuggestedRotationValue(suggestedRotationValue);</span>
+<span class="fc" id="L648">                refiner.setSuggestCenterEnabled(suggestCenterEnabled);</span>
+<span class="fc" id="L649">                refiner.setSuggestedCenterValue(suggestedCenterValue);</span>
+
+<span class="fc" id="L651">                final var result = new PinholeCamera();</span>
+<span class="fc" id="L652">                final var improved = refiner.refine(result);</span>
+
+<span class="pc bpc" id="L654" title="1 of 2 branches missed.">                if (keepCovariance) {</span>
+                    // keep covariance
+<span class="fc" id="L656">                    covariance = refiner.getCovariance();</span>
+                }
+
+<span class="fc bfc" id="L659" title="All 2 branches covered.">                return improved ? result : pinholeCamera;</span>
+<span class="fc" id="L660">            } catch (final Exception e) {</span>
+                // refinement failed, so we return input value
+<span class="fc" id="L662">                return pinholeCamera;</span>
+            }
+        } else {
+<span class="nc" id="L665">            return pinholeCamera;</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

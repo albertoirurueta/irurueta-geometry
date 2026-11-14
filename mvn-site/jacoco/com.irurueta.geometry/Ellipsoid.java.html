@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Ellipsoid.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Ellipsoid.java</span></div><h1>Ellipsoid.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.AlgebraException;
+
+import java.io.Serializable;
+import java.util.Arrays;
+
+/**
+ * This class defines an ellipsoid.
+ */
+public class Ellipsoid implements Serializable {
+
+    /**
+     * Number of dimensions.
+     */
+    public static final int DIMENSIONS = 3;
+
+    /**
+     * Constant to compute approximate surface area.
+     */
+    private static final double P = 1.6075;
+
+    /**
+     * Center of ellipse.
+     */
+    private Point3D center;
+
+
+    /**
+     * Lengths of all three semi-axes.
+     */
+    private double[] semiAxesLengths;
+
+    /**
+     * Rotation.
+     */
+    private Rotation3D rotation;
+
+    /**
+     * Empty constructor.
+     * Creates an ellipsoid equal to a sphere located at space origin (0,0,0)
+     * with radius 1.0.
+     */
+<span class="fc" id="L59">    public Ellipsoid() {</span>
+<span class="fc" id="L60">        center = Point3D.create();</span>
+<span class="fc" id="L61">        semiAxesLengths = new double[DIMENSIONS];</span>
+<span class="fc" id="L62">        Arrays.fill(semiAxesLengths, 1.0);</span>
+<span class="fc" id="L63">        rotation = Rotation3D.create();</span>
+<span class="fc" id="L64">    }</span>
+
+    /**
+     * Sets ellipsoid parameters.
+     *
+     * @param center          center of ellipsoid.
+     * @param semiAxesLengths lengths of all three semi-axes.
+     * @param rotation        rotation.
+     * @throws IllegalArgumentException if length of provided array is not
+     *                                  three.
+     */
+<span class="fc" id="L75">    public Ellipsoid(final Point3D center, final double[] semiAxesLengths, final Rotation3D rotation) {</span>
+<span class="fc" id="L76">        setCenterAxesAndRotation(center, semiAxesLengths, rotation);</span>
+<span class="fc" id="L77">    }</span>
+
+    /**
+     * Returns center of ellipsoid.
+     *
+     * @return center of ellipsoid.
+     */
+    public Point3D getCenter() {
+<span class="fc" id="L85">        return center;</span>
+    }
+
+    /**
+     * Sets center of ellipsoid.
+     *
+     * @param center center of ellipsoid.
+     * @throws NullPointerException raised if provided center is null.
+     */
+    public void setCenter(final Point3D center) {
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        if (center == null) {</span>
+<span class="nc" id="L96">            throw new NullPointerException();</span>
+        }
+<span class="fc" id="L98">        this.center = center;</span>
+<span class="fc" id="L99">    }</span>
+
+    /**
+     * Gets lengths of all three semi-axes.
+     *
+     * @return lengths of all three semi-axes.
+     */
+    public double[] getSemiAxesLengths() {
+<span class="fc" id="L107">        return semiAxesLengths;</span>
+    }
+
+    /**
+     * Sets lengths of all three semi-axes.
+     *
+     * @param semiAxesLengths lengths of all three semi-axes.
+     * @throws IllegalArgumentException if length of provided array is not
+     *                                  three.
+     */
+    public void setSemiAxesLengths(final double[] semiAxesLengths) {
+<span class="fc bfc" id="L118" title="All 2 branches covered.">        if (semiAxesLengths.length != DIMENSIONS) {</span>
+<span class="fc" id="L119">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L121">        this.semiAxesLengths = semiAxesLengths;</span>
+<span class="fc" id="L122">    }</span>
+
+    /**
+     * Gets rotation.
+     *
+     * @return rotation.
+     */
+    public Rotation3D getRotation() {
+<span class="fc" id="L130">        return rotation;</span>
+    }
+
+    /**
+     * Sets rotation.
+     *
+     * @param rotation rotation.
+     */
+    public void setRotation(final Rotation3D rotation) {
+<span class="fc" id="L139">        this.rotation = rotation;</span>
+<span class="fc" id="L140">    }</span>
+
+    /**
+     * Sets ellipsoid parameters.
+     *
+     * @param center          center of ellipsoid.
+     * @param semiAxesLengths lengths of all three semi-axes.
+     * @param rotation        rotation.
+     * @throws IllegalArgumentException if length of provided array is not
+     *                                  three.
+     */
+    public final void setCenterAxesAndRotation(
+            final Point3D center, final double[] semiAxesLengths, final Rotation3D rotation) {
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        if (semiAxesLengths.length != DIMENSIONS) {</span>
+<span class="fc" id="L154">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L156">        this.center = center;</span>
+<span class="fc" id="L157">        this.semiAxesLengths = semiAxesLengths;</span>
+<span class="fc" id="L158">        this.rotation = rotation;</span>
+<span class="fc" id="L159">    }</span>
+
+    /**
+     * Returns volume of this ellipsoid.
+     *
+     * @return volume of this ellipsoid.
+     */
+    public double getVolume() {
+<span class="fc" id="L167">        final var a = semiAxesLengths[0];</span>
+<span class="fc" id="L168">        final var b = semiAxesLengths[1];</span>
+<span class="fc" id="L169">        final var c = semiAxesLengths[2];</span>
+<span class="fc" id="L170">        return 4.0 / 3.0 * Math.PI * a * b * c;</span>
+    }
+
+    /**
+     * Returns surface of this ellipsoid.
+     *
+     * @return surface of this ellipsoid.
+     */
+    public double getSurface() {
+<span class="fc" id="L179">        final var a = semiAxesLengths[0];</span>
+<span class="fc" id="L180">        final var b = semiAxesLengths[1];</span>
+<span class="fc" id="L181">        final var c = semiAxesLengths[2];</span>
+
+<span class="fc" id="L183">        return 4.0 * Math.PI * Math.pow((Math.pow(a * b, P) + Math.pow(a * c, P) + Math.pow(b * c, P)) / 3.0, 1.0 / P);</span>
+    }
+
+    /**
+     * Converts this ellipsoid into a quadric.
+     * Quadrics a re a more general representation of ellipsoids.
+     *
+     * @return a quadric representing this ellipsoid.
+     * @throws GeometryException if quadric cannot be determined due to
+     *                           numerical instabilities.
+     */
+    public Quadric toQuadric() throws GeometryException {
+        // A quadric has the following matrix form:
+        // Q =   [A  D   F   G]
+        //       [D  B   E   H]
+        //       [F  E   C   I]
+        //       [G  H   I   J]
+        // [x y z w][A D F G][x] = [x y z w][A*x + D*y + F*z + G*w] =
+        //          [D B E H][y]            [D*x + B*y + E*z + H*w]
+        //          [F E C I][z]            [F*x + E*y + C*z + I*w]
+        //          [G H I J][w]            [G*x + H*y + I*z + J*w]
+        // = A*x^2 + D*x*y + F*x*z + G*x*w + D*x*y + B*y^2 + E*y*z + H*y*w +
+        // F*x*z + E*y*z + C*z^2 + I*z*w + G*x*w + H*y*w + I*z*w + J*w^2 =
+        // = A*x^2 + B*y^2 + C*z^2 + 2*D*x*y + 2*E*y*z + 2*F*x*z + 2*G*x*w + 2*H*y*w + 2*I*z*w + J*w^2
+        // which follows expression:
+        // A*x^2 + B*y^2 + C*z^2 + 2*D*x*y + 2*E*y*z + 2*F*x*z + 2*G*x*w + 2*H*y*w + 2*I*z*w + J*w^2 = 0
+
+        // An Ellipsoid is a particular form of a quadric following expression:
+        // x^2 / a^2 + y^2 / b^2 + z^2 / c^2 = 1
+        // when centered at origin and having no rotation
+
+        // if we take an arbitrary center position:
+<span class="fc" id="L215">        final var a = 1.0 / Math.pow(semiAxesLengths[0], 2.0);</span>
+<span class="fc" id="L216">        final var b = 1.0 / Math.pow(semiAxesLengths[1], 2.0);</span>
+<span class="fc" id="L217">        final var c = 1.0 / Math.pow(semiAxesLengths[2], 2.0);</span>
+<span class="fc" id="L218">        final var d = 0.0;</span>
+<span class="fc" id="L219">        final var e = 0.0;</span>
+<span class="fc" id="L220">        final var f = 0.0;</span>
+<span class="fc" id="L221">        final var g = 0.0;</span>
+<span class="fc" id="L222">        final var h = 0.0;</span>
+<span class="fc" id="L223">        final var i = 0.0;</span>
+<span class="fc" id="L224">        final var j = -1;</span>
+
+<span class="fc" id="L226">        final var q = new Quadric(a, b, c, d, e, f, g, h, i, j);</span>
+<span class="fc" id="L227">        final var t = new EuclideanTransformation3D(rotation, new double[]{</span>
+<span class="fc" id="L228">                center.getInhomX(), center.getInhomY(), center.getInhomZ()});</span>
+
+        try {
+<span class="fc" id="L231">            t.transform(q);</span>
+<span class="nc" id="L232">        } catch (final NonSymmetricMatrixException | AlgebraException ex) {</span>
+<span class="nc" id="L233">            throw new GeometryException(ex);</span>
+<span class="fc" id="L234">        }</span>
+
+<span class="fc" id="L236">        return q;</span>
+    }
+
+    /**
+     * Sets parameters of this ellipsoid from a sphere.
+     *
+     * @param sphere a sphere to set parameters from.
+     */
+    public final void setFromSphere(final Sphere sphere) {
+<span class="fc" id="L245">        center = sphere.getCenter();</span>
+<span class="fc" id="L246">        Arrays.fill(semiAxesLengths, sphere.getRadius());</span>
+<span class="fc" id="L247">        rotation = Rotation3D.create();</span>
+<span class="fc" id="L248">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.java</span></div><h1>LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.geometry.AffineTransformation3D;
+import com.irurueta.geometry.CoincidentPlanesException;
+import com.irurueta.geometry.Plane;
+import com.irurueta.numerical.robust.LMedSRobustEstimator;
+import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best affine 3D transformation for provided collections of matched
+ * planes using LMedS algorithm.
+ */
+public class LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator
+        extends PlaneCorrespondenceAffineTransformation3DRobustEstimator {
+
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1e-6;
+
+    /**
+     * Minimum allowed stop threshold value.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    private double stopThreshold;
+
+
+    /**
+     * Constructor.
+     */
+    public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator() {
+<span class="fc" id="L83">        super();</span>
+<span class="fc" id="L84">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L85">    }</span>
+
+    /**
+     * Constructor with lists of planes to be used to estimate an affine 3D
+     * transformation.
+     * Planes in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPlanes  list of input planes to be used to estimate an affine
+     *                     3D transformation.
+     * @param outputPlanes list of output planes to be used to estimate an affine
+     *                     3D transformation.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L103">        super(inputPlanes, outputPlanes);</span>
+<span class="fc" id="L104">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L105">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+            final AffineTransformation3DRobustEstimatorListener listener) {
+<span class="fc" id="L115">        super(listener);</span>
+<span class="fc" id="L116">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L117">    }</span>
+
+    /**
+     * Constructor with listener and lists of planes to be used to estimate an
+     * affine 3D transformation.
+     * Planes in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPlanes  list of input planes to be used to estimate an affine
+     *                     3D transformation.
+     * @param outputPlanes list of output planes to be used to estimate an affine
+     *                     3D transformation.
+     * @throws IllegalArgumentException if provided lists of planes don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator(
+            final AffineTransformation3DRobustEstimatorListener listener,
+            final List&lt;Plane&gt; inputPlanes, final List&lt;Plane&gt; outputPlanes) {
+<span class="fc" id="L138">        super(listener, inputPlanes, outputPlanes);</span>
+<span class="fc" id="L139">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L140">    }</span>
+
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L162">        return stopThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L188" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L189">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L192">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L195">        this.stopThreshold = stopThreshold;</span>
+<span class="fc" id="L196">    }</span>
+
+    /**
+     * Estimates an affine 3D transformation using a robust estimator and
+     * the best set of matched 3D lines correspondences found using the robust
+     * estimator.
+     *
+     * @return an affine 3D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    @Override
+    public AffineTransformation3D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L214" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L215">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L218">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L221">        final var innerEstimator = new LMedSRobustEstimator&lt;&gt;(</span>
+<span class="fc" id="L222">                new LMedSRobustEstimatorListener&lt;AffineTransformation3D&gt;() {</span>
+
+                    // plane to be reused when computing residuals
+<span class="fc" id="L225">                    private final Plane testPlane = new Plane();</span>
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L229">                        return inputPlanes.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L234">                        return AffineTransformation3DRobustEstimator.MINIMUM_SIZE;</span>
+                    }
+
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List&lt;AffineTransformation3D&gt; solutions) {
+<span class="fc" id="L240">                        final var inputLine1 = inputPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L241">                        final var inputLine2 = inputPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L242">                        final var inputLine3 = inputPlanes.get(samplesIndices[2]);</span>
+<span class="fc" id="L243">                        final var inputLine4 = inputPlanes.get(samplesIndices[3]);</span>
+
+<span class="fc" id="L245">                        final var outputLine1 = outputPlanes.get(samplesIndices[0]);</span>
+<span class="fc" id="L246">                        final var outputLine2 = outputPlanes.get(samplesIndices[1]);</span>
+<span class="fc" id="L247">                        final var outputLine3 = outputPlanes.get(samplesIndices[2]);</span>
+<span class="fc" id="L248">                        final var outputLine4 = outputPlanes.get(samplesIndices[3]);</span>
+
+                        try {
+<span class="fc" id="L251">                            final var transformation = new AffineTransformation3D(inputLine1, inputLine2, inputLine3,</span>
+                                    inputLine4, outputLine1, outputLine2, outputLine3, outputLine4);
+<span class="fc" id="L253">                            solutions.add(transformation);</span>
+<span class="nc" id="L254">                        } catch (final CoincidentPlanesException e) {</span>
+                            // if lines are coincident, no solution is added
+<span class="fc" id="L256">                        }</span>
+<span class="fc" id="L257">                    }</span>
+
+                    @Override
+                    public double computeResidual(final AffineTransformation3D currentEstimation, final int i) {
+<span class="fc" id="L261">                        final var inputLine = inputPlanes.get(i);</span>
+<span class="fc" id="L262">                        final var outputLine = outputPlanes.get(i);</span>
+
+                        // transform input line and store result in mTestLine
+                        try {
+<span class="fc" id="L266">                            currentEstimation.transform(inputLine, testPlane);</span>
+
+<span class="fc" id="L268">                            return getResidual(outputLine, testPlane);</span>
+<span class="nc" id="L269">                        } catch (final AlgebraException e) {</span>
+                            // this happens when internal matrix of affine transformation
+                            // cannot be reverse (i.e. transformation is not well-defined,
+                            // numerical instabilities, etc.)
+<span class="nc" id="L273">                            return Double.MAX_VALUE;</span>
+                        }
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L279">                        return LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L284" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L285">                            listener.onEstimateStart(</span>
+                                    LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
+                        }
+<span class="fc" id="L288">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;AffineTransformation3D&gt; estimator) {
+<span class="pc bpc" id="L292" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L293">                            listener.onEstimateEnd(</span>
+                                    LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.this);
+                        }
+<span class="fc" id="L296">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;AffineTransformation3D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L301" title="1 of 2 branches missed.">                        if (listener != null) {</span>
+<span class="fc" id="L302">                            listener.onEstimateNextIteration(</span>
+                                    LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
+                                    iteration);
+                        }
+<span class="fc" id="L306">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;AffineTransformation3D&gt; estimator, final float progress) {
+<span class="nc bnc" id="L311" title="All 2 branches missed.">                        if (listener != null) {</span>
+<span class="nc" id="L312">                            listener.onEstimateProgressChange(</span>
+                                    LMedSPlaneCorrespondenceAffineTransformation3DRobustEstimator.this,
+                                    progress);
+                        }
+<span class="nc" id="L316">                    }</span>
+                });
+
+        try {
+<span class="fc" id="L320">            locked = true;</span>
+<span class="fc" id="L321">            inliersData = null;</span>
+<span class="fc" id="L322">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L323">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L324">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L325">            innerEstimator.setStopThreshold(stopThreshold);</span>
+<span class="fc" id="L326">            final var transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L327">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L328">            return attemptRefine(transformation);</span>
+<span class="nc" id="L329">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L330">            throw new LockedException(e);</span>
+<span class="nc" id="L331">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L332">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L334">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L345">        return RobustEstimatorMethod.LMEDS;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L361">        final var inliersData = (LMedSRobustEstimator.LMedSInliersData) getInliersData();</span>
+
+        // avoid setting a threshold too strict
+<span class="fc" id="L364">        final var threshold = inliersData.getEstimatedThreshold();</span>
+<span class="fc" id="L365">        return Math.max(threshold, stopThreshold);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

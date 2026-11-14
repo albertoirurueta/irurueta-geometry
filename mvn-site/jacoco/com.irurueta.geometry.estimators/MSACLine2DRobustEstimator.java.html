@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MSACLine2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">MSACLine2DRobustEstimator.java</span></div><h1>MSACLine2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoincidentPointsException;
+import com.irurueta.geometry.Line2D;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.numerical.robust.MSACRobustEstimator;
+import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best 2D line for provided collection of 2D points using MSAC
+ * algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class MSACLine2DRobustEstimator extends Line2DRobustEstimator {
+    /**
+     * Constant defining default threshold to determine whether points are
+     * inliers or not.
+     * Because typical resolution for points is 1 pixel, then default threshold
+     * is defined as 1.
+     */
+    public static final double DEFAULT_THRESHOLD = 1;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to determine whether points are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance) a possible
+     * solution has on a sampled line.
+     */
+    private double threshold;
+
+    /**
+     * Constructor.
+     */
+    public MSACLine2DRobustEstimator() {
+<span class="fc" id="L61">        super();</span>
+<span class="fc" id="L62">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Constructor with points.
+     *
+     * @param points 2D points to estimate a 2D line.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public MSACLine2DRobustEstimator(final List&lt;Point2D&gt; points) {
+<span class="fc" id="L73">        super(points);</span>
+<span class="fc" id="L74">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L75">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public MSACLine2DRobustEstimator(final Line2DRobustEstimatorListener listener) {
+<span class="fc" id="L84">        super(listener);</span>
+<span class="fc" id="L85">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L86">    }</span>
+
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points   2D points to estimate a 2D line.
+     * @throws IllegalArgumentException if provided list of points doesn't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public MSACLine2DRobustEstimator(final Line2DRobustEstimatorListener listener, final List&lt;Point2D&gt; points) {
+<span class="fc" id="L99">        super(listener, points);</span>
+<span class="fc" id="L100">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Returns threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error a possible solution has on a
+     * given point.
+     *
+     * @return threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L113">        return threshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error a possible solution has on
+     * a given point.
+     *
+     * @param threshold threshold to be set.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L130">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L133">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L135">        this.threshold = threshold;</span>
+<span class="fc" id="L136">    }</span>
+
+
+    /**
+     * Estimates a 2D line using a robust estimator and the best set of 2D
+     * points that pass through the estimated 2D line (i.e. belong to its locus).
+     *
+     * @return a 2D line.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public Line2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L153" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L154">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L157">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L160">        final var innerEstimator = new MSACRobustEstimator&lt;&gt;(new MSACRobustEstimatorListener&lt;Line2D&gt;() {</span>
+
+            @Override
+            public double getThreshold() {
+<span class="fc" id="L164">                return threshold;</span>
+            }
+
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L169">                return points.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L174">                return Line2DRobustEstimator.MINIMUM_SIZE;</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List&lt;Line2D&gt; solutions) {
+<span class="fc" id="L179">                final var point1 = points.get(samplesIndices[0]);</span>
+<span class="fc" id="L180">                final var point2 = points.get(samplesIndices[1]);</span>
+
+                try {
+<span class="fc" id="L183">                    final var line = new Line2D(point1, point2, false);</span>
+<span class="fc" id="L184">                    solutions.add(line);</span>
+<span class="nc" id="L185">                } catch (final CoincidentPointsException e) {</span>
+                    // if points are coincident, no solution is added
+<span class="fc" id="L187">                }</span>
+<span class="fc" id="L188">            }</span>
+
+            @Override
+            public double computeResidual(final Line2D currentEstimation, final int i) {
+<span class="fc" id="L192">                return residual(currentEstimation, points.get(i));</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L197">                return MSACLine2DRobustEstimator.this.isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(final RobustEstimator&lt;Line2D&gt; estimator) {
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L203">                    listener.onEstimateStart(MSACLine2DRobustEstimator.this);</span>
+                }
+<span class="fc" id="L205">            }</span>
+
+            @Override
+            public void onEstimateEnd(final RobustEstimator&lt;Line2D&gt; estimator) {
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L210">                    listener.onEstimateEnd(MSACLine2DRobustEstimator.this);</span>
+                }
+<span class="fc" id="L212">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator&lt;Line2D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L216" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L217">                    listener.onEstimateNextIteration(MSACLine2DRobustEstimator.this, iteration);</span>
+                }
+<span class="fc" id="L219">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator&lt;Line2D&gt; estimator, final float progress) {
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L224">                    listener.onEstimateProgressChange(MSACLine2DRobustEstimator.this, progress);</span>
+                }
+<span class="fc" id="L226">            }</span>
+        });
+
+        try {
+<span class="fc" id="L230">            locked = true;</span>
+<span class="fc" id="L231">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L232">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L233">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L234">            return innerEstimator.estimate();</span>
+<span class="nc" id="L235">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L236">            throw new LockedException(e);</span>
+<span class="nc" id="L237">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L238">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L240">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L251">        return RobustEstimatorMethod.MSAC;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

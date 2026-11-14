@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EuclideanTransformation3DEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">EuclideanTransformation3DEstimator.java</span></div><h1>EuclideanTransformation3DEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.SingularValueDecomposer;
+import com.irurueta.algebra.Utils;
+import com.irurueta.geometry.CoincidentPointsException;
+import com.irurueta.geometry.EuclideanTransformation3D;
+import com.irurueta.geometry.InvalidRotationMatrixException;
+import com.irurueta.geometry.MatrixRotation3D;
+import com.irurueta.geometry.Point3D;
+
+import java.util.List;
+
+/**
+ * Estimator of a 3D Euclidean transformation based on point correspondences.
+ * This estimator uses Kabsch algorithm.
+ * A minimum of 4 non-coincident matched 3D input/output points is required for
+ * estimation.
+ * For some point configurations 3 points are enough to find a valid solution.
+ * If more points are provided an LMSE (Least Mean Squared Error) solution will
+ * be found.
+ * Based on:
+ * &lt;a href=&quot;https://en.wikipedia.org/wiki/Kabsch_algorithm&quot;&gt;https://en.wikipedia.org/wiki/Kabsch_algorithm&lt;/a&gt;
+ * &lt;a href=&quot;http://nghiaho.com/?page_id=671&quot;&gt;http://nghiaho.com/?page_id=671&lt;/a&gt;
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class EuclideanTransformation3DEstimator {
+
+    /**
+     * Minimum required number of matched points.
+     */
+    public static final int MINIMUM_SIZE = 4;
+
+    /**
+     * For some point configurations a solution can be found with only 3 points.
+     */
+    public static final int WEAK_MINIMUM_SIZE = 3;
+
+    /**
+     * 3D input points.
+     */
+    private List&lt;Point3D&gt; inputPoints;
+
+    /**
+     * 3D output points.
+     */
+    private List&lt;Point3D&gt; outputPoints;
+
+    /**
+     * Listener to be notified of events such as when estimation starts or ends.
+     */
+    private EuclideanTransformation3DEstimatorListener listener;
+
+    /**
+     * Indicates whether estimation can start with only 3 points or not.
+     * True allows 3 points, false requires 4.
+     */
+    private boolean weakMinimumSizeAllowed;
+
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     */
+    private boolean locked;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L85">    public EuclideanTransformation3DEstimator() {</span>
+<span class="fc" id="L86">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param inputPoints  3D input points.
+     * @param outputPoints 3D output points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 4.
+     */
+    public EuclideanTransformation3DEstimator(
+<span class="fc" id="L97">            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {</span>
+<span class="fc" id="L98">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L99">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts or ends.
+     */
+<span class="fc" id="L107">    public EuclideanTransformation3DEstimator(final EuclideanTransformation3DEstimatorListener listener) {</span>
+<span class="fc" id="L108">        this.listener = listener;</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts or ends.
+     * @param inputPoints  3D input points.
+     * @param outputPoints 3D output points.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 4.
+     */
+    public EuclideanTransformation3DEstimator(
+            final EuclideanTransformation3DEstimatorListener listener,
+<span class="fc" id="L123">            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {</span>
+<span class="fc" id="L124">        this.listener = listener;</span>
+<span class="fc" id="L125">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L126">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+<span class="fc" id="L133">    public EuclideanTransformation3DEstimator(final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L134">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L135">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param inputPoints            3D input points.
+     * @param outputPoints           3D output points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 4.
+     */
+    public EuclideanTransformation3DEstimator(
+<span class="fc" id="L147">            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L148">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L149">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L150">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts or ends.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public EuclideanTransformation3DEstimator(
+<span class="fc" id="L160">            final EuclideanTransformation3DEstimatorListener listener, final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L161">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L162">        this.listener = listener;</span>
+<span class="fc" id="L163">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts or ends.
+     * @param inputPoints            3D input points.
+     * @param outputPoints           3D output points.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than 4.
+     */
+    public EuclideanTransformation3DEstimator(
+            final EuclideanTransformation3DEstimatorListener listener,
+<span class="fc" id="L178">            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {</span>
+<span class="fc" id="L179">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L180">        this.listener = listener;</span>
+<span class="fc" id="L181">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L182">    }</span>
+
+    /**
+     * Returns list of input points to be used to estimate an Euclidean 3D
+     * transformation.
+     * Each point in the list of input points must be matched with the
+     * corresponding point in the list of output points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than #getMinimumPoints.
+     *
+     * @return list of input points to be used to estimate an Euclidean 3D
+     * transformation.
+     */
+    public List&lt;Point3D&gt; getInputPoints() {
+<span class="fc" id="L196">        return inputPoints;</span>
+    }
+
+    /**
+     * Returns list of output points ot be used to estimate an Euclidean 3D
+     * transformation.
+     * Each point in the list of output points must be matched with the
+     * corresponding point in the list of input points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than #getMinimumPoints.
+     *
+     * @return list of output points to be used to estimate an Euclidean 3D
+     * transformation.
+     */
+    public List&lt;Point3D&gt; getOutputPoints() {
+<span class="fc" id="L211">        return outputPoints;</span>
+    }
+
+    /**
+     * Sets list of points to be used to estimate an Euclidean 3D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than #getMinimumPoints.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than #getMinimumPoints.
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
+     */
+    public void setPoints(final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L231" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L232">            throw new LockedException();</span>
+        }
+<span class="fc" id="L234">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L235">    }</span>
+
+    /**
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts or ends.
+     *
+     * @return listener to be notified of events.
+     */
+    public EuclideanTransformation3DEstimatorListener getListener() {
+<span class="fc" id="L244">        return listener;</span>
+    }
+
+    /**
+     * Sets listener to be notified of events such as when estimation starts or
+     * ends.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setListener(final EuclideanTransformation3DEstimatorListener listener) throws LockedException {
+<span class="fc bfc" id="L255" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L256">            throw new LockedException();</span>
+        }
+<span class="fc" id="L258">        this.listener = listener;</span>
+<span class="fc" id="L259">    }</span>
+
+    /**
+     * Indicates whether estimation can start with only 3 points or not.
+     *
+     * @return true allows 3 points, false requires 4.
+     */
+    public boolean isWeakMinimumSizeAllowed() {
+<span class="fc" id="L267">        return weakMinimumSizeAllowed;</span>
+    }
+
+    /**
+     * Specifies whether estimation can start with only 3 points or not.
+     *
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed) throws LockedException {
+<span class="fc bfc" id="L277" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L278">            throw new LockedException();</span>
+        }
+<span class="fc" id="L280">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L281">    }</span>
+
+    /**
+     * Required minimum number of point correspondences to start the estimation.
+     * Can be either 3 or 4.
+     *
+     * @return minimum number of point correspondences.
+     */
+    public int getMinimumPoints() {
+<span class="fc bfc" id="L290" title="All 2 branches covered.">        return weakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
+    }
+
+    /**
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L300" title="All 2 branches covered.">        return listener != null;</span>
+    }
+
+    /**
+     * Indicates if this instance is locked because estimation is being
+     * computed.
+     *
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L310">        return locked;</span>
+    }
+
+    /**
+     * Indicates if estimator is ready to start the Euclidean 3D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points) are provided
+     * and a minimum of MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="pc bpc" id="L322" title="2 of 6 branches missed.">        return inputPoints != null &amp;&amp; outputPoints != null &amp;&amp; inputPoints.size() == outputPoints.size()</span>
+<span class="pc bpc" id="L323" title="1 of 2 branches missed.">                &amp;&amp; inputPoints.size() &gt;= getMinimumPoints();</span>
+    }
+
+    /**
+     * Estimates an Euclidean 3D transformation using the list of matched input
+     * and output 3D points.
+     * A minimum of 4 matched non-coincident points is required. If more points
+     * are provided an LMSE (Least Mean Squared Error) solution will be found.
+     *
+     * @return estimated euclidean 3D transformation.
+     * @throws LockedException           if estimator is locked.
+     * @throws NotReadyException         if not enough data has been provided.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public EuclideanTransformation3D estimate() throws LockedException, NotReadyException, CoincidentPointsException {
+<span class="fc" id="L340">        final var result = new EuclideanTransformation3D();</span>
+<span class="fc" id="L341">        estimate(result);</span>
+<span class="fc" id="L342">        return result;</span>
+    }
+
+    /**
+     * Estimates an Euclidean 3D transformation using the list of matched input
+     * and output 3D points.
+     * A minimum of 4 matched non-coincident points is required. If more points
+     * are provided an LMSE (Least Mean Squared Error) solution will be found.
+     *
+     * @param result instance where result will be stored.
+     * @throws LockedException           if estimator is locked.
+     * @throws NotReadyException         if not enough data has been provided.
+     * @throws CoincidentPointsException raised if transformation cannot be
+     *                                   estimated for some reason (point configuration degeneracy, duplicate
+     *                                   points or numerical instabilities).
+     */
+    public void estimate(final EuclideanTransformation3D result) throws LockedException, NotReadyException,
+            CoincidentPointsException {
+<span class="fc bfc" id="L360" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L361">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L363" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L364">            throw new NotReadyException();</span>
+        }
+
+        try {
+<span class="fc" id="L368">            locked = true;</span>
+
+<span class="fc bfc" id="L370" title="All 2 branches covered.">            if (listener != null) {</span>
+<span class="fc" id="L371">                listener.onEstimateStart(this);</span>
+            }
+
+<span class="fc" id="L374">            final var inCentroid = computeCentroid(inputPoints);</span>
+<span class="fc" id="L375">            final var outCentroid = computeCentroid(outputPoints);</span>
+
+<span class="fc" id="L377">            final var m = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,</span>
+                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
+
+<span class="fc" id="L380">            final var n = inputPoints.size();</span>
+<span class="fc" id="L381">            final var col = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);</span>
+<span class="fc" id="L382">            final var row = new Matrix(1, Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);</span>
+<span class="fc" id="L383">            final var tmp = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH,</span>
+                    Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH);
+<span class="fc bfc" id="L385" title="All 2 branches covered.">            for (var i = 0; i &lt; n; i++) {</span>
+<span class="fc" id="L386">                final var inputPoint = inputPoints.get(i);</span>
+<span class="fc" id="L387">                final var outputPoint = outputPoints.get(i);</span>
+
+<span class="fc" id="L389">                col.setElementAtIndex(0, inputPoint.getInhomX() - inCentroid.getElementAtIndex(0));</span>
+<span class="fc" id="L390">                col.setElementAtIndex(1, inputPoint.getInhomY() - inCentroid.getElementAtIndex(1));</span>
+<span class="fc" id="L391">                col.setElementAtIndex(2, inputPoint.getInhomZ() - inCentroid.getElementAtIndex(2));</span>
+
+<span class="fc" id="L393">                row.setElementAtIndex(0, outputPoint.getInhomX() - outCentroid.getElementAtIndex(0));</span>
+<span class="fc" id="L394">                row.setElementAtIndex(1, outputPoint.getInhomY() - outCentroid.getElementAtIndex(1));</span>
+<span class="fc" id="L395">                row.setElementAtIndex(2, outputPoint.getInhomZ() - outCentroid.getElementAtIndex(2));</span>
+
+<span class="fc" id="L397">                col.multiply(row, tmp);</span>
+<span class="fc" id="L398">                m.add(tmp);</span>
+            }
+
+<span class="fc" id="L401">            final var decomposer = new SingularValueDecomposer(m);</span>
+<span class="fc" id="L402">            decomposer.decompose();</span>
+
+<span class="pc bpc" id="L404" title="1 of 4 branches missed.">            if (!weakMinimumSizeAllowed &amp;&amp; decomposer.getNullity() &gt; 0) {</span>
+<span class="nc" id="L405">                throw new CoincidentPointsException();</span>
+            }
+
+<span class="fc" id="L408">            final var u = decomposer.getU();</span>
+<span class="fc" id="L409">            final var v = decomposer.getV();</span>
+
+            // rotation R = V*U^T
+<span class="fc" id="L412">            u.transpose();</span>
+<span class="fc" id="L413">            v.multiply(u);</span>
+
+<span class="fc bfc" id="L415" title="All 2 branches covered.">            if (Utils.det(v) &lt; 0.0) {</span>
+                // multiply 3rd column of R by -1
+<span class="fc" id="L417">                v.setElementAt(0, 2, -v.getElementAt(0, 2));</span>
+<span class="fc" id="L418">                v.setElementAt(1, 2, -v.getElementAt(1, 2));</span>
+<span class="fc" id="L419">                v.setElementAt(2, 2, -v.getElementAt(2, 2));</span>
+            }
+
+<span class="fc" id="L422">            final var rotation = new MatrixRotation3D(v);</span>
+
+            // translation
+<span class="fc" id="L425">            final var t = v.multiplyAndReturnNew(inCentroid);</span>
+<span class="fc" id="L426">            t.multiplyByScalar(-1.0);</span>
+<span class="fc" id="L427">            t.add(outCentroid);</span>
+
+<span class="fc" id="L429">            result.setRotation(rotation);</span>
+<span class="fc" id="L430">            result.setTranslation(t.getBuffer());</span>
+
+<span class="fc bfc" id="L432" title="All 2 branches covered.">            if (listener != null) {</span>
+<span class="fc" id="L433">                listener.onEstimateEnd(this);</span>
+            }
+
+<span class="nc" id="L436">        } catch (final AlgebraException | InvalidRotationMatrixException e) {</span>
+<span class="nc" id="L437">            throw new CoincidentPointsException(e);</span>
+        } finally {
+<span class="fc" id="L439">            locked = false;</span>
+        }
+<span class="fc" id="L441">    }</span>
+
+    /**
+     * Computes centroid of provided list of points using inhomogeneous
+     * coordinates.
+     *
+     * @param points list of points to compute centroid.
+     * @return centroid.
+     * @throws AlgebraException never thrown.
+     */
+    private static Matrix computeCentroid(final List&lt;Point3D&gt; points) throws AlgebraException {
+<span class="fc" id="L452">        var x = 0.0;</span>
+<span class="fc" id="L453">        var y = 0.0;</span>
+<span class="fc" id="L454">        var z = 0.0;</span>
+<span class="fc" id="L455">        final var n = points.size();</span>
+<span class="fc bfc" id="L456" title="All 2 branches covered.">        for (final var p : points) {</span>
+<span class="fc" id="L457">            x += p.getInhomX() / n;</span>
+<span class="fc" id="L458">            y += p.getInhomY() / n;</span>
+<span class="fc" id="L459">            z += p.getInhomZ() / n;</span>
+<span class="fc" id="L460">        }</span>
+
+<span class="fc" id="L462">        final var result = new Matrix(Point3D.POINT3D_INHOMOGENEOUS_COORDINATES_LENGTH, 1);</span>
+<span class="fc" id="L463">        result.setElementAtIndex(0, x);</span>
+<span class="fc" id="L464">        result.setElementAtIndex(1, y);</span>
+<span class="fc" id="L465">        result.setElementAtIndex(2, z);</span>
+<span class="fc" id="L466">        return result;</span>
+    }
+
+    /**
+     * Internal method to set lists of points to be used to estimate an
+     * Euclidean 3D transformation.
+     * This method does not check whether estimator is locked or not.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than #getMinimumPoints.
+     */
+    private void internalSetPoints(final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc bfc" id="L482" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L483">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L485" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L486">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L488">        this.inputPoints = inputPoints;</span>
+<span class="fc" id="L489">        this.outputPoints = outputPoints;</span>
+<span class="fc" id="L490">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

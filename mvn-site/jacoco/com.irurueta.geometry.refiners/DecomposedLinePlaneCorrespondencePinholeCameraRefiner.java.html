@@ -1,0 +1,539 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DecomposedLinePlaneCorrespondencePinholeCameraRefiner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.refiners</a> &gt; <span class="el_source">DecomposedLinePlaneCorrespondencePinholeCameraRefiner.java</span></div><h1>DecomposedLinePlaneCorrespondencePinholeCameraRefiner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.refiners;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.GeometryException;
+import com.irurueta.geometry.Line2D;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Plane;
+import com.irurueta.geometry.estimators.LockedException;
+import com.irurueta.geometry.estimators.NotReadyException;
+import com.irurueta.numerical.EvaluationException;
+import com.irurueta.numerical.GradientEstimator;
+import com.irurueta.numerical.MultiDimensionFunctionEvaluatorListener;
+import com.irurueta.numerical.NumericalException;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFitter;
+import com.irurueta.numerical.fitting.LevenbergMarquardtMultiDimensionFunctionEvaluator;
+import com.irurueta.numerical.optimization.PowellMultiOptimizer;
+import com.irurueta.numerical.robust.InliersData;
+
+import java.util.BitSet;
+import java.util.List;
+
+/**
+ * A pinhole camera refiner using line/plane correspondences and the
+ * Powell algorithm to try to decrease overall error in LMSE terms among
+ * inlier samples by taking the decomposed parameters of a pinhole camera.
+ * Typically, this refiner is used by a robust estimator, however it can also be
+ * useful in some other situations.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class DecomposedLinePlaneCorrespondencePinholeCameraRefiner extends LinePlaneCorrespondencePinholeCameraRefiner {
+
+    /**
+     * Default value for minimum suggestion weight. This weight is used to
+     * slowly draw original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     */
+    public static final double DEFAULT_MIN_SUGGESTION_WEIGHT = 0.1;
+
+    /**
+     * Default value for maximum suggestion weight. This weight is used to
+     * slowly draw original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     */
+    public static final double DEFAULT_MAX_SUGGESTION_WEIGHT = 2.0;
+
+    /**
+     * Default value for the step to increase suggestion weight. This weight is
+     * used to slowly draw original camera parameters into desired suggested
+     * values. Suggestion weight slowly increases each time Levenberg-Marquardt
+     * is used to find a solution so that the algorithm can converge into
+     * desired value. The faster the weights are increased the less likely that
+     * suggested values can be converged if they differ too much from the
+     * original ones.
+     */
+    public static final double DEFAULT_SUGGESTION_WEIGHT_STEP = 0.475;
+
+    /**
+     * Dimensions for refinement.
+     */
+    private static final int REFINE_DIMS = 12;
+
+    /**
+     * Minimum suggestion weight. This weight is used to slowly draw original
+     * camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     */
+<span class="fc" id="L92">    private double minSuggestionWeight = DEFAULT_MIN_SUGGESTION_WEIGHT;</span>
+
+    /**
+     * Maximum suggestion weight. This weight is used to slowly draw original
+     * camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     */
+<span class="fc" id="L102">    private double maxSuggestionWeight = DEFAULT_MAX_SUGGESTION_WEIGHT;</span>
+
+    /**
+     * Step to increase suggestion weight. This weight is used to slowly draw
+     * original camera parameters into desired suggested values. Suggestion
+     * weight slowly increases each time Levenberg-Marquardt is used to find a
+     * solution so that the algorithm can converge into desired value. The
+     * faster the weights are increased the less likely that suggested values
+     * can be converged if they differ too much from the original ones.
+     */
+<span class="fc" id="L112">    private double suggestionWeightStep = DEFAULT_SUGGESTION_WEIGHT_STEP;</span>
+
+    /**
+     * Instance of a pinhole camera to be reused during refinement.
+     */
+    private PinholeCamera refineCamera;
+
+    /**
+     * Current weight during refinement.
+     */
+    private double currentWeight;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L127">    public DecomposedLinePlaneCorrespondencePinholeCameraRefiner() {</span>
+<span class="fc" id="L128">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
+            final PinholeCamera initialEstimation, final boolean keepCovariance, final BitSet inliers,
+            final double[] residuals, final int numInliers, final List&lt;Plane&gt; samples1, final List&lt;Line2D&gt; samples2,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L148">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,</span>
+                refinementStandardDeviation);
+<span class="fc" id="L150">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    public DecomposedLinePlaneCorrespondencePinholeCameraRefiner(
+            final PinholeCamera initialEstimation, final boolean keepCovariance, final InliersData inliersData,
+            final List&lt;Plane&gt; samples1, final List&lt;Line2D&gt; samples2, final double refinementStandardDeviation) {
+<span class="fc" id="L168">        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);</span>
+<span class="fc" id="L169">    }</span>
+
+    /**
+     * Gets minimum suggestion weight. This weight is used to slowly draw
+     * original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     *
+     * @return minimum suggestion weight.
+     */
+    public double getMinSuggestionWeight() {
+<span class="fc" id="L182">        return minSuggestionWeight;</span>
+    }
+
+    /**
+     * Sets minimum suggestion weight. This weight is used to slowly draw
+     * original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     *
+     * @param minSuggestionWeight minimum suggestion weight.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setMinSuggestionWeight(final double minSuggestionWeight) throws LockedException {
+<span class="fc bfc" id="L197" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L198">            throw new LockedException();</span>
+        }
+<span class="fc" id="L200">        this.minSuggestionWeight = minSuggestionWeight;</span>
+<span class="fc" id="L201">    }</span>
+
+    /**
+     * Gets maximum suggestion weight. This weight is used to slowly draw
+     * original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     *
+     * @return maximum suggestion weight.
+     */
+    public double getMaxSuggestionWeight() {
+<span class="fc" id="L214">        return maxSuggestionWeight;</span>
+    }
+
+    /**
+     * Sets maximum suggestion weight. This weight is used to slowly draw
+     * original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     *
+     * @param maxSuggestionWeight maximum suggestion weight.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setMaxSuggestionWeight(final double maxSuggestionWeight) throws LockedException {
+<span class="fc bfc" id="L229" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L230">            throw new LockedException();</span>
+        }
+<span class="fc" id="L232">        this.maxSuggestionWeight = maxSuggestionWeight;</span>
+<span class="fc" id="L233">    }</span>
+
+    /**
+     * Sets minimum and maximum suggestion weights. Suggestion weight is used to
+     * slowly draw original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     *
+     * @param minSuggestionWeight minimum suggestion weight.
+     * @param maxSuggestionWeight maximum suggestion weight.
+     * @throws LockedException          if estimator is locked.
+     * @throws IllegalArgumentException if minimum suggestion weight is greater
+     *                                  or equal than maximum value.
+     */
+    public void setMinMaxSuggestionWeight(final double minSuggestionWeight, final double maxSuggestionWeight)
+            throws LockedException {
+<span class="fc bfc" id="L251" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L252">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L254" title="1 of 2 branches missed.">        if (minSuggestionWeight &gt;= maxSuggestionWeight) {</span>
+<span class="nc" id="L255">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L258">        this.minSuggestionWeight = minSuggestionWeight;</span>
+<span class="fc" id="L259">        this.maxSuggestionWeight = maxSuggestionWeight;</span>
+<span class="fc" id="L260">    }</span>
+
+    /**
+     * Gets step to increase suggestion weight. This weight is used to slowly
+     * draw original camera parameters into desired suggested values. Suggestion
+     * weight slowly increases each time Levenberg-Marquardt is used to find a
+     * solution so that the algorithm can converge into desired value. The
+     * faster the weights are increased the less likely that suggested values
+     * can be converged if they differ too much from the original ones.
+     *
+     * @return step to increase suggestion weight.
+     */
+    public double getSuggestionWeightStep() {
+<span class="fc" id="L273">        return suggestionWeightStep;</span>
+    }
+
+    /**
+     * Sets step to increase suggestion weight. This weight is used to slowly
+     * draw original camera parameters into desired suggested values. Suggestion
+     * weight slowly increases each time Levenberg-Marquardt is used to find a
+     * solution so that the algorithm can converge into desired value. The
+     * faster the weights are increased the less likely that suggested values
+     * can be converged if they differ too much from the original ones.
+     *
+     * @param suggestionWeightStep step to increase suggestion weight.
+     * @throws LockedException          if estimator is locked.
+     * @throws IllegalArgumentException if provided step is negative or zero.
+     */
+    public void setSuggestionWeightStep(final double suggestionWeightStep) throws LockedException {
+<span class="fc bfc" id="L289" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L290">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L292" title="All 2 branches covered.">        if (suggestionWeightStep &lt;= 0.0) {</span>
+<span class="fc" id="L293">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L296">        this.suggestionWeightStep = suggestionWeightStep;</span>
+<span class="fc" id="L297">    }</span>
+
+    /**
+     * Refines provided initial estimation.
+     * This method always sets a value into provided result instance regardless
+     * of the fact that error has actually improved in LMSE terms or not.
+     *
+     * @param result instance where refined estimation will be stored.
+     * @return true if result improves (decreases) in LMSE terms respect to
+     * initial estimation, false if no improvement has been achieved.
+     * @throws NotReadyException if not enough input data has been provided.
+     * @throws LockedException   if estimator is locked because refinement is
+     *                           already in progress.
+     */
+    @Override
+    public boolean refine(final PinholeCamera result) throws NotReadyException, LockedException {
+<span class="fc bfc" id="L313" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L314">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L316" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L317">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L320">        locked = true;</span>
+
+<span class="fc bfc" id="L322" title="All 2 branches covered.">        if (listener != null) {</span>
+<span class="fc" id="L323">            listener.onRefineStart(this, initialEstimation);</span>
+        }
+
+<span class="fc" id="L326">        final var improved = refinePowell(result);</span>
+
+<span class="fc bfc" id="L328" title="All 2 branches covered.">        if (keepCovariance) {</span>
+<span class="fc bfc" id="L329" title="All 2 branches covered.">            covariance = estimateCovarianceLevenbergMarquardt(improved ? result : initialEstimation, currentWeight);</span>
+        }
+
+<span class="fc bfc" id="L332" title="All 2 branches covered.">        if (listener != null) {</span>
+<span class="fc" id="L333">            listener.onRefineEnd(this, initialEstimation, result, improved);</span>
+        }
+
+<span class="fc" id="L336">        locked = false;</span>
+
+<span class="fc" id="L338">        return improved;</span>
+    }
+
+    /**
+     * Estimates covariance matrix for provided estimated and refined camera
+     *
+     * @param pinholeCamera pinhole camera to estimate covariance for.
+     * @param weight        weight for suggestion residual.
+     * @return estimated covariance or null if anything fails.
+     */
+    private Matrix estimateCovarianceLevenbergMarquardt(final PinholeCamera pinholeCamera, final double weight) {
+        try {
+<span class="fc" id="L350">            pinholeCamera.normalize();</span>
+
+            // output values to be fitted/optimized will contain residuals
+<span class="fc" id="L353">            final var y = new double[numInliers];</span>
+            // input values will contain 2D line and 3D plane to compute
+            // residuals
+<span class="fc" id="L356">            final var nDims = Plane.PLANE_NUMBER_PARAMS + Line2D.LINE_NUMBER_PARAMS;</span>
+<span class="fc" id="L357">            final var x = new Matrix(numInliers, nDims);</span>
+<span class="fc" id="L358">            final var nSamples = inliers.length();</span>
+<span class="fc" id="L359">            var pos = 0;</span>
+<span class="fc" id="L360">            final var initParams = new double[REFINE_DIMS];</span>
+<span class="fc" id="L361">            cameraToParameters(pinholeCamera, initParams);</span>
+
+<span class="fc bfc" id="L363" title="All 2 branches covered.">            final var suggestionResidual = hasSuggestions() ? suggestionResidual(initParams, weight) : 0.0;</span>
+<span class="fc bfc" id="L364" title="All 2 branches covered.">            for (var i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L365" title="All 2 branches covered.">                if (inliers.get(i)) {</span>
+                    // sample is inlier
+<span class="fc" id="L367">                    final var plane = samples1.get(i);</span>
+<span class="fc" id="L368">                    final var line = samples2.get(i);</span>
+<span class="fc" id="L369">                    plane.normalize();</span>
+<span class="fc" id="L370">                    line.normalize();</span>
+<span class="fc" id="L371">                    x.setElementAt(pos, 0, line.getA());</span>
+<span class="fc" id="L372">                    x.setElementAt(pos, 1, line.getB());</span>
+<span class="fc" id="L373">                    x.setElementAt(pos, 2, line.getC());</span>
+<span class="fc" id="L374">                    x.setElementAt(pos, 3, plane.getA());</span>
+<span class="fc" id="L375">                    x.setElementAt(pos, 4, plane.getB());</span>
+<span class="fc" id="L376">                    x.setElementAt(pos, 5, plane.getC());</span>
+<span class="fc" id="L377">                    x.setElementAt(pos, 6, plane.getD());</span>
+
+<span class="fc" id="L379">                    y[pos] = Math.pow(residuals[i], 2.0) + suggestionResidual;</span>
+<span class="fc" id="L380">                    pos++;</span>
+                }
+            }
+
+<span class="fc" id="L384">            final var evaluator = new LevenbergMarquardtMultiDimensionFunctionEvaluator() {</span>
+
+<span class="fc" id="L386">                private final Plane plane = new Plane();</span>
+
+<span class="fc" id="L388">                private final Line2D line = new Line2D();</span>
+
+<span class="fc" id="L390">                private final PinholeCamera pinholeCamera = new PinholeCamera();</span>
+
+<span class="fc" id="L392">                private final GradientEstimator gradientEstimator = new GradientEstimator(params -&gt; {</span>
+<span class="fc" id="L393">                    parametersToCamera(params, pinholeCamera);</span>
+<span class="fc" id="L394">                    return residualLevenbergMarquardt(pinholeCamera, line, plane, params, weight);</span>
+                });
+
+                @Override
+                public int getNumberOfDimensions() {
+<span class="fc" id="L399">                    return nDims;</span>
+                }
+
+                @Override
+                public double[] createInitialParametersArray() {
+<span class="fc" id="L404">                    return initParams;</span>
+                }
+
+                @Override
+                public double evaluate(final int i, final double[] point, final double[] params,
+                                       final double[] derivatives) throws EvaluationException {
+
+<span class="fc" id="L411">                    line.setParameters(point[0], point[1], point[2]);</span>
+<span class="fc" id="L412">                    plane.setParameters(point[3], point[4], point[5], point[6]);</span>
+
+<span class="fc" id="L414">                    parametersToCamera(params, pinholeCamera);</span>
+<span class="fc" id="L415">                    final var y = residualLevenbergMarquardt(pinholeCamera, line, plane, params, weight);</span>
+<span class="fc" id="L416">                    gradientEstimator.gradient(params, derivatives);</span>
+
+<span class="fc" id="L418">                    return y;</span>
+                }
+            };
+
+<span class="fc" id="L422">            final var fitter = new LevenbergMarquardtMultiDimensionFitter(evaluator, x, y,</span>
+<span class="fc" id="L423">                    getRefinementStandardDeviation());</span>
+
+<span class="fc" id="L425">            fitter.fit();</span>
+
+            // obtain covariance
+<span class="fc" id="L428">            return fitter.getCovar();</span>
+
+<span class="fc" id="L430">        } catch (final Exception e) {</span>
+            // estimation failed, so we return null
+<span class="fc" id="L432">            return null;</span>
+        }
+    }
+
+    /**
+     * Refines camera using Powell optimization to minimize a cost function
+     * consisting on the sum of squared projection residuals plus the
+     * suggestion residual for any suggested terms.
+     *
+     * @param result instance where refined estimation will be stored.
+     * @return true if result improves (decreases) in LMSE terms respect to
+     * initial estimation, false if no improvement has been achieved.
+     */
+    private boolean refinePowell(final PinholeCamera result) {
+<span class="fc" id="L446">        var improvedAtLeastOnce = false;</span>
+<span class="fc" id="L447">        currentWeight = minSuggestionWeight;</span>
+
+<span class="fc bfc" id="L449" title="All 2 branches covered.">        if (hasSuggestions()) {</span>
+            try {
+                // copy camera into a new instance
+<span class="fc" id="L452">                refineCamera = new PinholeCamera(new Matrix(initialEstimation.getInternalMatrix()));</span>
+<span class="fc" id="L453">                refineCamera.normalize();</span>
+
+<span class="fc" id="L455">                final var startPoint = new double[REFINE_DIMS];</span>
+<span class="fc" id="L456">                final var listener = new RefinementMultiDimensionFunctionEvaluatorListener();</span>
+<span class="fc" id="L457">                final var optimizer = new PowellMultiOptimizer(listener, PowellMultiOptimizer.DEFAULT_TOLERANCE);</span>
+
+                boolean improved;
+                do {
+<span class="fc" id="L461">                    improved = refinementStepPowell(optimizer, listener, startPoint, currentWeight);</span>
+
+<span class="fc bfc" id="L463" title="All 2 branches covered.">                    if (improved) {</span>
+                        // update result
+<span class="fc" id="L465">                        result.setInternalMatrix(new Matrix(refineCamera.getInternalMatrix()));</span>
+<span class="fc" id="L466">                        improvedAtLeastOnce = true;</span>
+                    }
+
+<span class="fc" id="L469">                    currentWeight += suggestionWeightStep;</span>
+<span class="fc bfc" id="L470" title="All 4 branches covered.">                } while (currentWeight &lt; maxSuggestionWeight &amp;&amp; improved);</span>
+
+<span class="fc" id="L472">                return improvedAtLeastOnce;</span>
+<span class="fc" id="L473">            } catch (final GeometryException | NumericalException | AlgebraException e) {</span>
+                // refinement failed, so we return input value
+<span class="fc" id="L475">                return improvedAtLeastOnce;</span>
+            }
+        }
+<span class="fc" id="L478">        return false;</span>
+    }
+
+    /**
+     * Computes one refinement step using Powell optimizer for a given weight
+     * on suggestion terms.
+     *
+     * @param optimizer  Powell optimizer to be reused.
+     * @param listener   Powell optimizer listener to be reused.
+     * @param startPoint starting point for powell optimization. This array is
+     *                   passed only for reuse purposes.
+     * @param weight     suggestion terms weight.
+     * @return true if this refinement step decreased projection error in LMSE
+     * terms, false otherwise.
+     * @throws GeometryException  if something failed.
+     * @throws NumericalException if something failed.
+     */
+    private boolean refinementStepPowell(
+            final PowellMultiOptimizer optimizer, final RefinementMultiDimensionFunctionEvaluatorListener listener,
+            final double[] startPoint, final double weight) throws GeometryException, NumericalException {
+
+<span class="fc" id="L499">        listener.weight = weight;</span>
+<span class="fc" id="L500">        cameraToParameters(refineCamera, startPoint);</span>
+<span class="fc" id="L501">        final var initResidual = residualPowell(refineCamera, startPoint, weight);</span>
+
+<span class="fc" id="L503">        optimizer.setStartPoint(startPoint);</span>
+<span class="fc" id="L504">        optimizer.minimize();</span>
+
+<span class="fc" id="L506">        final var resultParams = optimizer.getResult();</span>
+<span class="fc" id="L507">        parametersToCamera(resultParams, refineCamera);</span>
+
+<span class="fc" id="L509">        final var finalResidual = residualPowell(refineCamera, resultParams, weight);</span>
+
+<span class="fc bfc" id="L511" title="All 2 branches covered.">        return finalResidual &lt; initResidual;</span>
+    }
+
+    /**
+     * Listener for powell optimizer to minimize cost function during
+     * refinement.
+     * A weight can be provided so that required parameters are slowly drawn
+     * to suggested values.
+     */
+<span class="fc" id="L520">    private class RefinementMultiDimensionFunctionEvaluatorListener implements MultiDimensionFunctionEvaluatorListener {</span>
+        /**
+         * Weight to slowly draw parameters to suggested values.
+         */
+        double weight;
+
+        /**
+         * Evaluates cost function
+         *
+         * @param point parameters to evaluate cost function.
+         * @return cost value.
+         */
+        @Override
+        public double evaluate(final double[] point) {
+<span class="fc" id="L534">            parametersToCamera(point, refineCamera);</span>
+<span class="fc" id="L535">            return residualPowell(refineCamera, point, weight);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

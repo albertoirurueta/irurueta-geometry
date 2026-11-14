@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LMedSSphereRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">LMedSSphereRobustEstimator.java</span></div><h1>LMedSSphereRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoplanarPointsException;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.geometry.Sphere;
+import com.irurueta.numerical.robust.LMedSRobustEstimator;
+import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best sphere for provided collection of 3D points using LMedS
+ * algorithm.
+ */
+public class LMedSSphereRobustEstimator extends SphereRobustEstimator {
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1e-3;
+
+    /**
+     * Minimum allowed stop threshold value.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    private double mStopThreshold;
+
+    /**
+     * Constructor.
+     */
+    public LMedSSphereRobustEstimator() {
+<span class="fc" id="L79">        super();</span>
+<span class="fc" id="L80">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L81">    }</span>
+
+    /**
+     * Constructor with points.
+     *
+     * @param points 3D points to estimate a sphere.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public LMedSSphereRobustEstimator(final List&lt;Point3D&gt; points) {
+<span class="fc" id="L91">        super(points);</span>
+<span class="fc" id="L92">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L93">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public LMedSSphereRobustEstimator(final SphereRobustEstimatorListener listener) {
+<span class="fc" id="L102">        super(listener);</span>
+<span class="fc" id="L103">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L104">    }</span>
+
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param points   3D points to estimate a sphere.
+     * @throws IllegalArgumentException if provided list of points don't have
+     *                                  a size greater or equal than MINIMUM_SIZE.
+     */
+    public LMedSSphereRobustEstimator(final SphereRobustEstimatorListener listener, final List&lt;Point3D&gt; points) {
+<span class="fc" id="L117">        super(listener, points);</span>
+<span class="fc" id="L118">        mStopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L119">    }</span>
+
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L141">        return mStopThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L168">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L170" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L171">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L174">        mStopThreshold = stopThreshold;</span>
+<span class="fc" id="L175">    }</span>
+
+    /**
+     * Estimates a sphere using a robust estimator and the best set of 3D points
+     * that fit into the locus of the estimated sphere found using the robust
+     * estimator.
+     *
+     * @return a sphere.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    @Override
+    public Sphere estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L193" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L194">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L197">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L200">        final var innerEstimator = new LMedSRobustEstimator&lt;&gt;(new LMedSRobustEstimatorListener&lt;Sphere&gt;() {</span>
+
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L204">                return points.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L209">                return SphereRobustEstimator.MINIMUM_SIZE;</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List&lt;Sphere&gt; solutions) {
+<span class="fc" id="L214">                final var point1 = points.get(samplesIndices[0]);</span>
+<span class="fc" id="L215">                final var point2 = points.get(samplesIndices[1]);</span>
+<span class="fc" id="L216">                final var point3 = points.get(samplesIndices[2]);</span>
+<span class="fc" id="L217">                final var point4 = points.get(samplesIndices[3]);</span>
+
+                try {
+<span class="fc" id="L220">                    final var sphere = new Sphere(point1, point2, point3, point4);</span>
+<span class="fc" id="L221">                    solutions.add(sphere);</span>
+<span class="fc" id="L222">                } catch (final CoplanarPointsException e) {</span>
+                    // if points are coincident, no solution is added
+<span class="fc" id="L224">                }</span>
+<span class="fc" id="L225">            }</span>
+
+            @Override
+            public double computeResidual(final Sphere currentEstimation, final int i) {
+<span class="fc" id="L229">                return residual(currentEstimation, points.get(i));</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L234">                return LMedSSphereRobustEstimator.this.isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(final RobustEstimator&lt;Sphere&gt; estimator) {
+<span class="pc bpc" id="L239" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L240">                    listener.onEstimateStart(LMedSSphereRobustEstimator.this);</span>
+                }
+<span class="fc" id="L242">            }</span>
+
+            @Override
+            public void onEstimateEnd(final RobustEstimator&lt;Sphere&gt; estimator) {
+<span class="pc bpc" id="L246" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L247">                    listener.onEstimateEnd(LMedSSphereRobustEstimator.this);</span>
+                }
+<span class="fc" id="L249">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator&lt;Sphere&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L254">                    listener.onEstimateNextIteration(LMedSSphereRobustEstimator.this, iteration);</span>
+                }
+<span class="fc" id="L256">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator&lt;Sphere&gt; estimator, final float progress) {
+<span class="pc bpc" id="L260" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L261">                    listener.onEstimateProgressChange(LMedSSphereRobustEstimator.this, progress);</span>
+                }
+<span class="fc" id="L263">            }</span>
+        });
+
+        try {
+<span class="fc" id="L267">            locked = true;</span>
+<span class="fc" id="L268">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L269">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L270">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L271">            innerEstimator.setStopThreshold(mStopThreshold);</span>
+<span class="fc" id="L272">            return innerEstimator.estimate();</span>
+<span class="nc" id="L273">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L274">            throw new LockedException(e);</span>
+<span class="nc" id="L275">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L276">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L278">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L289">        return RobustEstimatorMethod.LMEDS;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

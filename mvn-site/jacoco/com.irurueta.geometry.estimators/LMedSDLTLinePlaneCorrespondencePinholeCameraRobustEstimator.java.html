@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.java</span></div><h1>LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.Line2D;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Plane;
+import com.irurueta.numerical.robust.LMedSRobustEstimator;
+import com.irurueta.numerical.robust.LMedSRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best pinhole camera for provided collections of matched lines and
+ * planes using LMedS algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator extends
+        DLTLinePlaneCorrespondencePinholeCameraRobustEstimator {
+
+    /**
+     * Default value to be used for stop threshold. Stop threshold can be used
+     * to keep the algorithm iterating in case that best estimated threshold
+     * using median of residuals is not small enough. Once a solution is found
+     * that generates a threshold below this value, the algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    public static final double DEFAULT_STOP_THRESHOLD = 1.0;
+
+    /**
+     * Minimum allowed stop threshold value.
+     */
+    public static final double MIN_STOP_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to be used to keep the algorithm iterating in case that best
+     * estimated threshold using median of residuals is not small enough. Once
+     * a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     */
+    private double stopThreshold;
+
+    /**
+     * Constructor.
+     */
+    public LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator() {
+<span class="fc" id="L83">        super();</span>
+<span class="fc" id="L84">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L85">    }</span>
+
+    /**
+     * Constructor with lists of matched planes and 2D lines to estimate a
+     * pinhole camera.
+     * Points and lines in the lists located at the same position are considered
+     * to be matched. Hence, both lists must have the same size, and their size
+     * must be greater or equal than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES
+     * (4 matches).
+     *
+     * @param planes list of planes used to estimate a pinhole camera.
+     * @param lines  list of corresponding projected 2D lines used to estimate
+     *               a pinhole camera.
+     * @throws IllegalArgumentException if provided lists don't have the same
+     *                                  size or their size is smaller than required minimum size (4 matches).
+     */
+    public LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
+            final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L103">        super(planes, lines);</span>
+<span class="fc" id="L104">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L105">    }</span>
+
+    /**
+     * Constructor with listener.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
+            final PinholeCameraRobustEstimatorListener listener) {
+<span class="fc" id="L115">        super(listener);</span>
+<span class="fc" id="L116">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L117">    }</span>
+
+    /**
+     * Constructor with listener and lists of matched planes and 2D lines to
+     * estimate a pinhole camera.
+     * Points and lines in the lists located at the same position are considered
+     * to be matched. Hence, both lists must have the same size, and their size
+     * must be greater or equal than MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES
+     * (4 matches).
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param planes   list of planes used to estimate a pinhole camera.
+     * @param lines    list of corresponding projected 2D lines used to estimate
+     *                 a pinhole camera.
+     * @throws IllegalArgumentException if provided lists don't have the same
+     *                                  size or their size is smaller than required minimum size (4 matches).
+     */
+    public LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator(
+            final PinholeCameraRobustEstimatorListener listener, final List&lt;Plane&gt; planes, final List&lt;Line2D&gt; lines) {
+<span class="fc" id="L137">        super(listener, planes, lines);</span>
+<span class="fc" id="L138">        stopThreshold = DEFAULT_STOP_THRESHOLD;</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * Returns threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @return stop threshold to stop the algorithm prematurely when a certain
+     * accuracy has been reached.
+     */
+    public double getStopThreshold() {
+<span class="fc" id="L161">        return stopThreshold;</span>
+    }
+
+    /**
+     * Sets threshold to be used to keep the algorithm iterating in case that
+     * best estimated threshold using median of residuals is not small enough.
+     * Once a solution is found that generates a threshold below this value, the
+     * algorithm will stop.
+     * The stop threshold can be used to prevent the LMedS algorithm iterating
+     * too many times in cases where samples have a very similar accuracy.
+     * For instance, in cases where proportion of outliers is very small (close
+     * to 0%), and samples are very accurate (i.e. 1e-6), the algorithm would
+     * iterate for a long time trying to find the best solution when indeed
+     * there is no need to do that if a reasonable threshold has already been
+     * reached.
+     * Because of this behaviour the stop threshold can be set to a value much
+     * lower than the one typically used in RANSAC, and yet the algorithm could
+     * still produce even smaller thresholds in estimated results.
+     *
+     * @param stopThreshold stop threshold to stop the algorithm prematurely
+     *                      when a certain accuracy has been reached.
+     * @throws IllegalArgumentException if provided value is zero or negative.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setStopThreshold(final double stopThreshold) throws LockedException {
+<span class="fc bfc" id="L187" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L188">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L190" title="All 2 branches covered.">        if (stopThreshold &lt;= MIN_STOP_THRESHOLD) {</span>
+<span class="fc" id="L191">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L194">        this.stopThreshold = stopThreshold;</span>
+<span class="fc" id="L195">    }</span>
+
+    /**
+     * Estimates a pinhole camera using a robust estimator and
+     * the best set of matched 2D line/3D plane correspondences found using the
+     * robust estimator.
+     *
+     * @return a pinhole camera.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public PinholeCamera estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L213">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L216">            throw new NotReadyException();</span>
+        }
+
+        // pinhole camera estimator using DLT (Direct Linear Transform) algorithm
+<span class="fc" id="L220">        final var nonRobustEstimator = new DLTLinePlaneCorrespondencePinholeCameraEstimator();</span>
+
+<span class="fc" id="L222">        nonRobustEstimator.setLMSESolutionAllowed(false);</span>
+
+        // suggestions
+<span class="fc" id="L225">        nonRobustEstimator.setSuggestSkewnessValueEnabled(isSuggestSkewnessValueEnabled());</span>
+<span class="fc" id="L226">        nonRobustEstimator.setSuggestedSkewnessValue(getSuggestedSkewnessValue());</span>
+<span class="fc" id="L227">        nonRobustEstimator.setSuggestHorizontalFocalLengthEnabled(isSuggestHorizontalFocalLengthEnabled());</span>
+<span class="fc" id="L228">        nonRobustEstimator.setSuggestedHorizontalFocalLengthValue(getSuggestedHorizontalFocalLengthValue());</span>
+<span class="fc" id="L229">        nonRobustEstimator.setSuggestVerticalFocalLengthEnabled(isSuggestVerticalFocalLengthEnabled());</span>
+<span class="fc" id="L230">        nonRobustEstimator.setSuggestedVerticalFocalLengthValue(getSuggestedVerticalFocalLengthValue());</span>
+<span class="fc" id="L231">        nonRobustEstimator.setSuggestAspectRatioEnabled(isSuggestAspectRatioEnabled());</span>
+<span class="fc" id="L232">        nonRobustEstimator.setSuggestedAspectRatioValue(getSuggestedAspectRatioValue());</span>
+<span class="fc" id="L233">        nonRobustEstimator.setSuggestPrincipalPointEnabled(isSuggestPrincipalPointEnabled());</span>
+<span class="fc" id="L234">        nonRobustEstimator.setSuggestedPrincipalPointValue(getSuggestedPrincipalPointValue());</span>
+<span class="fc" id="L235">        nonRobustEstimator.setSuggestRotationEnabled(isSuggestRotationEnabled());</span>
+<span class="fc" id="L236">        nonRobustEstimator.setSuggestedRotationValue(getSuggestedRotationValue());</span>
+<span class="fc" id="L237">        nonRobustEstimator.setSuggestCenterEnabled(isSuggestCenterEnabled());</span>
+<span class="fc" id="L238">        nonRobustEstimator.setSuggestedCenterValue(getSuggestedCenterValue());</span>
+
+<span class="fc" id="L240">        final var innerEstimator = new LMedSRobustEstimator&lt;&gt;(new LMedSRobustEstimatorListener&lt;PinholeCamera&gt;() {</span>
+
+            // 3D planes for a subset of samples
+<span class="fc" id="L243">            private final List&lt;Plane&gt; subsetPlanes = new ArrayList&lt;&gt;();</span>
+
+            // 2D lines for a subset of samples
+<span class="fc" id="L246">            private final List&lt;Line2D&gt; subsetLines = new ArrayList&lt;&gt;();</span>
+
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L250">                return planes.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L255">                return LinePlaneCorrespondencePinholeCameraEstimator.MIN_NUMBER_OF_LINE_PLANE_CORRESPONDENCES;</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(final int[] samplesIndices, final List&lt;PinholeCamera&gt; solutions) {
+<span class="fc" id="L260">                subsetPlanes.clear();</span>
+<span class="fc" id="L261">                subsetPlanes.add(planes.get(samplesIndices[0]));</span>
+<span class="fc" id="L262">                subsetPlanes.add(planes.get(samplesIndices[1]));</span>
+<span class="fc" id="L263">                subsetPlanes.add(planes.get(samplesIndices[2]));</span>
+<span class="fc" id="L264">                subsetPlanes.add(planes.get(samplesIndices[3]));</span>
+
+<span class="fc" id="L266">                subsetLines.clear();</span>
+<span class="fc" id="L267">                subsetLines.add(lines.get(samplesIndices[0]));</span>
+<span class="fc" id="L268">                subsetLines.add(lines.get(samplesIndices[1]));</span>
+<span class="fc" id="L269">                subsetLines.add(lines.get(samplesIndices[2]));</span>
+<span class="fc" id="L270">                subsetLines.add(lines.get(samplesIndices[3]));</span>
+
+                try {
+<span class="fc" id="L273">                    nonRobustEstimator.setLists(subsetPlanes, subsetLines);</span>
+
+<span class="fc" id="L275">                    final var cam = nonRobustEstimator.estimate();</span>
+<span class="fc" id="L276">                    solutions.add(cam);</span>
+<span class="nc" id="L277">                } catch (final Exception e) {</span>
+                    // if lines/planes configuration is degenerate, no solution
+                    // is added
+<span class="fc" id="L280">                }</span>
+<span class="fc" id="L281">            }</span>
+
+            @Override
+            public double computeResidual(final PinholeCamera currentEstimation, final int i) {
+<span class="fc" id="L285">                final var inputLine = lines.get(i);</span>
+<span class="fc" id="L286">                final var inputPlane = planes.get(i);</span>
+
+<span class="fc" id="L288">                return singleBackprojectionResidual(currentEstimation, inputLine, inputPlane);</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L293">                return LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this.isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(final RobustEstimator&lt;PinholeCamera&gt; estimator) {
+<span class="pc bpc" id="L298" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L299">                    listener.onEstimateStart(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);</span>
+                }
+<span class="fc" id="L301">            }</span>
+
+            @Override
+            public void onEstimateEnd(final RobustEstimator&lt;PinholeCamera&gt; estimator) {
+<span class="pc bpc" id="L305" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L306">                    listener.onEstimateEnd(LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this);</span>
+                }
+<span class="fc" id="L308">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(final RobustEstimator&lt;PinholeCamera&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L312" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L313">                    listener.onEstimateNextIteration(</span>
+                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, iteration);
+                }
+<span class="fc" id="L316">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(final RobustEstimator&lt;PinholeCamera&gt; estimator, final float progress) {
+<span class="pc bpc" id="L320" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L321">                    listener.onEstimateProgressChange(</span>
+                            LMedSDLTLinePlaneCorrespondencePinholeCameraRobustEstimator.this, progress);
+                }
+<span class="fc" id="L324">            }</span>
+        });
+
+        try {
+<span class="fc" id="L328">            locked = true;</span>
+<span class="fc" id="L329">            inliersData = null;</span>
+<span class="fc" id="L330">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L331">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L332">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L333">            innerEstimator.setStopThreshold(stopThreshold);</span>
+<span class="fc" id="L334">            final var result = innerEstimator.estimate();</span>
+<span class="fc" id="L335">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L336">            return attemptRefine(result, nonRobustEstimator.getMaxSuggestionWeight());</span>
+
+<span class="nc" id="L338">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L339">            throw new LockedException(e);</span>
+<span class="nc" id="L340">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L341">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L343">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L354">        return RobustEstimatorMethod.LMEDS;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L370">        final var inliersData = (LMedSRobustEstimator.LMedSInliersData) getInliersData();</span>
+
+        // avoid setting a threshold too strict
+<span class="fc" id="L373">        final var threshold = inliersData.getEstimatedThreshold();</span>
+<span class="fc" id="L374">        return Math.max(threshold, stopThreshold);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

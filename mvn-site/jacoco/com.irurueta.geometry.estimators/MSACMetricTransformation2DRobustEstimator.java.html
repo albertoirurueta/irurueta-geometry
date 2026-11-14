@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MSACMetricTransformation2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">MSACMetricTransformation2DRobustEstimator.java</span></div><h1>MSACMetricTransformation2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.MetricTransformation2D;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.numerical.robust.MSACRobustEstimator;
+import com.irurueta.numerical.robust.MSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best metric 2D transformation for provided collections of
+ * matched 2D points using MSAC algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class MSACMetricTransformation2DRobustEstimator extends MetricTransformation2DRobustEstimator {
+
+    /**
+     * Constant defining default threshold to determine whether points are
+     * inliers or not.
+     * By default, 1.0 is considered a good value for cases where measures are
+     * done on pixels, since typically the minimum resolution is 1 pixel.
+     */
+    public static final double DEFAULT_THRESHOLD = 1.0;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Threshold to determine whether points are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance) a possible
+     * solution has on a matched pair of points.
+     */
+    private double threshold;
+
+    /**
+     * Constructor.
+     */
+    public MSACMetricTransformation2DRobustEstimator() {
+<span class="fc" id="L63">        super();</span>
+<span class="fc" id="L64">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L65">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points ot be used to estimate a
+     *                     metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     metric 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public MSACMetricTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L83">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L84">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L85">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public MSACMetricTransformation2DRobustEstimator(final MetricTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L94">        super(listener);</span>
+<span class="fc" id="L95">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L96">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate a
+     *                     metric 2D transformation.
+     * @param outputPoints list of output points to be used to estimate a
+     *                     metric 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public MSACMetricTransformation2DRobustEstimator(
+            final MetricTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L117">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L118">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L119">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     */
+    public MSACMetricTransformation2DRobustEstimator(final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L127">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L128">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L129">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate a metric 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points ot be used to estimate a
+     *                               metric 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public MSACMetricTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L148">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L149">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L150">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     */
+    public MSACMetricTransformation2DRobustEstimator(
+            final MetricTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L161">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L162">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L163">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate a
+     * metric 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate a
+     *                               metric 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate a
+     *                               metric 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public MSACMetricTransformation2DRobustEstimator(
+            final MetricTransformation2DRobustEstimatorListener listener,
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L185">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L186">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L187">    }</span>
+
+    /**
+     * Returns threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @return threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L199">        return threshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @param threshold threshold to determine whether points are inliers or
+     *                  not.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L216" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L217">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L219" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L220">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L222">        this.threshold = threshold;</span>
+<span class="fc" id="L223">    }</span>
+
+    /**
+     * Estimates a metric 2D transformation using a robust estimator and
+     * the best set of matched 2D point correspondences found using the robust
+     * estimator.
+     *
+     * @return a metric 2D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public MetricTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L240" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L241">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L244">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L247">        final var innerEstimator = new MSACRobustEstimator&lt;&gt;(new MSACRobustEstimatorListener&lt;MetricTransformation2D&gt;() {</span>
+
+            // point to be reused when computing residuals
+<span class="fc" id="L250">            private final Point2D testPoint = Point2D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+<span class="fc" id="L252">            private final MetricTransformation2DEstimator nonRobustEstimator = new MetricTransformation2DEstimator(</span>
+<span class="fc" id="L253">                    isWeakMinimumSizeAllowed());</span>
+
+<span class="fc" id="L255">            private final List&lt;Point2D&gt; subsetInputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L256">            private final List&lt;Point2D&gt; subsetOutputPoints = new ArrayList&lt;&gt;();</span>
+
+            @Override
+            public double getThreshold() {
+<span class="fc" id="L260">                return threshold;</span>
+            }
+
+            @Override
+            public int getTotalSamples() {
+<span class="fc" id="L265">                return inputPoints.size();</span>
+            }
+
+            @Override
+            public int getSubsetSize() {
+<span class="fc" id="L270">                return nonRobustEstimator.getMinimumPoints();</span>
+            }
+
+            @Override
+            public void estimatePreliminarSolutions(
+                    final int[] samplesIndices, final List&lt;MetricTransformation2D&gt; solutions) {
+<span class="fc" id="L276">                subsetInputPoints.clear();</span>
+<span class="fc" id="L277">                subsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L278" title="All 2 branches covered.">                for (final var samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L279">                    subsetInputPoints.add(inputPoints.get(samplesIndex));</span>
+<span class="fc" id="L280">                    subsetOutputPoints.add(outputPoints.get(samplesIndex));</span>
+                }
+
+                try {
+<span class="fc" id="L284">                    nonRobustEstimator.setPoints(subsetInputPoints, subsetOutputPoints);</span>
+<span class="fc" id="L285">                    solutions.add(nonRobustEstimator.estimate());</span>
+<span class="nc" id="L286">                } catch (final Exception e) {</span>
+                    // if points are coincident, no solution is added
+<span class="fc" id="L288">                }</span>
+<span class="fc" id="L289">            }</span>
+
+            @Override
+            public double computeResidual(final MetricTransformation2D currentEstimation, final int i) {
+<span class="fc" id="L293">                final var inputPoint = inputPoints.get(i);</span>
+<span class="fc" id="L294">                final var outputPoint = outputPoints.get(i);</span>
+
+                // transform input point and store result in mTestPoint
+<span class="fc" id="L297">                currentEstimation.transform(inputPoint, testPoint);</span>
+
+<span class="fc" id="L299">                return outputPoint.distanceTo(testPoint);</span>
+            }
+
+            @Override
+            public boolean isReady() {
+<span class="fc" id="L304">                return MSACMetricTransformation2DRobustEstimator.this.isReady();</span>
+            }
+
+            @Override
+            public void onEstimateStart(final RobustEstimator&lt;MetricTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L309" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L310">                    listener.onEstimateStart(MSACMetricTransformation2DRobustEstimator.this);</span>
+                }
+<span class="fc" id="L312">            }</span>
+
+            @Override
+            public void onEstimateEnd(final RobustEstimator&lt;MetricTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L316" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L317">                    listener.onEstimateEnd(MSACMetricTransformation2DRobustEstimator.this);</span>
+                }
+<span class="fc" id="L319">            }</span>
+
+            @Override
+            public void onEstimateNextIteration(
+                    final RobustEstimator&lt;MetricTransformation2D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L324" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L325">                    listener.onEstimateNextIteration(</span>
+                            MSACMetricTransformation2DRobustEstimator.this, iteration);
+                }
+<span class="fc" id="L328">            }</span>
+
+            @Override
+            public void onEstimateProgressChange(
+                    final RobustEstimator&lt;MetricTransformation2D&gt; estimator, final float progress) {
+<span class="pc bpc" id="L333" title="1 of 2 branches missed.">                if (listener != null) {</span>
+<span class="fc" id="L334">                    listener.onEstimateProgressChange(</span>
+                            MSACMetricTransformation2DRobustEstimator.this, progress);
+                }
+<span class="fc" id="L337">            }</span>
+        });
+
+        try {
+<span class="fc" id="L341">            locked = true;</span>
+<span class="fc" id="L342">            inliersData = null;</span>
+<span class="fc" id="L343">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L344">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L345">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L346">            final var transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L347">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L348">            return attemptRefine(transformation);</span>
+<span class="nc" id="L349">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L350">            throw new LockedException(e);</span>
+<span class="nc" id="L351">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L352">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L354">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L365">        return RobustEstimatorMethod.MSAC;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L381">        return threshold;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
