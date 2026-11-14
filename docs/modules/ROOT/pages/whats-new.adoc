@@ -1,8 +1,13 @@
 = What's New
-:description: Release notes for irurueta-geometry, including the new Antora documentation site and Java 21 upgrade in version 1.6.0.
-:keywords: irurueta-geometry changelog, release notes, what's new, version 1.6.0
+:description: Release notes for irurueta-geometry, including the dependency updates in version 1.6.1 and the new Antora documentation site and Java 21 upgrade in version 1.6.0.
+:keywords: irurueta-geometry changelog, release notes, what's new, version 1.6.1, version 1.6.0
 
 NOTE: This documentation was generated with the assistance of AI. Please report any inaccuracies.
+
+== 1.6.1 (2026-11-14)
+
+* ♻️ Updated compile-scope dependencies: `irurueta-statistics`, `irurueta-sorting` and `irurueta-algebra` from
+  1.4.0 to 1.4.1, and `irurueta-numerical` from 1.6.0 to 1.6.1.
 
 == 1.6.0 (2026-07-23)
 
