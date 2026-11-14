@@ -13,7 +13,7 @@ irurueta-geometry is published to Maven Central. Add it as a dependency to your 
 <dependency>
     <groupId>com.irurueta</groupId>
     <artifactId>irurueta-geometry</artifactId>
-    <version>1.6.0</version>
+    <version>1.6.1</version>
     <scope>compile</scope>
 </dependency>
 ----
