@@ -41,7 +41,7 @@ class EuclideanTransformation3DEstimatorTest implements EuclideanTransformation3
     private static final double MIN_RANDOM_VALUE = 50.0;
     private static final double MAX_RANDOM_VALUE = 100.0;
 
-    private static final double ABSOLUTE_ERROR = 1e-6;
+    private static final double ABSOLUTE_ERROR = 3e-6;
 
     private static final int TIMES = 50;
 

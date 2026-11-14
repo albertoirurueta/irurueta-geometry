@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.6.1] - 2026-11-14
+
+### Changed
+
+- Updated compile-scope dependencies: `irurueta-statistics`, `irurueta-sorting` and `irurueta-algebra` from 1.4.0
+  to 1.4.1, and `irurueta-numerical` from 1.6.0 to 1.6.1.
+
 ## [1.6.0] - 2026-07-23
 
 ### Added
@@ -100,7 +107,8 @@ Initial release.
 - Comprehensive exception hierarchy for geometric error conditions (coincident/colinear/coplanar points,
   degenerate configurations, locking, normalization, etc.).
 
-[Unreleased]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.6.0...HEAD
+[Unreleased]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.6.1...HEAD
+[1.6.1]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.5.0...1.6.0
 [1.5.0]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.4.0...1.5.0
 [1.4.0]: https://github.com/albertoirurueta/irurueta-geometry/compare/1.3.2...1.4.0

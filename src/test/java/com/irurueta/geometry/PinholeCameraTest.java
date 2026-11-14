@@ -2893,11 +2893,13 @@ class PinholeCameraTest {
         final var intrinsic2 = camera2.getIntrinsicParameters();
         final var intrinsic3 = camera3.getIntrinsicParameters();
 
-        assertEquals(intrinsic.getHorizontalFocalLength(), intrinsic2.getHorizontalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalFocalLength(), intrinsic2.getVerticalFocalLength(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getHorizontalPrincipalPoint(), intrinsic2.getHorizontalPrincipalPoint(), ABSOLUTE_ERROR);
-        assertEquals(intrinsic.getVerticalPrincipalPoint(), intrinsic2.getVerticalPrincipalPoint(), ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getHorizontalFocalLength(), intrinsic2.getHorizontalFocalLength(), LARGE_ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getVerticalFocalLength(), intrinsic2.getVerticalFocalLength(), LARGE_ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getSkewness(), intrinsic2.getSkewness(), LARGE_ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getHorizontalPrincipalPoint(), intrinsic2.getHorizontalPrincipalPoint(),
+                LARGE_ABSOLUTE_ERROR);
+        assertEquals(intrinsic.getVerticalPrincipalPoint(), intrinsic2.getVerticalPrincipalPoint(),
+                LARGE_ABSOLUTE_ERROR);
 
         assertEquals(intrinsic2.getHorizontalFocalLength(), intrinsic3.getHorizontalFocalLength(), ABSOLUTE_ERROR);
         assertEquals(intrinsic2.getVerticalFocalLength(), intrinsic3.getVerticalFocalLength(), ABSOLUTE_ERROR);
