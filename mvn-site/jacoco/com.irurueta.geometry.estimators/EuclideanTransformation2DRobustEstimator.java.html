@@ -1,0 +1,1468 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EuclideanTransformation2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">EuclideanTransformation2DRobustEstimator.java</span></div><h1>EuclideanTransformation2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.EuclideanTransformation2D;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.geometry.refiners.EuclideanTransformation2DRefiner;
+import com.irurueta.numerical.robust.InliersData;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * This is an abstract class to robustly find the best Euclidean transformation
+ * for collections of matching 2D points.
+ * Implementations of this class should be able to detect and discard outliers
+ * in order to find the best solution.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public abstract class EuclideanTransformation2DRobustEstimator {
+
+    /**
+     * Minimum number of matched points required to estimate an Euclidean 2D
+     * transformation.
+     */
+    public static final int MINIMUM_SIZE = EuclideanTransformation2DEstimator.MINIMUM_SIZE;
+
+    /**
+     * For some point configurations a solution can be found with only 2 points.
+     */
+    public static final int WEAK_MINIMUM_SIZE = EuclideanTransformation2DEstimator.WEAK_MINIMUM_SIZE;
+
+    /**
+     * Default amount of progress variation before notifying a change in
+     * estimation progress. By default, this is set to 5%.
+     */
+    public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
+
+    /**
+     * Minimum allowed value for progress delta.
+     */
+    public static final float MIN_PROGRESS_DELTA = 0.0f;
+
+    /**
+     * Maximum allowed value for progress delta.
+     */
+    public static final float MAX_PROGRESS_DELTA = 1.0f;
+
+    /**
+     * Constant defining default confidence of the estimated result, which is
+     * 99%. This means that with a probability of 99% estimation will be
+     * accurate because chosen sub-samples will be inliers.
+     */
+    public static final double DEFAULT_CONFIDENCE = 0.99;
+
+    /**
+     * Default maximum allowed number of iterations.
+     */
+    public static final int DEFAULT_MAX_ITERATIONS = 5000;
+
+    /**
+     * Minimum allowed confidence value.
+     */
+    public static final double MIN_CONFIDENCE = 0.0;
+
+    /**
+     * Maximum allowed confidence value.
+     */
+    public static final double MAX_CONFIDENCE = 1.0;
+
+    /**
+     * Minimum allowed number of iterations.
+     */
+    public static final int MIN_ITERATIONS = 1;
+
+    /**
+     * Indicates that is refined by default using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     */
+    public static final boolean DEFAULT_REFINE_RESULT = true;
+
+    /**
+     * Indicates that covariance is not kept by default after refining result.
+     */
+    public static final boolean DEFAULT_KEEP_COVARIANCE = false;
+
+    /**
+     * Default robust estimator method when none is provided.
+     */
+<span class="fc" id="L105">    public static final RobustEstimatorMethod DEFAULT_ROBUST_METHOD = RobustEstimatorMethod.PROMEDS;</span>
+
+    /**
+     * Listener to be notified of events such as when estimation starts, ends
+     * or its progress significantly changes.
+     */
+    protected EuclideanTransformation2DRobustEstimatorListener listener;
+
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     */
+    protected boolean locked;
+
+    /**
+     * Amount of progress variation before notifying a progress change during
+     * estimation.
+     */
+    protected float progressDelta;
+
+    /**
+     * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
+     * equivalent to 100%). The amount of confidence indicates the probability
+     * that the estimated result is correct. Usually this value will be close
+     * to 1.0, but not exactly 1.0.
+     */
+    protected double confidence;
+
+    /**
+     * Maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     */
+    protected int maxIterations;
+
+    /**
+     * Data related to inliers found after estimation.
+     */
+    protected InliersData inliersData;
+
+    /**
+     * Indicates whether result must be refined using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     * If true, inliers will be computed and kept in any implementation
+     * regardless of the settings.
+     */
+    protected boolean refineResult;
+
+    /**
+     * Indicates whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     */
+    private boolean keepCovariance;
+
+    /**
+     * Estimated covariance of estimated 2D Euclidean transformation.
+     * This is only available when result has been refined and covariance is
+     * kept.
+     */
+    private Matrix covariance;
+
+    /**
+     * List of points to be used to estimate an Euclidean 2D transformation.
+     * Each point in the list of input points must be matched with the
+     * corresponding point in the list of output points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     */
+    protected List&lt;Point2D&gt; inputPoints;
+
+    /**
+     * List of points to be used to estimate an Euclidean 2D transformation.
+     * Each point in the lis tof output points must be matched with the
+     * corresponding point in the list of input points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     */
+    protected List&lt;Point2D&gt; outputPoints;
+
+    /**
+     * Indicates whether estimation can start with only 2 points or not.
+     * True allows 2 points, false requires 3.
+     */
+    private boolean weakMinimumSizeAllowed;
+
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L194">    protected EuclideanTransformation2DRobustEstimator() {</span>
+<span class="fc" id="L195">        progressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L196">        confidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L197">        maxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L198">        refineResult = DEFAULT_REFINE_RESULT;</span>
+<span class="fc" id="L199">        keepCovariance = DEFAULT_KEEP_COVARIANCE;</span>
+<span class="fc" id="L200">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    protected EuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L210">        this();</span>
+<span class="fc" id="L211">        this.listener = listener;</span>
+<span class="fc" id="L212">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    protected EuclideanTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L230">        this();</span>
+<span class="fc" id="L231">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L232">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    protected EuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L253">        this(listener);</span>
+<span class="fc" id="L254">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L255">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     */
+    protected EuclideanTransformation2DRobustEstimator(final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L263">        this();</span>
+<span class="fc" id="L264">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L265">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     */
+    protected EuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L276">        this();</span>
+<span class="fc" id="L277">        this.listener = listener;</span>
+<span class="fc" id="L278">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L279">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    protected EuclideanTransformation2DRobustEstimator(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L298">        this();</span>
+<span class="fc" id="L299">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L300">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L301">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 2D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    protected EuclideanTransformation2DRobustEstimator(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L323">        this(listener);</span>
+<span class="fc" id="L324">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L325">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L326">    }</span>
+
+    /**
+     * Returns list of input points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Each point in the list of input points must be matched with the
+     * corresponding point in the list of output points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     *
+     * @return list of input points to be used to estimate an Euclidean 2D
+     * transformation.
+     */
+    public List&lt;Point2D&gt; getInputPoints() {
+<span class="fc" id="L340">        return inputPoints;</span>
+    }
+
+    /**
+     * Returns list of output points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Each point in the list of output points must be matched with the
+     * corresponding point in the list of input points located at the same
+     * position. Hence, both input points and output points must have the same
+     * size, and their size must be greater or equal than MINIMUM_SIZE.
+     *
+     * @return list of output points to be used to estimate an Euclidean 2D
+     * transformation.
+     */
+    public List&lt;Point2D&gt; getOutputPoints() {
+<span class="fc" id="L355">        return outputPoints;</span>
+    }
+
+    /**
+     * Sets list of points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     * @throws LockedException          if estimator is locked because a computation is
+     *                                  already in progress.
+     */
+    public void setPoints(final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) throws LockedException {
+<span class="fc bfc" id="L375" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L376">            throw new LockedException();</span>
+        }
+<span class="fc" id="L378">        internalSetPoints(inputPoints, outputPoints);</span>
+<span class="fc" id="L379">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the Euclidean 2D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched points) are provided
+     * and a minimum of MINIMUM_SIZE points are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    public boolean isReady() {
+<span class="pc bpc" id="L390" title="2 of 6 branches missed.">        return inputPoints != null &amp;&amp; outputPoints != null &amp;&amp; inputPoints.size() == outputPoints.size()</span>
+<span class="pc bpc" id="L391" title="1 of 2 branches missed.">                &amp;&amp; inputPoints.size() &gt;= getMinimumPoints();</span>
+    }
+
+    /**
+     * Returns quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     * This implementation always returns null.
+     * Subclasses using quality scores must implement proper behaviour.
+     *
+     * @return quality scores corresponding to each pair of matched points.
+     */
+    public double[] getQualityScores() {
+<span class="fc" id="L403">        return null;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched points.
+     * The larger the score value the better the quality of the matching.
+     * This implementation makes no action.
+     * Subclasses using quality scores must implement proper behaviour.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="fc" id="L420">    }</span>
+
+    /**
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts, ends or its progress significantly changes.
+     *
+     * @return listener to be notified of events.
+     */
+    public EuclideanTransformation2DRobustEstimatorListener getListener() {
+<span class="fc" id="L429">        return listener;</span>
+    }
+
+    /**
+     * Sets listener to be notified of events such as when estimation starts,
+     * ends or its progress significantly changes.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if robust estimator is locked.
+     */
+    public void setListener(final EuclideanTransformation2DRobustEstimatorListener listener) throws LockedException {
+<span class="fc bfc" id="L440" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L441">            throw new LockedException();</span>
+        }
+<span class="fc" id="L443">        this.listener = listener;</span>
+<span class="fc" id="L444">    }</span>
+
+    /**
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L453" title="All 2 branches covered.">        return listener != null;</span>
+    }
+
+    /**
+     * Indicates whether estimation can start with only 2 points or not.
+     *
+     * @return true allows 2 points, false requires 3.
+     */
+    public boolean isWeakMinimumSizeAllowed() {
+<span class="fc" id="L462">        return weakMinimumSizeAllowed;</span>
+    }
+
+    /**
+     * Specifies whether estimation can start with only 2 points or not.
+     *
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setWeakMinimumSizeAllowed(final boolean weakMinimumSizeAllowed) throws LockedException {
+<span class="fc bfc" id="L472" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L473">            throw new LockedException();</span>
+        }
+<span class="fc" id="L475">        this.weakMinimumSizeAllowed = weakMinimumSizeAllowed;</span>
+<span class="fc" id="L476">    }</span>
+
+    /**
+     * Required minimum number of point correspondences to start the estimation.
+     * Can be either 2 or 3.
+     *
+     * @return minimum number of point correspondences.
+     */
+    public int getMinimumPoints() {
+<span class="fc bfc" id="L485" title="All 2 branches covered.">        return weakMinimumSizeAllowed ? WEAK_MINIMUM_SIZE : MINIMUM_SIZE;</span>
+    }
+
+    /**
+     * Indicates if this instance is locked because estimation is being
+     * computed.
+     *
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L495">        return locked;</span>
+    }
+
+    /**
+     * Returns amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @return amount of progress variation before notifying a progress change
+     * during estimation.
+     */
+    public float getProgressDelta() {
+<span class="fc" id="L506">        return progressDelta;</span>
+    }
+
+    /**
+     * Sets amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @param progressDelta amount of progress variation before notifying a
+     *                      progress change during estimation.
+     * @throws IllegalArgumentException if progress delta is less than zero or
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setProgressDelta(final float progressDelta) throws LockedException {
+<span class="fc bfc" id="L521" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L522">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L524" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA || progressDelta &gt; MAX_PROGRESS_DELTA) {</span>
+<span class="fc" id="L525">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L527">        this.progressDelta = progressDelta;</span>
+<span class="fc" id="L528">    }</span>
+
+    /**
+     * Returns amount of confidence expressed as a value between 0.0 and 1.0
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @return amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+<span class="fc" id="L539">        return confidence;</span>
+    }
+
+    /**
+     * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
+     * is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimator
+     *                                  is being computed.
+     */
+    public void setConfidence(final double confidence) throws LockedException {
+<span class="fc bfc" id="L555" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L556">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L558" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L559">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L561">        this.confidence = confidence;</span>
+<span class="fc" id="L562">    }</span>
+
+    /**
+     * Returns maximum allowed number of iterations. If maximum allowed number
+     * of iterations is achieved without converging to a result when calling
+     * estimate(), a RobustEstimatorException will be raised.
+     *
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+<span class="fc" id="L572">        return maxIterations;</span>
+    }
+
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     *
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setMaxIterations(final int maxIterations) throws LockedException {
+<span class="fc bfc" id="L586" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L587">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L589" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L590">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L592">        this.maxIterations = maxIterations;</span>
+<span class="fc" id="L593">    }</span>
+
+    /**
+     * Gets data related to inliers found after estimation.
+     *
+     * @return data related to inliers found after estimation.
+     */
+    public InliersData getInliersData() {
+<span class="fc" id="L601">        return inliersData;</span>
+    }
+
+    /**
+     * Indicates whether result must be refined using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     * If ture, inliers will be computed and kept in any implementation
+     * regardless of the settings.
+     *
+     * @return true to refine result, false to simply use result found by
+     * robust estimator without further refining.
+     */
+    public boolean isResultRefined() {
+<span class="fc" id="L614">        return refineResult;</span>
+    }
+
+    /**
+     * Specifies whether result must be refined using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     *
+     * @param refineResult true to refine result, false to simply use result
+     *                     found by robust estimator without further refining.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setResultRefined(final boolean refineResult) throws LockedException {
+<span class="pc bpc" id="L626" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L627">            throw new LockedException();</span>
+        }
+<span class="fc" id="L629">        this.refineResult = refineResult;</span>
+<span class="fc" id="L630">    }</span>
+
+    /**
+     * Indicates whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     *
+     * @return true if covariance must be kept after refining result, false
+     * otherwise.
+     */
+    public boolean isCovarianceKept() {
+<span class="fc" id="L640">        return keepCovariance;</span>
+    }
+
+    /**
+     * Specifies whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     *
+     * @param keepCovariance true if covariance must be kept after refining
+     *                       result, false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setCovarianceKept(final boolean keepCovariance) throws LockedException {
+<span class="fc bfc" id="L652" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L653">            throw new LockedException();</span>
+        }
+<span class="fc" id="L655">        this.keepCovariance = keepCovariance;</span>
+<span class="fc" id="L656">    }</span>
+
+    /**
+     * Gets estimated covariance of estimated 3D point if available.
+     * This is only available when result has been refined and covariance is
+     * kept.
+     *
+     * @return estimated covariance or null.
+     */
+    public Matrix getCovariance() {
+<span class="fc" id="L666">        return covariance;</span>
+    }
+
+    /**
+     * Estimates an Euclidean 2D transformation using a robust estimator and the
+     * best set of matched 2D point correspondences found using the robust
+     * estimator.
+     *
+     * @return an Euclidean 2D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    public abstract EuclideanTransformation2D estimate() throws LockedException, NotReadyException,
+            RobustEstimatorException;
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    public abstract RobustEstimatorMethod getMethod();
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param method method of a robust estimator algorithm to estimate the
+     *               best Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L701" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L702">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator();</span>
+<span class="fc" id="L703">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator();</span>
+<span class="fc" id="L704">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator();</span>
+<span class="fc" id="L705">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator();</span>
+<span class="fc" id="L706">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator();</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided estimator method.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param method       method of a robust estimator algorithm to estimate the best
+     *                     Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L726" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L727">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);</span>
+<span class="fc" id="L728">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);</span>
+<span class="fc" id="L729">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);</span>
+<span class="fc" id="L730">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);</span>
+<span class="fc" id="L731">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @param method   method of a robust estimator algorithm to estimate the best
+     *                 Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L747" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L748">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(listener);</span>
+<span class="fc" id="L749">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(listener);</span>
+<span class="fc" id="L750">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(listener);</span>
+<span class="fc" id="L751">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(listener);</span>
+<span class="fc" id="L752">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(listener);</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param method       method of a robust estimator algorithm to estimate the best
+     *                     Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L775" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L776">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L777">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L778">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L779">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L780">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 matched points).
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L798" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L799">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator();</span>
+<span class="fc" id="L800">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator();</span>
+<span class="fc" id="L801">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(qualityScores);</span>
+<span class="fc" id="L802">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(qualityScores);</span>
+<span class="fc" id="L803">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator();</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      Euclidean 2D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      Euclidean 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points or scores
+     *                                  don't have the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L826" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L827">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);</span>
+<span class="fc" id="L828">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);</span>
+<span class="fc" id="L829">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints, qualityScores);</span>
+<span class="fc" id="L830">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+                    inputPoints, outputPoints, qualityScores);
+<span class="fc" id="L832">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(inputPoints, outputPoints);</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided quality scores don't have
+     *                                  the required minimum size.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L853" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L854">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(listener);</span>
+<span class="fc" id="L855">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(listener);</span>
+<span class="fc" id="L856">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L857">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(listener, qualityScores);</span>
+<span class="fc" id="L858">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(listener);</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      Euclidean 2D transformation.
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      Euclidean 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size of their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L883" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L884">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L885">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L886">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, qualityScores);
+<span class="fc" id="L888">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, qualityScores);
+<span class="fc" id="L890">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(listener, inputPoints, outputPoints);</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method                 method of a robust estimator algorithm to estimate
+     *                               the best Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L905" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L906">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L907">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L908">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L909">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L910">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided estimator method.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method                 method of a robust estimator algorithm to estimate the best
+     *                               Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L932" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L933">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(</span>
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L935">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(</span>
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L937">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(</span>
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L939">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L941">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(</span>
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method                 method of a robust estimator algorithm to estimate the best
+     *                               Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L960" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L961">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L962">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L963">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L964">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L965">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method                 method of a robust estimator algorithm to estimate the best
+     *                               Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L990" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L991">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L993">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L995">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L997">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L999">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method                 method of a robust estimator algorithm to estimate the best
+     *                               Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 matched points).
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L1019" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L1020">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L1021">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L1022">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(qualityScores, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L1023">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(qualityScores, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L1024">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(weakMinimumSizeAllowed);</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method                 method of a robust estimator algorithm to estimate the best
+     *                               Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points or scores
+     *                                  don't have the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L1048" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L1049">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(</span>
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L1051">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(</span>
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L1053">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(</span>
+                    inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed);
+<span class="fc" id="L1055">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+                    inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed);
+<span class="fc" id="L1057">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(</span>
+                    inputPoints, outputPoints, weakMinimumSizeAllowed);
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method                 method of a robust estimator algorithm to estimate the best
+     *                               Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided quality scores don't have
+     *                                  the required minimum size.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed, final RobustEstimatorMethod method) {
+<span class="pc bpc" id="L1080" title="1 of 5 branches missed.">        return switch (method) {</span>
+<span class="fc" id="L1081">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L1082">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);</span>
+<span class="nc" id="L1083">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(</span>
+                    listener, qualityScores, weakMinimumSizeAllowed);
+<span class="fc" id="L1085">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+                    listener, qualityScores, weakMinimumSizeAllowed);
+<span class="fc" id="L1087">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(listener, weakMinimumSizeAllowed);</span>
+        };
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @param method                 method of a robust estimator algorithm to estimate the best
+     *                               Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size of their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final double[] qualityScores, final boolean weakMinimumSizeAllowed,
+            final RobustEstimatorMethod method) {
+<span class="fc bfc" id="L1114" title="All 5 branches covered.">        return switch (method) {</span>
+<span class="fc" id="L1115">            case LMEDS -&gt; new LMedSEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L1117">            case MSAC -&gt; new MSACEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+<span class="fc" id="L1119">            case PROSAC -&gt; new PROSACEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed);
+<span class="fc" id="L1121">            case PROMEDS -&gt; new PROMedSEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed);
+<span class="fc" id="L1123">            default -&gt; new RANSACEuclideanTransformation2DRobustEstimator(</span>
+                    listener, inputPoints, outputPoints, weakMinimumSizeAllowed);
+        };
+    }
+
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create() {
+<span class="fc" id="L1136">        return create(DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size of their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L1153">        return create(inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L1166">        return create(listener, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L1186">        return create(listener, inputPoints, outputPoints, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(final double[] qualityScores) {
+<span class="fc" id="L1198">        return create(qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      Euclidean 2D transformation.
+     * @param outputPoints  list of output points ot be used to estimate an
+     *                      Euclidean 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of points.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L1216">        return create(inputPoints, outputPoints, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
+<span class="fc" id="L1231">        return create(listener, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      Euclidean 2D transformation.
+     * @param outputPoints  list of output points ot be used to estimate an
+     *                      Euclidean 2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L1253">        return create(listener, inputPoints, outputPoints, qualityScores, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1264">        return create(weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size of their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1282">        return create(inputPoints, outputPoints, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1296">        return create(listener, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1317">        return create(listener, inputPoints, outputPoints, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1331">        return create(qualityScores, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points ot be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1351">        return create(inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of Euclidean 2D transformation estimator.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final double[] qualityScores,
+            final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1368">        return create(listener, qualityScores, weakMinimumSizeAllowed, DEFAULT_ROBUST_METHOD);</span>
+    }
+
+    /**
+     * Creates an Euclidean 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param outputPoints           list of output points ot be used to estimate an
+     *                               Euclidean 2D transformation.
+     * @param qualityScores          quality scores corresponding to each pair of matched
+     *                               points.
+     * @param weakMinimumSizeAllowed true allows 2 points, false requires 3.
+     * @return an instance of Euclidean 2D transformation estimator.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public static EuclideanTransformation2DRobustEstimator create(
+            final EuclideanTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final double[] qualityScores, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L1391">        return create(listener, inputPoints, outputPoints, qualityScores, weakMinimumSizeAllowed,</span>
+                DEFAULT_ROBUST_METHOD);
+    }
+
+
+    /**
+     * Internal method to set lists of points to be used to estimate an
+     * Euclidean 2D transformation.
+     * This method does not check whether estimator is locked or not.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     Euclidean 2D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    private void internalSetPoints(final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc bfc" id="L1409" title="All 2 branches covered.">        if (inputPoints.size() &lt; getMinimumPoints()) {</span>
+<span class="fc" id="L1410">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L1412" title="All 2 branches covered.">        if (inputPoints.size() != outputPoints.size()) {</span>
+<span class="fc" id="L1413">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L1415">        this.inputPoints = inputPoints;</span>
+<span class="fc" id="L1416">        this.outputPoints = outputPoints;</span>
+<span class="fc" id="L1417">    }</span>
+
+    /**
+     * Attempts to refine provided solution if refinement is requested.
+     * This method returns a refined solution of the same provided solution
+     * if refinement is not requested or has failed.
+     * If refinement is enabled, and it is requested to keep covariance, this
+     * method will also keep covariance of refined transformation.
+     *
+     * @param transformation transformation estimated by a robust estimator
+     *                       without refinement.
+     * @return solution after refinement (if requested) or the provided
+     * non-refined solution if not requested or refinement failed.
+     */
+    protected EuclideanTransformation2D attemptRefine(final EuclideanTransformation2D transformation) {
+<span class="fc bfc" id="L1432" title="All 2 branches covered.">        if (refineResult) {</span>
+<span class="fc" id="L1433">            final var refiner = new EuclideanTransformation2DRefiner(transformation, keepCovariance, getInliersData(),</span>
+<span class="fc" id="L1434">                    inputPoints, outputPoints, getRefinementStandardDeviation());</span>
+
+            try {
+<span class="fc" id="L1437">                final var result = new EuclideanTransformation2D();</span>
+<span class="fc" id="L1438">                final var improved = refiner.refine(result);</span>
+
+<span class="pc bpc" id="L1440" title="1 of 2 branches missed.">                if (keepCovariance) {</span>
+                    // keep covariance
+<span class="fc" id="L1442">                    covariance = refiner.getCovariance();</span>
+                }
+
+<span class="fc bfc" id="L1445" title="All 2 branches covered.">                return improved ? result : transformation;</span>
+<span class="fc" id="L1446">            } catch (final Exception e) {</span>
+                // refinement failed, so we return input value
+<span class="fc" id="L1448">                return transformation;</span>
+            }
+        } else {
+<span class="fc" id="L1451">            return transformation;</span>
+        }
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    protected abstract double getRefinementStandardDeviation();
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

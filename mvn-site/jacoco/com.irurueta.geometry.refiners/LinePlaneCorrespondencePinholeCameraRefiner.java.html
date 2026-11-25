@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LinePlaneCorrespondencePinholeCameraRefiner.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.refiners</a> &gt; <span class="el_source">LinePlaneCorrespondencePinholeCameraRefiner.java</span></div><h1>LinePlaneCorrespondencePinholeCameraRefiner.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.refiners;
+
+import com.irurueta.geometry.Line2D;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Plane;
+import com.irurueta.numerical.robust.InliersData;
+
+import java.util.BitSet;
+import java.util.List;
+
+/**
+ * Base class for a pinhole camera refiner using line/plane correspondences.
+ * Implementations of this class refine a pinhole camera by taking into account
+ * an initial estimation, inlier line/plane matches and their residuals.
+ * This class can be used to find a solution that minimizes error of inliers in
+ * LMSE terms.
+ * Typically, a refiner is used by a robust estimator, however it can also be
+ * useful in some other situations.
+ */
+public abstract class LinePlaneCorrespondencePinholeCameraRefiner extends PinholeCameraRefiner&lt;Plane, Line2D&gt; {
+
+    /**
+     * Plane to be reused when computing residuals.
+     */
+<span class="fc" id="L40">    private final Plane residualTestPlane = new Plane();</span>
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L45">    protected LinePlaneCorrespondencePinholeCameraRefiner() {</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliers                     set indicating which of the provided matches are inliers.
+     * @param residuals                   residuals for matched samples.
+     * @param numInliers                  number of inliers on initial estimation.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    protected LinePlaneCorrespondencePinholeCameraRefiner(
+            final PinholeCamera initialEstimation, final boolean keepCovariance,
+            final BitSet inliers, final double[] residuals, final int numInliers,
+            final List&lt;Plane&gt; samples1, final List&lt;Line2D&gt; samples2, final double refinementStandardDeviation) {
+<span class="fc" id="L66">        super(initialEstimation, keepCovariance, inliers, residuals, numInliers, samples1, samples2,</span>
+                refinementStandardDeviation);
+<span class="fc" id="L68">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param initialEstimation           initial estimation to be set.
+     * @param keepCovariance              true if covariance of estimation must be kept after
+     *                                    refinement, false otherwise.
+     * @param inliersData                 inlier data, typically obtained from a robust
+     *                                    estimator.
+     * @param samples1                    1st set of paired samples.
+     * @param samples2                    2nd set of paired samples.
+     * @param refinementStandardDeviation standard deviation used for
+     *                                    Levenberg-Marquardt fitting.
+     */
+    protected LinePlaneCorrespondencePinholeCameraRefiner(
+            final PinholeCamera initialEstimation, final boolean keepCovariance,
+            final InliersData inliersData, final List&lt;Plane&gt; samples1, final List&lt;Line2D&gt; samples2,
+            final double refinementStandardDeviation) {
+<span class="fc" id="L87">        super(initialEstimation, keepCovariance, inliersData, samples1, samples2, refinementStandardDeviation);</span>
+<span class="fc" id="L88">    }</span>
+
+    /**
+     * Total residual to be used during Powell refinement.
+     * Refinement uses Powell algorithm to minimize a cost function
+     * consisting on the sum of squared projection residuals plus the
+     * suggestion residual for any suggested terms.
+     *
+     * @param pinholeCamera camera to be checked.
+     * @param params        camera parameters. In the following order:
+     *                      skewness, horizontal focal length, vertical focal length,
+     *                      horizontal principal point, vertical principal point, quaternion A,
+     *                      quaternion B, quaternion C, quaternion D, center x, center y, center z.
+     * @param weight        weight for suggestion residual.
+     * @return total residual during Powell refinement.
+     */
+    protected double residualPowell(final PinholeCamera pinholeCamera, final double[] params, final double weight) {
+<span class="fc" id="L105">        return backprojectionResidual(pinholeCamera) + suggestionResidual(params, weight);</span>
+    }
+
+    /**
+     * Computes total line back-projection residual for provided camera.
+     * This method computes the sum of the squared residuals for all inlier
+     * back-projected lines.
+     *
+     * @param pinholeCamera camera to compute residual for.
+     * @return total back-projection residual.
+     */
+    private double backprojectionResidual(final PinholeCamera pinholeCamera) {
+<span class="fc" id="L117">        pinholeCamera.normalize();</span>
+
+        // back-projection inlier lines into test plane
+<span class="fc" id="L120">        final var nSamples = inliers.length();</span>
+<span class="fc" id="L121">        var residual = 0.0;</span>
+<span class="fc bfc" id="L122" title="All 2 branches covered.">        for (int i = 0; i &lt; nSamples; i++) {</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">            if (inliers.get(i)) {</span>
+<span class="fc" id="L124">                final var line = samples2.get(i);</span>
+<span class="fc" id="L125">                final var plane = samples1.get(i);</span>
+
+<span class="fc" id="L127">                line.normalize();</span>
+<span class="fc" id="L128">                plane.normalize();</span>
+
+<span class="fc" id="L130">                residual += Math.pow(singleBackprojectionResidual(pinholeCamera, line, plane), 2.0);</span>
+            }
+        }
+
+<span class="fc" id="L134">        return residual;</span>
+    }
+
+    /**
+     * Computes total residual to be used during Levenberg/Marquard covariance
+     * estimation.
+     *
+     * @param pinholeCamera camera to estimate covariance for.
+     * @param line          2D line to be back-projected with provided pinhole camera.
+     * @param plane         plane to be compared with back-projected line.
+     * @param params        camera parameters. In the following order:
+     *                      skewness, horizontal focal length, vertical focal length,
+     *                      horizontal principal point, vertical principal point, quaternion A,
+     *                      quaternion B, quaternion C, quaternion D, center x, center y, center z.
+     * @param weight        weight for suggestion residual.
+     * @return total residual.
+     */
+    protected double residualLevenbergMarquardt(
+            final PinholeCamera pinholeCamera, final Line2D line, final Plane plane, final double[] params,
+            final double weight) {
+<span class="fc" id="L154">        var residual = singleBackprojectionResidual(pinholeCamera, line, plane);</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">        if (hasSuggestions()) {</span>
+<span class="fc" id="L156">            residual += suggestionResidual(params, weight);</span>
+        }
+<span class="fc" id="L158">        return residual;</span>
+    }
+
+    /**
+     * Back-projection residual/error for a single line using provided camera.
+     *
+     * @param pinholeCamera camera ot be checked.
+     * @param line          line to be back-projected.
+     * @param plane         plane to check against.
+     * @return dot product distance between back-projected line and plane.
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    private double singleBackprojectionResidual(final PinholeCamera pinholeCamera, final Line2D line,
+                                                final Plane plane) {
+        // back-project line into test plane
+<span class="fc" id="L173">        pinholeCamera.backProject(line, residualTestPlane);</span>
+<span class="fc" id="L174">        residualTestPlane.normalize();</span>
+
+<span class="fc" id="L176">        final var dotProduct = Math.abs(plane.getA() * residualTestPlane.getA()</span>
+<span class="fc" id="L177">                + plane.getB() * residualTestPlane.getB()</span>
+<span class="fc" id="L178">                + plane.getC() * residualTestPlane.getC()</span>
+<span class="fc" id="L179">                + plane.getD() * residualTestPlane.getD());</span>
+<span class="fc" id="L180">        return 1.0 - dotProduct;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,994 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PinholeCameraEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PinholeCameraEstimator.java</span></div><h1>PinholeCameraEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2013 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.InhomogeneousPoint2D;
+import com.irurueta.geometry.InhomogeneousPoint3D;
+import com.irurueta.geometry.PinholeCamera;
+import com.irurueta.geometry.Quaternion;
+
+/**
+ * This class defines the interface for an estimator for pinhole cameras.
+ */
+public abstract class PinholeCameraEstimator {
+
+    /**
+     * Default estimator type.
+     */
+<span class="fc" id="L31">    public static final PinholeCameraEstimatorType DEFAULT_ESTIMATOR_TYPE =</span>
+            PinholeCameraEstimatorType.DLT_POINT_PINHOLE_CAMERA_ESTIMATOR;
+
+    /**
+     * Default value indicating whether skewness value is suggested or not.
+     * By default, this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED = false;
+
+    /**
+     * Default value of skewness to be suggested when suggestion is enabled.
+     * By default suggested skewness is zero.
+     */
+    public static final double DEFAULT_SUGGESTED_SKEWNESS_VALUE = 0.0;
+
+    /**
+     * Default value indicating whether horizontal focal length value is
+     * suggested or not. By default, this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED = false;
+
+    /**
+     * Default value indicating whether vertical focal length value is suggested
+     * or not. By default, this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED = false;
+
+    /**
+     * Default value indicating whether aspect ratio is suggested or not. By
+     * default, this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED = false;
+
+    /**
+     * Default value of aspect ratio to be suggested when suggestion is enabled.
+     * By default, suggested aspect ratio is 1.0, although also -1.0 is a typical
+     * value when vertical coordinates increase downwards.
+     */
+    public static final double DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE = 1.0;
+
+    /**
+     * Default value indicating whether principal point is suggested or not. By
+     * default, this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED = false;
+
+    /**
+     * Default value indicating whether rotation is suggested or not. By default,
+     * this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_ROTATION_ENABLED = false;
+
+    /**
+     * Default value indicating whether center is suggested or not. By default,
+     * this is disabled.
+     */
+    public static final boolean DEFAULT_SUGGEST_CENTER_ENABLED = false;
+
+    /**
+     * Default value for minimum suggestion weight. This weight is used to
+     * slowly draw original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     */
+    public static final double DEFAULT_MIN_SUGGESTION_WEIGHT = 0.1;
+
+    /**
+     * Default value for maximum suggestion weight. This weight is used to
+     * slowly draw original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     */
+    public static final double DEFAULT_MAX_SUGGESTION_WEIGHT = 2.0;
+
+    /**
+     * Default value for the step to increase suggestion weight. This weight is
+     * used to slowly draw original camera parameters into desired suggested
+     * values. Suggestion weight slowly increases each time Levenberg-Marquardt
+     * is used to find a solution so that the algorithm can converge into
+     * desired value. The faster the weights are increased the less likely that
+     * suggested values can be converged if they differ too much from the
+     * original ones.
+     */
+    public static final double DEFAULT_SUGGESTION_WEIGHT_STEP = 0.475;
+
+    /**
+     * True when an estimator is estimating a camera.
+     */
+    protected boolean locked;
+
+    /**
+     * Listener to be notified of events such as when estimation starts, ends
+     * or estimation progress changes.
+     */
+    protected PinholeCameraEstimatorListener listener;
+
+    /**
+     * Indicates whether skewness value is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L139">    protected boolean suggestSkewnessValueEnabled = DEFAULT_SUGGEST_SKEWNESS_VALUE_ENABLED;</span>
+
+    /**
+     * Suggested skewness value to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided
+     * value.
+     */
+<span class="fc" id="L147">    protected double suggestedSkewnessValue = DEFAULT_SUGGESTED_SKEWNESS_VALUE;</span>
+
+    /**
+     * Indicates whether horizontal focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L157">    protected boolean suggestHorizontalFocalLengthEnabled = DEFAULT_SUGGEST_HORIZONTAL_FOCAL_LENGTH_ENABLED;</span>
+
+    /**
+     * Suggested horizontal focal length value to be reached when suggestion is
+     * enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+    protected double suggestedHorizontalFocalLengthValue;
+
+    /**
+     * Indicates whether vertical focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L175">    protected boolean suggestVerticalFocalLengthEnabled = DEFAULT_SUGGEST_VERTICAL_FOCAL_LENGTH_ENABLED;</span>
+
+    /**
+     * Suggested vertical focal length value to be reached when suggestion is
+     * enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+    protected double suggestedVerticalFocalLengthValue;
+
+    /**
+     * Indicates whether aspect ratio is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L193">    protected boolean suggestAspectRatioEnabled = DEFAULT_SUGGEST_ASPECT_RATIO_ENABLED;</span>
+
+    /**
+     * Suggested aspect ratio value to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+<span class="fc" id="L200">    protected double suggestedAspectRatioValue = DEFAULT_SUGGESTED_ASPECT_RATIO_VALUE;</span>
+
+    /**
+     * Indicates whether principal point is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L210">    protected boolean suggestPrincipalPointEnabled = DEFAULT_SUGGEST_PRINCIPAL_POINT_ENABLED;</span>
+
+    /**
+     * Suggested principal point value to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+    protected InhomogeneousPoint2D suggestedPrincipalPointValue;
+
+    /**
+     * Indicates whether camera rotation is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+<span class="fc" id="L227">    protected boolean suggestRotationEnabled = DEFAULT_SUGGEST_ROTATION_ENABLED;</span>
+
+    /**
+     * Suggested rotation to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+    protected Quaternion suggestedRotationValue;
+
+    /**
+     * Indicates whether camera center is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     */
+    protected boolean suggestCenterEnabled;
+
+    /**
+     * Suggested center to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     */
+    protected InhomogeneousPoint3D suggestedCenterValue;
+
+    /**
+     * Minimum suggestion weight. This weight is used to slowly draw original
+     * camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     */
+<span class="fc" id="L261">    protected double minSuggestionWeight = DEFAULT_MIN_SUGGESTION_WEIGHT;</span>
+
+    /**
+     * Maximum suggestion weight. This weight is used to slowly draw original
+     * camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     */
+<span class="fc" id="L271">    protected double maxSuggestionWeight = DEFAULT_MAX_SUGGESTION_WEIGHT;</span>
+
+    /**
+     * Step to increase suggestion weight. This weight is used to slowly draw
+     * original camera parameters into desired suggested values. Suggestion
+     * weight slowly increases each time Levenberg-Marquardt is used to find a
+     * solution so that the algorithm can converge into desired value. The
+     * faster the weights are increased the less likely that suggested values
+     * can be converged if they differ too much from the original ones.
+     */
+<span class="fc" id="L281">    protected double suggestionWeightStep = DEFAULT_SUGGESTION_WEIGHT_STEP;</span>
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L286">    protected PinholeCameraEstimator() {</span>
+<span class="fc" id="L287">        locked = false;</span>
+<span class="fc" id="L288">        listener = null;</span>
+<span class="fc" id="L289">    }</span>
+
+    /**
+     * Constructor with listener.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or estimation progress changes.
+     */
+<span class="fc" id="L297">    protected PinholeCameraEstimator(final PinholeCameraEstimatorListener listener) {</span>
+<span class="fc" id="L298">        locked = false;</span>
+<span class="fc" id="L299">        this.listener = listener;</span>
+<span class="fc" id="L300">    }</span>
+
+    /**
+     * Returns listener to be notified of events such as when estimation starts,
+     * ends or estimation progress changes.
+     *
+     * @return listener to be notified of events.
+     */
+    public PinholeCameraEstimatorListener getListener() {
+<span class="fc" id="L309">        return listener;</span>
+    }
+
+    /**
+     * Sets listener to be notified of events such as when estimation starts,
+     * ends or estimation progress changes.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setListener(final PinholeCameraEstimatorListener listener) throws LockedException {
+<span class="fc bfc" id="L320" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L321">            throw new LockedException();</span>
+        }
+<span class="fc" id="L323">        this.listener = listener;</span>
+<span class="fc" id="L324">    }</span>
+
+    /**
+     * Indicates whether skewness value is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if skewness value is suggested, false otherwise.
+     */
+    public boolean isSuggestSkewnessValueEnabled() {
+<span class="fc" id="L337">        return suggestSkewnessValueEnabled;</span>
+    }
+
+    /**
+     * Specifies whether skewness value is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestSkewnessValueEnabled true if skewness value is suggested,
+     *                                    false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestSkewnessValueEnabled(final boolean suggestSkewnessValueEnabled) throws LockedException {
+<span class="fc bfc" id="L353" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L354">            throw new LockedException();</span>
+        }
+<span class="fc" id="L356">        this.suggestSkewnessValueEnabled = suggestSkewnessValueEnabled;</span>
+<span class="fc" id="L357">    }</span>
+
+    /**
+     * Gets suggested skewness value to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested skewness value.
+     */
+    public double getSuggestedSkewnessValue() {
+<span class="fc" id="L367">        return suggestedSkewnessValue;</span>
+    }
+
+    /**
+     * Sets suggested skewness value to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedSkewnessValue suggested skewness value.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedSkewnessValue(final double suggestedSkewnessValue) throws LockedException {
+<span class="fc bfc" id="L379" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L380">            throw new LockedException();</span>
+        }
+<span class="fc" id="L382">        this.suggestedSkewnessValue = suggestedSkewnessValue;</span>
+<span class="fc" id="L383">    }</span>
+
+    /**
+     * Indicates whether horizontal focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if horizontal focal length is suggested, false otherwise.
+     */
+    public boolean isSuggestHorizontalFocalLengthEnabled() {
+<span class="fc" id="L396">        return suggestHorizontalFocalLengthEnabled;</span>
+    }
+
+    /**
+     * Specifies whether horizontal focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestHorizontalFocalLengthEnabled true if horizontal focal
+     *                                            length is suggested, false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestHorizontalFocalLengthEnabled(final boolean suggestHorizontalFocalLengthEnabled)
+            throws LockedException {
+<span class="fc bfc" id="L413" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L414">            throw new LockedException();</span>
+        }
+<span class="fc" id="L416">        this.suggestHorizontalFocalLengthEnabled =</span>
+                suggestHorizontalFocalLengthEnabled;
+<span class="fc" id="L418">    }</span>
+
+    /**
+     * Gets suggested horizontal focal length value to be reached when
+     * suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested horizontal focal length value.
+     */
+    public double getSuggestedHorizontalFocalLengthValue() {
+<span class="fc" id="L429">        return suggestedHorizontalFocalLengthValue;</span>
+    }
+
+    /**
+     * Sets suggested horizontal focal length value to be reached when
+     * suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedHorizontalFocalLengthValue suggested horizontal focal
+     *                                            length value.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedHorizontalFocalLengthValue(final double suggestedHorizontalFocalLengthValue)
+            throws LockedException {
+<span class="fc bfc" id="L444" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L445">            throw new LockedException();</span>
+        }
+<span class="fc" id="L447">        this.suggestedHorizontalFocalLengthValue = suggestedHorizontalFocalLengthValue;</span>
+<span class="fc" id="L448">    }</span>
+
+    /**
+     * Indicates whether vertical focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if vertical focal length is suggested, false otherwise.
+     */
+    public boolean isSuggestVerticalFocalLengthEnabled() {
+<span class="fc" id="L461">        return suggestVerticalFocalLengthEnabled;</span>
+    }
+
+    /**
+     * Specifies whether vertical focal length is suggested or not. When
+     * enabled, the estimator will attempt to enforce suggested value in an
+     * iterative manner starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestVerticalFocalLengthEnabled true if vertical focal length is
+     *                                          suggested, false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestVerticalFocalLengthEnabled(final boolean suggestVerticalFocalLengthEnabled)
+            throws LockedException {
+<span class="fc bfc" id="L478" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L479">            throw new LockedException();</span>
+        }
+<span class="fc" id="L481">        this.suggestVerticalFocalLengthEnabled = suggestVerticalFocalLengthEnabled;</span>
+<span class="fc" id="L482">    }</span>
+
+    /**
+     * Gets suggested vertical focal length value to be reached when suggestion
+     * is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested vertical focal length.
+     */
+    public double getSuggestedVerticalFocalLengthValue() {
+<span class="fc" id="L493">        return suggestedVerticalFocalLengthValue;</span>
+    }
+
+    /**
+     * Sets suggested vertical focal length value to be reached when suggestion
+     * is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedVerticalFocalLengthValue suggested vertical focal length.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedVerticalFocalLengthValue(final double suggestedVerticalFocalLengthValue)
+            throws LockedException {
+<span class="fc bfc" id="L507" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L508">            throw new LockedException();</span>
+        }
+<span class="fc" id="L510">        this.suggestedVerticalFocalLengthValue = suggestedVerticalFocalLengthValue;</span>
+<span class="fc" id="L511">    }</span>
+
+    /**
+     * Indicates whether aspect ratio is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if aspect ratio is suggested, false otherwise.
+     */
+    public boolean isSuggestAspectRatioEnabled() {
+<span class="fc" id="L524">        return suggestAspectRatioEnabled;</span>
+    }
+
+    /**
+     * Specifies whether aspect ratio is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestAspectRatioEnabled true if aspect ratio is suggested, false
+     *                                  otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestAspectRatioEnabled(final boolean suggestAspectRatioEnabled) throws LockedException {
+<span class="fc bfc" id="L540" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L541">            throw new LockedException();</span>
+        }
+<span class="fc" id="L543">        this.suggestAspectRatioEnabled = suggestAspectRatioEnabled;</span>
+<span class="fc" id="L544">    }</span>
+
+    /**
+     * Gets suggested aspect ratio value to be reached when suggestion is
+     * enabled. Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested aspect ratio value.
+     */
+    public double getSuggestedAspectRatioValue() {
+<span class="fc" id="L554">        return suggestedAspectRatioValue;</span>
+    }
+
+    /**
+     * Sets suggested aspect ratio value to be reached when suggestion is
+     * enabled. Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedAspectRatioValue suggested aspect ratio value.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedAspectRatioValue(final double suggestedAspectRatioValue) throws LockedException {
+<span class="fc bfc" id="L566" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L567">            throw new LockedException();</span>
+        }
+<span class="fc" id="L569">        this.suggestedAspectRatioValue = suggestedAspectRatioValue;</span>
+<span class="fc" id="L570">    }</span>
+
+    /**
+     * Indicates whether principal point is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if principal point is suggested, false otherwise.
+     */
+    public boolean isSuggestPrincipalPointEnabled() {
+<span class="fc" id="L583">        return suggestPrincipalPointEnabled;</span>
+    }
+
+    /**
+     * Specifies whether principal point is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestPrincipalPointEnabled true if principal point is suggested,
+     *                                     false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestPrincipalPointEnabled(final boolean suggestPrincipalPointEnabled) throws LockedException {
+<span class="fc bfc" id="L599" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L600">            throw new LockedException();</span>
+        }
+<span class="fc" id="L602">        this.suggestPrincipalPointEnabled = suggestPrincipalPointEnabled;</span>
+<span class="pc bpc" id="L603" title="1 of 4 branches missed.">        if (suggestPrincipalPointEnabled &amp;&amp; suggestedPrincipalPointValue == null) {</span>
+<span class="fc" id="L604">            suggestedPrincipalPointValue = new InhomogeneousPoint2D();</span>
+        }
+<span class="fc" id="L606">    }</span>
+
+    /**
+     * Gets suggested principal point value to be reached when suggestion is
+     * enabled. Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested principal point value to be reached when suggestion is
+     * enabled.
+     */
+    public InhomogeneousPoint2D getSuggestedPrincipalPointValue() {
+<span class="fc" id="L617">        return suggestedPrincipalPointValue;</span>
+    }
+
+    /**
+     * Sets suggested principal point value to be reached when suggestion is
+     * enabled. Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedPrincipalPointValue suggested principal point value to be
+     *                                     reached when suggestion is enabled.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedPrincipalPointValue(final InhomogeneousPoint2D suggestedPrincipalPointValue)
+            throws LockedException {
+<span class="fc bfc" id="L631" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L632">            throw new LockedException();</span>
+        }
+<span class="fc" id="L634">        this.suggestedPrincipalPointValue = suggestedPrincipalPointValue;</span>
+<span class="fc" id="L635">    }</span>
+
+    /**
+     * Indicates whether camera rotation is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if camera rotation is suggested, false otherwise.
+     */
+    public boolean isSuggestRotationEnabled() {
+<span class="fc" id="L648">        return suggestRotationEnabled;</span>
+    }
+
+    /**
+     * Specifies whether camera rotation is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestRotationEnabled true if camera rotation is suggested, false
+     *                               otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestRotationEnabled(final boolean suggestRotationEnabled) throws LockedException {
+<span class="fc bfc" id="L664" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L665">            throw new LockedException();</span>
+        }
+<span class="fc" id="L667">        this.suggestRotationEnabled = suggestRotationEnabled;</span>
+<span class="pc bpc" id="L668" title="1 of 4 branches missed.">        if (suggestRotationEnabled &amp;&amp; suggestedRotationValue == null) {</span>
+<span class="fc" id="L669">            suggestedRotationValue = new Quaternion();</span>
+        }
+<span class="fc" id="L671">    }</span>
+
+    /**
+     * Gets suggested rotation to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested rotation to be reached when suggestion is enabled.
+     */
+    public Quaternion getSuggestedRotationValue() {
+<span class="fc" id="L681">        return suggestedRotationValue;</span>
+    }
+
+    /**
+     * Sets suggested rotation to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedRotationValue suggested rotation to be reached when
+     *                               suggestion is enabled.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedRotationValue(final Quaternion suggestedRotationValue) throws LockedException {
+<span class="fc bfc" id="L694" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L695">            throw new LockedException();</span>
+        }
+<span class="fc" id="L697">        this.suggestedRotationValue = suggestedRotationValue;</span>
+<span class="fc" id="L698">    }</span>
+
+    /**
+     * Indicates whether camera center is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @return true if camera center is suggested, false otherwise.
+     */
+    public boolean isSuggestCenterEnabled() {
+<span class="fc" id="L711">        return suggestCenterEnabled;</span>
+    }
+
+    /**
+     * Specifies whether camera center is suggested or not. When enabled, the
+     * estimator will attempt to enforce suggested value in an iterative manner
+     * starting from an initially estimated camera.
+     * Even when suggestion is enabled, the iterative algorithm might not reach
+     * suggested value if the initial value largely differs from the suggested
+     * value.
+     *
+     * @param suggestCenterEnabled true if camera is suggested, false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestCenterEnabled(final boolean suggestCenterEnabled) throws LockedException {
+<span class="fc bfc" id="L726" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L727">            throw new LockedException();</span>
+        }
+<span class="fc" id="L729">        this.suggestCenterEnabled = suggestCenterEnabled;</span>
+<span class="pc bpc" id="L730" title="1 of 4 branches missed.">        if (suggestCenterEnabled &amp;&amp; suggestedCenterValue == null) {</span>
+<span class="fc" id="L731">            suggestedCenterValue = new InhomogeneousPoint3D();</span>
+        }
+<span class="fc" id="L733">    }</span>
+
+    /**
+     * Gets suggested center to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @return suggested center to be reached when suggestion is enabled.
+     */
+    public InhomogeneousPoint3D getSuggestedCenterValue() {
+<span class="fc" id="L743">        return suggestedCenterValue;</span>
+    }
+
+    /**
+     * Sets suggested center to be reached when suggestion is enabled.
+     * Suggested value should be close to the initially estimated value
+     * otherwise the iterative refinement might not converge to provided value.
+     *
+     * @param suggestedCenterValue suggested center to be reached when
+     *                             suggestion is enabled.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setSuggestedCenterValue(final InhomogeneousPoint3D suggestedCenterValue) throws LockedException {
+<span class="fc bfc" id="L756" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L757">            throw new LockedException();</span>
+        }
+<span class="fc" id="L759">        this.suggestedCenterValue = suggestedCenterValue;</span>
+<span class="fc" id="L760">    }</span>
+
+    /**
+     * Gets minimum suggestion weight. This weight is used to slowly draw
+     * original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     *
+     * @return minimum suggestion weight.
+     */
+    public double getMinSuggestionWeight() {
+<span class="fc" id="L773">        return minSuggestionWeight;</span>
+    }
+
+    /**
+     * Sets minimum suggestion weight. This weight is used to slowly draw
+     * original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     *
+     * @param minSuggestionWeight minimum suggestion weight.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setMinSuggestionWeight(final double minSuggestionWeight) throws LockedException {
+<span class="fc bfc" id="L788" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L789">            throw new LockedException();</span>
+        }
+<span class="fc" id="L791">        this.minSuggestionWeight = minSuggestionWeight;</span>
+<span class="fc" id="L792">    }</span>
+
+    /**
+     * Gets maximum suggestion weight. This weight is used to slowly draw
+     * original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     *
+     * @return maximum suggestion weight.
+     */
+    public double getMaxSuggestionWeight() {
+<span class="fc" id="L805">        return maxSuggestionWeight;</span>
+    }
+
+    /**
+     * Sets maximum suggestion weight. This weight is used to slowly draw
+     * original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     *
+     * @param maxSuggestionWeight maximum suggestion weight.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setMaxSuggestionWeight(final double maxSuggestionWeight) throws LockedException {
+<span class="fc bfc" id="L820" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L821">            throw new LockedException();</span>
+        }
+<span class="fc" id="L823">        this.maxSuggestionWeight = maxSuggestionWeight;</span>
+<span class="fc" id="L824">    }</span>
+
+    /**
+     * Sets minimum and maximum suggestion weights. Suggestion weight is used to
+     * slowly draw original camera parameters into desired suggested values.
+     * Suggestion weight slowly increases each time Levenberg-Marquardt is used
+     * to find a solution so that the algorithm can converge into desired value.
+     * The faster the weights are increased the less likely that suggested
+     * values can be converged if they differ too much from the original ones.
+     *
+     * @param minSuggestionWeight minimum suggestion weight.
+     * @param maxSuggestionWeight maximum suggestion weight.
+     * @throws LockedException          if estimator is locked.
+     * @throws IllegalArgumentException if minimum suggestion weight is greater
+     *                                  or equal than maximum value.
+     */
+    public void setMinMaxSuggestionWeight(final double minSuggestionWeight, final double maxSuggestionWeight)
+            throws LockedException {
+<span class="fc bfc" id="L842" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L843">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L845" title="All 2 branches covered.">        if (minSuggestionWeight &gt;= maxSuggestionWeight) {</span>
+<span class="fc" id="L846">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L849">        this.minSuggestionWeight = minSuggestionWeight;</span>
+<span class="fc" id="L850">        this.maxSuggestionWeight = maxSuggestionWeight;</span>
+<span class="fc" id="L851">    }</span>
+
+    /**
+     * Gets step to increase suggestion weight. This weight is used to slowly
+     * draw original camera parameters into desired suggested values. Suggestion
+     * weight slowly increases each time Levenberg-Marquardt is used to find a
+     * solution so that the algorithm can converge into desired value. The
+     * faster the weights are increased the less likely that suggested values
+     * can be converged if they differ too much from the original ones.
+     *
+     * @return step to increase suggestion weight.
+     */
+    public double getSuggestionWeightStep() {
+<span class="fc" id="L864">        return suggestionWeightStep;</span>
+    }
+
+    /**
+     * Sets step to increase suggestion weight. This weight is used to slowly
+     * draw original camera parameters into desired suggested values. Suggestion
+     * weight slowly increases each time Levenberg-Marquardt is used to find a
+     * solution so that the algorithm can converge into desired value. The
+     * faster the weights are increased the less likely that suggested values
+     * can be converged if they differ too much from the original ones.
+     *
+     * @param suggestionWeightStep step to increase suggestion weight.
+     * @throws LockedException          if estimator is locked.
+     * @throws IllegalArgumentException if provided step is negative or zero.
+     */
+    public void setSuggestionWeightStep(final double suggestionWeightStep) throws LockedException {
+<span class="fc bfc" id="L880" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L881">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L883" title="All 2 branches covered.">        if (suggestionWeightStep &lt;= 0.0) {</span>
+<span class="fc" id="L884">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L887">        this.suggestionWeightStep = suggestionWeightStep;</span>
+<span class="fc" id="L888">    }</span>
+
+    /**
+     * Indicates whether this instance is locked.
+     *
+     * @return true if this estimator is busy estimating a camera, false
+     * otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L897">        return locked;</span>
+    }
+
+    /**
+     * Indicates if this estimator is ready to start the estimation.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    public abstract boolean isReady();
+
+    /**
+     * Estimates a pinhole camera.
+     *
+     * @return estimated pinhole camera.
+     * @throws LockedException                 if estimator is locked.
+     * @throws NotReadyException               if input has not yet been provided.
+     * @throws PinholeCameraEstimatorException if an error occurs during
+     *                                         estimation, usually because input data is not valid.
+     */
+    public abstract PinholeCamera estimate() throws LockedException, NotReadyException, PinholeCameraEstimatorException;
+
+    /**
+     * Returns type of pinhole camera estimator.
+     *
+     * @return type of pinhole camera estimator.
+     */
+    public abstract PinholeCameraEstimatorType getType();
+
+    /**
+     * Creates an instance of a pinhole camera estimator using default type.
+     *
+     * @return an instance of a pinhole camera estimator.
+     */
+    public static PinholeCameraEstimator create() {
+<span class="fc" id="L931">        return create(DEFAULT_ESTIMATOR_TYPE);</span>
+    }
+
+    /**
+     * Creates an instance of a pinhole camera estimator using provided type.
+     *
+     * @param type type of pinhole camera estimator.
+     * @return an instance of a pinhole camera estimator.
+     */
+    public static PinholeCameraEstimator create(final PinholeCameraEstimatorType type) {
+<span class="fc bfc" id="L941" title="All 4 branches covered.">        return switch (type) {</span>
+<span class="fc" id="L942">            case DLT_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR -&gt; new DLTLinePlaneCorrespondencePinholeCameraEstimator();</span>
+            case WEIGHTED_LINE_PLANE_PINHOLE_CAMERA_ESTIMATOR -&gt;
+<span class="fc" id="L944">                    new WeightedLinePlaneCorrespondencePinholeCameraEstimator();</span>
+<span class="fc" id="L945">            case WEIGHTED_POINT_PINHOLE_CAMERA_ESTIMATOR -&gt; new WeightedPointCorrespondencePinholeCameraEstimator();</span>
+<span class="fc" id="L946">            default -&gt; new DLTPointCorrespondencePinholeCameraEstimator();</span>
+        };
+    }
+
+    /**
+     * Attempts to refine provided camera using requested suggestions.
+     * If no suggestions are requested or if refinement fails, provided
+     * camera is returned instead.
+     *
+     * @param pinholeCamera camera to be refined.
+     * @return refined camera.
+     */
+    protected abstract PinholeCamera attemptRefine(final PinholeCamera pinholeCamera);
+
+    /**
+     * Indicates whether obtained solution requires refinement to apply provided
+     * suggestions.
+     *
+     * @return true if solution requires refinement to apply provided
+     * suggestions, false otherwise.
+     */
+    protected boolean hasSuggestions() {
+<span class="fc bfc" id="L968" title="All 4 branches covered.">        return hasIntrinsicSuggestions() || hasExtrinsicSuggestions();</span>
+    }
+
+    /**
+     * Indicates whether suggestions for any intrinsic parameter are required
+     * or not.
+     *
+     * @return true if suggestions for any intrinsic parameters are required,
+     * false otherwise.
+     */
+    private boolean hasIntrinsicSuggestions() {
+<span class="fc bfc" id="L979" title="All 8 branches covered.">        return suggestSkewnessValueEnabled || suggestHorizontalFocalLengthEnabled || suggestVerticalFocalLengthEnabled</span>
+                || suggestAspectRatioEnabled;
+    }
+
+    /**
+     * Indicates whether suggestions for any extrinsic parameter are required
+     * or not.
+     *
+     * @return true if suggestions for any extrinsic parameter are required,
+     * false otherwise.
+     */
+    private boolean hasExtrinsicSuggestions() {
+<span class="fc bfc" id="L991" title="All 6 branches covered.">        return suggestPrincipalPointEnabled || suggestRotationEnabled || suggestCenterEnabled;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

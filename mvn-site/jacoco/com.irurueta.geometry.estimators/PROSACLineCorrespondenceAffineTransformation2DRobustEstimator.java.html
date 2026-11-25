@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.java</span></div><h1>PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.geometry.AffineTransformation2D;
+import com.irurueta.geometry.CoincidentLinesException;
+import com.irurueta.geometry.Line2D;
+import com.irurueta.numerical.robust.PROSACRobustEstimator;
+import com.irurueta.numerical.robust.PROSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * Finds the best affine 2D transformation for provided collections of matched
+ * 2D lines using PROSAC algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class PROSACLineCorrespondenceAffineTransformation2DRobustEstimator
+        extends LineCorrespondenceAffineTransformation2DRobustEstimator {
+
+    /**
+     * Constant defining default threshold to determine whether lines are
+     * inliers or not.
+     * Residuals to determine whether lines are inliers or not are computed by
+     * comparing two lines algebraically (e.g. doing the dot product of their
+     * parameters).
+     * A residual of 0 indicates that dot product was 1 or -1 and lines were
+     * equal.
+     * A residual of 1 indicates that dot product was 0 and lines were
+     * orthogonal.
+     * If dot product between lines is -1, then although their director vectors
+     * are opposed, lines are considered equal, since sign changes are not taken
+     * into account and their residuals will be 0.
+     */
+    public static final double DEFAULT_THRESHOLD = 1e-6;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Indicates that by default inliers will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_INLIERS = false;
+
+    /**
+     * Indicates that by default residuals will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_RESIDUALS = false;
+
+    /**
+     * Threshold to determine whether lines are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance and director
+     * vector angle difference) a possible solution has on a matched pair of
+     * lines.
+     */
+    private double threshold;
+
+    /**
+     * Quality scores corresponding to each pair of matched lines.
+     * The larger the score value the better the quality of the matching.
+     */
+    private double[] qualityScores;
+
+    /**
+     * Indicates whether inliers must be computed and kept.
+     */
+    private boolean computeAndKeepInliers;
+
+    /**
+     * Indicates whether residuals must be computed and kept.
+     */
+    private boolean computeAndKeepResiduals;
+
+    /**
+     * Constructor.
+     */
+    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator() {
+<span class="fc" id="L99">        super();</span>
+<span class="fc" id="L100">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L101">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L102">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L103">    }</span>
+
+    /**
+     * Constructor with lists of lines to be used to estimate an affine 2D
+     * transformation.
+     * Lines in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputLines  list of input lines to be used to estimate an affine
+     *                    2D transformation.
+     * @param outputLines list of output lines to be used to estimate an affine
+     *                    2D transformation.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+            final List&lt;Line2D&gt; inputLines, final List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L121">        super(inputLines, outputLines);</span>
+<span class="fc" id="L122">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L123">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L124">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L125">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+            final AffineTransformation2DRobustEstimatorListener listener) {
+<span class="fc" id="L135">        super(listener);</span>
+<span class="fc" id="L136">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L137">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L138">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L139">    }</span>
+
+    /**
+     * Constructor with listener and lists of lines to be used to estimate an
+     * affine 2D transformation.
+     * Lines in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes.
+     * @param inputLines  list of input lines to be used to estimate an affine
+     *                    2D transformation.
+     * @param outputLines list of output lines to be used to estimate an affine
+     *                    2D transformation.
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+            final AffineTransformation2DRobustEstimatorListener listener,
+            final List&lt;Line2D&gt; inputLines, final List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L160">        super(listener, inputLines, outputLines);</span>
+<span class="fc" id="L161">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L162">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L163">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(final double[] qualityScores) {
+<span class="fc" id="L175">        super();</span>
+<span class="fc" id="L176">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L177">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L178">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L179">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L180">    }</span>
+
+    /**
+     * Constructor with lists of lines to be used to estimate an affine 2D
+     * transformation.
+     * Lines in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputLines    list of input lines to be used to estimate an affine
+     *                      2D transformation.
+     * @param outputLines   list of output lines to be used to estimate an affine
+     *                      2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      lines.
+     * @throws IllegalArgumentException if provided lists of lines and array
+     *                                  of quality scores don't have the same size or their size is smaller than
+     *                                  MINIMUM_SIZE.
+     */
+    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+            final List&lt;Line2D&gt; inputLines, final List&lt;Line2D&gt; outputLines, final double[] qualityScores) {
+<span class="fc" id="L201">        super(inputLines, outputLines);</span>
+
+<span class="fc bfc" id="L203" title="All 2 branches covered.">        if (qualityScores.length != inputLines.size()) {</span>
+<span class="fc" id="L204">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L207">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L208">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L209">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L210">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L211">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      lines.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+            final AffineTransformation2DRobustEstimatorListener listener, final double[] qualityScores) {
+<span class="fc" id="L225">        super(listener);</span>
+<span class="fc" id="L226">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L227">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L228">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L229">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L230">    }</span>
+
+    /**
+     * Constructor with listener and lists of lines to be used to estimate an
+     * affine 2D transformation.
+     * Lines in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes.
+     * @param inputLines    list of input lines to be used to estimate an affine
+     *                      2D transformation.
+     * @param outputLines   list of output lines to be used to estimate an affine
+     *                      2D transformation.
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      lines.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public PROSACLineCorrespondenceAffineTransformation2DRobustEstimator(
+            final AffineTransformation2DRobustEstimatorListener listener,
+            final List&lt;Line2D&gt; inputLines, final List&lt;Line2D&gt; outputLines, final double[] qualityScores) {
+<span class="fc" id="L253">        super(listener, inputLines, outputLines);</span>
+
+<span class="fc bfc" id="L255" title="All 2 branches covered.">        if (qualityScores.length != inputLines.size()) {</span>
+<span class="fc" id="L256">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L259">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L260">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L261">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L262">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L263">    }</span>
+
+    /**
+     * Returns threshold to determine whether lines are inliers or not when
+     * testing possible estimation solutions.
+     * Residuals to determine whether lines are inliers or not are computed by
+     * comparing two lines algebraically (e.g. doing the dot product of their
+     * parameters).
+     * A residual of 0 indicates that dot product was 1 or -1 and lines were
+     * equal.
+     * A residual of 1 indicates that dot product was 0 and lines were
+     * orthogonal.
+     * If dot product between lines is -1, then although their director vectors
+     * are opposed, lines are considered equal, since sign changes are not taken
+     * into account and their residuals will be 0.
+     *
+     * @return threshold to determine whether matched lines are inliers or not.
+     */
+    public double getThreshold() {
+<span class="fc" id="L282">        return threshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether lines are inliers or not when
+     * testing possible estimation solutions.
+     * Residuals to determine whether lines are inliers or not are computed by
+     * comparing two lines algebraically (e.g. doing the dot product of their
+     * parameters).
+     * A residual of 0 indicates that dot product was 1 or -1 and lines were
+     * equal.
+     * A residual of 1 indicates that dot product was 0 and lines were
+     * orthogonal.
+     * If dot product between lines is -1, then although their director vectors
+     * are opposed, lines are considered equal, since sign changes are not taken
+     * into account and their residuals will be 0.
+     *
+     * @param threshold threshold to determine whether matched lines are inliers
+     *                  or not.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L307" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L308">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L310" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L311">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L313">        this.threshold = threshold;</span>
+<span class="fc" id="L314">    }</span>
+
+    /**
+     * Returns quality scores corresponding to each pair of matched lines.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @return quality scores corresponding to each pair of matched lines.
+     */
+    @Override
+    public double[] getQualityScores() {
+<span class="fc" id="L324">        return qualityScores;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched lines.
+     * The larger the score value the better the quality of the matching.
+     *
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      lines.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE (i.e. 3 samples).
+     */
+    @Override
+    public void setQualityScores(final double[] qualityScores) throws LockedException {
+<span class="pc bpc" id="L340" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L341">            throw new LockedException();</span>
+        }
+<span class="fc" id="L343">        internalSetQualityScores(qualityScores);</span>
+<span class="fc" id="L344">    }</span>
+
+    /**
+     * Indicates if estimator is ready to start the affine 2D transformation
+     * estimation.
+     * This is true when input data (i.e. lists of matched lines and quality
+     * scores) are provided and a minimum of MINIMUM_SIZE lines are available.
+     *
+     * @return true if estimator is ready, false otherwise.
+     */
+    @Override
+    public boolean isReady() {
+<span class="pc bpc" id="L356" title="1 of 6 branches missed.">        return super.isReady() &amp;&amp; qualityScores != null &amp;&amp; qualityScores.length == inputLines.size();</span>
+    }
+
+    /**
+     * Indicates whether inliers must be computed and kept.
+     *
+     * @return true if inliers must be computed and kept, false if inliers
+     * only need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepInliersEnabled() {
+<span class="fc" id="L366">        return computeAndKeepInliers;</span>
+    }
+
+    /**
+     * Specifies whether inliers must be computed and kept.
+     *
+     * @param computeAndKeepInliers true if inliers must be computed and kept,
+     *                              false if inliers only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
+<span class="pc bpc" id="L377" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L378">            throw new LockedException();</span>
+        }
+<span class="fc" id="L380">        this.computeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L381">    }</span>
+
+    /**
+     * Indicates whether residuals must be computed and kept.
+     *
+     * @return true if residuals must be computed and kept, false if residuals
+     * only need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepResidualsEnabled() {
+<span class="fc" id="L390">        return computeAndKeepResiduals;</span>
+    }
+
+    /**
+     * Specifies whether residuals must be computed and kept.
+     *
+     * @param computeAndKeepResiduals true if residuals must be computed and
+     *                                kept, false if residuals only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
+<span class="pc bpc" id="L401" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L402">            throw new LockedException();</span>
+        }
+<span class="fc" id="L404">        this.computeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L405">    }</span>
+
+    /**
+     * Estimates an affine 2D transformation using a robust estimator and
+     * the best set of matched 2D lines correspondences found using the robust
+     * estimator.
+     *
+     * @return an affine 2D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public AffineTransformation2D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L422" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L423">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L425" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L426">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L429">        final var innerEstimator = new PROSACRobustEstimator&lt;&gt;(</span>
+<span class="fc" id="L430">                new PROSACRobustEstimatorListener&lt;AffineTransformation2D&gt;() {</span>
+
+                    // line to be reused when computing residuals
+<span class="fc" id="L433">                    private final Line2D testLine = new Line2D();</span>
+
+                    @Override
+                    public double getThreshold() {
+<span class="fc" id="L437">                        return threshold;</span>
+                    }
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L442">                        return inputLines.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L447">                        return AffineTransformation2DRobustEstimator.MINIMUM_SIZE;</span>
+                    }
+
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List&lt;AffineTransformation2D&gt; solutions) {
+<span class="fc" id="L453">                        final var inputLine1 = inputLines.get(samplesIndices[0]);</span>
+<span class="fc" id="L454">                        final var inputLine2 = inputLines.get(samplesIndices[1]);</span>
+<span class="fc" id="L455">                        final var inputLine3 = inputLines.get(samplesIndices[2]);</span>
+
+<span class="fc" id="L457">                        final var outputLine1 = outputLines.get(samplesIndices[0]);</span>
+<span class="fc" id="L458">                        final var outputLine2 = outputLines.get(samplesIndices[1]);</span>
+<span class="fc" id="L459">                        final var outputLine3 = outputLines.get(samplesIndices[2]);</span>
+
+                        try {
+<span class="fc" id="L462">                            final var transformation = new AffineTransformation2D(inputLine1, inputLine2, inputLine3,</span>
+                                    outputLine1, outputLine2, outputLine3);
+<span class="fc" id="L464">                            solutions.add(transformation);</span>
+<span class="nc" id="L465">                        } catch (final CoincidentLinesException e) {</span>
+                            // if lines are coincident, no solution is added
+<span class="fc" id="L467">                        }</span>
+<span class="fc" id="L468">                    }</span>
+
+                    @Override
+                    public double computeResidual(final AffineTransformation2D currentEstimation, final int i) {
+<span class="fc" id="L472">                        final var inputLine = inputLines.get(i);</span>
+<span class="fc" id="L473">                        final var outputLine = outputLines.get(i);</span>
+
+                        // transform input line and store result in mTestLine
+                        try {
+<span class="fc" id="L477">                            currentEstimation.transform(inputLine, testLine);</span>
+
+<span class="fc" id="L479">                            return getResidual(outputLine, testLine);</span>
+<span class="nc" id="L480">                        } catch (final AlgebraException e) {</span>
+                            // this happens when internal matrix of affine transformation
+                            // cannot be reverse (i.e. transformation is not well-defined,
+                            // numerical instabilities, etc.)
+<span class="nc" id="L484">                            return Double.MAX_VALUE;</span>
+                        }
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L490">                        return PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;AffineTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L495" title="1 of 2 branches missed.">                        if (mListener != null) {</span>
+<span class="fc" id="L496">                            mListener.onEstimateStart(</span>
+                                    PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.this);
+                        }
+<span class="fc" id="L499">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;AffineTransformation2D&gt; estimator) {
+<span class="pc bpc" id="L503" title="1 of 2 branches missed.">                        if (mListener != null) {</span>
+<span class="fc" id="L504">                            mListener.onEstimateEnd(</span>
+                                    PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.this);
+                        }
+<span class="fc" id="L507">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;AffineTransformation2D&gt; estimator, final int iteration) {
+<span class="pc bpc" id="L512" title="1 of 2 branches missed.">                        if (mListener != null) {</span>
+<span class="fc" id="L513">                            mListener.onEstimateNextIteration(</span>
+                                    PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.this,
+                                    iteration);
+                        }
+<span class="fc" id="L517">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;AffineTransformation2D&gt; estimator, final float progress) {
+<span class="nc bnc" id="L522" title="All 2 branches missed.">                        if (mListener != null) {</span>
+<span class="nc" id="L523">                            mListener.onEstimateProgressChange(</span>
+                                    PROSACLineCorrespondenceAffineTransformation2DRobustEstimator.this,
+                                    progress);
+                        }
+<span class="nc" id="L527">                    }</span>
+
+                    @Override
+                    public double[] getQualityScores() {
+<span class="fc" id="L531">                        return qualityScores;</span>
+                    }
+                });
+
+        try {
+<span class="fc" id="L536">            locked = true;</span>
+<span class="fc" id="L537">            inliersData = null;</span>
+<span class="pc bpc" id="L538" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(computeAndKeepInliers || refineResult);</span>
+<span class="pc bpc" id="L539" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(computeAndKeepResiduals || refineResult);</span>
+<span class="fc" id="L540">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L541">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L542">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L543">            final var transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L544">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L545">            return attemptRefine(transformation);</span>
+<span class="nc" id="L546">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L547">            throw new LockedException(e);</span>
+<span class="nc" id="L548">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L549">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L551">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L562">        return RobustEstimatorMethod.PROSAC;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L578">        return threshold;</span>
+    }
+
+    /**
+     * Sets quality scores corresponding to each pair of matched lines.
+     * This method is used internally and does not check whether instance is
+     * locked or not.
+     *
+     * @param qualityScores quality scores to be set.
+     * @throws IllegalArgumentException if provided quality scores length is
+     *                                  smaller than MINIMUM_SIZE.
+     */
+    private void internalSetQualityScores(final double[] qualityScores) {
+<span class="fc bfc" id="L591" title="All 2 branches covered.">        if (qualityScores.length &lt; MINIMUM_SIZE) {</span>
+<span class="fc" id="L592">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L595">        this.qualityScores = qualityScores;</span>
+<span class="fc" id="L596">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

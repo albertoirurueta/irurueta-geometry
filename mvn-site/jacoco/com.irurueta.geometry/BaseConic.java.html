@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BaseConic.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">BaseConic.java</span></div><h1>BaseConic.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.Utils;
+import com.irurueta.algebra.WrongSizeException;
+
+import java.io.Serializable;
+
+/**
+ * Class defining the base interface of any possible conic.
+ * Appropriate subclasses should be used for each conic type: pure conics and
+ * dual conics.
+ */
+public abstract class BaseConic implements Serializable {
+    /**
+     * Number of rows of one matrix that contains conic parameters.
+     */
+    public static final int BASECONIC_MATRIX_ROW_SIZE = 3;
+
+    /**
+     * Number of columns of one matrix that contains conic parameters.
+     */
+    public static final int BASECONIC_MATRIX_COLUMN_SIZE = 3;
+
+    /**
+     * Number of parameters on a conic or dual conic.
+     */
+    public static final int N_PARAMS = 6;
+
+    /**
+     * Threshold above zero used to determine whether a point lies inside
+     * (is locus of) the given conic or not.
+     */
+    public static final double DEFAULT_LOCUS_THRESHOLD = 1e-12;
+
+    /**
+     * Threshold above zero used to determine whether two points of a conic
+     * are perpendicular or not.
+     */
+    public static final double DEFAULT_PERPENDICULAR_THRESHOLD = 1e-12;
+
+    /**
+     * Minimum allowed threshold.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Threshold above zero to determine whether one matrix is symmetric or not.
+     */
+    private static final double DEFAULT_SYMMETRIC_THRESHOLD = 1e-12;
+
+    /**
+     * Machine precision.
+     */
+    private static final double PRECISION = 1e-12;
+
+    /**
+     * &quot;A&quot; element of the matrix defining a conic.
+     */
+    protected double a;
+
+    /**
+     * B element of the matrix defining a conic.
+     */
+    protected double b;
+
+    /**
+     * C element of the matrix defining a conic.
+     */
+    protected double c;
+
+    /**
+     * D element of the matrix defining a conic.
+     */
+    private double d;
+
+    /**
+     * E element of the matrix defining a conic.
+     */
+    private double e;
+
+    /**
+     * F element of the matrix defining a conic.
+     */
+    private double f;
+
+    /**
+     * Determines whether this instance is already mNormalized.
+     */
+    private boolean normalized;
+
+    /**
+     * Constructor of this class.
+     */
+<span class="fc" id="L110">    protected BaseConic() {</span>
+<span class="fc" id="L111">        a = b = c = d = e = f = 0.0;</span>
+<span class="fc" id="L112">        normalized = false;</span>
+<span class="fc" id="L113">    }</span>
+
+    /**
+     * Constructor of this class. This constructor accepts every parameter
+     * describing a base conic (parameters a, b, c, d, e, f).
+     *
+     * @param a Parameter A of the base conic
+     * @param b Parameter B of the base conic.
+     * @param c Parameter C of the base conic.
+     * @param d Parameter D of the base conic.
+     * @param e Parameter E of the base conic.
+     * @param f Parameter F of the base conic.
+     */
+    protected BaseConic(final double a, final double b, final double c, final double d, final double e,
+<span class="fc" id="L127">                        final double f) {</span>
+<span class="fc" id="L128">        setParameters(a, b, c, d, e, f);</span>
+<span class="fc" id="L129">    }</span>
+
+    /**
+     * Constructor. This constructor accepts a Matrix describing a base conic.
+     *
+     * @param m 3x3 matrix describing a base conic.
+     * @throws NonSymmetricMatrixException Raised when the conic matrix is not
+     *                                     symmetric.
+     * @throws IllegalArgumentException    Raised when the size of the matrix is
+     *                                     not 3x3.
+     */
+<span class="fc" id="L140">    protected BaseConic(final Matrix m) throws NonSymmetricMatrixException {</span>
+<span class="fc" id="L141">        setParameters(m);</span>
+<span class="fc" id="L142">    }</span>
+
+    /**
+     * Returns parameter A of the given base conic.
+     *
+     * @return Parameter A of a matrix describing a base conic.
+     */
+    public double getA() {
+<span class="fc" id="L150">        return a;</span>
+    }
+
+    /**
+     * Returns parameter B of the given base conic.
+     *
+     * @return Parameter B of a matrix describing a base conic.
+     */
+    public double getB() {
+<span class="fc" id="L159">        return b;</span>
+    }
+
+    /**
+     * Returns parameter C of the given base conic.
+     *
+     * @return Parameter C of a matrix describing a base conic.
+     */
+    public double getC() {
+<span class="fc" id="L168">        return c;</span>
+    }
+
+    /**
+     * Returns parameter D of the given base conic.
+     *
+     * @return Parameter D of a matrix describing a base conic.
+     */
+    public double getD() {
+<span class="fc" id="L177">        return d;</span>
+    }
+
+    /**
+     * Returns parameter E of the given base conic.
+     *
+     * @return Parameter E of a matrix describing a base conic.
+     */
+    public double getE() {
+<span class="fc" id="L186">        return e;</span>
+    }
+
+    /**
+     * Returns parameter F of the given base conic.
+     *
+     * @return Parameter F of a matrix describing a base conic.
+     */
+    public double getF() {
+<span class="fc" id="L195">        return f;</span>
+    }
+
+    /**
+     * This method accepts every parameter describing a base conic (parameters
+     * a, b, c, d, e, f).
+     *
+     * @param a Parameter A of the base conic.
+     * @param b Parameter B of the base conic.
+     * @param c Parameter C of the base conic.
+     * @param d Parameter D of the base conic.
+     * @param e Parameter E of the base conic.
+     * @param f Parameter F of the base conic.
+     */
+    public final void setParameters(final double a, final double b, final double c, final double d, final double e,
+                                    final double f) {
+<span class="fc" id="L211">        this.a = a;</span>
+<span class="fc" id="L212">        this.b = b;</span>
+<span class="fc" id="L213">        this.c = c;</span>
+<span class="fc" id="L214">        this.d = d;</span>
+<span class="fc" id="L215">        this.e = e;</span>
+<span class="fc" id="L216">        this.f = f;</span>
+<span class="fc" id="L217">        normalized = false;</span>
+<span class="fc" id="L218">    }</span>
+
+    /**
+     * This method sets the matrix used for describing a base conic.
+     * This matrix must be 3x3 and symmetric.
+     *
+     * @param m                  3x3 Matrix describing a base conic.
+     * @param symmetricThreshold Grade of tolerance to determine whether a
+     *                           matrix is symmetric or not. Because of machine precision,
+     *                           the values may not be exactly equal. (by default:
+     *                           DEFAULT_SYMMETRIC_THRESHOLD is used).
+     * @throws IllegalArgumentException    Raised when the size of the matrix is
+     *                                     not 3x3.
+     * @throws NonSymmetricMatrixException Raised when the conic matrix is not
+     *                                     symmetric.
+     */
+    @SuppressWarnings(&quot;DuplicatedCode&quot;)
+    public final void setParameters(final Matrix m, final double symmetricThreshold)
+            throws NonSymmetricMatrixException {
+<span class="fc bfc" id="L237" title="All 4 branches covered.">        if (m.getRows() != BASECONIC_MATRIX_ROW_SIZE || m.getColumns() != BASECONIC_MATRIX_COLUMN_SIZE) {</span>
+<span class="fc" id="L238">            throw new IllegalArgumentException();</span>
+        } else {
+<span class="fc bfc" id="L240" title="All 2 branches covered.">            if (!Utils.isSymmetric(m, symmetricThreshold)) {</span>
+<span class="fc" id="L241">                throw new NonSymmetricMatrixException();</span>
+            } else {
+<span class="fc" id="L243">                a = m.getElementAt(0, 0);</span>
+<span class="fc" id="L244">                b = m.getElementAt(0, 1);</span>
+<span class="fc" id="L245">                c = m.getElementAt(1, 1);</span>
+<span class="fc" id="L246">                d = m.getElementAt(0, 2);</span>
+<span class="fc" id="L247">                e = m.getElementAt(1, 2);</span>
+<span class="fc" id="L248">                f = m.getElementAt(2, 2);</span>
+<span class="fc" id="L249">                normalized = false;</span>
+            }
+        }
+<span class="fc" id="L252">    }</span>
+
+    /**
+     * This method sets the matrix used for describing a base conic.
+     * This matrix must be 3x3 and symmetric.
+     *
+     * @param m 3x3 Matrix describing a base conic.
+     * @throws IllegalArgumentException    Raised when the size of the matrix is
+     *                                     not 3x3.
+     * @throws NonSymmetricMatrixException Raised when the conic matrix is not
+     *                                     symmetric.
+     */
+    public final void setParameters(final Matrix m) throws NonSymmetricMatrixException {
+<span class="fc" id="L265">        setParameters(m, DEFAULT_SYMMETRIC_THRESHOLD);</span>
+<span class="fc" id="L266">    }</span>
+
+    /**
+     * This method sets the A parameter of a base conic.
+     *
+     * @param a Parameter A of the given base conic.
+     */
+    public void setA(final double a) {
+<span class="fc" id="L274">        this.a = a;</span>
+<span class="fc" id="L275">        normalized = false;</span>
+<span class="fc" id="L276">    }</span>
+
+    /**
+     * This method sets the B parameter of a base conic.
+     *
+     * @param b Parameter B of the given base conic.
+     */
+    public void setB(final double b) {
+<span class="fc" id="L284">        this.b = b;</span>
+<span class="fc" id="L285">        normalized = false;</span>
+<span class="fc" id="L286">    }</span>
+
+    /**
+     * This method sets the C parameter of a base conic.
+     *
+     * @param c Parameter C of the given base conic.
+     */
+    public void setC(final double c) {
+<span class="fc" id="L294">        this.c = c;</span>
+<span class="fc" id="L295">        normalized = false;</span>
+<span class="fc" id="L296">    }</span>
+
+    /**
+     * This method sets the D parameter of a base conic.
+     *
+     * @param d Parameter D of the given base conic.
+     */
+    public void setD(final double d) {
+<span class="fc" id="L304">        this.d = d;</span>
+<span class="fc" id="L305">        normalized = false;</span>
+<span class="fc" id="L306">    }</span>
+
+    /**
+     * This method sets the E parameter of a base conic.
+     *
+     * @param e Parameter E of the given base conic.
+     */
+    public void setE(final double e) {
+<span class="fc" id="L314">        this.e = e;</span>
+<span class="fc" id="L315">        normalized = false;</span>
+<span class="fc" id="L316">    }</span>
+
+    /**
+     * This method sets the F parameter of a base conic.
+     *
+     * @param f Parameter F of the given base conic.
+     */
+    public void setF(final double f) {
+<span class="fc" id="L324">        this.f = f;</span>
+<span class="fc" id="L325">        normalized = false;</span>
+<span class="fc" id="L326">    }</span>
+
+    /**
+     * Returns the matrix that describes this base conic.
+     *
+     * @return 3x3 matrix describing this base conic.
+     */
+    public Matrix asMatrix() {
+<span class="fc" id="L334">        Matrix out = null;</span>
+        try {
+<span class="fc" id="L336">            out = new Matrix(BASECONIC_MATRIX_ROW_SIZE, BASECONIC_MATRIX_COLUMN_SIZE);</span>
+<span class="fc" id="L337">            asMatrix(out);</span>
+<span class="nc" id="L338">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L340">        }</span>
+<span class="fc" id="L341">        return out;</span>
+    }
+
+    /**
+     * Sets the values in provided matrix corresponding to this base conic.
+     *
+     * @param m Provided matrix where values will be stored
+     * @throws IllegalArgumentException Raised if provided matrix is not 3x3
+     */
+    public void asMatrix(final Matrix m) {
+
+<span class="pc bpc" id="L352" title="2 of 4 branches missed.">        if (m.getRows() != BASECONIC_MATRIX_ROW_SIZE || m.getColumns() != BASECONIC_MATRIX_ROW_SIZE) {</span>
+<span class="nc" id="L353">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L356">        m.setElementAt(0, 0, a);</span>
+<span class="fc" id="L357">        m.setElementAt(0, 1, b);</span>
+<span class="fc" id="L358">        m.setElementAt(0, 2, d);</span>
+<span class="fc" id="L359">        m.setElementAt(1, 0, b);</span>
+<span class="fc" id="L360">        m.setElementAt(1, 1, c);</span>
+<span class="fc" id="L361">        m.setElementAt(1, 2, e);</span>
+<span class="fc" id="L362">        m.setElementAt(2, 0, d);</span>
+<span class="fc" id="L363">        m.setElementAt(2, 1, e);</span>
+<span class="fc" id="L364">        m.setElementAt(2, 2, f);</span>
+<span class="fc" id="L365">    }</span>
+
+    /**
+     * Normalizes the Conic params using its norm
+     */
+    public void normalize() {
+<span class="fc bfc" id="L371" title="All 2 branches covered.">        if (!normalized) {</span>
+<span class="fc" id="L372">            final var m = asMatrix();</span>
+<span class="fc" id="L373">            final var norm = Utils.normF(m);</span>
+
+<span class="pc bpc" id="L375" title="1 of 4 branches missed.">            if (!Double.isNaN(norm) &amp;&amp; norm &gt; PRECISION) {</span>
+<span class="fc" id="L376">                a /= norm;</span>
+<span class="fc" id="L377">                b /= norm;</span>
+<span class="fc" id="L378">                c /= norm;</span>
+<span class="fc" id="L379">                d /= norm;</span>
+<span class="fc" id="L380">                e /= norm;</span>
+<span class="fc" id="L381">                f /= norm;</span>
+<span class="fc" id="L382">                normalized = true;</span>
+            }
+        }
+<span class="fc" id="L385">    }</span>
+
+    /**
+     * Returns boolean indicating whether this base conic has already been
+     * normalized.
+     *
+     * @return True if normalized, false otherwise.
+     */
+    public boolean isNormalized() {
+<span class="fc" id="L394">        return normalized;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

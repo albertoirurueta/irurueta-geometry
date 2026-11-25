@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>VanGoghTriangulator2D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">VanGoghTriangulator2D.java</span></div><h1>VanGoghTriangulator2D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+/**
+ * This class defines a triangulator for 2D polygons. Triangulators divide
+ * polygons into triangles, which are the simplest geometric figure.
+ * This implementation uses Van Gogh or Ear Cutting algorithm for triangulation.
+ */
+<span class="fc" id="L27">public class VanGoghTriangulator2D extends Triangulator2D {</span>
+
+    /**
+     * Returns triangulator method.
+     * Each method implementation will divide polygons into triangles using
+     * different techniques.
+     *
+     * @return Triangulator method.
+     */
+    @Override
+    public TriangulatorMethod getMethod() {
+<span class="fc" id="L38">        return TriangulatorMethod.VAN_GOGH_TRIANGULATOR;</span>
+    }
+
+    /**
+     * Triangulates provided polygon by dividing it into a set of triangles.
+     *
+     * @param polygon Polygon to be triangulated.
+     * @return List of triangles forming the polygon that has been triangulated.
+     * @throws TriangulatorException Raised if triangulation cannot be done.
+     *                               Usually this indicates numerical instability or polygon degeneracy.
+     */
+    @Override
+    public List&lt;Triangle2D&gt; triangulate(final Polygon2D polygon) throws TriangulatorException {
+        // triangulation will modify provided list of vertices, so we make a copy
+        // of it
+
+        // original vertices
+<span class="fc" id="L55">        final var vertices = polygon.getVertices();</span>
+<span class="fc" id="L56">        final var verticesCopy = new ArrayList&lt;&gt;(polygon.getVertices());</span>
+<span class="fc" id="L57">        return internalTriangulate(verticesCopy, null, vertices);</span>
+    }
+
+    /**
+     * Triangulates a polygon formed by provided vertices.
+     *
+     * @param vertices List of points considered as vertices of a polygon.
+     * @return List of triangles forming the polygon that has been triangulated.
+     * @throws TriangulatorException Raised if triangulation cannot be done.
+     *                               Usually this indicates numerical instability or polygon degeneracy.
+     */
+    @Override
+    public List&lt;Triangle2D&gt; triangulate(final List&lt;Point2D&gt; vertices) throws TriangulatorException {
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (vertices.size() &lt; MIN_VERTICES) {</span>
+<span class="nc" id="L71">            throw new TriangulatorException();</span>
+        }
+
+        // triangulation will modify provided list of vertices, so we make a copy
+        // of it
+<span class="fc" id="L76">        final var verticesCopy = new ArrayList&lt;&gt;(vertices);</span>
+<span class="fc" id="L77">        return internalTriangulate(verticesCopy, null, vertices);</span>
+    }
+
+    /**
+     * Triangulates a polygon formed by provided vertices.
+     *
+     * @param vertices List of points considered as vertices of a polygon.
+     * @param indices  List where indices of original vertices will be stored.
+     *                 This list can be used to refer to the original order of vertices. Notice
+     *                 that vertices indices might be repeated because vertices might appear in
+     *                 more than one triangle after triangulation. If this parameter is null,
+     *                 indices won't be stored in this list.
+     * @return List of triangles forming the polygon that has been triangulated
+     * @throws TriangulatorException Raised if triangulation cannot be done.
+     *                               Usually this indicates numerical instability or polygon degeneracy.
+     */
+    @Override
+    public List&lt;Triangle2D&gt; triangulate(final List&lt;Point2D&gt; vertices, final List&lt;int[]&gt; indices)
+            throws TriangulatorException {
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">        if (vertices.size() &lt; MIN_VERTICES) {</span>
+<span class="nc" id="L97">            throw new TriangulatorException();</span>
+        }
+
+        // triangulation will modify provided list of vertices, so we make a copy
+        // of it
+<span class="fc" id="L102">        final var verticesCopy = new ArrayList&lt;&gt;(vertices);</span>
+<span class="fc" id="L103">        return internalTriangulate(verticesCopy, indices, vertices);</span>
+    }
+
+    /**
+     * Internal method that computes the actual triangulation.
+     *
+     * @param verticesCopy     List of points considered as verticesCopy of a
+     *                         polygon. This list will be modified after execution of this method.
+     * @param indices          List where indices of original verticesCopy will be
+     *                         stored.
+     *                         This list can be used to refer to the original order of verticesCopy.
+     *                         Notice that verticesCopy indices might be repeated because verticesCopy
+     *                         might appear in more than one triangle after triangulation. If this
+     *                         parameter is null, indices won't be stored in this list.
+     * @param originalVertices Reference to original list of vertices that won't
+     *                         be modified.
+     * @return List of triangles forming the polygon that has been triangulated.
+     * @throws TriangulatorException Raised if triangulation cannot be done.
+     *                               Usually this indicates numerical instability or polygon degeneracy.
+     */
+    private static List&lt;Triangle2D&gt; internalTriangulate(
+            final List&lt;Point2D&gt; verticesCopy, final List&lt;int[]&gt; indices, final List&lt;Point2D&gt; originalVertices)
+            throws TriangulatorException {
+<span class="pc bpc" id="L126" title="1 of 2 branches missed.">        if (verticesCopy.size() &lt; MIN_VERTICES) {</span>
+<span class="nc" id="L127">            throw new TriangulatorException();</span>
+        }
+
+<span class="fc" id="L130">        final var result = new LinkedList&lt;Triangle2D&gt;();</span>
+
+        boolean madeCut;
+
+<span class="fc" id="L134">        Triangle2D triangle = null;</span>
+
+        // Second, apply algorithm
+<span class="fc bfc" id="L137" title="All 2 branches covered.">        while (verticesCopy.size() &gt; MIN_VERTICES) {</span>
+<span class="fc" id="L138">            madeCut = false;</span>
+<span class="fc" id="L139">            final var lastElement = verticesCopy.size() - 1;</span>
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">            for (int i = 0; i &lt;= lastElement; i++) {</span>
+
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">                if (i == 0) {</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">                    if (triangle == null) {</span>
+                        // instantiate triangle if not already instantiated
+<span class="fc" id="L145">                        triangle = new Triangle2D(verticesCopy.get(lastElement), verticesCopy.get(0),</span>
+<span class="fc" id="L146">                                verticesCopy.get(1));</span>
+                    } else {
+<span class="nc" id="L148">                        triangle.setVertices(verticesCopy.get(lastElement), verticesCopy.get(0), verticesCopy.get(1));</span>
+                    }
+<span class="nc bnc" id="L150" title="All 2 branches missed.">                } else if (i == lastElement) {</span>
+<span class="nc" id="L151">                    triangle.setVertices(verticesCopy.get(lastElement - 1), verticesCopy.get(lastElement),</span>
+<span class="nc" id="L152">                            verticesCopy.get(0));</span>
+                } else {
+<span class="nc" id="L154">                    triangle.setVertices(verticesCopy.get(i - 1), verticesCopy.get(i), verticesCopy.get(i + 1));</span>
+                }
+
+<span class="pc bpc" id="L157" title="1 of 2 branches missed.">                if (isEar(triangle, verticesCopy)) {</span>
+                    // If it is an ear, we build a face out of the triangle being
+                    // cut and remove it from polygon by cutting it
+<span class="fc" id="L160">                    result.add(triangle);</span>
+                    // so that it cannot be reused after being added
+<span class="fc" id="L162">                    triangle = null;</span>
+
+                    // cut ear
+<span class="fc" id="L165">                    verticesCopy.remove(i);</span>
+<span class="fc" id="L166">                    madeCut = true;</span>
+
+                    // Leave from FOR loop to loop again to new reduced vertices set
+<span class="fc" id="L169">                    break;</span>
+                }
+            }
+
+            // if arrived here but no cut was made and polygon size contains
+            // more than 3 vertices, then the algorithm failed for some reason
+<span class="pc bpc" id="L175" title="1 of 2 branches missed.">            if (!madeCut) {</span>
+<span class="nc" id="L176">                throw new TriangulatorException();</span>
+            }
+<span class="fc" id="L178">        }</span>
+
+        // instantiate final triangle
+<span class="fc" id="L181">        triangle = new Triangle2D(verticesCopy.get(0), verticesCopy.get(1), verticesCopy.get(2));</span>
+
+
+<span class="fc" id="L184">        final var arePointsColinear = triangle.areVerticesColinear();</span>
+
+        // only add final triangle if not co-linear (area greater than small
+        // threshold)
+<span class="pc bpc" id="L188" title="1 of 2 branches missed.">        if (!arePointsColinear)</span>
+<span class="fc" id="L189">            result.add(triangle);</span>
+
+        // add indices of triangles verticesCopy
+<span class="fc" id="L192">        computeIndices(originalVertices, result, indices);</span>
+
+<span class="fc" id="L194">        return result;</span>
+    }
+
+    /**
+     * Computes indices of resulting triangles vertices respect to original
+     * polygon vertices. Indices are stored in provided indices list.
+     *
+     * @param vertices  Vertices of polygon.
+     * @param triangles Triangles obtained after triangulation.
+     * @param indices   Indices of original positions of resulting triangle's
+     *                  vertices.
+     */
+    private static void computeIndices(
+            final List&lt;Point2D&gt; vertices, final List&lt;Triangle2D&gt; triangles, final List&lt;int[]&gt; indices) {
+<span class="fc bfc" id="L208" title="All 2 branches covered.">        if (indices != null) {</span>
+            int vertexCounter;
+            int triangleVertexCounter;
+            int[] triangleIndices;
+<span class="fc bfc" id="L212" title="All 2 branches covered.">            for (final var t : triangles) {</span>
+<span class="fc" id="L213">                triangleVertexCounter = 0;</span>
+<span class="fc" id="L214">                triangleIndices = new int[Triangle2D.NUM_VERTICES];</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">                for (final var p1 : t.getVertices()) {</span>
+<span class="fc" id="L216">                    vertexCounter = 0;</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">                    for (final var p2 : vertices) {</span>
+<span class="fc bfc" id="L218" title="All 2 branches covered.">                        if (p1 == p2) {</span>
+<span class="fc" id="L219">                            triangleIndices[triangleVertexCounter] = vertexCounter;</span>
+<span class="fc" id="L220">                            break;</span>
+                        }
+<span class="fc" id="L222">                        vertexCounter++;</span>
+<span class="fc" id="L223">                    }</span>
+<span class="fc" id="L224">                    triangleVertexCounter++;</span>
+<span class="fc" id="L225">                }</span>
+<span class="fc" id="L226">                indices.add(triangleIndices);</span>
+<span class="fc" id="L227">            }</span>
+        }
+<span class="fc" id="L229">    }</span>
+
+    /**
+     * Determines if provided triangle can be considered as an ear of the
+     * remaining polygon formed by provided vertices.
+     * An ear is usually a triangle located at a corner of a polygon.
+     * A triangle is considered an ear if no other vertex of the polygon lies
+     * within the triangle and if the triangle is not convex (is concave).
+     *
+     * @param triangle        A triangle.
+     * @param polygonVertices A list of points forming the remaining polygon
+     * @return true if triangle is ear, false otherwise.
+     */
+    private static boolean isEar(final Triangle2D triangle, final List&lt;Point2D&gt; polygonVertices) {
+
+        boolean isInside;
+        boolean isNotConvex;
+        // in a counterclockwise polygon, reversed orientation means that
+        // triangle is not convex and cannot be an ear
+
+<span class="fc" id="L249">        final var triangleVertices = triangle.getVertices();</span>
+
+        // check that no points in the polygon (aside from points belonging to
+        // the triangle) lie inside the triangle
+<span class="fc bfc" id="L253" title="All 2 branches covered.">        for (final var testPoint : polygonVertices) {</span>
+            // Do not compare with polygon elements which are triangle points
+            // if end is reached then polygon and triangle is equal and hence the
+            // polygon is the ear
+<span class="fc bfc" id="L257" title="All 2 branches covered.">            if (triangleVertices.contains(testPoint)) {</span>
+<span class="fc" id="L258">                continue;</span>
+            }
+
+<span class="fc" id="L261">            isInside = triangle.isInside(testPoint);</span>
+<span class="fc" id="L262">            isNotConvex = triangle.areVerticesClockwise();</span>
+
+            // if a point is inside the triangle or orientation is reversed, then
+            // it is not an ear
+<span class="pc bpc" id="L266" title="2 of 4 branches missed.">            if (isInside || isNotConvex) {</span>
+<span class="nc" id="L267">                return false;</span>
+            }
+<span class="fc" id="L269">        }</span>
+
+        // no points in the polygon where found inside the triangle and
+        // orientation is the same, so an ear is detected
+<span class="fc" id="L273">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RANSACEuclideanTransformation3DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">RANSACEuclideanTransformation3DRobustEstimator.java</span></div><h1>RANSACEuclideanTransformation3DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2017 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.geometry.CoordinatesType;
+import com.irurueta.geometry.EuclideanTransformation3D;
+import com.irurueta.geometry.Point3D;
+import com.irurueta.numerical.robust.RANSACRobustEstimator;
+import com.irurueta.numerical.robust.RANSACRobustEstimatorListener;
+import com.irurueta.numerical.robust.RobustEstimator;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Finds the best Euclidean 3D transformation for provided collections of
+ * matched 3D points using RANSAC algorithm.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public class RANSACEuclideanTransformation3DRobustEstimator extends EuclideanTransformation3DRobustEstimator {
+
+    /**
+     * Constant defining default threshold to determine whether points are
+     * inliers or not.
+     * By default, 1.0 is considered a good value for cases where measures are
+     * done on pixels, since typically the minimum resolution is 1 pixel.
+     */
+    public static final double DEFAULT_THRESHOLD = 1.0;
+
+    /**
+     * Minimum value that can be set as threshold.
+     * Threshold must be strictly greater than 0.0.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Indicates that by default inliers will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_INLIERS = false;
+
+    /**
+     * Indicates that by default residuals will only be computed but not kept.
+     */
+    public static final boolean DEFAULT_COMPUTE_AND_KEEP_RESIDUALS = false;
+
+    /**
+     * Threshold to determine whether points are inliers or not when testing
+     * possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. distance) a possible
+     * solution has on a matched pair of points.
+     */
+    private double threshold;
+
+    /**
+     * Indicates whether inliers must be computed and kept.
+     */
+    private boolean computeAndKeepInliers;
+
+    /**
+     * Indicates whether residuals must be computed and kept.
+     */
+    private boolean computeAndKeepResiduals;
+
+    /**
+     * Constructor.
+     */
+    public RANSACEuclideanTransformation3DRobustEstimator() {
+<span class="fc" id="L83">        super();</span>
+<span class="fc" id="L84">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L85">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L86">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L87">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public RANSACEuclideanTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L105">        super(inputPoints, outputPoints);</span>
+<span class="fc" id="L106">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L107">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L108">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L109">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+    public RANSACEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener) {
+<span class="fc" id="L119">        super(listener);</span>
+<span class="fc" id="L120">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L121">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L122">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L123">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes.
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 3D transformation.
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 3D transformation.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public RANSACEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints) {
+<span class="fc" id="L144">        super(listener, inputPoints, outputPoints);</span>
+<span class="fc" id="L145">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L146">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L147">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L148">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public RANSACEuclideanTransformation3DRobustEstimator(final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L156">        super(weakMinimumSizeAllowed);</span>
+<span class="fc" id="L157">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L158">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L159">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L160">    }</span>
+
+    /**
+     * Constructor with lists of points to be used to estimate an Euclidean 2D
+     * transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               affine 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               affine 3D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public RANSACEuclideanTransformation3DRobustEstimator(
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L179">        super(inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L180">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L181">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L182">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L183">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     */
+    public RANSACEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L194">        super(listener, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L195">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L196">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L197">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L198">    }</span>
+
+    /**
+     * Constructor with listener and lists of points to be used to estimate an
+     * Euclidean 3D transformation.
+     * Points in the list located at the same position are considered to be
+     * matched. Hence, both lists must have the same size, and their size must
+     * be greater or equal than MINIMUM_SIZE.
+     *
+     * @param listener               listener to be notified of events such as when estimation
+     *                               starts, ends or its progress significantly changes.
+     * @param inputPoints            list of input points to be used to estimate an
+     *                               affine 3D transformation.
+     * @param outputPoints           list of output points to be used to estimate an
+     *                               affine 3D transformation.
+     * @param weakMinimumSizeAllowed true allows 3 points, false requires 4.
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE.
+     */
+    public RANSACEuclideanTransformation3DRobustEstimator(
+            final EuclideanTransformation3DRobustEstimatorListener listener,
+            final List&lt;Point3D&gt; inputPoints, final List&lt;Point3D&gt; outputPoints, final boolean weakMinimumSizeAllowed) {
+<span class="fc" id="L220">        super(listener, inputPoints, outputPoints, weakMinimumSizeAllowed);</span>
+<span class="fc" id="L221">        threshold = DEFAULT_THRESHOLD;</span>
+<span class="fc" id="L222">        computeAndKeepInliers = DEFAULT_COMPUTE_AND_KEEP_INLIERS;</span>
+<span class="fc" id="L223">        computeAndKeepResiduals = DEFAULT_COMPUTE_AND_KEEP_RESIDUALS;</span>
+<span class="fc" id="L224">    }</span>
+
+    /**
+     * Returns threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @return threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     */
+    public double getThreshold() {
+<span class="fc" id="L236">        return threshold;</span>
+    }
+
+    /**
+     * Sets threshold to determine whether points are inliers or not when
+     * testing possible estimation solutions.
+     * The threshold refers to the amount of error (i.e. Euclidean distance) a
+     * possible solution has on a matched pair of points.
+     *
+     * @param threshold threshold to be set.
+     * @throws IllegalArgumentException if provided value is equal or less than
+     *                                  zero.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     */
+    public void setThreshold(final double threshold) throws LockedException {
+<span class="fc bfc" id="L252" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L253">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L255" title="All 2 branches covered.">        if (threshold &lt;= MIN_THRESHOLD) {</span>
+<span class="fc" id="L256">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L258">        this.threshold = threshold;</span>
+<span class="fc" id="L259">    }</span>
+
+    /**
+     * Indicates whether inliers must be computed and kept.
+     *
+     * @return true if inliers must be computed and kept, false if inliers only
+     * need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepInliersEnabled() {
+<span class="fc" id="L268">        return computeAndKeepInliers;</span>
+    }
+
+    /**
+     * Specifies whether inliers must be computed and kept.
+     *
+     * @param computeAndKeepInliers true if inliers must be computed and kept,
+     *                              false if inliers only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepInliersEnabled(final boolean computeAndKeepInliers) throws LockedException {
+<span class="pc bpc" id="L279" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L280">            throw new LockedException();</span>
+        }
+<span class="fc" id="L282">        this.computeAndKeepInliers = computeAndKeepInliers;</span>
+<span class="fc" id="L283">    }</span>
+
+    /**
+     * Indicates whether residuals must be computed and kept.
+     *
+     * @return true if residuals must be computed and kept, false if residuals
+     * only need to be computed but not kept.
+     */
+    public boolean isComputeAndKeepResidualsEnabled() {
+<span class="fc" id="L292">        return computeAndKeepResiduals;</span>
+    }
+
+    /**
+     * Specifies whether residuals must be computed and kept.
+     *
+     * @param computeAndKeepResiduals true if residuals must be computed and
+     *                                kept, false if residuals only need to be computed but not kept.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setComputeAndKeepResidualsEnabled(final boolean computeAndKeepResiduals) throws LockedException {
+<span class="pc bpc" id="L303" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L304">            throw new LockedException();</span>
+        }
+<span class="fc" id="L306">        this.computeAndKeepResiduals = computeAndKeepResiduals;</span>
+<span class="fc" id="L307">    }</span>
+
+    /**
+     * Estimates an affine 3D transformation using a robust estimator and
+     * the best set of matched 3D point correspondences found using the robust
+     * estimator.
+     *
+     * @return an affine 3D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    @Override
+    public EuclideanTransformation3D estimate() throws LockedException, NotReadyException, RobustEstimatorException {
+<span class="fc bfc" id="L324" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L325">            throw new LockedException();</span>
+        }
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">        if (!isReady()) {</span>
+<span class="nc" id="L328">            throw new NotReadyException();</span>
+        }
+
+<span class="fc" id="L331">        final var innerEstimator = new RANSACRobustEstimator&lt;&gt;(</span>
+<span class="fc" id="L332">                new RANSACRobustEstimatorListener&lt;EuclideanTransformation3D&gt;() {</span>
+
+                    // point to be reused when computing residuals
+<span class="fc" id="L335">                    private final Point3D testPoint = Point3D.create(CoordinatesType.HOMOGENEOUS_COORDINATES);</span>
+
+<span class="fc" id="L337">                    private final EuclideanTransformation3DEstimator nonRobustEstimator =</span>
+<span class="fc" id="L338">                            new EuclideanTransformation3DEstimator(isWeakMinimumSizeAllowed());</span>
+
+<span class="fc" id="L340">                    private final List&lt;Point3D&gt; subsetInputPoints = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L341">                    private final List&lt;Point3D&gt; subsetOutputPoints = new ArrayList&lt;&gt;();</span>
+
+                    @Override
+                    public double getThreshold() {
+<span class="fc" id="L345">                        return threshold;</span>
+                    }
+
+                    @Override
+                    public int getTotalSamples() {
+<span class="fc" id="L350">                        return inputPoints.size();</span>
+                    }
+
+                    @Override
+                    public int getSubsetSize() {
+<span class="fc" id="L355">                        return nonRobustEstimator.getMinimumPoints();</span>
+                    }
+
+                    @Override
+                    public void estimatePreliminarSolutions(
+                            final int[] samplesIndices, final List&lt;EuclideanTransformation3D&gt; solutions) {
+<span class="fc" id="L361">                        subsetInputPoints.clear();</span>
+<span class="fc" id="L362">                        subsetOutputPoints.clear();</span>
+<span class="fc bfc" id="L363" title="All 2 branches covered.">                        for (final var samplesIndex : samplesIndices) {</span>
+<span class="fc" id="L364">                            subsetInputPoints.add(inputPoints.get(samplesIndex));</span>
+<span class="fc" id="L365">                            subsetOutputPoints.add(outputPoints.get(samplesIndex));</span>
+                        }
+
+                        try {
+<span class="fc" id="L369">                            nonRobustEstimator.setPoints(subsetInputPoints, subsetOutputPoints);</span>
+<span class="fc" id="L370">                            solutions.add(nonRobustEstimator.estimate());</span>
+<span class="nc" id="L371">                        } catch (final Exception e) {</span>
+                            // if points are coincident, no solution is added
+<span class="fc" id="L373">                        }</span>
+<span class="fc" id="L374">                    }</span>
+
+                    @Override
+                    public double computeResidual(final EuclideanTransformation3D currentEstimation, final int i) {
+<span class="fc" id="L378">                        final var inputPoint = inputPoints.get(i);</span>
+<span class="fc" id="L379">                        final var outputPoint = outputPoints.get(i);</span>
+
+                        // transform input point and store result in mTestPoint
+<span class="fc" id="L382">                        currentEstimation.transform(inputPoint, testPoint);</span>
+
+<span class="fc" id="L384">                        return outputPoint.distanceTo(testPoint);</span>
+                    }
+
+                    @Override
+                    public boolean isReady() {
+<span class="fc" id="L389">                        return RANSACEuclideanTransformation3DRobustEstimator.this.isReady();</span>
+                    }
+
+                    @Override
+                    public void onEstimateStart(final RobustEstimator&lt;EuclideanTransformation3D&gt; estimator) {
+<span class="fc bfc" id="L394" title="All 2 branches covered.">                        if (listener != null) {</span>
+<span class="fc" id="L395">                            listener.onEstimateStart(RANSACEuclideanTransformation3DRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L397">                    }</span>
+
+                    @Override
+                    public void onEstimateEnd(final RobustEstimator&lt;EuclideanTransformation3D&gt; estimator) {
+<span class="fc bfc" id="L401" title="All 2 branches covered.">                        if (listener != null) {</span>
+<span class="fc" id="L402">                            listener.onEstimateEnd(RANSACEuclideanTransformation3DRobustEstimator.this);</span>
+                        }
+<span class="fc" id="L404">                    }</span>
+
+                    @Override
+                    public void onEstimateNextIteration(
+                            final RobustEstimator&lt;EuclideanTransformation3D&gt; estimator, final int iteration) {
+<span class="fc bfc" id="L409" title="All 2 branches covered.">                        if (listener != null) {</span>
+<span class="fc" id="L410">                            listener.onEstimateNextIteration(</span>
+                                    RANSACEuclideanTransformation3DRobustEstimator.this, iteration);
+                        }
+<span class="fc" id="L413">                    }</span>
+
+                    @Override
+                    public void onEstimateProgressChange(
+                            final RobustEstimator&lt;EuclideanTransformation3D&gt; estimator, final float progress) {
+<span class="fc bfc" id="L418" title="All 2 branches covered.">                        if (listener != null) {</span>
+<span class="fc" id="L419">                            listener.onEstimateProgressChange(</span>
+                                    RANSACEuclideanTransformation3DRobustEstimator.this, progress);
+                        }
+<span class="fc" id="L422">                    }</span>
+                });
+
+        try {
+<span class="fc" id="L426">            locked = true;</span>
+<span class="fc" id="L427">            inliersData = null;</span>
+<span class="pc bpc" id="L428" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepInliersEnabled(computeAndKeepInliers || refineResult);</span>
+<span class="pc bpc" id="L429" title="1 of 4 branches missed.">            innerEstimator.setComputeAndKeepResidualsEnabled(computeAndKeepResiduals || refineResult);</span>
+<span class="fc" id="L430">            innerEstimator.setConfidence(confidence);</span>
+<span class="fc" id="L431">            innerEstimator.setMaxIterations(maxIterations);</span>
+<span class="fc" id="L432">            innerEstimator.setProgressDelta(progressDelta);</span>
+<span class="fc" id="L433">            final var transformation = innerEstimator.estimate();</span>
+<span class="fc" id="L434">            inliersData = innerEstimator.getInliersData();</span>
+<span class="fc" id="L435">            return attemptRefine(transformation);</span>
+<span class="nc" id="L436">        } catch (final com.irurueta.numerical.LockedException e) {</span>
+<span class="nc" id="L437">            throw new LockedException(e);</span>
+<span class="nc" id="L438">        } catch (final com.irurueta.numerical.NotReadyException e) {</span>
+<span class="nc" id="L439">            throw new NotReadyException(e);</span>
+        } finally {
+<span class="fc" id="L441">            locked = false;</span>
+        }
+    }
+
+    /**
+     * Returns method being used for robust estimation.
+     *
+     * @return method being used for robust estimation.
+     */
+    @Override
+    public RobustEstimatorMethod getMethod() {
+<span class="fc" id="L452">        return RobustEstimatorMethod.RANSAC;</span>
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    @Override
+    protected double getRefinementStandardDeviation() {
+<span class="fc" id="L468">        return threshold;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

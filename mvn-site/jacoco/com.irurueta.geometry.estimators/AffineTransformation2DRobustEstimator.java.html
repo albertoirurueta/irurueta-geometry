@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AffineTransformation2DRobustEstimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry.estimators</a> &gt; <span class="el_source">AffineTransformation2DRobustEstimator.java</span></div><h1>AffineTransformation2DRobustEstimator.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2015 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry.estimators;
+
+import com.irurueta.algebra.Matrix;
+import com.irurueta.geometry.AffineTransformation2D;
+import com.irurueta.geometry.Line2D;
+import com.irurueta.geometry.Point2D;
+import com.irurueta.numerical.robust.InliersData;
+import com.irurueta.numerical.robust.RobustEstimatorException;
+import com.irurueta.numerical.robust.RobustEstimatorMethod;
+
+import java.util.List;
+
+/**
+ * This is an abstract class for algorithms to robustly find the best affine
+ * 2D transformation for collections of matching 2D points, or 2D lines.
+ * Implementations of this class should be able to detect and discard outliers
+ * in order to find the best solution.
+ */
+public abstract class AffineTransformation2DRobustEstimator {
+
+    /**
+     * Minimum number of matched points or matched lines required to estimate an
+     * affine 2D transformation.
+     */
+    public static final int MINIMUM_SIZE = 3;
+
+    /**
+     * Default amount of progress variation before notifying a change in
+     * estimation progress. By default, this is set to 5%.
+     */
+    public static final float DEFAULT_PROGRESS_DELTA = 0.05f;
+
+    /**
+     * Minimum allowed value for progress delta.
+     */
+    public static final float MIN_PROGRESS_DELTA = 0.0f;
+
+    /**
+     * Maximum allowed value for progress delta.
+     */
+    public static final float MAX_PROGRESS_DELTA = 1.0f;
+
+    /**
+     * Constant defining default confidence of the estimated result, which is
+     * 99%. This means that with a probability of 99% estimation will be
+     * accurate because chosen sub-samples will be inliers.
+     */
+    public static final double DEFAULT_CONFIDENCE = 0.99;
+
+    /**
+     * Default maximum allowed number of iterations.
+     */
+    public static final int DEFAULT_MAX_ITERATIONS = 5000;
+
+    /**
+     * Minimum allowed confidence value.
+     */
+    public static final double MIN_CONFIDENCE = 0.0;
+
+    /**
+     * Maximum allowed confidence value.
+     */
+    public static final double MAX_CONFIDENCE = 1.0;
+
+    /**
+     * Minimum allowed number of iterations.
+     */
+    public static final int MIN_ITERATIONS = 1;
+
+    /**
+     * Indicates that result is refined by default using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     */
+    public static final boolean DEFAULT_REFINE_RESULT = true;
+
+    /**
+     * Indicates that covariance is not kept by default after refining result.
+     */
+    public static final boolean DEFAULT_KEEP_COVARIANCE = false;
+
+    /**
+     * Listener to be notified of events such as when estimation starts, ends
+     * or its progress significantly changes.
+     */
+    protected AffineTransformation2DRobustEstimatorListener mListener;
+
+    /**
+     * Indicates if this estimator is locked because an estimation is being
+     * computed.
+     */
+    protected volatile boolean locked;
+
+    /**
+     * Amount of progress variation before notifying a progress change during
+     * estimation.
+     */
+    protected float progressDelta;
+
+    /**
+     * Amount of confidence expressed as a value between 0.0 and 1.0 (which is
+     * equivalent to 100%). The amount of confidence indicates the probability
+     * that the estimated result is correct. Usually this value will be close
+     * to 1.0, but not exactly 1.0.
+     */
+    protected double confidence;
+
+    /**
+     * Maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     */
+    protected int maxIterations;
+
+    /**
+     * Data related to inliers found after estimation.
+     */
+    protected InliersData inliersData;
+
+    /**
+     * Indicates whether result must be refined using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     * If true, inliers will be computed and kept in any implementation
+     * regardless of the settings.
+     */
+    protected boolean refineResult;
+
+    /**
+     * Indicates whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     */
+    protected boolean keepCovariance;
+
+    /**
+     * Estimated covariance of estimated 2D affine transformation.
+     * This is only available when result has been refined and covariance is
+     * kept.
+     */
+    protected Matrix covariance;
+
+    /**
+     * Constructor.
+     */
+<span class="fc" id="L158">    protected AffineTransformation2DRobustEstimator() {</span>
+<span class="fc" id="L159">        progressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L160">        confidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L161">        maxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L162">        refineResult = DEFAULT_REFINE_RESULT;</span>
+<span class="fc" id="L163">        keepCovariance = DEFAULT_KEEP_COVARIANCE;</span>
+<span class="fc" id="L164">    }</span>
+
+    /**
+     * Constructor.
+     *
+     * @param listener listener to be notified of events such as when estimation
+     *                 starts, ends or its progress significantly changes.
+     */
+<span class="fc" id="L172">    protected AffineTransformation2DRobustEstimator(final AffineTransformation2DRobustEstimatorListener listener) {</span>
+<span class="fc" id="L173">        mListener = listener;</span>
+<span class="fc" id="L174">        progressDelta = DEFAULT_PROGRESS_DELTA;</span>
+<span class="fc" id="L175">        confidence = DEFAULT_CONFIDENCE;</span>
+<span class="fc" id="L176">        maxIterations = DEFAULT_MAX_ITERATIONS;</span>
+<span class="fc" id="L177">        refineResult = DEFAULT_REFINE_RESULT;</span>
+<span class="fc" id="L178">        keepCovariance = DEFAULT_KEEP_COVARIANCE;</span>
+<span class="fc" id="L179">    }</span>
+
+    /**
+     * Returns reference to listener to be notified of events such as when
+     * estimation starts, ends or its progress significantly changes.
+     *
+     * @return listener to be notified of events.
+     */
+    public AffineTransformation2DRobustEstimatorListener getListener() {
+<span class="fc" id="L188">        return mListener;</span>
+    }
+
+    /**
+     * Sets listener to be notified of events such as when estimation starts,
+     * ends or its progress significantly changes.
+     *
+     * @param listener listener to be notified of events.
+     * @throws LockedException if robust estimator is locked.
+     */
+    public void setListener(final AffineTransformation2DRobustEstimatorListener listener) throws LockedException {
+<span class="fc bfc" id="L199" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L200">            throw new LockedException();</span>
+        }
+<span class="fc" id="L202">        mListener = listener;</span>
+<span class="fc" id="L203">    }</span>
+
+    /**
+     * Indicates whether listener has been provided and is available for
+     * retrieval.
+     *
+     * @return true if available, false otherwise.
+     */
+    public boolean isListenerAvailable() {
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        return mListener != null;</span>
+    }
+
+    /**
+     * Indicates if this instance is locked because estimation is being
+     * computed.
+     *
+     * @return true if locked, false otherwise.
+     */
+    public boolean isLocked() {
+<span class="fc" id="L222">        return locked;</span>
+    }
+
+    /**
+     * Returns amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @return amount of progress variation before notifying a progress change
+     * during estimation.
+     */
+    public float getProgressDelta() {
+<span class="fc" id="L233">        return progressDelta;</span>
+    }
+
+    /**
+     * Sets amount of progress variation before notifying a progress change
+     * during estimation.
+     *
+     * @param progressDelta amount of progress variation before notifying a
+     *                      progress change during estimation.
+     * @throws IllegalArgumentException if progress delta is less than zero or
+     *                                  greater than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setProgressDelta(final float progressDelta) throws LockedException {
+<span class="fc bfc" id="L248" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L249">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L251" title="All 4 branches covered.">        if (progressDelta &lt; MIN_PROGRESS_DELTA || progressDelta &gt; MAX_PROGRESS_DELTA) {</span>
+<span class="fc" id="L252">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L254">        this.progressDelta = progressDelta;</span>
+<span class="fc" id="L255">    }</span>
+
+    /**
+     * Returns amount of confidence expressed as a value between 0.0 and 1.0
+     * (which is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @return amount of confidence as a value between 0.0 and 1.0.
+     */
+    public double getConfidence() {
+<span class="fc" id="L266">        return confidence;</span>
+    }
+
+    /**
+     * Sets amount of confidence expressed as a value between 0.0 and 1.0 (which
+     * is equivalent to 100%). The amount of confidence indicates the
+     * probability that the estimated result is correct. Usually this value will
+     * be close to 1.0, but not exactly 1.0.
+     *
+     * @param confidence confidence to be set as a value between 0.0 and 1.0.
+     * @throws IllegalArgumentException if provided value is not between 0.0 and
+     *                                  1.0.
+     * @throws LockedException          if this estimator is locked because an estimator
+     *                                  is being computed.
+     */
+    public void setConfidence(final double confidence) throws LockedException {
+<span class="fc bfc" id="L282" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L283">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L285" title="All 4 branches covered.">        if (confidence &lt; MIN_CONFIDENCE || confidence &gt; MAX_CONFIDENCE) {</span>
+<span class="fc" id="L286">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L288">        this.confidence = confidence;</span>
+<span class="fc" id="L289">    }</span>
+
+    /**
+     * Returns maximum allowed number of iterations. If maximum allowed number
+     * of iterations is achieved without converging to a result when calling
+     * estimate(), a RobustEstimatorException will be raised.
+     *
+     * @return maximum allowed number of iterations.
+     */
+    public int getMaxIterations() {
+<span class="fc" id="L299">        return maxIterations;</span>
+    }
+
+    /**
+     * Sets maximum allowed number of iterations. When the maximum number of
+     * iterations is exceeded, result will not be available, however an
+     * approximate result will be available for retrieval.
+     *
+     * @param maxIterations maximum allowed number of iterations to be set.
+     * @throws IllegalArgumentException if provided value is less than 1.
+     * @throws LockedException          if this estimator is locked because an estimation
+     *                                  is being computed.
+     */
+    public void setMaxIterations(final int maxIterations) throws LockedException {
+<span class="fc bfc" id="L313" title="All 2 branches covered.">        if (isLocked()) {</span>
+<span class="fc" id="L314">            throw new LockedException();</span>
+        }
+<span class="fc bfc" id="L316" title="All 2 branches covered.">        if (maxIterations &lt; MIN_ITERATIONS) {</span>
+<span class="fc" id="L317">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L319">        this.maxIterations = maxIterations;</span>
+<span class="fc" id="L320">    }</span>
+
+    /**
+     * Gets data related to inliers found after estimation.
+     *
+     * @return data related to inliers found after estimation.
+     */
+    public InliersData getInliersData() {
+<span class="fc" id="L328">        return inliersData;</span>
+    }
+
+    /**
+     * Indicates whether result must be refined using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     * If ture, inliers will be computed and kept in any implementation
+     * regardless of the settings.
+     *
+     * @return true to refine result, false to simply use result found by
+     * robust estimator without further refining.
+     */
+    public boolean isResultRefined() {
+<span class="fc" id="L341">        return refineResult;</span>
+    }
+
+    /**
+     * Specifies whether result must be refined using Levenberg-Marquardt
+     * fitting algorithm over found inliers.
+     *
+     * @param refineResult true to refine result, false to simply use result
+     *                     found by robust estimator without further refining.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setResultRefined(final boolean refineResult) throws LockedException {
+<span class="pc bpc" id="L353" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L354">            throw new LockedException();</span>
+        }
+<span class="fc" id="L356">        this.refineResult = refineResult;</span>
+<span class="fc" id="L357">    }</span>
+
+    /**
+     * Indicates whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     *
+     * @return true if covariance must be kept after refining result, false
+     * otherwise.
+     */
+    public boolean isCovarianceKept() {
+<span class="fc" id="L367">        return keepCovariance;</span>
+    }
+
+    /**
+     * Specifies whether covariance must be kept after refining result.
+     * This setting is only taken into account if result is refined.
+     *
+     * @param keepCovariance true if covariance must be kept after refining
+     *                       result, false otherwise.
+     * @throws LockedException if estimator is locked.
+     */
+    public void setCovarianceKept(final boolean keepCovariance) throws LockedException {
+<span class="pc bpc" id="L379" title="1 of 2 branches missed.">        if (isLocked()) {</span>
+<span class="nc" id="L380">            throw new LockedException();</span>
+        }
+<span class="fc" id="L382">        this.keepCovariance = keepCovariance;</span>
+<span class="fc" id="L383">    }</span>
+
+    /**
+     * Gets estimated covariance of estimated 3D point if available.
+     * This is only available when result has been refined and covariance is
+     * kept.
+     *
+     * @return estimated covariance or null.
+     */
+    public Matrix getCovariance() {
+<span class="fc" id="L393">        return covariance;</span>
+    }
+
+    /**
+     * Estimates an affine 2D transformation using a robust estimator and
+     * the best set of matched 2D point or line correspondences found using the
+     * robust estimator.
+     *
+     * @return an affine 2D transformation.
+     * @throws LockedException          if robust estimator is locked because an
+     *                                  estimation is already in progress.
+     * @throws NotReadyException        if provided input data is not enough to start
+     *                                  the estimation.
+     * @throws RobustEstimatorException if estimation fails for any reason
+     *                                  (i.e. numerical instability, no solution available, etc).
+     */
+    public abstract AffineTransformation2D estimate() throws LockedException, NotReadyException,
+            RobustEstimatorException;
+
+    /**
+     * Returns method being used for robust estimation
+     *
+     * @return method being used for robust estimation
+     */
+    public abstract RobustEstimatorMethod getMethod();
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 2D transformation
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 2D transformation
+     * @param method       method of a robust estimator algorithm to estimate
+     *                     the best affine 2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromPoints(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final RobustEstimatorMethod method) {
+<span class="fc" id="L435">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints, method);</span>
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 2D transformation
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 2D transformation
+     * @param method       method of a robust estimator algorithm to estimate
+     *                     the best affine 2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromPoints(
+            final AffineTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final RobustEstimatorMethod method) {
+<span class="fc" id="L457">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,</span>
+                method);
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method
+     *
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 2D transformation
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 2D transformation
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate
+     *                      the best affine 2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromPoints(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L480">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints, qualityScores,</span>
+                method);
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D point
+     * correspondences and using provided robust estimator method
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 2D transformation
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 2D transformation
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @param method        method of a robust estimator algorithm to estimate
+     *                      the best affine 2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromPoints(
+            final AffineTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final double[] qualityScores, final RobustEstimatorMethod method) {
+<span class="fc" id="L505">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,</span>
+                qualityScores, method);
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method
+     *
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 2D transformation
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromPoints(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L523">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints);</span>
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method
+     *
+     * @param listener     listener to be notified of events such as when estimation
+     *                     starts, ends or its progress significantly changes
+     * @param inputPoints  list of input points to be used to estimate an
+     *                     affine 2D transformation
+     * @param outputPoints list of output points to be used to estimate an
+     *                     affine 2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromPoints(
+            final AffineTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints) {
+<span class="fc" id="L543">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints);</span>
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method
+     *
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 2D transformation
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 2D transformation
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromPoints(
+            final List&lt;Point2D&gt; inputPoints, final List&lt;Point2D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L562">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(inputPoints, outputPoints,</span>
+                qualityScores);
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D point
+     * correspondences and using default robust estimator method
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes
+     * @param inputPoints   list of input points to be used to estimate an
+     *                      affine 2D transformation
+     * @param outputPoints  list of output points to be used to estimate an
+     *                      affine 2D transformation
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of points don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromPoints(
+            final AffineTransformation2DRobustEstimatorListener listener, final List&lt;Point2D&gt; inputPoints,
+            final List&lt;Point2D&gt; outputPoints, final double[] qualityScores) {
+<span class="fc" id="L585">        return PointCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputPoints, outputPoints,</span>
+                qualityScores);
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D line
+     * correspondences and using provided robust estimator method
+     *
+     * @param inputLines  list of input lines to be used to estimate an
+     *                    affine 2D transformation
+     * @param outputLines list of output lines to be used to estimate an
+     *                    affine 2D transformation
+     * @param method      method of a robust estimator algorithm to estimate
+     *                    the best affine 2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromLines(
+            final List&lt;Line2D&gt; inputLines, final List&lt;Line2D&gt; outputLines, final RobustEstimatorMethod method) {
+<span class="fc" id="L605">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(inputLines, outputLines, method);</span>
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D line
+     * correspondences and using provided robust estimator method
+     *
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes
+     * @param inputLines  list of input lines to be used to estimate an affine
+     *                    2D transformation
+     * @param outputLines list of output lines to be used to estimate an affine
+     *                    2D transformation
+     * @param method      method of a robust estimator algorithm to estimate the best
+     *                    affine 2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromLines(
+            final AffineTransformation2DRobustEstimatorListener listener, final List&lt;Line2D&gt; inputLines,
+            final List&lt;Line2D&gt; outputLines, final RobustEstimatorMethod method) {
+<span class="fc" id="L627">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputLines, outputLines,</span>
+                method);
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D line
+     * correspondences and using provided robust estimator method
+     *
+     * @param inputLines    list of input lines to be used to estimate an
+     *                      affine 2D transformation
+     * @param outputLines   list of output lines to be used to estimate an
+     *                      affine 2D transformation
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      lines.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      affine 2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromLines(
+            final List&lt;Line2D&gt; inputLines, final List&lt;Line2D&gt; outputLines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L650">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(inputLines, outputLines, qualityScores,</span>
+                method);
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D line
+     * correspondences and using provided robust estimator method
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes
+     * @param inputLines    list of input lines to be used to estimate an affine
+     *                      2D transformation
+     * @param outputLines   list of output lines to be used to estimate an affine
+     *                      2D transformation
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      lines.
+     * @param method        method of a robust estimator algorithm to estimate the best
+     *                      affine 2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromLines(
+            final AffineTransformation2DRobustEstimatorListener listener,
+            final List&lt;Line2D&gt; inputLines, final List&lt;Line2D&gt; outputLines, final double[] qualityScores,
+            final RobustEstimatorMethod method) {
+<span class="fc" id="L676">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputLines, outputLines,</span>
+                qualityScores, method);
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D line
+     * correspondences and using default robust estimator method
+     *
+     * @param inputLines  list of input lines to be used to estimate an
+     *                    affine 2D transformation
+     * @param outputLines list of output lines to be used to estimate an
+     *                    affine 2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromLines(
+            final List&lt;Line2D&gt; inputLines, final List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L694">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(inputLines, outputLines);</span>
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D line
+     * correspondences and using default robust estimator method
+     *
+     * @param listener    listener to be notified of events such as when estimation
+     *                    starts, ends or its progress significantly changes
+     * @param inputLines  list of input lines to be used to estimate an affine
+     *                    2D transformation
+     * @param outputLines list of output lines to be used to estimate an affine
+     *                    2D transformation
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromLines(
+            final AffineTransformation2DRobustEstimatorListener listener, final List&lt;Line2D&gt; inputLines,
+            final List&lt;Line2D&gt; outputLines) {
+<span class="fc" id="L714">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputLines, outputLines);</span>
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D line
+     * correspondences and using default robust estimator method
+     *
+     * @param inputLines    list of input lines to be used to estimate an affine
+     *                      2D transformation
+     * @param outputLines   list of output lines to be used to estimate an affine
+     *                      2D transformation
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      points.
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromLines(
+            final List&lt;Line2D&gt; inputLines, final List&lt;Line2D&gt; outputLines, final double[] qualityScores) {
+<span class="fc" id="L733">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(inputLines, outputLines, qualityScores);</span>
+    }
+
+    /**
+     * Creates an affine 2D transformation estimator based on 2D line
+     * correspondences and using default robust estimator method
+     *
+     * @param listener      listener to be notified of events such as when estimation
+     *                      starts, ends or its progress significantly changes
+     * @param inputLines    list of input lines to be used to estimate an affine
+     *                      2D transformation
+     * @param outputLines   list of output lines to be used to estimate an affine
+     *                      2D transformation
+     * @param qualityScores quality scores corresponding to each pair of matched
+     *                      lines.
+     * @return an instance of affine 2D transformation estimator
+     * @throws IllegalArgumentException if provided lists of lines don't have
+     *                                  the same size or their size is smaller than MINIMUM_SIZE
+     */
+    public static AffineTransformation2DRobustEstimator createFromLines(
+            final AffineTransformation2DRobustEstimatorListener listener, final List&lt;Line2D&gt; inputLines,
+            final List&lt;Line2D&gt; outputLines, final double[] qualityScores) {
+<span class="fc" id="L755">        return LineCorrespondenceAffineTransformation2DRobustEstimator.create(listener, inputLines, outputLines,</span>
+                qualityScores);
+    }
+
+    /**
+     * Gets standard deviation used for Levenberg-Marquardt fitting during
+     * refinement.
+     * Returned value gives an indication of how much variance each residual
+     * has.
+     * Typically, this value is related to the threshold used on each robust
+     * estimation, since residuals of found inliers are within the range of
+     * such threshold.
+     *
+     * @return standard deviation used for refinement.
+     */
+    protected abstract double getRefinementStandardDeviation();
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>

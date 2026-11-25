@@ -1,0 +1,792 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Rotation3D.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">com.irurueta:irurueta-geometry</a> &gt; <a href="index.source.html" class="el_package">com.irurueta.geometry</a> &gt; <span class="el_source">Rotation3D.java</span></div><h1>Rotation3D.java</h1><pre class="source lang-java linenums">/*
+ * Copyright (C) 2012 Alberto Irurueta Carro (alberto@irurueta.com)
+ *
+ * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.irurueta.geometry;
+
+import com.irurueta.algebra.AlgebraException;
+import com.irurueta.algebra.ArrayUtils;
+import com.irurueta.algebra.Matrix;
+import com.irurueta.algebra.Utils;
+import com.irurueta.algebra.WrongSizeException;
+
+import java.io.Serializable;
+
+/**
+ * Abstract class representing a rotation in 3D space.
+ * Subclasses of this class will implement the interface of this class.
+ */
+@SuppressWarnings(&quot;DuplicatedCode&quot;)
+public abstract class Rotation3D implements Serializable {
+
+    /**
+     * Constant defining threshold to determine whether a matrix is orthogonal
+     * or not and has determinant equal to 1. Rotation matrices must fulfill
+     * those requirements.
+     */
+    public static final double DEFAULT_VALID_THRESHOLD = 1e-12;
+
+    /**
+     * Constant defining minimum allowed threshold.
+     */
+    public static final double MIN_THRESHOLD = 0.0;
+
+    /**
+     * Constant defining number of inhomogeneous 3D coordinates.
+     */
+    public static final int INHOM_COORDS = 3;
+
+    /**
+     * Constant defining number of homogeneous 3D coordinates.
+     */
+    public static final int HOM_COORDS = 4;
+
+    /**
+     * Constant defining default type if none is provided.
+     */
+<span class="fc" id="L58">    public static final Rotation3DType DEFAULT_TYPE = Rotation3DType.QUATERNION;</span>
+
+    /**
+     * Default threshold to determine if two instances are equal.
+     */
+    public static final double DEFAULT_COMPARISON_THRESHOLD = 1e-9;
+
+    /**
+     * Constant defining minimum allowed comparison threshold.
+     */
+    private static final double MIN_COMPARISON_THRESHOLD = 0.0;
+
+    /**
+     * Empty constructor.
+     */
+<span class="fc" id="L73">    protected Rotation3D() {</span>
+<span class="fc" id="L74">    }</span>
+
+    /**
+     * Returns type of this rotation.
+     *
+     * @return Type of this rotation.
+     */
+    public abstract Rotation3DType getType();
+
+    /**
+     * Sets the axis and rotation of this instance.
+     * Once set, points will rotate around provided axis an amount equal to
+     * provided rotation angle in radians.
+     * Note: to avoid numerical instabilities and improve accuracy, axis
+     * coordinates should be normalized (e.g. norm equal to 1).
+     *
+     * @param axis  Array of length 3 containing axis coordinates.
+     * @param theta Amount of rotation in radians.
+     * @throws IllegalArgumentException Raised if provided axis array does not
+     *                                  have length 3.
+     */
+    public final void setAxisAndRotation(final double[] axis, final double theta) {
+<span class="fc bfc" id="L96" title="All 2 branches covered.">        if (axis.length != INHOM_COORDS) {</span>
+<span class="fc" id="L97">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L100">        setAxisAndRotation(axis[0], axis[1], axis[2], theta);</span>
+<span class="fc" id="L101">    }</span>
+
+    /**
+     * Sets the axis and rotation of this instance.
+     * Once set, points will rotate around provided axis an amount equal to
+     * provided rotation angle in radians.
+     * Note: to avoid numerical instabilities and improve accuracy, axis
+     * coordinates should be normalized (e.g. norm equal to 1).
+     *
+     * @param axisX X coordinate of rotation axis.
+     * @param axisY Y coordinate of rotation axis.
+     * @param axisZ Z coordinate of rotation axis.
+     * @param theta Amount of rotation in radians.
+     */
+    public abstract void setAxisAndRotation(
+            final double axisX, final double axisY, final double axisZ, final double theta);
+
+    /**
+     * Returns rotation axis corresponding to this instance as a new array
+     * containing axis coordinates.
+     *
+     * @return Rotation axis coordinates.
+     * @throws RotationException Raised if numerical instabilities happen.
+     */
+    public double[] getRotationAxis() throws RotationException {
+<span class="fc" id="L126">        final var axis = new double[INHOM_COORDS];</span>
+<span class="fc" id="L127">        rotationAxis(axis);</span>
+<span class="fc" id="L128">        return axis;</span>
+    }
+
+    /**
+     * Returns rotation axis corresponding to this instance.
+     * Result is stored in provided axis array, which must have length 3.
+     *
+     * @param axis Array where axis coordinates will be stored.
+     * @throws IllegalArgumentException Raised if provided array does not have
+     *                                  length 3.
+     * @throws RotationException        Raised if numerical instabilities happen.
+     */
+    public abstract void rotationAxis(final double[] axis) throws RotationException;
+
+    /**
+     * Returns rotation amount or angle in radians around the rotation axis
+     * associated to this instance.
+     *
+     * @return Rotation angle in radians.
+     * @throws RotationException Raised if numerical instabilities happen.
+     *                           Because internal matrix will always be well-defined (orthogonal and
+     *                           determinant equal to 1), this exception will rarely happen.
+     */
+    public abstract double getRotationAngle() throws RotationException;
+
+    /**
+     * Returns a 3D rotation which is inverse to this instance.
+     * In other words, the combination of this rotation with its inverse
+     * produces no change.
+     *
+     * @return Inverse 3D rotation.
+     */
+    public abstract Rotation3D inverseRotationAndReturnNew();
+
+    /**
+     * Sets into provided Rotation3D instance a rotation inverse to this
+     * instance.
+     * The combination of this rotation with its inverse produces no change.
+     *
+     * @param result Instance where inverse rotation will be set.
+     */
+    public abstract void inverseRotation(final Rotation3D result);
+
+    /**
+     * Reverses the rotation of this instance.
+     */
+    public abstract void inverseRotation();
+
+    /**
+     * Returns this 3D rotation instance expressed as a 3x3 inhomogeneous
+     * matrix.
+     * This is equivalent to call getInternalMatrix().
+     *
+     * @return Rotation matrix expressed in inhomogeneous coordinates.
+     */
+    public abstract Matrix asInhomogeneousMatrix();
+
+    /**
+     * Sets into provided Matrix instance this 3D rotation expressed as a
+     * 3x3 inhomogeneous matrix.
+     *
+     * @param result Matrix where rotation will be set.
+     * @throws IllegalArgumentException Raised if provided instance does not
+     *                                  have size 3x3.
+     */
+    public abstract void asInhomogeneousMatrix(final Matrix result);
+
+    /**
+     * Returns this 3D rotation instance expressed as a 4x4 homogeneous matrix.
+     *
+     * @return Rotation matrix expressed in homogeneous coordinates.
+     */
+    public abstract Matrix asHomogeneousMatrix();
+
+    /**
+     * Sets into provided Matrix instance this 3D rotation expressed as a
+     * 4x4 homogeneous matrix.
+     *
+     * @param result Matrix where rotation will be set.
+     * @throws IllegalArgumentException Raised if provided instance does not
+     *                                  have size 4x4.
+     */
+    public abstract void asHomogeneousMatrix(final Matrix result);
+
+    /**
+     * Sets amount of rotation from provided rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix can be expressed in either inhomogeneous (3x3) or
+     * homogeneous (4x4) coordinates.
+     *
+     * @param m         Provided rotation matrix.
+     * @param threshold Threshold to determine whether matrix is orthonormal.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is
+     *                                        negative.
+     *                                        {@link #isValidRotationMatrix(Matrix)}
+     */
+    public final void fromMatrix(final Matrix m, final double threshold) throws InvalidRotationMatrixException {
+<span class="pc bpc" id="L228" title="1 of 4 branches missed.">        if (m.getRows() == INHOM_COORDS &amp;&amp; m.getColumns() == INHOM_COORDS) {</span>
+            // inhomogeneous matrix
+<span class="fc" id="L230">            fromInhomogeneousMatrix(m, threshold);</span>
+<span class="pc bpc" id="L231" title="2 of 4 branches missed.">        } else if (m.getRows() == HOM_COORDS &amp;&amp; m.getColumns() == HOM_COORDS) {</span>
+            // homogeneous matrix
+<span class="fc" id="L233">            fromHomogeneousMatrix(m, threshold);</span>
+        } else {
+<span class="nc" id="L235">            throw new InvalidRotationMatrixException();</span>
+        }
+<span class="fc" id="L237">    }</span>
+
+    /**
+     * Sets amount of rotation from provided rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix can be expressed in either inhomogeneous (3x3) or
+     * homogeneous (4x4) coordinates.
+     * Because threshold is not provided it is used DEFAULT_VALID_THRESHOLD
+     * instead.
+     *
+     * @param m Provided rotation matrix.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     *                                        {@link #isValidRotationMatrix(Matrix)}
+     */
+    public final void fromMatrix(final Matrix m) throws InvalidRotationMatrixException {
+<span class="fc" id="L254">        fromMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
+<span class="fc" id="L255">    }</span>
+
+    /**
+     * Sets amount of rotation from provided inhomogeneous rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix must also have size 3x3.
+     *
+     * @param m         Provided rotation matrix.
+     * @param threshold Threshold to determine whether matrix is orthonormal.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is
+     *                                        negative.
+     *                                        {@link #isValidRotationMatrix(Matrix)}
+     */
+    public abstract void fromInhomogeneousMatrix(final Matrix m, final double threshold)
+            throws InvalidRotationMatrixException;
+
+    /**
+     * Sets amount of rotation from provided inhomogeneous rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix must also have size 3x3.
+     * Because threshold is not provided it is used DEFAULT_VALID_THRESHOLD
+     * instead.
+     *
+     * @param m Provided rotation matrix.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     *                                        {@link #isValidRotationMatrix(Matrix)}
+     */
+    public void fromInhomogeneousMatrix(final Matrix m) throws InvalidRotationMatrixException {
+<span class="fc" id="L288">        fromInhomogeneousMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
+<span class="fc" id="L289">    }</span>
+
+    /**
+     * Sets amount of rotation from provided homogeneous rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular, it's
+     * transpose must be its inverse) and must have determinant equal to 1.
+     * Provided matrix must also have size 4x4, and its last row and column must
+     * be zero, except for element in last row and column which must be 1.
+     *
+     * @param m         Provided rotation matrix.
+     * @param threshold Threshold to determine whether matrix is orthonormal.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     * @throws IllegalArgumentException       Raised if provided threshold is
+     *                                        negative.
+     *                                        {@link #isValidRotationMatrix(Matrix)}
+     */
+    public abstract void fromHomogeneousMatrix(final Matrix m, final double threshold)
+            throws InvalidRotationMatrixException;
+
+    /**
+     * Sets amount of rotation from provided homogeneous rotation matrix.
+     * Provided matrix must be orthogonal (i.e. squared, non-singular), its
+     * transpose must be its inverse and must have determinant equal to 1.
+     * Provided matrix must also have size exe, and its last row and column must
+     * be zero, except for element in last row and column which must be 1
+     * Because threshold is not provided it is used DEFAULT_VALID_THRESHOLD
+     * instead.
+     *
+     * @param m Provided rotation matrix.
+     * @throws InvalidRotationMatrixException Raised if provided matrix is not
+     *                                        valid (has wrong size, or it is not orthonormal).
+     *                                        {@link #isValidRotationMatrix(Matrix)}
+     */
+    public void fromHomogeneousMatrix(final Matrix m) throws InvalidRotationMatrixException {
+<span class="fc" id="L324">        fromHomogeneousMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
+<span class="fc" id="L325">    }</span>
+
+    /**
+     * Rotates a 3D point using the origin of coordinates as the axis of
+     * rotation.
+     * Point will be rotated by the amount of rotation contained in this
+     * instance.
+     *
+     * @param inputPoint  Input point to be rotated.
+     * @param resultPoint Rotated point.
+     */
+    public abstract void rotate(final Point3D inputPoint, final Point3D resultPoint);
+
+    /**
+     * Returns a 3D point containing a rotated version of provided point.
+     * Point will be rotated using the origin of the coordinates as the axis of
+     * rotation.
+     * Point will be rotated by the amount of rotation contained in this
+     * instance.
+     *
+     * @param point Point to be rotated.
+     * @return Rotated point.
+     */
+    public Point3D rotate(final Point3D point) {
+<span class="fc" id="L349">        final var result = new HomogeneousPoint3D();</span>
+<span class="fc" id="L350">        rotate(point, result);</span>
+<span class="fc" id="L351">        return result;</span>
+    }
+
+    /**
+     * Rotates a plane using the origin of coordinates as the axis of rotation.
+     * Plane will be rotated by the amount of rotation contained in this
+     * instance.
+     *
+     * @param inputPlane  Input plane to be rotated.
+     * @param resultPlane plane where result is stored.
+     */
+    public void rotate(final Plane inputPlane, final Plane resultPlane) {
+        try {
+<span class="fc" id="L364">            final var r = asHomogeneousMatrix();</span>
+            // because of the duality theorem:
+            // P'*M = 0 --&gt; P*R^-1*R*M = 0 --&gt; P2' = P'*R^-1 and M2 = R*M
+            // where P2 and M2 are rotated plane and point, however rotated
+            // plane uses the inverse rotation, which is the transposed matrix
+            // Hence P2' = P' * R', and by undoing the transposition
+            // P2 = (P' * R')' = R'' * P'' = R * P
+
+<span class="fc" id="L372">            final var p = new Matrix(Plane.PLANE_NUMBER_PARAMS, 1);</span>
+
+            // to increase accuracy
+<span class="fc" id="L375">            inputPlane.normalize();</span>
+<span class="fc" id="L376">            p.setElementAt(0, 0, inputPlane.getA());</span>
+<span class="fc" id="L377">            p.setElementAt(1, 0, inputPlane.getB());</span>
+<span class="fc" id="L378">            p.setElementAt(2, 0, inputPlane.getC());</span>
+<span class="fc" id="L379">            p.setElementAt(3, 0, inputPlane.getD());</span>
+
+            // Rotated plane below is R * P
+<span class="fc" id="L382">            r.multiply(p);</span>
+
+<span class="fc" id="L384">            resultPlane.setParameters(r.getElementAt(0, 0), r.getElementAt(1, 0),</span>
+<span class="fc" id="L385">                    r.getElementAt(2, 0), r.getElementAt(3, 0));</span>
+<span class="nc" id="L386">        } catch (final WrongSizeException ignore) {</span>
+            // never happens
+<span class="fc" id="L388">        }</span>
+<span class="fc" id="L389">    }</span>
+
+    /**
+     * Returns a plane containing a rotated version of provided plane.
+     * Plane will be rotated using the origin of the coordinates as the axis of
+     * rotation.
+     * Plane will be rotated by the amount of rotation contained in this
+     * instance.
+     *
+     * @param plane Plane to be rotated.
+     * @return Rotated plane.
+     */
+    public Plane rotate(final Plane plane) {
+<span class="fc" id="L402">        final var result = new Plane();</span>
+<span class="fc" id="L403">        rotate(plane, result);</span>
+<span class="fc" id="L404">        return result;</span>
+    }
+
+    /**
+     * Returns boolean indicating whether provided matrix is a valid matrix for
+     * a rotation.
+     * Rotation matrices must be orthogonal and must have determinant equal to
+     * 1.
+     *
+     * @param m         Input matrix to be checked.
+     * @param threshold Threshold to determine whether matrix is orthogonal and
+     *                  whether determinant is one.
+     * @return True if matrix is valid, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is
+     *                                  negative.
+     */
+    public static boolean isValidRotationMatrix(final Matrix m, final double threshold) {
+<span class="fc bfc" id="L421" title="All 2 branches covered.">        if (threshold &lt; MIN_THRESHOLD) {</span>
+<span class="fc" id="L422">            throw new IllegalArgumentException();</span>
+        }
+
+        try {
+<span class="fc bfc" id="L426" title="All 4 branches covered.">            return Utils.isOrthogonal(m, threshold) &amp;&amp; Math.abs(Math.abs(Utils.det(m)) - 1.0) &lt; threshold;</span>
+<span class="nc" id="L427">        } catch (final AlgebraException e) {</span>
+<span class="nc" id="L428">            return false;</span>
+        }
+    }
+
+    /**
+     * Returns boolean indicating whether provided matrix is a valid matrix for
+     * a rotation.
+     * Rotation matrices must be orthogonal and must have determinant equal to 1
+     * Because threshold is not provided, it is used DEFAULT_VALID_THRESHOLD
+     * instead.
+     *
+     * @param m Input matrix to be checked.
+     * @return True if matrix is valid, false otherwise.
+     * @throws IllegalArgumentException Raised if provided threshold is
+     *                                  negative.
+     */
+    public static boolean isValidRotationMatrix(final Matrix m) {
+<span class="fc" id="L445">        return isValidRotationMatrix(m, DEFAULT_VALID_THRESHOLD);</span>
+    }
+
+    /**
+     * Combines provided rotation with this rotation and returns the result as
+     * a new Rotation3D instance.
+     *
+     * @param rotation Input rotation to be combined.
+     * @return Combined rotation, which is equal to the multiplication of the
+     * internal matrix of provided rotation with the internal matrix of this
+     * instance.
+     */
+    public abstract Rotation3D combineAndReturnNew(final Rotation3D rotation);
+
+    /**
+     * Combines provided rotation into this rotation resulting in the
+     * multiplication of the internal matrices of both rotations.
+     *
+     * @param rotation Input rotation to be combined.
+     */
+    public abstract void combine(final Rotation3D rotation);
+
+    /**
+     * Factory method.
+     * Creates a rotation that has no effect on geometric objects using default
+     * type.
+     *
+     * @return A 3D rotation.
+     */
+    public static Rotation3D create() {
+<span class="fc" id="L475">        return create(DEFAULT_TYPE);</span>
+    }
+
+    /**
+     * Factory method.
+     * Creates a rotation that has no effect on geometric objects using provided
+     * type.
+     *
+     * @param type Rotation type.
+     * @return A 3D rotation.
+     */
+    public static Rotation3D create(final Rotation3DType type) {
+<span class="fc bfc" id="L487" title="All 3 branches covered.">        return switch (type) {</span>
+<span class="fc" id="L488">            case AXIS_ROTATION3D -&gt; new AxisRotation3D();</span>
+<span class="fc" id="L489">            case MATRIX_ROTATION3D -&gt; new MatrixRotation3D();</span>
+<span class="fc" id="L490">            default -&gt; new Quaternion();</span>
+        };
+    }
+
+    /**
+     * Factory method.
+     * Creates a 3D rotation using provided axis and rotation angle.
+     * Note: to increase accuracy axis coordinates should be normalized.
+     *
+     * @param axis  Array containing rotation axis coordinates.
+     * @param theta Rotation angle around axis expressed in radians.
+     * @return A 3D rotation instance.
+     * @throws IllegalArgumentException Raised if provided axis array does not
+     *                                  have length 3.
+     */
+    public static Rotation3D create(final double[] axis, final double theta) {
+<span class="fc" id="L506">        return create(axis, theta, DEFAULT_TYPE);</span>
+    }
+
+    /**
+     * Factory method.
+     * Creates a 3D rotation using provided axis, rotation angle and rotation
+     * type.
+     * Note: to increase accuracy axis coordinates should be normalized.
+     *
+     * @param axis  Array containing rotation axis coordinates.
+     * @param theta Rotation angle around axis expressed in radians.
+     * @param type  Rotation type.
+     * @return A 3D rotation instance.
+     * @throws IllegalArgumentException Raised if provided axis array does not
+     *                                  have length 3.
+     */
+    public static Rotation3D create(final double[] axis, final double theta, final Rotation3DType type) {
+<span class="fc bfc" id="L523" title="All 3 branches covered.">        return switch (type) {</span>
+<span class="fc" id="L524">            case AXIS_ROTATION3D -&gt; new AxisRotation3D(axis, theta);</span>
+<span class="fc" id="L525">            case MATRIX_ROTATION3D -&gt; new MatrixRotation3D(axis, theta);</span>
+<span class="fc" id="L526">            default -&gt; new Quaternion(axis, theta);</span>
+        };
+    }
+
+    /**
+     * Factory method.
+     * Creates a 3D rotation using provided axis coordinates and rotation angle.
+     * Note: to increase accuracy axis coordinates should be normalized.
+     *
+     * @param axisX X coordinate of axis.
+     * @param axisY Y coordinate of axis.
+     * @param axisZ Z coordinate of axis.
+     * @param theta Rotation angle around axis expressed in radians.
+     * @return A 3D rotation instance.
+     */
+    public static Rotation3D create(final double axisX, final double axisY, final double axisZ, final double theta) {
+<span class="fc" id="L542">        return create(axisX, axisY, axisZ, theta, DEFAULT_TYPE);</span>
+    }
+
+    /**
+     * Factory method.
+     * Creates a 3D rotation using provided axis coordinates, rotation angle and
+     * rotation type.
+     * Note: to increase accuracy axis coordinates should be normalized.
+     *
+     * @param axisX X coordinate of axis.
+     * @param axisY Y coordinate of axis.
+     * @param axisZ Z coordinate of axis.
+     * @param theta Rotation angle around axis expressed in radians.
+     * @param type  Rotation type.
+     * @return A 3D rotation instance.
+     */
+    public static Rotation3D create(
+            final double axisX, final double axisY, final double axisZ, final double theta, final Rotation3DType type) {
+<span class="fc bfc" id="L560" title="All 3 branches covered.">        switch (type) {</span>
+            case AXIS_ROTATION3D:
+<span class="fc" id="L562">                return new AxisRotation3D(axisX, axisY, axisZ, theta);</span>
+            case MATRIX_ROTATION3D:
+<span class="fc" id="L564">                return new MatrixRotation3D(axisX, axisY, axisZ, theta);</span>
+            case QUATERNION:
+            default:
+<span class="fc" id="L567">                final var result = new Quaternion();</span>
+<span class="fc" id="L568">                result.setAxisAndRotation(axisX, axisY, axisZ, theta);</span>
+<span class="fc" id="L569">                return result;</span>
+        }
+    }
+
+    /**
+     * Determines if two Rotation3D instances are equal up to provided threshold
+     * or not (i.e. have the same rotation).
+     *
+     * @param other     other rotation to compare.
+     * @param threshold threshold to determine if they are equal.
+     * @return true if they are equal, false otherwise.
+     * @throws IllegalArgumentException if threshold is negative.
+     * @throws RotationException        if rotation angle or axis cannot be determined.
+     */
+    public boolean equals(final Rotation3D other, final double threshold) throws RotationException {
+
+<span class="pc bpc" id="L585" title="1 of 2 branches missed.">        if (threshold &lt; MIN_COMPARISON_THRESHOLD) {</span>
+<span class="nc" id="L586">            throw new IllegalArgumentException();</span>
+        }
+
+<span class="fc" id="L589">        final var thisAxis = getRotationAxis();</span>
+<span class="fc" id="L590">        final var thisAngle = getRotationAngle();</span>
+<span class="fc" id="L591">        final var otherAxis = other.getRotationAxis();</span>
+<span class="fc" id="L592">        final var otherAngle = other.getRotationAngle();</span>
+
+<span class="fc" id="L594">        final var cosAngle = ArrayUtils.dotProduct(thisAxis, otherAxis);</span>
+<span class="fc bfc" id="L595" title="All 2 branches covered.">        if (cosAngle &gt;= 0.0) {</span>
+            // axis have same direction
+<span class="fc" id="L597">            final var diffX = thisAxis[0] - otherAxis[0];</span>
+<span class="fc" id="L598">            final var diffY = thisAxis[1] - otherAxis[1];</span>
+<span class="fc" id="L599">            final var diffZ = thisAxis[2] - otherAxis[2];</span>
+<span class="fc" id="L600">            final var sqrNormDiff = diffX * diffX + diffY * diffY + diffZ * diffZ;</span>
+
+<span class="fc bfc" id="L602" title="All 2 branches covered.">            if (sqrNormDiff &gt; threshold) {</span>
+                // axes are not equal
+<span class="fc" id="L604">                return false;</span>
+            }
+
+            // compare difference of angles
+<span class="fc bfc" id="L608" title="All 2 branches covered.">            return Math.abs(thisAngle - otherAngle) &lt;= threshold</span>
+<span class="pc bpc" id="L609" title="1 of 2 branches missed.">                    || Math.abs(thisAngle - otherAngle - 2 * Math.PI) &lt;= threshold;</span>
+        } else {
+            // axis might be reversed, hence also angle is reversed
+<span class="fc" id="L612">            final var sumX = thisAxis[0] + otherAxis[0];</span>
+<span class="fc" id="L613">            final var sumY = thisAxis[1] + otherAxis[1];</span>
+<span class="fc" id="L614">            final var sumZ = thisAxis[2] + otherAxis[2];</span>
+<span class="fc" id="L615">            final var sqrNormSum = sumX * sumX + sumY * sumY + sumZ * sumZ;</span>
+
+<span class="pc bpc" id="L617" title="1 of 2 branches missed.">            if (sqrNormSum &gt; threshold) {</span>
+                // axes are not equal
+<span class="nc" id="L619">                return false;</span>
+            }
+
+            // compare sum of angles (because rotation angle is also reversed)
+<span class="pc bpc" id="L623" title="1 of 2 branches missed.">            return Math.abs(thisAngle + otherAngle) &lt;= threshold</span>
+<span class="pc bnc" id="L624" title="All 2 branches missed.">                    || Math.abs(thisAngle + otherAngle - 2 * Math.PI) &lt;= threshold;</span>
+        }
+    }
+
+    /**
+     * Determines if two Rotation3D instances are equal or not (i.e. have the
+     * same rotation).
+     *
+     * @param other other object to compare.
+     * @return true if they are equal, false otherwise.
+     */
+    public boolean equals(final Rotation3D other) {
+        try {
+<span class="fc" id="L637">            return equals(other, DEFAULT_COMPARISON_THRESHOLD);</span>
+<span class="nc" id="L638">        } catch (final RotationException e) {</span>
+<span class="nc" id="L639">            return false;</span>
+        }
+    }
+
+    /**
+     * Determines if two Rotation3D instances are equal or not (i.e. have the
+     * same rotation).
+     *
+     * @param obj other object to compare.
+     * @return true if they are equal, false otherwise.
+     */
+    @Override
+    public boolean equals(final Object obj) {
+<span class="fc bfc" id="L652" title="All 2 branches covered.">        if (obj == this) {</span>
+<span class="fc" id="L653">            return true;</span>
+        }
+<span class="pc bpc" id="L655" title="1 of 2 branches missed.">        if (!(obj instanceof Rotation3D)) {</span>
+<span class="nc" id="L656">            return false;</span>
+        }
+
+<span class="fc" id="L659">        return equals((Rotation3D) obj);</span>
+    }
+
+    /**
+     * Hash code to compare instances.
+     *
+     * @return hash code to compare instances.
+     */
+    @Override
+    public int hashCode() {
+<span class="fc" id="L669">        return 5;</span>
+    }
+
+    /**
+     * Sets values of this rotation from a 3D matrix rotation.
+     *
+     * @param rot 3D matrix rotation to set values from.
+     */
+    public void fromRotation(final MatrixRotation3D rot) {
+        try {
+<span class="fc" id="L679">            fromInhomogeneousMatrix(rot.internalMatrix);</span>
+<span class="nc" id="L680">        } catch (final InvalidRotationMatrixException ignore) {</span>
+            // never thrown
+<span class="fc" id="L682">        }</span>
+<span class="fc" id="L683">    }</span>
+
+    /**
+     * Sets values of this rotation from a 3D axis rotation.
+     *
+     * @param rot an axis rotation to set values from.
+     */
+    public void fromRotation(final AxisRotation3D rot) {
+<span class="fc" id="L691">        setAxisAndRotation(rot.getAxisX(), rot.getAxisY(), rot.getAxisZ(), rot.getRotationAngle());</span>
+<span class="fc" id="L692">    }</span>
+
+    /**
+     * Sets values of this rotation from a quaternion.
+     *
+     * @param q a quaternion to set values from.
+     */
+    public abstract void fromRotation(final Quaternion q);
+
+    /**
+     * Sets values of this rotation from another rotation.
+     *
+     * @param rot a 3D rotation to set values from.
+     * @throws IllegalArgumentException if provided rotation type is
+     *                                  not supported. Only {@link Rotation3DType#AXIS_ROTATION3D},
+     *                                  {@link Rotation3DType#MATRIX_ROTATION3D} and
+     *                                  {@link Rotation3DType#QUATERNION} are supported.
+     */
+    public void fromRotation(final Rotation3D rot) {
+<span class="nc bnc" id="L711" title="All 4 branches missed.">        switch (rot.getType()) {</span>
+            case AXIS_ROTATION3D:
+<span class="nc" id="L713">                fromRotation((AxisRotation3D) rot);</span>
+<span class="nc" id="L714">                break;</span>
+            case MATRIX_ROTATION3D:
+<span class="nc" id="L716">                fromRotation((MatrixRotation3D) rot);</span>
+<span class="nc" id="L717">                break;</span>
+            case QUATERNION:
+<span class="nc" id="L719">                fromRotation((Quaternion) rot);</span>
+<span class="nc" id="L720">                break;</span>
+            default:
+<span class="nc" id="L722">                throw new IllegalArgumentException();</span>
+        }
+<span class="nc" id="L724">    }</span>
+
+    /**
+     * Converts this 3D rotation into a matrix rotation storing the result
+     * into provided instance.
+     *
+     * @param result instance where result wil be stored.
+     */
+    public void toMatrixRotation(final MatrixRotation3D result) {
+<span class="nc" id="L733">        result.fromRotation(this);</span>
+<span class="nc" id="L734">    }</span>
+
+    /**
+     * Converts this 3D rotation into a matrix rotation and returns the result
+     * as a new instance.
+     *
+     * @return a new 3D matrix rotation equivalent to this rotation.
+     */
+    public MatrixRotation3D toMatrixRotation() {
+<span class="fc" id="L743">        final var r = new MatrixRotation3D();</span>
+<span class="fc" id="L744">        toMatrixRotation(r);</span>
+<span class="fc" id="L745">        return r;</span>
+    }
+
+    /**
+     * Converts this 3D rotation into an axis rotation storing the result into
+     * provided instance.
+     *
+     * @param result instance where result will be stored.
+     */
+    public void toAxisRotation(final AxisRotation3D result) {
+<span class="nc" id="L755">        result.fromRotation(this);</span>
+<span class="nc" id="L756">    }</span>
+
+    /**
+     * Converts this 3D rotation into an axis rotation and returns the result
+     * as a new instance.
+     *
+     * @return a new axis rotation equivalent to this rotation.
+     */
+    public AxisRotation3D toAxisRotation() {
+<span class="fc" id="L765">        final var r = new AxisRotation3D();</span>
+<span class="fc" id="L766">        toAxisRotation(r);</span>
+<span class="fc" id="L767">        return r;</span>
+    }
+
+    /**
+     * Converts this 3D rotation into a quaternion storing the result into
+     * provided instance.
+     *
+     * @param result instance where result will be stored.
+     */
+    public void toQuaternion(final Quaternion result) {
+<span class="nc" id="L777">        result.fromRotation(this);</span>
+<span class="nc" id="L778">    }</span>
+
+    /**
+     * Converts this 3D rotation into a quaternion and returns the result as a
+     * new instance.
+     *
+     * @return a new quaternion equivalent to this rotation.
+     */
+    public Quaternion toQuaternion() {
+<span class="fc" id="L787">        final var q = new Quaternion();</span>
+<span class="fc" id="L788">        toQuaternion(q);</span>
+<span class="fc" id="L789">        return q;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.13.202504020838</span></div></body></html>
