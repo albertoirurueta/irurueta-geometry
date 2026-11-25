@@ -2624,7 +2624,7 @@ class PinholeCameraTest {
     }
 
     @Test
-    void testProjectBackProjectQuadricAndConic() throws WrongSizeException, DecomposerException,
+    void testBackProjectConic() throws WrongSizeException, DecomposerException,
             CoincidentPointsException, CameraException {
         // create conic
         var m = Matrix.createWithUniformRandomValues(5, HOM_2D_COORDS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
@@ -2791,16 +2791,63 @@ class PinholeCameraTest {
         assertTrue(quadric.isLocus(point4b, ABSOLUTE_ERROR));
         assertTrue(quadric.isLocus(point5b, ABSOLUTE_ERROR));
 
-        // project quadric into conic
-        final var conic2 = camera.project(quadric);
-        final var conic3 = new Conic();
-        camera.project(quadric, conic3);
+        // camera center is the apex of the back-projected cone, hence it must be locus of the quadric
+        // (this check does not require inverting the rank-deficient cone)
+        final var cameraCenter = camera.computeCameraCenterSVD();
+        assertTrue(quadric.isLocus(cameraCenter, ABSOLUTE_ERROR));
+    }
 
-        conic.normalize();
-        conic2.normalize();
-        conic3.normalize();
+    @Test
+    void testProjectQuadric() throws WrongSizeException, DecomposerException {
+        final var randomizer = new UniformRandomizer();
 
-        assertEquals(conic2.asMatrix(), conic3.asMatrix());
+        var numValid = 0;
+        for (var t = 0; t < TIMES; t++) {
+            try {
+                // build a non-degenerate quadric from 9 random points
+                final var points = new ArrayList<Point3D>();
+                for (var i = 0; i < 9; i++) {
+                    points.add(new InhomogeneousPoint3D(
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE),
+                            randomizer.nextDouble(MIN_RANDOM_VALUE, MAX_RANDOM_VALUE)));
+                }
+
+                final var quadric = new Quadric(points.get(0), points.get(1), points.get(2), points.get(3),
+                        points.get(4), points.get(5), points.get(6), points.get(7), points.get(8));
+
+                // instantiate random camera
+                final var cameraMatrix = Matrix.createWithUniformRandomValues(PINHOLE_CAMERA_ROWS,
+                        PINHOLE_CAMERA_COLS, MIN_RANDOM_VALUE, MAX_RANDOM_VALUE);
+                final var camera = new PinholeCamera(cameraMatrix);
+
+                // project quadric into conic
+                final var conic2 = camera.project(quadric);
+                final var conic3 = new Conic();
+                camera.project(quadric, conic3);
+
+                conic2.normalize();
+                conic3.normalize();
+
+                assertEquals(conic2.asMatrix(), conic3.asMatrix());
+
+                // the dual conic of the projected conic must match the projection of the dual quadric
+                final var dualConic = camera.project(quadric.getDualQuadric());
+                final var dualConic2 = conic2.getDualConic();
+                dualConic.normalize();
+                dualConic2.normalize();
+
+                assertTrue(dualConic.asMatrix().equals(dualConic2.asMatrix(), LARGE_ABSOLUTE_ERROR));
+            } catch (final CameraException | CoincidentPointsException | DualQuadricNotAvailableException
+                     | DualConicNotAvailableException e) {
+                continue;
+            }
+
+            numValid++;
+            break;
+        }
+
+        assertTrue(numValid > 0);
     }
 
     @Test

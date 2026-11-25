@@ -7,6 +7,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Made `PinholeCameraTest` no longer project a back-projected (degenerate) quadric, which failed intermittently with
+  `SingularMatrixException` (#34).
+
 ## [1.6.2] - 2026-11-24
 
 ### Changed
